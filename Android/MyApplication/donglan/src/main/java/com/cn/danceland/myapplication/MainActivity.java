@@ -27,14 +27,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void hydropower() {
             Toast.makeText(MainActivity.this, "关", Toast.LENGTH_SHORT).show();
-            Log.d("info", "关");
+            Log.d("info","");
         }
     };
     SwitchButton.SoftFloorListener softFloorListener = new SwitchButton.SoftFloorListener() {
         @Override
         public void softFloor() {
             Toast.makeText(MainActivity.this, "开", Toast.LENGTH_SHORT).show();
-            Log.d("info", "开");
+
         }
+
     };
 }
