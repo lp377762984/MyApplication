@@ -1,1 +1,1 @@
-include ':donglan'
+include ':donglan', ':hellocharts-library', ':hellocharts-samples'
