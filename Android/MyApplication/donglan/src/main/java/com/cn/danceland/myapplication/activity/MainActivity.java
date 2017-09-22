@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         public void hydropower() {
             Toast.makeText(MainActivity.this, "关", Toast.LENGTH_SHORT).show();
 
-            startActivity(new Intent(MainActivity.this,ChartActivity.class));
+            startActivity(new Intent(MainActivity.this,LoginSMSActivity.class));
 
         }
     };

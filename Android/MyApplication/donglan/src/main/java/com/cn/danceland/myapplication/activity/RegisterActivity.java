@@ -3,6 +3,8 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Spinner;
 
 import com.cn.danceland.myapplication.R;
 
@@ -11,9 +13,21 @@ import com.cn.danceland.myapplication.R;
  */
 
 public class RegisterActivity extends Activity {
+    private Spinner mSpinner;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activit_register);
+        initView();
+    }
+
+    private void initView() {
+        mSpinner=findViewById(R.id.sp_phone);
+        mSpinner.setSelection(0,true);
+    }
+
+    //返回
+    public void back(View view) {
+        finish();
     }
 }
