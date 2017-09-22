@@ -1,3 +1,15 @@
 <resources>
+<<<<<<< HEAD
+    <string name="app_name">My Application</string>
+
+    <string-array name="languages">
+        <item>86</item>
+        <item>87 </item>
+        <item>88</item>
+        <item>89</item>
+        <item>90</item>
+    </string-array>
+=======
     <string name="app_name">动岚科技</string>
+>>>>>>> 7655e5c47265ccb0a55795df7b76aa10fd0a4e91
 </resources>
