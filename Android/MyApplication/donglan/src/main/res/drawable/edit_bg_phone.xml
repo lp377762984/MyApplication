@@ -7,7 +7,7 @@
     <!-- 边缘线条颜色 -->
     <stroke
         android:width="1dp"
-        android:color="#000" />
+        android:color="#696969" />
     <!-- 圆角的幅度 -->
 <!--    <corners
         android:topLeftRadius="5dip"
