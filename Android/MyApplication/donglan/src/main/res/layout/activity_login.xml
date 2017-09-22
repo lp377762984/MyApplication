@@ -43,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:background="@drawable/edit_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
         <Spinner
             android:id="@+id/spinner1"
@@ -56,9 +58,10 @@
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:text="手机号"
+            android:hint="手机号"
             android:textColor="#D3D3D3"
             android:background="@null"
+
             />
     </RelativeLayout>
 
