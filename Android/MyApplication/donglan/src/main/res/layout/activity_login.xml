@@ -48,7 +48,7 @@
             android:id="@+id/spinner1"
             android:layout_width="50dp"
             android:layout_height="40dp"
-            android:entries="@array/languages"
+            android:entries="@array/phone_codes"
             />
         <EditText
             android:id="@+id/phone"
