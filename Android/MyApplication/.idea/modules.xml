@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/donglan/donglan.iml" filepath="$PROJECT_DIR$/donglan/donglan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hellochars-library/hellochars-library.iml" filepath="$PROJECT_DIR$/hellochars-library/hellochars-library.iml" />
     </modules>
   </component>
 </project>

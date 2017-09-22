@@ -1,1 +1,1 @@
-include ':donglan'
+include ':donglan',':hellochars-library'
