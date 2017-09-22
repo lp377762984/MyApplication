@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="#fff"
+    >
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/back"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:layout_centerInParent="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        />
+</RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dcdcdc">
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/edit_bg_phone">
+        <android.support.v7.widget.AppCompatSpinner
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/phone_codes"
+            android:layout_gravity="center_vertical">
+
+        </android.support.v7.widget.AppCompatSpinner>
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="手机号"
+            android:inputType="phone"
+            android:background="@drawable/edit_bg_phone"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_getsms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_sms_bg"
+        android:layout_below="@+id/ll_phone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:text="获取验证码"
+        android:padding="10dp"
+        android:gravity="center"/>
+    <EditText
+
+        android:id="@+id/et_sms"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:inputType="number"
+        android:hint="请输入短信验证码"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/edit_bg_phone"
+        android:layout_below="@id/tv_getsms"/>
+    <EditText
+
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="请输入密码"
+        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/edit_bg_phone"
+        android:layout_below="@id/et_sms"/>
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#696969"
+        android:text="完成"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:layout_below="@+id/et_password"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        />
+
+</RelativeLayout>
+
+
+</LinearLayout>
