@@ -13,6 +13,10 @@
 		18D2B9241F78A43400C32888 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D2B9231F78A43400C32888 /* Assets.xcassets */; };
 		18D2B9271F78A43400C32888 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18D2B9251F78A43400C32888 /* LaunchScreen.storyboard */; };
 		18D2B92A1F78A43400C32888 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D2B9291F78A43400C32888 /* main.m */; };
+		18D2B9321F78ABFC00C32888 /* HomeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D2B9311F78ABFC00C32888 /* HomeControl.m */; };
+		18D2B9351F78ADBD00C32888 /* ShopControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D2B9341F78ADBD00C32888 /* ShopControl.m */; };
+		18D2B9381F78AEB500C32888 /* findControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D2B9371F78AEB500C32888 /* findControl.m */; };
+		18D2B93B1F78AF5100C32888 /* MyControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D2B93A1F78AF5100C32888 /* MyControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,14 @@
 		18D2B9261F78A43400C32888 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18D2B9281F78A43400C32888 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18D2B9291F78A43400C32888 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		18D2B9301F78ABFC00C32888 /* HomeControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeControl.h; sourceTree = "<group>"; };
+		18D2B9311F78ABFC00C32888 /* HomeControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeControl.m; sourceTree = "<group>"; };
+		18D2B9331F78ADBD00C32888 /* ShopControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShopControl.h; sourceTree = "<group>"; };
+		18D2B9341F78ADBD00C32888 /* ShopControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShopControl.m; sourceTree = "<group>"; };
+		18D2B9361F78AEB500C32888 /* findControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = findControl.h; sourceTree = "<group>"; };
+		18D2B9371F78AEB500C32888 /* findControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = findControl.m; sourceTree = "<group>"; };
+		18D2B9391F78AF5100C32888 /* MyControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyControl.h; sourceTree = "<group>"; };
+		18D2B93A1F78AF5100C32888 /* MyControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +70,9 @@
 		18D2B9191F78A43400C32888 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				18D2B93C1F78AF6200C32888 /* Model */,
+				18D2B93D1F78AF7A00C32888 /* VIew */,
+				18D2B93E1F78AF8300C32888 /* Control */,
 				18D2B91A1F78A43400C32888 /* AppDelegate.h */,
 				18D2B91B1F78A43400C32888 /* AppDelegate.m */,
 				18D2B91D1F78A43400C32888 /* ViewController.h */,
@@ -69,6 +84,67 @@
 				18D2B9291F78A43400C32888 /* main.m */,
 			);
 			path = model;
+			sourceTree = "<group>";
+		};
+		18D2B93C1F78AF6200C32888 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		18D2B93D1F78AF7A00C32888 /* VIew */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = VIew;
+			sourceTree = "<group>";
+		};
+		18D2B93E1F78AF8300C32888 /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				18D2B93F1F78AFB900C32888 /* 首页 */,
+				18D2B9401F78AFFC00C32888 /* 门店 */,
+				18D2B9411F78B01B00C32888 /* 发现 */,
+				18D2B9421F78B03F00C32888 /* 我的 */,
+			);
+			path = Control;
+			sourceTree = "<group>";
+		};
+		18D2B93F1F78AFB900C32888 /* 首页 */ = {
+			isa = PBXGroup;
+			children = (
+				18D2B9301F78ABFC00C32888 /* HomeControl.h */,
+				18D2B9311F78ABFC00C32888 /* HomeControl.m */,
+			);
+			path = "首页";
+			sourceTree = "<group>";
+		};
+		18D2B9401F78AFFC00C32888 /* 门店 */ = {
+			isa = PBXGroup;
+			children = (
+				18D2B9331F78ADBD00C32888 /* ShopControl.h */,
+				18D2B9341F78ADBD00C32888 /* ShopControl.m */,
+			);
+			path = "门店";
+			sourceTree = "<group>";
+		};
+		18D2B9411F78B01B00C32888 /* 发现 */ = {
+			isa = PBXGroup;
+			children = (
+				18D2B9361F78AEB500C32888 /* findControl.h */,
+				18D2B9371F78AEB500C32888 /* findControl.m */,
+			);
+			path = "发现";
+			sourceTree = "<group>";
+		};
+		18D2B9421F78B03F00C32888 /* 我的 */ = {
+			isa = PBXGroup;
+			children = (
+				18D2B9391F78AF5100C32888 /* MyControl.h */,
+				18D2B93A1F78AF5100C32888 /* MyControl.m */,
+			);
+			path = "我的";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,7 +220,11 @@
 			files = (
 				18D2B91F1F78A43400C32888 /* ViewController.m in Sources */,
 				18D2B92A1F78A43400C32888 /* main.m in Sources */,
+				18D2B9321F78ABFC00C32888 /* HomeControl.m in Sources */,
 				18D2B91C1F78A43400C32888 /* AppDelegate.m in Sources */,
+				18D2B9381F78AEB500C32888 /* findControl.m in Sources */,
+				18D2B93B1F78AF5100C32888 /* MyControl.m in Sources */,
+				18D2B9351F78ADBD00C32888 /* ShopControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

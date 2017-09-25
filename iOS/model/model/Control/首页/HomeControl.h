@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  HomeControl.h
 //  model
 //
 //  Created by apple on 2017/9/25.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UITabBarController
-
+@interface HomeControl : UIViewController
 
 @end
-
