@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
-import com.cn.danceland.myapplication.LoginActivity;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
