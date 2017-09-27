@@ -7,4 +7,7 @@
         <attr name="bg_bitmap" format="reference"/>
         <attr name="btn_bitmap" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="SliderView">
+        <attr name="TextColor" format="color"/>
+    </declare-styleable>
 </resources>

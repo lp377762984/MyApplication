@@ -4,21 +4,16 @@
 xmlns:myc="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DCDCDC">
+    android:background="#CD5C5C">
 
-    <com.cn.danceland.myapplication.view.SwitchButton
-        android:id="@+id/btn_switchbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        myc:bg_bitmap="@drawable/bg"
-        myc:btn_bitmap="@drawable/btn"
-        myc:textSize_ab="15sp"
-        myc:textOn="开"
-        myc:textOff="关"
-        android:padding="10dp"
+    <RelativeLayout
         android:layout_centerHorizontal="true"
-       />
-
+        android:layout_width="100dp"
+        android:layout_height="30dp">
+        <com.cn.danceland.myapplication.view.SliderView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 </RelativeLayout>
 
 
