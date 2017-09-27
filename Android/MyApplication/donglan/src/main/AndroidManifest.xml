@@ -21,7 +21,8 @@
         <activity android:name=".activity.LoginSMSActivity"/>
         <activity android:name=".activity.ForgetPasswordActivity"/>
         <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".activity.LoginActivity"
+            />
     </application>
 
 </manifest>

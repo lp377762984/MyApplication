@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
@@ -12,6 +13,8 @@ import com.cn.danceland.myapplication.R;
 public class LoginActivity extends Activity implements OnClickListener {
 
 
+    private EditText mEtPhone;
+    private EditText mEtPsw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +33,14 @@ public class LoginActivity extends Activity implements OnClickListener {
         findViewById(R.id.login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
         findViewById(R.id.tv_login_others).setOnClickListener(this);
-
-
+        mEtPhone = findViewById(R.id.et_phone);
+        mEtPsw = findViewById(R.id.et_password);
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.tv_register://注册
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
