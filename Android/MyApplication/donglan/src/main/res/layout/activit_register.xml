@@ -3,141 +3,147 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="#fff"
 
-    >
-    <ImageView
-        android:id="@+id/iv_back"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/back"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:layout_centerInParent="true"
-        android:onClick="back"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="注册"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-
-        />
-</RelativeLayout>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#dcdcdc">
-    <LinearLayout
-        android:id="@+id/ll_phone"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/edit_bg_phone"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_height="40dp"
+        android:background="#fff"
+
         >
-        <Spinner
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="5dp"
+            android:onClick="back"
+            android:src="@drawable/img_back" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/phone_codes"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/sp_phone">
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
 
-        </Spinner>
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F9F9F9">
+
+        <LinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_bg_phone"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+            <!--       <Spinner
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:entries="@array/phone_codes"
+                       android:layout_gravity="center_vertical"
+                       android:id="@+id/sp_phone">
+
+                   </Spinner>-->
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_phone" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:hint="手机号"
+                android:inputType="phone"
+                android:paddingLeft="10dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_getsms"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/ll_phone"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/text_sms_bg"
+            android:gravity="center"
+            android:text="获取验证码"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+
         <EditText
-            android:textSize="14sp"
-            android:id="@+id/et_phone"
+            android:id="@+id/et_sms"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:hint="手机号"
-            android:inputType="phone"
+            android:layout_below="@id/tv_getsms"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
+            android:hint="请输入短信验证码"
+            android:inputType="number"
             android:paddingLeft="10dp"
-            android:layout_gravity="center_vertical"/>
-    </LinearLayout>
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tv_getsms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/text_sms_bg"
-        android:layout_below="@+id/ll_phone"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
-        android:textSize="14sp"
-        android:textColor="#fff"
-        android:text="获取验证码"
-        android:padding="10dp"
-        android:gravity="center"/>
-    <EditText
-        android:textSize="14sp"
-        android:id="@+id/et_sms"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:inputType="number"
-        android:hint="请输入短信验证码"
-        android:paddingLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/edit_bg_phone"
-        android:layout_below="@id/tv_getsms"/>
-    <EditText
+        <EditText
 
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="请输入密码（6-20位）"
-        android:textSize="14sp"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:paddingLeft="10dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/edit_bg_phone"
-        android:layout_below="@id/et_sms"/>
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/et_sms"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_bg_phone"
+            android:hint="请输入密码（6-20位）"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
 
 
-    <EditText
+        <EditText
 
-        android:id="@+id/et_confirm_password"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="请再次输入密码"
-        android:textSize="14sp"
-        android:inputType="textPassword"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:paddingLeft="10dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/edit_bg_phone"
-        android:layout_below="@id/et_password"/>
+            android:id="@+id/et_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@id/et_password"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_bg_phone"
+            android:hint="请再次输入密码"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/btn_commit"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#36BA67"
-        android:text="完成"
-        android:textColor="#fff"
-        android:textSize="16sp"
-        android:layout_below="@+id/et_confirm_password"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        />
+        <Button
+            style="@style/BtnCommitStyle"
+            android:id="@+id/btn_commit"
+            android:layout_below="@+id/et_confirm_password"
+            android:layout_marginTop="10dp"
+            android:text="完成"
+           />
 
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

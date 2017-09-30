@@ -58,8 +58,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        mSpinner = findViewById(R.id.sp_phone);
-        mSpinner.setSelection(0, true);
+//        mSpinner = findViewById(R.id.sp_phone);
+//        mSpinner.setSelection(0, true);
         mTvGetsms =findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
