@@ -29,7 +29,7 @@ public class SplashActivity extends Activity {
 
 
 
-        AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
+        AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
     }

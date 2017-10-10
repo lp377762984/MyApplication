@@ -17,99 +17,97 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="5dp"
             android:onClick="back"
-            android:src="@drawable/back" />
+            android:src="@drawable/img_back" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="短信验证"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            style="@style/TextViewTitileStyle"
+            android:text="短信验证" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#dcdcdc">
+        android:background="#F9F9F9">
 
         <LinearLayout
             android:id="@+id/ll_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="30dp"
             android:background="@drawable/edit_bg_phone"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <Spinner
+            <!--         <Spinner
                 android:id="@+id/sp_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:entries="@array/phone_codes">
 
-            </Spinner>
+            </Spinner>-->
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_phone" />
 
             <EditText
                 android:id="@+id/et_phone"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/edit_bg_phone"
+                style="@style/EtStyle"
+
                 android:hint="手机号"
-                android:paddingLeft="10dp"
-                android:inputType="phone"
-                android:textSize="14sp" />
+                android:inputType="phone" />
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_getsms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            style="@style/TvGetsmsStyle"
             android:layout_below="@+id/ll_phone"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/text_sms_bg"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="获取验证码"
-            android:textColor="#fff"
-            android:textSize="14sp" />
+            android:layout_marginTop="10dp" />
 
-        <EditText
-
-            android:id="@+id/et_sms"
+        <LinearLayout
+            android:id="@+id/ll_getsms"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tv_getsms"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
-            android:hint="请输入短信验证码"
-            android:paddingLeft="10dp"
-            android:inputType="number"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_muber" />
+
+            <EditText
+                android:id="@+id/et_sms"
+                style="@style/EtStyle"
+                android:hint="请输入短信验证码"
+                android:inputType="number" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/btn_commit"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@+id/et_sms"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:background="#696969"
-            android:text="完成"
-            android:textColor="#fff"
-            android:textSize="16sp" />
+            style="@style/BtnCommitStyle"
+            android:layout_below="@+id/ll_getsms"
+            android:layout_marginTop="172dp"
+            android:text="完成" />
 
     </RelativeLayout>
+
+
 
 
 </LinearLayout>

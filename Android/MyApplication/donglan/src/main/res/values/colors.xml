@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="common_botton_bar_blue">#2ea7e0</color>
+
+    <color name="color_tab_text_grey">#4c4c4c</color>
+    <!--灰色线-->
+    <color name="color_bg_line">#EAEAEA</color>
+    <!--主页面浅灰背景-->
+    <color name="color_bg_mianlayout">#F9F9F9</color>
 </resources>

@@ -38,7 +38,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 //倒计时结束后设置可以点击
                 mTvGetsms.setFocusable(true);
                 mTvGetsms.setClickable(true);
-                mTvGetsms.setTextColor(Color.BLACK);
+                mTvGetsms.setTextColor(Color.WHITE);
                 mTvGetsms.setText("获取验证码");
                 handler.removeCallbacks(runnable);
 
@@ -55,9 +55,9 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        mSpinner = findViewById(R.id.sp_phone);
-        //设置默认值
-        mSpinner.setSelection(0, true);
+//        mSpinner = findViewById(R.id.sp_phone);
+//        //设置默认值
+//        mSpinner.setSelection(0, true);
         mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
