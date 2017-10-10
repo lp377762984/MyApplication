@@ -3,9 +3,11 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -16,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     private EditText mEtPhone;
     private EditText mEtPsw;
+    private boolean isPswdChecked = false;
+    private ImageView iv_pswd_see;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +48,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
         findViewById(R.id.tv_login_others).setOnClickListener(this);
+        iv_pswd_see = findViewById(R.id.iv_pswd_see);
+        iv_pswd_see.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
         mEtPsw = findViewById(R.id.et_password);
     }
+
 
 
     @Override
@@ -61,13 +67,28 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
             case R.id.btn_login://登录
                 Toast.makeText(this, "登录成功！", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this,HomeActivity.class));
+                startActivity(new Intent(this, HomeActivity.class));
                 break;
             case R.id.tv_forgetpsw://忘记密码
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
             case R.id.tv_login_others://其他方式登陆
                 Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.iv_pswd_see://设置密码可见
+                if (isPswdChecked) {
+                    //密码不可见
+                    mEtPsw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    isPswdChecked = false;
+                    iv_pswd_see.setImageResource(R.drawable.img_unlook);
+
+                } else {
+                    //密码可见
+                    mEtPsw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    isPswdChecked = true;
+                    iv_pswd_see.setImageResource(R.drawable.img_look);
+                }
+
                 break;
             default:
                 break;
@@ -103,7 +124,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         String params = "";
 
-        String url = Constants.QUERY_USERIFNO_URL + params;
+        String url ="" + params;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

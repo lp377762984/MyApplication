@@ -79,7 +79,7 @@
         <EditText
             android:id="@+id/et_phone"
             style="@style/EtStyle"
-            android:hint="请输入手机号"
+            android:hint="请输入您的手机号"
             android:inputType="phone" />
     </LinearLayout>
 
@@ -112,12 +112,13 @@
          />
 
         <ImageView
+            android:id="@+id/iv_pswd_see"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:src="@drawable/img_look" />
+            android:src="@drawable/img_unlook" />
 
 
     </LinearLayout>

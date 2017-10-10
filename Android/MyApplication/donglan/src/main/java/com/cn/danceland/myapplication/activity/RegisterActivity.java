@@ -12,8 +12,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 64456 on 2017/9/22.
@@ -25,6 +41,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private EditText mEtSms;
     private EditText mEtPsd;
     private EditText mEtConfirmPsd;
+    private String smsCode = "";
     private int recLen = 30;//倒计时时长
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
@@ -60,7 +77,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private void initView() {
 //        mSpinner = findViewById(R.id.sp_phone);
 //        mSpinner.setSelection(0, true);
-        mTvGetsms =findViewById(R.id.tv_getsms);
+        mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
         mEtSms = findViewById(R.id.et_sms);
@@ -95,12 +112,16 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 //设置倒计时
                 handler.postDelayed(runnable, 1000);
 
-
+                getSMS();//获取短信验证码
                 break;
             case R.id.btn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
                     Toast.makeText(RegisterActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
+                    Toast.makeText(RegisterActivity.this, "验证码有误，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断密码是否为空
@@ -127,6 +148,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(RegisterActivity.this, "密码输入不一致，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                userRegister();//注册账户
+
                 break;
             case R.id.iv_back://返回
                 finish();
@@ -136,4 +160,82 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         }
 
     }
+
+    /**
+     * 获取短信验证码
+     */
+    private void getSMS() {
+
+        String params = mEtPhone.getText().toString().trim();
+
+        String url = Constants.GET_SMS_URL + params;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                try {
+                    JSONObject jo = new JSONObject(s);
+                    smsCode = jo.getString("verCode");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+        });
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("get_sms");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+    /**
+     * 注册用户
+     */
+    private void userRegister() {
+
+        String url = Constants.REGISTER_URL;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("phone", mEtPhone.getText().toString().trim());
+                map.put("password", MD5Utils.encode(mEtPsd.getText().toString().trim()));
+                map.put("romType", "ANDROID");
+                return map;
+            }
+        };
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("userRegister");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
+
 }

@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <!--标题样式-->
     <style name="TextViewTitileStyle">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#333333</item>
@@ -16,7 +16,7 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
-
+    <!--输入框样式-->
     <style name="EtStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
@@ -26,7 +26,7 @@
         <item name="android:textColor">#000</item>
         <item name="android:cacheColorHint">#666666</item>
     </style>
-
+    <!--提交按钮样式-->
     <style name="BtnCommitStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
@@ -38,7 +38,7 @@
         <item name="android:text">完成</item>
 
     </style>
-
+    <!--获取验证码样式-->
     <style name="TvGetsmsStyle">
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">30dp</item>

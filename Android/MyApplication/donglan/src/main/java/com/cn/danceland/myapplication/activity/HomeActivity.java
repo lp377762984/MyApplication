@@ -39,8 +39,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
         fragments = new Fragment[]{ homeFragment,shopFragment, discoverFragment, meFragment};
+
+//        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
+//                .add(R.id.fragment_container, discoverFragment).hide(discoverFragment).show(homeFragment)
+//                .commit();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
-                .add(R.id.fragment_container, discoverFragment).hide(discoverFragment).show(homeFragment)
+                .show(homeFragment)
                 .commit();
     }
 

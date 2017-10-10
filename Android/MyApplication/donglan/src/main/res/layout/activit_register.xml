@@ -42,8 +42,8 @@
             android:id="@+id/ll_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/edit_bg_phone"
             android:focusable="true"
@@ -65,81 +65,117 @@
                 android:src="@drawable/img_phone" />
 
             <EditText
+                style="@style/EtStyle"
                 android:id="@+id/et_phone"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:hint="手机号"
+                android:hint="请输入您的手机号"
                 android:inputType="phone"
-                android:paddingLeft="10dp"
-                android:textSize="14sp" />
+            />
         </LinearLayout>
-
         <TextView
             android:id="@+id/tv_getsms"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            style="@style/TvGetsmsStyle"
             android:layout_below="@+id/ll_phone"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/text_sms_bg"
-            android:gravity="center"
-            android:text="获取验证码"
-            android:textColor="#fff"
-            android:textSize="12sp" />
+            android:layout_marginTop="10dp" />
 
-        <EditText
-            android:id="@+id/et_sms"
+        <LinearLayout
+            android:id="@+id/ll_getsms"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/tv_getsms"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
-            android:hint="请输入短信验证码"
-            android:inputType="number"
-            android:paddingLeft="10dp"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
 
-        <EditText
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_muber" />
 
-            android:id="@+id/et_password"
+            <EditText
+                android:id="@+id/et_sms"
+                style="@style/EtStyle"
+                android:hint="请输入短信验证码"
+                android:inputType="number" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_miman"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/et_sms"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_getsms"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
-            android:hint="请输入密码（6-20位）"
-            android:inputType="textPassword"
-            android:paddingLeft="10dp"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_password" />
+
+            <EditText
+                android:id="@+id/et_password"
+                style="@style/EtStyle"
+                android:layout_weight="1"
+                android:hint="请输入密码（6-20位）"
+                android:inputType="textPassword"
+                />
 
 
-        <EditText
 
-            android:id="@+id/et_confirm_password"
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_confirm_password"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/et_password"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_miman"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
-            android:hint="请再次输入密码"
-            android:inputType="textPassword"
-            android:paddingLeft="10dp"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_password" />
+
+            <EditText
+                android:id="@+id/et_confirm_password"
+                style="@style/EtStyle"
+                android:layout_weight="1"
+                android:hint="请再次输入密码"
+                android:inputType="textPassword"
+                />
+
+
+
+
+        </LinearLayout>
+
 
         <Button
             style="@style/BtnCommitStyle"
             android:id="@+id/btn_commit"
-            android:layout_below="@+id/et_confirm_password"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="172dp"
             android:text="完成"
            />
 

@@ -12,9 +12,7 @@ import com.cn.danceland.myapplication.R;
 public class HomeFragment extends BaseFragment {
 
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+
 
 
     @Override

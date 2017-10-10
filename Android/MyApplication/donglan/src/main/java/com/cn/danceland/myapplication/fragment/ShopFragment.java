@@ -12,9 +12,6 @@ import com.cn.danceland.myapplication.R;
 public class ShopFragment extends BaseFragment {
 
 
-    public ShopFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override

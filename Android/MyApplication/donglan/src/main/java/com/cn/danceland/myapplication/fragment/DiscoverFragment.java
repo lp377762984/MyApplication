@@ -12,9 +12,6 @@ import com.cn.danceland.myapplication.R;
 public class DiscoverFragment extends BaseFragment {
 
 
-    public DiscoverFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
