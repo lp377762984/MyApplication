@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="selectorMenuAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/selector_enter</item>
+        <item name="android:windowExitAnimation">@anim/selector_exit</item>
+    </style>
 </resources>

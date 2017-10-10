@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
-import com.cn.danceland.myapplication.LoginActivity;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
@@ -60,7 +59,7 @@ public class SplashActivity extends Activity {
                         }
                     }
 
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, RegisterInfoActivity.class));
 
                     finish();
                 } else {
@@ -68,7 +67,7 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    startActivity(new Intent(SplashActivity.this, RegisterInfoActivity.class));
                     finish();
                 }
             }

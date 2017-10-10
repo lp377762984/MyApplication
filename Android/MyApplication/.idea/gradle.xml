@@ -10,7 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/donglan" />
-            <option value="$PROJECT_DIR$/hellochars-library" />
+            <option value="$PROJECT_DIR$/hellocharts-library" />
+            <option value="$PROJECT_DIR$/hellocharts-samples" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

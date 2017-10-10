@@ -80,7 +80,7 @@
         android:padding="10dp"
         android:gravity="center"/>
     <EditText
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:id="@+id/et_sms"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -97,7 +97,7 @@
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:hint="请输入密码"
+        android:hint="请输入密码（6-20位）"
         android:textSize="14sp"
         android:inputType="textPassword"
         android:layout_marginTop="10dp"
@@ -106,15 +106,32 @@
         android:layout_marginRight="30dp"
         android:background="@drawable/edit_bg_phone"
         android:layout_below="@id/et_sms"/>
+
+
+    <EditText
+
+        android:id="@+id/et_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="请再次输入密码"
+        android:textSize="14sp"
+        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:paddingLeft="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/edit_bg_phone"
+        android:layout_below="@id/et_password"/>
+
     <Button
         android:id="@+id/btn_commit"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#696969"
+        android:background="#36BA67"
         android:text="完成"
         android:textColor="#fff"
         android:textSize="16sp"
-        android:layout_below="@+id/et_password"
+        android:layout_below="@+id/et_confirm_password"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
