@@ -20,6 +20,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         v.findViewById(R.id.ll_setting).setOnClickListener(this);
         v.findViewById(R.id.iv_edit).setOnClickListener(this);
 
+
+        
         return v;
     }
 
