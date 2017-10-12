@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.SPUtils;
 
 public class SettingActivity extends Activity implements View.OnClickListener {
 
@@ -39,6 +41,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.tv_quit://退出
                 startActivity(new Intent(this, LoginActivity.class));
+                SPUtils.setBoolean(Constants.ISLOGINED,false);
+                //退出主页面
+                HomeActivity.instance.finish();
                 finish();
                 break;
             case R.id.ll_setting://设置会员

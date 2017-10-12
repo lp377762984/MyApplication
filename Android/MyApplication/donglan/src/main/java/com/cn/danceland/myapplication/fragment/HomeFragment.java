@@ -21,6 +21,9 @@ public class HomeFragment extends BaseFragment {
         return v;
     }
 
+    @Override
+    public void initDta() {
 
+    }
 
 }

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
@@ -15,7 +17,6 @@ import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 
 public class HomeActivity extends FragmentActivity implements View.OnClickListener {
-
 
 
     private Button[] mTabs;
@@ -27,18 +28,19 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private ShopFragment shopFragment;
     private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
-
+    public static HomeActivity instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        instance = this;
         initView();
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
-        fragments = new Fragment[]{ homeFragment,shopFragment, discoverFragment, meFragment};
+        fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
 
 //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
 //                .add(R.id.fragment_container, discoverFragment).hide(discoverFragment).show(homeFragment)
@@ -97,5 +99,27 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         currentTabIndex = index;
 
 
+    }
+
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //主页面返回两次退出
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (System.currentTimeMillis() - exitTime > 2000) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                System.exit(0);
+                return super.onKeyDown(keyCode, event);
+            }
+
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -18,7 +18,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +69,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
             case R.id.btn_login://登录
                 Toast.makeText(this, "登录成功！", Toast.LENGTH_SHORT).show();
+
+                SPUtils.setBoolean(Constants.ISLOGINED,true);
                 startActivity(new Intent(this, HomeActivity.class));
+                finish();
                 break;
             case R.id.tv_forgetpsw://忘记密码
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));

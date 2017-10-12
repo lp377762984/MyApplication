@@ -7,6 +7,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
 
@@ -42,7 +43,8 @@ public class SplashActivity extends Activity {
 
         new Thread(new Runnable() {
             public void run() {
-                if (SPUtils.getBoolean(SplashActivity.this, "islogin", false)) {
+                //判断是否登录
+                if (SPUtils.getBoolean( Constants.ISLOGINED, false)) {
 
                     long start = System.currentTimeMillis();
 //                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
@@ -59,7 +61,7 @@ public class SplashActivity extends Activity {
                         }
                     }
 
-                        startActivity(new Intent(SplashActivity.this, RegisterInfoActivity.class));
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
                     finish();
                 } else {
@@ -67,7 +69,7 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, RegisterInfoActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
             }

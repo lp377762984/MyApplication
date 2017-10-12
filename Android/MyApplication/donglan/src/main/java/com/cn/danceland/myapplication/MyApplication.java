@@ -16,6 +16,7 @@ public class MyApplication extends Application {
     private static RequestQueue requestQueue;
     public static Context applicationContext;
     private static MyApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -23,12 +24,16 @@ public class MyApplication extends Application {
         applicationContext = this;
         instance = this;
     }
+
     public static RequestQueue getHttpQueues() {
         return requestQueue;
     }
+
     public static MyApplication getInstance() {
         return instance;
     }
 
-
+    public static Context getContext() {
+        return applicationContext;
+    }
 }
