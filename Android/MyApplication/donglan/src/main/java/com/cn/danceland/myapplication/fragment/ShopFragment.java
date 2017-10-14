@@ -12,13 +12,14 @@ import com.cn.danceland.myapplication.R;
 public class ShopFragment extends BaseFragment {
 
 
-
-
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_shop, null);
         return v;
     }
 
+    @Override
+    public void initDta() {
 
+    }
 }

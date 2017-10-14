@@ -27,10 +27,10 @@ dependencies {
     compile project(':hellocharts-library')
     compile files('libs/volley-1.0.19.jar')
     compile files('libs/gson-2.4.jar')
+    compile project(':hellocharts-library')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:26.+'
-    testCompile 'junit:junit:4.12'
-    compile project(':hellocharts-library')
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    testCompile 'junit:junit:4.12'
 }

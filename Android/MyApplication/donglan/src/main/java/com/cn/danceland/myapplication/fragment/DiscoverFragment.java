@@ -20,6 +20,8 @@ public class DiscoverFragment extends BaseFragment {
         return v;
     }
 
+    @Override
+    public void initDta() {
 
-
+    }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cn.danceland.myapplication" >
+    package="com.cn.danceland.myapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -19,18 +19,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChartActivity"/>
-        <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.RegisterInfoActivity"/>
-        <activity android:name=".activity.LoginSMSActivity"/>
-        <activity android:name=".activity.ForgetPasswordActivity"/>
-        <activity android:name=".activity.MainActivity"/>
-        <activity android:name=".activity.LoginActivity"
-            />
-        <activity android:name=".activity.MyProActivity"
-            />
-        <activity android:name=".activity.HomeActivity" />
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity android:name=".activity.ChartActivity" />
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.RegisterInfoActivity" />
+        <activity android:name=".activity.LoginSMSActivity" />
+        <activity android:name=".activity.ForgetPasswordActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.MyProActivity" />
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.ChangePhoneActivity"></activity>
     </application>
 
 </manifest>
