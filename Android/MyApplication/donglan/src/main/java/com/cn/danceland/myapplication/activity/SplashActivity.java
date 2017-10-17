@@ -58,13 +58,10 @@ public class SplashActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-<<<<<<< HEAD
+
                     //已经登录，进入主界面
                     startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-=======
 
-                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
->>>>>>> 043467b3a53609d084291ed19d6223c14e93b570
 
                     finish();
                 } else {
@@ -72,10 +69,9 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-<<<<<<< HEAD
+
                     //未登录进入，登录页面
-=======
->>>>>>> 043467b3a53609d084291ed19d6223c14e93b570
+
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
