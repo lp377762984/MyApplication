@@ -29,12 +29,10 @@ public class SplashActivity extends Activity {
         //	versionText.setText(getVersion());
 
 
-
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
     }
-
 
 
     @Override
@@ -44,7 +42,7 @@ public class SplashActivity extends Activity {
         new Thread(new Runnable() {
             public void run() {
                 //判断是否登录
-                if (SPUtils.getBoolean( Constants.ISLOGINED, false)) {
+                if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
 
                     long start = System.currentTimeMillis();
 //                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
@@ -60,8 +58,8 @@ public class SplashActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-
-                        startActivity(new Intent(SplashActivity.this, MyProActivity.class));
+                    //已经登录，进入主界面
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
                     finish();
                 } else {
@@ -69,7 +67,8 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, MyProActivity.class));
+                    //未登录进入，登录页面
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
             }
