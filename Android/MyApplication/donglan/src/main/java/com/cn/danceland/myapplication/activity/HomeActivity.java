@@ -29,6 +29,14 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;
+    private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //不处理崩溃时页面保存信息
+        // super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +48,25 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         shopFragment = new ShopFragment();
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
+//        if (savedInstanceState != null) {
+//            homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[0]);
+//            shopFragment = (ShopFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[1]);
+//            discoverFragment = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[2]);
+//            meFragment = (MeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[3]);
+//        }
+
         fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
 
 //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
 //                .add(R.id.fragment_container, discoverFragment).hide(discoverFragment).show(homeFragment)
 //                .commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
-                .show(homeFragment)
-                .commit();
+
+        if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[0]) == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment, FRAGMENT_TAG[0])
+                    .show(homeFragment)
+                    .commit();
+        }
+
     }
 
     private void initView() {
@@ -89,7 +108,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     getSupportFragmentManager().beginTransaction();
             trx.hide(fragments[currentTabIndex]);
             if (!fragments[index].isAdded()) {
-                trx.add(R.id.fragment_container, fragments[index]);
+                trx.add(R.id.fragment_container, fragments[index], FRAGMENT_TAG[index]);
             }
             trx.show(fragments[index]).commit();
         }

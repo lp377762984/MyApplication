@@ -32,6 +32,7 @@
             android:launchMode="singleTask" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ChangePhoneActivity"></activity>
+        <activity android:name=".activity.ConfirmPasswordActivity"/>
     </application>
 
 </manifest>

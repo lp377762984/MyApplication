@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     android:background="#F9F9F9">
 
+
+
+
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
@@ -15,6 +18,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         tools:ignore="DisableBaselineAlignment">
+
 
         <RelativeLayout
             android:id="@+id/btn_container_myjob"
@@ -104,7 +108,11 @@
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_bg_line"
+        android:layout_above="@id/main_bottom"/>
     <RelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

@@ -34,7 +34,7 @@
             />
     </RelativeLayout>
 
-    <ScrollView
+    <com.cn.danceland.myapplication.view.ReboundScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_bg_mianlayout">
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
-                        android:text="未填写"
+                        android:text="13436907535"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -269,7 +269,7 @@
                 android:background="@drawable/bg_setting_item_selector"/>
 
         </RelativeLayout>
-    </ScrollView>
+    </com.cn.danceland.myapplication.view.ReboundScrollView>
 
 
 </LinearLayout>

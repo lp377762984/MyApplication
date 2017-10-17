@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#fff"
-
-        >
+        android:background="#fff">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -21,18 +20,92 @@
             android:src="@drawable/img_back" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="验证手机号"
-            android:textColor="@color/color_content_text"
-            android:textSize="18sp"
-
-            />
+            style="@style/TextViewTitileStyle"
+            android:text="绑定新手机号" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F9F9F9">
 
+        <LinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/edit_bg_phone"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <!--         <Spinner
+                android:id="@+id/sp_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:entries="@array/phone_codes">
+
+            </Spinner>-->
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_phone" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/EtStyle"
+
+                android:hint="请输入绑定的新手机号"
+                android:inputType="phone" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_getsms"
+            style="@style/TvGetsmsStyle"
+            android:layout_below="@+id/ll_phone"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_getsms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_getsms"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_bg_phone"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_muber" />
+
+            <EditText
+                android:id="@+id/et_sms"
+                style="@style/EtStyle"
+                android:hint="请输入短信验证码"
+                android:inputType="number" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_commit"
+            style="@style/BtnCommitStyle"
+            android:layout_below="@+id/ll_getsms"
+            android:layout_marginTop="172dp"
+            android:text="绑定" />
+
+    </RelativeLayout>
 
 
 
