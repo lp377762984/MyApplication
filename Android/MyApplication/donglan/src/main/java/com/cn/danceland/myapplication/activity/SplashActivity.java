@@ -61,7 +61,7 @@ public class SplashActivity extends Activity {
                         }
                     }
 
-                        startActivity(new Intent(SplashActivity.this, MyProActivity.class));
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
                     finish();
                 } else {
@@ -69,7 +69,7 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-                    startActivity(new Intent(SplashActivity.this, MyProActivity.class));
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
             }
