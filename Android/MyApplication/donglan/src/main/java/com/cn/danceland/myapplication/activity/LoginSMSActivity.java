@@ -16,7 +16,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 
 /**
- * Created by 64456 on 2017/9/22.
+ * Created by shy on 2017/9/22.
  */
 
 public class LoginSMSActivity extends Activity implements View.OnClickListener {
@@ -55,9 +55,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-//        mSpinner = findViewById(R.id.sp_phone);
-//        //设置默认值
-//        mSpinner.setSelection(0, true);
+
         mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);

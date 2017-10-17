@@ -80,6 +80,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                startActivity(new  Intent(SettingActivity.this,ConfirmPasswordActivity.class));
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

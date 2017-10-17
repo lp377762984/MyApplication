@@ -32,6 +32,7 @@
             android:launchMode="singleTask" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ChangePhoneActivity"></activity>
+        <activity android:name=".activity.ConfirmPasswordActivity"/>
     </application>
     <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
