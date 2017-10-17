@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="200dp">
-
-
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -16,48 +14,43 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="取消"
-            android:textColor="#87CEFA"
+            android:layout_centerVertical="true"
+            android:textColor="@color/common_botton_bar_blue"
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/selecttitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="选择日期"
+            android:layout_centerInParent="true"
+            android:text="选择身高"
             android:textColor="#C0C0C0"
             android:textSize="17sp" />
 
         <TextView
+            android:id="@+id/over"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:text="完成"
-            android:textColor="#87CEFA"
+            android:layout_centerVertical="true"
+            android:textColor="@color/common_botton_bar_blue"
             android:textSize="20sp" />
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         >
         <ListView
-            android:id="@+id/list_year"
+            android:id="@+id/list_height"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
         </ListView>
 
-        <ListView
-            android:id="@+id/list_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-        </ListView>
-
-    </LinearLayout>
-
-
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
