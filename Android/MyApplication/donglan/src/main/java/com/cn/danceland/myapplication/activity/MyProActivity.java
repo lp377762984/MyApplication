@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,11 +162,13 @@ public class MyProActivity extends Activity {
     public void showPop(){
         head_image_window = new PopupWindow(headView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
+        head_image_window.setOutsideTouchable(true);
+        head_image_window.setBackgroundDrawable(new BitmapDrawable());
         //显示PopupWindow
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         head_image_window.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
         head_image_window.setAnimationStyle(R.style.selectorMenuAnim);
+
     }
 
     public void showEditImage(){
