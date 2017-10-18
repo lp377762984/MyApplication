@@ -66,8 +66,6 @@ public class MyProActivity extends Activity {
 
     public void initHost(){
         resolver = getContentResolver();
-
-
     }
 
     public void initView(){
