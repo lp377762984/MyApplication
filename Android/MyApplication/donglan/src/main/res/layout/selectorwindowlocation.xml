@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="#ffffff"
     android:layout_height="200dp">
 
 
@@ -23,11 +24,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="选择日期"
+            android:text="选择地点"
             android:textColor="#C0C0C0"
             android:textSize="17sp" />
 
         <TextView
+            android:id="@+id/over_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,14 +46,14 @@
         android:orientation="horizontal"
         >
         <ListView
-            android:id="@+id/list_year"
+            android:id="@+id/list_province"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
         </ListView>
 
         <ListView
-            android:id="@+id/list_date"
+            android:id="@+id/list_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
