@@ -41,7 +41,7 @@ import java.util.List;
 
 public class RegisterInfoActivity extends Activity{
 
-    String strName ;
+    String strName,strSex,strBirthday,strHeight,strWeight ;
     TextView text_birthday,cancel_action,text_height,button,text_name,text_male,text_female,over,text_weight,
             selecttitle;
     PopupWindow mPopWindow;
@@ -102,7 +102,8 @@ public class RegisterInfoActivity extends Activity{
                     new DatePickerDialog(RegisterInfoActivity.this,new DatePickerDialog.OnDateSetListener() {
                         public void onDateSet(DatePicker dp, int year,int month, int dayOfMonth) {
                             //et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
-                           text_birthday.setText(year+"年"+(month+1)+"月");
+                            text_birthday.setText(year+"年"+(month+1)+"月"+dayOfMonth+"日");
+                            strBirthday = year+"-"+(month+1)+"-"+dayOfMonth;
                         }
                     }, c.get(Calendar.YEAR), // 传入年份
                             c.get(Calendar.MONTH), // 传入月份
@@ -120,6 +121,7 @@ public class RegisterInfoActivity extends Activity{
                     selecttitle.setText("选择体重");
                     break;
                 case R.id.text_name:
+                    text_name.setText("");
                     showName();
                     break;
                 case R.id.cancel_action:{
@@ -132,11 +134,12 @@ public class RegisterInfoActivity extends Activity{
                 case R.id.text_male:
                     text_male.setBackgroundResource(R.drawable.male_blue);
                     text_female.setBackgroundResource(R.drawable.female_gray);
-
+                    strSex = "男";
                     break;
                 case R.id.text_female:
                     text_male.setBackgroundResource(R.drawable.male_gray);
                     text_female.setBackgroundResource(R.drawable.female_blue);
+                    strSex = "女";
                     break;
             }
 
@@ -212,8 +215,10 @@ public class RegisterInfoActivity extends Activity{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(j==0){
                     text_height.setText(arHeight.get(i)+" cm");
+                    strHeight = arHeight.get(i);
                 }else{
                     text_weight.setText(arHeight.get(i)+" kg");
+                    strWeight = arHeight.get(i);
                 }
             }
         });
