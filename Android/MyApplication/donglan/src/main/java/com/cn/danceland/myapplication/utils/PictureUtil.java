@@ -2,10 +2,12 @@ package com.cn.danceland.myapplication.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
@@ -97,6 +99,15 @@ public  class PictureUtil {
         return result;
     }
 
+    public static String getRealPath(Context context, Uri uri){
+        int sdkInt = Build.VERSION.SDK_INT;
+        if(sdkInt<19){
+            return  getRealPathFromUri_Api11To18(context,uri);
+        }else{
+            return getRealPathFromUri_AboveApi19(context,uri);
+        }
+    }
+
     public static String getRealPathFromUri_AboveApi19(Context context, Uri uri) {
         String filePath = null;
         String wholeID = DocumentsContract.getDocumentId(uri);
@@ -113,6 +124,20 @@ public  class PictureUtil {
         int columnIndex = cursor.getColumnIndex(projection[0]);
         if (cursor.moveToFirst()) filePath = cursor.getString(columnIndex);
         cursor.close();
+        return filePath;
+    }
+
+    private static String getRealPathFromUri_Api11To18(Context context, Uri uri) {
+        String filePath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            filePath = cursor.getString(cursor.getColumnIndex(projection[0]));
+            cursor.close();
+        }
         return filePath;
     }
 }
