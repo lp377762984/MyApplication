@@ -251,7 +251,12 @@ public class MyProActivity extends Activity {
             }
             if(requestCode == ALBUM_REQUEST_CODE){
                 Uri photo = data.getData();
-                String path = PictureUtil.getRealPathFromUri_AboveApi19(this,photo);
+                String path;
+                if(photo!=null&&photo.toString().contains("file://")){
+                    path = photo.toString().replace("file://","");
+                }else{
+                    path = PictureUtil.getRealPath(this,photo);
+                }
                 circleImageView.setImageBitmap(PictureUtil.getSmallBitmap(path,65,65));
             }
         }
