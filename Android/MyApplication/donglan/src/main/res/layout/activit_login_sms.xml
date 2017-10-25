@@ -7,21 +7,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#fff">
+        android:background="@color/dl_blue">
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="5dp"
             android:onClick="back"
+            android:paddingLeft="15dp"
             android:src="@drawable/img_back" />
 
         <TextView
             style="@style/TextViewTitileStyle"
-            android:text="短信验证" />
+            android:text="短信验证"
+            />
     </RelativeLayout>
 
     <RelativeLayout
