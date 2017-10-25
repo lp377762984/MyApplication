@@ -6,8 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,11 +22,11 @@ import com.cn.danceland.myapplication.R;
  * email:myc1101255053@163.com
  * description:
  */
-public class SwitchButton extends View implements View.OnTouchListener  {
+public class SwitchButton extends View implements View.OnTouchListener {
     //背景图片
-    private Bitmap bgBitmap;
+    private GradientDrawable bg_drawable;
     //按钮图片
-    private Bitmap btnBitmap;
+    private GradientDrawable btn_drawable;
     private Paint paint;
     private int leftDis = 0;
     //标记最大滑动
@@ -52,6 +53,7 @@ public class SwitchButton extends View implements View.OnTouchListener  {
     //定义文本大小
     float textSize;
 
+
     public SwitchButton(Context context) {
         this(context, null);
     }
@@ -65,47 +67,72 @@ public class SwitchButton extends View implements View.OnTouchListener  {
         initData(context, attrs);
         initView();
     }
+
+    public Bitmap drawableToBitmap(Drawable drawable) {
+        // 取 drawable 的长宽
+        int w = drawable.getIntrinsicWidth();
+        int h = drawable.getIntrinsicHeight();
+
+        // 取 drawable 的颜色格式
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565;
+        // 建立对应 bitmap
+        Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+        // 建立对应 bitmap 的画布
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, w, h);
+        // 把 drawable 内容画到画布中
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
     private void initData(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwitchButton);
-        Drawable bg_Drawable = a.getDrawable(R.styleable.SwitchButton_bg_bitmap);
-        Drawable btn_Drawable = a.getDrawable(R.styleable.SwitchButton_btn_bitmap);
+        bg_drawable = (GradientDrawable) a.getDrawable(R.styleable.SwitchButton_bg_bitmap);
+        btn_drawable =
+                (GradientDrawable) a.getDrawable(R.styleable.SwitchButton_btn_bitmap);
         textOn = a.getString(R.styleable.SwitchButton_textOn);
         textOff = a.getString(R.styleable.SwitchButton_textOff);
         textSize = a.getDimension(R.styleable.SwitchButton_textSize_ab, 35);
         a.recycle();
-        bgBitmap = ((BitmapDrawable) bg_Drawable).getBitmap();
-        btnBitmap = ((BitmapDrawable) btn_Drawable).getBitmap();
+
     }
 
     private void initView() {
+
         paint = new Paint();
-        slidingMax = bgBitmap.getWidth() - btnBitmap.getWidth();
+        slidingMax = bg_drawable.getIntrinsicWidth() - btn_drawable.getIntrinsicWidth();
+
         paint.setTextSize(textSize);
         width1 = paint.measureText(textOn);
-        cx1 = btnBitmap.getWidth() / 2 - width1 / 2;
+        cx1 = btn_drawable.getIntrinsicWidth() / 2 - width1 / 2;
 
         //测量绘制文本高度
-        Paint.FontMetrics fontMetrics=paint.getFontMetrics();
-        float fontHeight=fontMetrics.bottom-fontMetrics.top;
-        cy = btnBitmap.getHeight() -(btnBitmap.getHeight()-fontHeight)/2-fontMetrics.bottom;
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        float fontHeight = fontMetrics.bottom - fontMetrics.top;
+        cy = btn_drawable.getIntrinsicHeight() - (btn_drawable.getIntrinsicHeight() - fontHeight) / 2 - fontMetrics.bottom;
         width2 = paint.measureText(textOff);
-        cx2 = (bgBitmap.getWidth() * 2 - btnBitmap.getWidth()) / 2 - width2 / 2;
+        cx2 = (bg_drawable.getIntrinsicWidth() * 2 - btn_drawable.getIntrinsicWidth()) / 2 - width2 / 2;
         paint.setAntiAlias(true);
         setOnTouchListener(this);
-    }
 
+    }
 
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(bgBitmap.getWidth(), bgBitmap.getHeight());
+        setMeasuredDimension(bg_drawable.getIntrinsicWidth(), bg_drawable.getIntrinsicHeight());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(bgBitmap, 0, 0, paint);
-        canvas.drawBitmap(btnBitmap, leftDis, 0, paint);
+        canvas.drawBitmap(drawableToBitmap(bg_drawable), 0, 0, paint);
+        canvas.drawBitmap(drawableToBitmap(btn_drawable), leftDis, 0, paint);
+
+//        ( bg_drawable).draw(canvas);
+//        ( btn_drawable).draw(canvas);
+
         if (mCurrent) {
             paint.setColor(Color.WHITE);
             canvas.drawText(textOff, cx2, cy, paint);

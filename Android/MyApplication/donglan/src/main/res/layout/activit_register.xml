@@ -7,18 +7,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="#fff"
+        android:background="@color/dl_blue"
 
         >
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="5dp"
             android:onClick="back"
+           android:paddingLeft="15dp"
+
             android:src="@drawable/img_back" />
 
         <TextView
@@ -27,7 +28,8 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="注册"
-            android:textColor="@android:color/black"
+
+            android:textColor="@android:color/white"
             android:textSize="18sp"
 
             />
@@ -65,12 +67,12 @@
                 android:src="@drawable/img_phone" />
 
             <EditText
-                style="@style/EtStyle"
                 android:id="@+id/et_phone"
+                style="@style/EtStyle"
                 android:hint="请输入您的手机号"
-                android:inputType="phone"
-            />
+                android:inputType="phone" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/tv_getsms"
             style="@style/TvGetsmsStyle"
@@ -104,7 +106,6 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:id="@+id/ll_miman"
             android:layout_width="match_parent"
@@ -129,10 +130,7 @@
                 style="@style/EtStyle"
                 android:layout_weight="1"
                 android:hint="请输入密码（6-20位）"
-                android:inputType="textPassword"
-                />
-
-
+                android:inputType="textPassword" />
 
 
         </LinearLayout>
@@ -162,22 +160,18 @@
                 style="@style/EtStyle"
                 android:layout_weight="1"
                 android:hint="请再次输入密码"
-                android:inputType="textPassword"
-                />
-
-
+                android:inputType="textPassword" />
 
 
         </LinearLayout>
 
 
         <Button
-            style="@style/BtnCommitStyle"
             android:id="@+id/btn_commit"
+            style="@style/BtnCommitStyle"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="172dp"
-            android:text="完成"
-           />
+            android:text="完成" />
 
     </RelativeLayout>
 
