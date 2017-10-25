@@ -137,7 +137,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1990年12月"
+                android:text="1990年12月10日"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 />
