@@ -17,19 +17,33 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     View locationView;
-    TextView cancel_action,over_action;
+    TextView cancel_action, over_action;
     PopupWindow locationWindow;
-    ListView list_province,list_city;
-    LocationAdapter proAdapter,cityAdapter;
+    ListView list_province, list_city;
+    LocationAdapter proAdapter, cityAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +60,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ll_about_us).setOnClickListener(this);
         findViewById(R.id.ll_clear).setOnClickListener(this);
 
-        locationView = LayoutInflater.from(SettingActivity.this).inflate(R.layout.selectorwindowlocation,null);
+        locationView = LayoutInflater.from(SettingActivity.this).inflate(R.layout.selectorwindowlocation, null);
         locationWindow = new PopupWindow(locationView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         locationWindow.setOutsideTouchable(true);
@@ -66,11 +80,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.tv_quit://退出
-                startActivity(new Intent(this, LoginActivity.class));
-                SPUtils.setBoolean(Constants.ISLOGINED,false);
-                //退出主页面
-                HomeActivity.instance.finish();
-                finish();
+
+                logOut();
+
                 break;
             case R.id.ll_setting://设置会员
                 showInputDialog();
@@ -108,11 +120,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 new AlertDialog.Builder(this);
         dialog.setTitle("提示");
         dialog.setMessage("是否重新绑定手机号");
-        dialog.setPositiveButton("确认",new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                startActivity(new  Intent(SettingActivity.this,ConfirmPasswordActivity.class));
+                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class));
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -133,7 +145,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 new AlertDialog.Builder(this);
         dialog.setTitle("提示");
         dialog.setMessage("清除缓存成功");
-        dialog.setPositiveButton("确认",new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -175,7 +187,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     }
 
 
-    public  void showLocation(){
+    public void showLocation() {
 
         ArrayList<String> proList = new ArrayList<String>();
         proList.add("河南");
@@ -197,22 +209,23 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         cityList.add("合肥");
 
         locationWindow.setContentView(locationView);
-        proAdapter = new LocationAdapter(proList,this);
-        cityAdapter = new LocationAdapter(cityList,this);
+        proAdapter = new LocationAdapter(proList, this);
+        cityAdapter = new LocationAdapter(cityList, this);
         list_province.setAdapter(proAdapter);
         list_city.setAdapter(cityAdapter);
 
 
-        locationWindow.showAsDropDown(findViewById(R.id.tv_quit),0,40);
+        locationWindow.showAsDropDown(findViewById(R.id.tv_quit), 0, 40);
         locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
 
     }
 
-    public class LocationAdapter extends BaseAdapter{
+    public class LocationAdapter extends BaseAdapter {
 
         ArrayList<String> arrayList;
         LayoutInflater inflater = null;
-        public LocationAdapter(ArrayList<String> list, Context context){
+
+        public LocationAdapter(ArrayList<String> list, Context context) {
             arrayList = list;
             inflater = LayoutInflater.from(context);
         }
@@ -235,8 +248,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             TextView item_text = null;
-            if(view==null){
-                view  = inflater.inflate(R.layout.selector_item,null);
+            if (view == null) {
+                view = inflater.inflate(R.layout.selector_item, null);
             }
             item_text = view.findViewById(R.id.item_text);
             item_text.setText(arrayList.get(i));
@@ -244,10 +257,67 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void dismissWindow(){
-        if(null != locationWindow && locationWindow.isShowing()){
+    public void dismissWindow() {
+        if (null != locationWindow && locationWindow.isShowing()) {
             locationWindow.dismiss();
         }
     }
 
+    /***
+     * 退出登录
+     */
+    private void logOut() {
+
+        String url = Constants.LOGOUT_URL;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    //成功
+                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+                    SPUtils.setBoolean(Constants.ISLOGINED, false);
+                    //退出主页面
+                    HomeActivity.instance.finish();
+                    finish();
+                } else {
+                    //失败
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+                        + ">>" + volleyError.networkResponse.statusCode
+                        + ">>" + volleyError.networkResponse.data
+                        + ">>" + volleyError.getCause()
+                        + ">>" + volleyError.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
+
+                // map.put("romType", "0");
+                return map;
+            }
+        };
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
 }

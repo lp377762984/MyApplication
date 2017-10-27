@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,13 +23,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +42,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;
-    private EditText mEtPsd;
+    private EditText mEtPsw;
     private EditText mEtConfirmPsd;
     private String smsCode = "";
     private int recLen = 30;//倒计时时长
@@ -55,7 +58,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 //倒计时结束后设置可以点击
                 mTvGetsms.setFocusable(true);
                 mTvGetsms.setClickable(true);
-                mTvGetsms.setTextColor(Color.BLACK);
+                mTvGetsms.setTextColor(Color.WHITE);
                 mTvGetsms.setText("获取验证码");
                 handler.removeCallbacks(runnable);
 
@@ -80,10 +83,28 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
+        mEtPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //    修改手机号后清空验证码
+                mEtSms.setText("");
+                smsCode = "";
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         mEtSms = findViewById(R.id.et_sms);
         findViewById(R.id.btn_commit).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
-        mEtPsd = findViewById(R.id.et_password);
+        mEtPsw = findViewById(R.id.et_password);
         mEtConfirmPsd = findViewById(R.id.et_confirm_password);
     }
 
@@ -125,26 +146,26 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     return;
                 }
                 //判断密码是否为空
-                if (TextUtils.isEmpty(mEtPsd.getText().toString())) {
+                if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
                     Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断密码是否包含空格
-                if (mEtPsd.getText().toString().contains(" ")) {
+                if (mEtPsw.getText().toString().contains(" ")) {
                     Toast.makeText(RegisterActivity.this, "密码不能包含空格，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断密码位数是否符合6-20
-                if (mEtPsd.getText().toString().length() < 6) {
+                if (mEtPsw.getText().toString().length() < 6) {
                     Toast.makeText(RegisterActivity.this, "设置密码要大于等于6位，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (mEtPsd.getText().toString().length() > 20) {
+                if (mEtPsw.getText().toString().length() > 20) {
                     Toast.makeText(RegisterActivity.this, "设置密码要小于等于20位，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断密码输入是否一致
-                if (!TextUtils.equals(mEtConfirmPsd.getText().toString(), mEtPsd.getText().toString())) {
+                if (!TextUtils.equals(mEtConfirmPsd.getText().toString(), mEtPsw.getText().toString())) {
                     Toast.makeText(RegisterActivity.this, "密码输入不一致，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -174,12 +195,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                try {
-                    JSONObject jo = new JSONObject(s);
-                    smsCode = jo.getString("verCode");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    smsCode = requestInfoBean.getData().getVerCode();
+                    ToastUtils.showToastLong("验证码是："
+                            + smsCode);
                 }
 
 
@@ -188,7 +210,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         });
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
@@ -211,11 +233,32 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    //成功
+                    String mUserId = requestInfoBean.getData().getId();
+                    //      SPUtils.setString(Constants.MY_USERID, mUserId);
+                    ToastUtils.showToastShort("注册成功");
+                    startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                    finish();
+                } else {
+                    //注册失败
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+                        + ">>" + volleyError.networkResponse.statusCode
+                        + ">>" + volleyError.networkResponse.data
+                        + ">>" + volleyError.getCause()
+                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override
@@ -223,8 +266,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Map<String, String> map = new HashMap<String, String>();
 
                 map.put("phone", mEtPhone.getText().toString().trim());
-                map.put("password", MD5Utils.encode(mEtPsd.getText().toString().trim()));
-                map.put("romType", "ANDROID");
+                map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
+                map.put("romType", "0");
                 return map;
             }
         };

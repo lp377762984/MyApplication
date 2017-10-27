@@ -1,19 +1,34 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 /**
  * Created by shy on 2017/9/22.
@@ -23,7 +38,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;
-
+    private String smsCode = "";
     private EditText mEtPhone;
     private int recLen = 30;//倒计时时长
     Handler handler = new Handler();
@@ -59,6 +74,24 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
         mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
+        mEtPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //    修改手机号后清空验证码
+                mEtSms.setText("");
+                smsCode = "";
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         mEtSms = findViewById(R.id.et_sms);
         findViewById(R.id.btn_commit).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
@@ -86,6 +119,8 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     return;
                 }
 
+                getSMS();
+
                 //设置不能点击
                 mTvGetsms.setFocusable(false);
                 mTvGetsms.setClickable(false);
@@ -103,6 +138,19 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(LoginSMSActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                //判断验证码是否正确
+                if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
+
+                    login_by_phone_url(mEtPhone.getText().toString().trim());
+                    ToastUtils.showToastShort("登录成功");
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);
+                    startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(LoginSMSActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+
+                }
+
 
                 break;
             case R.id.iv_back://返回
@@ -114,4 +162,81 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
         }
     }
+
+
+    /**
+     * 获取短信验证码
+     */
+    private void getSMS() {
+
+        String params = mEtPhone.getText().toString().trim();
+
+        String url = Constants.GET_SMS_URL + params;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    smsCode = requestInfoBean.getData().getVerCode();
+                    ToastUtils.showToastLong("验证码是："
+                            + smsCode);
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        });
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("get_sms");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+    /***
+     *
+     * @param phone
+     */
+    private void login_by_phone_url(String phone) {
+
+        String params = phone;
+
+        String url = Constants.LOGIN_BY_PHONE_URL + params;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+        });
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("queryUserInfo");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
 }

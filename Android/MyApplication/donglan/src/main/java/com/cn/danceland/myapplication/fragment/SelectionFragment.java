@@ -1,15 +1,15 @@
 package com.cn.danceland.myapplication.fragment;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.adapter.MyListviewAdater;
+import com.cn.danceland.myapplication.adapter.MyRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.PullBean;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -28,7 +28,9 @@ import java.util.List;
 public class SelectionFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
     private List<PullBean> data = new ArrayList<PullBean>();
-    MyAdapter adapter;
+    MyListviewAdater myListviewAdater;
+    private RecyclerView mRecyclerView;
+
 
     @Override
     public View initViews() {
@@ -36,8 +38,11 @@ public class SelectionFragment extends BaseFragment {
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
 
         data = getData();
-        adapter = new MyAdapter(mActivity);
-        pullToRefresh.setAdapter(adapter);
+        myListviewAdater = new MyListviewAdater(mActivity, (ArrayList<PullBean>) data);
+        pullToRefresh.setAdapter(myListviewAdater);
+        //加入头布局
+        pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
 
@@ -48,38 +53,75 @@ public class SelectionFragment extends BaseFragment {
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
                 // TODO Auto-generated method stub
-                PullBean bean = new PullBean();
-                bean.setTitle("派大星");
-                bean.setContent("最近发布");
-                adapter.addFirst(bean);
+                //最后刷新时间
+//                String label = DateUtils.formatDateTime(mActivity, System.currentTimeMillis(),
+//                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+//                PullBean bean = new PullBean();
+//                bean.setTitle("派大星333");
+//                bean.setContent("最近发布");
+//                myListviewAdater.addFirst(bean);
+
                 new FinishRefresh().execute();
-                adapter.notifyDataSetChanged();
+            myListviewAdater.notifyDataSetChanged();
+
+
             }
 
             @Override
             public void onPullUpToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
                 // TODO Auto-generated method stub
+                //最后刷新时间
+//                String label = "最后更新时间："+DateUtils.formatDateTime(mActivity, System.currentTimeMillis(),
+//                        DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+
 //                PullBean bean = new PullBean();
 //                bean.setTitle("派大星");
 //                bean.setContent("最近发布");
-//                adapter.addLast(bean);
+//                myListviewAdater.addLast(bean);
                 List<PullBean> list = new ArrayList<PullBean>();
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 3; i++) {
                     PullBean bean = new PullBean();
-                    bean.setTitle("派大星 " + i);
-                    bean.setContent("最近更新");
+                    bean.setTitle("派大星222" + System.currentTimeMillis()+ i);
+                    bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
+
                     list.add(bean);
                 }
-                adapter.addLastList((ArrayList<PullBean>) list);
+                myListviewAdater.addLastList((ArrayList<PullBean>) list);
                 new FinishRefresh().execute();
-                adapter.notifyDataSetChanged();
-
+                //   myListviewAdater.notifyDataSetChanged();
+                //  pullToRefresh.getRefreshableView().setSelection(1);
+                //   LogUtil.i( pullToRefresh.getRefreshableView().getFirstVisiblePosition()+"");
+                // myListviewAdater.notifyDataSetChanged();
             }
         });
 
         return v;
     }
+
+    private View initHeadview() {
+
+        View headview = View.inflate(mActivity, R.layout.recycleview_headview, null);
+
+        mRecyclerView = headview.findViewById(R.id.my_recycler_view);
+
+
+        //创建默认的线性LayoutManager
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        mRecyclerView.setHasFixedSize(true);
+        //创建并设置Adapter
+        MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
+        mRecyclerView.setAdapter(mAdapter);
+        return headview;
+    }
+
 
     @Override
     public void initDta() {
@@ -88,10 +130,10 @@ public class SelectionFragment extends BaseFragment {
 
     private List<PullBean> getData() {
         List<PullBean> list = new ArrayList<PullBean>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             PullBean bean = new PullBean();
             bean.setTitle("派大星 " + i);
-            bean.setContent("最近更新");
+            bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
             list.add(bean);
         }
 
@@ -106,6 +148,16 @@ public class SelectionFragment extends BaseFragment {
         protected Void doInBackground(Void... params) {
             try {
                 Thread.sleep(1000);
+                List<PullBean> list = new ArrayList<PullBean>();
+                for (int i = 0; i < 3; i++) {
+                    PullBean bean = new PullBean();
+                    bean.setTitle("派大星3333" + System.currentTimeMillis()+ i);
+                    bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
+
+                    list.add(bean);
+                }
+                myListviewAdater.addFirstList((ArrayList<PullBean>) list);
+
             } catch (InterruptedException e) {
             }
             return null;
@@ -113,107 +165,29 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Void result) {
-//          adapter.notifyDataSetChanged();
+        myListviewAdater.notifyDataSetChanged();
             pullToRefresh.onRefreshComplete();
         }
     }
 
-    // 设置下拉刷新文本
+
     private void init() {
+        // 设置下拉刷新文本
         ILoadingLayout startLabels = pullToRefresh
                 .getLoadingLayoutProxy(true, false);
         startLabels.setPullLabel("下拉刷新...");// 刚下拉时，显示的提示
         startLabels.setRefreshingLabel("正在加载...");// 刷新时
         startLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
-
+        // 设置上拉刷新文本
         ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
                 false, true);
         endLabels.setPullLabel("上拉加载...");// 刚下拉时，显示的提示
         endLabels.setRefreshingLabel("正在加载...");// 刷新时
         endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
 
-//      // 设置下拉刷新文本
-//      pullToRefresh.getLoadingLayoutProxy(false, true)
-//              .setPullLabel("上拉刷新...");
-//      pullToRefresh.getLoadingLayoutProxy(false, true).setReleaseLabel(
-//              "放开刷新...");
-//      pullToRefresh.getLoadingLayoutProxy(false, true).setRefreshingLabel(
-//              "正在加载...");
-//      // 设置上拉刷新文本
-//      pullToRefresh.getLoadingLayoutProxy(true, false)
-//              .setPullLabel("下拉刷新...");
-//      pullToRefresh.getLoadingLayoutProxy(true, false).setReleaseLabel(
-//              "放开刷新...");
-//      pullToRefresh.getLoadingLayoutProxy(true, false).setRefreshingLabel(
-//              "正在加载...");
+
     }
 
 
-    private class MyAdapter extends BaseAdapter {
-        private LayoutInflater mInflater;
 
-        public MyAdapter(Context context) {
-            // TODO Auto-generated constructor stub
-            mInflater = LayoutInflater.from(context);
-        }
-
-        public void addFirst(PullBean bean) {
-            data.add(0, bean);
-        }
-
-        public void addFirstList(ArrayList<PullBean> bean) {
-            data.addAll(0, bean);
-        }
-
-        public void addLast(PullBean bean) {
-            data.add(bean);
-        }
-        public void addLastList(ArrayList<PullBean> bean) {
-            data.addAll(bean);
-        }
-
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return data.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return data.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            ViewHolder viewHolder = null;
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-                convertView = mInflater.inflate(R.layout.listview_item_dynamic, null);
-                viewHolder.tv_pick_name = (TextView) convertView.findViewById(R.id.tv_pick_name);
-                viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
-
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-            viewHolder.tv_pick_name.setText(data.get(position).getTitle());
-            viewHolder.tv_time.setText(data.get(position).getContent());
-
-            return convertView;
-        }
-
-        class ViewHolder {
-            TextView tv_pick_name;
-            TextView tv_time;
-        }
-    }
 }

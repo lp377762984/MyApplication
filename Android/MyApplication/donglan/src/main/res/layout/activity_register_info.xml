@@ -5,12 +5,14 @@
 
     <TextView
         android:id="@+id/text_finish"
-        android:layout_marginTop="15dp"
+
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="注册完成"
-        android:textSize="25sp"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:background="@color/dl_blue"
         />
 
     <TextView
@@ -97,7 +99,7 @@
             android:layout_weight="1">
             <TextView
                 android:id="@+id/text_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
@@ -135,9 +137,9 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1990年12月"
+                android:text="1990年12月10日"
                 android:textColor="#333333"
                 android:textSize="18sp"
                 />
@@ -147,7 +149,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="170 cm"
                 android:textColor="#333333"
@@ -159,7 +161,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="55 kg"
                 android:textColor="#333333"
@@ -179,8 +181,8 @@
         android:background="@mipmap/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_below="@+id/text_info"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"/>
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
