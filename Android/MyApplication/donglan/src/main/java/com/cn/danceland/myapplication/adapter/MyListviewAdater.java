@@ -19,25 +19,35 @@ import java.util.List;
  */
 
 
-public class ListviewAdater extends BaseAdapter {
+public class MyListviewAdater extends BaseAdapter {
     private List<PullBean> data = new ArrayList<PullBean>();
 
     private LayoutInflater mInflater;
 
-    public ListviewAdater(Context context, ArrayList<PullBean> data) {
+    public MyListviewAdater(Context context, ArrayList<PullBean> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
 
     }
 
+
     public void addFirst(PullBean bean) {
         data.add(0, bean);
+    }
+
+    public void addFirstList(ArrayList<PullBean> bean) {
+        data.addAll(0, bean);
     }
 
     public void addLast(PullBean bean) {
         data.add(bean);
     }
+
+    public void addLastList(ArrayList<PullBean> bean) {
+        data.addAll(bean);
+    }
+
 
     @Override
     public int getCount() {
