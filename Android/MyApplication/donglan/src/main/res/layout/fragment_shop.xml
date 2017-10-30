@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-  >
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="门店"
-            android:layout_centerInParent="true"
-            />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_top_bg"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:background="@drawable/img_man" />I
+
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_alignBottom="@id/iv_top_bg"
+
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="动岚健身俱乐部"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/ibtn_gps"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/img_gps_white" />
+
+            <ImageButton
+                android:id="@+id/ibtn_call"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/img_call_phone" />
+        </LinearLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:numColumns="4"></GridView>
+</LinearLayout>

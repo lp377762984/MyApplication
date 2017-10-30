@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,13 +31,28 @@ public class SelectionFragment extends BaseFragment {
     private List<PullBean> data = new ArrayList<PullBean>();
     MyListviewAdater myListviewAdater;
     private RecyclerView mRecyclerView;
+    ProgressDialog dialog;
 
 
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_selection, null);
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
+        dialog = new ProgressDialog(mActivity);
+        dialog.setMessage("登录中……");
+        dialog.show();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);//延时1s
+                  dialog.dismiss();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
         data = getData();
         myListviewAdater = new MyListviewAdater(mActivity, (ArrayList<PullBean>) data);
         pullToRefresh.setAdapter(myListviewAdater);
@@ -63,7 +79,7 @@ public class SelectionFragment extends BaseFragment {
 //                myListviewAdater.addFirst(bean);
 
                 new FinishRefresh().execute();
-            myListviewAdater.notifyDataSetChanged();
+                myListviewAdater.notifyDataSetChanged();
 
 
             }
@@ -84,7 +100,7 @@ public class SelectionFragment extends BaseFragment {
                 List<PullBean> list = new ArrayList<PullBean>();
                 for (int i = 0; i < 3; i++) {
                     PullBean bean = new PullBean();
-                    bean.setTitle("派大星222" + System.currentTimeMillis()+ i);
+                    bean.setTitle("派大星222" + System.currentTimeMillis() + i);
                     bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
 
                     list.add(bean);
@@ -128,7 +144,10 @@ public class SelectionFragment extends BaseFragment {
         super.initDta();
     }
 
+
     private List<PullBean> getData() {
+
+
         List<PullBean> list = new ArrayList<PullBean>();
         for (int i = 0; i < 3; i++) {
             PullBean bean = new PullBean();
@@ -138,6 +157,11 @@ public class SelectionFragment extends BaseFragment {
         }
 
         return list;
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     /**
@@ -151,12 +175,14 @@ public class SelectionFragment extends BaseFragment {
                 List<PullBean> list = new ArrayList<PullBean>();
                 for (int i = 0; i < 3; i++) {
                     PullBean bean = new PullBean();
-                    bean.setTitle("派大星3333" + System.currentTimeMillis()+ i);
+                    bean.setTitle("派大星3333" + System.currentTimeMillis() + i);
                     bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
 
                     list.add(bean);
                 }
                 myListviewAdater.addFirstList((ArrayList<PullBean>) list);
+
+                dialog.dismiss();
 
             } catch (InterruptedException e) {
             }
@@ -165,7 +191,7 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Void result) {
-        myListviewAdater.notifyDataSetChanged();
+            myListviewAdater.notifyDataSetChanged();
             pullToRefresh.onRefreshComplete();
         }
     }
@@ -187,7 +213,6 @@ public class SelectionFragment extends BaseFragment {
 
 
     }
-
 
 
 }

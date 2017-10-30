@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,14 +20,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,13 +43,16 @@ public class LoginActivity extends Activity implements OnClickListener {
     private boolean isPswdChecked = false;
     private ImageView iv_pswd_see;
 
+    ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
         intView();
-
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("登录中……");
 
     }
 
@@ -59,6 +67,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         iv_pswd_see.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
         mEtPsw = findViewById(R.id.et_password);
+
     }
 
 
@@ -88,7 +97,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     return;
                 }
 
-
+                dialog.show();
                 login();
 
                 break;
@@ -122,11 +131,12 @@ public class LoginActivity extends Activity implements OnClickListener {
      * 登录
      */
     private void login() {
-
+        dialog.show();
         String url = Constants.LOGIN_URL;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                dialog.dismiss();
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
@@ -152,6 +162,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
                 LogUtil.i(volleyError.toString() + "Error: " + volleyError
                         + ">>" + volleyError.networkResponse.statusCode
@@ -191,12 +202,12 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = gson.fromJson(s,RequestInfoBean.class);
+                InfoBean requestInfoBean = gson.fromJson(s, InfoBean.class);
 
-                LogUtil.i( requestInfoBean.toString());
-//                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
-//                mInfoBean.add(requestInfoBean.getData().getResultObject());
-//                DataInfoCache.saveListCache(MyApplication.getContext(),mInfoBean,Constants.MY_INFO);
+                LogUtil.i(requestInfoBean.toString());
+                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
+                mInfoBean.add(requestInfoBean.getData().getResultObject());
+                DataInfoCache.saveListCache(MyApplication.getContext(), mInfoBean, Constants.MY_INFO);
             }
         }, new Response.ErrorListener() {
             @Override

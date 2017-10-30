@@ -1,1 +1,1 @@
-include ':donglan', ':hellocharts-library', ':hellocharts-samples', ':ViewPagerIndicatorlibrary', ':PullToRefreshLibrary'
+include ':donglan', ':hellocharts-library', ':hellocharts-samples', ':ViewPagerIndicatorlibrary', ':PullToRefreshLibrary', ':DroppyDropdownLibrary'

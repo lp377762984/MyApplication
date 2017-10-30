@@ -9,9 +9,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--请求访问使用照相设备-->
     <uses-permission android:name="android.permission.CAMERA" />
-
-
-
+    <!--打电话-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".MyApplication"
@@ -41,8 +40,8 @@
             android:launchMode="singleTask" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ChangePhoneActivity"></activity>
-        <activity android:name=".activity.ConfirmPasswordActivity"/>
-
+        <activity android:name=".activity.ConfirmPasswordActivity" />
+        <activity android:name=".activity.AddFriendsActivity" />
 
 
     </application>

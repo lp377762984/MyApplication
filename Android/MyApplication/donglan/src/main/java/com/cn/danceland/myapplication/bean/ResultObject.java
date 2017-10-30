@@ -17,8 +17,8 @@ public class ResultObject {
     private String nickName;
     private String height;
     private String weight;
-    private int regDate;
-    private int birthday;
+    private String regDate;
+    private String birthday;
     private String zoneCode;
     private int enabled;
     private int auth;
@@ -86,19 +86,19 @@ public class ResultObject {
         return weight;
     }
 
-    public void setRegDate(int regDate) {
+    public void setRegDate(String regDate) {
         this.regDate = regDate;
     }
 
-    public int getRegDate() {
+    public String getRegDate() {
         return regDate;
     }
 
-    public void setBirthday(int birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
-    public int getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 

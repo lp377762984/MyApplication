@@ -3,28 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_bg_mianlayout"
+
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
         android:background="#fff"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/img_my_avatar" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circleimageview"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/img_my_avatar" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="#fff">
+            android:background="#fff"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_pick_name"
@@ -35,10 +40,10 @@
 
             <TextView
                 android:id="@+id/tv_time"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
                 android:text="最近发布" />
         </LinearLayout>
 
@@ -53,16 +58,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
         android:text="好骚激动啊搜的哦啊建设大街奥普斯京东价哦啊四季豆isA级欧弟就奥斯大家哦爱上京东个架搜救的" />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="240dp"
 
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/img_man" />
 
@@ -72,25 +79,57 @@
         android:background="#fff"
         android:orientation="horizontal">
 
-        <ImageView
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/img_xin"
-            android:layout_gravity="center"/>
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/img_xin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="123"
+                android:textSize="12sp"
+                android:layout_marginLeft="3dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/img_msg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="123"
+                android:textSize="12sp"
+                android:layout_marginLeft="3dp"/>
+        </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/img_msg"
-            android:layout_gravity="center" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/img_share"
-            android:layout_gravity="center"/>
+            android:src="@drawable/img_share" />
     </LinearLayout>
 </LinearLayout>
