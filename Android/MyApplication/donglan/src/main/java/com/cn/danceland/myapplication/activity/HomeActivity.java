@@ -11,10 +11,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -66,6 +72,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .show(homeFragment)
                     .commit();
         }
+
+
+
 
     }
 

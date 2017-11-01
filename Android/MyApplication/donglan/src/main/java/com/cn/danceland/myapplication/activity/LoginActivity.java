@@ -79,6 +79,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
             case R.id.tv_login_sms://短信登录
                 startActivity(new Intent(LoginActivity.this, LoginSMSActivity.class));
+                finish();
                 break;
             case R.id.btn_login://登录
                 //判断电话号码是否为空
@@ -145,12 +146,13 @@ public class LoginActivity extends Activity implements OnClickListener {
                 if (requestInfoBean.getSuccess()) {
                     //成功
                     String mUserId = requestInfoBean.getData().getId();
-                    SPUtils.setString(Constants.MY_USERID, mUserId);
-
+                    SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
+                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
+                    //查询信息
                     queryUserInfo(mUserId);
 
                     ToastUtils.showToastShort("登录成功");
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
                 } else {
@@ -200,14 +202,15 @@ public class LoginActivity extends Activity implements OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.i(s);
+       //         LogUtil.i(s);
                 Gson gson = new Gson();
                 InfoBean requestInfoBean = gson.fromJson(s, InfoBean.class);
 
-                LogUtil.i(requestInfoBean.toString());
+                //   LogUtil.i(requestInfoBean.toString());
                 ArrayList<ResultObject> mInfoBean = new ArrayList<>();
                 mInfoBean.add(requestInfoBean.getData().getResultObject());
-                DataInfoCache.saveListCache(MyApplication.getContext(), mInfoBean, Constants.MY_INFO);
+                DataInfoCache.saveListCache( mInfoBean, Constants.MY_INFO);
+
             }
         }, new Response.ErrorListener() {
             @Override

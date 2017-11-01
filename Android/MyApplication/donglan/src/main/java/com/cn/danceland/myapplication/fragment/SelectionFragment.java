@@ -133,7 +133,7 @@ public class SelectionFragment extends BaseFragment {
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
         //创建并设置Adapter
-        MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
+        MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(mActivity,new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
         mRecyclerView.setAdapter(mAdapter);
         return headview;
     }

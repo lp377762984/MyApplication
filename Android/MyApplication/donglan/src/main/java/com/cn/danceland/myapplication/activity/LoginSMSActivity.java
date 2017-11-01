@@ -22,13 +22,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 /**
  * Created by shy on 2017/9/22.
@@ -154,6 +159,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.iv_back://返回
+                startActivity(new Intent(LoginSMSActivity.this, LoginActivity.class));
                 finish();
                 break;
             default:
@@ -218,8 +224,23 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.i(s);
+                //      LogUtil.i(s);
+                Gson gson = new Gson();
+                InfoBean infoBean = new InfoBean();
+                infoBean = gson.fromJson(s, InfoBean.class);
+                ToastUtils.showToastShort("登录成功");
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                SPUtils.setString(Constants.MY_PSWD, infoBean.getData().getResultObject().getPassword());//保存密码
+                  LogUtil.i(infoBean.toString());
+                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
+                mInfoBean.add(infoBean.getData().getResultObject());
+                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
 
+
+                startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+
+
+                finish();
             }
         }, new Response.ErrorListener() {
             @Override
