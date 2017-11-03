@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -43,6 +46,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     PopupWindow locationWindow;
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
+    private TextView tv_number;
+    private TextView tv_phone;
+    private ArrayList<ResultObject> mInfoBean;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,21 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ll_setting_location).setOnClickListener(this);
         findViewById(R.id.ll_about_us).setOnClickListener(this);
         findViewById(R.id.ll_clear).setOnClickListener(this);
+
+        tv_number = findViewById(R.id.tv_number);
+        tv_phone = findViewById(R.id.tv_phone);
+
+        mInfoBean = new ArrayList<>();
+        mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
+        if (!TextUtils.isEmpty(mInfoBean.get(0).getPhone())) {
+            tv_phone.setText(mInfoBean.get(0).getPhone());
+        }
+        if (!TextUtils.isEmpty(mInfoBean.get(0).getMemberNo())) {
+            tv_number.setText(mInfoBean.get(0).getMemberNo());
+        } else{
+            tv_number.setText("未设置");
+        }
+
 
         locationView = LayoutInflater.from(SettingActivity.this).inflate(R.layout.selectorwindowlocation, null);
         locationWindow = new PopupWindow(locationView,
@@ -124,7 +146,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class));
+                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone",tv_phone.getText().toString()));
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -172,9 +194,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                         // 获取EditView中的输入内容
                         EditText edit_phone =
                                 dialogView.findViewById(R.id.edit_phone);
-                        Toast.makeText(SettingActivity.this,
-                                edit_phone.getText().toString(),
-                                Toast.LENGTH_SHORT).show();
+
+                        mInfoBean.get(0).setMemberNo(edit_phone.getText().toString());
+                        DataInfoCache.saveListCache(mInfoBean,Constants.MY_INFO);
+                        tv_number.setText(edit_phone.getText().toString());
+
+//                        Toast.makeText(SettingActivity.this,
+//                                edit_phone.getText().toString(),
+//                                Toast.LENGTH_SHORT).show();
                     }
                 });
         inputDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

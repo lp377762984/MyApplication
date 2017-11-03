@@ -3,13 +3,15 @@
  */
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
+
 /**
  * Auto-generated: 2017-10-26 15:41:33
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class ResultObject {
+public class ResultObject  implements Serializable {
 
     private int id;
     private String cName;
@@ -17,15 +19,15 @@ public class ResultObject {
     private String nickName;
     private String height;
     private String weight;
-    private int regDate;
-    private int birthday;
+    private String regDate;
+    private String birthday;
     private String zoneCode;
     private int enabled;
     private int auth;
     private String branchId;
     private String gender;
     private String status;
-    private String memberNo;
+    private String memberNo;//会员编号
     private String password;
     private int romType;
     private String userName;
@@ -37,6 +39,38 @@ public class ResultObject {
     private String remark;
     private boolean success;
     private String errorMsg;
+
+    @Override
+    public String toString() {
+        return "ResultObject{" +
+                "id=" + id +
+                ", cName='" + cName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", height='" + height + '\'' +
+                ", weight='" + weight + '\'' +
+                ", regDate='" + regDate + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", zoneCode='" + zoneCode + '\'' +
+                ", enabled=" + enabled +
+                ", auth=" + auth +
+                ", branchId='" + branchId + '\'' +
+                ", gender='" + gender + '\'' +
+                ", status='" + status + '\'' +
+                ", memberNo='" + memberNo + '\'' +
+                ", password='" + password + '\'' +
+                ", romType=" + romType +
+                ", userName='" + userName + '\'' +
+                ", avatarPath='" + avatarPath + '\'' +
+                ", selfAvatarPath='" + selfAvatarPath + '\'' +
+                ", teachMumberId='" + teachMumberId + '\'' +
+                ", awareWay='" + awareWay + '\'' +
+                ", adminMumberId='" + adminMumberId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", success=" + success +
+                ", errorMsg='" + errorMsg + '\'' +
+                '}';
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -86,19 +120,19 @@ public class ResultObject {
         return weight;
     }
 
-    public void setRegDate(int regDate) {
+    public void setRegDate(String regDate) {
         this.regDate = regDate;
     }
 
-    public int getRegDate() {
+    public String getRegDate() {
         return regDate;
     }
 
-    public void setBirthday(int birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
-    public int getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
@@ -220,38 +254,6 @@ public class ResultObject {
 
     public String getAdminMumberId() {
         return adminMumberId;
-    }
-
-    @Override
-    public String toString() {
-        return "ResultObject{" +
-                "id=" + id +
-                ", cName='" + cName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", height='" + height + '\'' +
-                ", weight='" + weight + '\'' +
-                ", regDate=" + regDate +
-                ", birthday=" + birthday +
-                ", zoneCode='" + zoneCode + '\'' +
-                ", enabled=" + enabled +
-                ", auth=" + auth +
-                ", branchId='" + branchId + '\'' +
-                ", gender='" + gender + '\'' +
-                ", status='" + status + '\'' +
-                ", memberNo='" + memberNo + '\'' +
-                ", password='" + password + '\'' +
-                ", romType=" + romType +
-                ", userName='" + userName + '\'' +
-                ", avatarPath='" + avatarPath + '\'' +
-                ", selfAvatarPath='" + selfAvatarPath + '\'' +
-                ", teachMumberId='" + teachMumberId + '\'' +
-                ", awareWay='" + awareWay + '\'' +
-                ", adminMumberId='" + adminMumberId + '\'' +
-                ", remark='" + remark + '\'' +
-                ", success=" + success +
-                ", errorMsg='" + errorMsg + '\'' +
-                '}';
     }
 
     public void setRemark(String remark) {

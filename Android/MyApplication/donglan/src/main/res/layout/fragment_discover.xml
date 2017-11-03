@@ -31,38 +31,43 @@
             android:layout_alignParentTop="true"
             android:background="#fff"
             android:orientation="horizontal">
-            <ImageView
+
+            <ImageButton
+                android:id="@+id/iv_add_friends"
                 android:layout_width="19dp"
                 android:layout_height="19dp"
-              android:layout_gravity="center_vertical"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/img_add_friends"
-                />
+                android:padding="15dp"
+
+                android:background="@drawable/img_add_friends"/>
+
             <com.viewpagerindicator.TabPageIndicator
-                android:layout_gravity="center"
                 android:id="@+id/id_indicator"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="40dp"
-                android:background="@android:color/transparent"
+                android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp">
-            </com.viewpagerindicator.TabPageIndicator>
-            <ImageView
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"></com.viewpagerindicator.TabPageIndicator>
+
+            <ImageButton
+                android:id="@+id/iv_photo"
                 android:layout_width="19dp"
                 android:layout_height="19dp"
-                android:layout_centerVertical="true"
+                android:padding="15dp"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:src="@drawable/img_photo"
-                android:layout_gravity="center_vertical"/>
+                android:background="@drawable/img_photo" />
         </LinearLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/id_viewpager"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </android.support.v4.view.ViewPager>
+            android:layout_height="fill_parent"></android.support.v4.view.ViewPager>
     </LinearLayout>
 
 </RelativeLayout>

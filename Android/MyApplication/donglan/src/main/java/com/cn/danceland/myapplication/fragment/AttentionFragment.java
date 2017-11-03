@@ -22,4 +22,9 @@ public class AttentionFragment extends BaseFragment {
     public void initDta() {
         super.initDta();
     }
+
+    @Override
+    public void onClick(View view) {
+
+    }
 }

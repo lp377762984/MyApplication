@@ -19,5 +19,9 @@ public class Constants {
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
+    public static final String MY_MEMBERNO = "memberNo";//我的会员号
+    public static final String MY_PSWD = "mypswd";//我的密码
+
+
     public static final String MY_INFO = "my_info";//我的资料
 }

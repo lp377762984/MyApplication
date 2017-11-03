@@ -12,7 +12,7 @@ import com.cn.danceland.myapplication.activity.SettingActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MeFragment extends BaseFragment implements View.OnClickListener {
+public class MeFragment extends BaseFragment  {
 
 
     @Override
