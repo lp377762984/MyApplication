@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ImageFolder;
 import com.cn.danceland.myapplication.utils.PictureUtil;
@@ -271,7 +272,8 @@ public class ImagesActivity extends Activity{
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             viewHolder.img.setMaxHeight(100);
             viewHolder.img.setMaxWidth(windowManager.getDefaultDisplay().getWidth()/3);
-            viewHolder.img.setImageBitmap(PictureUtil.getSmallBitmap(path+"/"+asList.get(position),windowManager.getDefaultDisplay().getWidth()/3,100));
+            Glide.with(context).load(new File(path+"/"+asList.get(position))).into(viewHolder.img);
+            //viewHolder.img.setImageBitmap(PictureUtil.getSmallBitmap(path+"/"+asList.get(position),windowManager.getDefaultDisplay().getWidth()/3,100));
 
             return convertView;
         }
