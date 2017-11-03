@@ -58,10 +58,8 @@ public class SplashActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-
                     //已经登录，进入主界面
-                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-
+                    startActivity(new Intent(SplashActivity.this, PublishActivity.class));
 
                     finish();
                 } else {
@@ -69,10 +67,7 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-
-                    //未登录进入，登录页面
-
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    startActivity(new Intent(SplashActivity.this, PublishActivity.class));
                     finish();
                 }
             }
