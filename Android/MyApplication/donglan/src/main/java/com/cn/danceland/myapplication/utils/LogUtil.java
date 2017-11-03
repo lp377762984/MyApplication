@@ -8,7 +8,7 @@ import java.util.Date;
 public class LogUtil {
     private static final boolean DEBUG = true;
 
-    public static final String TAG = "info";
+    public static final String TAG = "taginfo";
 
     private static void d(String method, String msg) {
         Log.d(TAG, "[" + method + "]" + msg);

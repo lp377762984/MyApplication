@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -18,9 +19,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +62,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -68,11 +72,25 @@ public class LoginActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(LoginActivity.this, LoginSMSActivity.class));
                 break;
             case R.id.btn_login://登录
-                Toast.makeText(this, "登录成功！", Toast.LENGTH_SHORT).show();
+                //判断电话号码是否为空
+                if (TextUtils.isEmpty(mEtPhone.getText().toString())) {
+                    ToastUtils.showToastShort("请输入账号或手机号");
+                    return;
+                }
+                //判断密码是否为空
+                if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
+                    ToastUtils.showToastShort("请输入密码");
+                    return;
+                }
+                //判断密码是否包含空格
+                if (mEtPsw.getText().toString().contains(" ")) {
+                    ToastUtils.showToastShort("密码不能包含空格，请重新输入");
+                    return;
+                }
 
-                SPUtils.setBoolean(Constants.ISLOGINED,true);
-                startActivity(new Intent(this, HomeActivity.class));
-                finish();
+
+                login();
+
                 break;
             case R.id.tv_forgetpsw://忘记密码
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
@@ -100,42 +118,85 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     }
 
+    /**
+     * 登录
+     */
     private void login() {
 
-        StringRequest request = new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+        String url = Constants.LOGIN_URL;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    //成功
+                    String mUserId = requestInfoBean.getData().getId();
+                    SPUtils.setString(Constants.MY_USERID, mUserId);
+
+                    queryUserInfo(mUserId);
+
+                    ToastUtils.showToastShort("登录成功");
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                } else {
+                    //注册失败
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+                        + ">>" + volleyError.networkResponse.statusCode
+                        + ">>" + volleyError.networkResponse.data
+                        + ">>" + volleyError.getCause()
+                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("params1", "value1");
-                map.put("params2", "value2");
+                map.put("name", mEtPhone.getText().toString().trim());
+                map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
+                // map.put("romType", "0");
                 return map;
             }
         };
 
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
     }
 
-    private void QUERY_user_info() {
+    private void queryUserInfo(String id) {
 
-        String params = "";
+        String params = id;
 
-        String url ="" + params;
+        String url = Constants.QUERY_USERINFO_URL + params;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = gson.fromJson(s,RequestInfoBean.class);
 
+                LogUtil.i( requestInfoBean.toString());
+//                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
+//                mInfoBean.add(requestInfoBean.getData().getResultObject());
+//                DataInfoCache.saveListCache(MyApplication.getContext(),mInfoBean,Constants.MY_INFO);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -145,7 +206,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
         });
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("query_userinfo");
+        request.setTag("queryUserInfo");
         // 设置超时时间
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
