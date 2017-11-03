@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/publish_title"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:background="@color/dl_blue"
+        >
+        <TextView
+            android:id="@+id/publish_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="取消"
+            android:textColor="@color/color_white"
+            android:textSize="17sp"
+            android:paddingLeft="15dp"
+            />
+        <TextView
+            android:id="@+id/publish_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发布"
+            android:textSize="17sp"
+            android:textColor="@color/color_white"
+            android:layout_centerVertical="true"
+            android:paddingRight="15dp"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/publish_status"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#ffffff"
+        android:paddingLeft="15dp"
+        android:textSize="14sp"
+        android:layout_below="@+id/publish_title"
+        android:hint="晒改变，晒心得，晒运动"
+        android:textColorHint="#999999"
+        />
+
+    <RelativeLayout
+        android:id="@+id/publish_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/publish_status"
+        android:background="#ffffff"
+        >
+        <RelativeLayout
+            android:id="@+id/publish_photo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="#d3d3d3"
+            android:layout_marginLeft="15dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/publish_status"
+                />
+
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="4"
+            >
+
+
+        </GridView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/publish_line"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@+id/publish_mid"
+        android:background="#ffffff"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#e8e8e8"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/publish_line"
+        android:background="#ffffff"
+        >
+
+        <TextView
+            android:id="@+id/location_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/publish_location"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            />
+        <TextView
+            android:id="@+id/publish_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/location_img"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+
+            />
+        <TextView
+            android:id="@+id/publish_share1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="同步到健身圈"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/publish_share1"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/publish_circle"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></LinearLayout>
+
+</RelativeLayout>
