@@ -43,7 +43,8 @@
         <activity android:name=".activity.ConfirmPasswordActivity" />
         <activity android:name=".activity.AddFriendsActivity" />
         <activity android:name=".activity.UserHomeActivity" />
-
+        <activity android:name=".activity.SellCardActivity" />
+        <activity android:name=".activity.SellCardConfirmActivity"/>
     </application>
 
 </manifest>

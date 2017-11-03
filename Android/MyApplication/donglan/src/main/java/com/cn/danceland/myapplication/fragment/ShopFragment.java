@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
 /**
@@ -77,7 +77,7 @@ public class ShopFragment extends BaseFragment {
         AlertDialog.Builder dialog =
                 new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
-        dialog.setMessage("是否呼叫"+"010-12345678");
+        dialog.setMessage("是否呼叫" + "010-12345678");
         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -100,18 +100,48 @@ public class ShopFragment extends BaseFragment {
      * @param phone 电话号码
      */
     private void call(String phone) {
-        Intent intent = new Intent(Intent.ACTION_DIAL,Uri.parse("tel:"+phone));
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
     }
+
+
 
     class MyOnItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             ToastUtils.showToastShort(icon_name[i]);
-            LogUtil.i(i + "");
+            switch (i) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3://在线售卡
+                    startActivity(new Intent(mActivity, SellCardActivity.class));
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+
+
+                default:
+                    break;
+            }
+
+
+
+
         }
     }
 
