@@ -24,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by feng on 2017/11/3.
+ * 健身达人页
  */
 
 public class FitnessManActivity extends Activity {
