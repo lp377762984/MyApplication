@@ -80,11 +80,12 @@ public class ImagesActivity extends Activity{
             switch (v.getId()){
                 case R.id.sure:
                     order=0;
+                    Intent intent1 = new Intent();
+                    intent1.putStringArrayListExtra("arrPath",arrPath);
+                    setResult(0,intent1);
+                    finish();
                     break;
                 case R.id.iv_back:
-                    Intent intent = new Intent();
-                    intent.putStringArrayListExtra("arrPath",arrPath);
-                    setResult(0,intent);
                     finish();
                     break;
 
