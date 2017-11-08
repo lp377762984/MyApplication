@@ -107,11 +107,11 @@ public class PublishActivity extends Activity {
                     startActivityForResult(intent,0);
                     break;
                 case R.id.location_img:
-                    Intent intent1 = new Intent(PublishActivity.this,MapActivity.class);
+                    Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent1,1);
                     break;
                 case R.id.publish_location:
-                    Intent intent2 = new Intent(PublishActivity.this,MapActivity.class);
+                    Intent intent2 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent2,1);
                     break;
                 case R.id.publish_ok:
