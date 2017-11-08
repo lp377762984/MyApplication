@@ -59,7 +59,8 @@ public class SplashActivity extends Activity {
                         }
                     }
                     //已经登录，进入主界面
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                 
+                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
 
                     finish();
                 } else {
@@ -67,6 +68,7 @@ public class SplashActivity extends Activity {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
+            
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }

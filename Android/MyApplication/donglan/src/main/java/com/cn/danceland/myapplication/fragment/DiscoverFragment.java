@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
+import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
@@ -21,6 +22,8 @@ import static android.R.attr.value;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * 发现页面
  */
 public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.OnDismissCallback, DroppyClickCallbackInterface {
 
@@ -94,14 +97,19 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
         }
     }
 
-
+    /**
+     * 下拉回调
+     * @param v
+     * @param id
+     */
     @Override
     public void call(View v, int id) {
 
 
         switch (id) {
             case 0:
-                ToastUtils.showToastShort("发布动态");
+                //ToastUtils.showToastShort("发布动态");
+                startActivity(new Intent(mActivity, PublishActivity.class));
                 break;
             case 1:
                 ToastUtils.showToastShort("发布视频");

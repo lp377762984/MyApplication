@@ -22,9 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -230,10 +230,12 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 infoBean = gson.fromJson(s, InfoBean.class);
                 ToastUtils.showToastShort("登录成功");
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                SPUtils.setString(Constants.MY_PSWD, infoBean.getData().getResultObject().getPassword());//保存密码
+                SPUtils.setString(Constants.MY_PSWD, infoBean.getData().getPassword());//保存密码
+                SPUtils.setString(Constants.MY_TOKEN,"Bearer+"+infoBean.getData().getToken());
+                SPUtils.setString(Constants.MY_USERID,infoBean.getData().getId());
                   LogUtil.i(infoBean.toString());
-                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
-                mInfoBean.add(infoBean.getData().getResultObject());
+                ArrayList<Data> mInfoBean = new ArrayList<>();
+                mInfoBean.add(infoBean.getData());
                 DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
 
 

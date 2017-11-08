@@ -95,7 +95,7 @@ public class MyListviewAdater extends BaseAdapter {
         viewHolder.tv_pick_name.setText(data.get(position).getTitle());
         viewHolder.tv_time.setText(data.get(position).getContent());
         Glide.with(context)
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509534557271&di=c4a8f91b55493002326319ffb193f767&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg")
+                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=92a343f766c683c086be21e2ff0eea66&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Ddfed83e2eafe9925df0161135cc134aa%2Fbd315c6034a85edf6875650443540923dd547518.jpg")
                 .into(viewHolder.iv_avatar);
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,16 +106,20 @@ public class MyListviewAdater extends BaseAdapter {
 
 
         final List<String> list = new ArrayList<String>();
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=8798f823cde65a24788bc7741e0f8956&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=fb637042af5878b887969222e1f55975&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535d3baa0959aef76c6a7ef632f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509599618510&di=a285851c997adfb117b8992144b8c215&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201410%2F2014102406.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=8798f823cde65a24788bc7741e0f8956&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=fb637042af5878b887969222e1f55975&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535d3baa0959aef76c6a7ef632f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509599618510&di=a285851c997adfb117b8992144b8c215&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201410%2F2014102406.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=8798f823cde65a24788bc7741e0f8956&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=fb637042af5878b887969222e1f55975&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535d3baa0959aef76c6a7ef632f.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509599618510&di=a285851c997adfb117b8992144b8c215&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201410%2F2014102406.jpg");
+     //   list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=8798f823cde65a24788bc7741e0f8956&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg");
+       // list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509529741192&di=fb637042af5878b887969222e1f55975&imgtype=0&src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F9a504fc2d5628535d3baa0959aef76c6a7ef632f.jpg");
+       // list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509599618510&di=a285851c997adfb117b8992144b8c215&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201410%2F2014102406.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=9ced5f6e12498585405213597c31768f&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Db3ac16dadf62853586edda62f8861cb3%2Fe4dde71190ef76c68f1397039716fdfaae5167d0.jpg");
+       list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698421&di=0b400f04ef15b2cd602065989845e293&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8b82b9014a90f603054b2c623312b31bb051ed18.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698418&di=4e6175c3f0ec0b3579106647ff179032&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D14eb806481d4b31ce4319cf8efbf4d0a%2F8601a18b87d6277fc029a91f22381f30e924fcda.jpg");
 
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=9ced5f6e12498585405213597c31768f&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Db3ac16dadf62853586edda62f8861cb3%2Fe4dde71190ef76c68f1397039716fdfaae5167d0.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698421&di=0b400f04ef15b2cd602065989845e293&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8b82b9014a90f603054b2c623312b31bb051ed18.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698418&di=4e6175c3f0ec0b3579106647ff179032&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D14eb806481d4b31ce4319cf8efbf4d0a%2F8601a18b87d6277fc029a91f22381f30e924fcda.jpg");
+
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=9ced5f6e12498585405213597c31768f&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Db3ac16dadf62853586edda62f8861cb3%2Fe4dde71190ef76c68f1397039716fdfaae5167d0.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698421&di=0b400f04ef15b2cd602065989845e293&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8b82b9014a90f603054b2c623312b31bb051ed18.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698418&di=4e6175c3f0ec0b3579106647ff179032&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D14eb806481d4b31ce4319cf8efbf4d0a%2F8601a18b87d6277fc029a91f22381f30e924fcda.jpg");
 
         viewHolder.gridView.setAdapter(new ImageGridAdapter(context, list));
         /**

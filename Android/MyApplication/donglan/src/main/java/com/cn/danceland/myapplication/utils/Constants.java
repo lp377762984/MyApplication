@@ -16,12 +16,13 @@ public class Constants {
 
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
 
+    public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
     public static final String MY_MEMBERNO = "memberNo";//我的会员号
     public static final String MY_PSWD = "mypswd";//我的密码
-
+    public static final String MY_TOKEN = "my_token";//我的token
 
     public static final String MY_INFO = "my_info";//我的资料
 }

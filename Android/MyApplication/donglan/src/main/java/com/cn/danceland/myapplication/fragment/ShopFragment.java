@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.multipartrequest.FileUtil;
+import com.cn.danceland.myapplication.utils.multipartrequest.HttpUrlConnectionOpts;
+import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
+import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,7 +128,6 @@ public class ShopFragment extends BaseFragment {
     }
 
 
-
     class MyOnItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
@@ -115,10 +135,59 @@ public class ShopFragment extends BaseFragment {
             ToastUtils.showToastShort(icon_name[i]);
             switch (i) {
                 case 0:
+                    //     logOut();
+
                     break;
                 case 1:
+                    MultipartRequestParams params = new MultipartRequestParams();
+                    //   params.put("userName",username);
+                    if (!FileUtil.fileIsExists(Environment.getExternalStorageDirectory() + "/300.jpg")) {
+                        ToastUtils.showToastShort("文件不存在");
+                        return;
+                    }
+
+//                    List<File> files = new ArrayList<File>();
+//                    files.add(new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+//                    files.add(new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+//
+
+
+                    params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+
+                    params.put("myfiles", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
+                    //  params.put("myfiles",);
+
+                    params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+                    // MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
+
+                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.113:8003/appDynMsg/uploadFiles", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+
+                            LogUtil.i(s);
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            LogUtil.i(volleyError.toString());
+                        }
+                    }
+                    ) {
+
+                    };
+
+                    MyApplication.getHttpQueues().add(request);
+
                     break;
                 case 2:
+
+                    HttpUrlConnectionOpts opts = new HttpUrlConnectionOpts();
+                    Map<String, File> map = new HashMap<>();
+                    map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+                    map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
+                    //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
+                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL, map);
                     break;
                 case 3://在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
@@ -138,8 +207,6 @@ public class ShopFragment extends BaseFragment {
                 default:
                     break;
             }
-
-
 
 
         }
@@ -176,5 +243,72 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
+
+    /***
+     * 退出登录
+     */
+    private void logOut() {
+
+        String url = "http://192.168.1.119:8888/user/logOut";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    //成功
+                    //    startActivity(new Intent(mActivity, LoginActivity.class));
+                    SPUtils.setBoolean(Constants.ISLOGINED, false);
+                    //退出主页面
+                    //  HomeActivity.instance.finish();
+                    //   mActivity.finish();
+                } else {
+                    //失败
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+                        + ">>" + volleyError.networkResponse.statusCode
+                        + ">>" + volleyError.networkResponse.data
+                        + ">>" + volleyError.getCause()
+                        + ">>" + volleyError.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
+
+                // map.put("romType", "0");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
 
 }

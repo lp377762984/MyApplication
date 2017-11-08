@@ -51,8 +51,8 @@ public class ImageGridAdapter extends BaseAdapter {
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(R.drawable.img_loading)//加载占位图
-                .error(R.drawable.img_del)//
+              //  .placeholder(R.drawable.img_loading)//加载占位图
+                .error(R.drawable.img_loadfail)//
                 .priority(Priority.HIGH);
 
         Glide

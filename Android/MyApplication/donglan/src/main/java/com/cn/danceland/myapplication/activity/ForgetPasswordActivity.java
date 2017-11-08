@@ -274,6 +274,14 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 // map.put("romType", "0");
                 return map;
             }
+
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//
+//                map.put("Authorization", "Bearer+"+ SPUtils.getString(Constants.MY_TOKEN,null));
+//                return map;
+//            }
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
