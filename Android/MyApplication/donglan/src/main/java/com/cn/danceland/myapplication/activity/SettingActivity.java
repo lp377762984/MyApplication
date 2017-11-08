@@ -72,7 +72,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         mInfoBean = new ArrayList<>();
         mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
-        LogUtil.i(mInfoBean.get(0).toString());
+        //LogUtil.i(mInfoBean.get(0).toString());
         if (!TextUtils.isEmpty(mInfoBean.get(0).getPhone())) {
             tv_phone.setText(mInfoBean.get(0).getPhone());
         }
