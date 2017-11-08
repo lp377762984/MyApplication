@@ -157,9 +157,9 @@ public class ShopFragment extends BaseFragment {
                     params.put("myfiles", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
                     //  params.put("myfiles",);
 
-                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
+                    // MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
 
-                        //         MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.113:8003/appDynMsg/uploadFiles", new Response.Listener<String>() {
+                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.113:8003/appDynMsg/uploadFiles", new Response.Listener<String>() {
                         @Override
                         public void onResponse(String s) {
 
@@ -181,12 +181,12 @@ public class ShopFragment extends BaseFragment {
                     break;
                 case 2:
 
-                    HttpUrlConnectionOpts opts =new HttpUrlConnectionOpts();
-                   Map<String,File> map=new HashMap<>();
+                    HttpUrlConnectionOpts opts = new HttpUrlConnectionOpts();
+                    Map<String, File> map = new HashMap<>();
                     map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
                     map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-                //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
-                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL,map);
+                    //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
+                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL, map);
                     break;
                 case 3://在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
@@ -285,7 +285,7 @@ public class ShopFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("id", "45");
+                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
 
                 // map.put("romType", "0");
                 return map;
@@ -296,7 +296,7 @@ public class ShopFragment extends BaseFragment {
 
 
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", "Bearer+" + "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzkxODYzMTI0MSIsImNyZWF0ZWQiOjE1MDk5NTAyMDY4MjQsImV4cCI6MTUxMDU1NTAwNn0.rulG1c7qpINHBp-L4EPARcsS-vBmU783qxC8B8THhhWAs-iXGxKWcXAHrZTIUrIFilIPr2flMn2zsQYgGbnlpQ");
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
                 return map;
             }
         };
