@@ -157,6 +157,7 @@ public class ShopFragment extends BaseFragment {
                     params.put("myfiles", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
                     //  params.put("myfiles",);
 
+                    params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
                     // MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
 
                     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.113:8003/appDynMsg/uploadFiles", new Response.Listener<String>() {
