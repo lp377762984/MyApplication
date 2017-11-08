@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+        <ImageView
+            android:id="@+id/store_item_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/store_item_img"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:id="@+id/store_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房山区德宝会议中心2楼"
+                android:textSize="15sp"
+                android:textColor="#333333"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="良乡，据我5km"
+                android:layout_below="@+id/store_address"
+                android:paddingTop="10dp"
+                android:textSize="12sp"
+                android:textColor="#999999"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/img_phone"
+                android:src="@drawable/store_adress"
+                android:layout_centerVertical="true"
+                android:paddingRight="20dp"
+                />
+            <ImageView
+                android:id="@+id/img_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/store_phone"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

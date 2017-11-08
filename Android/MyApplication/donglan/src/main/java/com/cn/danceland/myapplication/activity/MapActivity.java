@@ -213,7 +213,9 @@ public class MapActivity extends Activity {
         public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
             WalkingRouteOverlay walkingRouteOverlay = new WalkingRouteOverlay(map);
             List<WalkingRouteLine> routeLines = walkingRouteResult.getRouteLines();
-            walkingRouteOverlay.setData(routeLines.get(0));
+            if(routeLines!=null&&routeLines.size()>0){
+                walkingRouteOverlay.setData(routeLines.get(0));
+            }
             List<OverlayOptions> list = walkingRouteOverlay.getOverlayOptions();
             map.addOverlays(list);
         }

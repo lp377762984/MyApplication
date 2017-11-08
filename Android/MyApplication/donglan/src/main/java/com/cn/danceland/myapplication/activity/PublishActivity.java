@@ -19,8 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.LocationClient;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
@@ -59,7 +61,9 @@ public class PublishActivity extends Activity {
         initView();
         setOnclick();
         initdata();
-        
+//        DBData data = new DBData();
+//        data.getCityInfo(PublishActivity.this);
+//
     }
 
     private void initdata() {
@@ -103,11 +107,11 @@ public class PublishActivity extends Activity {
                     startActivityForResult(intent,0);
                     break;
                 case R.id.location_img:
-                    Intent intent1 = new Intent(PublishActivity.this,MapActivity.class);
+                    Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent1,1);
                     break;
                 case R.id.publish_location:
-                    Intent intent2 = new Intent(PublishActivity.this,MapActivity.class);
+                    Intent intent2 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent2,1);
                     break;
                 case R.id.publish_ok:
@@ -120,7 +124,7 @@ public class PublishActivity extends Activity {
                             @Override
                             public void run() {
                                 try {
-                                    String str = UpLoadUtils.postUpLoadFile("http://192.168.1.94:8003/appDynMsg/uploadImage",null,arrayFileMap);
+                                    String str = UpLoadUtils.postUpLoadFile("http://192.168.1.113:8003/appDynMsg/uploadFiles",null,arrayFileMap);
                                 }catch (IOException e){
                                 }
                             }
@@ -136,6 +140,11 @@ public class PublishActivity extends Activity {
         if(resultCode==0){
             if(data!=null){
                 arrayList = data.getStringArrayListExtra("arrPath");
+                if(arrayList!=null&&arrayList.size()!=0){
+                    publish_photo.setVisibility(View.GONE);
+                }else{
+                    publish_photo.setVisibility(View.VISIBLE);
+                }
                 grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
             }
         }else if(resultCode==1){
@@ -189,7 +198,8 @@ public class PublishActivity extends Activity {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             viewHolder.img.setMaxHeight(windowManager.getDefaultDisplay().getWidth()/4);
             viewHolder.img.setMaxWidth(windowManager.getDefaultDisplay().getWidth()/4);
-            viewHolder.img.setImageBitmap(PictureUtil.getSmallBitmap(arrayList.get(position),windowManager.getDefaultDisplay().getWidth()/4,windowManager.getDefaultDisplay().getWidth()/4));
+            Glide.with(context).load(arrayList.get(position)).into(viewHolder.img);
+            //viewHolder.img.setImageBitmap(PictureUtil.getSmallBitmap(arrayList.get(position),windowManager.getDefaultDisplay().getWidth()/4,windowManager.getDefaultDisplay().getWidth()/4));
 
             return convertView;
         }
