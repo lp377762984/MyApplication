@@ -24,6 +24,12 @@ import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
 
 import org.w3c.dom.Text;
@@ -34,6 +40,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by feng on 2017/9/28.
@@ -41,7 +48,7 @@ import java.util.List;
 
 public class RegisterInfoActivity extends Activity{
 
-    String strName,strSex,strBirthday,strHeight,strWeight ;
+    String strSex,strBirthday,strHeight,strWeight ;
     TextView text_birthday,cancel_action,text_height,button,text_name,text_male,text_female,over,text_weight,
             selecttitle;
     PopupWindow mPopWindow;
@@ -51,13 +58,21 @@ public class RegisterInfoActivity extends Activity{
     View contentView;
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
+    RequestQueue requestQueue;
+    String id,strName,gender;//性别:1、男，2、女，3、未知，4、保密
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_info);
+        initHost();
         intiView();
         setClick();
+
+    }
+
+    private void initHost() {
+        requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
 
     }
 
@@ -135,11 +150,13 @@ public class RegisterInfoActivity extends Activity{
                     text_male.setBackgroundResource(R.drawable.male_blue);
                     text_female.setBackgroundResource(R.drawable.female_gray);
                     strSex = "男";
+                    gender = "1";
                     break;
                 case R.id.text_female:
                     text_male.setBackgroundResource(R.drawable.male_gray);
                     text_female.setBackgroundResource(R.drawable.female_blue);
                     strSex = "女";
+                    gender = "2";
                     break;
             }
 
@@ -159,8 +176,8 @@ public class RegisterInfoActivity extends Activity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String str =  edit_name.getText().toString();
-                        text_name.setText(str);
+                        strName =  edit_name.getText().toString();
+                        text_name.setText(strName);
                     }
                 });
         normalDialog.setNegativeButton("关闭",
@@ -264,5 +281,40 @@ public class RegisterInfoActivity extends Activity{
                 item_text.setText(arrayList.get(i));
             return view;
         }
+    }
+
+    public void commit(){
+
+        StringRequest stringRequest = new StringRequest("", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("id",id);
+                hashMap.put("nickName",strName);
+                hashMap.put("gender",gender);
+                hashMap.put("height",strHeight);
+                hashMap.put("weight",strWeight);
+                hashMap.put("birthday",strBirthday);
+                return hashMap;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+
+                return super.getHeaders();
+            }
+        };
+
     }
 }
