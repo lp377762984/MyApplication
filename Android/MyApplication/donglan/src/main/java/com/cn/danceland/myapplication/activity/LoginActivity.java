@@ -20,9 +20,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -147,6 +147,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //成功
                     String mUserId = requestInfoBean.getData().getId();
                     SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
+                    SPUtils.setString(Constants.MY_TOKEN,"Bearer+"+requestInfoBean.getData().getToken());
                     SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
                     //查询信息
                     queryUserInfo(mUserId);
@@ -206,9 +207,9 @@ public class LoginActivity extends Activity implements OnClickListener {
                 Gson gson = new Gson();
                 InfoBean requestInfoBean = gson.fromJson(s, InfoBean.class);
 
-                //   LogUtil.i(requestInfoBean.toString());
-                ArrayList<ResultObject> mInfoBean = new ArrayList<>();
-                mInfoBean.add(requestInfoBean.getData().getResultObject());
+                LogUtil.i(requestInfoBean.toString());
+                ArrayList<Data> mInfoBean = new ArrayList<>();
+                mInfoBean.add(requestInfoBean.getData());
                 DataInfoCache.saveListCache( mInfoBean, Constants.MY_INFO);
 
             }
@@ -218,7 +219,18 @@ public class LoginActivity extends Activity implements OnClickListener {
                 LogUtil.i(volleyError.toString());
 
             }
-        });
+
+        }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+        };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("queryUserInfo");
         // 设置超时时间

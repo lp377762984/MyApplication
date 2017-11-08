@@ -26,8 +26,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.bean.ResultObject;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -48,7 +48,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
     private TextView tv_phone;
-    private ArrayList<ResultObject> mInfoBean;
+    private ArrayList<Data> mInfoBean;
 
 
     @Override
@@ -72,6 +72,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         mInfoBean = new ArrayList<>();
         mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
+        LogUtil.i(mInfoBean.get(0).toString());
         if (!TextUtils.isEmpty(mInfoBean.get(0).getPhone())) {
             tv_phone.setText(mInfoBean.get(0).getPhone());
         }
@@ -321,11 +322,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
+//                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+//                        + ">>" + volleyError.networkResponse.statusCode
+//                        + ">>" + volleyError.networkResponse.data
+//                        + ">>" + volleyError.getCause()
+//                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override
@@ -337,10 +338,19 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 // map.put("romType", "0");
                 return map;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
+               // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("login");
+        request.setTag("logOut");
         // 设置超时时间
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

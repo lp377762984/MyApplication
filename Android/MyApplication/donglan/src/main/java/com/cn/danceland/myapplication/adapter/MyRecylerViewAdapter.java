@@ -25,7 +25,7 @@ public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdap
     public MyRecylerViewAdapter(Context context, String[] datas) {
         this.datas = datas;
         this.context = context;
-    }
+    } 
 
     //创建新View，被LayoutManager所调用
     @Override
@@ -48,7 +48,7 @@ public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdap
             }
         });
         Glide.with(context)
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509534557271&di=c4a8f91b55493002326319ffb193f767&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F500fd9f9d72a6059341ae1ae2234349b033bba7f.jpg")
+                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=92a343f766c683c086be21e2ff0eea66&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Ddfed83e2eafe9925df0161135cc134aa%2Fbd315c6034a85edf6875650443540923dd547518.jpg")
                 .into(viewHolder.iv_avatar);
     }
 
