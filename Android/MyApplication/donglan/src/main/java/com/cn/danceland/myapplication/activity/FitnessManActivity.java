@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.Text;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 
@@ -62,12 +63,19 @@ public class FitnessManActivity extends Activity {
 
         @Override
         public void onBindViewHolder(MyRecycleViewHolder holder, int position) {
-            holder.fitness_circleimage.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+            Glide.with(FitnessManActivity.this).load("http://img06.tooopen.com/images/20160915/tooopen_sy_178926047887.jpg").into(holder.fitness_circleimage);
+            //holder.fitness_circleimage.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
             holder.fitness_fans.setText("100w粉丝");
             holder.fitness_name.setText("小明同学");
-            holder.im1.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
-            holder.im2.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
-            holder.im3.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+            Glide.with(FitnessManActivity.this).load("http://img1.juimg.com/160827/330238-160RF20H543.jpg").
+                    into(holder.im1);
+            Glide.with(FitnessManActivity.this).load("http://img1.imgtn.bdimg.com/it/u=1634488570,2322070169&fm=214&gp=0.jpg").
+                    into(holder.im2);
+            Glide.with(FitnessManActivity.this).load("http://img01.taopic.com/160326/318753-160326104Z353.jpg").
+                    into(holder.im3);
+//            holder.im1.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+//            holder.im2.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+//            holder.im3.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
         }
 
 
