@@ -10,8 +10,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.bean.CityBean;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -36,33 +38,38 @@ import java.util.Map;
 public class DBData {
 
     public ArrayList<String> cityDis = new ArrayList<String>();
+    DonglanDao donglanDao;
 
-    public void getCityInfo(Context context){
+    //从接口获取数据存入数据库
+    public void setCityInfo(Context context){
         final Gson gson = new Gson();
-
+        final Donglan dl = new Donglan();
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("http://192.168.1.94:8003/zone", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.ZONE, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-
                 Type type = new TypeToken<ArrayList<CityBean>>() {
                 }.getType();
-//
-//                ArrayList<CityBean> arr = new ArrayList<CityBean>();
-//                arr = gson.fromJson(jsonObject.toString(), type);
                 RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
                 ArrayList<CityBean> arrayList = gson.fromJson(rootBean.data, type);
+
                 if(arrayList!=null&&arrayList.size()>0){
                     for(int i =0;i<arrayList.size();i++){
+                        StringBuilder sb = new StringBuilder();
                         List childrenList = arrayList.get(i).getChildren();
+                        dl.setId(i);
+                        dl.setProvince(arrayList.get(i).getValue()+"@"+arrayList.get(i).getLabel());
                         if(childrenList!=null&&childrenList.size()>0){
                             for(int n=0;n<childrenList.size();n++){
                                 String str = childrenList.get(n).toString();
-
+                                sb.append(getCity(str)+"]");
                             }
+                            dl.setCity(sb.toString());
                         }
-                        LogUtil.e("zzf",arrayList.get(i).getChildren().get(0).toString());
+                        //LogUtil.e("zzf",arrayList.get(i).getChildren().get(0).toString());
+                        addD(dl);
+                        dl.clear();
                     }
                 }
 
@@ -93,10 +100,35 @@ public class DBData {
         if(str!=null){
             String[] split = str.split(",");
             if(split!=null&&split.length>1){
-                return split[1].replace("label=","");
+                return split[0]+"@"+split[1];
             }
         }
         return "";
+    }
+
+    //添加记录
+    public void addD(Donglan d){
+        if(donglanDao==null){
+            donglanDao = MyApplication.getInstance().getDaoSession().getDonglanDao();
+        }
+        donglanDao.insert(d);
+    }
+
+    //查询数据
+    public List<Donglan> getCityList(){
+        if(donglanDao==null){
+            donglanDao = MyApplication.getInstance().getDaoSession().getDonglanDao();
+        }
+        List<Donglan> donglanList = donglanDao.loadAll();
+        return donglanList;
+    }
+
+    //改变数据
+    public void upDate(Donglan d){
+        if(donglanDao==null){
+            donglanDao = MyApplication.getInstance().getDaoSession().getDonglanDao();
+        }
+        donglanDao.update(d);
     }
 
 }

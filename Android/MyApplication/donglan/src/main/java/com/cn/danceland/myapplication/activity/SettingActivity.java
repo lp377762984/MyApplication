@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -35,8 +38,10 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SettingActivity extends Activity implements View.OnClickListener {
@@ -49,13 +54,19 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private TextView tv_number;
     private TextView tv_phone;
     private ArrayList<Data> mInfoBean;
+    DBData dbData;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initHost();
         setContentView(R.layout.activity_setting);
         initView();
+    }
+
+    private void initHost() {
+        dbData = new DBData();
     }
 
     private void initView() {
@@ -216,31 +227,62 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
     public void showLocation() {
+        List<Donglan> cityList = dbData.getCityList();
+        //省份和代码对应的map
+        HashMap<String,String> proMap = new HashMap<String,String>();
+        //城市代码和名称map
+        HashMap<String,String> city = new HashMap<String,String>();
+        //省份列表
+        final ArrayList<String> proList = new ArrayList<String>();
+        //省份和城市map
+        ArrayList<String> cityList1 = new ArrayList<String>();
+        final HashMap<String,ArrayList<String>> proCityMap = new HashMap<String,ArrayList<String>>();
 
-        ArrayList<String> proList = new ArrayList<String>();
-        proList.add("河南");
-        proList.add("河北");
-        proList.add("山西");
-        proList.add("山西");
-        proList.add("山西");
-        proList.add("山西");
-        proList.add("山西");
-        proList.add("山西");
-        ArrayList<String> cityList = new ArrayList<String>();
-        cityList.add("郑州");
-        cityList.add("武汉");
-        cityList.add("合肥");
-        cityList.add("合肥");
-        cityList.add("合肥");
-        cityList.add("合肥");
-        cityList.add("合肥");
-        cityList.add("合肥");
+        final HashMap<String,HashMap<String,String>> cityMap = new HashMap<String,HashMap<String,String>>();
+        if(cityList!=null&&cityList.size()>0){
+            for(int i=0;i<cityList.size();i++){
+                //城市名字为key，城市代码为value
+                String prokey = cityList.get(i).getProvince().split("@")[1];
+                String provalue = cityList.get(i).getProvince().split("@")[0];
+                cityList1 = getCityList(cityList.get(i).getCity());
+                proList.add(prokey);
+                proMap.put(prokey,provalue);
+                city = getCityMap(cityList.get(i).getCity());
+                //cityList1 = getCityList(cityList.get(i).getCity());
+                proCityMap.put(prokey,cityList1);
+            }
+        }
+
+
+
+        //ArrayList<String> cityList1 = new ArrayList<String>();
+//        cityList.add("郑州");
+//        cityList.add("武汉");
+//        cityList.add("合肥");
+//        cityList.add("合肥");
+//        cityList.add("合肥");
+//        cityList.add("合肥");
+//        cityList.add("合肥");
+//        cityList.add("合肥");
 
         locationWindow.setContentView(locationView);
         proAdapter = new LocationAdapter(proList, this);
-        cityAdapter = new LocationAdapter(cityList, this);
         list_province.setAdapter(proAdapter);
-        list_city.setAdapter(cityAdapter);
+        list_province.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pro = proList.get(position);
+                ArrayList<String> cityList = proCityMap.get(pro);
+                if(cityList!=null&&cityList.size()>0){
+                    cityAdapter = new LocationAdapter(cityList, SettingActivity.this);
+                    list_city.setAdapter(cityAdapter);
+                }
+            }
+        });
+
+        //
+
+
 
 
         locationWindow.showAsDropDown(findViewById(R.id.tv_quit), 0, 40);
@@ -357,4 +399,37 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
     }
+
+    public HashMap<String,String> getCityMap(String str){
+        if(!"".equals(str)&&str!=null){
+            HashMap<String,String> cityMap = new HashMap<String,String>();
+            String[] ss = str.split("$");
+            if(ss.length>0){
+                for(int i= 0;i<ss.length;i++){
+                    String[] split = ss[i].split("@");
+                    String value = split[0].replace("{value=","");
+                    String key = split[1].replace("label=","");
+                    cityMap.put(key,value);
+                }
+            }
+            return cityMap;
+        }
+        return null;
+    }
+
+    public ArrayList<String> getCityList(String str){
+        if(!"".equals(str)&&str!=null){
+            ArrayList<String> arr = new ArrayList<String>();
+            String[] strings = str.split("]");
+            if(strings.length>0){
+                for(int i=0;i<strings.length;i++){
+                    String[] split = strings[i].split("@");
+                    arr.add(split[1].replace("label=",""));
+                }
+            }
+            return arr;
+        }
+        return null;
+    }
+
 }

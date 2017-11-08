@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
 android {
 
 
@@ -7,7 +7,7 @@ android {
     signingConfigs {
         config {
             keyPassword 'donglanyg'
-            storeFile file('D:/appworkspace/dl-mobile/Android/key.jks')
+            storeFile file('D:/key.jks')
             storePassword 'donglanyg'
             keyAlias 'key0'
 
@@ -15,6 +15,9 @@ android {
     }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
+    greendao {
+        schemaVersion 1
+    }
     defaultConfig {
         applicationId "com.cn.danceland.myapplication"
         minSdkVersion 14

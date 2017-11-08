@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -31,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.Constants;
 
 import org.w3c.dom.Text;
 
@@ -49,8 +51,8 @@ import java.util.Map;
 public class RegisterInfoActivity extends Activity{
 
     String strSex,strBirthday,strHeight,strWeight ;
-    TextView text_birthday,cancel_action,text_height,button,text_name,text_male,text_female,over,text_weight,
-            selecttitle;
+    TextView text_birthday,cancel_action,text_height,text_name,text_male,text_female,over,text_weight,
+            selecttitle,button;
     PopupWindow mPopWindow;
     ListView list_year,list_date,list_height;
     SimpleAdapter mSchedule;
@@ -93,7 +95,7 @@ public class RegisterInfoActivity extends Activity{
 
         text_male = findViewById(R.id.text_male);
         text_female = findViewById(R.id.text_female);
-
+        button = findViewById(R.id.button);
         text_name = findViewById(R.id.text_name);
     }
     public void setClick(){
@@ -105,6 +107,7 @@ public class RegisterInfoActivity extends Activity{
         text_female.setOnClickListener(onclick);
         over.setOnClickListener(onclick);
         text_weight.setOnClickListener(onclick);
+        button.setOnClickListener(onclick);
     }
 
     View.OnClickListener onclick = new View.OnClickListener() {
@@ -157,6 +160,11 @@ public class RegisterInfoActivity extends Activity{
                     text_female.setBackgroundResource(R.drawable.female_blue);
                     strSex = "女";
                     gender = "2";
+                    break;
+                case R.id.button:
+                    commit();
+                    Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
+                    startActivity(intent);
                     break;
             }
 
@@ -310,9 +318,9 @@ public class RegisterInfoActivity extends Activity{
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-
-
-                return super.getHeaders();
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("Authorization", Constants.MY_TOKEN);
+                return hashMap;
             }
         };
 
