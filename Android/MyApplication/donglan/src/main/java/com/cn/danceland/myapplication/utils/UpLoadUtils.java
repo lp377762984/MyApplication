@@ -37,6 +37,7 @@ public class UpLoadUtils {
         conn.setRequestProperty("Charsert", "UTF-8");
         conn.setRequestProperty("Accept","application/json");
         conn.setRequestProperty("Content-Type", "multipart/form-data" + ";boundary=" + BOUNDARY);
+        conn.setRequestProperty("Authorization","Bearer+eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzQzNjkwNzUzNSIsImNyZWF0ZWQiOjE1MTAwMzU1MzMyMDAsImV4cCI6MTUxMDY0MDMzM30.Ex6PoP3NqZfiDzMRFiiNgY5J55N9S8GFoveHkZug0J_9qS92Si3KYk4xbb3_rvEqLzgSsM5HjYvH3fLt-4jPqw\n");
         // 首先组拼文本类型的参数
 //        if(params!=null){
 //            StringBuilder sb = new StringBuilder();
@@ -94,7 +95,7 @@ public class UpLoadUtils {
                 InputStreamReader(conn.getInputStream()));
 
         String line;
-// 一行一行的读取服务器返回的数据
+        // 一行一行的读取服务器返回的数据
         while ((line = reader.readLine()) != null) {
             sb.append(line).append("\n");
         }
