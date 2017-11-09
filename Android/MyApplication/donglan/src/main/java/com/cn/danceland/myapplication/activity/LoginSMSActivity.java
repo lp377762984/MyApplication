@@ -23,7 +23,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -32,8 +31,6 @@ import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
 
 /**
  * Created by shy on 2017/9/22.
@@ -224,20 +221,29 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+
                 //      LogUtil.i(s);
                 Gson gson = new Gson();
-                InfoBean infoBean = new InfoBean();
-                infoBean = gson.fromJson(s, InfoBean.class);
+                RequestInfoBean infoBean = new RequestInfoBean();
+                infoBean = gson.fromJson(s, RequestInfoBean.class);
+
+                if (!infoBean.getSuccess()) {
+                    ToastUtils.showToastShort(infoBean.getErrorMsg());
+                    return;
+                }
+
                 ToastUtils.showToastShort("登录成功");
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                 SPUtils.setString(Constants.MY_PSWD, infoBean.getData().getPassword());//保存密码
-                SPUtils.setString(Constants.MY_TOKEN,"Bearer+"+infoBean.getData().getToken());
-                SPUtils.setString(Constants.MY_USERID,infoBean.getData().getId());
-                  LogUtil.i(infoBean.toString());
-                ArrayList<Data> mInfoBean = new ArrayList<>();
-                mInfoBean.add(infoBean.getData());
-                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
-
+                SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + infoBean.getData().getToken());
+                SPUtils.setString(Constants.MY_USERID, infoBean.getData().getId());
+                LogUtil.i(infoBean.toString());
+//                ArrayList<Data> mInfoBean = new ArrayList<>();
+//                mInfoBean.add(infoBean.getData());
+//                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
+                //保存个人信息
+                Data data = infoBean.getData();
+                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
                 startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
 

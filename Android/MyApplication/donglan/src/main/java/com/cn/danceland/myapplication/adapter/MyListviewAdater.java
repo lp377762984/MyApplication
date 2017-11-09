@@ -83,7 +83,7 @@ public class MyListviewAdater extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.listview_item_dynamic, null);
-            viewHolder.tv_pick_name = (TextView) convertView.findViewById(R.id.tv_pick_name);
+            viewHolder.tv_pick_name = (TextView) convertView.findViewById(R.id.tv_nick_name);
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);

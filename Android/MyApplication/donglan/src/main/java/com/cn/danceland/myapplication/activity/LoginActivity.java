@@ -21,7 +21,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.InfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -31,7 +30,6 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -147,7 +145,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //成功
                     String mUserId = requestInfoBean.getData().getId();
                     SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
-                    SPUtils.setString(Constants.MY_TOKEN,"Bearer+"+requestInfoBean.getData().getToken());
+                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
                     SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
                     //查询信息
                     queryUserInfo(mUserId);
@@ -203,15 +201,19 @@ public class LoginActivity extends Activity implements OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-       //         LogUtil.i(s);
+                //         LogUtil.i(s);
                 Gson gson = new Gson();
-                InfoBean requestInfoBean = gson.fromJson(s, InfoBean.class);
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
 
-                LogUtil.i(requestInfoBean.toString());
-                ArrayList<Data> mInfoBean = new ArrayList<>();
-                mInfoBean.add(requestInfoBean.getData());
-                DataInfoCache.saveListCache( mInfoBean, Constants.MY_INFO);
+                //      LogUtil.i(requestInfoBean.toString());
+//                ArrayList<Data> mInfoBean = new ArrayList<>();
+//                mInfoBean.add(requestInfoBean.getData());
+//                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
+                //保存个人信息
+                Data data = requestInfoBean.getData();
+                DataInfoCache.saveOneCache(data,Constants.MY_INFO);
 
+                //    LogUtil.i(DataInfoCache.loadOneCache("info").toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -221,12 +223,12 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
 
         }
-        ){
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
                 // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
                 return map;
             }
@@ -240,4 +242,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
+
+
 }

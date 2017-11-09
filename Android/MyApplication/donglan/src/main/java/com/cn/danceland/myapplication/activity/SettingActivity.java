@@ -48,7 +48,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
     private TextView tv_phone;
-    private ArrayList<Data> mInfoBean;
+    private Data mInfo;
+    //   private ArrayList<Data> mInfoBean;
 
 
     @Override
@@ -70,15 +71,18 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
 
-        mInfoBean = new ArrayList<>();
-        mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
-        LogUtil.i(mInfoBean.get(0).toString());
-        if (!TextUtils.isEmpty(mInfoBean.get(0).getPhone())) {
-            tv_phone.setText(mInfoBean.get(0).getPhone());
+//        mInfoBean = new ArrayList<>();
+//        mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
+
+        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        //  LogUtil.i(mInfoBean.get(0).toString());
+        if (!TextUtils.isEmpty(mInfo.getPhone())) {
+            tv_phone.setText(mInfo.getPhone());
         }
-        if (!TextUtils.isEmpty(mInfoBean.get(0).getMemberNo())) {
-            tv_number.setText(mInfoBean.get(0).getMemberNo());
-        } else{
+        if (!TextUtils.isEmpty(mInfo.getMemberNo())) {
+            tv_number.setText(mInfo.getMemberNo());
+        } else {
             tv_number.setText("未设置");
         }
 
@@ -147,7 +151,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone",tv_phone.getText().toString()));
+                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone", tv_phone.getText().toString()));
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -196,8 +200,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                         EditText edit_phone =
                                 dialogView.findViewById(R.id.edit_phone);
 
-                        mInfoBean.get(0).setMemberNo(edit_phone.getText().toString());
-                        DataInfoCache.saveListCache(mInfoBean,Constants.MY_INFO);
+                        mInfo.setMemberNo(edit_phone.getText().toString());
+                        DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+
                         tv_number.setText(edit_phone.getText().toString());
 
 //                        Toast.makeText(SettingActivity.this,
@@ -343,8 +348,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
-               // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
                 return map;
             }
         };

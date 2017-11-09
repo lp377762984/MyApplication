@@ -11,26 +11,11 @@ package com.cn.danceland.myapplication.bean;
  */
 public class RequestInfoBean {
 
-    private String code;
-    private String detail;
+
     private boolean success;
     private String errorMsg;
     private Data data;
-    public String getCode() {
-        return code;
-    }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 
     public void setSuccess(boolean success) {
          this.success = success;
@@ -56,8 +41,7 @@ public class RequestInfoBean {
     @Override
     public String toString() {
         return "RequestInfoBean{" +
-                "code='" + code + '\'' +
-                ", detail='" + detail + '\'' +
+
                 ", success=" + success +
                 ", errorMsg='" + errorMsg + '\'' +
                 ", data=" + data +
