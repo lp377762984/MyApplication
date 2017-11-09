@@ -33,8 +33,13 @@ public class SplashActivity extends Activity {
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
-        DBData data = new DBData();
-        data.setCityInfo(SplashActivity.this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DBData data = new DBData();
+                data.setCityInfo(SplashActivity.this);
+            }
+        }).start();
     }
 
 
