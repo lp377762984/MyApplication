@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
@@ -10,11 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.map.Text;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 
@@ -30,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FitnessManActivity extends Activity {
 
     RecyclerView fitness_recycle;
-
+    ImageView fitness_back;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,17 +43,21 @@ public class FitnessManActivity extends Activity {
 
     private void initView() {
         fitness_recycle = findViewById(R.id.fitness_recycle);
+
+        fitness_back = findViewById(R.id.fitness_back);
         fitness_recycle.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<String> arr = new ArrayList<>();
-        fitness_recycle.setAdapter(new MyRecycleAdapter(arr));
+        fitness_recycle.setAdapter(new MyRecycleAdapter(arr,FitnessManActivity.this));
     }
 
     public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyRecycleViewHolder>{
 
         public ArrayList<String> arrayList;
+        Context context;
 
-        public MyRecycleAdapter(ArrayList<String> arrayList){
+        public MyRecycleAdapter(ArrayList<String> arrayList,Context context){
             this.arrayList = arrayList;
+            this.context = context;
         }
 
         @Override
@@ -62,12 +69,19 @@ public class FitnessManActivity extends Activity {
 
         @Override
         public void onBindViewHolder(MyRecycleViewHolder holder, int position) {
-            holder.fitness_circleimage.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+            Glide.with(FitnessManActivity.this).load("http://img06.tooopen.com/images/20160915/tooopen_sy_178926047887.jpg").into(holder.fitness_circleimage);
+            //holder.fitness_circleimage.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
             holder.fitness_fans.setText("100w粉丝");
             holder.fitness_name.setText("小明同学");
-            holder.im1.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
-            holder.im2.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
-            holder.im3.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.zhongdian_icon));
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+            Glide.with(FitnessManActivity.this).load("http://img1.juimg.com/160827/330238-160RF20H543.jpg").
+                    into(holder.im1);
+            Glide.with(FitnessManActivity.this).load("http://pic103.nipic.com/file/20160709/5212257_092537022000_2.jpg").
+                    into(holder.im2);
+            Glide.with(FitnessManActivity.this).load("http://img01.taopic.com/160326/318753-160326104Z353.jpg").
+                    into(holder.im3);
+
         }
 
 

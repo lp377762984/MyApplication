@@ -61,8 +61,6 @@ public class PublishActivity extends Activity {
         initView();
         setOnclick();
         initdata();
-//        DBData data = new DBData();
-//        data.getCityInfo(PublishActivity.this);
 //
     }
 
