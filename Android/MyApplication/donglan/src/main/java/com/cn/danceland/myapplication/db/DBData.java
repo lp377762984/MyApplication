@@ -77,8 +77,6 @@ public class DBData {
 
                     }
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
