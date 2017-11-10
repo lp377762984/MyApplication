@@ -13,6 +13,7 @@ public class Constants {
     public static final String LOGIN_BY_PHONE_URL = HOST + "user/findByPhone/";//短信登录
     public static final String LOGOUT_URL = HOST + "user/logOut";//用户退出
     public static final String ZONE = HOST + "/zone";//城市区域
+    public static final String MODIFY_ZONE = HOST+"/user/modifyZoneCode";//修改区域
 
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
