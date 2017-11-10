@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -38,7 +39,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +66,28 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         initHost();
         setContentView(R.layout.activity_setting);
+        //注册event事件
+        EventBus.getDefault().register(this);
+
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //取消注册event事件
+        EventBus.getDefault().unregister(this);
+    }
+
+    //even事件处理
+    public void onEventMainThread(StringEvent event) {
+        if (111==event.getEventCode()){
+            String msg = event.getMsg();
+
+            tv_phone.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void initHost() {
@@ -86,17 +109,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-        //  LogUtil.i(mInfoBean.get(0).toString());
         if (!TextUtils.isEmpty(mInfo.getPhone())) {
             tv_phone.setText(mInfo.getPhone());
         }
 
-        //LogUtil.i(mInfoBean.get(0).toString());
-        if (!TextUtils.isEmpty(mInfo.getPhone())) {
-            tv_phone.setText(mInfo.getPhone());
-        }
+        //设置会员号
         if (!TextUtils.isEmpty(mInfo.getMemberNo())) {
-            tv_number.setText(mInfo.getMemberNo());
+            tv_number.setText(mInfo.getUserName());
         } else {
             tv_number.setText("未设置");
         }
@@ -213,13 +232,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 获取EditView中的输入内容
-                        EditText edit_phone =
-                                dialogView.findViewById(R.id.edit_phone);
+                        EditText et_number =
 
-                        mInfo.setMemberNo(edit_phone.getText().toString());
-                        DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                                dialogView.findViewById(R.id.et_number);
 
-                        tv_number.setText(edit_phone.getText().toString());
+                        mInfo.setMemberNo(et_number.getText().toString());
+                        // DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+
+                        tv_number.setText(et_number.getText().toString());
 
 //                        Toast.makeText(SettingActivity.this,
 //                                edit_phone.getText().toString(),
@@ -371,11 +391,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-//                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-//                        + ">>" + volleyError.networkResponse.statusCode
-//                        + ">>" + volleyError.networkResponse.data
-//                        + ">>" + volleyError.getCause()
-//                        + ">>" + volleyError.getMessage());
+                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+                        + ">>" + volleyError.networkResponse.statusCode
+                        + ">>" + volleyError.networkResponse.data
+                        + ">>" + volleyError.getCause()
+                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override
@@ -383,7 +403,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 Map<String, String> map = new HashMap<String, String>();
 
                 map.put("id", SPUtils.getString(Constants.MY_USERID, null));
-
+                LogUtil.i("id=========="
+                        + SPUtils.getString(Constants.MY_USERID, null));
                 // map.put("romType", "0");
                 return map;
             }
@@ -393,7 +414,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 Map<String, String> map = new HashMap<String, String>();
 
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                LogUtil.i("Authorization=" + SPUtils.getString(Constants.MY_TOKEN, null));
                 return map;
             }
         };

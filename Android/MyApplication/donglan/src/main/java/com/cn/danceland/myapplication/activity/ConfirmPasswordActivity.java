@@ -49,14 +49,15 @@ public class ConfirmPasswordActivity extends Activity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case btn_commit:
-                if (!TextUtils.equals(SPUtils.getString(Constants.MY_PSWD,null), MD5Utils.encode(et_password.getText().toString()))){
+                if (!TextUtils.equals(SPUtils.getString(Constants.MY_PSWD, null), MD5Utils.encode(et_password.getText().toString()))) {
 
                     ToastUtils.showToastShort("面输入有误，请重新输入");
                     et_password.setText("");
                     return;
                 }
 
-                startActivity(new Intent(ConfirmPasswordActivity.this,ChangePhoneActivity.class));
+                startActivity(new Intent(ConfirmPasswordActivity.this, ResetPhoneActivity.class).putExtra("phone", tv_phone.getText().toString()));
+                finish();
                 break;
             case iv_back:
                 finish();

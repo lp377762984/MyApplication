@@ -147,6 +147,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
                     SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
+
+
+
+
                     //查询信息
                     queryUserInfo(mUserId);
 
@@ -201,7 +205,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                //         LogUtil.i(s);
+                LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
 
@@ -213,7 +217,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 Data data = requestInfoBean.getData();
                 DataInfoCache.saveOneCache(data,Constants.MY_INFO);
 
-                //    LogUtil.i(DataInfoCache.loadOneCache("info").toString());
+               LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
             }
         }, new Response.ErrorListener() {
             @Override
