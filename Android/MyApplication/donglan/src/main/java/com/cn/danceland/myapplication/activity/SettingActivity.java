@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -48,7 +49,7 @@ import java.util.Map;
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     View locationView;
-    TextView cancel_action, over_action;
+    TextView cancel_action, over_action,tx_location;
     PopupWindow locationWindow;
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
@@ -104,7 +105,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
-
+        tx_location = findViewById(R.id.tx_location);
 
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
