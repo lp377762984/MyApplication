@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,19 +57,21 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private TextView tv_number;
     private TextView tv_phone;
     private Data mInfo;
-    //   private ArrayList<Data> mInfoBean;
+
     DBData dbData;
+    String zoneCode;
+
+    List<Donglan> zoneArr;
 
 
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initHost();
         setContentView(R.layout.activity_setting);
         //注册event事件
         EventBus.getDefault().register(this);
-
+        initHost();
         initView();
     }
 
@@ -80,6 +83,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     }
 
     //even事件处理
+    @Subscribe
     public void onEventMainThread(StringEvent event) {
         if (111==event.getEventCode()){
             String msg = event.getMsg();
@@ -92,6 +96,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     private void initHost() {
         dbData = new DBData();
+        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        zoneCode = mInfo.getZoneCode();
+        zoneArr = new ArrayList<Donglan>();
+        zoneArr = dbData.queryCityValue(zoneCode);
     }
 
     private void initView() {
@@ -107,7 +115,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_phone = findViewById(R.id.tv_phone);
         tx_location = findViewById(R.id.tx_location);
 
-        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        if(zoneArr.size()>0){
+            tx_location.setText(zoneArr.get(0).getProvince()+" "+zoneArr.get(0).getCity());
+            zoneArr.clear();
+        }
+
+
+       // mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         if (!TextUtils.isEmpty(mInfo.getPhone())) {
             tv_phone.setText(mInfo.getPhone());
