@@ -85,16 +85,7 @@ public class DBData {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                HashMap<String,String> hashMap = new HashMap<String,String>();
-                hashMap.put("Authorization",token);
-
-                return hashMap;
-            }
-        };
+        });
 
         requestQueue.add(jsonObjectRequest);
 
