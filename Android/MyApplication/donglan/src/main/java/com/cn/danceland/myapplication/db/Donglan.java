@@ -10,12 +10,17 @@ import org.greenrobot.greendao.annotation.Generated;
 public class Donglan {
 
     private int id;
+    private String provinceValue;
     private String province;
+    private String cityValue;
     private String city;
-    @Generated(hash = 1808725935)
-    public Donglan(int id, String province, String city) {
+    @Generated(hash = 1285588360)
+    public Donglan(int id, String provinceValue, String province, String cityValue,
+            String city) {
         this.id = id;
+        this.provinceValue = provinceValue;
         this.province = province;
+        this.cityValue = cityValue;
         this.city = city;
     }
     @Generated(hash = 843809695)
@@ -42,6 +47,18 @@ public class Donglan {
     public void clear(){
         province = "";
         city = "";
+    }
+    public String getProvinceValue() {
+        return this.provinceValue;
+    }
+    public void setProvinceValue(String provinceValue) {
+        this.provinceValue = provinceValue;
+    }
+    public String getCityValue() {
+        return this.cityValue;
+    }
+    public void setCityValue(String cityValue) {
+        this.cityValue = cityValue;
     }
 
 }

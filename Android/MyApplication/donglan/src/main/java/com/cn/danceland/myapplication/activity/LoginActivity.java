@@ -167,11 +167,11 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
+//                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+//                        + ">>" + volleyError.networkResponse.statusCode
+//                        + ">>" + volleyError.networkResponse.data
+//                        + ">>" + volleyError.getCause()
+//                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override

@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -52,7 +53,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
-    private TextView tv_phone;
+    private TextView tv_phone,tx_location;
     private ArrayList<Data> mInfoBean;
     DBData dbData;
 
@@ -67,6 +68,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     private void initHost() {
         dbData = new DBData();
+
+      //  Data data= DataInfoCache.
     }
 
     private void initView() {
@@ -80,7 +83,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
-
+        tx_location = findViewById(R.id.tx_location);
         mInfoBean = new ArrayList<>();
         mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
         //LogUtil.i(mInfoBean.get(0).toString());
@@ -253,25 +256,15 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             }
         }
 
-
-
-        //ArrayList<String> cityList1 = new ArrayList<String>();
-//        cityList.add("郑州");
-//        cityList.add("武汉");
-//        cityList.add("合肥");
-//        cityList.add("合肥");
-//        cityList.add("合肥");
-//        cityList.add("合肥");
-//        cityList.add("合肥");
-//        cityList.add("合肥");
-
         locationWindow.setContentView(locationView);
         proAdapter = new LocationAdapter(proList, this);
         list_province.setAdapter(proAdapter);
+
         list_province.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String pro = proList.get(position);
+                tx_location.setText(pro);
                 ArrayList<String> cityList = proCityMap.get(pro);
                 if(cityList!=null&&cityList.size()>0){
                     cityAdapter = new LocationAdapter(cityList, SettingActivity.this);
@@ -279,10 +272,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
-
-        //
-
-
+        list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String city = proCityMap.get(tx_location.getText().toString().split(" ")[0]).get(position);
+                tx_location.setText(tx_location.getText().toString().split(" ")[0]+" "+city);
+            }
+        });
 
 
         locationWindow.showAsDropDown(findViewById(R.id.tv_quit), 0, 40);
