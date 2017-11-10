@@ -25,7 +25,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -39,7 +38,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,23 +53,44 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
-    private TextView tv_phone,tx_location;
-    private ArrayList<Data> mInfoBean;
+    private TextView tv_phone;
+    private Data mInfo;
+    //   private ArrayList<Data> mInfoBean;
     DBData dbData;
 
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initHost();
         setContentView(R.layout.activity_setting);
+        //注册event事件
+        EventBus.getDefault().register(this);
+
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //取消注册event事件
+        EventBus.getDefault().unregister(this);
+    }
+
+    //even事件处理
+    public void onEventMainThread(StringEvent event) {
+        if (111==event.getEventCode()){
+            String msg = event.getMsg();
+
+            tv_phone.setText(msg);
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void initHost() {
         dbData = new DBData();
-
-      //  Data data= DataInfoCache.
     }
 
     private void initView() {
@@ -83,16 +104,18 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
-        tx_location = findViewById(R.id.tx_location);
-        mInfoBean = new ArrayList<>();
-        mInfoBean = DataInfoCache.loadListCache(Constants.MY_INFO);
-        //LogUtil.i(mInfoBean.get(0).toString());
-        if (!TextUtils.isEmpty(mInfoBean.get(0).getPhone())) {
-            tv_phone.setText(mInfoBean.get(0).getPhone());
+
+
+        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        if (!TextUtils.isEmpty(mInfo.getPhone())) {
+            tv_phone.setText(mInfo.getPhone());
         }
-        if (!TextUtils.isEmpty(mInfoBean.get(0).getMemberNo())) {
-            tv_number.setText(mInfoBean.get(0).getMemberNo());
-        } else{
+
+        //设置会员号
+        if (!TextUtils.isEmpty(mInfo.getMemberNo())) {
+            tv_number.setText(mInfo.getUserName());
+        } else {
             tv_number.setText("未设置");
         }
 
@@ -161,7 +184,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone",tv_phone.getText().toString()));
+                startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone", tv_phone.getText().toString()));
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -207,12 +230,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 获取EditView中的输入内容
-                        EditText edit_phone =
-                                dialogView.findViewById(R.id.edit_phone);
+                        EditText et_number =
 
-                        mInfoBean.get(0).setMemberNo(edit_phone.getText().toString());
-                        DataInfoCache.saveListCache(mInfoBean,Constants.MY_INFO);
-                        tv_number.setText(edit_phone.getText().toString());
+                                dialogView.findViewById(R.id.et_number);
+
+                        mInfo.setMemberNo(et_number.getText().toString());
+                        // DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+
+                        tv_number.setText(et_number.getText().toString());
 
 //                        Toast.makeText(SettingActivity.this,
 //                                edit_phone.getText().toString(),

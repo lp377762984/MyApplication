@@ -32,7 +32,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_pick_name"
+                android:id="@+id/tv_nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -48,6 +48,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_guanzhu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -65,29 +66,38 @@
         android:text="今天天气不错！" />
 
     <ImageView
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/img_man" />
+        android:src="@drawable/img_man"
+        android:visibility="gone" />
+
     <com.cn.danceland.myapplication.view.NoScrollGridView
         android:id="@+id/gridview"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:columnWidth="100dp"
         android:gravity="center_vertical"
-        android:layout_gravity="center_horizontal"
         android:numColumns="3"
         android:stretchMode="spacingWidth"
-        android:verticalSpacing="5dp"
-        />
+        android:verticalSpacing="5dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:text="发布于月球"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginTop="5dp"
         android:background="#fff"
         android:orientation="horizontal">
 
@@ -109,9 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="3dp"
                 android:text="123"
-                android:textSize="12sp"
-                android:layout_marginLeft="3dp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
 
@@ -132,9 +142,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="3dp"
                 android:text="123"
-                android:textSize="12sp"
-                android:layout_marginLeft="3dp"/>
+                android:textSize="12sp" />
         </LinearLayout>
 
         <ImageView

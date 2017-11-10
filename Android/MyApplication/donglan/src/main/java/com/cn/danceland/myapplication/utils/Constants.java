@@ -12,9 +12,9 @@ public class Constants {
     public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
     public static final String LOGIN_BY_PHONE_URL = HOST + "user/findByPhone/";//短信登录
     public static final String LOGOUT_URL = HOST + "user/logOut";//用户退出
-    public static final String ZONE = HOST+"/zone";//城市区域
+    public static final String ZONE = HOST + "/zone";//城市区域
 
-
+    public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
 
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
@@ -24,6 +24,7 @@ public class Constants {
     public static final String MY_MEMBERNO = "memberNo";//我的会员号
     public static final String MY_PSWD = "mypswd";//我的密码
     public static final String MY_TOKEN = "my_token";//我的token
+    public static final String MY_LOCATION = "my_location";//我的地区
 
     public static final String MY_INFO = "my_info";//我的资料
 }

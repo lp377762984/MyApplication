@@ -17,12 +17,11 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
@@ -30,14 +29,14 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.Request.Method.GET;
 
-public class ChangePhoneActivity extends Activity implements View.OnClickListener {
+public class ResetPhoneActivity extends Activity implements View.OnClickListener {
     private TextView mTvGetsms;
     private EditText mEtSms;
     private String smsCode = "";
@@ -107,15 +106,19 @@ public class ChangePhoneActivity extends Activity implements View.OnClickListene
             case R.id.tv_getsms:
                 //判断电话号码是否为空
                 if (TextUtils.isEmpty(mEtPhone.getText().toString())) {
-                    Toast.makeText(ChangePhoneActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPhoneActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断电话号码是否合法
                 if (!PhoneFormatCheckUtils.isPhoneLegal(mEtPhone.getText().toString())) {
-                    Toast.makeText(ChangePhoneActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPhoneActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (TextUtils.equals(getIntent().getStringExtra("phone"), mEtPhone.getText().toString().trim())) {
 
+                    ToastUtils.showToastShort("请输入新的手机号");
+                    return;
+                }
                 //设置不能点击
                 mTvGetsms.setFocusable(false);
                 mTvGetsms.setClickable(false);
@@ -130,18 +133,20 @@ public class ChangePhoneActivity extends Activity implements View.OnClickListene
             case R.id.btn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
-                    Toast.makeText(ChangePhoneActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPhoneActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
 
                     ToastUtils.showToastShort("验证码有误，请重新输入");
+                    return;
                 }
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("id", SPUtils.getString(Constants.MY_USERID, ""));
 
-                changeUserInfo(map);
+
+                resetPhone();//重置手机号
+
+
                 break;
             case R.id.iv_back://返回
                 finish();
@@ -194,27 +199,54 @@ public class ChangePhoneActivity extends Activity implements View.OnClickListene
 
     }
 
-    private void changeUserInfo(final Map<String, String> map) {
+    private void resetPhone() {
 
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.RESET_USERINFO_URL, new Response.Listener<JSONObject>() {
+        StringRequest jsonRequest = new StringRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject jsonObject) {
-                LogUtil.i(jsonObject.toString());
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean infoBean = new RequestInfoBean();
+                infoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (infoBean.getSuccess()) {
+
+                    ToastUtils.showToastShort("手机号修改成功");
+                    //发送事件
+                    EventBus.getDefault().post(new StringEvent(mEtPhone.toString().trim(),111));
+
+
+                    finish();
+                } else {
+
+                    ToastUtils.showToastShort("修改失败，原因：" + infoBean.getErrorMsg());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请查看网络连接");
             }
-        }
-        ) {
+        }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
                 return map;
             }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                //   map.put("id", SPUtils.getString(Constants.MY_USERID, ""));
+                map.put("phone", mEtPhone.getText().toString().trim());
+                return map;
+            }
+
+
         };
 
+        MyApplication.getHttpQueues().add(jsonRequest);
     }
 
 

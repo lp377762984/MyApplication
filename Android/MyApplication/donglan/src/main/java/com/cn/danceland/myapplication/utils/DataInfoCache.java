@@ -35,24 +35,38 @@ public class DataInfoCache {
     /**
      * 保存 一组 数据
      *
-
      * @param data      种子
      * @param cacheName 缓存文件名
      */
-    public static <T> void saveListCache( ArrayList<T> data, String cacheName) {
+    public static <T> void saveListCache(ArrayList<T> data, String cacheName) {
         new DataCache<T>().saveGlobal(MyApplication.getContext(), data, cacheName);
     }
 
-
-
+    /**
+     * 保存 一个 数据
+     *
+     * @param data      种子
+     * @param cacheName 缓存文件名
+     */
+    public static <T> void saveOneCache(Object data, String cacheName) {
+        new DataCache<T>().saveGlobalone(MyApplication.getContext(), data, cacheName);
+    }
 
 
     /**
      * 直接根据 缓存文件名获取
      */
-    public static <T> ArrayList<T> loadListCache( String cacheName) {
+    public static <T> ArrayList<T> loadListCache(String cacheName) {
         return new DataCache<T>().loadGlobal(MyApplication.getContext(), cacheName);
     }
+
+    /**
+     * 直接根据文件名 获取一个文件名获取
+     */
+    public static Object loadOneCache(String cacheName) {
+        return new DataCache().loadGlobal_one(MyApplication.getContext(), cacheName);
+    }
+
 
     /**
      * 获取 一组 数据
@@ -67,6 +81,39 @@ public class DataInfoCache {
         public void saveGlobal(Context ctx, ArrayList<T> data, String name) {
             save(ctx, data, name, DataCache);
         }
+
+        public void saveGlobalone(Context ctx, Object data, String name) {
+            save_one(ctx, data, name, DataCache);
+        }
+
+        private void save_one(Context ctx, Object data, String name, String folder) {
+            if (ctx == null) {
+                return;
+            }
+            File file;
+            if (!folder.isEmpty()) {
+                File fileDir = new File(ctx.getFilesDir(), folder);
+                if (!fileDir.exists() || !fileDir.isDirectory()) {
+                    fileDir.mkdir();
+                }
+                file = new File(fileDir, name);
+            } else {
+                file = new File(ctx.getFilesDir(), name);
+            }
+            if (file.exists()) {
+                file.delete();
+            }
+
+            //   Log.d("taginfo", file.getAbsolutePath());
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+                oos.writeObject(data);
+                oos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
 
         private void save(Context ctx, ArrayList<T> data, String name, String folder) {
             if (ctx == null) {
@@ -85,7 +132,7 @@ public class DataInfoCache {
             if (file.exists()) {
                 file.delete();
             }
-            Log.d("taginfo", file.getAbsolutePath());
+            //  Log.d("taginfo", file.getAbsolutePath());
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
                 oos.writeObject(data);
@@ -103,6 +150,43 @@ public class DataInfoCache {
             return load(ctx, name, DataCache);
         }
 
+        public Object loadGlobal_one(Context ctx, String name) {
+            return load_one(ctx, name, DataCache);
+        }
+
+        private Object load_one(Context ctx, String name, String folder) {
+            Object data = null;
+
+            File file;
+            if (!folder.isEmpty()) {
+                File fileDir = new File(ctx.getFilesDir(), folder);
+                if (!fileDir.exists() || !fileDir.isDirectory()) {
+                    fileDir.mkdir();
+                }
+                file = new File(fileDir, name);
+            } else {
+                file = new File(ctx.getFilesDir(), name);
+            }
+            //      Log.d("taginfo", "file " + file.getAbsolutePath());
+            if (file.exists()) {
+                try {
+                    //    Log.d("taginfo", "write object");
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+                    data = (Object) ois.readObject();
+                    ois.close();
+                } catch (Exception e) {
+                    //   Log.d("taginfo", e.toString());
+                }
+            }
+            if (data == null) {     /** 如果没有 */
+                //  Log.d("taginfo", "data == null");
+                LogUtil.i("data == null" + "data是空");
+                data = new Object();
+                // data = new Class<T>().newInstance();Class<?>
+            }
+            return data;
+        }
+
         private ArrayList<T> load(Context ctx, String name, String folder) {
             ArrayList<T> data = null;
 
@@ -116,19 +200,19 @@ public class DataInfoCache {
             } else {
                 file = new File(ctx.getFilesDir(), name);
             }
-            Log.d("taginfo", "file " + file.getAbsolutePath());
+            //       Log.d("taginfo", "file " + file.getAbsolutePath());
             if (file.exists()) {
                 try {
-                    Log.d("taginfo", "write object");
+                    //             Log.d("taginfo", "write object");
                     ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
                     data = (ArrayList<T>) ois.readObject();
                     ois.close();
                 } catch (Exception e) {
-                    Log.d("taginfo", e.toString());
+                    //           Log.d("taginfo", e.toString());
                 }
             }
             if (data == null) {     /** 如果没有 */
-                Log.d("taginfo", "data == null");
+                LogUtil.i("data == null" + "data是空");
                 data = new ArrayList<T>();
             }
             return data;

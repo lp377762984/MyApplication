@@ -83,8 +83,9 @@ public class MyListviewAdater extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.listview_item_dynamic, null);
-            viewHolder.tv_pick_name = (TextView) convertView.findViewById(R.id.tv_pick_name);
+            viewHolder.tv_nick_name = (TextView) convertView.findViewById(R.id.tv_nick_name);
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
+            viewHolder.tv_guanzhu = (TextView) convertView.findViewById(R.id.tv_guanzhu);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             convertView.setTag(viewHolder);
@@ -92,7 +93,7 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tv_pick_name.setText(data.get(position).getTitle());
+        viewHolder.tv_nick_name.setText(data.get(position).getTitle());
         viewHolder.tv_time.setText(data.get(position).getContent());
         Glide.with(context)
                 .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=92a343f766c683c086be21e2ff0eea66&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Ddfed83e2eafe9925df0161135cc134aa%2Fbd315c6034a85edf6875650443540923dd547518.jpg")
@@ -155,8 +156,9 @@ public class MyListviewAdater extends BaseAdapter {
     }
 
     class ViewHolder {
-        TextView tv_pick_name;
+        TextView tv_nick_name;
         TextView tv_time;
+        TextView tv_guanzhu;
         ImageView iv_avatar;
         NoScrollGridView gridView;
     }

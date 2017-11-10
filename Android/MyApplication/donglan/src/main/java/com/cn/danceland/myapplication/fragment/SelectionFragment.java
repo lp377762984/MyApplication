@@ -40,19 +40,19 @@ public class SelectionFragment extends BaseFragment {
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("登录中……");
-        dialog.show();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);//延时1s
-                  dialog.dismiss();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        dialog.show();
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(1000);//延时1s
+//                  dialog.dismiss();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
         data = getData();
         myListviewAdater = new MyListviewAdater(mActivity, (ArrayList<PullBean>) data);
         pullToRefresh.setAdapter(myListviewAdater);
