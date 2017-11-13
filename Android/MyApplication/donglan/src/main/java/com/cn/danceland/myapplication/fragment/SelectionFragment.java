@@ -34,6 +34,7 @@ public class SelectionFragment extends BaseFragment {
     ProgressDialog dialog;
 
 
+
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_selection, null);

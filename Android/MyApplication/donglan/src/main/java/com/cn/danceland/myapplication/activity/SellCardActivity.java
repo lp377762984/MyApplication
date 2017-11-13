@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
@@ -31,6 +31,8 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     private String[] names = {"黄金年卡", "白金年卡", "钻石年卡"};
     private ImageView iv_fenlie;
     private LinearLayout ll_fenlie;
+    private TextView tv_tiltle;
+    private ListView listView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +42,10 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        ListView listView = findViewById(R.id.listview);
+        listView = findViewById(R.id.listview);
+        tv_tiltle = findViewById(R.id.tv_tiltle);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+
         ll_fenlie =
                 findViewById(R.id.ll_fenlie);
         ll_fenlie.setOnClickListener(this);
@@ -62,7 +67,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
                 showDroppyMenu();
                 break;
 
-
+            case R.id.iv_back://返回
+                finish();
+                break;
             default:
                 break;
         }
@@ -95,58 +102,78 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private String[] data = new String[]{"全部", "年卡", "季卡", "月卡", "限时活动"};
+
     //弹出下拉框
     protected void showDroppyMenu() {
-        droppyMenu.show();
 
+        iv_fenlie.setImageResource(R.drawable.img_down);
+//        ListView listView = (ListView) droppyMenu.getMenuView().findViewById(R.id.listview);
+//        listView.setAdapter(new MyAdapter());
+        droppyMenu.show();
     }
 
     DroppyMenuPopup droppyMenu;
 
 
+    public class MyAdapter extends BaseAdapter {
+
+
+        @Override
+        public int getCount() {
+            return data.length;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = View.inflate(SellCardActivity.this, R.layout.listview_item_droppy, null);
+            TextView textView = view.findViewById(R.id.text1);
+            textView.setText(data[i]);
+
+            return view;
+        }
+    }
+
     //绑定下拉框
     private void initDroppyMenu(View btn) {
         DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(SellCardActivity.this, btn);
-        droppyBuilder.addMenuItem(new DroppyMenuItem("全部"))
-                .addSeparator()
-                .addMenuItem(new DroppyMenuItem("年卡"))
-                .addSeparator()
-                .addMenuItem(new DroppyMenuItem("季卡"))
-                .addSeparator()
-                .addMenuItem(new DroppyMenuItem("月卡"))
-                .addSeparator()
-                .addMenuItem(new DroppyMenuItem("限时活动"))
+
+        for (int j = 0; j < data.length; j++) {
+
+            droppyBuilder.addMenuItem(new DroppyMenuItem(data[j]))
+                    .addSeparator();
+        }
+
+
+
+        droppyBuilder
                 .setOnDismissCallback(new DroppyMenuPopup.OnDismissCallback() {
                     @Override
                     public void call() {
-
+                        iv_fenlie.setImageResource(R.drawable.img_up);
                     }
                 })
                 .setOnClick(new DroppyClickCallbackInterface() {
                     @Override
                     public void call(View v, int id) {
-                        switch (id) {
-                            case 0:
-                                ToastUtils.showToastShort("全部");
-                                break;
-                            case 1:
-                                ToastUtils.showToastShort("年卡");
-                                break;
-                            case 2:
-                                ToastUtils.showToastShort("季卡");
-                                break;
-                            case 3:
-                                ToastUtils.showToastShort("月卡");
-                                break;
-                            case 4:
-                                ToastUtils.showToastShort("限时活动");
-                                break;
-                            default:
-                        }
+                        iv_fenlie.setImageResource(R.drawable.img_up);
+                        tv_tiltle.setText(data[id]);
+
                     }
                 })
                 .setPopupAnimation(new DroppyFadeInAnimation())
                 .triggerOnAnchorClick(false);
+
 
         droppyMenu = droppyBuilder.build();
     }

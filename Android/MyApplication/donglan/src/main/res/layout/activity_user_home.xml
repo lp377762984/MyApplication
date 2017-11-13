@@ -4,48 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="184dp"
-        android:orientation="vertical"
-        android:background="#fff">
+        android:layout_height="wrap_content"
+        android:divider="@color/color_bg_line"
+        android:dividerHeight="1px"
+        android:fadingEdge="none"
+        android:scrollingCache="false"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrDrawable="@drawable/default_ptr_flip"
+        ptr:ptrHeaderBackground="#00000000"
+        ptr:ptrHeaderTextColor="#999999"
+        ptr:ptrRefreshableViewBackground="#00000000"
+        ptr:ptrScrollingWhileRefreshingEnabled="true"
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="73dp"
-            android:layout_height="73dp"
-
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/img_my_avatar" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:textSize="15sp"
-            android:textColor="#333333"
-            android:text="派大星" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:textSize="13sp"
-            android:textColor="#999999"
-            android:text="10w粉丝" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:textSize="13sp"
-            android:textColor="#333333"
-            android:text="+关注" />
-
-    </LinearLayout>
-
+        />
 </LinearLayout>

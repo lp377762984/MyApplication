@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ import java.util.Map;
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     View locationView;
-    TextView cancel_action, over_action,tx_location;
+    TextView cancel_action, over_action, tx_location;
     PopupWindow locationWindow;
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
@@ -64,11 +65,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initHost();
+
         setContentView(R.layout.activity_setting);
         //注册event事件
         EventBus.getDefault().register(this);
-
+        initHost();
         initView();
     }
 
@@ -80,18 +81,20 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     }
 
     //even事件处理
+    @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (111==event.getEventCode()){
+        if (111 == event.getEventCode()) {
             String msg = event.getMsg();
 
             tv_phone.setText(msg);
-            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        //    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
 
     }
 
     private void initHost() {
         dbData = new DBData();
+        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
     }
 
     private void initView() {
@@ -107,7 +110,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_phone = findViewById(R.id.tv_phone);
         tx_location = findViewById(R.id.tx_location);
 
-        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
 
         if (!TextUtils.isEmpty(mInfo.getPhone())) {
             tv_phone.setText(mInfo.getPhone());
@@ -258,27 +261,27 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     public void showLocation() {
         List<Donglan> cityList = dbData.getCityList();
         //省份和代码对应的map
-        HashMap<String,String> proMap = new HashMap<String,String>();
+        HashMap<String, String> proMap = new HashMap<String, String>();
         //城市代码和名称map
-        HashMap<String,String> city = new HashMap<String,String>();
+        HashMap<String, String> city = new HashMap<String, String>();
         //省份列表
         final ArrayList<String> proList = new ArrayList<String>();
         //省份和城市map
         ArrayList<String> cityList1 = new ArrayList<String>();
-        final HashMap<String,ArrayList<String>> proCityMap = new HashMap<String,ArrayList<String>>();
+        final HashMap<String, ArrayList<String>> proCityMap = new HashMap<String, ArrayList<String>>();
 
-        final HashMap<String,HashMap<String,String>> cityMap = new HashMap<String,HashMap<String,String>>();
-        if(cityList!=null&&cityList.size()>0){
-            for(int i=0;i<cityList.size();i++){
+        final HashMap<String, HashMap<String, String>> cityMap = new HashMap<String, HashMap<String, String>>();
+        if (cityList != null && cityList.size() > 0) {
+            for (int i = 0; i < cityList.size(); i++) {
                 //城市名字为key，城市代码为value
                 String prokey = cityList.get(i).getProvince().split("@")[1];
                 String provalue = cityList.get(i).getProvince().split("@")[0];
                 cityList1 = getCityList(cityList.get(i).getCity());
                 proList.add(prokey);
-                proMap.put(prokey,provalue);
+                proMap.put(prokey, provalue);
                 city = getCityMap(cityList.get(i).getCity());
                 //cityList1 = getCityList(cityList.get(i).getCity());
-                proCityMap.put(prokey,cityList1);
+                proCityMap.put(prokey, cityList1);
             }
         }
 
@@ -292,7 +295,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 String pro = proList.get(position);
                 tx_location.setText(pro);
                 ArrayList<String> cityList = proCityMap.get(pro);
-                if(cityList!=null&&cityList.size()>0){
+                if (cityList != null && cityList.size() > 0) {
                     cityAdapter = new LocationAdapter(cityList, SettingActivity.this);
                     list_city.setAdapter(cityAdapter);
                 }
@@ -302,7 +305,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String city = proCityMap.get(tx_location.getText().toString().split(" ")[0]).get(position);
-                tx_location.setText(tx_location.getText().toString().split(" ")[0]+" "+city);
+                tx_location.setText(tx_location.getText().toString().split(" ")[0] + " " + city);
             }
         });
 
@@ -407,8 +410,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
-               // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
                 return map;
             }
         };
@@ -422,16 +425,16 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    public HashMap<String,String> getCityMap(String str){
-        if(!"".equals(str)&&str!=null){
-            HashMap<String,String> cityMap = new HashMap<String,String>();
+    public HashMap<String, String> getCityMap(String str) {
+        if (!"".equals(str) && str != null) {
+            HashMap<String, String> cityMap = new HashMap<String, String>();
             String[] ss = str.split("$");
-            if(ss.length>0){
-                for(int i= 0;i<ss.length;i++){
+            if (ss.length > 0) {
+                for (int i = 0; i < ss.length; i++) {
                     String[] split = ss[i].split("@");
-                    String value = split[0].replace("{value=","");
-                    String key = split[1].replace("label=","");
-                    cityMap.put(key,value);
+                    String value = split[0].replace("{value=", "");
+                    String key = split[1].replace("label=", "");
+                    cityMap.put(key, value);
                 }
             }
             return cityMap;
@@ -439,14 +442,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         return null;
     }
 
-    public ArrayList<String> getCityList(String str){
-        if(!"".equals(str)&&str!=null){
+    public ArrayList<String> getCityList(String str) {
+        if (!"".equals(str) && str != null) {
             ArrayList<String> arr = new ArrayList<String>();
             String[] strings = str.split("]");
-            if(strings.length>0){
-                for(int i=0;i<strings.length;i++){
+            if (strings.length > 0) {
+                for (int i = 0; i < strings.length; i++) {
                     String[] split = strings[i].split("@");
-                    arr.add(split[1].replace("label=",""));
+                    arr.add(split[1].replace("label=", ""));
                 }
             }
             return arr;

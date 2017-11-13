@@ -47,9 +47,9 @@ import java.util.Map;
 public class ShopFragment extends BaseFragment {
 
     GridView mGridView;
-    String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动"};
+    String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动","我的会员卡"};
     int[] icons = {R.drawable.img_jsq, R.drawable.img_srjl, R.drawable.img_hsdt, R.drawable.img_zxsk
-            , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd};
+            , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd,R.drawable.img_hyk};
 
     @Override
     public View initViews() {
@@ -155,12 +155,12 @@ public class ShopFragment extends BaseFragment {
                     params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
 
                     params.put("myfiles", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-                    //  params.put("myfiles",);
 
                     params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-                    // MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
+                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
+                        //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
 
-                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.113:8003/appDynMsg/uploadFiles", new Response.Listener<String>() {
+                        //     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.94:8003/user/uploadFile", new Response.Listener<String>() {
                         @Override
                         public void onResponse(String s) {
 

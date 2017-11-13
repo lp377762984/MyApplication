@@ -26,6 +26,7 @@ public class MeFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_me, null);
         v.findViewById(R.id.ll_setting).setOnClickListener(this);
+        v.findViewById(R.id.ll_my_msg).setOnClickListener(this);
         v.findViewById(R.id.iv_edit).setOnClickListener(this);
         tv_nick_name = v.findViewById(R.id.tv_nick_name);
         iv_avatar = v.findViewById(R.id.iv_avatar);
@@ -41,7 +42,6 @@ public class MeFragment extends BaseFragment {
 //        tv_nick_name.setText(mInfo.getNickName());
 
 
-
     }
 
     @Override
@@ -54,7 +54,8 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, MyProActivity.class));
 
                 break;
-
+            case R.id.ll_my_msg://我的消息
+                break;
             default:
                 break;
         }

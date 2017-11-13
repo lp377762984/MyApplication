@@ -20,9 +20,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -212,8 +214,10 @@ public class ResetPhoneActivity extends Activity implements View.OnClickListener
 
                     ToastUtils.showToastShort("手机号修改成功");
                     //发送事件
-                    EventBus.getDefault().post(new StringEvent(mEtPhone.toString().trim(),111));
-
+                    EventBus.getDefault().post(new StringEvent(mEtPhone.getText().toString().trim(),111));
+                    Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    data.setPhone(mEtPhone.getText().toString().trim());
+                    DataInfoCache.saveOneCache(data,Constants.MY_INFO);
 
                     finish();
                 } else {
