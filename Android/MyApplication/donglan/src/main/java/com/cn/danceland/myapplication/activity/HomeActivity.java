@@ -73,14 +73,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .show(homeFragment)
                     .commit();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DBData data = new DBData();
-                data.setCityInfo(HomeActivity.this);
-            }
-        }).start();
-
 
 
     }
