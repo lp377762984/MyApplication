@@ -373,7 +373,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
         locationWindow.showAsDropDown(findViewById(R.id.tv_quit), 0, 40);
-        locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
+        //locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
 
     }
 
