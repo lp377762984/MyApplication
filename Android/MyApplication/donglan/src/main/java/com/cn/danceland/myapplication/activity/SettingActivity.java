@@ -367,7 +367,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String city = cityList1.get(position);
                 mZoneCode = dbData.queryCity(city).get(0).getCityValue();
-                tx_location.setText(tx_location.getText().toString()+" "+city);
+                tx_location.setText(tx_location.getText().toString().split(" ")[0]+" "+city);
             }
         });
 
