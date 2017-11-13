@@ -22,6 +22,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -30,6 +31,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -157,6 +159,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("登录成功");
                     SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    copyDb();
                     finish();
                 } else {
                     //注册失败
@@ -247,5 +250,15 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     }
 
+    public void copyDb(){
+
+        try {
+            boolean bl = DBData.copyRawDBToApkDb(LoginActivity.this,R.raw.donglan,"/data/data/com.cn.danceland.myapplication/databases/","donglan.db",false);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
 
 }

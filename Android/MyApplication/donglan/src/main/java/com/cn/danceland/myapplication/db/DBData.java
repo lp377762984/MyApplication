@@ -26,11 +26,20 @@ import org.greenrobot.greendao.AbstractDaoSession;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Created by feng on 2017/11/6.
@@ -39,7 +48,9 @@ import java.util.Map;
 public class DBData {
 
     public ArrayList<String> cityDis = new ArrayList<String>();
-    DonglanDao donglanDao;
+     DonglanDao donglanDao;
+    private static DaoMaster donglanMaster;
+    private static DaoSession daoDonglanSession;
     int id;
 
     //从接口获取数据存入数据库
@@ -77,24 +88,13 @@ public class DBData {
 
                     }
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                HashMap<String,String> hashMap = new HashMap<String,String>();
-                hashMap.put("Authorization",token);
-
-                return hashMap;
-            }
-        };
+        });
 
         requestQueue.add(jsonObjectRequest);
 
@@ -185,4 +185,74 @@ public class DBData {
         donglanDao.update(d);
     }
 
+    public static boolean copyRawDBToApkDb(Context context, int copyRawDbResId, String apkDbPath, String dbName,boolean refresh)
+            throws IOException
+    {
+        boolean b = false;
+
+        File f = new File(apkDbPath);
+        if (!f.exists())
+        {
+            f.mkdirs();
+        }
+
+        File dbFile = new File(apkDbPath + dbName);
+        //b = isDbFileExists(dbFile,refresh);
+        if (!b)
+        {
+            InputStream is = context.getResources().openRawResource(copyRawDbResId);
+
+            ZipInputStream zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry entry;
+
+            while ((entry = zis.getNextEntry()) != null)
+            {
+                int size;
+                byte[] buffer = new byte[1024 * 2];
+
+                OutputStream fos = new FileOutputStream(apkDbPath + entry.getName());
+                BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
+
+                while ((size = zis.read(buffer, 0, buffer.length)) != -1)
+                {
+                    bos.write(buffer, 0, size);
+                }
+                bos.flush();
+                bos.close();
+            }
+            zis.close();
+            is.close();
+        }
+        return !b;
+    }
+
+    private static DaoMaster obtainMaster(Context context, String dbName)
+    {
+        return new DaoMaster(new DaoMaster.DevOpenHelper(context, dbName, null).getWritableDatabase());
+    }
+
+    private static DaoMaster getDonglanDaoMaster(Context context, String dbName)
+    {
+        if (dbName == null)
+            return null;
+        if ( donglanMaster== null)
+        {
+            donglanMaster = obtainMaster(context, dbName);
+        }
+        return donglanMaster;
+    }
+    /**
+     * 取得DaoSession
+     *
+     * @return
+     */
+    public static DaoSession getDaoSession(String dbName)
+    {
+
+        if (daoDonglanSession == null)
+        {
+            daoDonglanSession = getDonglanDaoMaster(MyApplication.getInstance(), dbName).newSession();
+        }
+        return daoDonglanSession;
+    }
 }

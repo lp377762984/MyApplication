@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ResultObject;
+import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
@@ -72,8 +73,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .show(homeFragment)
                     .commit();
         }
-
-
 
 
     }

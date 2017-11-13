@@ -63,6 +63,7 @@
         <activity android:name=".activity.SellCardActivity" />
         <activity android:name=".activity.SellCardConfirmActivity" />
         <activity android:name=".activity.FitnessManActivity" />
+        <activity android:name=".activity.AboutUsActivity" />
     </application>
     <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
