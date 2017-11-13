@@ -181,7 +181,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 showLocation();
                 break;
             case R.id.ll_about_us://关于我们
-
+                showAboutUs();
                 break;
             case R.id.ll_clear://清除缓存
                 Toast.makeText(this, "已清除缓存！", Toast.LENGTH_SHORT).show();
@@ -201,6 +201,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    private void showAboutUs() {
+        Intent intent = new Intent(SettingActivity.this,AboutUsActivity.class);
+        startActivity(intent);
     }
 
     public void commitLocation(final String str){
