@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.FitnessManActivity;
 import com.cn.danceland.myapplication.adapter.MyListviewAdater;
 import com.cn.danceland.myapplication.adapter.MyRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.PullBean;
@@ -123,7 +125,13 @@ public class SelectionFragment extends BaseFragment {
         View headview = View.inflate(mActivity, R.layout.recycleview_headview, null);
 
         mRecyclerView = headview.findViewById(R.id.my_recycler_view);
-
+        headview.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),FitnessManActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //创建默认的线性LayoutManager
 
