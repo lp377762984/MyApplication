@@ -76,6 +76,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
         //注册event事件
         EventBus.getDefault().register(this);
         initHost();
