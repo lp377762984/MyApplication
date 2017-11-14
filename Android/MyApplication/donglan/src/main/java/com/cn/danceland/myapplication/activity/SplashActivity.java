@@ -11,6 +11,8 @@ import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
+import java.io.IOException;
+
 
 /**
  * 开屏页
@@ -47,6 +49,8 @@ public class SplashActivity extends Activity {
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
 
                     long start = System.currentTimeMillis();
+                    copyDb();
+
 //                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
 //                            (PrefUtils.getString(SplashActivity.this, Constants.MY_MIPUSHID, ""))) {
 //                        bindMIPushID_post();
@@ -76,6 +80,17 @@ public class SplashActivity extends Activity {
                 }
             }
         }).start();
+
+    }
+
+    public void copyDb(){
+
+        try {
+            boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this,R.raw.donglan,"/data/data/com.cn.danceland.myapplication/databases/","donglan.db",false);
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 

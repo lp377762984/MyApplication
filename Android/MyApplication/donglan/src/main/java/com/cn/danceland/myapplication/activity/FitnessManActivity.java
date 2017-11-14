@@ -45,10 +45,22 @@ public class FitnessManActivity extends Activity {
         fitness_recycle = findViewById(R.id.fitness_recycle);
 
         fitness_back = findViewById(R.id.fitness_back);
+        fitness_back.setOnClickListener(onClickListener);
         fitness_recycle.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<String> arr = new ArrayList<>();
         fitness_recycle.setAdapter(new MyRecycleAdapter(arr,FitnessManActivity.this));
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.fitness_back:
+                    finish();
+                    break;
+            }
+        }
+    };
 
     public class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyRecycleViewHolder>{
 
