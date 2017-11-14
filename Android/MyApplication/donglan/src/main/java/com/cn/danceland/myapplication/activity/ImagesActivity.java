@@ -96,9 +96,13 @@ public class ImagesActivity extends Activity{
 
     public Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
-            path = mImgDir.getAbsolutePath();
-            MyAdapter myAdapter = new MyAdapter(ImagesActivity.this,Arrays.asList(mImgDir.list()),path);
-            photo_grid.setAdapter(myAdapter);
+            if(mImgDir!=null){
+                path = mImgDir.getAbsolutePath();
+                MyAdapter myAdapter = new MyAdapter(ImagesActivity.this,Arrays.asList(mImgDir.list()),path);
+                photo_grid.setAdapter(myAdapter);
+            }
+
+
 
             //mProgressDialog.dismiss();
             // 为View绑定数据
@@ -109,7 +113,7 @@ public class ImagesActivity extends Activity{
     };
 
     public void initHost() {
-        uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        uri = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
         contentResolver =ImagesActivity.this.getContentResolver();
         arrPath = new ArrayList<String>();
     }
@@ -124,11 +128,12 @@ public class ImagesActivity extends Activity{
             @Override
             public void run() {
                 String firstPath=null;
-                cursor = contentResolver.query(uri, null,
-                        MediaStore.Images.Media.MIME_TYPE + "=? or "
-                                + MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[]{"image/jpeg", "image/png"},
-                        MediaStore.Images.Media.DATE_MODIFIED);
+//                cursor = contentResolver.query(uri, null,
+//                        MediaStore.Images.Media.MIME_TYPE + "=? or "
+//                                + MediaStore.Images.Media.MIME_TYPE + "=?",
+//                        new String[]{"image/jpeg", "image/png"},
+//                        MediaStore.Images.Media.DATE_MODIFIED);
+                cursor = contentResolver.query(uri, null, null, null, null);
 
                 while (cursor.moveToNext()){
                     String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
