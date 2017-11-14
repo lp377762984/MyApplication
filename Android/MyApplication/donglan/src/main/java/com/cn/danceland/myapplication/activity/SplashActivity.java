@@ -45,11 +45,15 @@ public class SplashActivity extends Activity {
 
         new Thread(new Runnable() {
             public void run() {
+                if (!SPUtils.getBoolean("iscopy",false)){
+                    copyDb();
+                }
                 //判断是否登录
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
 
                     long start = System.currentTimeMillis();
-                    copyDb();
+
+
 
 //                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
 //                            (PrefUtils.getString(SplashActivity.this, Constants.MY_MIPUSHID, ""))) {
@@ -88,6 +92,9 @@ public class SplashActivity extends Activity {
         try {
             boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this,R.raw.donglan,"/data/data/com.cn.danceland.myapplication/databases/","donglan.db",false);
 
+            if (bl){
+                SPUtils.setBoolean("iscopy",bl);
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
