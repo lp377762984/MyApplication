@@ -47,9 +47,9 @@ import java.util.Map;
 public class ShopFragment extends BaseFragment {
 
     GridView mGridView;
-    String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动","我的会员卡"};
+    String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动", "我的会员卡"};
     int[] icons = {R.drawable.img_jsq, R.drawable.img_srjl, R.drawable.img_hsdt, R.drawable.img_zxsk
-            , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd,R.drawable.img_hyk};
+            , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd, R.drawable.img_hyk};
 
     @Override
     public View initViews() {
@@ -140,18 +140,10 @@ public class ShopFragment extends BaseFragment {
                     break;
                 case 1:
                     MultipartRequestParams params = new MultipartRequestParams();
-                    //   params.put("userName",username);
                     if (!FileUtil.fileIsExists(Environment.getExternalStorageDirectory() + "/300.jpg")) {
                         ToastUtils.showToastShort("文件不存在");
                         return;
                     }
-
-//                    List<File> files = new ArrayList<File>();
-//                    files.add(new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-//                    files.add(new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-//
-
-
                     params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
 
                     params.put("myfiles", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));

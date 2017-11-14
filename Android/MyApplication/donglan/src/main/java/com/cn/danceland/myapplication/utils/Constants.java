@@ -14,6 +14,8 @@ public class Constants {
     public static final String LOGOUT_URL = HOST + "user/logOut";//用户退出
     public static final String ZONE = HOST + "/zone";//城市区域
     public static final String MODIFY_ZONE = HOST+"/user/modifyZoneCode";//修改区域
+    public static final String FIND_SELF_DT_MSG = HOST+"/appDynMsg/findSelfDynMsg";//个人动态
+    public static final String FIND_JINGXUAN_DT_MSG = HOST+"/appDynMsg/findById";//精选动态
 
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
