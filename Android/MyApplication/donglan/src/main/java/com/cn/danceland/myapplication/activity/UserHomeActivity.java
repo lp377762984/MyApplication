@@ -11,16 +11,26 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.MyListviewAdater;
 import com.cn.danceland.myapplication.bean.PullBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shy on 2017/11/1 13:55
@@ -34,6 +44,7 @@ public class UserHomeActivity extends Activity {
     MyListviewAdater myListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
+    int mCurrentPage = 0;//当前请求页
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,12 +88,49 @@ public class UserHomeActivity extends Activity {
         data = getData();
     }
 
+    /***
+     * 查找个人动态
+     */
+    private void findSelfDT() {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_SELF_DT_MSG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id", Constants.MY_USERID);//用户id
+                map.put("page", mCurrentPage+"");//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
     private View initHeadview() {
 
         View headview = View.inflate(this, R.layout.headview_user_home, null);
-        ImageView iv_avatar=headview.findViewById(R.id.iv_avatar);
+        ImageView iv_avatar = headview.findViewById(R.id.iv_avatar);
 
-    Glide.with(this).load("http://www.027art.com/shaoer/UploadFiles_5898/201410/20141030164404328.jpg").into(iv_avatar);
+        Glide.with(this).load("http://www.027art.com/shaoer/UploadFiles_5898/201410/20141030164404328.jpg").into(iv_avatar);
 //        RequestBuilder<GifDrawable> requestBuilder = Glide.with(this).asGif();
 //        requestBuilder.load("http://img.mp.itc.cn/upload/20170404/eaa6a2543b0f4bc88a111ec086cad9dd_th.gif").into(iv_avatar);
         return headview;
@@ -101,6 +149,7 @@ public class UserHomeActivity extends Activity {
 
         return list;
     }
+
     /**
      * 一秒钟延迟
      */
@@ -108,7 +157,7 @@ public class UserHomeActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-               Thread.sleep(100);
+                Thread.sleep(100);
                 List<PullBean> list = new ArrayList<PullBean>();
                 for (int i = 0; i < 3; i++) {
                     PullBean bean = new PullBean();
@@ -150,5 +199,6 @@ public class UserHomeActivity extends Activity {
 
 
     }
+
 
 }

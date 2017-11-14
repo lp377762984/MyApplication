@@ -8,16 +8,26 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.MyListviewAdater;
 import com.cn.danceland.myapplication.adapter.MyRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.PullBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shy on 2017/10/20 13:56
@@ -32,7 +42,6 @@ public class SelectionFragment extends BaseFragment {
     MyListviewAdater myListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
-
 
 
     @Override
@@ -134,7 +143,7 @@ public class SelectionFragment extends BaseFragment {
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
         //创建并设置Adapter
-        MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(mActivity,new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
+        MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(mActivity, new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
         mRecyclerView.setAdapter(mAdapter);
         return headview;
     }
@@ -158,6 +167,44 @@ public class SelectionFragment extends BaseFragment {
         }
 
         return list;
+    }
+
+    /***
+     * 查找精选动态
+     * @param page
+     */
+    private void findSelfDT(int page) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("id", "");//用户id
+                map.put("page", "");//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
     }
 
     @Override
