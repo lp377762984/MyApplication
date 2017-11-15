@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,15 +19,38 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.baidu.location.LocationClient;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.PublishBean;
+import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.bean.UpImagesBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
+import com.cn.danceland.myapplication.utils.multipartrequest.FileUtil;
+import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
+import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,15 +72,21 @@ public class PublishActivity extends Activity {
     TextView publish_share1;
     ArrayList<String> arrayList;
     GridView grid_view;
-    String location;
+    String location="";
     TextView location_img;
     Map<String,File> arrayFileMap;
+    String stringstatus = "";
     //LocationClient mLocationClient;
-
+    Gson gson;
+    RequestQueue queue;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
+
+
+        queue = Volley.newRequestQueue(PublishActivity.this);
+        gson = new Gson();
         //mLocationClient = ((MyApplication) getApplication()).locationClient;
         initView();
         setOnclick();
@@ -73,6 +103,7 @@ public class PublishActivity extends Activity {
         publish_location.setOnClickListener(onClickListener);
         location_img.setOnClickListener(onClickListener);
         publish_ok.setOnClickListener(onClickListener);
+        publish_cancel.setOnClickListener(onClickListener);
     }
 
     private void initView() {
@@ -113,24 +144,82 @@ public class PublishActivity extends Activity {
                     startActivityForResult(intent2,1);
                     break;
                 case R.id.publish_ok:
+                    //Intent intent3 = new Intent(PublishActivity.this,S);
+                    stringstatus = publish_status.getText().toString();
+                    MultipartRequestParams params = new MultipartRequestParams();
                     arrayFileMap = new HashMap<String,File>();
+                    File[] files = new File[arrayList.size()];
                     for (int i =0;i<arrayList.size();i++){
                         File file = new File(arrayList.get(i));
                         arrayFileMap.put(i+"",file);
                     }
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    String str = UpLoadUtils.postUpLoadFile("http://192.168.1.113:8003/appDynMsg/uploadFiles",null,arrayFileMap);
-                                }catch (IOException e){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                             String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
+                                UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                                List<UpImagesBean.Data> beanList = upImagesBean.getData();
+                                ArrayList<String> arrImgUrl = new ArrayList<String>();
+                                for(int k = 0;k<beanList.size();k++){
+                                    arrImgUrl.add(beanList.get(k).getImgUrl());
                                 }
+                                PublishBean publishBean = new PublishBean();
+                                publishBean.setContent(stringstatus);
+                                publishBean.setPublishPlace(location);
+                                if(arrImgUrl.size()>0){
+                                    publishBean.setImgList(arrImgUrl);
+                                }
+                                String strBean = gson.toJson(publishBean);
+                                commitUrl(strBean);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        }).start();
+
+                        }
+                    }).start();
+                    finish();
+                    break;
+                case R.id.publish_cancel:
+                    finish();
                     break;
             }
         }
     };
+
+    public void commitUrl(final String str) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject(str);
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,Constants.SAVE_DYN_MSG,jsonObject,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
+                if("true".equals(rootBean.success)){
+                    ToastUtils.showToastShort("发布成功！");
+                }else{
+                    ToastUtils.showToastShort("发布失败！请检查网络连接");
+                }
+                //LogUtil.e("zzf",jsonObject.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map  = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        queue.add(stringRequest);
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
