@@ -180,6 +180,12 @@ public class RegisterInfoActivity extends Activity{
                         ToastUtils.showToastShort("请输入昵称");
                     }else{
                         commit();
+                        mData.setBirthday(strBirthday);
+                        mData.setNickName(strName);
+                        mData.setHeight(strHeight);
+                        mData.setWeight(strWeight);
+                        mData.setGender(gender);
+                        DataInfoCache.loadOneCache(Constants.MY_INFO);
                         Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
                         startActivity(intent);
                     }
