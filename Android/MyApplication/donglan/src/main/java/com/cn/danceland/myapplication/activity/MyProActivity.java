@@ -330,7 +330,7 @@ public class MyProActivity extends Activity {
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                         selfAvatarPath = headImageBean.getData().getImgUrl();
                         infoData.setSelfAvatarPath(selfAvatarPath);
-                        LogUtil.e("zzf",selfAvatarPath);
+                        //LogUtil.e("zzf",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
                         //LogUtil.e("zzf",s);
                     }
