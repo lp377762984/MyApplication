@@ -119,7 +119,7 @@ public class MyListviewAdater extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.tv_zan_num.setText(data.get(position).getFollowerNumber()+"");
+        viewHolder.tv_zan_num.setText(data.get(position).getFollowerNumber() + "");
         viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,15 +160,14 @@ public class MyListviewAdater extends BaseAdapter {
                 context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
             }
         });
-
-
-        viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
-        /**
-         * 图片列表点击事件
-         */
-        viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+            viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
+            /**
+             * 图片列表点击事件
+             */
+            viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
 //                Intent intent = new Intent(context, ImagePagerActivity.class);
@@ -177,19 +176,20 @@ public class MyListviewAdater extends BaseAdapter {
 //                intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, i);
 //                context.startActivity(intent);
 
-                PictureConfig config = new PictureConfig.Builder()
-                        .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                        .setPosition(i)//图片下标（从第position张图片开始浏览）
-                        .setDownloadPath("donglan")//图片下载文件夹地址
-                        .setIsShowNumber(true)//是否显示数字下标
-                        .needDownload(true)//是否支持图片下载
-                        .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                        .build();
-                ImagePagerActivity.startActivity(context, config);
+                    PictureConfig config = new PictureConfig.Builder()
+                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                            .setPosition(i)//图片下标（从第position张图片开始浏览）
+                            .setDownloadPath("donglan")//图片下载文件夹地址
+                            .setIsShowNumber(true)//是否显示数字下标
+                            .needDownload(true)//是否支持图片下载
+                            .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                            .build();
+                    ImagePagerActivity.startActivity(context, config);
 
 
-            }
-        });
+                }
+            });
+        }
 
 
         return convertView;
