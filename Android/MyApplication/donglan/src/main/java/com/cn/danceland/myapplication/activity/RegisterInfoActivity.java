@@ -185,7 +185,7 @@ public class RegisterInfoActivity extends Activity{
                         mData.setHeight(strHeight);
                         mData.setWeight(strWeight);
                         mData.setGender(gender);
-                        DataInfoCache.loadOneCache(Constants.MY_INFO);
+                        DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
                         Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
                         startActivity(intent);
                     }
