@@ -29,23 +29,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.google.gson.Gson;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -71,7 +79,9 @@ public class MyProActivity extends Activity {
     public static String SAVED_IMAGE_DIR_PATH =
             Environment.getExternalStorageDirectory().getPath()
                     + "/donglan/camera/";// 拍照路径
-    String cameraPath;
+    String cameraPath,gemder,nickName,selfAvatarPath;
+    Data infoData;
+    Gson gson;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +92,9 @@ public class MyProActivity extends Activity {
     }
 
     public void initHost(){
+        gson = new Gson();
         resolver = getContentResolver();
+        infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
     }
 
     public void initView(){
@@ -93,6 +105,12 @@ public class MyProActivity extends Activity {
         name = findViewById(R.id.name);
         sex = findViewById(R.id.sex);
         back = findViewById(R.id.back);
+        if("1".equals(infoData.getGender())){
+            text_sex.setText("男");
+        }else {
+            text_sex.setText("女");
+        }
+        text_name.setText(infoData.getNickName());
 
         headView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.head_image_popwindow, null);
 
@@ -165,6 +183,9 @@ public class MyProActivity extends Activity {
                     }
                     break;
                 case R.id.back:
+                    Intent intent = new Intent();
+                    intent.putExtra("selfAvatarPath",selfAvatarPath);
+                    setResult(99,intent);
                     finish();
                     break;
             }
@@ -236,26 +257,7 @@ public class MyProActivity extends Activity {
     }
 
     public void photoGraph (){
-//        File outputfile = new File(MyProActivity.this.getExternalCacheDir(),System.currentTimeMillis() + ".png");
-//        try {
-//            if (outputfile.exists()){
-//                outputfile.delete();//删除
-//            }
-//            outputfile.createNewFile();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        Uri imageuri ;
-//        if (Build.VERSION.SDK_INT >= 24){
-//            imageuri = FileProvider.getUriForFile(MyProActivity.this,
-//                    "com.cn.danceland.myapplication", //可以是任意字符串
-//                    outputfile);
-//        }else{
-//            imageuri = Uri.fromFile(outputfile);
-//        }
-//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageuri);
-//        startActivityForResult(intent,CAMERA_REQUEST_CODE);
+
         // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
@@ -284,11 +286,18 @@ public class MyProActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             MultipartRequestParams params = new MultipartRequestParams();
+            File file = null;
             if (requestCode == CAMERA_REQUEST_CODE) {
                 startPhotoZoom(uri);
+
             }
             if(requestCode == ALBUM_REQUEST_CODE){
                 startActivityForResult(CutForPhoto(data.getData()),10010);
+                try {
+                    file = new File(new URI(mCutUri.toString()));
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
             }
             if(requestCode==10010){
                 Glide.with(MyProActivity.this).load(mCutUri).into(circleImageView);
@@ -298,6 +307,7 @@ public class MyProActivity extends Activity {
                 if (extras != null) {
                     Bitmap photo = extras.getParcelable("data");
                     File fileCut = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
+                    file = fileCut;
                     try{
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileCut));
                         photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -306,29 +316,34 @@ public class MyProActivity extends Activity {
                     }catch (IOException e){
                         e.printStackTrace();
                     }
+
                     Drawable drawable = new BitmapDrawable(getResources(), photo);
                     Glide.with(MyProActivity.this).load(drawable).into(circleImageView);
                 }
             }
+            if(file!=null){
+                params.put("file",file);
+                MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADFILE_URL, new Response.Listener<String>() {
 
-            MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADFILE_URL, new Response.Listener<String>() {
-
-                @Override
-                public void onResponse(String s) {
-
-                    LogUtil.e("zzf",s);
-
+                    @Override
+                    public void onResponse(String s) {
+                        HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
+                        selfAvatarPath = headImageBean.getData().getImgUrl();
+                        infoData.setSelfAvatarPath(selfAvatarPath);
+                        LogUtil.e("zzf",selfAvatarPath);
+                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        //LogUtil.e("zzf",s);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //LogUtil.e("zzf",volleyError.toString());
+                    }
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    LogUtil.e("zzf",volleyError.toString());
-                }
+                );
+
+                MyApplication.getHttpQueues().add(request);
             }
-            ) {
-            };
-
-      //      MyApplication.getHttpQueues().add(request);
 
         }
 
