@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
         android:background="#fff"
         android:gravity="center"
@@ -57,12 +57,12 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="今天天气不错！" />
 
     <ImageView
@@ -75,6 +75,7 @@
         android:visibility="gone" />
 
     <com.cn.danceland.myapplication.view.NoScrollGridView
+        android:layout_marginTop="5dp"
         android:id="@+id/gridview"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
@@ -86,10 +87,11 @@
         android:verticalSpacing="5dp" />
 
     <TextView
+        android:id="@+id/tv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:singleLine="true"
         android:text="发布于月球"
         android:textSize="12sp" />

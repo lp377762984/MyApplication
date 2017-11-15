@@ -9,12 +9,15 @@ import java.util.List;
  * Auto-generated: 2017-11-14 13:33:29
  *
  *动态请求bean
+ *
  */
 public class RequsetDynInfoBean {
 
     private boolean success;
     private String errorMsg;
     private Data data;
+
+
 
     @Override
     public String toString() {
@@ -85,7 +88,7 @@ public class RequsetDynInfoBean {
             private String content;
             private int privacyType;
             private int msgType;
-            private int author;
+            private String author;
             private int publishType;
             private int shareId;
             private boolean enabled;
@@ -170,11 +173,11 @@ public class RequsetDynInfoBean {
                 return msgType;
             }
 
-            public void setAuthor(int author) {
+            public void setAuthor(String author) {
                 this.author = author;
             }
 
-            public int getAuthor() {
+            public String getAuthor() {
                 return author;
             }
 

@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,9 +41,10 @@ public class MeFragment extends BaseFragment {
     @Override
     public void initDta() {
         //获取本地用户信息缓存
-//        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//        Glide.with(mActivity).load(mInfo.getAvatarPath()).into(iv_avatar);
-//        tv_nick_name.setText(mInfo.getNickName());
+        RequestOptions options=new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        Glide.with(mActivity).load(mInfo.getSelfAvatarPath()).apply(options).into(iv_avatar);
+        tv_nick_name.setText(mInfo.getNickName());
 
 
     }

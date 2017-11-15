@@ -10,8 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.bean.Data;
+
+import java.util.List;
 
 /**
  * Created by shy on 2017/10/26 09:44
@@ -19,13 +23,17 @@ import com.cn.danceland.myapplication.activity.UserHomeActivity;
  */
 
 public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdapter.ViewHolder> {
-    public String[] datas = null;
+    public List<Data> datas = null;
     private Context context;
 
-    public MyRecylerViewAdapter(Context context, String[] datas) {
+    public MyRecylerViewAdapter(Context context, List<Data> datas) {
         this.datas = datas;
         this.context = context;
-    } 
+    }
+
+    public void setData(List<Data> datas) {
+        this.datas = datas;
+    }
 
     //创建新View，被LayoutManager所调用
     @Override
@@ -39,23 +47,26 @@ public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdap
 
     //将数据与界面进行绑定的操作
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.tv_pcikname.setText(datas[position]);
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        viewHolder.tv_pcikname.setText(datas.get(position).getNickName());
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class));
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id",datas.get(position).getId()));
             }
         });
+        //m默认头像
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(context)
-                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509706698422&di=92a343f766c683c086be21e2ff0eea66&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3Ddfed83e2eafe9925df0161135cc134aa%2Fbd315c6034a85edf6875650443540923dd547518.jpg")
+                .load(datas.get(position).getSelfAvatarPath())
+                .apply(options)
                 .into(viewHolder.iv_avatar);
     }
 
     //获取数据的数量
     @Override
     public int getItemCount() {
-        return datas.length;
+        return datas.size();
     }
 
     //自定义的ViewHolder，持有每个Item的的所有界面元素
@@ -65,7 +76,7 @@ public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdap
 
         public ViewHolder(View view) {
             super(view);
-            tv_pcikname = (TextView) view.findViewById(R.id.tv_pcikname);
+            tv_pcikname = view.findViewById(R.id.tv_pcikname);
             iv_avatar = view.findViewById(R.id.iv_avatar);
 
         }

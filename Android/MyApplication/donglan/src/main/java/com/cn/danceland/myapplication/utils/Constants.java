@@ -17,10 +17,15 @@ public class Constants {
     public static final String FIND_SELF_DT_MSG = HOST+"/appDynMsg/findSelfDynMsg";//个人动态
     public static final String FIND_JINGXUAN_DT_MSG = HOST+"/appDynMsg/findById";//精选动态
 
+    public static final String FIND_PUSH_MSG = HOST+"/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
 
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
+
+
+
+
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID

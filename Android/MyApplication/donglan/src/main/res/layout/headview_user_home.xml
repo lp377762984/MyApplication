@@ -6,8 +6,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="184dp"
-        android:orientation="vertical"
-        android:background="#fff">
+        android:background="@color/color_bg_mianlayout"
+        android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
@@ -19,31 +19,34 @@
             android:src="@drawable/img_my_avatar" />
 
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="15sp"
+            android:text="派大星"
             android:textColor="#333333"
-            android:text="派大星" />
+            android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_follwer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="13sp"
+            android:text="10w粉丝"
             android:textColor="#999999"
-            android:text="10w粉丝" />
+            android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/tv_add_gz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textSize="13sp"
+            android:text="+关注"
             android:textColor="#333333"
-            android:text="+关注" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 </LinearLayout>
