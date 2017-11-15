@@ -375,7 +375,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Data data = requestInfoBean.getData();
                 DataInfoCache.saveOneCache(data, Constants.MY_INFO);
                 //跳转到填写资料页
-                startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
                 finish();
 
 
