@@ -166,7 +166,7 @@ public class LocationActivity extends Activity {
         public void onReceiveLocation(BDLocation location){
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
-            LogUtil.e("zzf",location.getLocType()+"");
+            //LogUtil.e("zzf",location.getLocType()+"");
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 loading.setVisibility(View.GONE);
                 StringBuffer sb = new StringBuffer(256);

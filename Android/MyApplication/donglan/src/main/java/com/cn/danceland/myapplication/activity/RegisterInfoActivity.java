@@ -26,13 +26,21 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
@@ -50,7 +58,7 @@ import java.util.Map;
 
 public class RegisterInfoActivity extends Activity{
 
-    String strSex,strBirthday,strHeight,strWeight ;
+    String strSex = "1",strBirthday = "1990-12-10",strHeight = "170",strWeight  = "55";
     TextView text_birthday,cancel_action,text_height,text_name,text_male,text_female,over,text_weight,
             selecttitle,button;
     PopupWindow mPopWindow;
@@ -61,8 +69,9 @@ public class RegisterInfoActivity extends Activity{
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
     RequestQueue requestQueue;
-    String id,strName,gender;//性别:1、男，2、女，3、未知，4、保密
-
+    String id,strName,gender = "1";//性别:1、男，2、女，3、未知，4、保密
+    Data mData;
+    Gson gson;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +83,12 @@ public class RegisterInfoActivity extends Activity{
     }
 
     private void initHost() {
+
+        gson = new Gson();
         requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
+
+        mData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        id = mData.getId();
 
     }
 
@@ -162,9 +176,19 @@ public class RegisterInfoActivity extends Activity{
                     gender = "2";
                     break;
                 case R.id.button:
-                    commit();
-                    Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
-                    startActivity(intent);
+                    if(strName==null||strName.equals("")){
+                        ToastUtils.showToastShort("请输入昵称");
+                    }else{
+                        commit();
+                        mData.setBirthday(strBirthday);
+                        mData.setNickName(strName);
+                        mData.setHeight(strHeight);
+                        mData.setWeight(strWeight);
+                        mData.setGender(gender);
+                        DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
+                        Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
+                        startActivity(intent);
+                    }
                     break;
             }
 
@@ -293,36 +317,42 @@ public class RegisterInfoActivity extends Activity{
 
     public void commit(){
 
-        StringRequest stringRequest = new StringRequest("", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-
+                RootBean rootBean = gson.fromJson(s, RootBean.class);
+                if("true".equals(rootBean.success)){
+                    ToastUtils.showToastShort("提交成功！");
+                }else{
+                    ToastUtils.showToastShort("提交失败！");
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                ToastUtils.showToastShort("提交失败！");
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<>();
+                HashMap<String, String> hashMap = new HashMap<String,String>();
                 hashMap.put("id",id);
                 hashMap.put("nickName",strName);
                 hashMap.put("gender",gender);
                 hashMap.put("height",strHeight);
                 hashMap.put("weight",strWeight);
                 hashMap.put("birthday",strBirthday);
+                //LogUtil.e("zzf",hashMap.toString());
                 return hashMap;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("Authorization", Constants.MY_TOKEN);
+                hashMap.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
                 return hashMap;
             }
         };
-
+        requestQueue.add(stringRequest);
     }
 }
