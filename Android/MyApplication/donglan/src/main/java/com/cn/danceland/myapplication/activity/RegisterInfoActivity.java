@@ -32,7 +32,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import org.w3c.dom.Text;
 
@@ -62,7 +65,7 @@ public class RegisterInfoActivity extends Activity{
     private Calendar c = null;
     RequestQueue requestQueue;
     String id,strName,gender;//性别:1、男，2、女，3、未知，4、保密
-
+    Data mData;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,9 @@ public class RegisterInfoActivity extends Activity{
 
     private void initHost() {
         requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
+
+        mData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        id = mData.getId();
 
     }
 
@@ -293,10 +299,10 @@ public class RegisterInfoActivity extends Activity{
 
     public void commit(){
 
-        StringRequest stringRequest = new StringRequest("", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-
+                LogUtil.e("zzf",s);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -323,6 +329,6 @@ public class RegisterInfoActivity extends Activity{
                 return hashMap;
             }
         };
-
+        requestQueue.add(stringRequest);
     }
 }
