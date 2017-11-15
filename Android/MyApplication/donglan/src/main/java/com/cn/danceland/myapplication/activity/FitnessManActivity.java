@@ -87,11 +87,11 @@ public class FitnessManActivity extends Activity {
             holder.fitness_name.setText("小明同学");
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
-            Glide.with(FitnessManActivity.this).load("http://img1.juimg.com/160827/330238-160RF20H543.jpg").
+            Glide.with(FitnessManActivity.this).load("http://bpic.ooopic.com/15/50/63/15506336-428618c60ee298b4b17fe13668008109-4.jpg").
                     into(holder.im1);
-            Glide.with(FitnessManActivity.this).load("http://pic103.nipic.com/file/20160709/5212257_092537022000_2.jpg").
+            Glide.with(FitnessManActivity.this).load("http://pic35.photophoto.cn/20150527/0036036836605210_b.jpg").
                     into(holder.im2);
-            Glide.with(FitnessManActivity.this).load("http://img01.taopic.com/160326/318753-160326104Z353.jpg").
+            Glide.with(FitnessManActivity.this).load("http://img1.juimg.com/160915/328468-16091509333851.jpg").
                     into(holder.im3);
 
         }
