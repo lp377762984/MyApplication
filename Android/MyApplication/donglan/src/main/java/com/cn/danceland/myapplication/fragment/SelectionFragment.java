@@ -178,6 +178,7 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             findSelectionDyn_Down(1);
+            init();
             return null;
         }
 

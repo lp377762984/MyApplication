@@ -25,7 +25,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="#fff"
@@ -36,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textSize="14sp"
                 android:text="派大星" />
 
             <TextView
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="5dp"
+                android:textSize="12sp"
                 android:text="最近发布" />
         </LinearLayout>
 
@@ -54,6 +56,8 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
             android:text="+关注" />
+
+
     </LinearLayout>
 
     <TextView
@@ -64,15 +68,6 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
         android:text="今天天气不错！" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/img_man"
-        android:visibility="gone" />
 
     <com.cn.danceland.myapplication.view.NoScrollGridView
         android:layout_marginTop="5dp"
@@ -112,16 +107,19 @@
             android:gravity="center">
 
             <ImageView
+                android:id="@+id/iv_zan"
+                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/img_xin" />
 
             <TextView
+                android:id="@+id/tv_zan_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="3dp"
+
                 android:text="123"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -138,7 +136,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/img_msg" />
+                android:src="@drawable/img_msg"
+                android:padding="5dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,6 +152,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:padding="5dp"
             android:layout_weight="1"
             android:src="@drawable/img_share" />
     </LinearLayout>

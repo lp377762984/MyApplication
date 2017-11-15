@@ -103,7 +103,7 @@ public class RequsetDynInfoBean {
             private String nickName;
             private int priaseNumber;
             private int replyNumber;
-            private String followerNumber;
+            private int followerNumber;
 
 
             @Override
@@ -293,11 +293,11 @@ public class RequsetDynInfoBean {
                 return replyNumber;
             }
 
-            public void setFollowerNumber(String followerNumber) {
+            public void setFollowerNumber(int followerNumber) {
                 this.followerNumber = followerNumber;
             }
 
-            public String getFollowerNumber() {
+            public int getFollowerNumber() {
                 return followerNumber;
             }
 

@@ -12,9 +12,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
+import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.SPUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +34,7 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.ll_setting).setOnClickListener(this);
         v.findViewById(R.id.ll_my_msg).setOnClickListener(this);
         v.findViewById(R.id.iv_edit).setOnClickListener(this);
+        v.findViewById(R.id.ll_my_dyn).setOnClickListener(this);
         tv_nick_name = v.findViewById(R.id.tv_nick_name);
         iv_avatar = v.findViewById(R.id.iv_avatar);
 
@@ -60,6 +63,9 @@ public class MeFragment extends BaseFragment {
 
                 break;
             case R.id.ll_my_msg://我的消息
+                break;
+            case R.id.ll_my_dyn://我的动态
+                startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID,null)));
                 break;
             default:
                 break;

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ public class UserHomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
+
         LogUtil.i("userid:" + userId);
         //  userId="74";
 
@@ -81,6 +83,7 @@ public class UserHomeActivity extends Activity {
 
 
         myListviewAdater = new MyListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myListviewAdater);
         //加入头布局
         //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
@@ -263,6 +266,10 @@ public class UserHomeActivity extends Activity {
         TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
         TextView tv_follwer = headview.findViewById(R.id.tv_follwer);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
+        if (TextUtils.equals(data.getId(),SPUtils.getString(Constants.MY_USERID,null))){
+            tv_add_gz.setVisibility(View.GONE);
+        }
+
         //m默认头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
