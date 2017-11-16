@@ -146,54 +146,60 @@ public class PublishActivity extends Activity {
                 case R.id.publish_ok:
                     //Intent intent3 = new Intent(PublishActivity.this,S);
                     stringstatus = publish_status.getText().toString();
-                    MultipartRequestParams params = new MultipartRequestParams();
-                    arrayFileMap = new HashMap<String,File>();
-                    if(arrayList!=null&&arrayList.size()>0){
-                        File[] files = new File[arrayList.size()];
-                        for (int i =0;i<arrayList.size();i++){
-                            File file = new File(arrayList.get(i));
-                            arrayFileMap.put(i+"",file);
-                        }
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
-                                    UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
-                                    List<UpImagesBean.Data> beanList = upImagesBean.getData();
-                                    ArrayList<String> arrImgUrl = new ArrayList<String>();
-                                    for(int k = 0;k<beanList.size();k++){
-                                        arrImgUrl.add(beanList.get(k).getImgUrl());
-                                    }
-                                    PublishBean publishBean = new PublishBean();
-                                    publishBean.setContent(stringstatus);
-                                    publishBean.setPublishPlace(location);
-                                    if(arrImgUrl.size()>0){
-                                        publishBean.setImgList(arrImgUrl);
-                                    }
-                                    String strBean = gson.toJson(publishBean);
-                                    commitUrl(strBean);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
+                    if(!stringstatus.equals("")||(arrayList!=null&&arrayList.size()>0)){
+                        MultipartRequestParams params = new MultipartRequestParams();
+                        arrayFileMap = new HashMap<String,File>();
+                        if(arrayList!=null&&arrayList.size()>0){
+                            File[] files = new File[arrayList.size()];
+                            for (int i =0;i<arrayList.size();i++){
+                                File file = new File(arrayList.get(i));
+                                arrayFileMap.put(i+"",file);
                             }
-                        }).start();
-                    }else{
-                        PublishBean publishBean = new PublishBean();
-                        publishBean.setContent(stringstatus);
-                        publishBean.setPublishPlace(location);
-                        String strBean = gson.toJson(publishBean);
-                        try {
-                            commitUrl(strBean);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
+                                        UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                                        List<UpImagesBean.Data> beanList = upImagesBean.getData();
+                                        ArrayList<String> arrImgUrl = new ArrayList<String>();
+                                        if(beanList!=null&&beanList.size()>0){
+                                            for(int k = 0;k<beanList.size();k++){
+                                                arrImgUrl.add(beanList.get(k).getImgUrl());
+                                            }
+                                        }
+                                        PublishBean publishBean = new PublishBean();
+                                        publishBean.setContent(stringstatus);
+                                        publishBean.setPublishPlace(location);
+                                        if(arrImgUrl!=null&&arrImgUrl.size()>0){
+                                            publishBean.setImgList(arrImgUrl);
+                                        }
+                                        String strBean = gson.toJson(publishBean);
+                                        commitUrl(strBean);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }).start();
+                        }else{
+                            PublishBean publishBean = new PublishBean();
+                            publishBean.setContent(stringstatus);
+                            publishBean.setPublishPlace(location);
+                            String strBean = gson.toJson(publishBean);
+                            try {
+                                commitUrl(strBean);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        finish();
+                    }else{
+                        ToastUtils.showToastShort("请填写需要发布的动态！");
                     }
 
-                    finish();
                     break;
                 case R.id.publish_cancel:
                     finish();

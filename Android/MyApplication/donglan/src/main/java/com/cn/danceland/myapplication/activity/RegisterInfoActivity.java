@@ -188,6 +188,7 @@ public class RegisterInfoActivity extends Activity{
                         DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
                         Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                     break;
             }
