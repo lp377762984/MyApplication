@@ -36,8 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="14sp"
-                android:text="派大星" />
+                android:text="派大星"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_time"
@@ -45,8 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="5dp"
-                android:textSize="12sp"
-                android:text="最近发布" />
+                android:text="最近发布"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <TextView
@@ -70,16 +70,17 @@
         android:text="今天天气不错！" />
 
     <com.cn.danceland.myapplication.view.NoScrollGridView
-        android:layout_marginTop="5dp"
         android:id="@+id/gridview"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
         android:columnWidth="100dp"
         android:gravity="center_vertical"
         android:numColumns="3"
         android:stretchMode="spacingWidth"
-        android:verticalSpacing="5dp" />
+        android:verticalSpacing="5dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_location"
@@ -108,10 +109,10 @@
 
             <ImageView
                 android:id="@+id/iv_zan"
-                android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:padding="5dp"
                 android:src="@drawable/img_xin" />
 
             <TextView
@@ -136,8 +137,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/img_msg"
-                android:padding="5dp"/>
+                android:padding="5dp"
+                android:src="@drawable/img_msg" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -152,8 +153,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="5dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:src="@drawable/img_share" />
     </LinearLayout>
 </LinearLayout>

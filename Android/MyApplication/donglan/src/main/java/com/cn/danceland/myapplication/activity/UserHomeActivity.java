@@ -9,7 +9,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -27,7 +26,6 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.MyListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -212,6 +210,7 @@ public class UserHomeActivity extends Activity {
                         myListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
+                        isEnd = true;//没数据了
                         ToastUtils.showToastShort("到底啦");
                         ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
                                 false, true);
@@ -266,7 +265,7 @@ public class UserHomeActivity extends Activity {
         TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
         TextView tv_follwer = headview.findViewById(R.id.tv_follwer);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
-        if (TextUtils.equals(data.getId(),SPUtils.getString(Constants.MY_USERID,null))){
+        if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
             tv_add_gz.setVisibility(View.GONE);
         }
 
@@ -280,19 +279,7 @@ public class UserHomeActivity extends Activity {
         return headview;
     }
 
-    private List<PullBean> getData() {
-
-
-        List<PullBean> list = new ArrayList<PullBean>();
-        for (int i = 0; i < 3; i++) {
-            PullBean bean = new PullBean();
-            bean.setTitle("派大星 " + i);
-            bean.setContent(DateUtils.formatDateTime(this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
-            list.add(bean);
-        }
-
-        return list;
-    }
+    private boolean isEnd;
 
     /**
      * 一秒钟延迟
@@ -301,7 +288,10 @@ public class UserHomeActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                findSelfDT();
+                if (!isEnd) {//还有数据请求
+                    findSelfDT();
+                }
+
 //                Thread.sleep(100);
 //                List<PullBean> list = new ArrayList<PullBean>();
 //                for (int i = 0; i < 3; i++) {
