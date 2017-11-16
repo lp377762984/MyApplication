@@ -95,7 +95,8 @@ public class MeFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_setting://设置页面
-                startActivity(new Intent(mActivity, SettingActivity.class));
+               startActivity(new Intent(mActivity, SettingActivity.class));
+
                 break;
             case R.id.iv_edit://编辑资料页面
                 Intent intent = new Intent(mActivity, MyProActivity.class);

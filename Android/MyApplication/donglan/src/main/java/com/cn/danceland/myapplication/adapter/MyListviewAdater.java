@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.SuperKotlin.pictureviewer.ImagePagerActivity;
@@ -18,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 
 import java.util.ArrayList;
@@ -108,6 +108,7 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
             viewHolder.tv_guanzhu = (TextView) convertView.findViewById(tv_guanzhu);
             viewHolder.tv_location = convertView.findViewById(R.id.tv_location);
+            viewHolder.ll_location = convertView.findViewById(R.id.ll_location);
             viewHolder.tv_content = convertView.findViewById(R.id.tv_content);
             viewHolder.tv_zan_num = convertView.findViewById(R.id.tv_zan_num);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
@@ -137,9 +138,11 @@ public class MyListviewAdater extends BaseAdapter {
 
         if (isMe) {
             viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
+        } else {
+            viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
         }
 
-        LogUtil.i(data.get(position).getNickName());
+        //  LogUtil.i(data.get(position).getNickName());
         if (!TextUtils.isEmpty(data.get(position).getNickName())) {
             viewHolder.tv_nick_name.setText(data.get(position).getNickName());
         }
@@ -150,11 +153,12 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder.tv_content.setVisibility(View.GONE);
         } else {//内容不为空赋值
             viewHolder.tv_content.setText(data.get(position).getContent());
+            viewHolder.tv_content.setVisibility(View.VISIBLE);
         }
         if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
-            viewHolder.tv_location.setVisibility(View.GONE);
+            viewHolder.ll_location.setVisibility(View.GONE);
         } else {//地点不为空赋值
-            viewHolder.tv_location.setVisibility(View.VISIBLE);
+            viewHolder.ll_location.setVisibility(View.VISIBLE);
             viewHolder.tv_location.setText(data.get(position).getPublishPlace());
         }
 
@@ -218,7 +222,7 @@ public class MyListviewAdater extends BaseAdapter {
         TextView tv_guanzhu;
         ImageView iv_avatar;
         ImageView iv_zan;
-
+        LinearLayout ll_location;
         NoScrollGridView gridView;
     }
 }
