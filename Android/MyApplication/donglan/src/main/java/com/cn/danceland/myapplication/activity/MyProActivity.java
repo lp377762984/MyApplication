@@ -85,6 +85,7 @@ public class MyProActivity extends Activity {
     Data infoData;
     Gson gson;
     RequestQueue queue;
+    File cutfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -340,25 +341,22 @@ public class MyProActivity extends Activity {
             File file = null;
             if (requestCode == CAMERA_REQUEST_CODE) {
                 startPhotoZoom(uri);
-
             }
             if(requestCode == ALBUM_REQUEST_CODE){
                 startActivityForResult(CutForPhoto(data.getData()),10010);
-                try {
-                    file = new File(new URI(mCutUri.toString()));
-                    LogUtil.e("zzf",file.toString());
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
+
             }
             if(requestCode==10010){
                 Glide.with(MyProActivity.this).load(mCutUri).into(circleImageView);
+                file = cutfile;
+
             }
             if(requestCode==222){
                 Bundle extras = data.getExtras();
                 if (extras != null) {
                     Bitmap photo = extras.getParcelable("data");
                     File fileCut = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
+                    //LogUtil.e("zzf",fileCut.toString());
                     file = fileCut;
                     try{
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileCut));
@@ -384,14 +382,14 @@ public class MyProActivity extends Activity {
                         infoData.setSelfAvatarPath(selfAvatarPath);
                         //发送事件
                         EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
-                        //LogUtil.e("zzf",selfAvatarPath);
+                        LogUtil.e("zzf",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
                         //LogUtil.e("zzf",s);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                    //    LogUtil.e("zzf",volleyError.toString());
+                        //LogUtil.e("zzf",volleyError.toString());
                     }
                 }
                 );
@@ -417,8 +415,8 @@ public class MyProActivity extends Activity {
             //直接裁剪
             Intent intent = new Intent("com.android.camera.action.CROP");
             //设置裁剪之后的图片路径文件
-            File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
-                    System.currentTimeMillis()+".png"); //随便命名一个
+             //随便命名一个
+            cutfile = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
             if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
@@ -436,8 +434,8 @@ public class MyProActivity extends Activity {
             intent.putExtra("aspectX",1);
             intent.putExtra("aspectY",1);
             //设置要裁剪的宽高
-            intent.putExtra("outputX", 200); //200dp
-            intent.putExtra("outputY",200);
+            intent.putExtra("outputX", 100); //200dp
+            intent.putExtra("outputY",100);
             intent.putExtra("scale",true);
             //如果图片过大，会导致oom，这里设置为false
             intent.putExtra("return-data",false);
@@ -448,8 +446,8 @@ public class MyProActivity extends Activity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
             }
             intent.putExtra("noFaceDetection", true);
-            //压缩图片
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+//            //压缩图片
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
             return intent;
         } catch (IOException e) {
             e.printStackTrace();
@@ -462,7 +460,7 @@ public class MyProActivity extends Activity {
 
             //设置裁剪之后的图片路径文件
             File cutfile = new File(Environment.getExternalStorageDirectory().getPath(),
-                    System.currentTimeMillis() + ".png"); //随便命名一个
+                    System.currentTimeMillis() + ".jpg"); //随便命名一个
             if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
