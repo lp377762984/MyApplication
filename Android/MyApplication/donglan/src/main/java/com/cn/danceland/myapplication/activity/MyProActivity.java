@@ -3,11 +3,9 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,7 +16,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,15 +38,17 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -61,8 +60,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.R.attr.bitmap;
 
 /**
  * Created by feng on 2017/10/10.
@@ -385,14 +382,16 @@ public class MyProActivity extends Activity {
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                         selfAvatarPath = headImageBean.getData().getImgUrl();
                         infoData.setSelfAvatarPath(selfAvatarPath);
+                        //发送事件
+                        EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
                         //LogUtil.e("zzf",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        LogUtil.e("zzf",s);
+                        //LogUtil.e("zzf",s);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        LogUtil.e("zzf",volleyError.toString());
+                    //    LogUtil.e("zzf",volleyError.toString());
                     }
                 }
                 );
