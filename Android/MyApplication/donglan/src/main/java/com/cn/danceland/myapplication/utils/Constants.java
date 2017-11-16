@@ -15,6 +15,7 @@ public class Constants {
     public static final String ZONE = HOST + "/zone";//城市区域
     public static final String MODIFY_ZONE = HOST+"/user/modifyZoneCode";//修改区域
     public static final String MODIFY_NAME = HOST+"user/modifyNickName";//修改昵称
+    public static final String MODIFYY_IMAGE = HOST+"user/modifySelfAvatar";//修改头像
 
     public static final String FIND_SELF_DT_MSG = HOST+"/appDynMsg/findSelfDynMsg";//个人动态
     public static final String SAVE_DYN_MSG = HOST+"appDynMsg/saveDynMsg";//发布动态
