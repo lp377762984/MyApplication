@@ -263,10 +263,10 @@ public class UserHomeActivity extends Activity {
         View headview = View.inflate(this, R.layout.headview_user_home, null);
         ImageView iv_avatar = headview.findViewById(R.id.iv_avatar);
         TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
-        TextView tv_follwer = headview.findViewById(R.id.tv_follwer);
+        TextView tv_fans = headview.findViewById(R.id.tv_fans);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
         if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
-            tv_add_gz.setVisibility(View.GONE);
+            tv_add_gz.setVisibility(View.INVISIBLE);
         }
 
         //m默认头像
@@ -274,15 +274,16 @@ public class UserHomeActivity extends Activity {
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
         tv_nickname.setText(data.getNickName());
 
-        if (!data.getFollower()) {
-            if (TextUtils.equals(SPUtils.getString("Constants.MY_USERID",null),data.getId())){
-                tv_follwer.setVisibility(View.INVISIBLE);
+        LogUtil.i(data.getFollower()+"");
+        if (data.getFollower()) {
+            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID,null),data.getId())){
+                tv_add_gz.setVisibility(View.INVISIBLE);
             }else {
-                tv_follwer.setText("已关注");
+                tv_add_gz.setText("已关注");
             }
 
         }else {
-            tv_follwer.setText("+关注");
+            tv_add_gz.setText("+关注");
         }
 
 
