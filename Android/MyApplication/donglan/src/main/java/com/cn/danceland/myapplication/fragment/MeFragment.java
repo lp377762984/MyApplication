@@ -75,15 +75,18 @@ public class MeFragment extends BaseFragment {
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (99==event.getEventCode()){
+        if (99 == event.getEventCode()) {
             String msg = event.getMsg();
-            LogUtil.i("收到消息"+msg);
+            LogUtil.i("收到消息" + msg);
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(msg).apply(options).into(iv_avatar);
 
-           // tv_phone.setText(msg);
-         //   Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+            // tv_phone.setText(msg);
+            //   Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
+        }
+        if (100 == event.getEventCode()) {
+            tv_nick_name.setText(event.getMsg());
         }
 
     }
@@ -96,8 +99,8 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.iv_edit://编辑资料页面
                 Intent intent = new Intent(mActivity, MyProActivity.class);
-               startActivityForResult(intent,119);
-              //  startActivity(intent);
+                startActivityForResult(intent, 119);
+                //  startActivity(intent);
                 break;
             case R.id.ll_my_msg://我的消息
                 break;

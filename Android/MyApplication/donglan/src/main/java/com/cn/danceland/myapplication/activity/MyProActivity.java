@@ -10,11 +10,9 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +39,6 @@ import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
@@ -54,8 +51,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -244,6 +239,8 @@ public class MyProActivity extends Activity {
                             commitName();
                             infoData.setNickName(nickName);
                             DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                            //发送事件
+                            EventBus.getDefault().post(new StringEvent(nickName,100));
                         }
                     });
             normalDialog.setNegativeButton("关闭",
