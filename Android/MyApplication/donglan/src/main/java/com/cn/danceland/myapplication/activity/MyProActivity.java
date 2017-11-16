@@ -31,8 +31,11 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -42,6 +45,8 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
@@ -82,6 +87,7 @@ public class MyProActivity extends Activity {
     String cameraPath,gemder,nickName,selfAvatarPath;
     Data infoData;
     Gson gson;
+    RequestQueue queue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +101,14 @@ public class MyProActivity extends Activity {
         gson = new Gson();
         resolver = getContentResolver();
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        queue = Volley.newRequestQueue(MyProActivity.this);
     }
 
     public void initView(){
         circleImageView = findViewById(R.id.circleimageview);
+        if(infoData.getSelfAvatarPath()!=null&&!infoData.getSelfAvatarPath().equals("")){
+            Glide.with(MyProActivity.this).load(infoData.getSelfAvatarPath()).into(circleImageView);
+        }
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
         headimage = findViewById(R.id.head_image);
@@ -231,7 +241,11 @@ public class MyProActivity extends Activity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            text_name.setText(ed.getText());
+                            nickName = ed.getText().toString();
+                            text_name.setText(nickName);
+                            commitName();
+                            infoData.setNickName(nickName);
+                            DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
                         }
                     });
             normalDialog.setNegativeButton("关闭",
@@ -243,6 +257,46 @@ public class MyProActivity extends Activity {
                     });
             // 显示
             normalDialog.show();
+
+    }
+
+    public void commitName(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT,Constants.MODIFY_NAME , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if(s.contains("true")){
+                    ToastUtils.showToastShort("修改成功！");
+                }else{
+                    ToastUtils.showToastShort("修改失败！");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("修改失败！请检查网络");
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("nickName",nickName);
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+
+                return map;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void commitSex(){
+
 
     }
 
@@ -295,6 +349,7 @@ public class MyProActivity extends Activity {
                 startActivityForResult(CutForPhoto(data.getData()),10010);
                 try {
                     file = new File(new URI(mCutUri.toString()));
+                    LogUtil.e("zzf",file.toString());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -332,12 +387,12 @@ public class MyProActivity extends Activity {
                         infoData.setSelfAvatarPath(selfAvatarPath);
                         //LogUtil.e("zzf",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        //LogUtil.e("zzf",s);
+                        LogUtil.e("zzf",s);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        //LogUtil.e("zzf",volleyError.toString());
+                        LogUtil.e("zzf",volleyError.toString());
                     }
                 }
                 );
