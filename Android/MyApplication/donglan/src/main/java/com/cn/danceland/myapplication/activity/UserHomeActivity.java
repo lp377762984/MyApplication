@@ -273,7 +273,17 @@ public class UserHomeActivity extends Activity {
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
         tv_nickname.setText(data.getNickName());
-        tv_follwer.setText(data.getFollower());
+
+        if (!data.getFollower()) {
+            if (TextUtils.equals(SPUtils.getString("Constants.MY_USERID",null),data.getId())){
+                tv_follwer.setVisibility(View.INVISIBLE);
+            }else {
+                tv_follwer.setText("已关注");
+            }
+
+        }else {
+            tv_follwer.setText("+关注");
+        }
 
 
         return headview;

@@ -38,7 +38,7 @@ public class Data implements Serializable {
     private String awareWay; // 了解途径
     private String adminMumberId; // 所属会籍
     private String remark; // 备注
-    private String follower;
+    private boolean follower;
     private String token;
     private String verCode;
 
@@ -284,11 +284,11 @@ public class Data implements Serializable {
         return remark;
     }
 
-    public void setFollower(String follower) {
+    public void setFollower(boolean follower) {
         this.follower = follower;
     }
 
-    public String getFollower() {
+    public boolean getFollower() {
         return follower;
     }
 

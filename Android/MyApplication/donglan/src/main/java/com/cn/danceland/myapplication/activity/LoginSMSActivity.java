@@ -144,10 +144,10 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
 
                     login_by_phone_url(mEtPhone.getText().toString().trim());
-                    ToastUtils.showToastShort("登录成功");
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);
-                    startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
-                    finish();
+//                    ToastUtils.showToastShort("登录成功");
+//                    SPUtils.setBoolean(Constants.ISLOGINED, true);
+//                    startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+//                    finish();
                 } else {
                     Toast.makeText(LoginSMSActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
 

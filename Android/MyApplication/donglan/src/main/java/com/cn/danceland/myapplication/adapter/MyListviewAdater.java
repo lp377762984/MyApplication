@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 
 import java.util.ArrayList;
@@ -118,6 +119,10 @@ public class MyListviewAdater extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        if (data == null) {
+            return convertView;
+        }
+
         viewHolder.tv_zan_num.setText(data.get(position).getFollowerNumber() + "");
         viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +139,11 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
         }
 
-        viewHolder.tv_nick_name.setText(data.get(position).getNickName());
+        LogUtil.i(data.get(position).getNickName());
+        if (!TextUtils.isEmpty(data.get(position).getNickName())) {
+            viewHolder.tv_nick_name.setText(data.get(position).getNickName());
+        }
+
 
         viewHolder.tv_time.setText(data.get(position).getPublishTime());
         if (TextUtils.isEmpty(data.get(position).getContent())) {
@@ -209,6 +218,7 @@ public class MyListviewAdater extends BaseAdapter {
         TextView tv_guanzhu;
         ImageView iv_avatar;
         ImageView iv_zan;
+
         NoScrollGridView gridView;
     }
 }
