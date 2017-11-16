@@ -163,13 +163,15 @@ public class PublishActivity extends Activity {
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
                                         ArrayList<String> arrImgUrl = new ArrayList<String>();
-                                        for(int k = 0;k<beanList.size();k++){
-                                            arrImgUrl.add(beanList.get(k).getImgUrl());
+                                        if(beanList!=null&&beanList.size()>0){
+                                            for(int k = 0;k<beanList.size();k++){
+                                                arrImgUrl.add(beanList.get(k).getImgUrl());
+                                            }
                                         }
                                         PublishBean publishBean = new PublishBean();
                                         publishBean.setContent(stringstatus);
                                         publishBean.setPublishPlace(location);
-                                        if(arrImgUrl.size()>0){
+                                        if(arrImgUrl!=null&&arrImgUrl.size()>0){
                                             publishBean.setImgList(arrImgUrl);
                                         }
                                         String strBean = gson.toJson(publishBean);
