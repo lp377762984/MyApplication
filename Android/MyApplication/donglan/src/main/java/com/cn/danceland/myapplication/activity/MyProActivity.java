@@ -3,11 +3,9 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,7 +16,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -38,13 +34,15 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -52,12 +50,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.R.attr.bitmap;
 
 /**
  * Created by feng on 2017/10/10.
@@ -183,16 +177,16 @@ public class MyProActivity extends Activity {
                     }
                     break;
                 case R.id.back:
-                    Intent intent = new Intent();
-                    intent.putExtra("selfAvatarPath",selfAvatarPath);
-                    setResult(99,intent);
+
+
+//                    Intent intent = new Intent();
+//                    intent.putExtra("selfAvatarPath",selfAvatarPath);
+//                    setResult(99,intent);
                     finish();
                     break;
             }
         }
     };
-
-
 
 
     public void showPop(){
@@ -332,6 +326,10 @@ public class MyProActivity extends Activity {
                         infoData.setSelfAvatarPath(selfAvatarPath);
                         //LogUtil.e("zzf",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+
+                        //发送事件
+                        EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
+                        LogUtil.i(selfAvatarPath);
                         //LogUtil.e("zzf",s);
                     }
                 }, new Response.ErrorListener() {

@@ -92,7 +92,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (111==event.getEventCode()){
+        if (99==event.getEventCode()){
             String msg = event.getMsg();
 
             tv_phone.setText(msg);

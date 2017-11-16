@@ -112,7 +112,6 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.iv_zan = convertView.findViewById(R.id.iv_zan);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
-            final ViewHolder finalViewHolder = viewHolder;
 
 
             convertView.setTag(viewHolder);
@@ -136,15 +135,17 @@ public class MyListviewAdater extends BaseAdapter {
         }
 
         viewHolder.tv_nick_name.setText(data.get(position).getNickName());
+
         viewHolder.tv_time.setText(data.get(position).getPublishTime());
         if (TextUtils.isEmpty(data.get(position).getContent())) {
             viewHolder.tv_content.setVisibility(View.GONE);
-        } else {//不为空赋值
+        } else {//内容不为空赋值
             viewHolder.tv_content.setText(data.get(position).getContent());
         }
-        if (TextUtils.isEmpty(data.get(position).getContent())) {
+        if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
             viewHolder.tv_location.setVisibility(View.GONE);
-        } else {//不为空赋值
+        } else {//地点不为空赋值
+            viewHolder.tv_location.setVisibility(View.VISIBLE);
             viewHolder.tv_location.setText(data.get(position).getPublishPlace());
         }
 
@@ -161,6 +162,7 @@ public class MyListviewAdater extends BaseAdapter {
             }
         });
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+            viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
             /**
              * 图片列表点击事件
@@ -189,6 +191,9 @@ public class MyListviewAdater extends BaseAdapter {
 
                 }
             });
+        } else {
+            viewHolder.gridView.setVisibility(View.GONE);
+
         }
 
 

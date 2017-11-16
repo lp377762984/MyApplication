@@ -55,6 +55,7 @@ public class SelectionFragment extends BaseFragment {
     int mCurrentPage = 1;//当前请求页
     private MyRecylerViewAdapter mRecylerViewAdapter;
     private View headView;
+    private boolean isEnd = false;//是否没有数据了 默认值false
 
     @Override
     public View initViews() {
@@ -72,7 +73,7 @@ public class SelectionFragment extends BaseFragment {
         myListviewAdater = new MyListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
         pullToRefresh.setAdapter(myListviewAdater);
         //加入头布局
-      /// pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+        /// pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
@@ -122,7 +123,6 @@ public class SelectionFragment extends BaseFragment {
 
         return v;
     }
-
 
 
     private View initHeadview() {
@@ -199,7 +199,10 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            findSelectionDyn_Up(mCurrentPage);
+            if (!isEnd){//还有数据请求
+                findSelectionDyn_Up(mCurrentPage);
+            }
+
             return null;
         }
 
@@ -264,15 +267,14 @@ public class SelectionFragment extends BaseFragment {
                 pushUserBean = gson.fromJson(s, RequestPushUserBean.class);
 
                 LogUtil.i(pushUserBean.toString());
-                pushUserDatas=pushUserBean.getData();
-                if (pushUserDatas.size()>0){
+                pushUserDatas = pushUserBean.getData();
+                if (pushUserDatas.size() > 0) {
                     mRecylerViewAdapter.setData(pushUserDatas);
                     mRecylerViewAdapter.notifyDataSetChanged();
                     pullToRefresh.getRefreshableView().addHeaderView(headView);
-                }else {
-                ToastUtils.showToastShort("没有数据");
+                } else {
+                    ToastUtils.showToastShort("没有数据");
                 }
-
 
 
             }
@@ -323,7 +325,7 @@ public class SelectionFragment extends BaseFragment {
                     data = requsetDynInfoBean.getData().getItems();
                     myListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
                     myListviewAdater.notifyDataSetChanged();
-                    mCurrentPage=1;
+                    mCurrentPage = 2;//下次从第二页请求
                 } else {
                     ToastUtils.showToastShort(requsetDynInfoBean.getErrorMsg());
                 }
@@ -373,13 +375,14 @@ public class SelectionFragment extends BaseFragment {
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
-                    LogUtil.i(data.size() + "");
+                    LogUtil.i(requsetDynInfoBean.getData().toString());
                     if (data.size() > 0) {
 
                         myListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
                         myListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
+                        isEnd = true;
                         ToastUtils.showToastShort("到底啦");
                         ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
                                 false, true);
