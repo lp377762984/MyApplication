@@ -265,6 +265,12 @@ public class UserHomeActivity extends Activity {
         TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
         TextView tv_fans = headview.findViewById(R.id.tv_fans);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
+        headview.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
             tv_add_gz.setVisibility(View.INVISIBLE);
         }
@@ -274,15 +280,15 @@ public class UserHomeActivity extends Activity {
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
         tv_nickname.setText(data.getNickName());
 
-        LogUtil.i(data.getFollower()+"");
+        LogUtil.i(data.getFollower() + "");
         if (data.getFollower()) {
-            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID,null),data.getId())){
+            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
                 tv_add_gz.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 tv_add_gz.setText("已关注");
             }
 
-        }else {
+        } else {
             tv_add_gz.setText("+关注");
         }
 

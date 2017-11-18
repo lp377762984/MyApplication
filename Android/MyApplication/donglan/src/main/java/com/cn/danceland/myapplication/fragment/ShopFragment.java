@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +30,6 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.utils.multipartrequest.FileUtil;
-import com.cn.danceland.myapplication.utils.multipartrequest.HttpUrlConnectionOpts;
-import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
-import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
 
 import java.io.DataOutputStream;
@@ -186,77 +181,56 @@ public class ShopFragment extends BaseFragment {
 
                     break;
                 case 1:
-                    MultipartRequestParams params = new MultipartRequestParams();
-                    if (!FileUtil.fileIsExists(Environment.getExternalStorageDirectory() + "/300.jpg")) {
-                        ToastUtils.showToastShort("文件不存在");
-                        return;
-                    }
-                    params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-
-                  params.put("files", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-
-               params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
-                        //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-
-                        //     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.94:8003/user/uploadFile", new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String s) {
-
-                            LogUtil.i(s);
-
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            LogUtil.i(volleyError.toString());
-                        }
-                    }
-                    ) {
-
-                    };
-
-                    MyApplication.getHttpQueues().add(request);
+//                    MultipartRequestParams params = new MultipartRequestParams();
+//                    if (!FileUtil.fileIsExists(Environment.getExternalStorageDirectory() + "/300.jpg")) {
+//                        ToastUtils.showToastShort("文件不存在");
+//                        return;
+//                    }
+//                    params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+//
+//                  params.put("files", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
+//
+//               params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+//                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
+//                        //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+//
+//                        //     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.94:8003/user/uploadFile", new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String s) {
+//
+//                            LogUtil.i(s);
+//
+//                        }
+//                    }, new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError volleyError) {
+//                            LogUtil.i(volleyError.toString());
+//                        }
+//                    }
+//                    ) {
+//
+//                    };
+//
+//                    MyApplication.getHttpQueues().add(request);
 
                     break;
                 case 2:
 
-                    HttpUrlConnectionOpts opts = new HttpUrlConnectionOpts();
-                    Map<String, File> map = new HashMap<>();
-                    map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-                    map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-                    //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
-                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL, map);
+//                    HttpUrlConnectionOpts opts = new HttpUrlConnectionOpts();
+//                    Map<String, File> map = new HashMap<>();
+//                    map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
+//                    map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
+//                    //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
+//                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL, map);
                     break;
                 case 3://在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
                     break;
                 case 4:
-                 //   final String[] uploadFiles=new String[]{Environment.getExternalStorageDirectory() + "/123.jpg",Environment.getExternalStorageDirectory() + "/300.jpg"};
-                    final String[] uploadFiles=new String[]{Environment.getExternalStorageDirectory() + "/123.jpg"};
-
-                    new Thread(new Runnable() {
-                     @Override
-                     public void run() {
-                         upload(uploadFiles,Constants.UPLOAD_FILES_URL);
-                     }
-                 }).start();
 
                     break;
                 case 5:
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Map<String, File> map = new HashMap<>();
-                            map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-                            map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-                            try {
-                                post(Constants.UPLOAD_FILES_URL,null,map);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+
 
 
                     break;

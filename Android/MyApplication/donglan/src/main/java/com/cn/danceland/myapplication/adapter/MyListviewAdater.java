@@ -14,16 +14,33 @@ import android.widget.TextView;
 
 import com.SuperKotlin.pictureviewer.ImagePagerActivity;
 import com.SuperKotlin.pictureviewer.PictureConfig;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerStandard;
+
+import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 /**
@@ -33,7 +50,6 @@ import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 
 public class MyListviewAdater extends BaseAdapter {
-    //   private List<PullBean> data = new ArrayList<PullBean>();
     private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
     private LayoutInflater mInflater;
     private Context context;
@@ -112,10 +128,11 @@ public class MyListviewAdater extends BaseAdapter {
             viewHolder.tv_content = convertView.findViewById(R.id.tv_content);
             viewHolder.tv_zan_num = convertView.findViewById(R.id.tv_zan_num);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
-            viewHolder.iv_zan = convertView.findViewById(R.id.iv_zan);
+            viewHolder.iv_zan = convertView.findViewById(iv_zan);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
-
-
+            viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
+            viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
+            viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -124,23 +141,56 @@ public class MyListviewAdater extends BaseAdapter {
             return convertView;
         }
 
+        viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//点击整个页面
+                // ToastUtils.showToastShort(position + "");
+            }
+        });
+        //设置评论数量
+        viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
+        //设置点赞数量
         viewHolder.tv_zan_num.setText(data.get(position).getFollowerNumber() + "");
+
+        if (data.get(position).isPraise()) {//设置点赞
+            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
+        } else {
+            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
+        }
+
         viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //点赞
 
-                int i = data.get(position).getFollowerNumber() + 1;
-                data.get(position).setFollowerNumber(i);
+                if (data.get(position).isPraise()) {
+                    data.get(position).setPraise(false);
+                    int i = data.get(position).getFollowerNumber() - 1;
+                    data.get(position).setFollowerNumber(i);
+                } else {
+                    data.get(position).setPraise(true);
+                    int i = data.get(position).getFollowerNumber() + 1;
+                    data.get(position).setFollowerNumber(i);
+                }
+
                 notifyDataSetChanged();
 
             }
         });
 
-        if (isMe) {
+
+        if (isMe) {//是否是个人页面
             viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
         }
+            if (data.get(position).isFollower()){
+                viewHolder.tv_guanzhu.setText("已关注");
+            }else {
+                viewHolder.tv_guanzhu.setText("+关注");
+            }
+
+
 
         //  LogUtil.i(data.get(position).getNickName());
         if (!TextUtils.isEmpty(data.get(position).getNickName())) {
@@ -175,6 +225,7 @@ public class MyListviewAdater extends BaseAdapter {
             }
         });
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+            viewHolder.jzVideoPlayer.setVisibility(View.GONE);
             viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
             /**
@@ -206,6 +257,16 @@ public class MyListviewAdater extends BaseAdapter {
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
+            viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+
+            viewHolder.jzVideoPlayer.setUp(
+                    "http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4", JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    "");
+            Glide.with(convertView.getContext())
+                    .load("http://jzvd-pic.nathen.cn/jzvd-pic/bd7ffc84-8407-4037-a078-7d922ce0fb0f.jpg")
+                    .into(viewHolder.jzVideoPlayer.thumbImageView);
+            viewHolder.jzVideoPlayer.positionInList = position;
+
 
         }
 
@@ -224,5 +285,125 @@ public class MyListviewAdater extends BaseAdapter {
         ImageView iv_zan;
         LinearLayout ll_location;
         NoScrollGridView gridView;
+        JZVideoPlayerStandard jzVideoPlayer;
+        LinearLayout ll_item;
+        TextView tv_pinglun;//评论数
     }
+
+
+    /**
+     * 点赞
+     *
+     * @param isPraise
+     * @param isPraise
+     */
+    private void addZan(final String id, final String msgId, final boolean isPraise) {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("msgId", msgId);
+                map.put("id", id);
+                map.put("isPraise", String.valueOf(isPraise));
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+    /**
+     * 加关注
+     *
+     * @param id
+     * @param b
+     */
+    private void addGuanzhu(final String id, final boolean b) {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", id);
+                map.put("isFollower", String.valueOf(b));
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
 }

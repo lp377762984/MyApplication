@@ -52,7 +52,7 @@ public class SelectionFragment extends BaseFragment {
     MyListviewAdater myListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
-    int mCurrentPage = 1;//当前请求页
+    int mCurrentPage = 1;//起始请求页
     private MyRecylerViewAdapter mRecylerViewAdapter;
     private View headView;
     private boolean isEnd = false;//是否没有数据了 默认值false
@@ -63,7 +63,7 @@ public class SelectionFragment extends BaseFragment {
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
         headView = initHeadview();
         dialog = new ProgressDialog(mActivity);
-        dialog.setMessage("登录中……");
+        dialog.setMessage("加载中……");
 //        dialog.show();
 //
 
@@ -108,17 +108,19 @@ public class SelectionFragment extends BaseFragment {
 
                     list.add(bean);
                 }
-                //     myListviewAdater.addLastList((ArrayList<<RequsetDynInfoBean.Data.Items>) list);
-                //new FinishRefresh().execute();
 
-                //   myListviewAdater.notifyDataSetChanged();
-                //  pullToRefresh.getRefreshableView().setSelection(1);
-                //   LogUtil.i( pullToRefresh.getRefreshableView().getFirstVisiblePosition()+"");
-                // myListviewAdater.notifyDataSetChanged();
 
                 new UpRefresh().execute();
             }
         });
+//        pullToRefresh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                ToastUtils.showToastShort(i+"");
+//
+//            }
+//        });
 
 
         return v;
@@ -159,8 +161,8 @@ public class SelectionFragment extends BaseFragment {
     @Override
     public void initDta() {
         dialog.show();
-        findSelectionDyn_Down(1);
-        findPushUser();
+        findSelectionDyn_Down(mCurrentPage);
+        // findPushUser();
     }
 
 
@@ -168,6 +170,7 @@ public class SelectionFragment extends BaseFragment {
     public void onClick(View view) {
 
     }
+
 
     /**
      * 下拉刷新
@@ -199,7 +202,7 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if (!isEnd){//还有数据请求
+            if (!isEnd) {//还有数据请求
                 findSelectionDyn_Up(mCurrentPage);
             }
 
@@ -322,9 +325,13 @@ public class SelectionFragment extends BaseFragment {
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
                 LogUtil.i(requsetDynInfoBean.toString());
                 if (requsetDynInfoBean.getSuccess()) {
-                    data = requsetDynInfoBean.getData().getItems();
-                    myListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                    myListviewAdater.notifyDataSetChanged();
+
+                    if (requsetDynInfoBean.getData().getItems() != null) {
+                        data = requsetDynInfoBean.getData().getItems();
+                        myListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myListviewAdater.notifyDataSetChanged();
+                    }
+
                     mCurrentPage = 2;//下次从第二页请求
                 } else {
                     ToastUtils.showToastShort(requsetDynInfoBean.getErrorMsg());

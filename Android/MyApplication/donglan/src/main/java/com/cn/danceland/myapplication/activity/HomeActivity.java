@@ -11,17 +11,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.ResultObject;
-import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 
-import java.util.ArrayList;
+import cn.jzvd.JZVideoPlayer;
 
 public class HomeActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -43,6 +38,18 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onSaveInstanceState(Bundle outState) {
         //不处理崩溃时页面保存信息
         // super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JZVideoPlayer.releaseAllVideos();
     }
 
     @Override
@@ -132,8 +139,13 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         //主页面返回两次退出
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (JZVideoPlayer.backPress()) {
+                return true;
+            }
+
             if (System.currentTimeMillis() - exitTime > 2000) {
                 Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
