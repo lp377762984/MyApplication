@@ -42,6 +42,8 @@ import java.util.Map;
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 
+import static com.cn.danceland.myapplication.R.id.iv_comment;
+import static com.cn.danceland.myapplication.R.id.iv_transpond;
 import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
@@ -131,6 +133,8 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.tv_zan_num = convertView.findViewById(R.id.tv_zan_num);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.iv_zan = convertView.findViewById(iv_zan);
+            viewHolder.iv_comment = convertView.findViewById(iv_comment);
+            viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
@@ -183,6 +187,19 @@ public class MyDynListviewAdater extends BaseAdapter {
             }
         });
 
+        viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showToastShort("评论");
+
+            }
+        });
+        viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showToastShort("转发");
+            }
+        });
 
         if (isMe) {//是否是个人页面
             viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
@@ -305,12 +322,16 @@ public class MyDynListviewAdater extends BaseAdapter {
         TextView tv_zan_num;//点赞数量
         TextView tv_guanzhu;
         ImageView iv_avatar;
-        ImageView iv_zan;
+        ImageView iv_zan;//点赞
+        ImageView iv_transpond;//转发
+        ImageView iv_comment;//评论
         LinearLayout ll_location;
         NoScrollGridView gridView;
         JZVideoPlayerStandard jzVideoPlayer;
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
+
+
     }
 
 
