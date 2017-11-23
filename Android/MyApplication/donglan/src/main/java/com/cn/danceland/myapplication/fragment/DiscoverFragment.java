@@ -40,8 +40,8 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
         iv_photo = v.findViewById(R.id.iv_photo);
         iv_photo.setOnClickListener(this);
-        mViewPager = (ViewPager) v.findViewById(R.id.id_viewpager);
-        mTabPageIndicator = (TabPageIndicator) v.findViewById(R.id.id_indicator);
+        mViewPager =  v.findViewById(R.id.id_viewpager);
+        mTabPageIndicator =  v.findViewById(R.id.id_indicator);
         mAdapter = new TabAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mTabPageIndicator.setViewPager(mViewPager, 0);

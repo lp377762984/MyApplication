@@ -46,7 +46,9 @@
         <activity android:name=".activity.MyProActivity" />
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ResetPhoneActivity"></activity>
         <activity android:name=".activity.ConfirmPasswordActivity" />
@@ -70,11 +72,9 @@
         <activity android:name=".activity.FitnessManActivity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.RecordView" />
+ <activity android:name=".activity.UserListActivity"/>
     </application>
-    <!-- 往SDCard写入数据权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--请求访问使用照相设备-->
-    <uses-permission android:name="android.permission.CAMERA" />
+
 
 
     <!-- 这个权限用于进行网络定位-->

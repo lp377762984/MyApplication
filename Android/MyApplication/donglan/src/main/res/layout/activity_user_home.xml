@@ -18,6 +18,5 @@
         ptr:ptrHeaderTextColor="#999999"
         ptr:ptrRefreshableViewBackground="#00000000"
         ptr:ptrScrollingWhileRefreshingEnabled="true"
-
         />
 </LinearLayout>

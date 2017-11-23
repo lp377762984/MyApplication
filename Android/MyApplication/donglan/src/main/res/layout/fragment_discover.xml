@@ -50,7 +50,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"></com.viewpagerindicator.TabPageIndicator>
+                android:background="@android:color/transparent"/>
 
             <ImageButton
                 android:id="@+id/iv_photo"
@@ -67,7 +67,7 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/id_viewpager"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"></android.support.v4.view.ViewPager>
+            android:layout_height="fill_parent"/>
     </LinearLayout>
 
 </RelativeLayout>

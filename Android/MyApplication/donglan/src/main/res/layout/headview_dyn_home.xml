@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/img_my_avatar" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="派大星"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:text="最近发布"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_guanzhu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:text="+关注"
+            android:textColor="#333333" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:text="今天天气不错！" />
+
+    <cn.jzvd.JZVideoPlayerStandard
+        android:id="@+id/videoplayer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:visibility="gone" />
+
+    <com.cn.danceland.myapplication.view.NoScrollGridView
+        android:id="@+id/gridview"
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:columnWidth="100dp"
+        android:gravity="center_vertical"
+        android:numColumns="3"
+        android:stretchMode="spacingWidth"
+        android:verticalSpacing="5dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_location"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/store_adress" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="3dp"
+            android:singleLine="true"
+            android:text="发布于月球"
+            android:textSize="12sp"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="赞：" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+
+</LinearLayout>

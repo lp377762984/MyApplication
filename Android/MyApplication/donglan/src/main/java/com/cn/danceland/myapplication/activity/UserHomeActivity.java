@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.adapter.MyListviewAdater;
+import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -52,19 +54,20 @@ public class UserHomeActivity extends Activity {
     private PullToRefreshListView pullToRefresh;
     //  private List<PullBean> data = new ArrayList<PullBean>();
     List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
-    MyListviewAdater myListviewAdater;
+    MyDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
     private int mCurrentPage = 1;//当前请求页
     private String userId;
+    private boolean isdyn = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
-
-        LogUtil.i("userid:" + userId);
+        isdyn = getIntent().getBooleanExtra("isdyn", false);
+        //    LogUtil.i("userid:" + userId);
         //  userId="74";
 
         initView();
@@ -80,9 +83,9 @@ public class UserHomeActivity extends Activity {
         dialog.setMessage("正在加载……");
 
 
-        myListviewAdater = new MyListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
-        myListviewAdater.setGzType(true);//隐藏关注按钮
-        pullToRefresh.setAdapter(myListviewAdater);
+        myDynListviewAdater = new MyDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater.setGzType(true);//隐藏关注按钮
+        pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
         //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
@@ -110,13 +113,20 @@ public class UserHomeActivity extends Activity {
             switch (msg.what) {      //判断标志位
                 case 1:
 
-                    myListviewAdater.notifyDataSetChanged();
+                    myDynListviewAdater.notifyDataSetChanged();
                     pullToRefresh.onRefreshComplete();
 
                     break;
                 case 2:
                     pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
                     dialog.dismiss();
+
+                    if (isdyn) {//跳转到动态的那行
+
+                        pullToRefresh.getRefreshableView().setSelection(2);
+                        // pullToRefresh.getRefreshableView().smoothScrollToPosition(2);
+                    }
+
 
                     break;
             }
@@ -205,9 +215,19 @@ public class UserHomeActivity extends Activity {
                     // requsetDynInfoBean.getData().getItems().toString();
 
                     if (data.size() > 0) {
+                        if (data.size() < 10) {
+                            isEnd = true;//没数据了
+                            ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                                    false, true);
+                            endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+                            endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+                            endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+                            endLabels.setLoadingDrawable(null);
+                        }
 
-                        myListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        myListviewAdater.notifyDataSetChanged();
+
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
                         isEnd = true;//没数据了
@@ -264,9 +284,64 @@ public class UserHomeActivity extends Activity {
         ImageView iv_avatar = headview.findViewById(R.id.iv_avatar);
         TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
         TextView tv_fans = headview.findViewById(R.id.tv_fans);
+        TextView tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
+        LinearLayout ll_edit = headview.findViewById(R.id.ll_edit);
+        ImageView iv_sex = headview.findViewById(R.id.iv_sex);
+
+        if (TextUtils.equals(data.getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        } else if (TextUtils.equals(data.getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        } else {
+            iv_sex.setVisibility(View.INVISIBLE);
+        }
+
+
+        tv_guanzhu_num.setText("关注 " + data.getFollowNumber());
+        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//查看关注
+                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
+
+            }
+        });
+        tv_fans.setText("粉丝 " + data.getFansNum());
+        tv_fans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//查看粉丝
+                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
+
+            }
+        });
+
+
+        headview.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        if (data.getFollower()) {
+            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
+                tv_add_gz.setVisibility(View.INVISIBLE);
+            } else {
+                tv_add_gz.setText("已关注");
+            }
+
+        } else {
+            tv_add_gz.setText("+关注");
+        }
         if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
-            tv_add_gz.setVisibility(View.INVISIBLE);
+
+            ll_edit.setVisibility(View.VISIBLE);
+            ll_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserHomeActivity.this, MyProActivity.class));
+                }
+            });
+            tv_add_gz.setVisibility(View.GONE);
         }
 
         //m默认头像
@@ -274,17 +349,8 @@ public class UserHomeActivity extends Activity {
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
         tv_nickname.setText(data.getNickName());
 
-        LogUtil.i(data.getFollower()+"");
-        if (data.getFollower()) {
-            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID,null),data.getId())){
-                tv_add_gz.setVisibility(View.INVISIBLE);
-            }else {
-                tv_add_gz.setText("已关注");
-            }
 
-        }else {
-            tv_add_gz.setText("+关注");
-        }
+
 
 
         return headview;
@@ -303,16 +369,6 @@ public class UserHomeActivity extends Activity {
                     findSelfDT();
                 }
 
-//                Thread.sleep(100);
-//                List<PullBean> list = new ArrayList<PullBean>();
-//                for (int i = 0; i < 3; i++) {
-//                    PullBean bean = new PullBean();
-//                    bean.setTitle("派大星3333" + System.currentTimeMillis() + i);
-//                    bean.setContent(DateUtils.formatDateTime(UserHomeActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
-//
-//                    list.add(bean);
-//                }
-//               // myListviewAdater.addLastList((ArrayList<PullBean>) list);
 
                 dialog.dismiss();
 
@@ -323,7 +379,7 @@ public class UserHomeActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
-            myListviewAdater.notifyDataSetChanged();
+            myDynListviewAdater.notifyDataSetChanged();
             pullToRefresh.onRefreshComplete();
         }
     }

@@ -20,19 +20,9 @@
             style="@style/TextViewTitileStyle"
 
             android:text="登录"
-            android:textColor="#333333"/>
+            android:textColor="#333333" />
 
-        <TextView
-            android:id="@+id/tv_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="25dp"
-            android:onClick="register"
-            android:text="注册"
-            android:textColor="#333333"
-            android:textSize="15sp" />
+
     </RelativeLayout>
 
     <ImageView
@@ -110,8 +100,7 @@
             style="@style/EtStyle"
             android:layout_weight="1"
             android:hint="请输入密码"
-            android:inputType="textPassword"
-         />
+            android:inputType="textPassword" />
 
         <ImageView
             android:id="@+id/iv_pswd_see"
@@ -159,24 +148,26 @@
         style="@style/BtnCommitStyle"
         android:layout_below="@+id/wangji"
         android:layout_marginTop="30dp"
-        android:text="进入" />
+        android:text="登录" />
 
-
+    <Button
+        android:id="@+id/tv_register"
+        style="@style/BtnCommitStyle"
+        android:layout_below="@+id/btn_login"
+        android:layout_marginTop="10dp"
+        android:text="注册" />
 
 
     <TextView
         android:id="@+id/tv_login_others"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_login"
+        android:layout_below="@+id/tv_register"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="其他方式登录"
         android:textColor="#999999"
         android:textSize="12sp" />
-
-
-
 
 
     <RelativeLayout

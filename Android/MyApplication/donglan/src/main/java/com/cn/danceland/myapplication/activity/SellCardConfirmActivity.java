@@ -47,6 +47,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         RadioGroup radioGroup = findViewById(R.id.rg_who);
         tv_select_date = findViewById(R.id.tv_select_date);
         tv_select_counselor = findViewById(R.id.tv_select_counselor);
+        findViewById(R.id.iv_back).setOnClickListener(this);
         ll_phone = findViewById(R.id.ll_phone);
 
         et_name = findViewById(R.id.et_name);

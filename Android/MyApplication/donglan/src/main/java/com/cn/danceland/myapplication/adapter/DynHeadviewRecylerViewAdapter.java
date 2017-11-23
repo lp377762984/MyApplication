@@ -22,11 +22,11 @@ import java.util.List;
  * Email:644563767@qq.com
  */
 
-public class MyRecylerViewAdapter extends RecyclerView.Adapter<MyRecylerViewAdapter.ViewHolder> {
+public class DynHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynHeadviewRecylerViewAdapter.ViewHolder> {
     public List<Data> datas = null;
     private Context context;
 
-    public MyRecylerViewAdapter(Context context, List<Data> datas) {
+    public DynHeadviewRecylerViewAdapter(Context context, List<Data> datas) {
         this.datas = datas;
         this.context = context;
     }

@@ -7,9 +7,9 @@
     <com.cn.danceland.myapplication.view.HeadZoomScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -72,21 +72,19 @@
                 android:layout_width="325dp"
                 android:layout_height="60dp"
 
-                android:layout_alignBottom="@id/line11"
-
-                android:layout_centerHorizontal="true"
-
 
                 android:background="@drawable/bg_white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_alignBottom="@+id/line11"
+                android:layout_centerHorizontal="true">
 
                 <LinearLayout
+                    android:id="@+id/ll_my_dyn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:id="@+id/ll_my_dyn">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,11 +97,13 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_dyn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:text="0"
+                        android:textStyle="bold"
                         android:textColor="@color/color_content_text"
                         android:textSize="15dp" />
 
@@ -111,6 +111,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_my_guanzhu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -126,16 +127,49 @@
                         android:textSize="15dp" />
 
                     <TextView
+                        android:id="@+id/tv_gauzhu_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:text="0"
+                        android:textStyle="bold"
                         android:textColor="@color/color_content_text"
                         android:textSize="15dp" />
 
 
                 </LinearLayout>
+                <LinearLayout
+                  android:id="@+id/ll_my_fans"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="粉丝"
+                        android:textColor="@color/color_content_text"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/tv_fans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="0"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_content_text"
+                        android:textSize="15dp" />
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +194,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/img_setting" />
+                        android:src="@drawable/img_msg_seting" />
 
                     <TextView
                         android:layout_width="0dp"

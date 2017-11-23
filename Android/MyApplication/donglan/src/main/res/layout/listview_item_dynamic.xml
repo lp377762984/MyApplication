@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_bg_mianlayout"
-
     android:orientation="vertical">
 
     <LinearLayout
@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
-            android:text="+关注" />
+            android:text="+关注"
+            android:textColor="#333333" />
 
 
     </LinearLayout>
@@ -69,11 +70,19 @@
         android:layout_marginTop="5dp"
         android:text="今天天气不错！" />
 
+    <cn.jzvd.JZVideoPlayerStandard
+        android:id="@+id/videoplayer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:visibility="gone" />
+
     <com.cn.danceland.myapplication.view.NoScrollGridView
         android:id="@+id/gridview"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
         android:columnWidth="100dp"
         android:gravity="center_vertical"
@@ -101,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="10dp"
             android:singleLine="true"
             android:text="发布于月球"
             android:textSize="12sp"
@@ -112,7 +121,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginTop="5dp"
         android:background="#fff"
         android:orientation="horizontal">
@@ -159,6 +168,7 @@
                 android:src="@drawable/img_msg" />
 
             <TextView
+                android:id="@+id/tv_pinglun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

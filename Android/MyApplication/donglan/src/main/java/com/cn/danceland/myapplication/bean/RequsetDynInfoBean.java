@@ -7,16 +7,14 @@ import java.util.List;
 
 /**
  * Auto-generated: 2017-11-14 13:33:29
- *
- *动态请求bean
- *
+ * <p>
+ * 动态请求bean
  */
 public class RequsetDynInfoBean {
 
     private boolean success;
     private String errorMsg;
     private Data data;
-
 
 
     @Override
@@ -83,7 +81,7 @@ public class RequsetDynInfoBean {
 
         public class Items {
 
-            private int id;
+            private String id;
             private String title;
             private String content;
             private int privacyType;
@@ -104,17 +102,57 @@ public class RequsetDynInfoBean {
             private int priaseNumber;
             private int replyNumber;
             private int followerNumber;
+            private boolean follower;
+            private boolean praise;
 
+            private String vedioImg;
+            private String vedioUrl;
+
+            public String getVedioImg() {
+                return vedioImg;
+            }
+
+            public void setVedioImg(String vedioImg) {
+                this.vedioImg = vedioImg;
+            }
+
+            public String getVedioUrl() {
+                return vedioUrl;
+            }
+
+            public void setVedioUrl(String vedioUrl) {
+                this.vedioUrl = vedioUrl;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public boolean isFollower() {
+                return follower;
+            }
+
+            public void setFollower(boolean follower) {
+                this.follower = follower;
+            }
+
+            public boolean isPraise() {
+                return praise;
+            }
+
+            public void setPraise(boolean praise) {
+                this.praise = praise;
+            }
 
             @Override
             public String toString() {
                 return "Items{" +
-                        "id=" + id +
+                        "id='" + id + '\'' +
                         ", title='" + title + '\'' +
                         ", content='" + content + '\'' +
                         ", privacyType=" + privacyType +
                         ", msgType=" + msgType +
-                        ", author=" + author +
+                        ", author='" + author + '\'' +
                         ", publishType=" + publishType +
                         ", shareId=" + shareId +
                         ", enabled=" + enabled +
@@ -129,15 +167,20 @@ public class RequsetDynInfoBean {
                         ", nickName='" + nickName + '\'' +
                         ", priaseNumber=" + priaseNumber +
                         ", replyNumber=" + replyNumber +
-                        ", followerNumber='" + followerNumber + '\'' +
+                        ", followerNumber=" + followerNumber +
+                        ", follower=" + follower +
+                        ", praise=" + praise +
+                        ", vedioImg='" + vedioImg + '\'' +
+                        ", vedioUrl='" + vedioUrl + '\'' +
                         '}';
             }
 
-            public void setId(int id) {
+
+            public void setId(String id) {
                 this.id = id;
             }
 
-            public int getId() {
+            public String getId() {
                 return id;
             }
 
