@@ -3,9 +3,20 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Camera;
+import android.media.Image;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaRecorder;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +42,16 @@ import com.baidu.location.LocationClient;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.bean.PublishBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.UpImagesBean;
+import com.cn.danceland.myapplication.bean.VideoBean;
 import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -49,10 +64,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,26 +93,28 @@ public class PublishActivity extends Activity {
     String location="";
     TextView location_img;
     Map<String,File> arrayFileMap;
+    String videoPath,videoUrl;
+    final static int CAPTURE_VIDEO_CODE = 100;
+    static String SAVED_IMAGE_DIR_PATH =
+            Environment.getExternalStorageDirectory().getPath()
+                    + "/donglan/camera/";// 拍照路径
     String stringstatus = "";
     //LocationClient mLocationClient;
     Gson gson;
     RequestQueue queue;
+    ImageView videoimg;
+    String picUrl,vedioUrl;
+    String isPhoto;
+    File picFile,videoFile;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
-
-
         queue = Volley.newRequestQueue(PublishActivity.this);
         gson = new Gson();
-        //mLocationClient = ((MyApplication) getApplication()).locationClient;
+        isPhoto = getIntent().getStringExtra("isPhoto");
         initView();
         setOnclick();
-        initdata();
-//
-    }
-
-    private void initdata() {
 
     }
 
@@ -116,7 +136,8 @@ public class PublishActivity extends Activity {
         publish_location = findViewById(R.id.publish_location);
         publish_share1 = findViewById(R.id.publish_share1);
         grid_view = findViewById(R.id.grid_view);
-
+        videoimg = findViewById(R.id.videoimg);
+        videoimg.setOnClickListener(onClickListener);
         grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -132,8 +153,17 @@ public class PublishActivity extends Activity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.publish_photo:
-                    Intent intent = new Intent(PublishActivity.this,ImagesActivity.class);
-                    startActivityForResult(intent,0);
+                    if("0".equals(isPhoto)){
+                        Intent intent = new Intent(PublishActivity.this,ImagesActivity.class);
+                        startActivityForResult(intent,0);
+                    }else{
+                        Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+                        startActivityForResult(intentr,111);
+                    }
+                    break;
+                case R.id.videoimg:
+                    Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+                    startActivityForResult(intentr,111);
                     break;
                 case R.id.location_img:
                     Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
@@ -145,11 +175,62 @@ public class PublishActivity extends Activity {
                     break;
                 case R.id.publish_ok:
                     //Intent intent3 = new Intent(PublishActivity.this,S);
+                    final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
-                    if(!stringstatus.equals("")||(arrayList!=null&&arrayList.size()>0)){
+
+                    if(videoPath!=null&&!"".equals(videoPath)){
+                        videoFile = new File(videoPath);
+                        if(picFile!=null){
+                            MultipartRequestParams params = new MultipartRequestParams();
+                            params.put("file",picFile);
+                            MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String s) {
+                                    HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
+                                    if(headImageBean!=null&&headImageBean.getData()!=null){
+                                        picUrl = headImageBean.getData().getImgUrl();
+                                        publishBean.setVedioImg(picUrl);
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+
+                                }
+                            });
+                            MyApplication.getHttpQueues().add(request);
+                        }
+                        if(videoFile!=null){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        HashMap<String,File> fileHashMap = new HashMap<String,File>();
+                                        fileHashMap.put("vedio",videoFile);
+                                        String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOADVEDIO,null,fileHashMap);
+                                        VideoBean videoBean = gson.fromJson(s, VideoBean.class);
+                                        if(videoBean!=null&&videoBean.getData()!=null){
+                                            vedioUrl = videoBean.getData().getImgUrl();
+                                            publishBean.setVedioUrl(vedioUrl);
+                                            //LogUtil.e("zzf",vedioUrl);
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    }
+
+                    if(!"".equals(stringstatus)){
+                        publishBean.setContent(stringstatus);
+                        publishBean.setPublishPlace(location);
+                    }
+
+
+                    if(arrayList!=null&&arrayList.size()>0){
                         MultipartRequestParams params = new MultipartRequestParams();
                         arrayFileMap = new HashMap<String,File>();
-                        if(arrayList!=null&&arrayList.size()>0){
                             File[] files = new File[arrayList.size()];
                             for (int i =0;i<arrayList.size();i++){
                                 File file = new File(arrayList.get(i));
@@ -168,38 +249,29 @@ public class PublishActivity extends Activity {
                                                 arrImgUrl.add(beanList.get(k).getImgUrl());
                                             }
                                         }
-                                        PublishBean publishBean = new PublishBean();
                                         publishBean.setContent(stringstatus);
                                         publishBean.setPublishPlace(location);
                                         if(arrImgUrl!=null&&arrImgUrl.size()>0){
                                             publishBean.setImgList(arrImgUrl);
                                         }
-                                        String strBean = gson.toJson(publishBean);
-                                        commitUrl(strBean);
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
-
                                 }
                             }).start();
-                        }else{
-                            PublishBean publishBean = new PublishBean();
-                            publishBean.setContent(stringstatus);
-                            publishBean.setPublishPlace(location);
-                            String strBean = gson.toJson(publishBean);
-                            try {
-                                commitUrl(strBean);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                    }
+                    if(publishBean.getContent()==null && publishBean.getImgList()==null && publishBean.getVedioUrl()==null){
+                        ToastUtils.showToastShort("请填写需要发布的动态！");
+                    }else{
+                        String strBean = gson.toJson(publishBean);
+                        try {
+                            commitUrl(strBean);
+                            LogUtil.e("zzf",strBean);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                         finish();
-                    }else{
-                        ToastUtils.showToastShort("请填写需要发布的动态！");
                     }
-
                     break;
                 case R.id.publish_cancel:
                     finish();
@@ -207,6 +279,19 @@ public class PublishActivity extends Activity {
             }
         }
     };
+
+    /**
+     * 获得视频的缩略图
+     *
+     *
+     */
+    public Bitmap getBitmap(String imgPath) {
+
+        Bitmap bp = ThumbnailUtils.createVideoThumbnail(imgPath,
+                MediaStore.Video.Thumbnails.MINI_KIND);
+        return bp;
+    }
+
 
     public void commitUrl(final String str) throws JSONException {
 
@@ -221,7 +306,6 @@ public class PublishActivity extends Activity {
                 }else{
                     ToastUtils.showToastShort("发布失败！请检查网络连接");
                 }
-                //LogUtil.e("zzf",jsonObject.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -256,9 +340,33 @@ public class PublishActivity extends Activity {
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
                 publish_location.setText(location);
+        }else if(resultCode == 111){
+            videoPath = data.getStringExtra("videoPath");
+            MediaMetadataRetriever media = new MediaMetadataRetriever();
+            media.setDataSource(videoPath);
+            Bitmap frameAtTime = media.getFrameAtTime();
+            picFile = saveBitmapFile(frameAtTime);
+            videoimg.setImageBitmap(frameAtTime);
+            publish_photo.setVisibility(View.GONE);
+            videoimg.setVisibility(View.VISIBLE);
         }
 
     }
+
+    public File saveBitmapFile(Bitmap bitmap) {
+        File file=new File(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/"+System.currentTimeMillis()+".png");//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return file;
+    }
+
 
     public class SmallGridAdapter extends BaseAdapter{
 

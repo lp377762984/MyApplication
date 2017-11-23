@@ -109,10 +109,15 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
         switch (id) {
             case 0:
                 //ToastUtils.showToastShort("发布动态");
-                startActivity(new Intent(mActivity, PublishActivity.class));
+                Intent intent = new Intent(mActivity, PublishActivity.class);
+                intent.putExtra("isPhoto","0");
+                startActivity(intent);
                 break;
             case 1:
-                ToastUtils.showToastShort("发布视频");
+                Intent intent1 = new Intent(mActivity,PublishActivity.class);
+                intent1.putExtra("isPhoto","1");
+                startActivity(intent1);
+                //ToastUtils.showToastShort("发布视频");
                 break;
             default:
 

@@ -32,6 +32,8 @@ public class PublishBean {
     private int publishType;
     private int shareId;
     private String title;
+    private String vedioUrl;
+    private String vedioImg;
     public void setAuthor(int author) {
         this.author = author;
     }
@@ -123,4 +125,44 @@ public class PublishBean {
         return title;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public String getVedioUrl() {
+        return vedioUrl;
+    }
+
+    public void setVedioUrl(String vedioUrl) {
+        this.vedioUrl = vedioUrl;
+    }
+
+    public String getVedioImg() {
+        return vedioImg;
+    }
+
+    public void setVedioImg(String vedioImg) {
+        this.vedioImg = vedioImg;
+    }
+
+    @Override
+    public String toString() {
+        return "PublishBean{" +
+                "author=" + author +
+                ", content='" + content + '\'' +
+                ", enabled=" + enabled +
+                ", id=" + id +
+                ", imgList=" + imgList +
+                ", imgs='" + imgs + '\'' +
+                ", msgType=" + msgType +
+                ", privacyType=" + privacyType +
+                ", publishPlace='" + publishPlace + '\'' +
+                ", publishTime=" + publishTime +
+                ", publishType=" + publishType +
+                ", shareId=" + shareId +
+                ", title='" + title + '\'' +
+                ", vedioUrl='" + vedioUrl + '\'' +
+                ", vedioImg='" + vedioImg + '\'' +
+                '}';
+    }
 }

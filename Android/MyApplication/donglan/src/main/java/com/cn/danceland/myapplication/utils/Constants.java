@@ -26,7 +26,9 @@ public class Constants {
     public static final String FIND_PUSH_MSG = HOST+"/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
+    public static final String UPLOADVEDIO = HOST+"appDynMsg/uploadVedio";//上传视频
 
+    public static final String UPLOADTH = HOST + "appDynMsg/uploadThumbnail";//上传缩略图
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
 
