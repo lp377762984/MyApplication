@@ -467,4 +467,6 @@ public class MyProActivity extends Activity {
         intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, 222);
     }
+
+
 }
