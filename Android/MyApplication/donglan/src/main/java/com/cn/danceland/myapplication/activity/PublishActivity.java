@@ -13,6 +13,8 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
@@ -106,6 +108,7 @@ public class PublishActivity extends Activity {
     String picUrl,vedioUrl;
     String isPhoto;
     File picFile,videoFile;
+    Handler handler;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +118,34 @@ public class PublishActivity extends Activity {
         isPhoto = getIntent().getStringExtra("isPhoto");
         initView();
         setOnclick();
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                if(msg.what == 1){
+                    PublishBean bean = new PublishBean();
+                    if(!"".equals(stringstatus)){
+                        bean.setContent(stringstatus);
+                        bean.setPublishPlace(location);
+                    }
+                    if(picUrl!=null&&vedioUrl!=null){
+                        bean.setVedioUrl(vedioUrl);
+                        bean.setVedioImg(picUrl);
+                        bean.setMsgType(1);
+                    }
+                    if(bean.getVedioUrl()==null&&bean.getContent()==null){
+                        ToastUtils.showToastShort("请填写需要发布的动态！");
+                    }else{
+                        try {
+                            commitUrl(gson.toJson(bean));
+                            finish();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            }
+        };
 
     }
 
@@ -189,7 +220,6 @@ public class PublishActivity extends Activity {
                                     HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                                     if(headImageBean!=null&&headImageBean.getData()!=null){
                                         picUrl = headImageBean.getData().getImgUrl();
-                                        publishBean.setVedioImg(picUrl);
                                     }
                                 }
                             }, new Response.ErrorListener() {
@@ -211,8 +241,9 @@ public class PublishActivity extends Activity {
                                         VideoBean videoBean = gson.fromJson(s, VideoBean.class);
                                         if(videoBean!=null&&videoBean.getData()!=null){
                                             vedioUrl = videoBean.getData().getImgUrl();
-                                            publishBean.setVedioUrl(vedioUrl);
-                                            //LogUtil.e("zzf",vedioUrl);
+                                            Message message = new Message();
+                                            message.what = 1;
+                                            handler.sendMessage(message);
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
@@ -259,19 +290,21 @@ public class PublishActivity extends Activity {
                                     }
                                 }
                             }).start();
-                    }
-                    if(publishBean.getContent()==null && publishBean.getImgList()==null && publishBean.getVedioUrl()==null){
-                        ToastUtils.showToastShort("请填写需要发布的动态！");
-                    }else{
-                        String strBean = gson.toJson(publishBean);
-                        try {
-                            commitUrl(strBean);
-                            LogUtil.e("zzf",strBean);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+
+                        if(publishBean.getContent()==null && publishBean.getImgList()==null){
+                            ToastUtils.showToastShort("请填写需要发布的动态！");
+                        }else{
+                            String strBean = gson.toJson(publishBean);
+                            try {
+                                commitUrl(strBean);
+                                //LogUtil.e("zzf",strBean);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            finish();
                         }
-                        finish();
                     }
+
                     break;
                 case R.id.publish_cancel:
                     finish();
