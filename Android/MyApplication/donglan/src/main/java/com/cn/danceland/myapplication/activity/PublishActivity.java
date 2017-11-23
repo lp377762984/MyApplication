@@ -209,56 +209,14 @@ public class PublishActivity extends Activity {
                     final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
 
-                    if(videoPath!=null&&!"".equals(videoPath)){
-                        videoFile = new File(videoPath);
-                        if(picFile!=null){
+
+
+
+
+                    if("0".equals(isPhoto)){
+                        if(arrayList!=null&&arrayList.size()>0){
                             MultipartRequestParams params = new MultipartRequestParams();
-                            params.put("file",picFile);
-                            MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String s) {
-                                    HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                                    if(headImageBean!=null&&headImageBean.getData()!=null){
-                                        picUrl = headImageBean.getData().getImgUrl();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
-
-                                }
-                            });
-                            MyApplication.getHttpQueues().add(request);
-                        }
-                        if(videoFile!=null){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        HashMap<String,File> fileHashMap = new HashMap<String,File>();
-                                        fileHashMap.put("vedio",videoFile);
-                                        String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOADVEDIO,null,fileHashMap);
-                                        VideoBean videoBean = gson.fromJson(s, VideoBean.class);
-                                        if(videoBean!=null&&videoBean.getData()!=null){
-                                            vedioUrl = videoBean.getData().getImgUrl();
-                                            Message message = new Message();
-                                            message.what = 1;
-                                            handler.sendMessage(message);
-                                        }
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }).start();
-                        }
-                    }
-
-
-
-
-                    if(arrayList!=null&&arrayList.size()>0){
-                        MultipartRequestParams params = new MultipartRequestParams();
-                        arrayFileMap = new HashMap<String,File>();
+                            arrayFileMap = new HashMap<String,File>();
                             File[] files = new File[arrayList.size()];
                             for (int i =0;i<arrayList.size();i++){
                                 File file = new File(arrayList.get(i));
@@ -288,35 +246,81 @@ public class PublishActivity extends Activity {
                                 }
                             }).start();
 
-                        if(publishBean.getContent()==null && publishBean.getImgList()==null){
-                            ToastUtils.showToastShort("请填写需要发布的动态！");
-                        }else{
-                            String strBean = gson.toJson(publishBean);
-                            try {
-                                commitUrl(strBean);
-                                //LogUtil.e("zzf",strBean);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if(publishBean.getContent()==null && publishBean.getImgList()==null){
+                                ToastUtils.showToastShort("请填写需要发布的动态！");
+                            }else{
+                                String strBean = gson.toJson(publishBean);
+                                try {
+                                    commitUrl(strBean);
+                                    //LogUtil.e("zzf",strBean);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                finish();
                             }
-                            finish();
+                        }else{
+                            if(!"".equals(stringstatus)){
+                                publishBean.setContent(stringstatus);
+                                publishBean.setPublishPlace(location);
+                                String strBean = gson.toJson(publishBean);
+                                try {
+                                    commitUrl(strBean);
+                                    //LogUtil.e("zzf",strBean);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                finish();
+                            }else{
+                                ToastUtils.showToastShort("请填写需要发布的动态！");
+
+                            }
+
                         }
                     }else{
-                        if(!"".equals(stringstatus)){
-                            publishBean.setContent(stringstatus);
-                            publishBean.setPublishPlace(location);
-                            String strBean = gson.toJson(publishBean);
-                            try {
-                                commitUrl(strBean);
-                                //LogUtil.e("zzf",strBean);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+
+                        if(videoPath!=null&&!"".equals(videoPath)){
+                            videoFile = new File(videoPath);
+                            if(picFile!=null){
+                                MultipartRequestParams params = new MultipartRequestParams();
+                                params.put("file",picFile);
+                                MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String s) {
+                                        HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
+                                        if(headImageBean!=null&&headImageBean.getData()!=null){
+                                            picUrl = headImageBean.getData().getImgUrl();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError volleyError) {
+
+                                    }
+                                });
+                                MyApplication.getHttpQueues().add(request);
                             }
-                            finish();
-                        }else{
-                            ToastUtils.showToastShort("请填写需要发布的动态！");
-
+                            if(videoFile!=null){
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            HashMap<String,File> fileHashMap = new HashMap<String,File>();
+                                            fileHashMap.put("vedio",videoFile);
+                                            String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOADVEDIO,null,fileHashMap);
+                                            VideoBean videoBean = gson.fromJson(s, VideoBean.class);
+                                            if(videoBean!=null&&videoBean.getData()!=null){
+                                                vedioUrl = videoBean.getData().getImgUrl();
+                                                Message message = new Message();
+                                                message.what = 1;
+                                                handler.sendMessage(message);
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                            }
                         }
-
                     }
 
                     break;
