@@ -134,12 +134,10 @@ public class PublishActivity extends Activity {
                     }
                     if(bean.getVedioUrl()==null&&bean.getContent()==null){
                         ToastUtils.showToastShort("请填写需要发布的动态！");
-                        LogUtil.e("zzf",111111111+"");
                     }else{
                         try {
                             commitUrl(gson.toJson(bean));
                             finish();
-                            LogUtil.e("zzf",gson.toJson(bean));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
