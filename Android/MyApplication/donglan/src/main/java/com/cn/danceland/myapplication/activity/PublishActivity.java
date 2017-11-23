@@ -253,10 +253,7 @@ public class PublishActivity extends Activity {
                         }
                     }
 
-                    if(!"".equals(stringstatus)){
-                        publishBean.setContent(stringstatus);
-                        publishBean.setPublishPlace(location);
-                    }
+
 
 
                     if(arrayList!=null&&arrayList.size()>0){
@@ -303,6 +300,23 @@ public class PublishActivity extends Activity {
                             }
                             finish();
                         }
+                    }else{
+                        if(!"".equals(stringstatus)){
+                            publishBean.setContent(stringstatus);
+                            publishBean.setPublishPlace(location);
+                            String strBean = gson.toJson(publishBean);
+                            try {
+                                commitUrl(strBean);
+                                //LogUtil.e("zzf",strBean);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            finish();
+                        }else{
+                            ToastUtils.showToastShort("请填写需要发布的动态！");
+
+                        }
+
                     }
 
                     break;
