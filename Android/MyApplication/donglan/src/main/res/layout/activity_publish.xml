@@ -52,6 +52,13 @@
         android:layout_below="@+id/publish_status"
         android:background="#ffffff"
         >
+        <ImageView
+            android:id="@+id/videoimg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="15dp"
+            android:visibility="gone"
+            />
         <RelativeLayout
             android:id="@+id/publish_photo"
             android:layout_width="100dp"

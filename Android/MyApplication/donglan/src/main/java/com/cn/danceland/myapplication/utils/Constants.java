@@ -17,6 +17,7 @@ public class Constants {
     public static final String MODIFY_NAME = HOST + "user/modifyNickName";//修改昵称
     public static final String MODIFYY_IMAGE = HOST + "user/modifySelfAvatar";//修改头像
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
+    public static final String MODIFY_GENDER = HOST+"user/modifyGender";//修改性别
 
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
     public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注
@@ -33,6 +34,9 @@ public class Constants {
 
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
+    public static final String UPLOADVEDIO = HOST+"appDynMsg/uploadVedio";//上传视频
+
+    public static final String UPLOADTH = HOST + "appDynMsg/uploadThumbnail";//上传缩略图
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
 

@@ -166,6 +166,9 @@ public class MyProActivity extends Activity {
                     }else if(flag==1){
                         dismissWindow();
                         text_sex.setText("女");
+                        infoData.setGender("2");
+                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        commitSelf(Constants.MODIFY_GENDER,"gender","2");
                     }
                     break;
                 case R.id.photo_album:
@@ -175,6 +178,9 @@ public class MyProActivity extends Activity {
                     }else if(flag==1){
                         dismissWindow();
                         text_sex.setText("男");
+                        infoData.setGender("1");
+                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        commitSelf(Constants.MODIFY_GENDER,"gender","1");
                     }
                     break;
                 case R.id.photograph:
@@ -236,7 +242,7 @@ public class MyProActivity extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             nickName = ed.getText().toString();
                             text_name.setText(nickName);
-                            commitName();
+                            commitSelf(Constants.MODIFY_NAME,"nickName",nickName);
                             infoData.setNickName(nickName);
                             DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
                             //发送事件
@@ -254,10 +260,9 @@ public class MyProActivity extends Activity {
             normalDialog.show();
 
     }
+    public void commitSelf(String url, final String mapkey, final String mapvalue){
 
-    public void commitName(){
-
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT,Constants.MODIFY_NAME , new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT,url , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if(s.contains("true")){
@@ -275,7 +280,7 @@ public class MyProActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
-                map.put("nickName",nickName);
+                map.put(mapkey,mapvalue);
                 return map;
             }
 
@@ -290,46 +295,6 @@ public class MyProActivity extends Activity {
         queue.add(stringRequest);
     }
 
-    public void commitSelf(){
-
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT,Constants.MODIFYY_IMAGE , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                if(s.contains("true")){
-                    ToastUtils.showToastShort("修改成功！");
-                }else{
-                    ToastUtils.showToastShort("修改失败！");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("修改失败！请检查网络");
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("self_Avatar_path",selfAvatarPath);
-                return map;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-
-                return map;
-            }
-        };
-        queue.add(stringRequest);
-    }
-
-
-    public void commitSex(){
-
-
-    }
 
     public void showSex(){
         if(null != head_image_window && head_image_window.isShowing()){
@@ -415,7 +380,7 @@ public class MyProActivity extends Activity {
                         infoData.setSelfAvatarPath(selfAvatarPath);
                         //发送事件
                         EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
-                        commitSelf();
+                        commitSelf(Constants.MODIFYY_IMAGE,"self_Avatar_path",selfAvatarPath);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
                         //LogUtil.e("zzf",s);
                     }
@@ -502,4 +467,6 @@ public class MyProActivity extends Activity {
         intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, 222);
     }
+
+
 }

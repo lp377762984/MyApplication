@@ -9,11 +9,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--请求访问使用照相设备-->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <!--打电话-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!--读取手机通讯录-->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <!--音视频权限-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -66,7 +71,8 @@
         <activity android:name=".activity.SellCardConfirmActivity" />
         <activity android:name=".activity.FitnessManActivity" />
         <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.UserListActivity"/>
+        <activity android:name=".activity.RecordView" />
+ <activity android:name=".activity.UserListActivity"/>
     </application>
 
 

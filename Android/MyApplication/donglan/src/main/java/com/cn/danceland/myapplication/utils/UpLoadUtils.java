@@ -46,7 +46,7 @@ public class UpLoadUtils {
         conn.setRequestProperty("connection", "keep-alive");
         conn.setRequestProperty("Charsert", "UTF-8");
         conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
-
+        conn.setRequestProperty("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
 
         // 首先组拼文本类型的参数
         StringBuilder sb = new StringBuilder();

@@ -49,7 +49,7 @@ public class MultipartRequest extends Request<String>{
             }
             String str = new String(baos.toByteArray());
          //   Log.e("test", "bodyString is :" + str);
-          LogUtil.i("bodyString is :" + str);
+         // LogUtil.i("bodyString is :" + str);
         }
         return baos.toByteArray();
     }
