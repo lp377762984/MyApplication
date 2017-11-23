@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.adapter.MyListviewAdater;
+import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class DynIHomeActivity extends Activity {
     private PullToRefreshListView pullToRefresh;
     List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
-    MyListviewAdater myListviewAdater;
+    MyDynListviewAdater myDynListviewAdater;
     ProgressDialog dialog;
     private int mCurrentPage = 1;//当前请求页
     private String userId;

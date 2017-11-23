@@ -39,6 +39,9 @@ public class Data implements Serializable {
     private String adminMumberId; // 所属会籍
     private String remark; // 备注
     private boolean follower;
+    private int  followNumber;
+
+    private int  fansNum;
     private String token;
     private String verCode;
 
@@ -55,7 +58,21 @@ public class Data implements Serializable {
     public void setSelfUrl(String selfUrl) {
         this.selfUrl = selfUrl;
     }
+    public int getFollowNumber() {
+        return followNumber;
+    }
 
+    public void setFollowNumber(int followNumber) {
+        this.followNumber = followNumber;
+    }
+
+    public int getFansNum() {
+        return fansNum;
+    }
+
+    public void setFansNum(int fansNum) {
+        this.fansNum = fansNum;
+    }
     @Override
     public String toString() {
         return "Data{" +
@@ -84,6 +101,8 @@ public class Data implements Serializable {
                 ", adminMumberId='" + adminMumberId + '\'' +
                 ", remark='" + remark + '\'' +
                 ", follower=" + follower +
+                ", followNumber=" + followNumber +
+                ", fansNum=" + fansNum +
                 ", token='" + token + '\'' +
                 ", verCode='" + verCode + '\'' +
                 ", selfUrl='" + selfUrl + '\'' +

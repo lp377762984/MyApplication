@@ -17,8 +17,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
-import com.cn.danceland.myapplication.adapter.MyListviewAdater;
-import com.cn.danceland.myapplication.adapter.MyRecylerViewAdapter;
+import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
+import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestPushUserBean;
@@ -49,11 +49,11 @@ public class SelectionFragment extends BaseFragment {
     private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<>();
     private RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
     private List<Data> pushUserDatas = new ArrayList<>();
-    MyListviewAdater myListviewAdater;
+    MyDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
     int mCurrentPage = 1;//起始请求页
-    private MyRecylerViewAdapter mRecylerViewAdapter;
+    private DynHeadviewRecylerViewAdapter mRecylerViewAdapter;
     private View headView;
     private boolean isEnd = false;//是否没有数据了 默认值false
 
@@ -70,8 +70,8 @@ public class SelectionFragment extends BaseFragment {
         //    data = getData();
 
 
-        myListviewAdater = new MyListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
-        pullToRefresh.setAdapter(myListviewAdater);
+        myDynListviewAdater = new MyDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
         /// pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
@@ -88,7 +88,7 @@ public class SelectionFragment extends BaseFragment {
 
 
                 //   new FinishRefresh().execute();
-                //  myListviewAdater.notifyDataSetChanged();
+                //  myDynListviewAdater.notifyDataSetChanged();
 
                 new DownRefresh().execute();
 
@@ -149,8 +149,8 @@ public class SelectionFragment extends BaseFragment {
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
         //创建并设置Adapter
-        //   MyRecylerViewAdapter mAdapter = new MyRecylerViewAdapter(mActivity, new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
-        mRecylerViewAdapter = new MyRecylerViewAdapter(mActivity, pushUserDatas);
+        //   DynHeadviewRecylerViewAdapter mAdapter = new DynHeadviewRecylerViewAdapter(mActivity, new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
+        mRecylerViewAdapter = new DynHeadviewRecylerViewAdapter(mActivity, pushUserDatas);
         mRecyclerView.setAdapter(mRecylerViewAdapter);
         return headview;
     }
@@ -188,8 +188,8 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            myListviewAdater.notifyDataSetChanged();
-            pullToRefresh.onRefreshComplete();
+            myDynListviewAdater.notifyDataSetChanged();
+            // pullToRefresh.onRefreshComplete();
         }
     }
 
@@ -212,8 +212,12 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            myListviewAdater.notifyDataSetChanged();
-            pullToRefresh.onRefreshComplete();
+            myDynListviewAdater.notifyDataSetChanged();
+            if (isEnd) {//没数据了
+                pullToRefresh.onRefreshComplete();
+            }
+
+            // pullToRefresh.onRefreshComplete();
         }
     }
 
@@ -226,22 +230,8 @@ public class SelectionFragment extends BaseFragment {
         protected Void doInBackground(Void... params) {
             try {
 //                Thread.sleep(1000);
-//                List<PullBean> list = new ArrayList<PullBean>();
-//                for (int i = 0; i < 3; i++) {
-//                    PullBean bean = new PullBean();
-//                    bean.setTitle("派大星3333" + System.currentTimeMillis() + i);
-//                    bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
-//
-//                    list.add(bean);
-//                }
-                //   myListviewAdater.addFirstList((ArrayList<PullBean>) list);
 
-                //  findSelfDT();
-
-
-                // mCurrentPage=mCurrentPage+1;
-
-                dialog.dismiss();
+                //       dialog.dismiss();
 
             } catch (Exception e) {
             }
@@ -250,8 +240,8 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            myListviewAdater.notifyDataSetChanged();
-            pullToRefresh.onRefreshComplete();
+            myDynListviewAdater.notifyDataSetChanged();
+            // pullToRefresh.onRefreshComplete();
         }
     }
 
@@ -320,7 +310,7 @@ public class SelectionFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
-
+                pullToRefresh.onRefreshComplete();
                 Gson gson = new Gson();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
                 LogUtil.i(requsetDynInfoBean.toString());
@@ -328,8 +318,8 @@ public class SelectionFragment extends BaseFragment {
 
                     if (requsetDynInfoBean.getData().getItems() != null) {
                         data = requsetDynInfoBean.getData().getItems();
-                        myListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        myListviewAdater.notifyDataSetChanged();
+                        myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.notifyDataSetChanged();
                     }
 
                     mCurrentPage = 2;//下次从第二页请求
@@ -343,6 +333,7 @@ public class SelectionFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("查看网络连接");
                 dialog.dismiss();
+                pullToRefresh.onRefreshComplete();
             }
         }) {
             @Override
@@ -375,6 +366,8 @@ public class SelectionFragment extends BaseFragment {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                pullToRefresh.onRefreshComplete();
+
                 Gson gson = new Gson();
                 //  RequsetDynInfoBean requsetDynInfoBean=new RequsetDynInfoBean();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
@@ -385,9 +378,9 @@ public class SelectionFragment extends BaseFragment {
                     LogUtil.i(requsetDynInfoBean.getData().toString());
                     if (data.size() > 0) {
 
-                        myListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
                         LogUtil.i(data.toString());
-                        myListviewAdater.notifyDataSetChanged();
+                        myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
                         isEnd = true;
@@ -408,6 +401,7 @@ public class SelectionFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("查看网络连接");
+                pullToRefresh.onRefreshComplete();
             }
         }) {
             @Override

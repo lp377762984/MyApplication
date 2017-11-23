@@ -25,10 +25,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
 
@@ -49,13 +51,13 @@ import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
  */
 
 
-public class MyListviewAdater extends BaseAdapter {
+public class MyDynListviewAdater extends BaseAdapter {
     private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
     private LayoutInflater mInflater;
     private Context context;
     boolean isMe = false;
 
-    public MyListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
+    public MyDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
@@ -150,7 +152,7 @@ public class MyListviewAdater extends BaseAdapter {
         //设置评论数量
         viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
         //设置点赞数量
-        viewHolder.tv_zan_num.setText(data.get(position).getFollowerNumber() + "");
+        viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
             viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
@@ -163,14 +165,17 @@ public class MyListviewAdater extends BaseAdapter {
             public void onClick(View view) {
                 //点赞
 
-                if (data.get(position).isPraise()) {
-                    data.get(position).setPraise(false);
-                    int i = data.get(position).getFollowerNumber() - 1;
-                    data.get(position).setFollowerNumber(i);
-                } else {
-                    data.get(position).setPraise(true);
-                    int i = data.get(position).getFollowerNumber() + 1;
-                    data.get(position).setFollowerNumber(i);
+                if (data.get(position).isPraise()) {//已点赞
+
+                    int pos = position;
+                    addZan(data.get(position).getId(), false, pos);
+
+
+                } else {//未点赞
+                    int pos = position;
+                    addZan(data.get(position).getId(), true, pos);
+
+
                 }
 
                 notifyDataSetChanged();
@@ -184,12 +189,24 @@ public class MyListviewAdater extends BaseAdapter {
         } else {
             viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
         }
-            if (data.get(position).isFollower()){
-                viewHolder.tv_guanzhu.setText("已关注");
-            }else {
-                viewHolder.tv_guanzhu.setText("+关注");
-            }
 
+
+        if (data.get(position).isFollower()) {
+            viewHolder.tv_guanzhu.setText("已关注");
+        } else {
+            viewHolder.tv_guanzhu.setText("+关注");
+        }
+        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!data.get(position).isFollower()) {//未关注添加关注
+                    int pos = position;
+                    addGuanzhu(data.get(position).getAuthor(), true, pos);
+                }
+
+
+            }
+        });
 
 
         //  LogUtil.i(data.get(position).getNickName());
@@ -224,8 +241,23 @@ public class MyListviewAdater extends BaseAdapter {
                 context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
             }
         });
-        if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+
+        if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
+            viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+
+            viewHolder.jzVideoPlayer.setUp(
+                    data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    "");
+            Glide.with(convertView.getContext())
+                    .load(data.get(position).getVedioImg())
+                    .into(viewHolder.jzVideoPlayer.thumbImageView);
+            viewHolder.jzVideoPlayer.positionInList = position;
+        } else {
             viewHolder.jzVideoPlayer.setVisibility(View.GONE);
+        }
+
+        if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+
             viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
             /**
@@ -257,15 +289,6 @@ public class MyListviewAdater extends BaseAdapter {
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
-            viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
-
-            viewHolder.jzVideoPlayer.setUp(
-                    "http://jzvd.nathen.cn/c6e3dc12a1154626b3476d9bf3bd7266/6b56c5f0dc31428083757a45764763b0-5287d2089db37e62345123a1be272f8b.mp4", JZVideoPlayer.SCREEN_WINDOW_LIST,
-                    "");
-            Glide.with(convertView.getContext())
-                    .load("http://jzvd-pic.nathen.cn/jzvd-pic/bd7ffc84-8407-4037-a078-7d922ce0fb0f.jpg")
-                    .into(viewHolder.jzVideoPlayer.thumbImageView);
-            viewHolder.jzVideoPlayer.positionInList = position;
 
 
         }
@@ -297,7 +320,7 @@ public class MyListviewAdater extends BaseAdapter {
      * @param isPraise
      * @param isPraise
      */
-    private void addZan(final String id, final String msgId, final boolean isPraise) {
+    private void addZan(final String msgId, final boolean isPraise, final int pos) {
 
 
         StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
@@ -307,7 +330,29 @@ public class MyListviewAdater extends BaseAdapter {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
 
+                if (requestInfoBean.getSuccess()) {
+
+                    if (data.get(pos).isPraise()) {//如果已点赞
+                        data.get(pos).setPraise(false);
+                        int i = data.get(pos).getPriaseNumber() - 1;
+                        data.get(pos).setPriaseNumber(i);
+                        ToastUtils.showToastShort("取消点赞成功");
+                    } else {
+                        data.get(pos).setPraise(true);
+                        int i = data.get(pos).getPriaseNumber() + 1;
+                        data.get(pos).setPriaseNumber(i);
+                        ToastUtils.showToastShort("点赞成功");
+                    }
+
+
+                    notifyDataSetChanged();
+
+                } else {
+                    ToastUtils.showToastShort("点赞失败");
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -323,7 +368,7 @@ public class MyListviewAdater extends BaseAdapter {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("msgId", msgId);
-                map.put("id", id);
+                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
                 map.put("isPraise", String.valueOf(isPraise));
                 return map;
             }
@@ -334,7 +379,7 @@ public class MyListviewAdater extends BaseAdapter {
 
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
                 // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                //       LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
                 return map;
             }
         };
@@ -355,8 +400,7 @@ public class MyListviewAdater extends BaseAdapter {
      * @param id
      * @param b
      */
-    private void addGuanzhu(final String id, final boolean b) {
-
+    private void addGuanzhu(final String id, final boolean b, final int pos) {
 
         StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
 
@@ -365,14 +409,22 @@ public class MyListviewAdater extends BaseAdapter {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
-
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    data.get(pos).setFollower(true);
+                    notifyDataSetChanged();
+                    ToastUtils.showToastShort("关注成功");
+                } else {
+                    ToastUtils.showToastShort("关注失败");
+                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-
+                ToastUtils.showToastShort("请查看网络连接");
             }
 
         }

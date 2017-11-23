@@ -81,7 +81,7 @@ public class RequsetDynInfoBean {
 
         public class Items {
 
-            private int id;
+            private String id;
             private String title;
             private String content;
             private int privacyType;
@@ -104,6 +104,25 @@ public class RequsetDynInfoBean {
             private int followerNumber;
             private boolean follower;
             private boolean praise;
+
+            private String vedioImg;
+            private String vedioUrl;
+
+            public String getVedioImg() {
+                return vedioImg;
+            }
+
+            public void setVedioImg(String vedioImg) {
+                this.vedioImg = vedioImg;
+            }
+
+            public String getVedioUrl() {
+                return vedioUrl;
+            }
+
+            public void setVedioUrl(String vedioUrl) {
+                this.vedioUrl = vedioUrl;
+            }
 
             public boolean isEnabled() {
                 return enabled;
@@ -128,7 +147,7 @@ public class RequsetDynInfoBean {
             @Override
             public String toString() {
                 return "Items{" +
-                        "id=" + id +
+                        "id='" + id + '\'' +
                         ", title='" + title + '\'' +
                         ", content='" + content + '\'' +
                         ", privacyType=" + privacyType +
@@ -151,17 +170,17 @@ public class RequsetDynInfoBean {
                         ", followerNumber=" + followerNumber +
                         ", follower=" + follower +
                         ", praise=" + praise +
+                        ", vedioImg='" + vedioImg + '\'' +
+                        ", vedioUrl='" + vedioUrl + '\'' +
                         '}';
             }
 
 
-
-
-            public void setId(int id) {
+            public void setId(String id) {
                 this.id = id;
             }
 
-            public int getId() {
+            public String getId() {
                 return id;
             }
 
