@@ -125,13 +125,13 @@ public class PublishActivity extends Activity {
                     PublishBean bean = new PublishBean();
                     if(!"".equals(stringstatus)){
                         bean.setContent(stringstatus);
-                        bean.setPublishPlace(location);
                     }
                     if(picUrl!=null&&vedioUrl!=null){
                         bean.setVedioUrl(vedioUrl);
                         bean.setVedioImg(picUrl);
                         bean.setMsgType(1);
                     }
+                    bean.setPublishPlace(location);
                     if(bean.getVedioUrl()==null&&bean.getContent()==null){
                         ToastUtils.showToastShort("请填写需要发布的动态！");
                     }else{
