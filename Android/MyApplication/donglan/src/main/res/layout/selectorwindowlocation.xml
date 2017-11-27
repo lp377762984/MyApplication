@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#ffffff"
     android:layout_height="200dp">
 
 
@@ -9,10 +8,11 @@
         android:id="@+id/tv_nick_name"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:background="@drawable/bg_white"
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/cancel_action"
+            android:id="@+id/lo_cancel_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -42,7 +42,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="150dp"
         android:orientation="horizontal"
         >
         <ListView
