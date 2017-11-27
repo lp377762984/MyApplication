@@ -420,7 +420,7 @@ public class MyProActivity extends Activity {
         final int j = x;
         mPopWindow.setContentView(contentView);
         //显示PopupWindow
-        //View rootview = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.activity_register_info, null);
+        View rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         String[] str  = new String[71];
         Integer[] str1 = new Integer[165];
         final ArrayList<String> arHeight = new ArrayList<String>();
@@ -448,7 +448,8 @@ public class MyProActivity extends Activity {
         arrayAdapter = new MyAdapter(arHeight,this);
         list_height.setAdapter(arrayAdapter);
 
-        mPopWindow.showAsDropDown(identity,0,40);
+        //mPopWindow.showAsDropDown(identity,0,40);
+        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
         mPopWindow.setAnimationStyle(R.style.selectorMenuAnim);
 
         list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
