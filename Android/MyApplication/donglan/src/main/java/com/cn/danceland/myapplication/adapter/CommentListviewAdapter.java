@@ -18,7 +18,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -26,6 +25,8 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.others.IntEvent;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,12 +107,12 @@ public class CommentListviewAdapter extends BaseAdapter {
 
 
         if (!TextUtils.isEmpty(data.get(position).getReplyUser())) {
-         //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
-
-            viewHolder.tv_content.setText(getClickableSpan(data.get(position).getReplyNickName(), data.get(position).getContent()));
+            //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
+            int pos = position;
+            viewHolder.tv_content.setText(getClickableSpan(data.get(position).getReplyNickName(), data.get(position).getContent(), pos));
             viewHolder.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
         } else {
-         //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
+            //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
             viewHolder.tv_content.setText(data.get(position).getContent());
         }
 
@@ -133,8 +134,15 @@ public class CommentListviewAdapter extends BaseAdapter {
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos=position;
-                showListDialog(pos);
+                int pos = position;
+                if (TextUtils.equals(data.get(position).getReplyUserId(), SPUtils.getString(Constants.MY_USERID, null))) {
+                    //如果动态评论是自己发布的
+                    showListDialog_self(pos);
+                } else {
+                    showListDialog(pos);
+                }
+
+
             }
         });
 
@@ -162,7 +170,7 @@ public class CommentListviewAdapter extends BaseAdapter {
                     case 0:
 
 
-                        EventBus.getDefault().post(new IntEvent(pos,8001));
+                        EventBus.getDefault().post(new IntEvent(pos, 8001));
                         break;
                     case 1:
 
@@ -183,27 +191,53 @@ public class CommentListviewAdapter extends BaseAdapter {
         listDialog.show();
     }
 
+    private void showListDialog_self(final int pos) {
+        final String[] items = {"复制内容"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-    private SpannableString getClickableSpan(String userNickName, String content) {
+                switch (which) {
+                    case 0:
+
+                        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 将文本内容放到系统剪贴板里。
+                        cm.setText(data.get(pos).getContent());
+                        ToastUtils.showToastShort("复制成功");
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+
+    private SpannableString getClickableSpan(String userNickName, String content, final int pos) {
         View.OnClickListener l = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Click Success",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Click Success",
+//                        Toast.LENGTH_SHORT).show();
+
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(pos).getReplyUser()));
             }
         };
         StringBuffer sb = new StringBuffer();
-        String s1 = new String("回复 ");
+        String s1 = new String("回复");
         String s2 = new String(userNickName);
         String s3 = new String(":" + content);
         sb.append(s1 + s2 + s3);
         SpannableString spanableInfo = new SpannableString(sb);
         int start = s1.length();
         int end = s2.length() + start;
-//        SpannableString spanableInfo = new SpannableString(
-//                "This is a test, Click Me,家居阿斯加德静安寺绝对路径");
-//        int start = 16;
-//        int end = spanableInfo.length();
+
         spanableInfo.setSpan(new Clickable(l), start, end,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanableInfo;
