@@ -20,6 +20,7 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,6 +153,7 @@ public class PublishActivity extends Activity {
                     }
                     if(arrImgUrl!=null&&arrImgUrl.size()>0){
                         bean.setImgList(arrImgUrl);
+                        bean.setMsgType(0);
                     }
                     bean.setPublishPlace(location);
                     if(bean.getContent()==null && bean.getImgList()==null){
@@ -246,7 +248,9 @@ public class PublishActivity extends Activity {
                                 @Override
                                 public void run() {
                                     try {
+                                        LogUtil.e("zzf",arrayFileMap.toString());
                                         String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
+                                        LogUtil.e("zzf",s);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
@@ -421,6 +425,11 @@ public class PublishActivity extends Activity {
     public File saveBitmapFile(Bitmap bitmap) {
         File file=new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/"+System.currentTimeMillis()+".png");//将要保存图片的路径
+        File dir = new File(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
