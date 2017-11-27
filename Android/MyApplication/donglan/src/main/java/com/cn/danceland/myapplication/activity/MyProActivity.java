@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,8 +18,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,9 +40,12 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
+import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
@@ -51,7 +58,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,8 +72,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProActivity extends Activity {
     CircleImageView circleImageView;
-    TextView text_name,text_sex,photograph,photo_album,cancel,cancel1,male,female;
-    RelativeLayout  headimage,name,sex;
+    MyAdapter arrayAdapter;
+
     PopupWindow head_image_window;
     View headView,rootview,sexView;
     ImageView back;
@@ -76,11 +86,27 @@ public class MyProActivity extends Activity {
     public static String SAVED_IMAGE_DIR_PATH =
             Environment.getExternalStorageDirectory().getPath()
                     + "/donglan/camera/";// 拍照路径
-    String cameraPath,gemder,nickName,selfAvatarPath;
+    String cameraPath,gemder,nickName,selfAvatarPath,strHeight,strWeight;
     Data infoData;
     Gson gson;
     RequestQueue queue;
     File cutfile;
+    RelativeLayout  headimage,name,sex,height,weight,rl_zone,rl_phone,identity;
+    TextView text_name,text_sex,photograph,photo_album,cancel,cancel1,male,female,tv_height
+            ,tv_weight,tv_zone,tv_phone,tv_identity,selecttitle,over,cancel_action,lo_cancel_action,over_action;
+    View contentView;
+    PopupWindow mPopWindow;
+    ListView list_height;
+    View locationView;
+    PopupWindow locationWindow;
+    LocationAdapter proAdapter, cityAdapter;
+    int x = 999;
+    ArrayList<String> proList,cityList1;
+    ListView list_province, list_city;
+    DBData dbData;
+    String zoneCode,mZoneCode;
+    List<Donglan> zoneArr,cityList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,10 +117,17 @@ public class MyProActivity extends Activity {
     }
 
     public void initHost(){
+        dbData = new DBData();
         gson = new Gson();
         resolver = getContentResolver();
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         queue = Volley.newRequestQueue(MyProActivity.this);
+        zoneCode = infoData.getZoneCode();
+        zoneArr = new ArrayList<Donglan>();
+        if(zoneCode!=null&&!"".equals(zoneCode)){
+            zoneArr = dbData.queryCityValue(zoneCode);
+        }
+        initLocationData();
     }
 
     public void initView(){
@@ -108,6 +141,25 @@ public class MyProActivity extends Activity {
         name = findViewById(R.id.name);
         sex = findViewById(R.id.sex);
         back = findViewById(R.id.back);
+        height = findViewById(R.id.height);
+        weight = findViewById(R.id.weight);
+        rl_zone = findViewById(R.id.rl_zone);
+        rl_phone = findViewById(R.id.rl_phone);
+        identity = findViewById(R.id.identity);
+        tv_height = findViewById(R.id.tv_height);
+        tv_weight = findViewById(R.id.tv_weight);
+        tv_zone = findViewById(R.id.tv_zone);
+        tv_phone = findViewById(R.id.tv_phone);
+        tv_identity = findViewById(R.id.tv_identity);
+
+        if(infoData.getHeight()!=null){
+            tv_height.setText(infoData.getHeight()+" cm");
+        }
+        if(infoData.getWeight()!=null){
+            tv_weight.setText(infoData.getWeight()+" kg");
+        }
+
+
         if("1".equals(infoData.getGender())){
             text_sex.setText("男");
         }else {
@@ -121,6 +173,27 @@ public class MyProActivity extends Activity {
         photo_album = headView.findViewById(R.id.photo_album);
         cancel = headView.findViewById(R.id.cancel);
 
+        contentView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowsingle,null);
+        mPopWindow = new PopupWindow(contentView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        list_height = contentView.findViewById(R.id.list_height);
+        selecttitle = contentView.findViewById(R.id.selecttitle);
+        over = contentView.findViewById(R.id.over);
+        cancel_action = contentView.findViewById(R.id.cancel_action);
+
+        locationView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowlocation, null);
+        locationWindow = new PopupWindow(locationView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        locationWindow.setOutsideTouchable(true);
+        locationWindow.setBackgroundDrawable(new BitmapDrawable());
+        lo_cancel_action = locationView.findViewById(R.id.cancel_action);
+        over_action = locationView.findViewById(R.id.over_action);
+        list_province = locationView.findViewById(R.id.list_province);
+        list_city = locationView.findViewById(R.id.list_city);
+        if(zoneArr.size()>0){
+            tv_zone.setText(zoneArr.get(0).getProvince()+" "+zoneArr.get(0).getCity());
+            zoneArr.clear();
+        }
     }
 
     public void setClick(){
@@ -131,10 +204,21 @@ public class MyProActivity extends Activity {
         photo_album.setOnClickListener(onClickListener);
         photograph.setOnClickListener(onClickListener);
         back.setOnClickListener(onClickListener);
+        height.setOnClickListener(onClickListener);
+        weight.setOnClickListener(onClickListener);
+        over.setOnClickListener(onClickListener);
+        cancel_action.setOnClickListener(onClickListener);
+        rl_zone.setOnClickListener(onClickListener);
     }
     public void dismissWindow(){
         if(null != head_image_window && head_image_window.isShowing()){
             head_image_window.dismiss();
+        }
+        if(null != mPopWindow && mPopWindow.isShowing()){
+            mPopWindow.dismiss();
+        }
+        if (null != locationWindow && locationWindow.isShowing()) {
+            locationWindow.dismiss();
         }
     }
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -148,18 +232,43 @@ public class MyProActivity extends Activity {
                     showEditImage();
                     showPop();
                 }
-                break;
+                    break;
+                case R.id.height:
+                    //修改身高
+                    x = 0;
+                    showSelectorWindow(x);
+                    selecttitle.setText("选择身高");
+                    break;
+                case R.id.weight:
+                    x = 1;
+                    showSelectorWindow(x);
+                    selecttitle.setText("选择体重");
+                    break;
+                case R.id.over:
+                    if(x==0){
+                        infoData.setHeight(strHeight);
+                        commitSelf(Constants.MODIFY_HEIGHT,"height",strHeight);
+                    }else if(x==1){
+                        infoData.setWeight(strWeight);
+                        commitSelf(Constants.MODIFY_WEIGHT,"weight",strWeight);
+                    }
+                    DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                    dismissWindow();
+                    break;
+                case R.id.cancel_action:
+                    dismissWindow();
+                    break;
                 case R.id.name:{
                     showName();
                 }
-                break;
+                    break;
                 case R.id.sex:{
                     flag = 1;
                     dismissWindow();
                     showSex();
                     showPop();
                 }
-                break;
+                    break;
                 case R.id.cancel:
                     if(flag==0){
                         dismissWindow();
@@ -197,12 +306,199 @@ public class MyProActivity extends Activity {
                     setResult(99,intent);
                     finish();
                     break;
+                case R.id.over_action:
+                    infoData.setZoneCode(mZoneCode);
+                    DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                    commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode);
+                    dismissWindow();
+                    break;
+                case R.id.rl_zone:
+                    showLocation();
+                    break;
             }
         }
     };
 
 
+    public void showLocation() {
 
+        locationWindow.setContentView(locationView);
+        proAdapter = new LocationAdapter(proList, this);
+        list_province.setAdapter(proAdapter);
+
+        list_province.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pro = proList.get(position);
+                tv_zone.setText(pro);
+                List<Donglan> queryPro = dbData.queryPro(pro);
+
+                cityList1 = new ArrayList<String>();
+                for(int i=0;i<queryPro.size();i++){
+                    cityList1.add(queryPro.get(i).getCity());
+                }
+                //ArrayList<String> cityList = proCityMap.get(pro);
+                if(cityList1!=null&&cityList1.size()>0){
+                    cityAdapter = new LocationAdapter(cityList1, MyProActivity.this);
+                    list_city.setAdapter(cityAdapter);
+                }
+            }
+        });
+        list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String city = cityList1.get(position);
+                mZoneCode = dbData.queryCity(city).get(0).getCityValue();
+                tv_zone.setText(tv_zone.getText().toString().split(" ")[0]+" "+city);
+            }
+        });
+
+
+        locationWindow.showAsDropDown(identity, 0, 40);
+        //locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
+
+    }
+
+    public void initLocationData(){
+        cityList = dbData.getCityList();
+        //省份列表
+        proList = new ArrayList<String>();
+        if(cityList!=null&&cityList.size()>0){
+            for(int i=0;i<cityList.size();i++){
+                //城市名字为key，城市代码为value
+                String prokey = cityList.get(i).getProvince();
+                proList.add(prokey);
+                for(int m=0;m<proList.size()-1;m++){
+                    if(proList.get(m).equals(proList.get(m+1))){
+                        proList.remove(m);
+                        m--;
+                    }
+                }
+
+            }
+        }
+
+    }
+    public class LocationAdapter extends BaseAdapter {
+
+        ArrayList<String> arrayList;
+        LayoutInflater inflater = null;
+
+        public LocationAdapter(ArrayList<String> list, Context context) {
+            arrayList = list;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return arrayList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            TextView item_text = null;
+            if (view == null) {
+                view = inflater.inflate(R.layout.selector_item, null);
+            }
+            item_text = view.findViewById(R.id.item_text);
+            item_text.setText(arrayList.get(i));
+            return view;
+        }
+    }
+
+    public void showSelectorWindow(int x){
+        final int j = x;
+        mPopWindow.setContentView(contentView);
+        //显示PopupWindow
+        //View rootview = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.activity_register_info, null);
+        String[] str  = new String[71];
+        Integer[] str1 = new Integer[165];
+        final ArrayList<String> arHeight = new ArrayList<String>();
+        int n;
+        if(j==0){
+            for(int i = 0;i<71;i++){
+                n = 150+i;
+                str[i] = n+"";
+            }
+            Arrays.sort(str);
+            for(int z = 0;z<str.length;z++){
+                arHeight.add(str[z]);
+            }
+        }else {
+            for(int y=0;y<165;y++){
+                n = 35+y;
+                str1[y] = n;
+            }
+            Arrays.sort(str1);
+            for(int z = 0;z<str1.length;z++){
+                arHeight.add(str1[z]+"");
+            }
+        }
+
+        arrayAdapter = new MyAdapter(arHeight,this);
+        list_height.setAdapter(arrayAdapter);
+
+        mPopWindow.showAsDropDown(identity,0,40);
+        mPopWindow.setAnimationStyle(R.style.selectorMenuAnim);
+
+        list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(j==0){
+                    tv_height.setText(arHeight.get(i)+" cm");
+                    strHeight = arHeight.get(i)+"";
+                }else{
+                    tv_weight.setText(arHeight.get(i)+" kg");
+                    strWeight = arHeight.get(i)+"";
+                }
+            }
+        });
+
+    }
+    public class MyAdapter extends BaseAdapter {
+
+        ArrayList<String> arrayList;
+        LayoutInflater inflater = null;
+        public MyAdapter(ArrayList<String> list, Context context){
+            arrayList = list;
+            inflater = LayoutInflater.from(context);
+        }
+        @Override
+        public int getCount() {
+            return arrayList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            TextView item_text = null;
+            if(view==null){
+                view  = inflater.inflate(R.layout.selector_item,null);
+            }
+            item_text = view.findViewById(R.id.item_text);
+            item_text.setText(arrayList.get(i));
+            return view;
+        }
+    }
 
     public void showPop(){
         head_image_window = new PopupWindow(headView,
