@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Auto-generated: 2017-11-14 13:33:29
  * <p>
- * 动态请求bean
+ * 动态列表请求bean
  */
 public class RequsetDynInfoBean {
 

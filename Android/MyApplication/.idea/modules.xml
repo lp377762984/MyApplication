@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DroppyDropdownLibrary/DroppyDropdownLibrary.iml" filepath="$PROJECT_DIR$/DroppyDropdownLibrary/DroppyDropdownLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EmojiconLibrary/EmojiconLibrary.iml" filepath="$PROJECT_DIR$/EmojiconLibrary/EmojiconLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/PictureViewerLibrary/PictureViewerLibrary.iml" filepath="$PROJECT_DIR$/PictureViewerLibrary/PictureViewerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" filepath="$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" />

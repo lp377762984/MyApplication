@@ -1,0 +1,1061 @@
+package com.cn.danceland.myapplication.activity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.SuperKotlin.pictureviewer.ImagePagerActivity;
+import com.SuperKotlin.pictureviewer.PictureConfig;
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.MyApplication;
+import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
+import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
+import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
+import com.cn.danceland.myapplication.bean.RequstOneDynInfoBean;
+import com.cn.danceland.myapplication.others.IntEvent;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
+import com.cn.danceland.myapplication.utils.KeyBoardUtils;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.NoScrollGridView;
+import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerStandard;
+import io.github.rockerhieu.emojicon.EmojiconEditText;
+import io.github.rockerhieu.emojicon.EmojiconGridFragment;
+import io.github.rockerhieu.emojicon.EmojiconsFragment;
+import io.github.rockerhieu.emojicon.emoji.Emojicon;
+
+import static com.SuperKotlin.pictureviewer.PictureConfig.position;
+
+/**
+ * Created by shy on 2017/11/17 17:32
+ * Email:644563767@qq.com
+ */
+
+
+public class DynHomeActivity extends FragmentActivity implements View.OnClickListener, EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+    private PullToRefreshListView pullToRefresh;
+    private List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
+    private RequstCommentInfoBean commentInfoBean;
+    private RequstOneDynInfoBean.Data oneDynInfo;
+    private CommentListviewAdapter myAdater;
+    private ProgressDialog dialog;
+    private int mCurrentPage = 1;//当前请求页
+    private String msgId;
+    private String userId;
+    private List<RequsetUserListBean.Data.Items> zanUserList = new ArrayList<RequsetUserListBean.Data.Items>();
+
+    private DynZanHeadviewRecylerViewAdapter mRecylerViewAdapter;
+    private TextView tv_zan_num;
+    private ImageView iv_zan;
+    private EmojiconEditText et_comment;
+    private TextView tv_send;
+    private ImageView iv_emoji;
+    private FrameLayout fl_emojicons;
+    private TextView tv_nick_name;
+    private TextView tv_time;
+    private TextView tv_guanzhu;
+    private TextView tv_location;
+    private LinearLayout ll_location;
+    private TextView tv_content;
+    private ImageView iv_avatar;
+    private NoScrollGridView gridView;
+    private JZVideoPlayerStandard jzVideoPlayer;
+    private RecyclerView mRecyclerView;
+    private boolean init;
+    private int replypos = -1;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dyn_home);
+        //注册event事件
+        EventBus.getDefault().register(this);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+        findCommentList(msgId, mCurrentPage);
+        findOneDyn(msgId, userId);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(IntEvent event) {
+        if (8001 == event.getEventCode()) {
+            replypos = event.getMsg();
+            LogUtil.i("收到消息" + replypos + data.get(replypos).getNickName());
+            et_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
+            LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
+
+        }
+
+
+    }
+
+
+    private void initView() {
+
+        msgId = getIntent().getStringExtra("msgId");
+        userId = getIntent().getStringExtra("userId");
+
+
+        tv_zan_num = findViewById(R.id.tv_zan_num);
+        iv_zan = findViewById(R.id.iv_zan);
+        et_comment = findViewById(R.id.et_comment);
+
+//        et_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    init = true;
+//                }
+//            }
+//        });
+//
+//        LinearLayout linearLayout = findViewById(R.id.ll_comment);
+//
+//        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            public void onGlobalLayout() {
+//                if (init) {
+//                    if (isKeyboardShown(et_comment.getRootView())) {
+//                        // Do something when keyboard is shown
+//                        ToastUtils.showToastShort("弹出");
+//                        if (fl_emojicons.getVisibility()==View.VISIBLE){
+//                            fl_emojicons.setVisibility(View.GONE);
+//                        }
+//
+//                    } else {
+//
+//                        // Do something when keyboard is hidden
+//                       ToastUtils.showToastShort("收齐");
+//                    }
+//                }
+//            }
+//        });
+
+
+        iv_emoji = findViewById(R.id.iv_emoji);
+        iv_emoji.setOnClickListener(this);
+        setEmojiconFragment(false);
+
+        fl_emojicons = findViewById(R.id.emojicons);
+
+        tv_send = findViewById(R.id.tv_send);
+        tv_send.setOnClickListener(this);
+
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("正在加载……");
+
+
+        myAdater = new CommentListviewAdapter(data, this);
+
+        pullToRefresh.setAdapter(myAdater);
+
+
+        //设置下拉刷新模式both是支持下拉和上拉
+        pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+
+        initPull2Refesh();
+
+
+        pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                //    new FinishRefresh().execute();
+                if (!isEnd) {
+                    findCommentList(msgId, mCurrentPage);
+                } else {
+                    pullToRefresh.onRefreshComplete();
+                }
+
+
+            }
+        });
+        pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+
+    }
+
+    private boolean isKeyboardShown(View rootView) {
+        final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
+
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        int heightDiff = rootView.getBottom() - r.bottom;
+
+        return heightDiff > DensityUtils.dp2px(this, SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_send:
+                LogUtil.i(et_comment.getText().toString());
+                if (!TextUtils.isEmpty(et_comment.getText().toString())) {
+                    if (replypos < 0) {
+                        sendCommentReply(msgId, et_comment.getText().toString());
+                    } else {
+                        sendCommentReply(msgId, et_comment.getText().toString(), data.get(replypos).getId(), data.get(replypos).getReplyUserId());
+                    }
+                } else {
+                    ToastUtils.showToastShort("请输入");
+                }
+
+
+                break;
+
+            case R.id.iv_emoji:
+
+                if (fl_emojicons.getVisibility() == View.GONE) {
+                    fl_emojicons.setVisibility(View.VISIBLE);
+                    KeyBoardUtils.closeKeybord(et_comment, this);
+                } else {
+                    fl_emojicons.setVisibility(View.GONE);
+                    //  KeyBoardUtils.openKeybord(et_comment, this);
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    //表情点击回调
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(et_comment, emojicon);
+    }
+
+    //删除表情点击回调
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(et_comment);
+    }
+
+    //EmojiconsFragment表情显示的fragment
+    private void setEmojiconFragment(boolean useSystemDefault) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
+                .commit();
+    }
+
+    private RequstOneDynInfoBean.Data info;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            super.handleMessage(msg);
+            switch (msg.what) {      //判断标志位
+                case 1:
+                    //加入头布局
+                    info = new RequstOneDynInfoBean().getData();
+                    info = (RequstOneDynInfoBean.Data) msg.obj;
+
+                    initHeadviewData((RequstOneDynInfoBean.Data) msg.obj);
+
+                    findZanUserList_5(((RequstOneDynInfoBean.Data) msg.obj).getId(), 1);
+                    if (info.getPriaseNumber() >= 0) {
+                        tv_zan_num.setText(info.getPriaseNumber() + "");
+                    }
+                    if (info.getPraise()) {//如果点赞
+                        iv_zan.setImageResource(R.drawable.img_xin1);
+                    } else {
+                        iv_zan.setImageResource(R.drawable.img_xin);
+                    }
+
+                    iv_zan.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (info.getPraise()) {//如果点赞
+                                addZan(info.getId(), false);
+                            } else {//未点赞
+                                addZan(info.getId(), true);
+                            }
+                        }
+                    });
+
+
+                    break;
+                case 2:
+//                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
+//                    dialog.dismiss();
+//
+//                    if (isdyn) {//跳转到动态的那行
+//
+//                        pullToRefresh.getRefreshableView().setSelection(2);
+//                        // pullToRefresh.getRefreshableView().smoothScrollToPosition(2);
+//                    }
+
+
+                    break;
+            }
+
+        }
+    };
+
+
+    private void initPull2Refesh() {
+        // 设置下拉刷新文本
+        ILoadingLayout startLabels = pullToRefresh
+                .getLoadingLayoutProxy(true, false);
+        startLabels.setPullLabel("下拉刷新...");// 刚下拉时，显示的提示
+        startLabels.setRefreshingLabel("正在加载...");// 刷新时
+        startLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+        // 设置上拉刷新文本
+        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel("上拉加载...");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("正在加载...");// 刷新时
+        endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+
+
+    }
+
+    private boolean isEnd = false;
+
+    private void initHeadviewData(final RequstOneDynInfoBean.Data oneDynInfo) {
+        if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
+            tv_guanzhu.setVisibility(View.INVISIBLE);
+        } else {
+            tv_guanzhu.setVisibility(View.VISIBLE);
+            tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ToastUtils.showToastShort("点击了关注");
+                    LogUtil.i(oneDynInfo.getAuthor());
+                    if (!oneDynInfo.isFollower()) {//如果未关注，加关注
+
+                        addGuanzhu(oneDynInfo.getAuthor(), true);
+                    }
+                }
+            });
+        }
+
+
+        if (oneDynInfo.isFollower()) {
+            tv_guanzhu.setText("已关注");
+            tv_guanzhu.setTextColor(Color.GRAY);
+        } else {
+            tv_guanzhu.setText("+关注");
+        }
+
+
+        //  LogUtil.i(data.get(position).getNickName());
+        if (!TextUtils.isEmpty(oneDynInfo.getNickName())) {
+            tv_nick_name.setText(oneDynInfo.getNickName());
+        }
+
+
+        tv_time.setText(oneDynInfo.getPublishTime());
+        if (TextUtils.isEmpty(oneDynInfo.getContent())) {
+            tv_content.setVisibility(View.GONE);
+        } else {//内容不为空赋值
+            tv_content.setText(oneDynInfo.getContent());
+            tv_content.setVisibility(View.VISIBLE);
+        }
+        if (TextUtils.isEmpty(oneDynInfo.getPublishPlace())) {
+            ll_location.setVisibility(View.GONE);
+        } else {//地点不为空赋值
+            ll_location.setVisibility(View.VISIBLE);
+            tv_location.setText(oneDynInfo.getPublishPlace());
+        }
+
+
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        Glide.with(this)
+                .load(oneDynInfo.getSelfUrl())
+                .apply(options)
+                .into(iv_avatar);
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DynHomeActivity.this, UserHomeActivity.class).putExtra("id", oneDynInfo.getAuthor()));
+            }
+        });
+
+        if (oneDynInfo.getVedioUrl() != null && oneDynInfo.getMsgType() == 1) {//如果是视频消息
+            jzVideoPlayer.setVisibility(View.VISIBLE);
+
+            jzVideoPlayer.setUp(
+                    oneDynInfo.getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    "");
+            Glide.with(this)
+                    .load(oneDynInfo.getVedioImg())
+                    .into(jzVideoPlayer.thumbImageView);
+            jzVideoPlayer.positionInList = position;
+        } else {
+            jzVideoPlayer.setVisibility(View.GONE);
+        }
+
+        if (oneDynInfo.getImgList() != null && oneDynInfo.getImgList().size() > 0) {
+
+            gridView.setVisibility(View.VISIBLE);
+            gridView.setAdapter(new ImageGridAdapter(DynHomeActivity.this, oneDynInfo.getImgList()));
+            /**
+             * 图片列表点击事件
+             */
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                    PictureConfig config = new PictureConfig.Builder()
+                            .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
+                            .setPosition(i)//图片下标（从第position张图片开始浏览）
+                            .setDownloadPath("donglan")//图片下载文件夹地址
+                            .setIsShowNumber(true)//是否显示数字下标
+                            .needDownload(true)//是否支持图片下载
+                            .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                            .build();
+                    ImagePagerActivity.startActivity(DynHomeActivity.this, config);
+
+
+                }
+            });
+        } else {
+            gridView.setVisibility(View.GONE);
+
+
+        }
+
+    }
+
+    private View initHeadview() {
+
+        View headview = View.inflate(this, R.layout.headview_dyn_home, null);
+
+        tv_nick_name = headview.findViewById(R.id.tv_nick_name);
+        tv_time =
+                headview.findViewById(R.id.tv_time);
+        tv_guanzhu = headview.findViewById(R.id.tv_guanzhu);
+        tv_location = headview.findViewById(R.id.tv_location);
+        ll_location = headview.findViewById(R.id.ll_location);
+        tv_content = headview.findViewById(R.id.tv_content);
+        iv_avatar = headview.findViewById(R.id.iv_avatar);
+        gridView = headview.findViewById(R.id.gridview);
+        jzVideoPlayer = headview.findViewById(R.id.videoplayer);
+
+        //创建默认的线性LayoutManager
+        mRecyclerView = headview.findViewById(R.id.my_recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        mRecyclerView.setHasFixedSize(true);
+        //创建并设置Adapter
+        mRecylerViewAdapter = new DynZanHeadviewRecylerViewAdapter(this, zanUserList);
+        mRecyclerView.setAdapter(mRecylerViewAdapter);
+
+
+        //设置评论数量
+        //     viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
+        //设置点赞数量
+        //   viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
+
+//        if (data.get(position).isPraise()) {//设置点赞
+//            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
+//        } else {
+//            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
+//        }
+
+//        viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //点赞
+//
+//                if (data.get(position).isPraise()) {//已点赞
+//
+//                    int pos = position;
+//                    addZan(data.get(position).getId(), false, pos);
+//
+//
+//                } else {//未点赞
+//                    int pos = position;
+//                    addZan(data.get(position).getId(), true, pos);
+//
+//
+//                }
+//
+//                notifyDataSetChanged();
+//
+//            }
+//        });
+
+//        viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ToastUtils.showToastShort("评论");
+//
+//            }
+//        });
+//        viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ToastUtils.showToastShort("转发");
+//            }
+//        });
+
+
+        return headview;
+    }
+
+
+    private void setEnd() {
+        isEnd = true;//没数据了
+        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+        endLabels.setLoadingDrawable(null);
+        pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
+    }
+
+    /***
+     * 加载评论列表
+     * @param page
+     */
+    private void findCommentList(final String msgId, final int page) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                dialog.dismiss();
+                pullToRefresh.onRefreshComplete();
+                Gson gson = new Gson();
+                commentInfoBean = gson.fromJson(s, RequstCommentInfoBean.class);
+                LogUtil.i(commentInfoBean.toString());
+                if (commentInfoBean.getSuccess()) {
+
+                    if (commentInfoBean.getData().getItems() != null) {
+                        data = commentInfoBean.getData().getItems();
+
+                        //       LogUtil.i(data.toString());
+
+                        myAdater.addLastList(data);
+
+
+                        myAdater.notifyDataSetChanged();
+                    }
+
+                    if (data.size() > 0) {
+                        if (data.size() < 20) {
+                            setEnd();
+                        }
+                    }
+
+
+                    mCurrentPage = mCurrentPage + 1;//下次从第二页请求
+                } else {
+                    ToastUtils.showToastShort(commentInfoBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("查看网络连接");
+                dialog.dismiss();
+                pullToRefresh.onRefreshComplete();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("msgId", msgId);//用户id
+                map.put("page", page + "");//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+    private RequstOneDynInfoBean requstOneDynInfoBean;
+
+    private void findOneDyn(final String msgId, final String userId) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ONE_DYN, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+
+                Gson gson = new Gson();
+                requstOneDynInfoBean = new RequstOneDynInfoBean();
+                requstOneDynInfoBean = gson.fromJson(s, RequstOneDynInfoBean.class);
+                oneDynInfo = requstOneDynInfoBean.getData();
+
+                LogUtil.i(requstOneDynInfoBean.toString());
+                if (requstOneDynInfoBean.getSuccess()) {
+
+                    Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = oneDynInfo;
+                    handler.dispatchMessage(msg);
+
+                } else {
+                    ToastUtils.showToastShort(requstOneDynInfoBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("查看网络连接");
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("usId", userId);//用户id
+                map.put("msgId", msgId);//页数
+
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+    /**
+     * 查找点赞人数（前五个）
+     *
+     * @param msgId//消息id
+     * @param page//页数
+     */
+    private void findZanUserList_5(final String msgId, final int page) {
+        // dialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                dialog.dismiss();
+                Gson gson = new Gson();
+                RequsetUserListBean UserListBean = new RequsetUserListBean();
+                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+
+                zanUserList = UserListBean.getData().getItems();
+                //     LogUtil.i(UserListBean.toString());
+                if (UserListBean.getSuccess()) {
+
+
+                    if (zanUserList.size() > 0) {
+
+
+                        mRecylerViewAdapter.setData(zanUserList, msgId);
+
+                        mRecylerViewAdapter.notifyDataSetChanged();
+
+
+                    } else {
+                        ToastUtils.showToastShort("没有点赞数据");
+                    }
+                } else {
+                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("msgId", msgId);//用户id
+                map.put("page", page + "");//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+    /**
+     * 发送评论
+     *
+     * @param msgId
+     * @param content
+     */
+    private void sendCommentReply(final String msgId, final String content) {
+
+
+        final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("评论成功");
+
+                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
+                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    commentinfo.setNickName(userInfo.getNickName());
+                    commentinfo.setContent(content);
+                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
+                    commentinfo.setReplyUserId(userInfo.getId());
+                    commentinfo.setTime("刚刚");
+                    myAdater.addFirst(commentinfo);
+                    myAdater.notifyDataSetChanged();
+                    et_comment.setText("");
+                } else {
+                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("mid", msgId);
+                map.put("content", content);
+                //     map.put("parentId",parentId);//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
+    /**
+     * @param msgId//动态id
+     * @param content//内容
+     * @param parentId//这条评论的id
+     * @param replyUserId//这条回复的userid
+     */
+    private void sendCommentReply(final String msgId, final String content, final String parentId, final String replyUserId) {
+
+        LogUtil.i("这是一条评论回复"+"msgId="+msgId+"content="+content+"parentId="+parentId+"replyUserId="+replyUserId);
+        final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("评论成功");
+
+
+                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
+                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    commentinfo.setNickName(userInfo.getNickName());
+                    commentinfo.setContent(content);
+                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
+                    commentinfo.setReplyUserId(userInfo.getId());
+                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
+                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
+                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
+                    commentinfo.setTime("刚刚");
+                    myAdater.addFirst(commentinfo);
+                    myAdater.notifyDataSetChanged();
+                    et_comment.setText("");
+                    et_comment.setHint("写评论");
+                    replypos = -1;
+                } else {
+                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("mid", msgId);
+                map.put("content", content);
+                map.put("parentId", parentId);
+                map.put("userId", replyUserId);
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
+
+    /**
+     * 点赞
+     *
+     * @param isPraise
+     * @param isPraise
+     */
+    private void addZan(final String msgId, final boolean isPraise) {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+
+                if (requestInfoBean.getSuccess()) {
+
+
+                    if (requstOneDynInfoBean.getData().getPraise()) {//如果已点赞
+                        requstOneDynInfoBean.getData().setPraise(false);
+                        int i = requstOneDynInfoBean.getData().getPriaseNumber() - 1;
+                        requstOneDynInfoBean.getData().setPriaseNumber(i);
+                        oneDynInfo = requstOneDynInfoBean.getData();
+                        ToastUtils.showToastShort("取消点赞成功");
+                        Message msg = Message.obtain();
+                        msg.what = 1;
+                        msg.obj = oneDynInfo;
+                        handler.dispatchMessage(msg);
+                    } else {
+                        requstOneDynInfoBean.getData().setPraise(true);
+                        int i = requstOneDynInfoBean.getData().getPriaseNumber() + 1;
+                        requstOneDynInfoBean.getData().setPriaseNumber(i);
+                        oneDynInfo = requstOneDynInfoBean.getData();
+                        ToastUtils.showToastShort("点赞成功");
+                        Message msg = Message.obtain();
+                        msg.what = 1;
+                        msg.obj = oneDynInfo;
+                        handler.dispatchMessage(msg);
+                    }
+
+
+                } else {
+                    ToastUtils.showToastShort("点赞失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("msgId", msgId);
+                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
+                map.put("isPraise", String.valueOf(isPraise));
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                //       LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+    /**
+     * 加关注
+     *
+     * @param id
+     * @param b
+     */
+    private void addGuanzhu(final String id, final boolean b) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+
+                    requstOneDynInfoBean.getData().setFollower(true);
+                    oneDynInfo = requstOneDynInfoBean.getData();
+                    Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = oneDynInfo;
+                    handler.dispatchMessage(msg);
+
+                    ToastUtils.showToastShort("关注成功");
+                } else {
+                    ToastUtils.showToastShort("关注失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", id);
+                map.put("isFollower", String.valueOf(b));
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+}

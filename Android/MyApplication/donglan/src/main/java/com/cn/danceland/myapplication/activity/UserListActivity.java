@@ -32,8 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.R.attr.value;
-
 /**
  * Created by shy on 2017/11/21 15:08
  * Email:644563767@qq.com
@@ -58,6 +56,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         userId = getIntent().getStringExtra("id");
+        msgId=getIntent().getStringExtra("msgId");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
         type = getIntent().getIntExtra("type", 1);
 
@@ -77,6 +76,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                 findFansUserList(userId, 1);
                 break;
             case 3:
+                tv_tiltle.setText("点赞");
+              findZanUserList(msgId,1);
                 break;
             default:
                 break;
@@ -138,6 +139,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                         findFansUserList(userId, mCurrentPage);
                         break;
                     case 3:
+                        findZanUserList(userId,mCurrentPage);
                         break;
                     default:
                         break;
@@ -187,7 +189,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
-
+   private RequsetUserListBean UserListBean = new RequsetUserListBean();
     /**
      * 查找关注人数
      *
@@ -199,9 +201,10 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_GUANZHU_USER_LIST_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 dialog.dismiss();
                 Gson gson = new Gson();
-                RequsetUserListBean UserListBean = new RequsetUserListBean();
+
                 UserListBean = gson.fromJson(s, RequsetUserListBean.class);
                 LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
@@ -210,7 +213,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
 
                     if (data.size() > 0) {
-                        if (data.size() < 10) {
+                        if (data.size() < 20) {
                             setEnd();
                         }
 
@@ -266,7 +269,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     * 查找关注人数
+     * 查找粉丝人数
      *
      * @param userId//userid
      * @param page//页数
@@ -278,7 +281,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             public void onResponse(String s) {
                 dialog.dismiss();
                 Gson gson = new Gson();
-                RequsetUserListBean UserListBean = new RequsetUserListBean();
+
                 UserListBean = gson.fromJson(s, RequsetUserListBean.class);
                 LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
@@ -287,7 +290,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
 
                     if (data.size() > 0) {
-                        if (data.size() < 10) {
+                        if (data.size() < 20) {
                             setEnd();
                         }
 
@@ -323,6 +326,77 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("userId", userId);//用户id
+                map.put("page", page + "");//页数
+                return map;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+
+    /**
+     * 查找点赞人数（全部）
+     *
+     * @param msgId//消息id
+     * @param page//页数
+     */
+    private void findZanUserList(final String msgId, final int page) {
+        dialog.show();
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                dialog.dismiss();
+                Gson gson = new Gson();
+
+                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+                LogUtil.i(UserListBean.toString());
+                if (UserListBean.getSuccess()) {
+                    data = UserListBean.getData().getItems();
+                    // requsetDynInfoBean.getData().getItems().toString();
+
+
+                    if (data.size() > 0) {
+                        if (data.size() < 20) {
+                            setEnd();
+                        }
+
+                        LogUtil.i(data.toString());
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Items>) data,type);
+                        mListviewAdapter.notifyDataSetChanged();
+
+
+                        mCurrentPage = mCurrentPage + 1;
+                    } else {
+                        ToastUtils.showToastShort("到底啦");
+                        setEnd();
+                    }
+                } else {
+                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("msgId", msgId);//用户id
                 map.put("page", page + "");//页数
                 return map;
             }

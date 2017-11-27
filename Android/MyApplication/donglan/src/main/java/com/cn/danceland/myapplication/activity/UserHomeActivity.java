@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.others.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -39,10 +40,16 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.cn.danceland.myapplication.R.id.iv_avatar;
+import static com.cn.danceland.myapplication.R.id.tv_nickname;
 
 /**
  * Created by shy on 2017/11/1 13:55
@@ -60,10 +67,15 @@ public class UserHomeActivity extends Activity {
     private int mCurrentPage = 1;//当前请求页
     private String userId;
     private boolean isdyn = false;
+    private ImageView iv_userifno_avatar;
+    private TextView tv_head_nickname;
+    private TextView tv_no_data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
@@ -73,6 +85,12 @@ public class UserHomeActivity extends Activity {
         initView();
         initData();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initView() {
@@ -90,7 +108,7 @@ public class UserHomeActivity extends Activity {
         //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
         //设置下拉刷新模式both是支持下拉和上拉
-        pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_UP_TO_REFRESH);
+        pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
 
         init();
 
@@ -112,7 +130,7 @@ public class UserHomeActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {      //判断标志位
                 case 1:
-
+                    dialog.dismiss();
                     myDynListviewAdater.notifyDataSetChanged();
                     pullToRefresh.onRefreshComplete();
 
@@ -126,18 +144,39 @@ public class UserHomeActivity extends Activity {
                         pullToRefresh.getRefreshableView().setSelection(2);
                         // pullToRefresh.getRefreshableView().smoothScrollToPosition(2);
                     }
-
-
+                    break;
+                case 3:
+                    //  tv_no_data.setVisibility(View.VISIBLE);
                     break;
             }
 
         }
     };
 
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        if (99 == event.getEventCode()) {
+            String msg = event.getMsg();
+            LogUtil.i("收到消息" + msg);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(this).load(msg).apply(options).into(iv_userifno_avatar);
+
+            // tv_phone.setText(msg);
+            //   Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        }
+        if (100 == event.getEventCode()) {
+            tv_head_nickname.setText(event.getMsg());
+        }
+
+    }
+
     private void initData() {
         dialog.show();
         findSelfDT();
-        queryUserInfo(userId);
+
     }
 
     private RequestInfoBean requestInfoBean;
@@ -157,7 +196,7 @@ public class UserHomeActivity extends Activity {
 
             @Override
             public void onResponse(String s) {
-                dialog.dismiss();
+
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
@@ -199,6 +238,17 @@ public class UserHomeActivity extends Activity {
 
     }
 
+    private void setEnd() {
+        isEnd = true;//没数据了
+        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+        endLabels.setLoadingDrawable(null);
+        pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
+    }
+
     /***
      * 查找个人动态
      */
@@ -206,6 +256,7 @@ public class UserHomeActivity extends Activity {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_SELF_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                queryUserInfo(userId);
                 Gson gson = new Gson();
                 RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
@@ -216,13 +267,8 @@ public class UserHomeActivity extends Activity {
 
                     if (data.size() > 0) {
                         if (data.size() < 10) {
-                            isEnd = true;//没数据了
-                            ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
-                                    false, true);
-                            endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
-                            endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
-                            endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
-                            endLabels.setLoadingDrawable(null);
+                            setEnd();
+
                         }
 
 
@@ -230,14 +276,18 @@ public class UserHomeActivity extends Activity {
                         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
-                        isEnd = true;//没数据了
-                        ToastUtils.showToastShort("到底啦");
-                        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
-                                false, true);
-                        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
-                        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
-                        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
-                        endLabels.setLoadingDrawable(null);
+                       // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
+                        if (mCurrentPage == 1) {
+                            Message message=Message.obtain();
+                            message.what=3;
+                            handler.sendMessage(message);
+
+
+
+                        }
+
+
+                        setEnd();
                     }
                 } else {
                     ToastUtils.showToastShort("请求失败：" + requsetDynInfoBean.getErrorMsg());
@@ -281,8 +331,9 @@ public class UserHomeActivity extends Activity {
     private View initHeadview(Data data) {
 
         View headview = View.inflate(this, R.layout.headview_user_home, null);
-        ImageView iv_avatar = headview.findViewById(R.id.iv_avatar);
-        TextView tv_nickname = headview.findViewById(R.id.tv_nickname);
+        iv_userifno_avatar = headview.findViewById(iv_avatar);
+        tv_head_nickname = headview.findViewById(tv_nickname);
+        tv_no_data = headview.findViewById(R.id.tv_no_data);
         TextView tv_fans = headview.findViewById(R.id.tv_fans);
         TextView tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
@@ -346,11 +397,8 @@ public class UserHomeActivity extends Activity {
 
         //m默认头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_avatar);
-        tv_nickname.setText(data.getNickName());
-
-
-
+        Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
+        tv_head_nickname.setText(data.getNickName());
 
 
         return headview;

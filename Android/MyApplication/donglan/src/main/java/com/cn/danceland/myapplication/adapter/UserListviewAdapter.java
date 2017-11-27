@@ -19,7 +19,6 @@ import com.cn.danceland.myapplication.bean.RequsetUserListBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.SuperKotlin.pictureviewer.PictureConfig.position;
 
 /**
  * Created by shy on 2017/11/21 09:36
@@ -31,6 +30,7 @@ public class UserListviewAdapter extends BaseAdapter {
     private List<RequsetUserListBean.Data.Items> data = new ArrayList<RequsetUserListBean.Data.Items>();
     private LayoutInflater mInflater;
     private Context context;
+    private int type = 1;//等于3是点赞，默认是1
 
     public UserListviewAdapter(Context context, List<RequsetUserListBean.Data.Items> data) {
         mInflater = LayoutInflater.from(context);
@@ -39,13 +39,23 @@ public class UserListviewAdapter extends BaseAdapter {
     }
 
     public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean) {
-        data.addAll(bean);
+        this.data.addAll(bean);
     }
 
+    public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean, int type) {
+        this.type = type;
+        this.data.addAll(bean);
+    }
 
     public void setData(ArrayList<RequsetUserListBean.Data.Items> bean) {
 
-        data = bean;
+        this.data = bean;
+    }
+
+    public void setData(ArrayList<RequsetUserListBean.Data.Items> bean, int type) {
+        this.type = type;
+        this.data = bean;
+
     }
 
     @Override
@@ -64,7 +74,7 @@ public class UserListviewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int position, View view, ViewGroup viewGroup) {
 
         ViewHolder viewHolder = null;
         if (view == null) {
@@ -84,6 +94,7 @@ public class UserListviewAdapter extends BaseAdapter {
                 .apply(options)
                 .into(viewHolder.iv_avatar);
         viewHolder.tv_nickname.setText(data.get(position).getNickName());
+        // LogUtil.i(data.get(position).getNickName());
         if (data.get(position).getGender() == 1) {
             viewHolder.iv_sex.setImageResource(R.drawable.img_sex1);
         }
@@ -93,8 +104,14 @@ public class UserListviewAdapter extends BaseAdapter {
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id",data.get(position).getUserId()));
-               // context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
+                if (type == 3) {
+                    context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
+                } else {
+                    context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));
+                }
+
+
+                // context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
             }
         });
 

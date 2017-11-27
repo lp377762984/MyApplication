@@ -9,8 +9,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--请求访问使用照相设备-->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <!--打电话-->
@@ -46,9 +48,9 @@
         <activity android:name=".activity.MyProActivity" />
         <activity
             android:name=".activity.HomeActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ResetPhoneActivity"></activity>
         <activity android:name=".activity.ConfirmPasswordActivity" />
@@ -72,9 +74,9 @@
         <activity android:name=".activity.FitnessManActivity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.RecordView" />
- <activity android:name=".activity.UserListActivity"/>
+        <activity android:name=".activity.DynHomeActivity" />
+        <activity android:name=".activity.UserListActivity" />
     </application>
-
 
 
     <!-- 这个权限用于进行网络定位-->
