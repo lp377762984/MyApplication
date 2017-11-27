@@ -32,6 +32,7 @@ import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
@@ -258,7 +259,9 @@ public class MyDynListviewAdater extends BaseAdapter {
         }
 
 
-        viewHolder.tv_time.setText(data.get(position).getPublishTime());
+     //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
+        viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
+
         if (TextUtils.isEmpty(data.get(position).getContent())) {
             viewHolder.tv_content.setVisibility(View.GONE);
         } else {//内容不为空赋值

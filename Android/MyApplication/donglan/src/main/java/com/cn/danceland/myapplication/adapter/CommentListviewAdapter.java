@@ -5,12 +5,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.others.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -103,7 +106,7 @@ public class CommentListviewAdapter extends BaseAdapter {
                 .apply(options)
                 .into(viewHolder.iv_avatar);
         viewHolder.tv_nickname.setText(data.get(position).getNickName());
-        viewHolder.tv_time.setText(data.get(position).getTime() + "");
+        viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getTime()));
 
 
         if (!TextUtils.isEmpty(data.get(position).getReplyUser())) {
@@ -234,12 +237,18 @@ public class CommentListviewAdapter extends BaseAdapter {
         String s2 = new String(userNickName);
         String s3 = new String(":" + content);
         sb.append(s1 + s2 + s3);
+
+        ForegroundColorSpan FC = new ForegroundColorSpan(Color.parseColor("#61C5E7"));
         SpannableString spanableInfo = new SpannableString(sb);
+
         int start = s1.length();
         int end = s2.length() + start;
 
         spanableInfo.setSpan(new Clickable(l), start, end,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanableInfo.setSpan(FC, start, end,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         return spanableInfo;
     }
 
@@ -263,7 +272,8 @@ public class CommentListviewAdapter extends BaseAdapter {
 
         @Override
         public void updateDrawState(TextPaint ds) {
-            ds.setColor(ds.linkColor);
+            //ds.setColor(ds.linkColor);
+            //   ds.setColor(ds.linkColor);
             ds.setUnderlineText(false);    //去除超链接的下划线
         }
     }
