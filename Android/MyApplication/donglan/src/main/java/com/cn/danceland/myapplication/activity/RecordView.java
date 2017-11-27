@@ -146,7 +146,12 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
     public void init(){
         // 创建保存录制视频的视频文件
         videoPath = Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/"+System.currentTimeMillis()+".mp4";
+                + "/donglan/camera/vedio/"+System.currentTimeMillis()+".mp4";
+        File dir = new File(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/vedio/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         videoFile = new File(videoPath);
         // 创建MediaPlayer对象
         mRecorder = new MediaRecorder();

@@ -20,6 +20,7 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,6 +110,8 @@ public class PublishActivity extends Activity {
     String isPhoto;
     File picFile,videoFile;
     Handler handler;
+    ArrayList<String> arrImgUrl;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +146,29 @@ public class PublishActivity extends Activity {
                         }
                     }
 
+                }else if(msg.what == 2){
+                    PublishBean bean = new PublishBean();
+                    if(!"".equals(stringstatus)){
+                        bean.setContent(stringstatus);
+                    }
+                    if(arrImgUrl!=null&&arrImgUrl.size()>0){
+                        bean.setImgList(arrImgUrl);
+                        bean.setMsgType(0);
+                    }
+                    bean.setPublishPlace(location);
+                    if(bean.getContent()==null && bean.getImgList()==null){
+                        ToastUtils.showToastShort("请填写需要发布的动态！");
+                    }else{
+                        String strBean = gson.toJson(bean);
+                        LogUtil.e("zzf",strBean);
+                        try {
+                            commitUrl(strBean);
+                            //LogUtil.e("zzf",strBean);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        finish();
+                    }
                 }
             }
         };
@@ -209,10 +235,6 @@ public class PublishActivity extends Activity {
                     final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
 
-
-
-
-
                     if("0".equals(isPhoto)){
                         if(arrayList!=null&&arrayList.size()>0){
                             MultipartRequestParams params = new MultipartRequestParams();
@@ -226,38 +248,34 @@ public class PublishActivity extends Activity {
                                 @Override
                                 public void run() {
                                     try {
+                                        LogUtil.e("zzf",arrayFileMap.toString());
                                         String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
+                                        LogUtil.e("zzf",s);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
-                                        ArrayList<String> arrImgUrl = new ArrayList<String>();
+
+                                        arrImgUrl = new ArrayList<String>();
                                         if(beanList!=null&&beanList.size()>0){
                                             for(int k = 0;k<beanList.size();k++){
                                                 arrImgUrl.add(beanList.get(k).getImgUrl());
                                             }
                                         }
-                                        publishBean.setContent(stringstatus);
-                                        publishBean.setPublishPlace(location);
-                                        if(arrImgUrl!=null&&arrImgUrl.size()>0){
-                                            publishBean.setImgList(arrImgUrl);
-                                        }
+
+//                                        publishBean.setContent(stringstatus);
+//                                        publishBean.setPublishPlace(location);
+//                                        if(arrImgUrl!=null&&arrImgUrl.size()>0){
+//                                            publishBean.setImgList(arrImgUrl);
+//                                        }
+                                        Message message = new Message();
+                                        message.what = 2;
+                                        handler.sendMessage(message);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             }).start();
+//                                LogUtil.e("zzf",publishBean.getImgList().toString());
 
-                            if(publishBean.getContent()==null && publishBean.getImgList()==null){
-                                ToastUtils.showToastShort("请填写需要发布的动态！");
-                            }else{
-                                String strBean = gson.toJson(publishBean);
-                                try {
-                                    commitUrl(strBean);
-                                    //LogUtil.e("zzf",strBean);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                finish();
-                            }
                         }else{
                             if(!"".equals(stringstatus)){
                                 publishBean.setContent(stringstatus);
@@ -407,6 +425,11 @@ public class PublishActivity extends Activity {
     public File saveBitmapFile(Bitmap bitmap) {
         File file=new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/"+System.currentTimeMillis()+".png");//将要保存图片的路径
+        File dir = new File(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

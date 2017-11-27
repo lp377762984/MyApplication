@@ -35,6 +35,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.cn.danceland.myapplication.MyApplication.getContext;
@@ -98,10 +99,20 @@ public class ImagesActivity extends Activity{
         public void handleMessage(android.os.Message msg) {
             if(mImgDir!=null){
                 path = mImgDir.getAbsolutePath();
-                MyAdapter myAdapter = new MyAdapter(ImagesActivity.this,Arrays.asList(mImgDir.list()),path);
+                List<String> arr = new ArrayList<String>();
+                List<String> arrList = new ArrayList<String>();
+                arr = Arrays.asList(mImgDir.list());
+                if(arr!=null&&arr.size()>0){
+                    for(int i = 0;i<arr.size();i++){
+                        if(arr.get(i).contains(".jpg")||arr.get(i).contains(".png")){
+                            arrList.add(arr.get(i));
+                        }
+                    }
+                }
+                MyAdapter myAdapter = new MyAdapter(ImagesActivity.this,arrList,path);
                 photo_grid.setAdapter(myAdapter);
                 //滚动到最后一行
-                photo_grid.smoothScrollToPosition(Arrays.asList(mImgDir.list()).size()-1);
+                photo_grid.smoothScrollToPosition(arrList.size()-1);
             }
 
 
