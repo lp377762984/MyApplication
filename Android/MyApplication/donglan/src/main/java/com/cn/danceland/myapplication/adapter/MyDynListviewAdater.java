@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.DynHomeActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -101,7 +103,12 @@ public class MyDynListviewAdater extends BaseAdapter {
     public int getCount() {
         // TODO Auto-generated method stub
         // LogUtil.i(data.size() + "");
-        return data.size();
+//        if (data.size() == 0) {
+//            return 1;
+//        } else {
+            return data.size();
+    //    }
+
 
     }
 
@@ -114,11 +121,16 @@ public class MyDynListviewAdater extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         // TODO Auto-generated method stub
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+//        LogUtil.i("data.size()"+data.size()+"+++++++++++");
+//        LogUtil.i(data.toString());
+        //如果没有数据
+
+
         // TODO Auto-generated method stub
         ViewHolder viewHolder = null;
         if (convertView == null) {
@@ -139,6 +151,7 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
+          //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -147,10 +160,21 @@ public class MyDynListviewAdater extends BaseAdapter {
             return convertView;
         }
 
+//        if (data.size() == 0) {
+//            viewHolder.ll_item.setVisibility(View.GONE);
+//            viewHolder.tv_no_data.setVisibility(View.VISIBLE);
+//        } else {
+//            viewHolder.ll_item.setVisibility(View.VISIBLE);
+//            viewHolder.tv_no_data.setVisibility(View.GONE);
+//        }
+
+       // LogUtil.i(data.size() + "");
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//点击整个页面
                 // ToastUtils.showToastShort(position + "");
+                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
+
             }
         });
         //设置评论数量
@@ -190,7 +214,8 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.showToastShort("评论");
+           //     ToastUtils.showToastShort("评论");
+                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
 
             }
         });
@@ -210,6 +235,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
+            viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
         }
@@ -312,6 +338,8 @@ public class MyDynListviewAdater extends BaseAdapter {
 
 
         return convertView;
+
+
     }
 
     class ViewHolder {
@@ -321,6 +349,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         TextView tv_location;//地点
         TextView tv_zan_num;//点赞数量
         TextView tv_guanzhu;
+      //  TextView tv_no_data;
         ImageView iv_avatar;
         ImageView iv_zan;//点赞
         ImageView iv_transpond;//转发
@@ -435,6 +464,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 if (requestInfoBean.getSuccess()) {
                     data.get(pos).setFollower(true);
                     notifyDataSetChanged();
+
                     ToastUtils.showToastShort("关注成功");
                 } else {
                     ToastUtils.showToastShort("关注失败");

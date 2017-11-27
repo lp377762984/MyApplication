@@ -79,43 +79,63 @@ public class RequsetUserListBean {
 
         public class Items {
 
-            private int id;
-            private int follower;
+            private String id;
+            private String follower;
             private String userId;
             private String success;
             private String errorMsg;
             private String selfUrl;
             private String nickName;
             private int gender;
+            private String praiseUserId;
+
+//            private int id;
+//            private int follower;
+//            private int userId;
+//            private String success;
+//            private String errorMsg;
+//            private String selfUrl;
+//            private String nickName;
+//            private int gender;
+
 
             @Override
             public String toString() {
                 return "Items{" +
-                        "id=" + id +
+                        "id='" + id + '\'' +
                         ", follower=" + follower +
-                        ", userId=" + userId +
+                        ", userId='" + userId + '\'' +
                         ", success='" + success + '\'' +
                         ", errorMsg='" + errorMsg + '\'' +
                         ", selfUrl='" + selfUrl + '\'' +
                         ", nickName='" + nickName + '\'' +
                         ", gender=" + gender +
+                        ", praiseUserId='" + praiseUserId + '\'' +
                         '}';
             }
 
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public int getId() {
+            public String getId() {
                 return id;
             }
 
-            public void setFollower(int follower) {
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String isFollower() {
+                return follower;
+            }
+
+            public void setFollower(String follower) {
                 this.follower = follower;
             }
 
-            public int getFollower() {
-                return follower;
+            public String getPraiseUserId() {
+                return praiseUserId;
+            }
+
+            public void setPraiseUserId(String praiseUserId) {
+                this.praiseUserId = praiseUserId;
             }
 
             public void setUserId(String userId) {

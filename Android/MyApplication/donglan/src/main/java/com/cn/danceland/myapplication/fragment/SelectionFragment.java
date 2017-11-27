@@ -131,7 +131,7 @@ public class SelectionFragment extends BaseFragment {
 
         View headview = View.inflate(mActivity, R.layout.recycleview_headview, null);
 
-        mRecyclerView = headview.findViewById(R.id.my_recycler_view);
+
         headview.findViewById(R.id.tv_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,7 +141,7 @@ public class SelectionFragment extends BaseFragment {
         });
 
         //创建默认的线性LayoutManager
-
+        mRecyclerView = headview.findViewById(R.id.my_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
@@ -149,7 +149,6 @@ public class SelectionFragment extends BaseFragment {
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         mRecyclerView.setHasFixedSize(true);
         //创建并设置Adapter
-        //   DynHeadviewRecylerViewAdapter mAdapter = new DynHeadviewRecylerViewAdapter(mActivity, new String[]{"章魚哥", "派大星", "海绵宝宝", "派大星", "派大星", "派大星", "派大星", "派大星"});
         mRecylerViewAdapter = new DynHeadviewRecylerViewAdapter(mActivity, pushUserDatas);
         mRecyclerView.setAdapter(mRecylerViewAdapter);
         return headview;

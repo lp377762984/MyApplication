@@ -41,6 +41,7 @@ public class MeFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //注册event事件
         EventBus.getDefault().register(this);
     }
 
@@ -52,7 +53,7 @@ public class MeFragment extends BaseFragment {
 
     @Override
     public View initViews() {
-        //注册event事件
+
 
         View v = View.inflate(mActivity, R.layout.fragment_me, null);
         v.findViewById(R.id.ll_setting).setOnClickListener(this);

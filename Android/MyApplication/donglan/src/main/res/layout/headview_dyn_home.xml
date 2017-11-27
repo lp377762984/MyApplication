@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#fff"
     android:orientation="vertical">
 
     <LinearLayout
@@ -35,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="派大星"
+                android:textColor="@color/dl_blue"
                 android:textSize="14sp" />
 
             <TextView
@@ -44,6 +46,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="5dp"
                 android:text="最近发布"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -66,7 +69,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
-        android:text="今天天气不错！" />
+        android:text="今天天气不错！"
+        android:textColor="#333333" />
 
     <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/videoplayer"
@@ -119,13 +123,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="赞：" />
+            android:layout_gravity="center_vertical"
+            android:text="赞："
+            android:textColor="#333333" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/my_recycler_view"
@@ -133,8 +141,21 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_weight="1"
-            android:scrollbars="none" />
+            android:scrollbars="none"
+
+            />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bg_mianlayout"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:layout_gravity="center_vertical"
+        android:text="全部评论:"
+        android:textColor="#333333"
+        android:textSize="14sp" />
 
 </LinearLayout>

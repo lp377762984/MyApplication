@@ -27,13 +27,17 @@ public class Constants {
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
 
+    public static final String FIND_COMMENT_LIST = HOST + "/appDynMsg/findByReplyUserId";//动态评论列表
+    public static final String FIND_ONE_DYN = HOST + "/appDynMsg/findOneDynMsg";   //查一条动态
+
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findById";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
 
     public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "appDynMsg/findByFollower";//查看关注的人
     public static final String FIND_FANS_USER_LIST_MSG = HOST + "appDynMsg/findByUserId";//查看粉丝
-
+    public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appDynMsg/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
+    public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appDynMsg/findByMsgId";//查看点赞（全部）
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
     public static final String UPLOADVEDIO = HOST+"appDynMsg/uploadVedio";//上传视频
@@ -42,8 +46,10 @@ public class Constants {
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
 
-    public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
+    public static final String SEND_COMMENT_REPLY = HOST + "/reply";//发布评论
+    public static final String DEL_COMMENT_REPLY = HOST + "/reply";//删除发布评论
 
+    public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
 
 

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#fff">
+    android:background="#fff"
+    android:id="@+id/ll_item"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -31,27 +33,31 @@
                 android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="昵称" />
+                android:text="昵称"
+                android:textColor="#333333"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2014-7-2 12:30:01"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
 
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:layout_marginTop="5dp"
+    <io.github.rockerhieu.emojicon.EmojiconTextView
         android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈" />
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        emojicon:emojiconSize="20sp" />
 </LinearLayout>
