@@ -5,38 +5,55 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="90dp">
-        <ImageView
-            android:id="@+id/store_item_img"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="15dp"
-            android:layout_centerVertical="true"
-            />
+
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/clickitem"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/store_item_img"
-            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
             >
-            <TextView
-                android:id="@+id/store_address"
+            <ImageView
+                android:id="@+id/store_item_img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="15dp"
+                android:layout_centerVertical="true"
+                />
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房山区德宝会议中心2楼"
-                android:textSize="15sp"
-                android:textColor="#333333"
-                />
-            <TextView
-                android:id="@+id/distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="良乡，据我5km"
-                android:layout_below="@+id/store_address"
-                android:paddingTop="10dp"
-                android:textSize="12sp"
-                android:textColor="#999999"
-                />
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/store_item_img"
+                android:layout_marginLeft="10dp"
+                >
+                <TextView
+                    android:id="@+id/store_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="房山区德宝会议中心2楼"
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    />
+                <TextView
+                    android:id="@+id/distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="良乡，据我5km"
+                    android:layout_below="@+id/store_address"
+                    android:paddingTop="10dp"
+                    android:textSize="12sp"
+                    android:textColor="#999999"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            >
             <ImageView
                 android:id="@+id/img_location"
                 android:layout_width="wrap_content"
@@ -64,8 +81,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 />
-
         </RelativeLayout>
+
     </RelativeLayout>
 
 
