@@ -46,6 +46,7 @@ import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
@@ -325,7 +326,6 @@ public class MyProActivity extends Activity {
                     }else{
                         infoData.setZoneCode(mZoneCode);
                         DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        LogUtil.e("zzf",mZoneCode);
                         if(mZoneCode.contains(".0")){
                             commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode.replace(".0",""));
                         }else{
