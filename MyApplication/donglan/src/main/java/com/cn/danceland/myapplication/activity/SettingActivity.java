@@ -52,13 +52,14 @@ import java.util.Map;
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     View locationView;
-    TextView cancel_action, over_action,tx_location;
+    TextView lo_cancel_action, over_action,tx_location;
     PopupWindow locationWindow;
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
     private TextView tv_phone;
     private Data mInfo;
+
 
     DBData dbData;
     String zoneCode,mZoneCode;
@@ -151,11 +152,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         locationWindow.setOutsideTouchable(true);
         locationWindow.setBackgroundDrawable(new BitmapDrawable());
-        cancel_action = locationView.findViewById(R.id.cancel_action);
+        lo_cancel_action = locationView.findViewById(R.id.lo_cancel_action);
         over_action = locationView.findViewById(R.id.over_action);
         list_province = locationView.findViewById(R.id.list_province);
         list_city = locationView.findViewById(R.id.list_city);
-        cancel_action.setOnClickListener(this);
+        lo_cancel_action.setOnClickListener(this);
         over_action.setOnClickListener(this);
     }
 
@@ -187,7 +188,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(this, "已清除缓存！", Toast.LENGTH_SHORT).show();
                 showClearDialog();
                 break;
-            case R.id.cancel_action:
+            case R.id.lo_cancel_action:
                 dismissWindow();
                 tx_location.setText(location);
                 break;
