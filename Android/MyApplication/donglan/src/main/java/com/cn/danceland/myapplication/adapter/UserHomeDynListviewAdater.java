@@ -29,7 +29,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -64,13 +63,13 @@ import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
  */
 
 
-public class MyDynListviewAdater extends BaseAdapter {
+public class UserHomeDynListviewAdater extends BaseAdapter {
     public List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
     private LayoutInflater mInflater;
     private Context context;
     boolean isMe = false;
 
-    public MyDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
+    public UserHomeDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
@@ -192,6 +191,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         //设置点赞数量
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
+    //    LogUtil.i(data.get(position).isPraise()+"");
         if (data.get(position).isPraise()) {//设置点赞
             viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
         } else {
@@ -263,15 +263,7 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
-            viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
         }
-
-        if (TextUtils.equals(data.get(position).getAuthor(),SPUtils.getString(Constants.MY_USERID,null))){
-
-            viewHolder.tv_guanzhu.setText("");
-
-        }
-
         viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -313,35 +305,24 @@ public class MyDynListviewAdater extends BaseAdapter {
                 .load(data.get(position).getSelfUrl())
                 .apply(options)
                 .into(viewHolder.iv_avatar);
-        viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
-            }
-        });
+
+//        viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
+//            }
+//        });
 
         if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
             viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+
             viewHolder.jzVideoPlayer.setUp(
                     data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
                     "");
             Glide.with(convertView.getContext())
                     .load(data.get(position).getVedioImg())
                     .into(viewHolder.jzVideoPlayer.thumbImageView);
-            viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
-           // viewHolder.jzVideoPlayer
             viewHolder.jzVideoPlayer.positionInList = position;
-
-
-
-//            viewHolder.jzVideoPlayer.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    viewHolder.jzVideoPlayer .startFullscreen(context, JZVideoPlayerStandard.class, "http://2449.vod.myqcloud.com/2449_22ca37a6ea9011e5acaaf51d105342e3.f20.mp4", "嫂子辛苦了");
-//                    //直接进入全屏
-//                }
-//            });
-
         } else {
             viewHolder.jzVideoPlayer.setVisibility(View.GONE);
         }
@@ -511,11 +492,13 @@ public class MyDynListviewAdater extends BaseAdapter {
                         int i = data.get(pos).getPriaseNumber() - 1;
                         data.get(pos).setPriaseNumber(i);
                         ToastUtils.showToastShort("取消点赞成功");
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(),EventConstants.DEL_ZAN_USER_HOME));
                     } else {
                         data.get(pos).setPraise(true);
                         int i = data.get(pos).getPriaseNumber() + 1;
                         data.get(pos).setPriaseNumber(i);
                         ToastUtils.showToastShort("点赞成功");
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(),EventConstants.ADD_ZAN_USER_HOME));
                     }
 
 
@@ -583,12 +566,11 @@ public class MyDynListviewAdater extends BaseAdapter {
                 RequestInfoBean requestInfoBean = new RequestInfoBean();
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
-//                    data.get(pos).setFollower(true);
-//                    notifyDataSetChanged();
+                    data.get(pos).setFollower(true);
+                    notifyDataSetChanged();
 
                     ToastUtils.showToastShort("关注成功");
-                    EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.ADD_GUANZHU));
-
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_GUANZHU));
                 } else {
                     ToastUtils.showToastShort("关注失败");
                 }

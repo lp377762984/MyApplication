@@ -21,21 +21,34 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
-import com.cn.danceland.myapplication.others.IntEvent;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -46,18 +59,24 @@ import java.util.List;
 
 public class CommentListviewAdapter extends BaseAdapter {
 
-    private List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
+    public List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
     private LayoutInflater mInflater;
     private Context context;
+    private String msgId;
 
-    public CommentListviewAdapter(List<RequstCommentInfoBean.Items> data, Context context) {
+    public CommentListviewAdapter(List<RequstCommentInfoBean.Items> data, Context context, String msgId) {
         this.data = data;
         this.context = context;
+        this.msgId = msgId;
         mInflater = LayoutInflater.from(context);
     }
 
     public void addFirst(RequstCommentInfoBean.Items bean) {
         data.add(0, bean);
+    }
+
+    public void setData(List<RequstCommentInfoBean.Items> data) {
+        this.data = data;
     }
 
     //增加数据
@@ -172,7 +191,6 @@ public class CommentListviewAdapter extends BaseAdapter {
                 switch (which) {
                     case 0:
 
-
                         EventBus.getDefault().post(new IntEvent(pos, 8001));
                         break;
                     case 1:
@@ -195,7 +213,7 @@ public class CommentListviewAdapter extends BaseAdapter {
     }
 
     private void showListDialog_self(final int pos) {
-        final String[] items = {"复制内容"};
+        final String[] items = {"复制内容", "删除评论"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         //listDialog.setTitle("我是一个列表Dialog");
@@ -213,12 +231,43 @@ public class CommentListviewAdapter extends BaseAdapter {
 
                         break;
 
+                    case 1:
+                        //确认一下
+                        showConfirmDialog(pos);
+
+
+                        break;
+
                     default:
                         break;
                 }
             }
         });
         listDialog.show();
+    }
+
+    /**
+     * 确认对话
+     */
+    private void showConfirmDialog(final int pos) {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(context);
+        //   dialog.setTitle("提示");
+        dialog.setMessage("是否删除该评论");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sendCommentReply(msgId, data.get(pos).getId(), pos);
+
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
     }
 
 
@@ -276,6 +325,57 @@ public class CommentListviewAdapter extends BaseAdapter {
             //   ds.setColor(ds.linkColor);
             ds.setUnderlineText(false);    //去除超链接的下划线
         }
+    }
+
+    /**
+     * 删除评论
+     *
+     * @param msgId//动态id
+     * @param id//评论id
+     */
+    private void sendCommentReply(final String msgId, final String id, final int pos) {
+
+        String Params = Constants.SEND_COMMENT_REPLY + "/" + id + "/" + msgId;
+
+        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("删除成功");
+                    data.remove(pos);
+                    notifyDataSetChanged();
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.DEL_COMMENT));
+
+                } else {
+                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 
 }

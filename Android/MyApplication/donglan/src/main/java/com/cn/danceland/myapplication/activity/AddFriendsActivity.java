@@ -1,12 +1,15 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,12 +26,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestAddFriendInfoBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +58,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     private ImageView iv_avatar;
     private TextView tv_guanzhu;
     private TextView tv_result_null;
-
+    private RequestAddFriendInfoBean userInfo;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +70,31 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
         mEtPhone = findViewById(R.id.et_phone);
         tv_nickname = findViewById(R.id.tv_nickname);
         iv_avatar = findViewById(R.id.iv_avatar);
+        iv_avatar.setOnClickListener(this);
+//        iv_avatar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+
+
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
         findViewById(R.id.tv_guanzhu).setOnClickListener(this);
         tv_result_null = findViewById(R.id.tv_result_null);
         setListener();
+
+        mEtPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    findUser(mEtPhone.getText().toString().trim());
+
+                }
+                return false;
+            }
+        });
+
     }
 
     private void setListener() {
@@ -114,8 +143,8 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.tv_guanzhu://加关注
-                if (!requestInfoBean.getData().isFollower()) {
-
+                if (!userInfo.getData().isFollower()) {//如果未加关注
+                    addGuanzhu(userInfo.getData().getUserId(),true);
                 }
 
                 break;
@@ -126,7 +155,9 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 findUser(mEtPhone.getText().toString().trim());
 
                 break;
-
+            case R.id.iv_avatar:
+                startActivity(new Intent(AddFriendsActivity.this,UserHomeActivity.class).putExtra("id", userInfo.getData().getUserId()));
+                break;
             default:
                 break;
         }
@@ -148,8 +179,18 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+//                    data.get(pos).setFollower(true);
+//                    notifyDataSetChanged();
 
+                    ToastUtils.showToastShort("关注成功");
+                    EventBus.getDefault().post(new StringEvent(id, EventConstants.ADD_GUANZHU));
 
+                } else {
+                    ToastUtils.showToastShort("关注失败");
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -189,7 +230,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     }
 
 
-    private RequestInfoBean requestInfoBean;
+
 
     /*** 查找用户加关注
      *
@@ -207,20 +248,27 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 LogUtil.i(s);
                 Gson gson = new Gson();
 
-                requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                userInfo = new RequestAddFriendInfoBean();
+                userInfo = gson.fromJson(s, RequestAddFriendInfoBean.class);
 
-                if (requestInfoBean.getSuccess() && requestInfoBean.getData() != null) {
+                if (userInfo.getSuccess() && userInfo.getData() != null) {
                     ll_result.setVisibility(View.VISIBLE);
-                    tv_nickname.setText(requestInfoBean.getData().getNickName());
+                    tv_nickname.setText(userInfo.getData().getNickName());
                     RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-                    Glide.with(AddFriendsActivity.this).load(requestInfoBean.getData().getSelfUrl()).apply(options).into(iv_avatar);
-                    if (requestInfoBean.getData().isFollower()) {
+                    Glide.with(AddFriendsActivity.this).load(userInfo.getData().getSelfUrl()).apply(options).into(iv_avatar);
+                    if (userInfo.getData().isFollower()) {
                         tv_guanzhu.setText("已关注");
+                    }else {
+                        tv_guanzhu.setText("+关注");
+                    }
+                    if (TextUtils.equals(userInfo.getData().getUserId(),SPUtils.getString(Constants.MY_USERID,null))){
+
+                        tv_guanzhu.setText("");
+
                     }
 
                 } else {
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort(userInfo.getErrorMsg());
                     tv_result_null.setVisibility(View.VISIBLE);
                 }
 

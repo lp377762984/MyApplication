@@ -92,7 +92,6 @@
             android:layout_marginTop="10dp"
             android:text="+关注"
             android:textColor="#333333"
-
             android:textSize="13sp" />
 
         <LinearLayout
@@ -124,7 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/color_bg_mianlayout"
-            android:paddingBottom="5dp"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"
             android:text="全部动态"
@@ -134,11 +132,10 @@
         <TextView
             android:id="@+id/tv_no_data"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="50dp"
             android:gravity="center"
-            android:layout_weight="1"
             android:visibility="gone"
-            android:text="没有发布动态"/>
+            android:text="没有发布动态" />
     </LinearLayout>
 
     <TextView

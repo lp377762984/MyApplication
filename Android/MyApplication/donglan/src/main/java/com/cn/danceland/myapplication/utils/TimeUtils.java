@@ -57,7 +57,7 @@ public class TimeUtils {
         calendar.setTime(date);
         // 如果是今年的话，才去“xx月xx日”日期格式
         if (calendar.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)) {
-            LogUtil.i(Calendar.getInstance().get(Calendar.YEAR)+"");
+         //   LogUtil.i(Calendar.getInstance().get(Calendar.YEAR)+"");
             return DATE_FORMAT_TILL_DAY_CURRENT_YEAR.format(date);
         }
 
@@ -81,7 +81,7 @@ public class TimeUtils {
         long time = (now - past) / 1000;
 
         StringBuffer sb = new StringBuffer();
-        if (time > 0 && time < 60) { // 1小时内
+        if (time < 60) { // 1小时内
           //  return sb.append(time + "秒前").toString();
             return sb.append("刚刚").toString();
         } else if (time > 60 && time < 3600) {

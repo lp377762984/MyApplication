@@ -33,6 +33,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     public static HomeActivity instance = null;
     private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
 
+//    public SensorManager sensorManager;
+//    public JZVideoPlayer.JZAutoFullscreenListener sensorEventListener;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -46,11 +48,21 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         super.onBackPressed();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        sensorManager.registerListener(sensorEventListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
+   //     sensorManager.unregisterListener(sensorEventListener);
         JZVideoPlayer.releaseAllVideos();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +92,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .show(homeFragment)
                     .commit();
         }
-
+//        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+//        sensorEventListener = new JZVideoPlayer.JZAutoFullscreenListener();
 
     }
 

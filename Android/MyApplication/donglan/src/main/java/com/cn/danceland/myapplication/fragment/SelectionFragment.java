@@ -3,10 +3,12 @@ package com.cn.danceland.myapplication.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -17,12 +19,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
-import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
+import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestPushUserBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -32,10 +36,15 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.jzvd.JZVideoPlayer;
 
 /**
  * Created by shy on 2017/10/20 13:56
@@ -57,6 +66,193 @@ public class SelectionFragment extends BaseFragment {
     private View headView;
     private boolean isEnd = false;//是否没有数据了 默认值false
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(IntEvent event) {
+        LogUtil.i("收到消息" + event.getEventCode());
+
+
+        switch (event.getEventCode()) {
+            case EventConstants.ADD_DYN:  //发布动态
+                break;
+            case EventConstants.DEL_DYN://删除动态
+                int pos = event.getMsg();
+                myDynListviewAdater.data.remove(pos);
+                myDynListviewAdater.notifyDataSetChanged();
+                //    pullToRefresh.setRefreshing(true);
+                break;
+            case EventConstants.ADD_GUANZHU:
+                //设置关注数
+
+                break;
+            case EventConstants.DEL_GUANZHU:
+                //设置关注数-1
+
+                break;
+
+
+            default:
+                break;
+        }
+
+    }
+
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        LogUtil.i("收到消息" + event.getMsg());
+        int dynpos = -1;
+        switch (event.getEventCode()) {
+
+
+            case EventConstants.ADD_ZAN_DYN_HOME://点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(true);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+
+                break;
+            case EventConstants.DEL_ZAN_DYN_HOME://取消点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(false);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+                break;
+            case EventConstants.ADD_ZAN_USER_HOME://点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(true);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+
+                break;
+            case EventConstants.DEL_ZAN_USER_HOME://取消点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(false);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+                break;
+            case EventConstants.DEL_DYN_DYN_HOME://在动态主页删除动态
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.remove(dynpos);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+                break;
+            case EventConstants.ADD_GUANZHU:
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getAuthor(), event.getMsg())) {
+
+                        myDynListviewAdater.data.get(i).setFollower(true);
+
+                    }
+                }
+
+                myDynListviewAdater.notifyDataSetChanged();
+
+
+                break;
+
+            case EventConstants.DEL_GUANZHU:
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getAuthor(), event.getMsg())) {
+                        myDynListviewAdater.data.get(i).setFollower(false);
+                    }
+                }
+                myDynListviewAdater.notifyDataSetChanged();
+
+                break;
+
+            case EventConstants.ADD_COMMENT:
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber(myDynListviewAdater.data.get(dynpos).getReplyNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+
+
+                break;
+            case EventConstants.DEL_COMMENT:
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber(myDynListviewAdater.data.get(dynpos).getReplyNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_selection, null);
@@ -74,9 +270,11 @@ public class SelectionFragment extends BaseFragment {
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
         /// pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
-
+        pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
+        pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
+
 
         init();
 
@@ -84,11 +282,6 @@ public class SelectionFragment extends BaseFragment {
             @Override
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
-                // TODO Auto-generated method stub
-
-
-                //   new FinishRefresh().execute();
-                //  myDynListviewAdater.notifyDataSetChanged();
 
                 new DownRefresh().execute();
 
@@ -98,30 +291,24 @@ public class SelectionFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
-                // TODO Auto-generated method stub
-
-                List<PullBean> list = new ArrayList<PullBean>();
-                for (int i = 0; i < 3; i++) {
-                    PullBean bean = new PullBean();
-                    bean.setTitle("派大星222" + System.currentTimeMillis() + i);
-                    bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
-
-                    list.add(bean);
-                }
 
 
                 new UpRefresh().execute();
             }
         });
-//        pullToRefresh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                ToastUtils.showToastShort(i+"");
-//
-//            }
-//        });
 
+
+        pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
+            }
+        });
 
         return v;
     }

@@ -3,24 +3,15 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
-import android.media.Image;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaRecorder;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,33 +30,25 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.baidu.location.LocationClient;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.bean.PublishBean;
-import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.UpImagesBean;
 import com.cn.danceland.myapplication.bean.VideoBean;
-import com.cn.danceland.myapplication.db.DBData;
-import com.cn.danceland.myapplication.others.StringEvent;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
-import com.cn.danceland.myapplication.utils.multipartrequest.FileUtil;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -140,7 +123,9 @@ public class PublishActivity extends Activity {
                     }else{
                         try {
                             commitUrl(gson.toJson(bean));
+                            EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                             finish();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -167,6 +152,7 @@ public class PublishActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                         finish();
                     }
                 }
@@ -287,6 +273,7 @@ public class PublishActivity extends Activity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                                 finish();
                             }else{
                                 ToastUtils.showToastShort("请填写需要发布的动态！");

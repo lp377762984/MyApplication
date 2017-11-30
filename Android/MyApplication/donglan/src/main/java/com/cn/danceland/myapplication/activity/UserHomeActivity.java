@@ -26,11 +26,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
+import com.cn.danceland.myapplication.adapter.UserHomeDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
-import com.cn.danceland.myapplication.others.StringEvent;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -60,8 +62,8 @@ import static com.cn.danceland.myapplication.R.id.tv_nickname;
 public class UserHomeActivity extends Activity {
     private PullToRefreshListView pullToRefresh;
     //  private List<PullBean> data = new ArrayList<PullBean>();
-    List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
-    MyDynListviewAdater myDynListviewAdater;
+    public List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
+    UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
     private int mCurrentPage = 1;//当前请求页
@@ -70,6 +72,7 @@ public class UserHomeActivity extends Activity {
     private ImageView iv_userifno_avatar;
     private TextView tv_head_nickname;
     private TextView tv_no_data;
+    private TextView tv_add_gz;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,7 +104,7 @@ public class UserHomeActivity extends Activity {
         dialog.setMessage("正在加载……");
 
 
-        myDynListviewAdater = new MyDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater = new UserHomeDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
         myDynListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
@@ -156,20 +159,102 @@ public class UserHomeActivity extends Activity {
 
     //even事件处理
     @Subscribe
+    public void onEventMainThread(IntEvent event) {
+        LogUtil.i("收到消息" + event.getEventCode());
+
+
+        switch (event.getEventCode()) {
+
+            case EventConstants.DEL_DYN:
+                //设置动态数-1
+                int pos = event.getMsg();
+
+                myDynListviewAdater.data.remove(pos);
+                myDynListviewAdater.notifyDataSetChanged();
+                break;
+
+
+            default:
+                break;
+        }
+
+    }
+
+
+    //even事件处理
+    @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (99 == event.getEventCode()) {
-            String msg = event.getMsg();
-            LogUtil.i("收到消息" + msg);
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-            Glide.with(this).load(msg).apply(options).into(iv_userifno_avatar);
 
-            // tv_phone.setText(msg);
-            //   Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        int dynpos = -1;
+        switch (event.getEventCode()) {
 
+
+            case EventConstants.ADD_ZAN_DYN_HOME://点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(true);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+
+                break;
+            case EventConstants.DEL_ZAN_DYN_HOME://取消点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(false);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+                break;
+
+
+            case EventConstants.ADD_DYN:
+
+                break;
+            case EventConstants.DEL_DYN_DYN_HOME:
+
+                break;
+            case 99:
+                String msg = event.getMsg();
+                LogUtil.i("收到消息" + msg);
+                RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                Glide.with(this).load(msg).apply(options).into(iv_userifno_avatar);
+
+                break;
+            case 100:
+                if (100 == event.getEventCode()) {
+                    tv_head_nickname.setText(event.getMsg());
+                }
+                break;
+            case EventConstants.ADD_GUANZHU:
+
+                tv_add_gz.setText("已关注");
+                requestInfoBean.getData().setFollower(true);
+
+                break;
+            case EventConstants.DEL_GUANZHU:
+                tv_add_gz.setText("+关注");
+                requestInfoBean.getData().setFollower(false);
+                break;
+            case EventConstants.ADD_ZAN:
+
+                break;
+            case EventConstants.DEL_ZAN:
+
+                break;
+            default:
+                break;
         }
-        if (100 == event.getEventCode()) {
-            tv_head_nickname.setText(event.getMsg());
-        }
+
 
     }
 
@@ -256,15 +341,16 @@ public class UserHomeActivity extends Activity {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_SELF_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 queryUserInfo(userId);
                 Gson gson = new Gson();
                 RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
-                LogUtil.i(requsetDynInfoBean.toString());
+               // LogUtil.i(requsetDynInfoBean.toString());
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
-
+                    LogUtil.i(data.toString());
                     if (data.size() > 0) {
                         if (data.size() < 10) {
                             setEnd();
@@ -276,12 +362,11 @@ public class UserHomeActivity extends Activity {
                         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
-                       // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
+                        // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
                         if (mCurrentPage == 1) {
-                            Message message=Message.obtain();
-                            message.what=3;
+                            Message message = Message.obtain();
+                            message.what = 3;
                             handler.sendMessage(message);
-
 
 
                         }
@@ -328,7 +413,7 @@ public class UserHomeActivity extends Activity {
 
     }
 
-    private View initHeadview(Data data) {
+    private View initHeadview(final Data data) {
 
         View headview = View.inflate(this, R.layout.headview_user_home, null);
         iv_userifno_avatar = headview.findViewById(iv_avatar);
@@ -336,7 +421,7 @@ public class UserHomeActivity extends Activity {
         tv_no_data = headview.findViewById(R.id.tv_no_data);
         TextView tv_fans = headview.findViewById(R.id.tv_fans);
         TextView tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
-        TextView tv_add_gz = headview.findViewById(R.id.tv_add_gz);
+        tv_add_gz = headview.findViewById(R.id.tv_add_gz);
         LinearLayout ll_edit = headview.findViewById(R.id.ll_edit);
         ImageView iv_sex = headview.findViewById(R.id.iv_sex);
 
@@ -383,6 +468,21 @@ public class UserHomeActivity extends Activity {
         } else {
             tv_add_gz.setText("+关注");
         }
+        tv_add_gz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (TextUtils.equals(tv_add_gz.getText().toString(),"+关注")) {//未关注添加关注
+
+                    addGuanzhu(userId, true);
+                } else {//已关注取消关注
+                    addGuanzhu(userId, false);
+                }
+
+            }
+        });
+
+
         if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
 
             ll_edit.setVisibility(View.VISIBLE);
@@ -450,5 +550,83 @@ public class UserHomeActivity extends Activity {
 
     }
 
+    /**
+     * 加关注
+     *
+     * @param id
+     * @param b
+     */
+    private void addGuanzhu(final String id, final boolean b) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                //  LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (b) {
+                    if (requestInfoBean.getSuccess()) {
+
+                        ToastUtils.showToastShort("关注成功");
+                        EventBus.getDefault().post(new StringEvent(userId, EventConstants.ADD_GUANZHU));
+
+                    } else {
+                        ToastUtils.showToastShort("关注失败");
+                    }
+                } else {
+
+                    if (requestInfoBean.getSuccess()) {
+
+                        ToastUtils.showToastShort("取消关注成功");
+                        EventBus.getDefault().post(new StringEvent(userId, EventConstants.DEL_GUANZHU));
+
+                    } else {
+                        ToastUtils.showToastShort("取消关注失败");
+                    }
+
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", id);
+                map.put("isFollower", String.valueOf(b));
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
 
 }
