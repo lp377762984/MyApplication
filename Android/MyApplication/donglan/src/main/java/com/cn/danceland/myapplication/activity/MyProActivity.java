@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +106,6 @@ public class MyProActivity extends Activity {
     DBData dbData;
     String zoneCode,mZoneCode;
     List<Donglan> zoneArr,cityList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +130,8 @@ public class MyProActivity extends Activity {
     }
 
     public void initView(){
+
+        rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
         if(infoData.getSelfAvatarPath()!=null&&!infoData.getSelfAvatarPath().equals("")){
             Glide.with(MyProActivity.this).load(infoData.getSelfAvatarPath()).into(circleImageView);
@@ -150,6 +152,9 @@ public class MyProActivity extends Activity {
         tv_zone = findViewById(R.id.tv_zone);
         tv_phone = findViewById(R.id.tv_phone);
         tv_identity = findViewById(R.id.tv_identity);
+        if (!TextUtils.isEmpty(infoData.getPhone())) {
+            tv_phone.setText(infoData.getPhone());
+        }
 
         if(infoData.getHeight()!=null){
             tv_height.setText(infoData.getHeight()+" cm");
@@ -185,7 +190,7 @@ public class MyProActivity extends Activity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         locationWindow.setOutsideTouchable(true);
         locationWindow.setBackgroundDrawable(new BitmapDrawable());
-        lo_cancel_action = locationView.findViewById(R.id.cancel_action);
+        lo_cancel_action = locationView.findViewById(R.id.lo_cancel_action);
         over_action = locationView.findViewById(R.id.over_action);
         list_province = locationView.findViewById(R.id.list_province);
         list_city = locationView.findViewById(R.id.list_city);
@@ -208,6 +213,9 @@ public class MyProActivity extends Activity {
         over.setOnClickListener(onClickListener);
         cancel_action.setOnClickListener(onClickListener);
         rl_zone.setOnClickListener(onClickListener);
+        lo_cancel_action.setOnClickListener(onClickListener);
+        over_action.setOnClickListener(onClickListener);
+        rl_phone.setOnClickListener(onClickListener);
     }
     public void dismissWindow(){
         if(null != head_image_window && head_image_window.isShowing()){
@@ -231,6 +239,12 @@ public class MyProActivity extends Activity {
                     showEditImage();
                     showPop();
                 }
+                    break;
+                case R.id.lo_cancel_action:
+                    dismissWindow();
+                    break;
+                case R.id.rl_phone:
+                    showSettingPhoneDialog();
                     break;
                 case R.id.height:
                     //修改身高
@@ -306,10 +320,21 @@ public class MyProActivity extends Activity {
                     finish();
                     break;
                 case R.id.over_action:
-                    infoData.setZoneCode(mZoneCode);
-                    DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                    commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode);
-                    dismissWindow();
+                    if("".equals(mZoneCode)||mZoneCode==null){
+                        ToastUtils.showToastShort("请选择城市");
+                    }else{
+                        infoData.setZoneCode(mZoneCode);
+                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        LogUtil.e("zzf",mZoneCode);
+                        if(mZoneCode.contains(".0")){
+                            commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode.replace(".0",""));
+                        }else{
+                            commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode);
+                        }
+
+                        dismissWindow();
+                    }
+
                     break;
                 case R.id.rl_zone:
                     showLocation();
@@ -318,7 +343,29 @@ public class MyProActivity extends Activity {
         }
     };
 
+    /**
+     * 设置手机号
+     */
+    private void showSettingPhoneDialog() {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        dialog.setTitle("提示");
+        dialog.setMessage("是否重新绑定手机号");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
 
+                startActivity(new Intent(MyProActivity.this, ConfirmPasswordActivity.class).putExtra("phone", tv_phone.getText().toString()));
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
     public void showLocation() {
 
         locationWindow.setContentView(locationView);
@@ -331,7 +378,7 @@ public class MyProActivity extends Activity {
                 String pro = proList.get(position);
                 tv_zone.setText(pro);
                 List<Donglan> queryPro = dbData.queryPro(pro);
-
+                mZoneCode="";
                 cityList1 = new ArrayList<String>();
                 for(int i=0;i<queryPro.size();i++){
                     cityList1.add(queryPro.get(i).getCity());
@@ -353,8 +400,8 @@ public class MyProActivity extends Activity {
         });
 
 
-        locationWindow.showAsDropDown(identity, 0, 40);
-        //locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
+        locationWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+        locationWindow.setAnimationStyle(R.style.selectorMenuAnim);
 
     }
 
@@ -419,7 +466,7 @@ public class MyProActivity extends Activity {
         final int j = x;
         mPopWindow.setContentView(contentView);
         //显示PopupWindow
-        //View rootview = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.activity_register_info, null);
+
         String[] str  = new String[71];
         Integer[] str1 = new Integer[165];
         final ArrayList<String> arHeight = new ArrayList<String>();
@@ -447,7 +494,8 @@ public class MyProActivity extends Activity {
         arrayAdapter = new MyAdapter(arHeight,this);
         list_height.setAdapter(arrayAdapter);
 
-        mPopWindow.showAsDropDown(identity,0,40);
+        //mPopWindow.showAsDropDown(identity,0,40);
+        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
         mPopWindow.setAnimationStyle(R.style.selectorMenuAnim);
 
         list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -528,6 +576,7 @@ public class MyProActivity extends Activity {
                     new AlertDialog.Builder(MyProActivity.this);
             View dialogView = LayoutInflater.from(MyProActivity.this)
                 .inflate(R.layout.edit_name,null);
+            TextView dialogTitle = dialogView.findViewById(R.id.tv_nick_name);
             //normalDialog.setTitle("编辑昵称");
            final EditText ed = dialogView.findViewById(R.id.edit_name);
             normalDialog.setView(dialogView);
