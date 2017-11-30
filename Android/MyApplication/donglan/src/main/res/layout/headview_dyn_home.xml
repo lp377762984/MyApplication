@@ -144,16 +144,37 @@
             android:scrollbars="none"
 
             />
+
+        <RelativeLayout
+            android:id="@+id/rl_more"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+           >
+
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_width="20dp"
+                android:layout_height="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/img_more_dyn" />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:background="@color/color_bg_mianlayout"
         android:paddingBottom="5dp"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
-        android:layout_gravity="center_vertical"
         android:text="全部评论:"
         android:textColor="#333333"
         android:textSize="14sp" />

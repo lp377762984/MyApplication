@@ -3,8 +3,10 @@ package com.cn.danceland.myapplication.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ListView;
@@ -18,12 +20,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
-import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
+import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestPushUserBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -33,6 +38,9 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +69,180 @@ public class AttentionFragment extends BaseFragment {
     private Data userInfo;
     private RelativeLayout rl_no_info;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(IntEvent event) {
+        LogUtil.i("收到消息" + event.getEventCode());
+
+
+        switch (event.getEventCode()) {
+            case EventConstants.ADD_DYN:  //设置动态数+1
+
+                break;
+            case EventConstants.DEL_DYN:
+                //设置动态数-1
+                int pos = event.getMsg();
+                myDynListviewAdater.data.remove(pos);
+                myDynListviewAdater.notifyDataSetChanged();
+                break;
+            case EventConstants.ADD_GUANZHU:
+
+                break;
+            case EventConstants.DEL_GUANZHU:
+
+                break;
+            case EventConstants.ADD_ZAN:
+
+                break;
+            case EventConstants.DEL_ZAN:
+
+                break;
+
+
+            default:
+                break;
+        }
+
+    }
+
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        int dynpos = -1;
+        switch (event.getEventCode()) {
+            case EventConstants.ADD_ZAN_DYN_HOME://点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(true);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+
+                break;
+            case EventConstants.DEL_ZAN_DYN_HOME://取消点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(false);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+                break;
+
+            case EventConstants.ADD_ZAN_USER_HOME://点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(true);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() + 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+
+                break;
+            case EventConstants.DEL_ZAN_USER_HOME://取消点赞
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+                        dynpos = i;
+                    }
+                }
+                if (dynpos >= 0) {
+                    myDynListviewAdater.data.get(dynpos).setPraise(false);
+                    myDynListviewAdater.data.get(dynpos).setPriaseNumber(myDynListviewAdater.data.get(dynpos).getPriaseNumber() - 1);
+                    myDynListviewAdater.notifyDataSetChanged();
+                }
+                break;
+
+            case EventConstants.DEL_DYN_DYN_HOME://在动态主页删除动态
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.remove(dynpos);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+                break;
+            case EventConstants.ADD_GUANZHU://加关注
+
+                pullToRefresh.setRefreshing(true);
+            case EventConstants.DEL_GUANZHU://取消关注
+
+                pullToRefresh.setRefreshing(true);
+
+
+            case EventConstants.ADD_COMMENT://添加评论
+
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber( myDynListviewAdater.data.get(dynpos).getReplyNumber()+1);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+
+
+                break;
+            case EventConstants.DEL_COMMENT://删除评论
+                for (int i = 0; i < myDynListviewAdater.data.size(); i++) {
+                    if (TextUtils.equals(myDynListviewAdater.data.get(i).getId(), event.getMsg())) {
+
+                        dynpos = i;
+                    }
+
+                }
+                if (dynpos >= 0) {
+
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber( myDynListviewAdater.data.get(dynpos).getReplyNumber()-1);
+                    myDynListviewAdater.notifyDataSetChanged();
+
+                }
+                break;
+
+
+
+            default:
+                break;
+        }
+
+    }
+
     @Override
     public View initViews() {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
@@ -70,7 +252,6 @@ public class AttentionFragment extends BaseFragment {
 
             rl_no_info.setVisibility(View.VISIBLE);
         }
-
 
 
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
@@ -87,7 +268,8 @@ public class AttentionFragment extends BaseFragment {
 
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-
+        pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
+        pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         init();
 
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -171,9 +353,9 @@ public class AttentionFragment extends BaseFragment {
     @Override
     public void initDta() {
 
-      //  userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        //  userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-        if (userInfo.getFollowNumber()!= 0) {
+        if (userInfo.getFollowNumber() != 0) {
             dialog.show();
 
 

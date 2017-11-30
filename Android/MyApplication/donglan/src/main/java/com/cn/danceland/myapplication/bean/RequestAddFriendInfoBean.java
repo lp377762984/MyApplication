@@ -76,9 +76,9 @@ public class RequestAddFriendInfoBean {
         private String awareWay; // 了解途径
         private String adminMumberId; // 所属会籍
         private String remark; // 备注
-        private boolean follower;
+      //  private boolean follower;
         private int  followNumber;
-
+        private boolean  isFollower;
         private int  fansNum;
         private String token;
         private String verCode;
@@ -86,7 +86,7 @@ public class RequestAddFriendInfoBean {
         private String selfUrl;
 
         public boolean isFollower() {
-            return follower;
+            return isFollower;
         }
 
         public String getSelfUrl() {
@@ -138,7 +138,7 @@ public class RequestAddFriendInfoBean {
                     ", awareWay='" + awareWay + '\'' +
                     ", adminMumberId='" + adminMumberId + '\'' +
                     ", remark='" + remark + '\'' +
-                    ", follower=" + follower +
+                    ", isFollower=" + isFollower +
                     ", followNumber=" + followNumber +
                     ", fansNum=" + fansNum +
                     ", token='" + token + '\'' +
@@ -357,11 +357,11 @@ public class RequestAddFriendInfoBean {
         }
 
         public void setFollower(boolean follower) {
-            this.follower = follower;
+            this.isFollower = follower;
         }
 
         public boolean getFollower() {
-            return follower;
+            return isFollower;
         }
 
         public void setToken(String token) {

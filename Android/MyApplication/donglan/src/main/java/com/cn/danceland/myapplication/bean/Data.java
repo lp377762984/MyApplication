@@ -39,9 +39,18 @@ public class Data implements Serializable {
     private String adminMumberId; // 所属会籍
     private String remark; // 备注
     private boolean follower;
-    private int  followNumber;
+    private int  followNumber;//关注数
+    private int   dynMsgNumber;//动态数
 
-    private int  fansNum;
+    public int getDynMsgNumber() {
+        return dynMsgNumber;
+    }
+
+    public void setDynMsgNumber(int dynMsgNumber) {
+        this.dynMsgNumber = dynMsgNumber;
+    }
+
+    private int  fansNum;//粉丝数
     private String token;
     private String verCode;
 
@@ -73,6 +82,7 @@ public class Data implements Serializable {
     public void setFansNum(int fansNum) {
         this.fansNum = fansNum;
     }
+
     @Override
     public String toString() {
         return "Data{" +
@@ -102,6 +112,7 @@ public class Data implements Serializable {
                 ", remark='" + remark + '\'' +
                 ", follower=" + follower +
                 ", followNumber=" + followNumber +
+                ", dynMsgNumber=" + dynMsgNumber +
                 ", fansNum=" + fansNum +
                 ", token='" + token + '\'' +
                 ", verCode='" + verCode + '\'' +

@@ -1,4 +1,4 @@
-package com.cn.danceland.myapplication.others;
+package com.cn.danceland.myapplication.evntbus;
 
 /**
  * Created by shy on 2017/11/10 10:05
@@ -6,16 +6,16 @@ package com.cn.danceland.myapplication.others;
  */
 
 
-public class IntEvent {
-    private int mMsg;
+public class StringEvent {
+    private String mMsg;
     private int mEventCode;
 
-    public IntEvent(int msg, int eventCode) {
+    public StringEvent(String msg, int eventCode) {
         this.mMsg = msg;
         this.mEventCode = eventCode;
     }
 
-    public int getMsg() {
+    public String getMsg() {
         return mMsg;
     }
 

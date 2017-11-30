@@ -34,6 +34,9 @@ public class Constants {
     public static final String FIND_ONE_DYN = HOST + "/appDynMsg/findOneDynMsg";   //查一条动态
 
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
+    public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
+
+
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findById";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
 
@@ -43,7 +46,7 @@ public class Constants {
     public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appDynMsg/findByMsgId";//查看点赞（全部）
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
-    public static final String UPLOADVEDIO = HOST+"appDynMsg/uploadVedio";//上传视频
+    public static final String UPLOADVEDIO = HOST + "appDynMsg/uploadVedio";//上传视频
 
     public static final String UPLOADTH = HOST + "appDynMsg/uploadThumbnail";//上传缩略图
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件

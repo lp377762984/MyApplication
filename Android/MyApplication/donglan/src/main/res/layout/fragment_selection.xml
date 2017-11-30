@@ -10,10 +10,9 @@
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:headerDividersEnabled="false"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
-
+        android:dividerHeight="5dp"
         android:fadingEdge="none"
         android:scrollingCache="false"
         ptr:ptrAnimationStyle="flip"
@@ -22,8 +21,7 @@
         ptr:ptrHeaderTextColor="#999999"
         ptr:ptrRefreshableViewBackground="#00000000"
         ptr:ptrScrollingWhileRefreshingEnabled="true"
-
         />
-    <!--android:overScrollMode="never"-->
+
 
 </LinearLayout>

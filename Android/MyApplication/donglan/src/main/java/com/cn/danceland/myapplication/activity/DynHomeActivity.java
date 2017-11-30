@@ -1,6 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -18,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.SuperKotlin.pictureviewer.ImagePagerActivity;
@@ -35,18 +38,19 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
 import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
-import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.bean.RequstOneDynInfoBean;
-import com.cn.danceland.myapplication.others.IntEvent;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
@@ -108,6 +112,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private RecyclerView mRecyclerView;
     private boolean init;
     private int replypos = -1;
+    private RelativeLayout rl_more;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,12 +141,35 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     public void onEventMainThread(IntEvent event) {
         if (8001 == event.getEventCode()) {
             replypos = event.getMsg();
-            LogUtil.i("收到消息" + replypos + data.get(replypos).getNickName());
+         //   LogUtil.i("收到消息" + replypos + data.get(replypos).getNickName());
             et_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
-            LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
+        //    LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
 
         }
 
+
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+
+        switch (event.getEventCode()) {
+            case EventConstants.ADD_GUANZHU:
+
+                requstOneDynInfoBean.getData().
+                        setFollower(true);
+
+                oneDynInfo = requstOneDynInfoBean.getData();
+                Message msg = Message.obtain();
+                msg.what = 1;
+                msg.obj = oneDynInfo;
+                handler.sendMessage(msg);
+
+                break;
+            default:
+                break;
+        }
 
     }
 
@@ -151,6 +179,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         msgId = getIntent().getStringExtra("msgId");
         userId = getIntent().getStringExtra("userId");
 
+        findViewById(R.id.iv_back).setOnClickListener(this);
 
         tv_zan_num = findViewById(R.id.tv_zan_num);
         iv_zan = findViewById(R.id.iv_zan);
@@ -200,7 +229,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         dialog.setMessage("正在加载……");
 
 
-        myAdater = new CommentListviewAdapter(data, this);
+        myAdater = new CommentListviewAdapter(data, this, msgId);
 
         pullToRefresh.setAdapter(myAdater);
 
@@ -267,6 +296,10 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 }
 
                 break;
+
+            case R.id.iv_back:
+                finish();
+                break;
             default:
                 break;
         }
@@ -330,14 +363,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
                     break;
                 case 2:
-//                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
-//                    dialog.dismiss();
-//
-//                    if (isdyn) {//跳转到动态的那行
-//
-//                        pullToRefresh.getRefreshableView().setSelection(2);
-//                        // pullToRefresh.getRefreshableView().smoothScrollToPosition(2);
-//                    }
 
 
                     break;
@@ -367,6 +392,19 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private boolean isEnd = false;
 
     private void initHeadviewData(final RequstOneDynInfoBean.Data oneDynInfo) {
+
+        rl_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
+
+                    showListDialogSelf(1);
+                } else {
+                    showListDialog(1);
+                }
+            }
+        });
+
         if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
             tv_guanzhu.setVisibility(View.INVISIBLE);
         } else {
@@ -374,7 +412,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             tv_guanzhu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ToastUtils.showToastShort("点击了关注");
+                    //      ToastUtils.showToastShort("点击了关注");
                     LogUtil.i(oneDynInfo.getAuthor());
                     if (!oneDynInfo.isFollower()) {//如果未关注，加关注
 
@@ -399,7 +437,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         }
 
 
-        tv_time.setText(oneDynInfo.getPublishTime());
+        tv_time.setText(TimeUtils.timeLogic(oneDynInfo.getPublishTime()));
         if (TextUtils.isEmpty(oneDynInfo.getContent())) {
             tv_content.setVisibility(View.GONE);
         } else {//内容不为空赋值
@@ -488,6 +526,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         gridView = headview.findViewById(R.id.gridview);
         jzVideoPlayer = headview.findViewById(R.id.videoplayer);
 
+        rl_more = headview.findViewById(R.id.rl_more);
+
+
         //创建默认的线性LayoutManager
         mRecyclerView = headview.findViewById(R.id.my_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -499,55 +540,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         //创建并设置Adapter
         mRecylerViewAdapter = new DynZanHeadviewRecylerViewAdapter(this, zanUserList);
         mRecyclerView.setAdapter(mRecylerViewAdapter);
-
-
-        //设置评论数量
-        //     viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
-        //设置点赞数量
-        //   viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
-
-//        if (data.get(position).isPraise()) {//设置点赞
-//            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
-//        } else {
-//            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
-//        }
-
-//        viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //点赞
-//
-//                if (data.get(position).isPraise()) {//已点赞
-//
-//                    int pos = position;
-//                    addZan(data.get(position).getId(), false, pos);
-//
-//
-//                } else {//未点赞
-//                    int pos = position;
-//                    addZan(data.get(position).getId(), true, pos);
-//
-//
-//                }
-//
-//                notifyDataSetChanged();
-//
-//            }
-//        });
-
-//        viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ToastUtils.showToastShort("评论");
-//
-//            }
-//        });
-//        viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ToastUtils.showToastShort("转发");
-//            }
-//        });
 
 
         return headview;
@@ -584,9 +576,11 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     if (commentInfoBean.getData().getItems() != null) {
                         data = commentInfoBean.getData().getItems();
 
-                        //       LogUtil.i(data.toString());
-
-                        myAdater.addLastList(data);
+                        if (mCurrentPage == 1) {
+                            myAdater.setData(data);
+                        } else {
+                            myAdater.addLastList(data);
+                        }
 
 
                         myAdater.notifyDataSetChanged();
@@ -781,17 +775,25 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("评论成功");
+                    mCurrentPage = 1;
+                    findCommentList(msgId, mCurrentPage);
 
-                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
-                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    commentinfo.setNickName(userInfo.getNickName());
-                    commentinfo.setContent(content);
-                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
-                    commentinfo.setReplyUserId(userInfo.getId());
-                    commentinfo.setTime("刚刚");
-                    myAdater.addFirst(commentinfo);
-                    myAdater.notifyDataSetChanged();
+//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
+//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    commentinfo.setNickName(userInfo.getNickName());
+//                    commentinfo.setContent(content);
+//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
+//                    commentinfo.setReplyUserId(userInfo.getId());
+//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    String date = sDateFormat.format(new java.util.Date());
+//                    commentinfo.setTime(date);
+//                    myAdater.addFirst(commentinfo);
+//                    myAdater.notifyDataSetChanged();
+
                     et_comment.setText("");
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
+
+                    KeyBoardUtils.closeKeybord(et_comment,DynHomeActivity.this);
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
                 }
@@ -835,7 +837,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
      */
     private void sendCommentReply(final String msgId, final String content, final String parentId, final String replyUserId) {
 
-        LogUtil.i("这是一条评论回复"+"msgId="+msgId+"content="+content+"parentId="+parentId+"replyUserId="+replyUserId);
+        LogUtil.i("这是一条评论回复" + "msgId=" + msgId + "content=" + content + "parentId=" + parentId + "replyUserId=" + replyUserId);
         final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -847,22 +849,26 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("评论成功");
 
-
-                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
-                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    commentinfo.setNickName(userInfo.getNickName());
-                    commentinfo.setContent(content);
-                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
-                    commentinfo.setReplyUserId(userInfo.getId());
-                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
-                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
-                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
-                    commentinfo.setTime("刚刚");
-                    myAdater.addFirst(commentinfo);
-                    myAdater.notifyDataSetChanged();
+//
+//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
+//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    commentinfo.setNickName(userInfo.getNickName());
+//                    commentinfo.setContent(content);
+//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
+//                    commentinfo.setReplyUserId(userInfo.getId());
+//                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
+//                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
+//                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
+//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    String date = sDateFormat.format(new java.util.Date());
+//                    commentinfo.setTime(date);
+//                    myAdater.addFirst(commentinfo);
+//                    myAdater.notifyDataSetChanged();
                     et_comment.setText("");
                     et_comment.setHint("写评论");
                     replypos = -1;
+                    KeyBoardUtils.closeKeybord(et_comment,DynHomeActivity.this);
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
                 }
@@ -928,6 +934,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         requstOneDynInfoBean.getData().setPriaseNumber(i);
                         oneDynInfo = requstOneDynInfoBean.getData();
                         ToastUtils.showToastShort("取消点赞成功");
+                        EventBus.getDefault().post(new StringEvent(msgId, EventConstants.DEL_ZAN_DYN_HOME));
                         Message msg = Message.obtain();
                         msg.what = 1;
                         msg.obj = oneDynInfo;
@@ -938,6 +945,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         requstOneDynInfoBean.getData().setPriaseNumber(i);
                         oneDynInfo = requstOneDynInfoBean.getData();
                         ToastUtils.showToastShort("点赞成功");
+                        EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_ZAN_DYN_HOME));
                         Message msg = Message.obtain();
                         msg.what = 1;
                         msg.obj = oneDynInfo;
@@ -1008,14 +1016,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
 
-                    requstOneDynInfoBean.getData().setFollower(true);
-                    oneDynInfo = requstOneDynInfoBean.getData();
-                    Message msg = Message.obtain();
-                    msg.what = 1;
-                    msg.obj = oneDynInfo;
-                    handler.dispatchMessage(msg);
 
                     ToastUtils.showToastShort("关注成功");
+                    EventBus.getDefault().post(new StringEvent(userId, EventConstants.ADD_GUANZHU));
                 } else {
                     ToastUtils.showToastShort("关注失败");
                 }
@@ -1058,4 +1061,129 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
     }
 
+    private void showListDialog(final int pos) {
+        final String[] items = {"举报"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        ToastUtils.showToastShort("已举报");
+                        break;
+                    case 1:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+    private void showListDialogSelf(final int pos) {
+        final String[] items = {"删除动态"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+
+                        showConfirmDialog(pos);
+
+                        break;
+                    case 1:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+    /**
+     * 确认对话
+     */
+    private void showConfirmDialog(final int pos) {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        //   dialog.setTitle("提示");
+        dialog.setMessage("是否删除该动态");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                delDyn(msgId, pos);
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    /**
+     * 删除动态
+     *
+     * @param msgId//动态id
+     */
+    private void delDyn(final String msgId, final int pos) {
+
+        String Params = Constants.DEL_DYN_MSG + "/" + msgId;
+
+        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("删除成功");
+                    //  data.remove(pos);
+                    //notifyDataSetChanged();
+                    EventBus.getDefault().post(new StringEvent("home", EventConstants.DEL_DYN));
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.DEL_DYN_DYN_HOME));
+                    finish();
+
+                } else {
+                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
 }
