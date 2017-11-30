@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -108,13 +109,6 @@ public class ShopFragment extends BaseFragment {
             ibtn_gps.setVisibility(View.GONE);
         }
 
-        storelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                startActivity(intent);
-            }
-        });
 
         getData();
 
@@ -302,6 +296,7 @@ public class ShopFragment extends BaseFragment {
                 viewHolder.img_location = convertView.findViewById(R.id.img_location);
                 viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
                 viewHolder.img_join = convertView.findViewById(R.id.img_join);
+                viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -339,7 +334,31 @@ public class ShopFragment extends BaseFragment {
             viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    join(branchId);
+
+                    AlertDialog.Builder dialog =
+                            new AlertDialog.Builder(mActivity);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("是否关注此门店");
+                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            join(branchId);
+                        }
+                    });
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    dialog.show();
+                }
+            });
+            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+                    startActivity(intent);
                 }
             });
 
@@ -389,6 +408,7 @@ public class ShopFragment extends BaseFragment {
     class ViewHolder{
         ImageView store_item_img,img_location,img_phone,img_join;
         TextView store_address,distance;
+        RelativeLayout clickitem;
     }
 
 
