@@ -172,6 +172,7 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
 //        //构造CamcorderProfile，使用高质量视频录制
 //        CamcorderProfile camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
 //        mRecorder.setProfile(camcorderProfile);
+        mRecorder.setOrientationHint(90);
         // 设置视频文件的输出格式
         // 必须在设置声音编码格式、图像编码格式之前设置
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
