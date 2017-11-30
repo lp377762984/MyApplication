@@ -113,11 +113,11 @@ public class MapActivity extends Activity {
         }
 
         startlatLng = new LatLng(myLongitude, myLatitude);
-        finishlatLng = new LatLng(39.915599,116.405419);
+        finishlatLng = new LatLng(longitude,latitude);
         stNode = PlanNode.withLocation(startlatLng);
         enNode = PlanNode.withLocation(finishlatLng);
 
-        midLng = new LatLng(myLongitude+(39.915599-myLongitude)/2,myLatitude+(116.405419-myLatitude)/2);
+        midLng = new LatLng(myLongitude+(longitude-myLongitude)/2,myLatitude+(latitude-myLatitude)/2);
 
         distance = DistanceUtil.getDistance(startlatLng, finishlatLng);
         lv = getZoomLevel(distance);
