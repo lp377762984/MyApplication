@@ -12,7 +12,9 @@
             android:id="@+id/iv_top_bg"
             android:layout_width="match_parent"
             android:layout_height="240dp"
-            android:background="@drawable/img_man" />I
+            android:background="@drawable/img_man"
+            android:scaleType="centerCrop"
+            />I
 
         <LinearLayout
             android:id="@+id/ll_top"
