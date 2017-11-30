@@ -69,7 +69,7 @@ public class ShopFragment extends BaseFragment {
     RequestQueue requestQueue;
     ListView storelist;
     GridView mGridView;
-    String jingdu,weidu,shopJingdu,shopWeidu,branchId;
+    String jingdu,weidu,shopJingdu,shopWeidu;
     String PhoneNo;
     Gson gson;
     Data info;
@@ -95,7 +95,7 @@ public class ShopFragment extends BaseFragment {
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
 
         storelist = v.findViewById(R.id.storelist);
-        LogUtil.e("zzf",info.getBranchId());
+
         if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
@@ -146,8 +146,6 @@ public class ShopFragment extends BaseFragment {
                 List<StoreBean.Items> itemsList = storeBean.getData().getItems();
                 if(itemsList!=null&&itemsList.size()>0){
                     storelist.setAdapter(new MyStoreAdapter(getActivity(),itemsList));
-                }else{
-                    getData();
                 }
             }
         }, new Response.ErrorListener() {
@@ -294,7 +292,6 @@ public class ShopFragment extends BaseFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder=null;
-
             if(convertView==null){
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(mActivity,R.layout.store_item,null);
@@ -319,7 +316,6 @@ public class ShopFragment extends BaseFragment {
                 PhoneNo = items.getTelphoneNo();
                 shopJingdu = items.getLat()+"";
                 shopWeidu = items.getLng()+"";
-                branchId = items.getId()+"";
             }
             viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -341,7 +337,7 @@ public class ShopFragment extends BaseFragment {
             viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    join(branchId);
+
                 }
             });
 
@@ -349,42 +345,8 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    private void join(final String shopID){
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                if(s.contains("true")){
-                    mGridView.setVisibility(View.VISIBLE);
-                    ibtn_call.setVisibility(View.VISIBLE);
-                    ibtn_gps.setVisibility(View.VISIBLE);
-                    storelist.setVisibility(View.GONE);
-                }else{
-                    ToastUtils.showToastShort("加入失败！请检查网络！");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("branchId",shopID);
-                map.put("follow","true");
-                return map;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-        };
-
-        requestQueue.add(stringRequest);
+    private void join(){
+        
 
     }
 
