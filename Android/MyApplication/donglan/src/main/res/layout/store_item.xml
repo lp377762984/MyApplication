@@ -28,6 +28,7 @@
                 android:textColor="#333333"
                 />
             <TextView
+                android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="良乡，据我5km"
@@ -37,19 +38,29 @@
                 android:textColor="#999999"
                 />
             <ImageView
+                android:id="@+id/img_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/img_phone"
                 android:src="@drawable/store_adress"
                 android:layout_centerVertical="true"
-                android:paddingRight="20dp"
+                android:layout_marginRight="20dp"
                 />
             <ImageView
                 android:id="@+id/img_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:src="@drawable/store_phone"
+                android:layout_toLeftOf="@+id/img_join"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                />
+            <ImageView
+                android:id="@+id/img_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/joinshop"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 />

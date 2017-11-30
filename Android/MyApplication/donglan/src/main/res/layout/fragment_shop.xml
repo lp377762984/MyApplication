@@ -20,7 +20,7 @@
             android:layout_height="34dp"
             android:layout_alignBottom="@id/iv_top_bg"
 
-
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -51,18 +51,22 @@
                 android:background="@drawable/img_call_phone" />
         </LinearLayout>
     </RelativeLayout>
-    <ListView
-        android:id="@+id/storelist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        >
-    </ListView>
-    <GridView
-        android:id="@+id/gridview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:numColumns="4"></GridView>
+        android:layout_height="wrap_content">
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="4">
+        </GridView>
+        <ListView
+            android:id="@+id/storelist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+        </ListView>
+    </RelativeLayout>
 
 </LinearLayout>

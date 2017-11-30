@@ -1,7 +1,9 @@
 package com.cn.danceland.myapplication.fragment;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,21 +14,36 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClientOption;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.HomeActivity;
+import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
+import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -39,7 +56,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,8 +66,14 @@ import java.util.UUID;
  * A simple {@link Fragment} subclass.
  */
 public class ShopFragment extends BaseFragment {
-
+    RequestQueue requestQueue;
+    ListView storelist;
     GridView mGridView;
+    String jingdu,weidu,shopJingdu,shopWeidu,branchId;
+    String PhoneNo;
+    Gson gson;
+    Data info;
+    ImageButton ibtn_call,ibtn_gps;
     String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动", "我的会员卡"};
     int[] icons = {R.drawable.img_jsq, R.drawable.img_srjl, R.drawable.img_hsdt, R.drawable.img_zxsk
             , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd, R.drawable.img_hyk};
@@ -57,9 +82,42 @@ public class ShopFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_shop, null);
 
+        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        gson = new Gson();
+        requestQueue = Volley.newRequestQueue(getActivity());
         mGridView = v.findViewById(R.id.gridview);
+
+        ibtn_call = v.findViewById(R.id.ibtn_call);
+        ibtn_gps = v.findViewById(R.id.ibtn_gps);
+
         mGridView.setAdapter(new MyAdapter());
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
+
+        storelist = v.findViewById(R.id.storelist);
+        LogUtil.e("zzf",info.getBranchId());
+        if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
+            mGridView.setVisibility(View.VISIBLE);
+            ibtn_call.setVisibility(View.VISIBLE);
+            ibtn_gps.setVisibility(View.VISIBLE);
+            storelist.setVisibility(View.GONE);
+        }else{
+            mGridView.setVisibility(View.GONE);
+            storelist.setVisibility(View.VISIBLE);
+            ibtn_call.setVisibility(View.GONE);
+            ibtn_gps.setVisibility(View.GONE);
+        }
+
+        storelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        getData();
+
         LinearLayout ll_top = v.findViewById(R.id.ll_top);
         ll_top.setBackgroundColor(Color.WHITE);
         ll_top.getBackground().setAlpha(80);
@@ -69,6 +127,48 @@ public class ShopFragment extends BaseFragment {
 
         return v;
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        String getlocationString = ((HomeActivity) activity).getlocationString();
+        if(getlocationString!=null){
+            jingdu = getlocationString.split(",")[0];
+            weidu = getlocationString.split(",")[1];
+        }
+    }
+
+    public void getData(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                StoreBean storeBean = gson.fromJson(s, StoreBean.class);
+                List<StoreBean.Items> itemsList = storeBean.getData().getItems();
+                if(itemsList!=null&&itemsList.size()>0){
+                    storelist.setAdapter(new MyStoreAdapter(getActivity(),itemsList));
+                }else{
+                    getData();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
+    }
+
+
 
     @Override
     public void initDta() {
@@ -92,47 +192,6 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    /***
-     * 查找个人动态
-     */
-    private void findSelfDT() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_SELF_DT_MSG, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                LogUtil.i(SPUtils.getString(Constants.MY_USERID,""));
-                map.put("id", SPUtils.getString(Constants.MY_USERID,""));//用户id
-                map.put("page", 1+"");//页数
-                LogUtil.i(map.toString());
-                return map;
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                LogUtil.i(hm.toString());
-                return hm;
-            }
-
-        };
-        MyApplication.getHttpQueues().add(request);
-
-    }
-
-
     /**
      * 提示
      */
@@ -140,12 +199,12 @@ public class ShopFragment extends BaseFragment {
         AlertDialog.Builder dialog =
                 new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
-        dialog.setMessage("是否呼叫" + "010-12345678");
+        dialog.setMessage("是否呼叫" + PhoneNo);
         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                call("010-12345678");
+                call(PhoneNo);
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -177,51 +236,11 @@ public class ShopFragment extends BaseFragment {
             ToastUtils.showToastShort(icon_name[i]);
             switch (i) {
                 case 0:
-                    //     logOut();
-
                     break;
                 case 1:
-//                    MultipartRequestParams params = new MultipartRequestParams();
-//                    if (!FileUtil.fileIsExists(Environment.getExternalStorageDirectory() + "/300.jpg")) {
-//                        ToastUtils.showToastShort("文件不存在");
-//                        return;
-//                    }
-//                    params.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-//
-//                  params.put("files", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-//
-//               params.put("files", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-//                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOAD_FILES_URL, new Response.Listener<String>() {
-//                        //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-//
-//                        //     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, "http://192.168.1.94:8003/user/uploadFile", new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String s) {
-//
-//                            LogUtil.i(s);
-//
-//                        }
-//                    }, new Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError volleyError) {
-//                            LogUtil.i(volleyError.toString());
-//                        }
-//                    }
-//                    ) {
-//
-//                    };
-//
-//                    MyApplication.getHttpQueues().add(request);
 
                     break;
                 case 2:
-
-//                    HttpUrlConnectionOpts opts = new HttpUrlConnectionOpts();
-//                    Map<String, File> map = new HashMap<>();
-//                    map.put("file", new File(Environment.getExternalStorageDirectory() + "/123.jpg"));
-//                    map.put("file1", new File(Environment.getExternalStorageDirectory() + "/300.jpg"));
-//                    //    opts.addIfParameter( opts.createMultiPartConnection(Constants.UPLOAD_FILES_URL),map);
-//                    opts.fileUpLoad(Constants.UPLOAD_FILES_URL, map);
                     break;
                 case 3://在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
@@ -231,20 +250,15 @@ public class ShopFragment extends BaseFragment {
                     break;
                 case 5:
 
-
-
                     break;
                 case 6:
                     break;
                 case 7:
-                    findSelfDT();
                     break;
                 case 8:
                     LogUtil.i(SPUtils.getString(Constants.MY_USERID,null));
                     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN,null));
                     break;
-
-
                 default:
                     break;
             }
@@ -253,173 +267,131 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    private void upload(String[] uploadFiles, String actionUrl) {
-        String end = "/r/n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        try {
-            URL url = new URL(actionUrl);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            // 发送POST请求必须设置如下两行
-            con.setRequestProperty("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
-            con.setDoInput(true);
-            con.setDoOutput(true);
-            con.setUseCaches(false);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Connection", "Keep-Alive");
-            con.setRequestProperty("Charset", "UTF-8");
-            con.setRequestProperty("Content-Type",
-                    "multipart/form-data;boundary=" + boundary);
-            DataOutputStream ds =
-                    new DataOutputStream(con.getOutputStream());
-            for (int i = 0; i < uploadFiles.length; i++) {
-                String uploadFile = uploadFiles[i];
-                String filename = uploadFile.substring(uploadFile.lastIndexOf("//") + 1);
-                ds.writeBytes(twoHyphens + boundary + end);
-                ds.writeBytes("Content-Disposition: form-data;");
-              //  ds.writeBytes("name="+"\"file\""+i+";");
-                ds.writeBytes(" name="+"\"files\";");
-                ds.writeBytes(" filename="+"\""+filename+"\"");
-                ds.writeBytes(end);
+    public class MyStoreAdapter extends BaseAdapter{
+        Context mContext;
+        List<StoreBean.Items> itemsArrayList;
 
-               // ds.writeBytes(end);
-//                ds.writeBytes("Content-Disposition: form-data;"+"name=\"file\"" + i + "/";filename=/"" +
-//                        filename + "/"" + end);
+        MyStoreAdapter(Context context, List<StoreBean.Items> list){
+            mContext = context;
+            itemsArrayList = list;
+        }
+
+        @Override
+        public int getCount() {
+            return itemsArrayList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder=null;
+
+            if(convertView==null){
+                viewHolder = new ViewHolder();
+                convertView = View.inflate(mActivity,R.layout.store_item,null);
+                viewHolder.store_item_img = convertView.findViewById(R.id.store_item_img);
+                viewHolder.store_address = convertView.findViewById(R.id.store_address);
+                viewHolder.distance = convertView.findViewById(R.id.distance);
+                viewHolder.img_location = convertView.findViewById(R.id.img_location);
+                viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
+                viewHolder.img_join = convertView.findViewById(R.id.img_join);
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
 
 
-                FileInputStream fStream = new FileInputStream(uploadFile);
-                int bufferSize = 1024;
-                byte[] buffer = new byte[bufferSize];
-                int length = -1;
-                while ((length = fStream.read(buffer)) != -1) {
-                    ds.write(buffer, 0, length);
+
+            if(itemsArrayList!=null){
+                StoreBean.Items items = itemsArrayList.get(position);
+                viewHolder.store_address.setText(items.getBname());
+                viewHolder.distance.setText(items.getAddress());
+                Glide.with(getActivity()).load(items.getLogo()).into(viewHolder.store_item_img);
+                PhoneNo = items.getTelphoneNo();
+                shopJingdu = items.getLat()+"";
+                shopWeidu = items.getLng()+"";
+                branchId = items.getId()+"";
+            }
+            viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDialog();
                 }
-                ds.writeBytes(end);
-              /* close streams */
-                fStream.close();
-            }
-            ds.writeBytes(twoHyphens + boundary + twoHyphens + end);
-            ds.flush();
-            // 定义BufferedReader输入流来读取URL的响应
-            InputStream is = con.getInputStream();
-            int ch;
-            StringBuffer b = new StringBuffer();
-            while ((ch = is.read()) != -1) {
-                b.append((char) ch);
-            }
-            String s = b.toString();
-            LogUtil.i(s);
-            if (s.contains("successfully")) {
-                // for (int i = 1; i < 5; i++) {
-                int beginIndex = s.indexOf("url =") + 5;
-                int endIndex = s.indexOf("/n", beginIndex);
-                String urlStr = s.substring(beginIndex, endIndex).trim();
-                System.out.println(urlStr);
-                // }
-            }
-            ds.close();
-        } catch (Exception e) {
+            });
+            viewHolder.img_location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), MapActivity.class);
+                    intent.putExtra("shopJingdu",shopJingdu);
+                    intent.putExtra("shopWeidu",shopWeidu);
+                    intent.putExtra("jingdu",jingdu);
+                    intent.putExtra("weidu",weidu);
+                    startActivity(intent);
+                }
+            });
+            viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    join(branchId);
+                }
+            });
+
+            return convertView;
         }
     }
 
-
-    /**
-     * 通过拼接的方式构造请求内容，实现参数传输以及文件传输
-     *
-     * @param url Service net address
-     * @param params text content
-     * @param files pictures
-     * @return String result of Service response
-     * @throws IOException
-     */
-    public static String post(String url, Map<String, String> params, Map<String, File> files)
-            throws IOException {
-        String BOUNDARY = UUID.randomUUID().toString();
-        String PREFIX = "--", LINEND = "\r\n";
-        String MULTIPART_FROM_DATA = "multipart/form-data";
-        String CHARSET = "UTF-8";
-
-
-        URL uri = new URL(url);
-        HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
-        conn.setReadTimeout(10 * 1000); // 缓存的最长时间
-        conn.setDoInput(true);// 允许输入
-        conn.setDoOutput(true);// 允许输出
-        conn.setUseCaches(false); // 不允许使用缓存
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("connection", "keep-alive");
-        conn.setRequestProperty("Charsert", "UTF-8");
-        conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA + ";boundary=" + BOUNDARY);
-
-
-        // 首先组拼文本类型的参数
-        StringBuilder sb = new StringBuilder();
-        if (params!=null){
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                sb.append(PREFIX);
-                sb.append(BOUNDARY);
-                sb.append(LINEND);
-                sb.append("Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINEND);
-                sb.append("Content-Type: text/plain; charset=" + CHARSET + LINEND);
-                sb.append("Content-Transfer-Encoding: 8bit" + LINEND);
-                sb.append(LINEND);
-                sb.append(entry.getValue());
-                sb.append(LINEND);
-            }
-        }
-
-
-
-        DataOutputStream outStream = new DataOutputStream(conn.getOutputStream());
-        outStream.write(sb.toString().getBytes());
-        // 发送文件数据
-        if (files != null)
-            for (Map.Entry<String, File> file : files.entrySet()) {
-                StringBuilder sb1 = new StringBuilder();
-                sb1.append(PREFIX);
-                sb1.append(BOUNDARY);
-                sb1.append(LINEND);
-                sb1.append("Content-Disposition: form-data; name=\"files\"; filename=\""
-                        + file.getValue().getName() + "\"" + LINEND);
-                sb1.append("Content-Type: application/octet-stream; charset=" + CHARSET + LINEND);
-                sb1.append(LINEND);
-                outStream.write(sb1.toString().getBytes());
-
-
-                InputStream is = new FileInputStream(file.getValue());
-                byte[] buffer = new byte[1024];
-                int len = 0;
-                while ((len = is.read(buffer)) != -1) {
-                    outStream.write(buffer, 0, len);
+    private void join(final String shopID){
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if(s.contains("true")){
+                    mGridView.setVisibility(View.VISIBLE);
+                    ibtn_call.setVisibility(View.VISIBLE);
+                    ibtn_gps.setVisibility(View.VISIBLE);
+                    storelist.setVisibility(View.GONE);
+                }else{
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
-
-
-                is.close();
-                outStream.write(LINEND.getBytes());
             }
-
-
-        // 请求结束标志
-        byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINEND).getBytes();
-        outStream.write(end_data);
-        outStream.flush();
-        // 得到响应码
-        int res = conn.getResponseCode();
-        InputStream in = conn.getInputStream();
-        StringBuilder sb2 = new StringBuilder();
-        if (res == 200) {
-            int ch;
-            while ((ch = in.read()) != -1) {
-                sb2.append((char) ch);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
 
             }
-            LogUtil.i(sb2.toString());
-        }
-        outStream.close();
-        conn.disconnect();
-        return sb2.toString();
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("branchId",shopID);
+                map.put("follow","true");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
     }
 
+    class ViewHolder{
+        ImageView store_item_img,img_location,img_phone,img_join;
+        TextView store_address,distance;
+    }
 
 
     class MyAdapter extends BaseAdapter {
@@ -452,72 +424,5 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-
-    /***
-     * 退出登录
-     */
-    private void logOut() {
-
-        String url = "http://192.168.1.119:8888/user/logOut";
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-
-                Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    //成功
-                    //    startActivity(new Intent(mActivity, LoginActivity.class));
-                    SPUtils.setBoolean(Constants.ISLOGINED, false);
-                    //退出主页面
-                    //  HomeActivity.instance.finish();
-                    //   mActivity.finish();
-                } else {
-                    //失败
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("请求失败，请查看网络连接");
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
-
-                // map.put("romType", "0");
-                return map;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
-
-        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("login");
-        // 设置超时时间
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        // 将请求加入全局队列中
-        MyApplication.getHttpQueues().add(request);
-    }
 
 }

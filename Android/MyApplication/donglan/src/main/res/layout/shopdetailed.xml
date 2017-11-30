@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/bg_white"
+    >
+
+        <ScrollView
+            android:id="@+id/sc_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/s_button"
+            android:layout_marginBottom="10dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:id="@+id/rl_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/bt_back"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/img_back"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/store_top_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:src="@drawable/img_man"
+                        android:scaleType="fitXY"
+                        />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_alignBottom="@+id/store_top_bg"
+                        android:background="#7f808080"
+                        >
+                        <TextView
+                            android:id="@+id/store_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="动岚健身俱乐部"
+                            android:textSize="15sp"
+                            android:layout_centerVertical="true"
+                            android:textColor="#ffffff"
+                            android:layout_marginLeft="15sp"
+                            />
+
+                        <Button
+                            android:layout_width="70dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/circle_button"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="15dp"
+                            android:layout_centerVertical="true"
+                            android:text="加入"
+                            android:textColor="#61c5e7"
+                            android:textSize="15sp"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_adress"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_below="@+id/rl_top"
+                    android:background="@color/color_bg_mianlayout"
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="门店地址"
+                            android:textSize="15sp"
+                            android:textColor="#333333"
+                            android:layout_alignParentTop="true"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="营业时间"
+                            android:textSize="12sp"
+                            android:textColor="#999999"
+                            android:layout_alignParentBottom="true"
+                            />
+
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:id="@+id/detail_adress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/store_adress"
+                        android:layout_toLeftOf="@+id/detail_phone"
+                        android:layout_marginRight="20dp"
+                        android:layout_centerVertical="true"
+                        />
+                    <ImageView
+                        android:id="@+id/detail_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/store_phone"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp"
+                        android:layout_centerVertical="true"
+                        />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/rl_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_adress"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:text="门店简介"
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:layout_below="@+id/rl_detail"
+                    android:text="北京动岚阳光健身有限公司于2013年01月06日成立。法定代表人张建,公司经营范围包括：器械健身；跆拳道、舞蹈技术培训；组织文化艺术交流活动（演出除外）；体育运动项目经营等。"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#666666"
+                    />
+                <TextView
+                    android:id="@+id/rl_jiaolian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="教练团队"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/tv_detail"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    />
+                <GridView
+                    android:id="@+id/jiaolian_grid"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_jiaolian"
+                    android:numColumns="4"
+                    >
+                </GridView>
+            </RelativeLayout>
+
+
+        </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/s_button"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/dl_blue"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我要购卡"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -20,6 +20,9 @@ public class Constants {
     public static final String MODIFY_GENDER = HOST+"user/modifyGender";//修改性别
     public static final String MODIFY_HEIGHT = HOST+"user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST+"user/modifyWeight";//修改身高
+    public static final String BRANCH = HOST+"branch";//获取门店列表
+    public static final String JOINBRANCH = HOST+"branch/follow";//关注或者取消门店
+
 
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
     public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注

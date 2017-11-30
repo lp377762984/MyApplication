@@ -30,6 +30,24 @@
                 android:layout_marginLeft="15sp"
                 />
 
+            <ImageButton
+                android:id="@+id/ibtn_gps"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/img_gps_white" />
+
+            <ImageButton
+                android:id="@+id/ibtn_call"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:layout_toLeftOf="@+id/ibtn_gps"
+                android:background="@drawable/img_call_phone" />
+
             <Button
                 android:layout_width="70dp"
                 android:layout_height="28dp"
@@ -40,6 +58,7 @@
                 android:text="加入"
                 android:textColor="#61c5e7"
                 android:textSize="15sp"
+                android:visibility="gone"
                 />
         </RelativeLayout>
     </RelativeLayout>

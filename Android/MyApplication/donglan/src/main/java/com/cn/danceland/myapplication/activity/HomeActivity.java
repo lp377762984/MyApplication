@@ -10,11 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
+import com.cn.danceland.myapplication.utils.LocationService;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -32,7 +37,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private MeFragment meFragment;
     public static HomeActivity instance = null;
     private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
-
+    public LocationService mLocationClient;
+    public BDAbstractLocationListener myListener = new MyLocationListener();
+    double jingdu,weidu;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -96,6 +103,43 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
         // 默认首页
         mTabs[0].setSelected(true);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLocationClient = MyApplication.getInstance().locationClient;
+        mLocationClient.registerListener(myListener);
+
+        mLocationClient.start();
+
+    }
+    public String getlocationString(){
+        return jingdu+","+weidu;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLocationClient.unregisterListener(myListener);
+        mLocationClient.stop();
+    }
+
+    public class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            //获取周边POI信息
+            //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
+            //LogUtil.e("zzf",location.getLocType()+"");
+            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+                jingdu = location.getLatitude();
+                weidu = location.getLongitude();
+
+            }else{
+                ToastUtils.showToastShort("定位失败!");
+            }
+        }
+
     }
 
 

@@ -76,6 +76,8 @@
         <activity android:name=".activity.RecordView" />
         <activity android:name=".activity.DynHomeActivity" />
         <activity android:name=".activity.UserListActivity" />
+        <activity android:name=".activity.ShopDetailed" />
+        <activity android:name=".activity.ShopDetailedActivity" />
     </application>
 
 
