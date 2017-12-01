@@ -112,7 +112,7 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
         record.setOnClickListener(onClickListener);
         stop.setOnClickListener(onClickListener);
         holder.addCallback(RecordView.this);
-
+        ((AudioManager)getSystemService(Context.AUDIO_SERVICE)).setStreamMute(AudioManager.STREAM_SYSTEM,true);
 //        AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 //        mAudioManager.setStreamVolume();
 
