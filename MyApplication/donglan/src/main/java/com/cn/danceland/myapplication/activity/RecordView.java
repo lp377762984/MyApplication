@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.format.Time;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -152,9 +153,17 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
     };
 
     public void init(){
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+        t.setToNow(); // 取得系统时间。
+        int year = t.year;
+        int month = t.month;
+        int date = t.monthDay;
+        int hour = t.hour; // 0-23
+        int minute = t.minute;
+        int second = t.second;
         // 创建保存录制视频的视频文件
         videoPath = Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/vedio/"+System.currentTimeMillis()+".mp4";
+                + "/DCIM/Camera/"+"VID_"+year+month+date+"_"+hour+minute+second+".mp4";
         File dir = new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/vedio/");
         if (!dir.exists()) {
