@@ -1,8 +1,10 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -110,6 +112,10 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
         record.setOnClickListener(onClickListener);
         stop.setOnClickListener(onClickListener);
         holder.addCallback(RecordView.this);
+
+//        AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        mAudioManager.setStreamVolume();
+
     }
 
 
@@ -133,7 +139,9 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
                    case R.id.stop:
                        stop();
                        Intent intent = new Intent();
-                       intent.putExtra("videoPath",videoPath);
+                       if(videoPath!=null){
+                           intent.putExtra("videoPath",videoPath);
+                       }
                        setResult(111,intent);
                        timer.cancel();
                        finish();
@@ -159,6 +167,7 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
 
         //startPre();
         camera.setDisplayOrientation(90);
+
 //
 //        //Camera.Parameters parameters = camera.getParameters();
 //
