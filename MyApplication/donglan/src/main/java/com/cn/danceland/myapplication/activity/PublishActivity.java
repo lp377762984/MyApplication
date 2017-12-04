@@ -172,7 +172,7 @@ public class PublishActivity extends Activity {
     private void initView() {
         publish_cancel = findViewById(R.id.publish_cancel);
         publish_ok = findViewById(R.id.publish_ok);
-
+        publish_ok.setClickable(true);
         location_img = findViewById(R.id.location_img);
         publish_status = findViewById(R.id.publish_status);
         publish_photo = findViewById(R.id.publish_photo);
@@ -261,9 +261,10 @@ public class PublishActivity extends Activity {
                                 }
                             }).start();
 //                                LogUtil.e("zzf",publishBean.getImgList().toString());
-
+                            publish_ok.setClickable(false);
                         }else{
                             if(!"".equals(stringstatus)){
+                                publish_ok.setClickable(false);
                                 publishBean.setContent(stringstatus);
                                 publishBean.setPublishPlace(location);
                                 String strBean = gson.toJson(publishBean);
@@ -324,6 +325,7 @@ public class PublishActivity extends Activity {
                                         }
                                     }
                                 }).start();
+                                publish_ok.setClickable(false);
                             }
                         }
                     }
