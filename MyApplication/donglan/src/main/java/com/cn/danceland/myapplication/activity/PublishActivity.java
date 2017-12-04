@@ -399,14 +399,12 @@ public class PublishActivity extends Activity {
         }else if(resultCode == 111){
             videoPath = data.getStringExtra("videoPath");
             MediaMetadataRetriever media = new MediaMetadataRetriever();
-            if(videoPath!=null){
-                media.setDataSource(videoPath);
-                Bitmap frameAtTime = media.getFrameAtTime();
-                picFile = saveBitmapFile(frameAtTime);
-                videoimg.setImageBitmap(frameAtTime);
-                publish_photo.setVisibility(View.GONE);
-                videoimg.setVisibility(View.VISIBLE);
-            }
+            media.setDataSource(videoPath);
+            Bitmap frameAtTime = media.getFrameAtTime();
+            picFile = saveBitmapFile(frameAtTime);
+            videoimg.setImageBitmap(frameAtTime);
+            publish_photo.setVisibility(View.GONE);
+            videoimg.setVisibility(View.VISIBLE);
         }
 
     }
