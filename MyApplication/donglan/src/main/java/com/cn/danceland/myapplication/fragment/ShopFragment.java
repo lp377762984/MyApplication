@@ -74,6 +74,7 @@ public class ShopFragment extends BaseFragment {
     String PhoneNo;
     Gson gson;
     Data info;
+    List<StoreBean.Items> itemsList;
     ImageButton ibtn_call,ibtn_gps;
     String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动", "我的会员卡"};
     int[] icons = {R.drawable.img_jsq, R.drawable.img_srjl, R.drawable.img_hsdt, R.drawable.img_zxsk
@@ -96,22 +97,21 @@ public class ShopFragment extends BaseFragment {
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
 
         storelist = v.findViewById(R.id.storelist);
-        LogUtil.e("zzf",info.getBranchId());
+
+
+        getData();
         if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
             ibtn_gps.setVisibility(View.VISIBLE);
             storelist.setVisibility(View.GONE);
         }else{
+
             mGridView.setVisibility(View.GONE);
             storelist.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.GONE);
             ibtn_gps.setVisibility(View.GONE);
         }
-
-
-        getData();
-
         LinearLayout ll_top = v.findViewById(R.id.ll_top);
         ll_top.setBackgroundColor(Color.WHITE);
         ll_top.getBackground().setAlpha(80);
@@ -137,7 +137,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
-                List<StoreBean.Items> itemsList = storeBean.getData().getItems();
+                itemsList = storeBean.getData().getItems();
                 if(itemsList!=null&&itemsList.size()>0){
                     storelist.setAdapter(new MyStoreAdapter(getActivity(),itemsList));
                 }
