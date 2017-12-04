@@ -1020,26 +1020,52 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
         }
     }
 
-    public static void onScrollAutoTiny(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    public static void onScrollAutoTiny(AbsListView view, int firstVisibleItem, int visibleItemCount, int headviewCount) {
         int lastVisibleItem = firstVisibleItem + visibleItemCount;
-        int currentPlayPosition = JZMediaManager.instance().positionInList;
-        if (currentPlayPosition >= 0) {
+        int currentPlayPosition = JZMediaManager.instance().positionInList + headviewCount;
+
+//        Log.e(TAG, "lastVisibleItem"
+//                + lastVisibleItem + "currentPlayPosition" + currentPlayPosition);
+        if (currentPlayPosition >= 0 + headviewCount) {
             if ((currentPlayPosition < firstVisibleItem || currentPlayPosition > (lastVisibleItem - 1))) {
+                //看不到当前item
                 if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                         JZVideoPlayerManager.getCurrentJzvd().currentScreen != JZVideoPlayer.SCREEN_WINDOW_TINY) {
                     if (JZVideoPlayerManager.getCurrentJzvd().currentState == JZVideoPlayer.CURRENT_STATE_PAUSE) {
                         JZVideoPlayer.releaseAllVideos();
                     } else {
-                        Log.e(TAG, "onScroll: out screen");
-                        JZVideoPlayerManager.getCurrentJzvd().startWindowTiny();
+
+//                        Log.e(TAG, "JZVideoPlayerManager.getCurrentJzvd().currentScreen==="+JZVideoPlayerManager.getCurrentJzvd().currentScreen);
+//                        Log.e(TAG, "JZVideoPlayerManager.getCurrentJzvd().currentState"+JZVideoPlayerManager.getCurrentJzvd().currentState);
+//                        Log.e(TAG, "JZMediaManager.instance().positionInList==="+JZMediaManager.instance().positionInList);
+//                        Log.e(TAG, "headviewCount==="+headviewCount);
+//                        Log.e(TAG, "currentPlayPosition==="+currentPlayPosition);
+
+                        if (JZVideoPlayerManager.getCurrentJzvd().currentScreen != JZVideoPlayer.SCREEN_WINDOW_FULLSCREEN) {
+
+
+                            JZVideoPlayerManager.getCurrentJzvd().startWindowTiny();
+                            Log.e(TAG, "onScroll: out screen");
+
+                        }
+//                        if (JZVideoPlayerManager.getCurrentJzvd().currentState==JZVideoPlayer.CURRENT_STATE_PLAYING){
+//                            JZVideoPlayerManager.getCurrentJzvd().playOnThisJzvd();
+//                        }
+
                     }
                 }
             } else {
+                //看到到当前item
                 if (JZVideoPlayerManager.getCurrentJzvd() != null &&
                         JZVideoPlayerManager.getCurrentJzvd().currentScreen == JZVideoPlayer.SCREEN_WINDOW_TINY) {
                     Log.e(TAG, "onScroll: into screen");
                     JZVideoPlayer.backPress();
+
+
+
                 }
+
+
             }
         }
     }

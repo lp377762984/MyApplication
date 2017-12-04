@@ -1,5 +1,9 @@
 [
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\vpi__tab_indicator.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\drawable\\vpi__tab_indicator.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\vpi__tab_indicator.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\drawable\\vpi__tab_indicator.xml"
     }

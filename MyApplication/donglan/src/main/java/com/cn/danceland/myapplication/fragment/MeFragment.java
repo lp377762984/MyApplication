@@ -54,8 +54,6 @@ public class MeFragment extends BaseFragment {
     }
 
 
-
-
     @Override
     public View initViews() {
 
@@ -81,7 +79,6 @@ public class MeFragment extends BaseFragment {
     public void initDta() {
         //获取本地用户信息缓存
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        //设置动态数
 
         //设置关注数
         //  LogUtil.i(mInfo.getFollowNumber()+"");
@@ -94,6 +91,26 @@ public class MeFragment extends BaseFragment {
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(mActivity).load(mInfo.getSelfAvatarPath()).apply(options).into(iv_avatar);
         tv_nick_name.setText(mInfo.getNickName());
+
+
+    }
+
+
+    //更新用户信息
+    private void updateUserInfo(Data mInfo){
+
+        //设置关注数
+        //  LogUtil.i(mInfo.getFollowNumber()+"");
+        tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+        //设置粉丝数
+        tv_fans.setText(mInfo.getFansNum() + "");
+        //设置动态数
+        tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+        //设置头像
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        Glide.with(mActivity).load(mInfo.getSelfAvatarPath()).apply(options).into(iv_avatar);
+        tv_nick_name.setText(mInfo.getNickName());
+
 
 
     }
@@ -117,6 +134,7 @@ public class MeFragment extends BaseFragment {
 
         switch (event.getEventCode()) {
             case EventConstants.ADD_DYN:  //设置动态数+1
+                LogUtil.i("动态加1");
                 mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);
                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                 tv_dyn.setText(mInfo.getDynMsgNumber() + "");
@@ -152,6 +170,13 @@ public class MeFragment extends BaseFragment {
                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                 break;
 
+            case EventConstants.UPDATE_USER_INFO:
+
+
+                updateUserInfo((Data) DataInfoCache.loadOneCache(Constants.MY_INFO));
+
+
+                break;
             default:
                 break;
         }

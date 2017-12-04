@@ -106,6 +106,49 @@ public class SelectionFragment extends BaseFragment {
 
                 break;
 
+            case  8901://当前页
+                   // LogUtil.i("当前页"+event.getMsg());
+                if (event.getMsg()==0){
+                    pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
+                        }
+                    });
+                }else {
+                    pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                        }
+                    });
+                }
+                break;
+
+            case 8902:
+                pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                    }
+                });
+
+                break;
 
             default:
                 break;
@@ -282,7 +325,7 @@ public class SelectionFragment extends BaseFragment {
             @Override
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
-
+                JZVideoPlayer.releaseAllVideos();
                 new DownRefresh().execute();
 
 
@@ -306,7 +349,14 @@ public class SelectionFragment extends BaseFragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                //    JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
+              //  LogUtil.i("firstVisibleItem="+firstVisibleItem+"visibleItemCount="+visibleItemCount+"totalItemCount="+totalItemCount);
+
+//                if (firstVisibleItem==0){
+//                    visibleItemCount=visibleItemCount-1;
+//                }
+
+                JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
             }
         });
 

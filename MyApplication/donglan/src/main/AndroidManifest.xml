@@ -31,33 +31,50 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ChartActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.RegisterInfoActivity" />
-        <activity android:name=".activity.LoginSMSActivity" />
-        <activity android:name=".activity.ForgetPasswordActivity" />
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.MyProActivity" />
+        <activity android:name=".activity.ChartActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RegisterInfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LoginSMSActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MyProActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.ResetPhoneActivity"></activity>
-        <activity android:name=".activity.ConfirmPasswordActivity" />
-        <activity android:name=".activity.ImagesActivity" />
-        <activity android:name=".activity.PublishActivity" />
-        <activity android:name=".activity.LocationActivity" />
-        <activity android:name=".activity.MapActivity" />
+        <activity android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".pictureviewer.ImagePagerActivity"/>
+        <activity android:name=".activity.ResetPhoneActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.ConfirmPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ImagesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PublishActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LocationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MapActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -67,18 +84,29 @@
             android:enabled="true"
             android:process=":remote"></service>
 
-        <activity android:name=".activity.AddFriendsActivity" />
-        <activity android:name=".activity.UserHomeActivity" />
-        <activity android:name=".activity.SellCardActivity" />
-        <activity android:name=".activity.SellCardConfirmActivity" />
-        <activity android:name=".activity.FitnessManActivity" />
-        <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.RecordView" />
-        <activity android:name=".activity.DynHomeActivity" />
-        <activity android:name=".activity.UserListActivity" />
-        <activity android:name=".activity.ShopDetailed" />
-        <activity android:name=".activity.ShopDetailedActivity" />
-        <activity android:name=".activity.NewsDetailsActivity"/>
+        <activity android:name=".activity.AddFriendsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.UserHomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellCardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellCardConfirmActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessManActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AboutUsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RecordView"
+            />
+        <activity android:name=".activity.DynHomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.UserListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ShopDetailedActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.NewsDetailsActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 

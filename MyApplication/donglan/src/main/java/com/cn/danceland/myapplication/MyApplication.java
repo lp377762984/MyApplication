@@ -6,11 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.baidu.location.LocationClient;
 import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.utils.LocationService;
+import com.danikula.videocache.HttpProxyCacheServer;
 
 /**
  * Created by shy on 2017/9/30 09:27
@@ -27,6 +27,22 @@ public class MyApplication extends Application {
     private SQLiteDatabase db;
     private DaoMaster daoMaster;
     private DaoSession daoSession;
+
+
+    private HttpProxyCacheServer proxy;
+
+    public static HttpProxyCacheServer getProxy(Context context) {
+        MyApplication app = (MyApplication) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy() {
+
+        return new HttpProxyCacheServer.Builder(this)
+                .maxCacheSize(1024 * 1024 * 200)       // 200M for cache
+                .build();
+
+    }
 
     @Override
     public void onCreate() {

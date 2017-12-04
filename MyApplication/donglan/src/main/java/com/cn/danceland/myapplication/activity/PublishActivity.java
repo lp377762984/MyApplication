@@ -65,6 +65,7 @@ import java.util.Map;
 
 /**
  * Created by feng on 2017/10/23.
+ * 发布动态
  */
 
 public class PublishActivity extends Activity {
@@ -123,8 +124,8 @@ public class PublishActivity extends Activity {
                     }else{
                         try {
                             commitUrl(gson.toJson(bean));
-                            EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                            finish();
+                       //     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
+                      //      finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -152,8 +153,8 @@ public class PublishActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                        finish();
+                    //    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
+                     //   finish();
                     }
                 }
             }
@@ -273,8 +274,8 @@ public class PublishActivity extends Activity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                                finish();
+
+                            //    finish();
                             }else{
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
 
@@ -359,6 +360,8 @@ public class PublishActivity extends Activity {
                 RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
                 if("true".equals(rootBean.success)){
                     ToastUtils.showToastShort("发布成功！");
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
+                    finish();
                 }else{
                     ToastUtils.showToastShort("发布失败！请检查网络连接");
                 }
@@ -366,6 +369,8 @@ public class PublishActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
 
             }
         }) {

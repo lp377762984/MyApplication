@@ -81,7 +81,7 @@ public class HomeFragment extends BaseFragment {
         pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
         //禁止头部出现分割线
-        pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
+   //   pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
 
         pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
@@ -237,7 +237,7 @@ public class HomeFragment extends BaseFragment {
             newsDataBean.setUrl("http://money.163.com/17/1129/01/D4CGFLLC002580S6.html");
             data.add(newsDataBean);
         }
-        newsListviewAdapter.notifyDataSetChanged();
+
 
         imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511937477493&di=a44f237b0eeab978b10bcb43ca3e98e9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8c1001e93901213f4a21fac35ee736d12f2e959b.jpg");
         imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867148&di=76f9d5c92f0035fbc0cdc2cca7bd29ba&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F902397dda144ad349ad41299daa20cf431ad8541.jpg");
@@ -248,6 +248,8 @@ public class HomeFragment extends BaseFragment {
 
         topNewsAdapter.setData(imagelist);
         topNewsAdapter.notifyDataSetChanged();
+        newsListviewAdapter.setData(data);
+        newsListviewAdapter.notifyDataSetChanged();
         mHandler.sendMessageDelayed(Message.obtain(),
                 TOP_NEWS_CHANGE_TIME);
 
