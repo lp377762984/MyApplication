@@ -1,14 +1,17 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.format.Time;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -110,6 +113,10 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
         record.setOnClickListener(onClickListener);
         stop.setOnClickListener(onClickListener);
         holder.addCallback(RecordView.this);
+        ((AudioManager)getSystemService(Context.AUDIO_SERVICE)).setStreamMute(AudioManager.STREAM_SYSTEM,true);
+//        AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        mAudioManager.setStreamVolume();
+
     }
 
 
@@ -133,7 +140,9 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
                    case R.id.stop:
                        stop();
                        Intent intent = new Intent();
-                       intent.putExtra("videoPath",videoPath);
+                       if(videoPath!=null){
+                           intent.putExtra("videoPath",videoPath);
+                       }
                        setResult(111,intent);
                        timer.cancel();
                        finish();
@@ -144,9 +153,17 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
     };
 
     public void init(){
+        Time t=new Time(); // or Time t=new Time("GMT+8"); 加上Time Zone资料。
+        t.setToNow(); // 取得系统时间。
+        int year = t.year;
+        int month = t.month;
+        int date = t.monthDay;
+        int hour = t.hour; // 0-23
+        int minute = t.minute;
+        int second = t.second;
         // 创建保存录制视频的视频文件
         videoPath = Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/vedio/"+System.currentTimeMillis()+".mp4";
+                + "/DCIM/Camera/"+"VID_"+year+month+date+"_"+hour+minute+second+".mp4";
         File dir = new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/vedio/");
         if (!dir.exists()) {
@@ -159,6 +176,7 @@ public class RecordView extends Activity implements SurfaceHolder.Callback{
 
         //startPre();
         camera.setDisplayOrientation(90);
+
 //
 //        //Camera.Parameters parameters = camera.getParameters();
 //

@@ -1,17 +1,21 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
 import java.io.IOException;
+
 
 
 /**
@@ -20,6 +24,7 @@ import java.io.IOException;
 public class SplashActivity extends Activity {
 
     private static final int sleepTime = 2000;
+
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -35,9 +40,7 @@ public class SplashActivity extends Activity {
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
-
     }
-
 
     @Override
     protected void onStart() {
