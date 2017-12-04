@@ -16,7 +16,6 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 
 import java.io.IOException;
 
-import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
