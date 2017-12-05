@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ImageFolder;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
@@ -59,7 +60,8 @@ public class ImagesActivity extends Activity{
     String path;
     ImageView iv_back;
     TextView sure;
-
+    ArrayList<String> integers;
+    List<String> arrList = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +102,7 @@ public class ImagesActivity extends Activity{
             if(mImgDir!=null){
                 path = mImgDir.getAbsolutePath();
                 List<String> arr = new ArrayList<String>();
-                List<String> arrList = new ArrayList<String>();
+
                 arr = Arrays.asList(mImgDir.list());
                 if(arr!=null&&arr.size()>0){
                     for(int i = 0;i<arr.size();i++){
@@ -129,6 +131,8 @@ public class ImagesActivity extends Activity{
         uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         contentResolver =ImagesActivity.this.getContentResolver();
         arrPath = new ArrayList<String>();
+        arrPath.clear();
+        integers = new ArrayList<String>();
     }
 
     public void setData() {
@@ -216,22 +220,24 @@ public class ImagesActivity extends Activity{
                     if(item_select_blue.getVisibility()==View.GONE){
                         item_select_blue.setVisibility(View.VISIBLE);
                         item_select.setVisibility(View.GONE);
-                        arrPath.add(path+"/"+Arrays.asList(mImgDir.list()).get(position));
+                        arrPath.add(path+"/"+arrList.get(position));
                         order++;
+                        integers.add(String.valueOf(position));
                     }else{
                         item_select_blue.setVisibility(View.GONE);
                         item_select.setVisibility(View.VISIBLE);
                         for (int i=arrPath.size()-1;i>0;i--){
-                            if((path+"/"+Arrays.asList(mImgDir.list()).get(position)).equals(arrPath.get(i))){
+                            if((path+"/"+arrList.get(position)).equals(arrPath.get(i))){
                                 arrPath.remove(i);
                             }
                         }
                         order--;
+                        integers.remove(String.valueOf(position));
                     }
                 }else{
                     int m=0;
                     for (int i=arrPath.size()-1;i>0;i--){
-                        if((path+"/"+Arrays.asList(mImgDir.list()).get(position)).equals(arrPath.get(i))){
+                        if((path+"/"+arrList.get(position)).equals(arrPath.get(i))){
                             arrPath.remove(i);
                             item_select_blue.setVisibility(View.GONE);
                             item_select.setVisibility(View.VISIBLE);
@@ -282,10 +288,20 @@ public class ImagesActivity extends Activity{
                 convertView = mInflater.inflate(R.layout.images_item, null);
                 viewHolder.img = convertView.findViewById(R.id.image_item);
                 viewHolder.item_select = convertView.findViewById(R.id.item_select);
+                viewHolder.item_select_blue = convertView.findViewById(R.id.item_select_blue);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+
+                if(integers.contains(String.valueOf(position))){
+                    viewHolder.item_select_blue.setVisibility(View.VISIBLE);
+                    viewHolder.item_select.setVisibility(View.GONE);
+                }else{
+                    viewHolder.item_select_blue.setVisibility(View.GONE);
+                    viewHolder.item_select.setVisibility(View.VISIBLE);
+                }
+
 
 
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -299,7 +315,7 @@ public class ImagesActivity extends Activity{
 
     }
     public class ViewHolder{
-        ImageView img,item_select;
+        ImageView img,item_select,item_select_blue;
     }
 
     @Override
