@@ -9,6 +9,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -58,6 +63,7 @@ import static com.cn.danceland.myapplication.R.id.iv_comment;
 import static com.cn.danceland.myapplication.R.id.iv_transpond;
 import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
+import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by shy on 2017/10/24 17:40
@@ -76,6 +82,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+     //   buildAnima();
     }
 
 
@@ -106,6 +113,44 @@ public class MyDynListviewAdater extends BaseAdapter {
      */
     public void setGzType(boolean isMe) {
         this.isMe = isMe;
+    }
+
+
+    private AnimationSet mAnimationSet;
+
+    private void buildAnima(int pos) {
+        ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(500);
+        mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setFillAfter(false);
+
+        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
+        mAlphaAnimation.setDuration(500);
+        mAlphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAlphaAnimation.setFillAfter(false);
+
+        mAnimationSet = new AnimationSet(false);
+        mAnimationSet.setDuration(500);
+        mAnimationSet.addAnimation(mScaleAnimation);
+        mAnimationSet.addAnimation(mAlphaAnimation);
+        mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                data.get(position).setAnimationFlag(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
 
@@ -159,7 +204,9 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
+
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
+            viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
             //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
@@ -199,10 +246,19 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
         }
 
-        viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
+
+        if (data.get(position).isAnimationFlag()) {
+            buildAnima(position);
+            viewHolder.iv_zan.clearAnimation();
+            viewHolder.iv_zan.setAnimation(mAnimationSet);
+        }
+
+        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //点赞
+
+                data.get(position).setAnimationFlag(true);
 
                 if (data.get(position).isPraise()) {//已点赞
 
@@ -226,9 +282,9 @@ public class MyDynListviewAdater extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //     ToastUtils.showToastShort("评论");
-                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()).putExtra("from",0));
+                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()).putExtra("from", 0));
 
-                EventBus.getDefault().post(new IntEvent(100,8902));
+                EventBus.getDefault().post(new IntEvent(100, 8902));
 
             }
         });
@@ -311,7 +367,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         }
 
 
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar) .skipMemoryCache(true);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(context)
                 .load(data.get(position).getSelfUrl())
                 .apply(options)
@@ -320,9 +376,9 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from",0));
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from", 0));
 
-                EventBus.getDefault().post(new IntEvent(100,8902));
+                EventBus.getDefault().post(new IntEvent(100, 8902));
 
             }
         });
@@ -345,8 +401,8 @@ public class MyDynListviewAdater extends BaseAdapter {
                     .load(data.get(position).getVedioImg())
                     .into(viewHolder.jzVideoPlayer.thumbImageView);
             //  viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
-            viewHolder.jzVideoPlayer.positionInList = position ;
-         //   LogUtil.i(position + "");
+            viewHolder.jzVideoPlayer.positionInList = position;
+            //   LogUtil.i(position + "");
 
 //            viewHolder.jzVideoPlayer.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -421,7 +477,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
-
+        LinearLayout ll_zan;
     }
 
     private void showListDialog(final int pos) {

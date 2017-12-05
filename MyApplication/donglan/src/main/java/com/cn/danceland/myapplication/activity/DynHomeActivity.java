@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +69,6 @@ import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
-import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
@@ -97,7 +97,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private DynZanHeadviewRecylerViewAdapter mRecylerViewAdapter;
     private TextView tv_zan_num;
     private ImageView iv_zan;
-    private EmojiconEditText et_comment;
+    //private EmojiconEditText et_comment;
+    private EditText et_comment;
     private TextView tv_send;
     private ImageView iv_emoji;
     private FrameLayout fl_emojicons;
@@ -142,9 +143,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     public void onEventMainThread(IntEvent event) {
         if (8001 == event.getEventCode()) {
             replypos = event.getMsg();
-         //   LogUtil.i("收到消息" + replypos + data.get(replypos).getNickName());
+            //   LogUtil.i("收到消息" + replypos + data.get(replypos).getNickName());
             et_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
-        //    LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
+            //    LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
 
         }
 
@@ -720,7 +721,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
 
                     } else {
-                       // ToastUtils.showToastShort("没有点赞数据");
+                        // ToastUtils.showToastShort("没有点赞数据");
                         mRecylerViewAdapter.setData(zanUserList, msgId);
                         mRecylerViewAdapter.notifyDataSetChanged();
                     }
@@ -796,7 +797,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     et_comment.setText("");
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
 
-                    KeyBoardUtils.closeKeybord(et_comment,DynHomeActivity.this);
+                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
                 }
@@ -851,6 +852,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("评论成功");
+                    mCurrentPage = 1;
+                    findCommentList(msgId, mCurrentPage);
 
 //
 //                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
@@ -870,7 +873,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     et_comment.setText("");
                     et_comment.setHint("写评论");
                     replypos = -1;
-                    KeyBoardUtils.closeKeybord(et_comment,DynHomeActivity.this);
+                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());

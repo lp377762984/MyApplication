@@ -81,6 +81,8 @@ public class RequsetDynInfoBean {
 
         public class Items {
 
+
+            private boolean animationFlag=false;
             private String id;
             private String title;
             private String content;
@@ -107,6 +109,14 @@ public class RequsetDynInfoBean {
 
             private String vedioImg;
             private String vedioUrl;
+
+            public boolean isAnimationFlag() {
+                return animationFlag;
+            }
+
+            public void setAnimationFlag(boolean animationFlag) {
+                this.animationFlag = animationFlag;
+            }
 
             public String getVedioImg() {
                 return vedioImg;

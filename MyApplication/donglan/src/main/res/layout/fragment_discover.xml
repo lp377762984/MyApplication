@@ -63,7 +63,10 @@
                 android:layout_marginRight="15dp"
                 android:background="@drawable/img_photo" />
         </LinearLayout>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1px"
+    android:background="@color/color_bg_line"/>
         <android.support.v4.view.ViewPager
             android:id="@+id/id_viewpager"
             android:layout_width="fill_parent"

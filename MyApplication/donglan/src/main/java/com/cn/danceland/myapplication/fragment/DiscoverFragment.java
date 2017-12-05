@@ -1,6 +1,8 @@
 package com.cn.danceland.myapplication.fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,7 +14,7 @@ import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
-import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.view.AutoLocatedPopup;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
@@ -41,7 +43,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_discover, null);
         v.findViewById(R.id.iv_add_friends).setOnClickListener(this);
-
+        autoLocatedPopup = new AutoLocatedPopup(mActivity);
         iv_photo = v.findViewById(R.id.iv_photo);
         iv_photo.setOnClickListener(this);
         mViewPager = v.findViewById(R.id.id_viewpager);
@@ -69,17 +71,39 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
         return v;
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            //相当于Fragment的onResume
-            LogUtil.i("fragment获取焦点");
-        } else {
-            //相当于Fragment的onPause
-            LogUtil.i("fragment失去焦点");
-        }
+
+    private void showListDialog() {
+        final String[] items = {"发布图文", "发布视频"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(mActivity);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        //ToastUtils.showToastShort("发布动态");
+                        Intent intent = new Intent(mActivity, PublishActivity.class);
+                        intent.putExtra("isPhoto", "0");
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent1 = new Intent(mActivity, PublishActivity.class);
+                        intent1.putExtra("isPhoto", "1");
+                        startActivity(intent1);
+                        //ToastUtils.showToastShort("发布视频");
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
     }
+
+
 
     @Override
     public void initDta() {
@@ -107,7 +131,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
         droppyMenu = droppyBuilder.build();
     }
-
+    AutoLocatedPopup autoLocatedPopup;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -117,10 +141,10 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
                 break;
             case R.id.iv_photo://发布动态
 
-                initDroppyMenu(iv_photo);
-                showDroppyMenu();
-
-
+//                initDroppyMenu(iv_photo);
+//                showDroppyMenu();
+          //      showListDialog();
+                autoLocatedPopup.showPopupWindow(v);
                 break;
             case value:
                 break;

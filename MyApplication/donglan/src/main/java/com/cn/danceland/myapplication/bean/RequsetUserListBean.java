@@ -78,6 +78,24 @@ public class RequsetUserListBean {
 
 
         public class Items {
+            public String getFollower() {
+                return follower;
+            }
+
+            @Override
+            public String toString() {
+                return "Items{" +
+                        "id='" + id + '\'' +
+                        ", follower='" + follower + '\'' +
+                        ", userId='" + userId + '\'' +
+                        ", success='" + success + '\'' +
+                        ", errorMsg='" + errorMsg + '\'' +
+                        ", selfUrl='" + selfUrl + '\'' +
+                        ", nickName='" + nickName + '\'' +
+                        ", gender=" + gender +
+                        ", praiseUserId='" + praiseUserId + '\'' +
+                        '}';
+            }
 
             private String id;
             private String follower;
@@ -98,21 +116,6 @@ public class RequsetUserListBean {
 //            private String nickName;
 //            private int gender;
 
-
-            @Override
-            public String toString() {
-                return "Items{" +
-                        "id='" + id + '\'' +
-                        ", follower=" + follower +
-                        ", userId='" + userId + '\'' +
-                        ", success='" + success + '\'' +
-                        ", errorMsg='" + errorMsg + '\'' +
-                        ", selfUrl='" + selfUrl + '\'' +
-                        ", nickName='" + nickName + '\'' +
-                        ", gender=" + gender +
-                        ", praiseUserId='" + praiseUserId + '\'' +
-                        '}';
-            }
 
             public String getId() {
                 return id;

@@ -1,21 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -27,11 +19,7 @@ import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.utils.LocationService;
-import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-
-import java.util.ArrayList;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -122,7 +110,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onStart() {
-        super.onStart();
+           super.onStart();
         mLocationClient = MyApplication.getInstance().locationClient;
         mLocationClient.registerListener(myListener);
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -24,7 +23,6 @@ import com.cn.danceland.myapplication.activity.FitnessManActivity;
 import com.cn.danceland.myapplication.adapter.AttentionDynListviewAdater;
 import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestPushUserBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -337,14 +335,6 @@ public class AttentionFragment extends BaseFragment {
                     PullToRefreshBase<ListView> refreshView) {
                 // TODO Auto-generated method stub
 
-                List<PullBean> list = new ArrayList<PullBean>();
-                for (int i = 0; i < 3; i++) {
-                    PullBean bean = new PullBean();
-                    bean.setTitle("派大星222" + System.currentTimeMillis() + i);
-                    bean.setContent(DateUtils.formatDateTime(mActivity, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL));
-
-                    list.add(bean);
-                }
 
 
                 new UpRefresh().execute();
@@ -420,7 +410,8 @@ public class AttentionFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            findSelectionDyn_Down(1);
+            mCurrentPage=1;
+            findSelectionDyn_Down(mCurrentPage);
             init();
             return null;
         }
@@ -584,9 +575,13 @@ public class AttentionFragment extends BaseFragment {
                                 endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
                                 endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
                                 endLabels.setLoadingDrawable(null);
-                            }
+
+                            }else {
 
                                 mCurrentPage = 2;//下次从第二页请求
+                            }
+
+
 
 
 

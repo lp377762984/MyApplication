@@ -122,10 +122,11 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/color_bg_mianlayout"
+            android:background="@color/color_bg_line"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"
             android:text="全部动态"
+            android:paddingBottom="5dp"
             android:textColor="#333333"
             android:textSize="14sp" />
 
