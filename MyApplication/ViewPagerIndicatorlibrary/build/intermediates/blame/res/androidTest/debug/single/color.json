@@ -1,10 +1,18 @@
 [
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\vpi__dark_theme.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\color\\vpi__dark_theme.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\vpi__light_theme.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\color\\vpi__light_theme.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\vpi__dark_theme.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\color\\vpi__dark_theme.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\res\\merged\\androidTest\\debug\\color\\vpi__light_theme.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\ViewPagerIndicatorlibrary\\build\\intermediates\\bundles\\debug\\res\\color\\vpi__light_theme.xml"
     }
 ]

@@ -11,18 +11,21 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
-import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
 import com.shehabic.droppy.animations.DroppyFadeInAnimation;
 import com.viewpagerindicator.TabPageIndicator;
 
+import org.greenrobot.eventbus.EventBus;
+
 import static android.R.attr.value;
 
 /**
  * A simple {@link Fragment} subclass.
- *
+ * <p>
  * 发现页面
  */
 public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.OnDismissCallback, DroppyClickCallbackInterface {
@@ -32,6 +35,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
     private TabAdapter mAdapter;
     private ImageButton iv_photo;
 
+    public int curentpage = 0;
 
     @Override
     public View initViews() {
@@ -40,13 +44,41 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
         iv_photo = v.findViewById(R.id.iv_photo);
         iv_photo.setOnClickListener(this);
-        mViewPager =  v.findViewById(R.id.id_viewpager);
-        mTabPageIndicator =  v.findViewById(R.id.id_indicator);
+        mViewPager = v.findViewById(R.id.id_viewpager);
+        mTabPageIndicator = v.findViewById(R.id.id_indicator);
         mAdapter = new TabAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
         mTabPageIndicator.setViewPager(mViewPager, 0);
+        mTabPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                curentpage=position;
+                EventBus.getDefault().post(new IntEvent(position, 8901));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         return v;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            LogUtil.i("fragment获取焦点");
+        } else {
+            //相当于Fragment的onPause
+            LogUtil.i("fragment失去焦点");
+        }
     }
 
     @Override
@@ -99,6 +131,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
     /**
      * 下拉回调
+     *
      * @param v
      * @param id
      */
@@ -110,12 +143,12 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
             case 0:
                 //ToastUtils.showToastShort("发布动态");
                 Intent intent = new Intent(mActivity, PublishActivity.class);
-                intent.putExtra("isPhoto","0");
+                intent.putExtra("isPhoto", "0");
                 startActivity(intent);
                 break;
             case 1:
-                Intent intent1 = new Intent(mActivity,PublishActivity.class);
-                intent1.putExtra("isPhoto","1");
+                Intent intent1 = new Intent(mActivity, PublishActivity.class);
+                intent1.putExtra("isPhoto", "1");
                 startActivity(intent1);
                 //ToastUtils.showToastShort("发布视频");
                 break;

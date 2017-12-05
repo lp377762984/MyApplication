@@ -18,7 +18,7 @@
             <ImageView
                 android:id="@+id/iv_top_bg"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="240dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
 
@@ -39,11 +39,9 @@
                 android:id="@+id/tv_nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_above="@id/ll_01"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="40dp"
-                android:text="派大星"
                 android:textColor="#999999"
                 android:textSize="14sp" />
 
@@ -190,7 +188,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/imageView"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
@@ -233,11 +232,11 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/img_msg_seting" />
+                        android:src="@drawable/img_my_data" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -275,7 +274,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"

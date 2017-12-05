@@ -8,14 +8,6 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_go_search_api_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_switch_thumb_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_switch_thumb_material.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_track_material.xml"
-    },
-    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_share_selector.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_share_selector.xml"
     },
@@ -24,8 +16,12 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_spinner_textfield_background_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_default_mtrl_shape.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_seek_thumb_normal.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_seek_thumb_normal.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_progress.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_progress.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_bg.xml",
@@ -36,20 +32,12 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_textfield_search_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_textfield_search_material.xml"
-    },
-    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_bg_low.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_bg_low.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_dark.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_item_background_holo_dark.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_back_tiny_selector.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_back_tiny_selector.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_replay_selector.xml",
@@ -60,6 +48,10 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_seek_thumb.xml"
     },
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_volume_progress_bg.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_volume_progress_bg.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_seek_thumb_normal.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_seek_thumb_normal.xml"
     },
@@ -68,32 +60,20 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_ab_back_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_check_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_check_material.xml"
-    },
-    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_text_cursor_material.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_text_cursor_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_radio_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_radio_material.xml"
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_check_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_check_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_seek_thumb_pressed.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_seek_thumb_pressed.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_dialog_progress_bg.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_dialog_progress_bg.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_cab_background_top_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_cab_background_top_material.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_small_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_small_material.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_material.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_voice_search_api_material.xml",
@@ -104,16 +84,12 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_radio_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_holo_dark.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_holo_dark.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_light.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_item_background_holo_light.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_progress.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_progress.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_thumb_material.xml",
@@ -124,52 +100,84 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_edit_text_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_cab_background_top_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_loading.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_loading.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_back_selector.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_back_selector.xml"
     },
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_back_tiny_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_back_tiny_selector.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_light.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_pause_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_pause_selector.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_cab_background_internal_bg.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_cab_background_internal_bg.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_menu_overflow_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_play_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_play_selector.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_seek_progress.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_seek_progress.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_seek_thumb_pressed.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_seek_thumb_pressed.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_tile_bg.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_tile_bg.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_search_api_material.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_search_api_material.xml"
     },
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_dialog_progress_bg.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_dialog_progress_bg.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_vector_test.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_vector_test.xml"
-    },
-    {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_loading.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_loading.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_dialog_material_background.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_dialog_material_background.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_dialog_progress.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_dialog_progress.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_vector_test.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_bg.9.png",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_bg.9.png"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_indicator_material.xml",
@@ -180,16 +188,24 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_clear_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_colored_material.xml"
-    },
-    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_play_selector.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_play_selector.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_borderless_material.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_borderless_material.xml"
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_dialog_material_background.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_check_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_bg.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_volume_progress_bg.xml",
@@ -200,16 +216,224 @@
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_bg.9.png"
     },
     {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_bg_low.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_tick_mark_material.xml",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
     },
     {
-        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_icon_background.xml",
-        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_icon_background.xml"
-    },
-    {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_title_bg.9.png",
         "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_title_bg.9.png"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_error_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_error_selector.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_seek_thumb.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_seek_thumb.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_switch_thumb_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_clear_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_tab_indicator_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_replay_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_replay_selector.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_textfield_search_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_search_api_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_edit_text_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_back_tiny_selector.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_back_tiny_selector.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_seek_progress.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_seek_progress.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_dialog_progress.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_dialog_progress.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_radio_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_seek_thumb_pressed.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_seek_thumb_pressed.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_cab_background_top_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ratingbar_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_icon_background.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_light.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_progress.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_progress.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_item_background_holo_light.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_switch_thumb_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_share_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_share_selector.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_bottom_seek_progress.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_bottom_seek_progress.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_back_selector.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_click_back_selector.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_loading.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_loading.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_vector_test.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_dialog_progress.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_dialog_progress.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_textfield_search_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_seekbar_track_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_colored_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_title_bg.9.png",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\src\\main\\res\\drawable\\jz_title_bg.9.png"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_borderless_material.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_text_cursor_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\abc_btn_borderless_material.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\notification_icon_background.xml",
+        "source": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\26.0.0-alpha1\\res\\drawable\\notification_icon_background.xml"
     },
     {
         "merged": "D:\\appworkspace\\dl-mobile\\Android\\MyApplication\\jiaozivideoplayerLibrary\\build\\intermediates\\res\\merged\\release\\drawable\\jz_click_error_selector.xml",

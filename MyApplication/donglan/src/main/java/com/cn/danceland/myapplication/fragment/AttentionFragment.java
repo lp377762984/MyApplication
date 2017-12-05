@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -20,8 +21,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
+import com.cn.danceland.myapplication.adapter.AttentionDynListviewAdater;
 import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
-import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.PullBean;
 import com.cn.danceland.myapplication.bean.RequestPushUserBean;
@@ -47,6 +48,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.JZVideoPlayer;
+
 /**
  * Created by shy on 2017/10/20 13:54
  * Email:644563767@qq.com
@@ -59,7 +62,7 @@ public class AttentionFragment extends BaseFragment {
     private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<>();
     private RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
     private List<Data> pushUserDatas = new ArrayList<>();
-    MyDynListviewAdater myDynListviewAdater;
+    AttentionDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
     int mCurrentPage = 1;//起始请求页
@@ -75,6 +78,7 @@ public class AttentionFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         //注册event事件
         EventBus.getDefault().register(this);
+        //
     }
 
     @Override
@@ -112,6 +116,48 @@ public class AttentionFragment extends BaseFragment {
 
                 break;
 
+            case 8901:
+                if (event.getMsg()==1){
+                    pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
+                        }
+                    });
+                }else {
+                    pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                        }
+                    });
+                }
+                break;
+
+            case 8902:
+                pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                    }
+                });
+
+                break;
 
             default:
                 break;
@@ -212,7 +258,7 @@ public class AttentionFragment extends BaseFragment {
                 }
                 if (dynpos >= 0) {
 
-                    myDynListviewAdater.data.get(dynpos).setReplyNumber( myDynListviewAdater.data.get(dynpos).getReplyNumber()+1);
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber(myDynListviewAdater.data.get(dynpos).getReplyNumber() + 1);
                     myDynListviewAdater.notifyDataSetChanged();
 
                 }
@@ -229,12 +275,11 @@ public class AttentionFragment extends BaseFragment {
                 }
                 if (dynpos >= 0) {
 
-                    myDynListviewAdater.data.get(dynpos).setReplyNumber( myDynListviewAdater.data.get(dynpos).getReplyNumber()-1);
+                    myDynListviewAdater.data.get(dynpos).setReplyNumber(myDynListviewAdater.data.get(dynpos).getReplyNumber() - 1);
                     myDynListviewAdater.notifyDataSetChanged();
 
                 }
                 break;
-
 
 
             default:
@@ -260,7 +305,7 @@ public class AttentionFragment extends BaseFragment {
         dialog.setMessage("加载中……");
 
 
-        myDynListviewAdater = new MyDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater = new AttentionDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
         myDynListviewAdater.setGzType(true);//bu'xia不显示关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
@@ -278,7 +323,7 @@ public class AttentionFragment extends BaseFragment {
                     PullToRefreshBase<ListView> refreshView) {
                 // TODO Auto-generated method stub
 
-
+                JZVideoPlayer.releaseAllVideos();
                 //   new FinishRefresh().execute();
                 //  myDynListviewAdater.notifyDataSetChanged();
 
@@ -305,14 +350,8 @@ public class AttentionFragment extends BaseFragment {
                 new UpRefresh().execute();
             }
         });
-//        pullToRefresh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                ToastUtils.showToastShort(i+"");
-//
-//            }
-//        });
+
+
 
 
         return v;
@@ -528,14 +567,43 @@ public class AttentionFragment extends BaseFragment {
                 LogUtil.i(requsetDynInfoBean.toString());
                 if (requsetDynInfoBean.getSuccess()) {
 
-                    if (requsetDynInfoBean.getData().getItems() != null) {
-                        rl_no_info.setVisibility(View.GONE);
-                        data = requsetDynInfoBean.getData().getItems();
-                        myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        myDynListviewAdater.notifyDataSetChanged();
+                    if (requsetDynInfoBean.getData() != null) {
+                        if (requsetDynInfoBean.getData().getItems() != null) {
+                            rl_no_info.setVisibility(View.GONE);
+                            data = requsetDynInfoBean.getData().getItems();
+                            myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                            myDynListviewAdater.notifyDataSetChanged();
+
+
+                            if (mCurrentPage == 1 && data.size() < 10) {
+
+                                isEnd=true;
+                                ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                                        false, true);
+                                endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+                                endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+                                endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+                                endLabels.setLoadingDrawable(null);
+                            }
+
+                                mCurrentPage = 2;//下次从第二页请求
+
+
+
+                        }
+
+
+                    }else {
+                        isEnd=true;
+                        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                                false, true);
+                        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+                        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+                        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+                        endLabels.setLoadingDrawable(null);
                     }
 
-                    mCurrentPage = 2;//下次从第二页请求
+
                 } else {
                     ToastUtils.showToastShort(requsetDynInfoBean.getErrorMsg());
                 }

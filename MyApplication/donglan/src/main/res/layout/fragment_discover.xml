@@ -34,8 +34,8 @@
 
             <ImageButton
                 android:id="@+id/iv_add_friends"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="15dp"
                 android:padding="15dp"
@@ -54,8 +54,8 @@
 
             <ImageButton
                 android:id="@+id/iv_photo"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
+                android:layout_width="24dp"
+                android:layout_height="22dp"
                 android:padding="15dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

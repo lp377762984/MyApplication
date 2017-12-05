@@ -23,8 +23,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.SuperKotlin.pictureviewer.ImagePagerActivity;
-import com.SuperKotlin.pictureviewer.PictureConfig;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -45,6 +43,8 @@ import com.cn.danceland.myapplication.bean.RequstOneDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
+import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
@@ -73,7 +73,8 @@ import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
-import static com.SuperKotlin.pictureviewer.PictureConfig.position;
+import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
+
 
 /**
  * Created by shy on 2017/11/17 17:32
@@ -468,7 +469,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             jzVideoPlayer.setVisibility(View.VISIBLE);
 
             jzVideoPlayer.setUp(
-                    oneDynInfo.getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    oneDynInfo.getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,
                     "");
             Glide.with(this)
                     .load(oneDynInfo.getVedioImg())
@@ -719,7 +720,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
 
                     } else {
-                        ToastUtils.showToastShort("没有点赞数据");
+                       // ToastUtils.showToastShort("没有点赞数据");
+                        mRecylerViewAdapter.setData(zanUserList, msgId);
+                        mRecylerViewAdapter.notifyDataSetChanged();
                     }
                 } else {
                     ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());

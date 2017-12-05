@@ -16,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.SuperKotlin.pictureviewer.ImagePagerActivity;
-import com.SuperKotlin.pictureviewer.PictureConfig;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -35,12 +33,15 @@ import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
+import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -225,7 +226,9 @@ public class MyDynListviewAdater extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //     ToastUtils.showToastShort("评论");
-                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
+                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()).putExtra("from",0));
+
+                EventBus.getDefault().post(new IntEvent(100,8902));
 
             }
         });
@@ -266,7 +269,7 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
         }
 
-        if (TextUtils.equals(data.get(position).getAuthor(),SPUtils.getString(Constants.MY_USERID,null))){
+        if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
 
             viewHolder.tv_guanzhu.setText("");
 
@@ -308,31 +311,42 @@ public class MyDynListviewAdater extends BaseAdapter {
         }
 
 
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar) .skipMemoryCache(true);
         Glide.with(context)
                 .load(data.get(position).getSelfUrl())
                 .apply(options)
+
                 .into(viewHolder.iv_avatar);
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from",0));
+
+                EventBus.getDefault().post(new IntEvent(100,8902));
+
             }
         });
 
         if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
             viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+
+            HttpProxyCacheServer proxy = MyApplication.getProxy(context);//增加视频缓存
+            String proxyUrl = proxy.getProxyUrl(data.get(position).getVedioUrl());
+
             viewHolder.jzVideoPlayer.setUp(
-                    data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+                    proxyUrl, JZVideoPlayer.SCREEN_WINDOW_LIST,
                     "");
+//            viewHolder.jzVideoPlayer.setUp(
+//                    data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+//                    "");
+
+
             Glide.with(convertView.getContext())
                     .load(data.get(position).getVedioImg())
                     .into(viewHolder.jzVideoPlayer.thumbImageView);
-            viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
-           // viewHolder.jzVideoPlayer
-            viewHolder.jzVideoPlayer.positionInList = position;
-
-
+            //  viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
+            viewHolder.jzVideoPlayer.positionInList = position ;
+         //   LogUtil.i(position + "");
 
 //            viewHolder.jzVideoPlayer.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -650,10 +664,10 @@ public class MyDynListviewAdater extends BaseAdapter {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("删除成功");
-                   // data.remove(pos);
-                 //   notifyDataSetChanged();
-                    EventBus.getDefault().post(new StringEvent("",EventConstants.DEL_DYN));
-                    EventBus.getDefault().post(new IntEvent(pos,EventConstants.DEL_DYN));
+                    // data.remove(pos);
+                    //   notifyDataSetChanged();
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
+                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
                 } else {
                     ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
                 }

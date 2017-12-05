@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -31,6 +30,8 @@ public class ImageUtil {
             super.handleMessage(msg);
             if (msg.what == DOWNLOAD_SUCCESS) {
                 Toast.makeText(mContext, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                // 最后通知图库更新
+
             } else if (msg.what == DOWNLOAD_FAILD) {
                 Toast.makeText(mContext, "保存失败", Toast.LENGTH_SHORT).show();
             }
@@ -67,6 +68,11 @@ public class ImageUtil {
                         Message message = new Message();
                         message.what = DOWNLOAD_SUCCESS;
                         message.obj = "保存成功，路径/sd卡/" + path + "/" + fileName;
+//
+//                        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+//                                Uri.fromFile(new File(destFile.getPath()))));
+
+
                         mHandler.sendMessage(message);
                     } else {
                         mHandler.sendEmptyMessage(DOWNLOAD_FAILD);

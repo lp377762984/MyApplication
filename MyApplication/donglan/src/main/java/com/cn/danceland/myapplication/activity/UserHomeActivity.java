@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -49,6 +51,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.jzvd.JZVideoPlayer;
 
 import static com.cn.danceland.myapplication.R.id.iv_avatar;
 import static com.cn.danceland.myapplication.R.id.tv_nickname;
@@ -74,6 +78,13 @@ public class UserHomeActivity extends Activity {
     private TextView tv_no_data;
     private TextView tv_add_gz;
 
+    private Data userInfo;
+    private TextView tv_fans;
+    private TextView tv_guanzhu_num;
+    private LinearLayout ll_edit;
+    private ImageView iv_sex;
+
+    private int from ;//来着那个页面
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +93,7 @@ public class UserHomeActivity extends Activity {
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
+        from=getIntent().getIntExtra("from",-1);
         //    LogUtil.i("userid:" + userId);
         //  userId="74";
 
@@ -93,6 +105,10 @@ public class UserHomeActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+
+        EventBus.getDefault().post(new IntEvent(from,8901));
+
         EventBus.getDefault().unregister(this);
     }
 
@@ -108,7 +124,7 @@ public class UserHomeActivity extends Activity {
         myDynListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
-        //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+        pullToRefresh.getRefreshableView().addHeaderView(initHeadview(userInfo));
 
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
@@ -122,7 +138,94 @@ public class UserHomeActivity extends Activity {
                 new FinishRefresh().execute();
             }
         });
+        pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //    JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
+                //   LogUtil.i("firstVisibleItem="+firstVisibleItem+"visibleItemCount="+visibleItemCount+"totalItemCount="+totalItemCount);
+
+
+                JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 2);
+            }
+        });
+
+    }
+
+    private void setHeadViewData(final Data data) {
+
+        if (TextUtils.equals(data.getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        } else if (TextUtils.equals(data.getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        } else {
+            iv_sex.setVisibility(View.INVISIBLE);
+        }
+
+
+        tv_guanzhu_num.setText("关注 " + data.getFollowNumber());
+        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//查看关注
+                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
+
+            }
+        });
+        tv_fans.setText("粉丝 " + data.getFansNum());
+        tv_fans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//查看粉丝
+                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
+
+            }
+        });
+
+
+        if (data.getFollower()) {
+            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
+                tv_add_gz.setVisibility(View.INVISIBLE);
+            } else {
+                tv_add_gz.setText("已关注");
+            }
+
+        } else {
+            tv_add_gz.setText("+关注");
+        }
+        tv_add_gz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (TextUtils.equals(tv_add_gz.getText().toString(), "+关注")) {//未关注添加关注
+
+                    addGuanzhu(userId, true);
+                } else {//已关注取消关注
+                    addGuanzhu(userId, false);
+                }
+
+            }
+        });
+
+
+        if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
+
+            ll_edit.setVisibility(View.VISIBLE);
+            ll_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(UserHomeActivity.this, MyProActivity.class));
+                }
+            });
+            tv_add_gz.setVisibility(View.GONE);
+        }
+
+        //m默认头像
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
+        tv_head_nickname.setText(data.getNickName());
 
     }
 
@@ -139,7 +242,8 @@ public class UserHomeActivity extends Activity {
 
                     break;
                 case 2:
-                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
+                    //    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
+                    setHeadViewData(userInfo);
                     dialog.dismiss();
 
                     if (isdyn) {//跳转到动态的那行
@@ -157,6 +261,7 @@ public class UserHomeActivity extends Activity {
     };
 
 
+
     //even事件处理
     @Subscribe
     public void onEventMainThread(IntEvent event) {
@@ -165,8 +270,8 @@ public class UserHomeActivity extends Activity {
 
         switch (event.getEventCode()) {
 
-            case EventConstants.DEL_DYN:
-                //设置动态数-1
+            case EventConstants.DEL_DYN://删除动态
+
                 int pos = event.getMsg();
 
                 myDynListviewAdater.data.remove(pos);
@@ -261,7 +366,7 @@ public class UserHomeActivity extends Activity {
     private void initData() {
         dialog.show();
         findSelfDT();
-
+        queryUserInfo(userId);
     }
 
     private RequestInfoBean requestInfoBean;
@@ -270,7 +375,7 @@ public class UserHomeActivity extends Activity {
      * 查找个人资料
      * @param id 用户id
      */
-    private void queryUserInfo(String id) {
+    private void queryUserInfo(final String id) {
 
         String params = id;
 
@@ -285,6 +390,21 @@ public class UserHomeActivity extends Activity {
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+
+
+
+                userInfo = requestInfoBean.getData();
+
+
+
+                if (TextUtils.equals(id,SPUtils.getString(Constants.MY_USERID,null))){
+                    //如果是本人更新本地缓存
+                    DataInfoCache.saveOneCache(userInfo,Constants.MY_INFO);
+
+                    EventBus.getDefault().post(new StringEvent("",EventConstants.UPDATE_USER_INFO));
+                }
+
+
 
                 Message msg = Message.obtain();
                 //   msg.obj = data;
@@ -342,11 +462,11 @@ public class UserHomeActivity extends Activity {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                queryUserInfo(userId);
+
                 Gson gson = new Gson();
                 RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
-               // LogUtil.i(requsetDynInfoBean.toString());
+                // LogUtil.i(requsetDynInfoBean.toString());
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
@@ -359,7 +479,7 @@ public class UserHomeActivity extends Activity {
 
 
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        myDynListviewAdater.notifyDataSetChanged();
+               //         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     } else {
                         // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
@@ -419,86 +539,17 @@ public class UserHomeActivity extends Activity {
         iv_userifno_avatar = headview.findViewById(iv_avatar);
         tv_head_nickname = headview.findViewById(tv_nickname);
         tv_no_data = headview.findViewById(R.id.tv_no_data);
-        TextView tv_fans = headview.findViewById(R.id.tv_fans);
-        TextView tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
+        tv_fans = headview.findViewById(R.id.tv_fans);
+        tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         tv_add_gz = headview.findViewById(R.id.tv_add_gz);
-        LinearLayout ll_edit = headview.findViewById(R.id.ll_edit);
-        ImageView iv_sex = headview.findViewById(R.id.iv_sex);
-
-        if (TextUtils.equals(data.getGender(), "1")) {
-            iv_sex.setImageResource(R.drawable.img_sex1);
-        } else if (TextUtils.equals(data.getGender(), "2")) {
-            iv_sex.setImageResource(R.drawable.img_sex2);
-        } else {
-            iv_sex.setVisibility(View.INVISIBLE);
-        }
-
-
-        tv_guanzhu_num.setText("关注 " + data.getFollowNumber());
-        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//查看关注
-                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
-
-            }
-        });
-        tv_fans.setText("粉丝 " + data.getFansNum());
-        tv_fans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//查看粉丝
-                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
-
-            }
-        });
-
-
+        ll_edit = headview.findViewById(R.id.ll_edit);
+        iv_sex = headview.findViewById(R.id.iv_sex);
         headview.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        if (data.getFollower()) {
-            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
-                tv_add_gz.setVisibility(View.INVISIBLE);
-            } else {
-                tv_add_gz.setText("已关注");
-            }
-
-        } else {
-            tv_add_gz.setText("+关注");
-        }
-        tv_add_gz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (TextUtils.equals(tv_add_gz.getText().toString(),"+关注")) {//未关注添加关注
-
-                    addGuanzhu(userId, true);
-                } else {//已关注取消关注
-                    addGuanzhu(userId, false);
-                }
-
-            }
-        });
-
-
-        if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
-
-            ll_edit.setVisibility(View.VISIBLE);
-            ll_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(UserHomeActivity.this, MyProActivity.class));
-                }
-            });
-            tv_add_gz.setVisibility(View.GONE);
-        }
-
-        //m默认头像
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
-        tv_head_nickname.setText(data.getNickName());
 
 
         return headview;

@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class ImageDetailFragment extends Fragment {
     public static int mImageLoading;//占位符图片
     public static boolean mNeedDownload = false;//默认不支持下载
     private String mImageUrl;
-    private ImageView mImageView;
+    public ImageView mImageView;
     private PhotoViewAttacher mAttacher;
     private Bitmap mBitmap;
 
@@ -81,24 +88,102 @@ public class ImageDetailFragment extends Fragment {
         return v;
     }
 
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (mImageView != null)
+//            Glide.with(this).clear(mImageView);
+//
+//
+//    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //  mImageUrl = "http://cdn.duitang.com/uploads/item/201409/20/20140920230643_8tij8.png";
+
+
         if (!TextUtils.isEmpty(mImageUrl)) {
+
+            final File downDir = Environment.getExternalStorageDirectory();
+            //使用Glide下载图片,保存到本地
 
             RequestOptions options = new RequestOptions().placeholder(mImageLoading).error(mImageLoading);
 
-            Glide.with(getActivity()).asBitmap().load(mImageUrl).apply(options)
+            Glide.with(getActivity()).asBitmap()
+                    .load(mImageUrl)
+                    .apply(options)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                            mBitmap = resource;
-                            mImageView.setImageBitmap(mBitmap);
-                            mAttacher.update();
+
+
+                            //保存路径
+                            String imgDir = "";
+                            if (checkSDCard()) {
+                                imgDir = Environment.getExternalStorageDirectory().getPath() + "/Gilde/" + MD5Utils.encode(mImageUrl) + ".jpg";
+
+                            } else {
+                                imgDir = Environment.getDataDirectory().getPath() + "/Gilde/" + MD5Utils.encode(mImageUrl) + ".jpg";
+
+                            }
+                            File file = new File(imgDir);
+                            Log.i("taginfo", file.getAbsolutePath());
+                            if (!file.exists()) {
+                                try {
+                                    file.createNewFile();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            FileOutputStream fout = null;
+                            try {
+                                //保存图片
+                                fout = new FileOutputStream(file);
+                                resource.compress(Bitmap.CompressFormat.JPEG, 100, fout);
+
+                                // 将保存的地址给SubsamplingScaleImageView,这里注意设置ImageViewState
+                                //    imageView.setImage(ImageSource.uri(file.getAbsolutePath()), new ImageViewState(0.5F, new PointF(0, 0), 0));
+                                //    Glide.with(getActivity()).load(file.getAbsolutePath()).into(mImageView);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    if (fout != null) fout.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-
-
                     });
+
+
+//            RequestOptions options = new RequestOptions().placeholder(mImageLoading).error(mImageLoading).skipMemoryCache(true);
+//
+//            Glide.with(getActivity()).asBitmap().load(mImageUrl).apply(options).listener(new RequestListener<Bitmap>() {
+//                @Override
+//                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                    Log.i("taginfo", "onLoadFailed: "+e.toString());
+//                    return false;
+//                }
+//
+//                @Override
+//                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                    Log.i("taginfo", "onResourceReady: ");
+//                    return false;
+//                }
+//            })
+//                    .into(new SimpleTarget<Bitmap>() {
+//                        @Override
+//                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+//                            mBitmap = resource;
+//                            mImageView.setImageBitmap(mBitmap);
+//                            mAttacher.update();
+//                        }
+//                    });
+
+            //       Glide.with(getActivity()).load(mImageUrl).into(mImageView);
+
 
 //            Glide.with(getActivity()).load(mImageUrl).asBitmap().placeholder(mImageLoading).error(mImageLoading)
 //                    .into(new SimpleTarget<Bitmap>() {
@@ -109,8 +194,16 @@ public class ImageDetailFragment extends Fragment {
 //                            mAttacher.update();
 //                        }
 //                    });
-        } else {
+
+        } else
+
+        {
             mImageView.setImageResource(mImageLoading);
         }
+    }
+
+    private static boolean checkSDCard() {
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
     }
 }

@@ -99,6 +99,9 @@ public class ImagePagerActivity extends FragmentActivity {
             return ImageDetailFragment.newInstance(url);
         }
 
+
+
+
     }
 
     public static void startActivity(Context context, PictureConfig config) {
