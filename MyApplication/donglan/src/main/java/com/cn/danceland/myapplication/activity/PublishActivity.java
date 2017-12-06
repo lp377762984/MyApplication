@@ -93,7 +93,7 @@ public class PublishActivity extends Activity {
     String picUrl,vedioUrl;
     String isPhoto;
     File picFile,videoFile;
-    Handler handler;
+    public static Handler handler;
     ArrayList<String> arrImgUrl;
 
     @Override
