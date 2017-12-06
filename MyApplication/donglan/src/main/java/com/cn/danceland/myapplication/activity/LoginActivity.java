@@ -71,7 +71,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         intView();
         dialog = new ProgressDialog(this);
         dialog.setMessage("登录中……");
-        permissions();
+
     }
 
     private void intView() {
@@ -86,6 +86,12 @@ public class LoginActivity extends Activity implements OnClickListener {
         mEtPhone = findViewById(R.id.et_phone);
         mEtPsw = findViewById(R.id.et_password);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        permissions();
     }
 
     public void permissions(){
