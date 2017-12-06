@@ -136,8 +136,6 @@ public class ShopFragment extends BaseFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf",jingdu);
-                LogUtil.e("zzf",weidu);
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
                 itemsList = storeBean.getData().getItems();
                 if(itemsList!=null&&itemsList.size()>0){
