@@ -9,6 +9,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -56,6 +61,7 @@ import static com.cn.danceland.myapplication.R.id.iv_comment;
 import static com.cn.danceland.myapplication.R.id.iv_transpond;
 import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
+import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by shy on 2017/10/24 17:40
@@ -132,6 +138,44 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         return position;
     }
 
+    private AnimationSet mAnimationSet;
+
+    private void buildAnima(int pos) {
+        ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(500);
+        mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setFillAfter(false);
+
+        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
+        mAlphaAnimation.setDuration(500);
+        mAlphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAlphaAnimation.setFillAfter(false);
+
+        mAnimationSet = new AnimationSet(false);
+        mAnimationSet.setDuration(500);
+        mAnimationSet.addAnimation(mScaleAnimation);
+        mAnimationSet.addAnimation(mAlphaAnimation);
+        mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                data.get(position).setAnimationFlag(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 //        LogUtil.i("data.size()"+data.size()+"+++++++++++");
@@ -158,6 +202,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
+            viewHolder.ll_zan= convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
             //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
@@ -169,13 +214,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             return convertView;
         }
 
-//        if (data.size() == 0) {
-//            viewHolder.ll_item.setVisibility(View.GONE);
-//            viewHolder.tv_no_data.setVisibility(View.VISIBLE);
-//        } else {
-//            viewHolder.ll_item.setVisibility(View.VISIBLE);
-//            viewHolder.tv_no_data.setVisibility(View.GONE);
-//        }
+
 
         // LogUtil.i(data.size() + "");
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
@@ -198,10 +237,18 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
         }
 
-        viewHolder.iv_zan.setOnClickListener(new View.OnClickListener() {
+        if (data.get(position).isAnimationFlag()) {
+            buildAnima(position);
+            viewHolder.iv_zan.clearAnimation();
+            viewHolder.iv_zan.setAnimation(mAnimationSet);
+        }
+
+        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //点赞
+
+                data.get(position).setAnimationFlag(true);
 
                 if (data.get(position).isPraise()) {//已点赞
 
@@ -388,7 +435,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
-
+        LinearLayout ll_zan;
     }
 
     private void showListDialog(final int pos) {

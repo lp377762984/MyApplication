@@ -51,15 +51,7 @@
         ptr:ptrRefreshableViewBackground="#00000000"
         ptr:ptrScrollingWhileRefreshingEnabled="true" />
 
-    <!--        <com.rockerhieu.emojicon.EmojiconEditText
-                android:id="@+id/et_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
 
-                android:hint="写评论"
-                android:textSize="14sp" />-->
     <LinearLayout
         android:id="@+id/ll_comment"
         android:layout_width="match_parent"
@@ -68,14 +60,20 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <io.github.rockerhieu.emojicon.EmojiconEditText
+<!--        <io.github.rockerhieu.emojicon.EmojiconEditText
             android:id="@+id/et_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="写评论"
-            emojicon:emojiconSize="20sp" />
-
+         />-->
+        <EditText
+            android:id="@+id/et_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="写评论"
+         />
         <ImageView
             android:id="@+id/iv_emoji"
             android:layout_width="wrap_content"

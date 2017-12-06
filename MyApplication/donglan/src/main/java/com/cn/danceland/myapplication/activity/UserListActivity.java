@@ -93,7 +93,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         dialog.setMessage("正在加载……");
         findViewById(R.id.iv_back).setOnClickListener(this);
 
-        mListviewAdapter = new UserListviewAdapter(this, data);
+        mListviewAdapter = new UserListviewAdapter(this, data,type);
         pullToRefresh.setAdapter(mListviewAdapter);
         //加入头布局
         //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());

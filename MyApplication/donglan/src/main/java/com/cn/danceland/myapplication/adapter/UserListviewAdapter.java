@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,11 @@ public class UserListviewAdapter extends BaseAdapter {
     private Context context;
     private int type = 1;//等于3是点赞，默认是1
 
-    public UserListviewAdapter(Context context, List<RequsetUserListBean.Data.Items> data) {
+    public UserListviewAdapter(Context context, List<RequsetUserListBean.Data.Items> data, int type) {
         mInflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        this.type = type;
     }
 
     public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean) {
@@ -104,14 +106,26 @@ public class UserListviewAdapter extends BaseAdapter {
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (type == 3) {
-                    context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
-                } else {
-                    context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));
+
+                LogUtil.i("TYPE+"+type);
+                switch (type) {
+                    case 1://查看关注
+                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));
+                        break;
+                    case 2://查看粉丝
+                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getFollower()));
+                        break;
+                    case 3://查看点赞
+                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
+                        break;
+                    default:
+                        break;
                 }
 
 
+
                 // context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
+
             }
         });
 

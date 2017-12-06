@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:background="#fff"
         android:gravity="center"
@@ -15,8 +15,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -170,13 +170,18 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
+        android:background="@color/color_bg_line"
         android:gravity="center_vertical"
-        android:background="@color/color_bg_mianlayout"
         android:paddingBottom="5dp"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
         android:text="全部评论:"
         android:textColor="#333333"
         android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/color_bg_line"/>
 
 </LinearLayout>

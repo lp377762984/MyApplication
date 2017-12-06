@@ -49,7 +49,7 @@ public class MyApplication extends Application {
         super.onCreate();
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         locationClient = new LocationService(getApplicationContext());
-        SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(this);
         applicationContext = this;
         instance = this;
         setUpDb();
