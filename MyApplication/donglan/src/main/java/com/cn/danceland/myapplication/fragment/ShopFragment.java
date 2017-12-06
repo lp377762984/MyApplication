@@ -340,7 +340,7 @@ public class ShopFragment extends BaseFragment {
                     AlertDialog.Builder dialog =
                             new AlertDialog.Builder(mActivity);
                     dialog.setTitle("提示");
-                    dialog.setMessage("是否关注此门店");
+                    dialog.setMessage("是否加入此门店");
                     dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
