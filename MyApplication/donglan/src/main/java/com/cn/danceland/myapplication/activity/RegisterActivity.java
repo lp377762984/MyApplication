@@ -364,19 +364,22 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                       LogUtil.i(s);
+                LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
 
                 //       LogUtil.i(requestInfoBean.toString());
 
-
-                //保存个人信息
-                Data data = requestInfoBean.getData();
-                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                //跳转到填写资料页
-                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
-                finish();
+                if (requestInfoBean.getSuccess()) {
+                    //保存个人信息
+                    Data data = requestInfoBean.getData();
+                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                    //跳转到填写资料页
+                    startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                    finish();
+                } else {
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
 
 
             }
