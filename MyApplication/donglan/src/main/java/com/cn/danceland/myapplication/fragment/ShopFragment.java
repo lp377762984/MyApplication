@@ -309,10 +309,10 @@ public class ShopFragment extends BaseFragment {
                 viewHolder.store_address.setText(items.getBname());
                 viewHolder.distance.setText(items.getAddress());
                 Glide.with(getActivity()).load(items.getLogo()).into(viewHolder.store_item_img);
-                PhoneNo = items.getTelphoneNo();
+                PhoneNo = items.getTelphone_no();
                 shopJingdu = items.getLat()+"";
                 shopWeidu = items.getLng()+"";
-                branchId = items.getId()+"";
+                branchId = items.getBranch_id()+"";
             }
             viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -338,7 +338,7 @@ public class ShopFragment extends BaseFragment {
                     AlertDialog.Builder dialog =
                             new AlertDialog.Builder(mActivity);
                     dialog.setTitle("提示");
-                    dialog.setMessage("是否关注此门店");
+                    dialog.setMessage("是否加入此门店");
                     dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
