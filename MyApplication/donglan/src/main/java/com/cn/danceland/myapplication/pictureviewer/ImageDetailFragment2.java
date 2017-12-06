@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
@@ -69,7 +68,7 @@ public class ImageDetailFragment2 extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //  mImageUrl="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1512389262840&di=039fd750ee1b4ecaeb5d8bbf649bb8ec&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F13%2F19%2F62%2F61B58PICvc2_1024.jpg";
-        LogUtil.i("mImageUrl=" + mImageUrl);
+      //  LogUtil.i("mImageUrl=" + mImageUrl);
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
         bigImageView.showImage(Uri.parse(mImageUrl));
 

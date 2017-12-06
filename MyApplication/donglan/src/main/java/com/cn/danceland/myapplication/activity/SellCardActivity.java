@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -32,14 +34,15 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.shehabic.droppy.DroppyClickCallbackInterface;
-import com.shehabic.droppy.DroppyMenuItem;
-import com.shehabic.droppy.DroppyMenuPopup;
-import com.shehabic.droppy.animations.DroppyFadeInAnimation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import razerdp.basepopup.BasePopupWindow;
+
+import static android.R.attr.id;
 
 /**
  * Created by shy on 2017/11/2 16:37
@@ -59,6 +62,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     private RequestSellCardsInfoBean sellCardsInfoBean = new RequestSellCardsInfoBean();
     private MyListAdapter myListAdapter;
     ProgressDialog dialog;
+   private List<RequestSellCardsTypeBean.Data> cardTypeData=new ArrayList<>();
+    private  MyListPopupViewAdapter myListPopupViewAdapter;
+    private ListPopup listPopup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,18 +100,23 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
                 startActivity(new Intent(SellCardActivity.this, SellCardConfirmActivity.class));
             }
         });
+
+        listPopup = new ListPopup(this);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_fenlie://分类
-                if (sellCardsTypeBean.getData() != null && sellCardsTypeBean.getData().size() > 0) {
-                    initDroppyMenu(ll_fenlie, sellCardsTypeBean.getData());
-                    showDroppyMenu();
-                } else {
-                    ToastUtils.showToastShort("没有数据");
-                }
+//                if (sellCardsTypeBean.getData() != null && sellCardsTypeBean.getData().size() > 0) {
+//                    initDroppyMenu(ll_fenlie, sellCardsTypeBean.getData());
+//                    showDroppyMenu();
+//                } else {
+//                    ToastUtils.showToastShort("没有数据");
+//                }
+
+                listPopup.showPopupWindow(v);
 
                 break;
 
@@ -118,15 +129,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     }
 
     public class MyListAdapter extends BaseAdapter {
-//        RequestSellCardsInfoBean sellCardsInfoBean;
-//
-//        public MyListAdapter(RequestSellCardsInfoBean bean) {
-//            this.sellCardsInfoBean = bean;
-//        }
-//
-//        public void setdata(RequestSellCardsInfoBean bean) {
-//            this.sellCardsInfoBean = bean;
-//        }
+
 
         @Override
         public int getCount() {
@@ -194,61 +197,61 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     }
 
 
-    //弹出下拉框
-    protected void showDroppyMenu() {
+//    //弹出下拉框
+//    protected void showDroppyMenu() {
+//
+//        iv_fenlie.setImageResource(R.drawable.img_down);
+////        ListView listView = (ListView) droppyMenu.getMenuView().findViewById(R.id.listview);
+////        listView.setAdapter(new MyAdapter());
+//        droppyMenu.show();
+//    }
 
-        iv_fenlie.setImageResource(R.drawable.img_down);
-//        ListView listView = (ListView) droppyMenu.getMenuView().findViewById(R.id.listview);
-//        listView.setAdapter(new MyAdapter());
-        droppyMenu.show();
-    }
-
-    DroppyMenuPopup droppyMenu;
-
-
-    //绑定下拉框
-    private void initDroppyMenu(View btn, final List<RequestSellCardsTypeBean.Data> data) {
-        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(SellCardActivity.this, btn);
-
-        droppyBuilder.addMenuItem(new DroppyMenuItem("全部"))
-                .addSeparator();
-
-        for (int j = 0; j < data.size(); j++) {
-
-            droppyBuilder.addMenuItem(new DroppyMenuItem(data.get(j).getName()))
-                    .addSeparator();
-        }
+    //DroppyMenuPopup droppyMenu;
 
 
-        droppyBuilder
-                .setOnDismissCallback(new DroppyMenuPopup.OnDismissCallback() {
-                    @Override
-                    public void call() {
-                        iv_fenlie.setImageResource(R.drawable.img_up);
-                    }
-                })
-                .setOnClick(new DroppyClickCallbackInterface() {
-                    @Override
-                    public void call(View v, int id) {
-
-                        iv_fenlie.setImageResource(R.drawable.img_up);
-                        if (id == 0) {
-                            tv_tiltle.setText("全部");
-                            findCardsByCardId("");
-                        } else {
-                            tv_tiltle.setText(data.get(id - 1).getName());
-                            findCardsByCardId(data.get(id - 1).getId() + "");
-                        }
-
-
-                    }
-                })
-                .setPopupAnimation(new DroppyFadeInAnimation())
-                .triggerOnAnchorClick(false);
-
-
-        droppyMenu = droppyBuilder.build();
-    }
+//    //绑定下拉框
+//    private void initDroppyMenu(View btn, final List<RequestSellCardsTypeBean.Data> data) {
+//        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(SellCardActivity.this, btn);
+//
+//        droppyBuilder.addMenuItem(new DroppyMenuItem("全部"))
+//                .addSeparator();
+//
+//        for (int j = 0; j < data.size(); j++) {
+//
+//            droppyBuilder.addMenuItem(new DroppyMenuItem(data.get(j).getName()))
+//                    .addSeparator();
+//        }
+//
+//
+//        droppyBuilder
+//                .setOnDismissCallback(new DroppyMenuPopup.OnDismissCallback() {
+//                    @Override
+//                    public void call() {
+//                        iv_fenlie.setImageResource(R.drawable.img_up);
+//                    }
+//                })
+//                .setOnClick(new DroppyClickCallbackInterface() {
+//                    @Override
+//                    public void call(View v, int id) {
+//
+//                        iv_fenlie.setImageResource(R.drawable.img_up);
+//                        if (id == 0) {
+//                            tv_tiltle.setText("全部");
+//                            findCardsByCardId("");
+//                        } else {
+//                            tv_tiltle.setText(data.get(id - 1).getName());
+//                            findCardsByCardId(data.get(id - 1).getId() + "");
+//                        }
+//
+//
+//                    }
+//                })
+//                .setPopupAnimation(new DroppyFadeInAnimation())
+//                .triggerOnAnchorClick(false);
+//
+//
+//        droppyMenu = droppyBuilder.build();
+//    }
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -264,6 +267,113 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
         }
     });
 
+
+    public class ListPopup extends BasePopupWindow {
+        private Context context;
+
+        private View popupView;
+        private ListView listView;
+
+
+
+        public ListPopup(Activity context) {
+            super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            setAutoLocatePopup(true);
+            bindEvent();
+
+            this.context = context;
+        }
+
+
+        @Override
+        protected Animation initShowAnimation() {
+            return getDefaultAlphaAnimation();
+        }
+
+
+        @Override
+        public View getClickToDismissView() {
+            return null;
+        }
+
+        @Override
+        public View onCreatePopupView() {
+            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_list_menu, null);
+            return popupView;
+        }
+
+        @Override
+        public View initAnimaView() {
+            // return popupView.findViewById(R.id.popup_contianer);
+            return null;
+        }
+
+        private void bindEvent() {
+            if (popupView != null) {
+                listView = popupView.findViewById(R.id.listview);
+                myListPopupViewAdapter=new MyListPopupViewAdapter();
+                listView.setAdapter(myListPopupViewAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                     //   ToastUtils.showToastShort("我被点击了"+ i);
+
+                        if (id == 0) {
+                            tv_tiltle.setText("全部");
+                            findCardsByCardId("");
+                        } else {
+                            tv_tiltle.setText(cardTypeData.get(id - 1).getName());
+                            findCardsByCardId(cardTypeData.get(id - 1).getId() + "");
+                        }
+
+                    }
+                });
+            }
+
+        }
+
+
+
+
+
+    }
+
+    class MyListPopupViewAdapter extends BaseAdapter{
+
+
+
+        @Override
+        public int getCount() {
+            return cardTypeData.size()+1;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view=View.inflate(SellCardActivity.this,R.layout.listview_item_popup,null);
+
+            TextView tv_cardname=view.findViewById(R.id.tv_cardname);
+            if (i==0){
+                tv_cardname.setText("全部");
+            }else {
+                tv_cardname.setText(cardTypeData.get(i-1).getName());
+            }
+
+
+            return view;
+        }
+    }
+
     /**
      * 查询所有在售卡
      */
@@ -277,6 +387,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 sellCardsTypeBean = gson.fromJson(s, RequestSellCardsTypeBean.class);
+                if (sellCardsTypeBean.getData()!=null){
+                    cardTypeData=sellCardsTypeBean.getData();
+                }
 
 
             }

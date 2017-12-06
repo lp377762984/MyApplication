@@ -15,10 +15,7 @@ import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
-import com.shehabic.droppy.DroppyClickCallbackInterface;
-import com.shehabic.droppy.DroppyMenuItem;
-import com.shehabic.droppy.DroppyMenuPopup;
-import com.shehabic.droppy.animations.DroppyFadeInAnimation;
+
 import com.viewpagerindicator.TabPageIndicator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,12 +27,13 @@ import static android.R.attr.value;
  * <p>
  * 发现页面
  */
-public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.OnDismissCallback, DroppyClickCallbackInterface {
+public class DiscoverFragment extends BaseFragment {
 
     private ViewPager mViewPager;
     private TabPageIndicator mTabPageIndicator;
     private TabAdapter mAdapter;
     private ImageButton iv_photo;
+    private AutoLocatedPopup autoLocatedPopup;
 
     public int curentpage = 0;
 
@@ -59,7 +57,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
             @Override
             public void onPageSelected(int position) {
-                curentpage=position;
+                curentpage = position;
                 EventBus.getDefault().post(new IntEvent(position, 8901));
             }
 
@@ -104,34 +102,33 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
     }
 
 
-
     @Override
     public void initDta() {
 
     }
 
-    //弹出下拉框
-    protected void showDroppyMenu() {
-        droppyMenu.show();
+//    //弹出下拉框
+//    protected void showDroppyMenu() {
+//        droppyMenu.show();
+//
+//    }
 
-    }
+    //    DroppyMenuPopup droppyMenu;
+//
+//    //绑定下拉框
+//    private void initDroppyMenu(ImageButton btn) {
+//        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(mActivity, btn);
+//        droppyBuilder.addMenuItem(new DroppyMenuItem("发布动态"))
+//                .addSeparator()
+//                .addMenuItem(new DroppyMenuItem("发布视频"))
+//                .setOnDismissCallback(this)
+//                .setOnClick(this)
+//                .setPopupAnimation(new DroppyFadeInAnimation())
+//                .triggerOnAnchorClick(false);
+//
+//        droppyMenu = droppyBuilder.build();
+//    }
 
-    DroppyMenuPopup droppyMenu;
-
-    //绑定下拉框
-    private void initDroppyMenu(ImageButton btn) {
-        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(mActivity, btn);
-        droppyBuilder.addMenuItem(new DroppyMenuItem("发布动态"))
-                .addSeparator()
-                .addMenuItem(new DroppyMenuItem("发布视频"))
-                .setOnDismissCallback(this)
-                .setOnClick(this)
-                .setPopupAnimation(new DroppyFadeInAnimation())
-                .triggerOnAnchorClick(false);
-
-        droppyMenu = droppyBuilder.build();
-    }
-    AutoLocatedPopup autoLocatedPopup;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -143,7 +140,7 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
 
 //                initDroppyMenu(iv_photo);
 //                showDroppyMenu();
-          //      showListDialog();
+                //      showListDialog();
                 autoLocatedPopup.showPopupWindow(v);
                 break;
             case value:
@@ -153,38 +150,5 @@ public class DiscoverFragment extends BaseFragment implements DroppyMenuPopup.On
         }
     }
 
-    /**
-     * 下拉回调
-     *
-     * @param v
-     * @param id
-     */
-    @Override
-    public void call(View v, int id) {
 
-
-        switch (id) {
-            case 0:
-                //ToastUtils.showToastShort("发布动态");
-                Intent intent = new Intent(mActivity, PublishActivity.class);
-                intent.putExtra("isPhoto", "0");
-                startActivity(intent);
-                break;
-            case 1:
-                Intent intent1 = new Intent(mActivity, PublishActivity.class);
-                intent1.putExtra("isPhoto", "1");
-                startActivity(intent1);
-                //ToastUtils.showToastShort("发布视频");
-                break;
-            default:
-
-        }
-
-
-    }
-
-    @Override
-    public void call() {
-
-    }
 }

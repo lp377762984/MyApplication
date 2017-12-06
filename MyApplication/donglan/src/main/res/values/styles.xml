@@ -65,10 +65,10 @@
         <item name="android:windowContentOverlay">@null</item>
 
 
-        <item name="droppyMenuItemTitleStyle">@style/customMenuItemTitle</item>
+     <!--   <item name="droppyMenuItemTitleStyle">@style/customMenuItemTitle</item>
         <item name="droppyMenuItemIconStyle">@style/customMenuItemIcon</item>
         <item name="droppyMenuItemStyle">@style/customMenuItem</item>
-        <item name="droppyMenuSeparatorStyle">@style/customMenuSeparator</item>
+        <item name="droppyMenuSeparatorStyle">@style/customMenuSeparator</item>-->
 
     </style>
 
@@ -96,23 +96,22 @@
     </style>
 
 
-    <style name="customMenuItemIcon" parent="Droppy.DroppyMenuItemIcon">
+<!--    <style name="customMenuItemIcon" parent="Droppy.DroppyMenuItemIcon">
         <item name="android:layout_weight">0</item>
     </style>
-    <!--分割线颜色-->
+    &lt;!&ndash;分割线颜色&ndash;&gt;
     <style name="customMenuSeparator" parent="Droppy.DroppyMenuSeparator">
         <item name="android:background">@color/color_bg_line</item>
     </style>
 
     <style name="customMenuItem" parent="Droppy.DroppyMenuItem">
-        <!-- your custom style -->
+        &lt;!&ndash; your custom style &ndash;&gt;
     </style>
-<!--弹窗字体颜色-->
+&lt;!&ndash;弹窗字体颜色&ndash;&gt;
     <style name="customMenuItemTitle" parent="Droppy.DroppyMenuItemTitle">
         <item name="android:textColor">#333333</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_weight">1</item>
-
-    </style>
+    </style>-->
 
 </resources>

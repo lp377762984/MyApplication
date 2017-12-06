@@ -77,7 +77,7 @@ android {
         compile project(':ViewPagerIndicatorlibrary')
         compile project(':PullToRefreshLibrary')
         compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-        compile project(':DroppyDropdownLibrary')
+        //compile project(':DroppyDropdownLibrary')
         compile 'com.github.bumptech.glide:glide:4.3.0'
         annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
         //    compile project(':PictureViewerLibrary')
@@ -111,10 +111,8 @@ dependencies {
     }
 //
     compile 'com.github.piasy:BigImageViewer:1.4.5'
-
 // load with glide
     compile 'com.github.piasy:GlideImageLoader:1.4.5'
-
 // progress pie indicator
     compile 'com.github.piasy:ProgressPieIndicator:1.4.5'
     // compile 'io.github.rockerhieu:emojicon:<latest-version>'

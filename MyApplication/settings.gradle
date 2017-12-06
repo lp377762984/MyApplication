@@ -1,1 +1,1 @@
-include ':donglan', ':hellocharts-library', ':hellocharts-samples', ':ViewPagerIndicatorlibrary', ':PullToRefreshLibrary', ':DroppyDropdownLibrary', ':jiaozivideoplayerLibrary', ':EmojiconLibrary'
+include ':donglan', ':hellocharts-library', ':hellocharts-samples', ':ViewPagerIndicatorlibrary', ':PullToRefreshLibrary', ':jiaozivideoplayerLibrary', ':EmojiconLibrary'
