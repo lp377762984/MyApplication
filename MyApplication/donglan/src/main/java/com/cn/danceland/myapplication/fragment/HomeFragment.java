@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -18,16 +19,32 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
-import com.cn.danceland.myapplication.bean.NewsDataBean;
+import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
+import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,10 +52,16 @@ import java.util.List;
 public class HomeFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
     private ProgressDialog dialog;
-    private List<NewsDataBean> data = new ArrayList<>();
-    private List<String> imagelist = new ArrayList<>();
+    // private List<NewsDataBean> data = new ArrayList<>();
+    private List<RequestNewsDataBean.Data.Items> data = new ArrayList<>();
+
+    //  private List<String> imagelist = new ArrayList<>();
+    private List<RequestImageNewsDataBean.Data> imagelist = new ArrayList<>();
+
     private NewsListviewAdapter newsListviewAdapter;
     private ViewPager mViewPager;
+    private int mCurrentPage = 1;//起始请求页
+    private int mCurrentIamgenews = 1;//轮播开始页
     private static final int TOP_NEWS_CHANGE_TIME = 4000;// 顶部新闻切换事件
     private Handler mHandler = new Handler() {
 
@@ -54,6 +77,7 @@ public class HomeFragment extends BaseFragment {
             // Log.d(TAG, "轮播条:" + item);
 
             mViewPager.setCurrentItem(item);
+
             mHandler.sendMessageDelayed(Message.obtain(),
                     TOP_NEWS_CHANGE_TIME);
 
@@ -77,11 +101,9 @@ public class HomeFragment extends BaseFragment {
 
         newsListviewAdapter = new NewsListviewAdapter(data, mActivity);
         pullToRefresh.setAdapter(newsListviewAdapter);
-        //加入头布局
-        pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
         //禁止头部出现分割线
-   //   pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
+        //   pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
 
         pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
@@ -107,6 +129,8 @@ public class HomeFragment extends BaseFragment {
                 new UpRefresh().execute();
             }
         });
+
+
         return v;
     }
 
@@ -117,11 +141,13 @@ public class HomeFragment extends BaseFragment {
         mViewPager = headView.findViewById(R.id.vp_images);
         tv_image_title = headView.findViewById(R.id.tv_image_title);
         tv_indecater = headView.findViewById(R.id.tv_indecater);
-        LinearLayout ll_image_title_bg=headView.findViewById(R.id.ll_image_title_bg);
+        LinearLayout ll_image_title_bg = headView.findViewById(R.id.ll_image_title_bg);
         ll_image_title_bg.setBackgroundColor(Color.BLACK);
         ll_image_title_bg.getBackground().setAlpha(80);
 
         topNewsAdapter = new TopNewsAdapter(mActivity, imagelist);
+
+
         mViewPager.setAdapter(topNewsAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -132,6 +158,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 tv_indecater.setText((position + 1) + "/" + imagelist.size());
+                tv_image_title.setText(imagelist.get(position).getTitle());
+                mCurrentIamgenews = position;
             }
 
             @Override
@@ -156,25 +184,16 @@ public class HomeFragment extends BaseFragment {
             //  findSelectionDyn_Down(1);
             init();
 
-            for (int i = 0; i < 10; i++) {
-                NewsDataBean newsDataBean = new NewsDataBean();
-                newsDataBean.setTitle("新闻下拉" + i);
-                newsDataBean.setContent("该吃放了吧");
-                newsDataBean.setTime("11-9");
-                newsDataBean.setImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511937477493&di=a44f237b0eeab978b10bcb43ca3e98e9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8c1001e93901213f4a21fac35ee736d12f2e959b.jpg");
-                newsDataBean.setUrl("http://money.163.com/17/1129/01/D4CGFLLC002580S6.html");
-                data.add(0, newsDataBean);
-            }
 
+            mCurrentPage = 1;
+            findNews(mCurrentPage);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            newsListviewAdapter.setData(data);
-            newsListviewAdapter.notifyDataSetChanged();
-            //   myDynListviewAdater.notifyDataSetChanged();
+
             pullToRefresh.onRefreshComplete();
         }
     }
@@ -188,26 +207,10 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-//            if (!isEnd) {//还有数据请求
-//                findSelectionDyn_Up(mCurrentPage);
-//            }
-
-            try {
-                Thread.sleep(1000);
-
-                //       dialog.dismiss();
-                for (int i = 0; i < 10; i++) {
-                    NewsDataBean newsDataBean = new NewsDataBean();
-                    newsDataBean.setTitle("新闻上拉" + i);
-                    newsDataBean.setContent("该吃放了吧");
-                    newsDataBean.setTime("11-9");
-                    newsDataBean.setImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511937477493&di=a44f237b0eeab978b10bcb43ca3e98e9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8c1001e93901213f4a21fac35ee736d12f2e959b.jpg");
-                    newsDataBean.setUrl("http://money.163.com/17/1129/01/D4CGFLLC002580S6.html");
-                    data.add(newsDataBean);
-                }
-
-            } catch (Exception e) {
+            if (!isEnd) {//还有数据请求
+                findNews(mCurrentPage);
             }
+
 
             return null;
         }
@@ -219,8 +222,7 @@ public class HomeFragment extends BaseFragment {
 //            if (isEnd) {//没数据了
 //                pullToRefresh.onRefreshComplete();
 //            }
-            newsListviewAdapter.setData(data);
-            newsListviewAdapter.notifyDataSetChanged();
+
 
             pullToRefresh.onRefreshComplete();
         }
@@ -228,30 +230,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void initDta() {
-        for (int i = 0; i < 10; i++) {
-            NewsDataBean newsDataBean = new NewsDataBean();
-            newsDataBean.setTitle("新闻" + i);
-            newsDataBean.setContent("该吃放了吧");
-            newsDataBean.setTime("11-9");
-            newsDataBean.setImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511937477493&di=a44f237b0eeab978b10bcb43ca3e98e9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8c1001e93901213f4a21fac35ee736d12f2e959b.jpg");
-            newsDataBean.setUrl("http://money.163.com/17/1129/01/D4CGFLLC002580S6.html");
-            data.add(newsDataBean);
-        }
 
-
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511937477493&di=a44f237b0eeab978b10bcb43ca3e98e9&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F8c1001e93901213f4a21fac35ee736d12f2e959b.jpg");
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867148&di=76f9d5c92f0035fbc0cdc2cca7bd29ba&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F902397dda144ad349ad41299daa20cf431ad8541.jpg");
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867147&di=9bf28246ada4dde0fa4e263ba6d8aed5&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F203fb80e7bec54e7fd218537b2389b504ec26ace.jpg");
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867147&di=762d313a4230efdf7efc46dbb6e40305&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F574e9258d109b3de9ad6474fc6bf6c81800a4caf.jpg");
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867146&di=9c103cfb0dcd01886029edcb2db8c471&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F22%2F72%2F01%2F57c657a7e4258_1024.jpg");
-        imagelist.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511956867146&di=fdf729f81b3cf3042dbf11acb2d9f4cb&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dshijue1%252C0%252C0%252C294%252C40%2Fsign%3D1fdc96bad333c895b2739038b97a1985%2Fd043ad4bd11373f092fa8eb2ae0f4bfbfaed04d1.jpg");
-
-        topNewsAdapter.setData(imagelist);
-        topNewsAdapter.notifyDataSetChanged();
-        newsListviewAdapter.setData(data);
-        newsListviewAdapter.notifyDataSetChanged();
-        mHandler.sendMessageDelayed(Message.obtain(),
-                TOP_NEWS_CHANGE_TIME);
+        findNews(mCurrentPage);
+        findImageNews();
 
     }
 
@@ -281,14 +262,14 @@ public class HomeFragment extends BaseFragment {
 
     public class TopNewsAdapter extends PagerAdapter {
         private Context context;
-        private List<String> images;
+        private List<RequestImageNewsDataBean.Data> images;
 
-        public TopNewsAdapter(Context context, List<String> images) {
+        public TopNewsAdapter(Context context, List<RequestImageNewsDataBean.Data> images) {
             this.context = context;
             this.images = images;
         }
 
-        public void setData(List<String> images) {
+        public void setData(List<RequestImageNewsDataBean.Data> images) {
             this.images = images;
         }
 
@@ -313,7 +294,7 @@ public class HomeFragment extends BaseFragment {
             container.addView(image);
 
 
-            Glide.with(context).load(images.get(position)).into(image);
+            Glide.with(context).load(images.get(position).getImg_url()).into(image);
 
             // 参2表示图片url
             image.setOnTouchListener(new TopNewsTouchListener());
@@ -328,33 +309,210 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    private long starttime = 0;
+    private long endtime = 0;
+    float xDown, yDown, xUp;
+
     class TopNewsTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    //
-                    mHandler.removeCallbacksAndMessages(null);// 移除消息队列中的所有元素
-                    break;
-                case MotionEvent.ACTION_CANCEL:// 事件取消(比如按下后开始移动,
-                    // 那么就不会响应ACTION_UP动作了)
-                    //     Log.d(TAG, "事件取消");
-                    mHandler.sendMessageDelayed(Message.obtain(),
-                            TOP_NEWS_CHANGE_TIME);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    //     Log.d(TAG, "手指抬起");
-                    mHandler.sendMessageDelayed(Message.obtain(),
-                            TOP_NEWS_CHANGE_TIME);
-                    break;
 
-                default:
-                    break;
+
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                xDown = event.getX();
+                yDown = event.getY();
+
+                mHandler.removeCallbacksAndMessages(null);// 移除消息队列中的所有元素
+
+                starttime = event.getEventTime();
+            } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                // 那么就不会响应ACTION_UP动作了)
+                //     Log.d(TAG, "事件取消");
+                mHandler.sendMessageDelayed(Message.obtain(),
+                        TOP_NEWS_CHANGE_TIME);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                xUp = event.getX();
+                mHandler.sendMessageDelayed(Message.obtain(),
+                        TOP_NEWS_CHANGE_TIME);
+                endtime = event.getEventTime();
+
+
+                if ((xUp - xDown) > 20) {
+                    //添加要处理的内容
+                } else if ((xUp - xDown) < -20) {
+                    //添加要处理的内容
+                } else if (0 == (xDown - xUp)) {
+
+                    LogUtil.i("点击了图片");
+                    mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", imagelist.get(mCurrentIamgenews).getUrl()).putExtra("title", imagelist.get(mCurrentIamgenews).getTitle()));
+
+//                    int viewWidth = v.getWidth();
+//                    if( xDown < viewWidth/3 )
+//                    {
+//                        //靠左点击
+//                    }
+//                    else if(xDown > viewWidth/3 && xDown < viewWidth * 2 /3)
+//                    {
+//                        //中间点击
+//                    }
+//                    else
+//                    {
+//                        //靠右点击
+//                    }
+                }
+
+
             }
+            // LogUtil.i((endtime - starttime) + "");
+
 
             return true;
         }
     }
+
+    private boolean isEnd = false;
+
+    private void setEnd() {
+        isEnd = true;//没数据了
+        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+        endLabels.setLoadingDrawable(null);
+        // pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
+    }
+
+    private void findNews(int page) {
+        String params = page + "";
+
+        String url = Constants.FIND_NEWS_URL + params;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
+                if (newsDataBean.getSuccess()) {
+                    data = newsDataBean.getData().getItems();
+                    LogUtil.i(data.toString());
+                    if (mCurrentPage == 1) {
+                        newsListviewAdapter.setData(data);
+                        newsListviewAdapter.notifyDataSetChanged();
+
+
+                    } else {
+                        newsListviewAdapter.addLastList(data);
+                        newsListviewAdapter.notifyDataSetChanged();
+                    }
+                    if (data.size() > 0 && data.size() < 10) {
+                        setEnd();
+                    } else {
+                        mCurrentPage = mCurrentPage + 1;
+
+                    }
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                dialog.dismiss();
+                ToastUtils.showToastShort("请查看网络连接");
+
+            }
+
+        }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("findNews");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+
+    private void findImageNews() {
+
+
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_IMAGE_NEWS_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+
+                LogUtil.i(s);
+                Gson gson = new Gson();
+
+                RequestImageNewsDataBean imageNewsDataBean = new RequestImageNewsDataBean();
+                imageNewsDataBean = gson.fromJson(s, RequestImageNewsDataBean.class);
+                if (imageNewsDataBean.getSuccess()) {
+                    //加入头布局
+                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+
+                    imagelist = imageNewsDataBean.getData();
+                    topNewsAdapter.setData(imagelist);
+                    topNewsAdapter.notifyDataSetChanged();
+                    tv_indecater.setText((1) + "/" + imagelist.size());
+                    tv_image_title.setText(imagelist.get(1).getTitle());
+                    mHandler.sendMessageDelayed(Message.obtain(),
+                            TOP_NEWS_CHANGE_TIME);
+                } else {
+
+                    ToastUtils.showToastShort(imageNewsDataBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                dialog.dismiss();
+                ToastUtils.showToastShort("请查看网络连接");
+
+            }
+
+        }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("findImageNews");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
 
 }

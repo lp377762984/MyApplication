@@ -61,8 +61,8 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:hint="请输入手机号或会员号"
-            android:inputType="number"
             android:imeOptions="actionSearch"
+            android:inputType="number"
             android:maxLines="1" />
 
         <ImageButton

@@ -69,7 +69,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         intView();
         dialog = new ProgressDialog(this);
         dialog.setMessage("登录中……");
-        permissions();
+
     }
 
     private void intView() {
@@ -86,35 +86,40 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     }
 
-    public void permissions() {
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        permissions();
+    }
+
+    public void permissions(){
+        if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO},1);
         }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
+        if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_CALL_PHONE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE},2);
         }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
+        if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA},3);
         }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
+        if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION},4);
         }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
+        if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE},5);
         }
 
     }
-
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 || requestCode == 3 || requestCode == 2 || requestCode == 4 || requestCode == 5 || requestCode == 6) {
-            if (grantResults[0] != 0) {
+        if(requestCode==1||requestCode==3||requestCode==2||requestCode==4||requestCode==5||requestCode==6){
+            if(grantResults[0]!=0){
                 AlertDialog.Builder inputDialog =
                         new AlertDialog.Builder(LoginActivity.this);
                 inputDialog.setTitle("请在系统应用管理中开启相机定位等必要权限，否则程序无法正常使用");
@@ -122,31 +127,31 @@ public class LoginActivity extends Activity implements OnClickListener {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (requestCode == 1) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
+                                if(requestCode==1){
+                                    if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_RECORD_AUDIO)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO},1);
                                     }
                                 }
-                                if (requestCode == 2) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
+                                if(requestCode==2){
+                                    if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_CALL_PHONE)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE},2);
                                     }
-                                } else if (requestCode == 3) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
+                                }else if(requestCode==3){
+                                    if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_CAMERA)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA},3);
                                     }
-                                } else if (requestCode == 4) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
+                                }else if(requestCode==4){
+                                    if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_ACCESS_COARSE_LOCATION)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION},4);
                                     }
-                                } else if (requestCode == 5) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
+                                }else if(requestCode==5){
+                                    if(ContextCompat.checkSelfPermission(LoginActivity.this,PERMISSION_WRITE_EXTERNAL_STORAGE)
                                             != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE},5);
                                     }
                                 }
                                 //System.exit(0);
@@ -156,7 +161,6 @@ public class LoginActivity extends Activity implements OnClickListener {
             }
         }
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -237,6 +241,8 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
 
 
+
+
                     //查询信息
                     queryUserInfo(mUserId);
 
@@ -295,18 +301,16 @@ public class LoginActivity extends Activity implements OnClickListener {
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    //保存个人信息
-                    Data data = requestInfoBean.getData();
-                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
-                    LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
+                //      LogUtil.i(requestInfoBean.toString());
+//                ArrayList<Data> mInfoBean = new ArrayList<>();
+//                mInfoBean.add(requestInfoBean.getData());
+//                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
+                //保存个人信息
+                Data data = requestInfoBean.getData();
+                DataInfoCache.saveOneCache(data,Constants.MY_INFO);
 
-                }else {
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
-                }
-
-
+               LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -335,6 +339,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
+
 
 
 }
