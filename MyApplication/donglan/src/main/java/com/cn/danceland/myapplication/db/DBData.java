@@ -48,9 +48,8 @@ import java.util.zip.ZipInputStream;
 public class DBData {
 
     public ArrayList<String> cityDis = new ArrayList<String>();
-     DonglanDao donglanDao;
-    private static DaoMaster donglanMaster;
-    private static DaoSession daoDonglanSession;
+    DonglanDao donglanDao;
+    MiMessageDao miMessageDao;
     int id;
 
     //从接口获取数据存入数据库
@@ -226,33 +225,14 @@ public class DBData {
         return !b;
     }
 
-    private static DaoMaster obtainMaster(Context context, String dbName)
-    {
-        return new DaoMaster(new DaoMaster.DevOpenHelper(context, dbName, null).getWritableDatabase());
+    //查询全部数据
+    public List<MiMessage> getMessageList(){
+        if(miMessageDao==null){
+            miMessageDao = MyApplication.getInstance().getMessageDaoSession().getMiMessageDao();
+        }
+        List<MiMessage> messagesList = miMessageDao.loadAll();
+        return messagesList;
     }
 
-    private static DaoMaster getDonglanDaoMaster(Context context, String dbName)
-    {
-        if (dbName == null)
-            return null;
-        if ( donglanMaster== null)
-        {
-            donglanMaster = obtainMaster(context, dbName);
-        }
-        return donglanMaster;
-    }
-    /**
-     * 取得DaoSession
-     *
-     * @return
-     */
-    public static DaoSession getDaoSession(String dbName)
-    {
 
-        if (daoDonglanSession == null)
-        {
-            daoDonglanSession = getDonglanDaoMaster(MyApplication.getInstance(), dbName).newSession();
-        }
-        return daoDonglanSession;
-    }
 }

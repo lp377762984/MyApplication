@@ -23,10 +23,10 @@ public class MyApplication extends Application {
     public static Context applicationContext;
     private static MyApplication instance;
     public LocationService locationClient;
-    private DaoMaster.DevOpenHelper donglan;
-    private SQLiteDatabase db;
-    private DaoMaster daoMaster;
-    private DaoSession daoSession;
+    private DaoMaster.DevOpenHelper donglan,message;
+    private SQLiteDatabase db,messagedb;
+    private DaoMaster daoMaster,messageMaster;
+    private DaoSession daoSession,messageSession;
 
 
     private HttpProxyCacheServer proxy;
@@ -70,20 +70,31 @@ public class MyApplication extends Application {
     private void setUpDb(){
 
         donglan = new DaoMaster.DevOpenHelper(this, "donglan", null);
+        message = new DaoMaster.DevOpenHelper(this, "message", null);
 
         db = donglan.getWritableDatabase();
+        messagedb = message.getWritableDatabase();
 
         daoMaster = new DaoMaster(db);
+        messageMaster = new DaoMaster(messagedb);
 
         daoSession = daoMaster.newSession();
+        messageSession = messageMaster.newSession();
     }
 
     public SQLiteDatabase getDb(){
         return db;
     }
+    public SQLiteDatabase getMessageDb(){
+        return messagedb;
+    }
     public DaoSession getDaoSession(){
 
         return daoSession;
+    }
+    public DaoSession getMessageDaoSession(){
+
+        return messageSession;
     }
 
 }
