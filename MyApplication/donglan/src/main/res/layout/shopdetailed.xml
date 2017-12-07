@@ -82,6 +82,7 @@
                         >
 
                         <TextView
+                            android:id="@+id/tv_adress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="门店地址"
@@ -90,6 +91,7 @@
                             android:layout_alignParentTop="true"
                             />
                         <TextView
+                            android:id="@+id/tv_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="营业时间"
