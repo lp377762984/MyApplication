@@ -125,7 +125,7 @@ public class PublishActivity extends Activity {
                         try {
                             commitUrl(gson.toJson(bean));
                        //     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                      //      finish();
+                           //finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -154,7 +154,7 @@ public class PublishActivity extends Activity {
                             e.printStackTrace();
                         }
                     //    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                     //   finish();
+                        //finish();
                     }
                 }
             }
@@ -261,6 +261,7 @@ public class PublishActivity extends Activity {
                                     }
                                 }
                             }).start();
+                            finish();
 //                                LogUtil.e("zzf",publishBean.getImgList().toString());
                             publish_ok.setClickable(false);
                         }else{
@@ -276,7 +277,7 @@ public class PublishActivity extends Activity {
                                     e.printStackTrace();
                                 }
 
-                            //    finish();
+                                finish();
                             }else{
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
 
@@ -326,6 +327,7 @@ public class PublishActivity extends Activity {
                                         }
                                     }
                                 }).start();
+                                finish();
                                 publish_ok.setClickable(false);
                             }
                         }
@@ -363,7 +365,7 @@ public class PublishActivity extends Activity {
                 if("true".equals(rootBean.success)){
                     ToastUtils.showToastShort("发布成功！");
                     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                    finish();
+                    //finish();
                 }else{
                     ToastUtils.showToastShort("发布失败！请检查网络连接");
                 }
