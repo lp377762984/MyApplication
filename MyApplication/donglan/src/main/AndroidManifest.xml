@@ -110,7 +110,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ShopDetailedActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.CommentActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.NewsDetailsActivity"
             android:screenOrientation="portrait"/>
     </application>

@@ -3,8 +3,7 @@
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg_mianlayout"
- >
+    android:background="@color/color_bg_mianlayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,47 +60,48 @@
 
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/line_bg" />
 
         <LinearLayout
             android:id="@+id/ll_comment"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:background="#fff"
-            android:gravity="center"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:gravity="center">
 
-            <!--        <io.github.rockerhieu.emojicon.EmojiconEditText
-                        android:id="@+id/et_comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="写评论"
-                     />-->
-
-            <EditText
+            <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
                 android:id="@+id/et_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/edit_search_bg"
                 android:hint="写评论"
-                android:maxLines="3"
+
+                android:maxLines="5"
+                android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
-                android:visibility="gone" />
+                android:paddingTop="5dp"
+                android:visibility="visible"
+                emojicon:emojiconSize="18sp" />
+
+            <ImageView
+
+                android:id="@+id/emoji_btn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="5dp"
+                android:padding="4dp"
+                android:src="@drawable/smiley" />
 
             <TextView
                 android:id="@+id/tv_comment"
@@ -117,17 +117,9 @@
                 android:maxLines="3"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
-                android:paddingTop="5dp" />
-
-            <ImageView
-                android:id="@+id/iv_emoji"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-
-                android:layout_marginRight="10dp"
-                android:src="@drawable/img_xin"
+                android:paddingTop="5dp"
                 android:visibility="gone" />
+
 
             <ImageView
                 android:id="@+id/iv_zan"
@@ -155,18 +147,18 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
                 android:text="发送"
-                android:textColor="#333333"
+                android:textColor="@color/dl_blue"
                 android:textSize="16sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line_bg" />
     </FrameLayout>
 
 
-    <FrameLayout
-        android:id="@+id/emojicons"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:visibility="gone" />
 
 
 </RelativeLayout>

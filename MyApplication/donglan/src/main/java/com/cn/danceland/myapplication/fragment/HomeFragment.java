@@ -469,14 +469,18 @@ public class HomeFragment extends BaseFragment {
                 if (imageNewsDataBean.getSuccess()) {
                     //加入头布局
                     pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+                    if (imageNewsDataBean.getData().size()>0) {
+                        imagelist = imageNewsDataBean.getData();
+                        topNewsAdapter.setData(imagelist);
+                        topNewsAdapter.notifyDataSetChanged();
+                        tv_indecater.setText((1) + "/" + imagelist.size());
+                        tv_image_title.setText(imagelist.get(1).getTitle());
+                        mHandler.sendMessageDelayed(Message.obtain(),
+                                TOP_NEWS_CHANGE_TIME);
+                    }else {
+                        ToastUtils.showToastShort("轮播图片为空");
+                    }
 
-                    imagelist = imageNewsDataBean.getData();
-                    topNewsAdapter.setData(imagelist);
-                    topNewsAdapter.notifyDataSetChanged();
-                    tv_indecater.setText((1) + "/" + imagelist.size());
-                    tv_image_title.setText(imagelist.get(1).getTitle());
-                    mHandler.sendMessageDelayed(Message.obtain(),
-                            TOP_NEWS_CHANGE_TIME);
                 } else {
 
                     ToastUtils.showToastShort(imageNewsDataBean.getErrorMsg());

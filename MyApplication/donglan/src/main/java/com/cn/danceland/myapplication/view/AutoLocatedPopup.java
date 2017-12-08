@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.PublishActivity;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 
 import razerdp.basepopup.BasePopupWindow;
 
@@ -26,16 +29,11 @@ public class AutoLocatedPopup extends BasePopupWindow implements View.OnClickLis
 
     public AutoLocatedPopup(Activity context) {
         super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        setAutoLocatePopup(true);
+        //setAutoLocatePopup(true);
         bindEvent();
         this.context=context;
     }
 
-
-    @Override
-    protected Animation initShowAnimation() {
-        return getDefaultAlphaAnimation();
-    }
 
 
     @Override
@@ -50,9 +48,27 @@ public class AutoLocatedPopup extends BasePopupWindow implements View.OnClickLis
     }
 
     @Override
+    protected Animation initShowAnimation() {
+        TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, -DensityUtils.dp2px(getContext(), 350f), 0);
+        translateAnimation.setDuration(450);
+        translateAnimation.setInterpolator(new OvershootInterpolator(1));
+        return translateAnimation;
+    }
+
+    //
+    @Override
+    protected Animation initExitAnimation() {
+        TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, 0, -DensityUtils.dp2px(getContext(), 350f));
+        translateAnimation.setDuration(450);
+        translateAnimation.setInterpolator(new OvershootInterpolator(-4));
+        return translateAnimation;
+    }
+
+
+    @Override
     public View initAnimaView() {
-       // return popupView.findViewById(R.id.popup_contianer);
-        return null;
+        return popupView.findViewById(R.id.popup_contianer);
+     //   return null;
     }
 
     private void bindEvent() {

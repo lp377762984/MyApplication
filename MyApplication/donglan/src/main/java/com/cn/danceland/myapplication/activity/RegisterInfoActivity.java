@@ -30,11 +30,15 @@ import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,15 +174,7 @@ public class RegisterInfoActivity extends Activity{
                         ToastUtils.showToastShort("请输入昵称");
                     }else{
                         commit();
-                        mData.setBirthday(strBirthday);
-                        mData.setNickName(strName);
-                        mData.setHeight(strHeight);
-                        mData.setWeight(strWeight);
-                        mData.setGender(gender);
-                        DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
-                        Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+
                     }
                     break;
             }
@@ -311,9 +307,22 @@ public class RegisterInfoActivity extends Activity{
         StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 RootBean rootBean = gson.fromJson(s, RootBean.class);
                 if("true".equals(rootBean.success)){
                     ToastUtils.showToastShort("提交成功！");
+                    mData.setBirthday(strBirthday);
+                    mData.setNickName(strName);
+                    mData.setHeight(strHeight);
+                    mData.setWeight(strWeight);
+                    mData.setGender(gender);
+                    DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
+                    EventBus.getDefault().post(new StringEvent("",1010));
+                    Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+
+
                 }else{
                     ToastUtils.showToastShort("提交失败！");
                 }

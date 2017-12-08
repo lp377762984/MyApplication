@@ -40,12 +40,12 @@
         "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\abc_list_menu_item_icon.xml"
     },
     {
-        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_view_pager_charts.xml",
-        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\res\\layout\\fragment_view_pager_charts.xml"
-    },
-    {
         "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\res\\merged\\debug\\layout\\notification_media_action.xml",
         "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.3.0\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_view_pager_charts.xml",
+        "source": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\res\\layout\\fragment_view_pager_charts.xml"
     },
     {
         "merged": "D:\\WorkSpace\\dl-mobile-android\\MyApplication\\hellocharts-samples\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_bubble_chart.xml",

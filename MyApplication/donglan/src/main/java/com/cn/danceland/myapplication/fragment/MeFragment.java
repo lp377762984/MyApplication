@@ -118,7 +118,7 @@ public class MeFragment extends BaseFragment {
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        LogUtil.i("收到消息" + event.getEventCode());
+      //  LogUtil.i("收到消息" + event.getEventCode());
 
         if (99 == event.getEventCode()) {
             String msg = event.getMsg();
