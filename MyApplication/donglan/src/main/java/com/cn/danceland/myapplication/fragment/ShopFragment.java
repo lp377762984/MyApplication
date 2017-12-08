@@ -101,7 +101,7 @@ public class ShopFragment extends BaseFragment {
         ll_top.getBackground().setAlpha(80);
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
-        mGridView.setVisibility(View.VISIBLE);
+       // mGridView.setVisibility(View.VISIBLE);
 
         return v;
     }
