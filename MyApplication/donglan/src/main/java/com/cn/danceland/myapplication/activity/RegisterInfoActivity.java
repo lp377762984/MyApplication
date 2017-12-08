@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,12 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
@@ -35,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -42,14 +38,12 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
+import org.greenrobot.eventbus.EventBus;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,7 +82,7 @@ public class RegisterInfoActivity extends Activity{
         requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
 
         mData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        id = mData.getId();
+        id = SPUtils.getString(Constants.MY_USERID,null);
 
     }
 
@@ -180,15 +174,7 @@ public class RegisterInfoActivity extends Activity{
                         ToastUtils.showToastShort("请输入昵称");
                     }else{
                         commit();
-                        mData.setBirthday(strBirthday);
-                        mData.setNickName(strName);
-                        mData.setHeight(strHeight);
-                        mData.setWeight(strWeight);
-                        mData.setGender(gender);
-                        DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
-                        Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
-                        startActivity(intent);
-                        finish();
+
                     }
                     break;
             }
@@ -321,9 +307,22 @@ public class RegisterInfoActivity extends Activity{
         StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 RootBean rootBean = gson.fromJson(s, RootBean.class);
                 if("true".equals(rootBean.success)){
                     ToastUtils.showToastShort("提交成功！");
+                    mData.setBirthday(strBirthday);
+                    mData.setNickName(strName);
+                    mData.setHeight(strHeight);
+                    mData.setWeight(strWeight);
+                    mData.setGender(gender);
+                    DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
+                    EventBus.getDefault().post(new StringEvent("",1010));
+                    Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+
+
                 }else{
                     ToastUtils.showToastShort("提交失败！");
                 }

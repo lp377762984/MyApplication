@@ -1,7 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,9 +16,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,11 +77,9 @@ import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
-import io.github.rockerhieu.emojicon.EmojiconGridFragment;
-import io.github.rockerhieu.emojicon.EmojiconsFragment;
-import io.github.rockerhieu.emojicon.emoji.Emojicon;
-
-import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import razerdp.basepopup.BasePopupWindow;
 
 
 /**
@@ -82,7 +88,7 @@ import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.positio
  */
 
 
-public class DynHomeActivity extends FragmentActivity implements View.OnClickListener, EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
+public class DynHomeActivity extends FragmentActivity implements View.OnClickListener {
     private PullToRefreshListView pullToRefresh;
     private List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
     private RequstCommentInfoBean commentInfoBean;
@@ -98,7 +104,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private TextView tv_zan_num;
     private ImageView iv_zan;
     //private EmojiconEditText et_comment;
-    private EditText et_comment;
+    private EmojiconEditText et_comment;
     private TextView tv_send;
     private ImageView iv_emoji;
     private FrameLayout fl_emojicons;
@@ -115,13 +121,18 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private boolean init;
     private int replypos = -1;
     private RelativeLayout rl_more;
+    SlideFromBottomPopup slideFromBottomPopup;
+    private EmojiconEditText et_popup_comment;
+    private TextView tv_popup_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dyn_home);
         //注册event事件
         EventBus.getDefault().register(this);
+
         initView();
         initData();
     }
@@ -147,6 +158,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             et_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
             //    LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
 
+        //    slideFromBottomPopup.showPopupWindow();
+          //  tv_popup_title.setText("回复评论");
+          //  et_popup_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
         }
 
 
@@ -175,56 +189,101 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
     }
 
+    private AnimationSet mAnimationSet;//点赞动画
+
+    /**
+     * 创建点赞动画
+     */
+    private void buildAnima() {
+        ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(500);
+        mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setFillAfter(false);
+
+        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
+        mAlphaAnimation.setDuration(500);
+        mAlphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAlphaAnimation.setFillAfter(false);
+
+        mAnimationSet = new AnimationSet(false);
+        mAnimationSet.setDuration(500);
+        mAnimationSet.addAnimation(mScaleAnimation);
+        mAnimationSet.addAnimation(mAlphaAnimation);
+        mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
 
     private void initView() {
 
         msgId = getIntent().getStringExtra("msgId");
         userId = getIntent().getStringExtra("userId");
-
+        slideFromBottomPopup = new SlideFromBottomPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
-
-        tv_zan_num = findViewById(R.id.tv_zan_num);
-        iv_zan = findViewById(R.id.iv_zan);
-        et_comment = findViewById(R.id.et_comment);
-
-//        et_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    init = true;
-//                }
-//            }
-//        });
-//
-//        LinearLayout linearLayout = findViewById(R.id.ll_comment);
-//
-//        linearLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            public void onGlobalLayout() {
-//                if (init) {
-//                    if (isKeyboardShown(et_comment.getRootView())) {
-//                        // Do something when keyboard is shown
-//                        ToastUtils.showToastShort("弹出");
-//                        if (fl_emojicons.getVisibility()==View.VISIBLE){
-//                            fl_emojicons.setVisibility(View.GONE);
-//                        }
-//
-//                    } else {
-//
-//                        // Do something when keyboard is hidden
-//                       ToastUtils.showToastShort("收齐");
-//                    }
-//                }
-//            }
-//        });
-
-
-        iv_emoji = findViewById(R.id.iv_emoji);
-        iv_emoji.setOnClickListener(this);
-        setEmojiconFragment(false);
-
-        fl_emojicons = findViewById(R.id.emojicons);
-
         tv_send = findViewById(R.id.tv_send);
         tv_send.setOnClickListener(this);
+        tv_zan_num = findViewById(R.id.tv_zan_num);
+        iv_zan = findViewById(R.id.iv_zan);
+        buildAnima();
+        emojiButton = findViewById(R.id.emoji_btn);
+        et_comment = findViewById(R.id.et_comment);
+        LinearLayout ll_comment = findViewById(R.id.ll_comment);
+        emojIcon = new EmojIconActions(this, ll_comment, et_comment, emojiButton);
+        emojIcon.ShowEmojIcon();
+        emojIcon.setKeyboardListener(new EmojIconActions.KeyboardListener() {
+            @Override
+            public void onKeyboardOpen() {
+                Log.e("Keyboard", "open");
+                tv_zan_num.setVisibility(View.GONE);
+                iv_zan.setVisibility(View.GONE);
+                emojiButton.setVisibility(View.VISIBLE);
+                //     tv_send.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onKeyboardClose() {
+                Log.e("Keyboard", "close");
+                tv_zan_num.setVisibility(View.VISIBLE);
+                iv_zan.setVisibility(View.VISIBLE);
+                emojiButton.setVisibility(View.GONE);
+                //   tv_send.setVisibility(View.GONE);
+            }
+        });
+        emojIcon.addEmojiconEditTextList(et_comment);
+      //  et_comment.setImeOptions();
+       // android:imeOptions="actionDone"
+
+        findViewById(R.id.tv_comment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  slideFromBottomPopup.showPopupWindow();
+                startActivity(new Intent(DynHomeActivity.this, CommentActivity.class));
+
+            }
+        });
+
+
+
+
+
+
+
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
         dialog = new ProgressDialog(this);
@@ -273,7 +332,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_send:
-                LogUtil.i(et_comment.getText().toString());
+                //  LogUtil.i(et_comment.getText().toString());
                 if (!TextUtils.isEmpty(et_comment.getText().toString())) {
                     if (replypos < 0) {
                         sendCommentReply(msgId, et_comment.getText().toString());
@@ -287,17 +346,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
                 break;
 
-            case R.id.iv_emoji:
-
-                if (fl_emojicons.getVisibility() == View.GONE) {
-                    fl_emojicons.setVisibility(View.VISIBLE);
-                    KeyBoardUtils.closeKeybord(et_comment, this);
-                } else {
-                    fl_emojicons.setVisibility(View.GONE);
-                    //  KeyBoardUtils.openKeybord(et_comment, this);
-                }
-
-                break;
 
             case R.id.iv_back:
                 finish();
@@ -307,25 +355,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         }
     }
 
-    //表情点击回调
-    @Override
-    public void onEmojiconClicked(Emojicon emojicon) {
-        EmojiconsFragment.input(et_comment, emojicon);
-    }
-
-    //删除表情点击回调
-    @Override
-    public void onEmojiconBackspaceClicked(View v) {
-        EmojiconsFragment.backspace(et_comment);
-    }
-
-    //EmojiconsFragment表情显示的fragment
-    private void setEmojiconFragment(boolean useSystemDefault) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
-                .commit();
-    }
 
     private RequstOneDynInfoBean.Data info;
     private Handler handler = new Handler() {
@@ -354,6 +383,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     iv_zan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            iv_zan.clearAnimation();//添加动画
+                            iv_zan.startAnimation(mAnimationSet);
                             if (info.getPraise()) {//如果点赞
                                 addZan(info.getId(), false);
                             } else {//未点赞
@@ -475,7 +506,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             Glide.with(this)
                     .load(oneDynInfo.getVedioImg())
                     .into(jzVideoPlayer.thumbImageView);
-            jzVideoPlayer.positionInList = position;
+            //jzVideoPlayer.positionInList = position;
         } else {
             jzVideoPlayer.setVisibility(View.GONE);
         }
@@ -798,6 +829,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
 
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
+                    slideFromBottomPopup.dismiss();
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
                 }
@@ -870,11 +902,12 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 //                    commentinfo.setTime(date);
 //                    myAdater.addFirst(commentinfo);
 //                    myAdater.notifyDataSetChanged();
+                    replypos = -1;
                     et_comment.setText("");
                     et_comment.setHint("写评论");
-                    replypos = -1;
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
+                    slideFromBottomPopup.dismiss();
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
                 }
@@ -1141,6 +1174,92 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         dialog.show();
     }
 
+
+    ImageView emojiButton;
+    EmojIconActions emojIcon;
+    private View popupView;
+
+    public class SlideFromBottomPopup extends BasePopupWindow implements View.OnClickListener {
+
+
+        private Context context;
+
+        public SlideFromBottomPopup(Activity context) {
+            super(context);
+            this.context = context;
+            bindEvent();
+        }
+
+        @Override
+        protected Animation initShowAnimation() {
+            return getTranslateAnimation(250 * 2, 0, 300);
+        }
+
+        @Override
+        public View getClickToDismissView() {
+            return popupView.findViewById(R.id.click_to_dismiss);
+        }
+
+        @Override
+        public View onCreatePopupView() {
+            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_slide_from_bottom, null);
+            return popupView;
+        }
+
+        @Override
+        public View initAnimaView() {
+            return popupView.findViewById(R.id.popup_anima);
+        }
+
+        private void bindEvent() {
+            if (popupView != null) {
+                popupView.findViewById(R.id.tv_popup_send).setOnClickListener(this);
+                popupView.findViewById(R.id.tv_cancel).setOnClickListener(this);
+                tv_popup_title = popupView.findViewById(R.id.tv_popup_title);
+                et_popup_comment = popupView.findViewById(R.id.et_popup_comment);
+                emojiButton = popupView.findViewById(R.id.emoji_btn);
+                Message message = Message.obtain();
+                message.what = 2;
+                handler.sendMessage(message);
+
+            }
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_popup_send:
+
+                    //  LogUtil.i(et_comment.getText().toString());
+                    if (!TextUtils.isEmpty(et_popup_comment.getText().toString())) {
+                        if (replypos < 0) {
+                            sendCommentReply(msgId, et_popup_comment.getText().toString());
+                        } else {
+                            sendCommentReply(msgId, et_popup_comment.getText().toString(), data.get(replypos).getId(), data.get(replypos).getReplyUserId());
+                        }
+                    } else {
+                        ToastUtils.showToastShort("请输入");
+                    }
+
+
+                    break;
+                case R.id.tv_cancel:
+                    et_popup_comment.setText("");
+                    et_popup_comment.setHint("写评论");
+                    dismiss();
+                    break;
+//                case R.id.tx_3:
+//
+//                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+
     /**
      * 删除动态
      *
@@ -1192,4 +1311,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         };
         MyApplication.getHttpQueues().add(request);
     }
+
+
 }

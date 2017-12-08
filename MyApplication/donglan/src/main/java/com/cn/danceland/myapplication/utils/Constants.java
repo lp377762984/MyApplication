@@ -51,6 +51,8 @@ public class Constants {
     public static final String UPLOADTH = HOST + "appDynMsg/uploadThumbnail";//上传缩略图
     public static final String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
+    public static final String FIND_NEWS_URL = HOST + "appHome/showNews/";//查找新闻列表
+    public static final String FIND_IMAGE_NEWS_URL = HOST + "appHome/showCarousel";//查找新闻轮播图片
 
     public static final String SEND_COMMENT_REPLY = HOST + "/reply";//发布评论
     public static final String DEL_COMMENT_REPLY = HOST + "/reply";//删除发布评论

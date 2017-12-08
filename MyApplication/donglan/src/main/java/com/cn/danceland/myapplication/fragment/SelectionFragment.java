@@ -553,6 +553,8 @@ public class SelectionFragment extends BaseFragment {
                 if (requsetDynInfoBean.getSuccess()) {
 
                     if (requsetDynInfoBean.getData().getItems() != null) {
+
+
                         data = requsetDynInfoBean.getData().getItems();
                         myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
                         myDynListviewAdater.notifyDataSetChanged();
@@ -612,7 +614,7 @@ public class SelectionFragment extends BaseFragment {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
                     LogUtil.i(requsetDynInfoBean.getData().toString());
-                    if (data.size() > 0) {
+                    if (data.size() > 0&&data.size()<10) {
 
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
                         LogUtil.i(data.toString());

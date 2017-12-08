@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="派大星"
+
                 android:textColor="@color/dl_blue"
                 android:textSize="14sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="5dp"
-                android:text="最近发布"
+
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -69,7 +69,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
-        android:text="今天天气不错！"
+
         android:textColor="#333333" />
 
     <cn.jzvd.JZVideoPlayerStandard
@@ -114,7 +114,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="3dp"
             android:singleLine="true"
-            android:text="发布于月球"
+
             android:textSize="12sp"
 
             />

@@ -22,46 +22,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClientOption;
 import com.bumptech.glide.Glide;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -99,7 +83,7 @@ public class ShopFragment extends BaseFragment {
         storelist = v.findViewById(R.id.storelist);
 
 
-        getData();
+     //   getData();
         if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
@@ -117,7 +101,7 @@ public class ShopFragment extends BaseFragment {
         ll_top.getBackground().setAlpha(80);
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
-
+        mGridView.setVisibility(View.VISIBLE);
 
         return v;
     }

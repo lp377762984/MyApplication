@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="派大星"
+
                     android:textColor="@color/dl_blue"
                     android:textSize="14sp" />
 
@@ -83,7 +83,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="5dp"
-            android:text="今天天气不错！"
+
             android:textColor="#333333" />
 
         <cn.jzvd.JZVideoPlayerStandard
@@ -92,8 +92,8 @@
             android:layout_height="240dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:visibility="gone"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
 
         <com.cn.danceland.myapplication.view.NoScrollGridView
             android:id="@+id/gridview"
@@ -129,7 +129,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:singleLine="true"
-                android:text="发布于月球"
+
                 android:textSize="12sp"
 
                 />
@@ -226,6 +226,7 @@
 
         </LinearLayout>
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
