@@ -83,7 +83,7 @@ public class ShopFragment extends BaseFragment {
         storelist = v.findViewById(R.id.storelist);
 
 
-     //   getData();
+        getData();
         if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
