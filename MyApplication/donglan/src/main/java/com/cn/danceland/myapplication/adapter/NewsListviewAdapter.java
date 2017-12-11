@@ -28,7 +28,7 @@ import java.util.List;
 
 public class NewsListviewAdapter extends BaseAdapter {
 
-    public List<RequestNewsDataBean.Data.Items> data = new ArrayList<RequestNewsDataBean.Data.Items>();
+    private List<RequestNewsDataBean.Data.Items> data = new ArrayList<RequestNewsDataBean.Data.Items>();
     private LayoutInflater mInflater;
     private Context context;
 
@@ -37,6 +37,7 @@ public class NewsListviewAdapter extends BaseAdapter {
         this.context = context;
 
         mInflater = LayoutInflater.from(context);
+
     }
 
     public void addFirst(RequestNewsDataBean.Data.Items bean) {
@@ -45,11 +46,12 @@ public class NewsListviewAdapter extends BaseAdapter {
 
     public void setData(List<RequestNewsDataBean.Data.Items> data) {
         this.data = data;
+        //LogUtil.i(data.toString());
     }
 
     //增加数据
     public void addLastList(List<RequestNewsDataBean.Data.Items> bean) {
-
+     //   LogUtil.i(data.toString());
         data.addAll(bean);
         // LogUtil.i(data.toString());
     }
@@ -57,7 +59,11 @@ public class NewsListviewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+     //   LogUtil.i(data.size()+"");
         return data.size();
+
+      //
+
     }
 
     @Override
@@ -73,6 +79,7 @@ public class NewsListviewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
 
+    //    LogUtil.i("getView"+position);
         ViewHolder viewHolder = null;
         if (view == null) {
             viewHolder = new ViewHolder();

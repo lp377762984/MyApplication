@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
@@ -46,18 +45,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class HomeFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
     private ProgressDialog dialog;
-    // private List<NewsDataBean> data = new ArrayList<>();
     private List<RequestNewsDataBean.Data.Items> data = new ArrayList<>();
-
-    //  private List<String> imagelist = new ArrayList<>();
     private List<RequestImageNewsDataBean.Data> imagelist = new ArrayList<>();
-
     private NewsListviewAdapter newsListviewAdapter;
     private ViewPager mViewPager;
     private int mCurrentPage = 1;//起始请求页
@@ -84,6 +77,31 @@ public class HomeFragment extends BaseFragment {
 
         }
     };
+
+    private Handler mHandler2 = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case 1:
+                    //加入头布局
+                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+                    topNewsAdapter.setData(imagelist);
+                    topNewsAdapter.notifyDataSetChanged();
+                    tv_indecater.setText((1) + "/" + imagelist.size());
+                    tv_image_title.setText(imagelist.get(1).getTitle());
+                    mHandler.sendMessageDelayed(Message.obtain(),
+                            TOP_NEWS_CHANGE_TIME);
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+    };
+
     private TextView tv_indecater;
     private TextView tv_image_title;
 
@@ -91,16 +109,16 @@ public class HomeFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_home, null);
 
-        pullToRefresh = v.findViewById(R.id.pullToRefresh);
-
+        pullToRefresh = v.findViewById(R.id.pullToRefresh1);
+        init();
         //       headView = initHeadview();
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("加载中……");
-//        dialog.show();
-        //    data = getData();
 
-        newsListviewAdapter = new NewsListviewAdapter(data, mActivity);
-        pullToRefresh.setAdapter(newsListviewAdapter);
+        if (newsListviewAdapter == null) {
+            newsListviewAdapter = new NewsListviewAdapter(data, mActivity);
+        }
+
 
         //禁止头部出现分割线
         //   pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
@@ -109,7 +127,6 @@ public class HomeFragment extends BaseFragment {
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
 
-        init();
 
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -129,8 +146,8 @@ public class HomeFragment extends BaseFragment {
                 new UpRefresh().execute();
             }
         });
-
-
+        // pullToRefresh.setVisibility(View.GONE);
+        pullToRefresh.setAdapter(newsListviewAdapter);
         return v;
     }
 
@@ -146,8 +163,6 @@ public class HomeFragment extends BaseFragment {
         ll_image_title_bg.getBackground().setAlpha(80);
 
         topNewsAdapter = new TopNewsAdapter(mActivity, imagelist);
-
-
         mViewPager.setAdapter(topNewsAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -183,8 +198,6 @@ public class HomeFragment extends BaseFragment {
         protected Void doInBackground(Void... voids) {
             //  findSelectionDyn_Down(1);
             init();
-
-
             mCurrentPage = 1;
             findNews(mCurrentPage);
             return null;
@@ -193,7 +206,7 @@ public class HomeFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-
+            newsListviewAdapter.notifyDataSetChanged();
             pullToRefresh.onRefreshComplete();
         }
     }
@@ -218,19 +231,18 @@ public class HomeFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-//            myDynListviewAdater.notifyDataSetChanged();
-//            if (isEnd) {//没数据了
-//                pullToRefresh.onRefreshComplete();
-//            }
+            // newsListviewAdapter.notifyDataSetChanged();
+            if (isEnd) {//没数据了
+                pullToRefresh.onRefreshComplete();
+            }
 
-
-            pullToRefresh.onRefreshComplete();
+            //    pullToRefresh.onRefreshComplete();
         }
     }
 
     @Override
     public void initDta() {
-
+        dialog.show();
         findNews(mCurrentPage);
         findImageNews();
 
@@ -394,19 +406,28 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onResponse(String s) {
-
+                dialog.dismiss();
+             //   pullToRefresh.onRefreshComplete();
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
                 if (newsDataBean.getSuccess()) {
                     data = newsDataBean.getData().getItems();
-                    LogUtil.i(data.toString());
-                    if (mCurrentPage == 1) {
-                        newsListviewAdapter.setData(data);
-                        newsListviewAdapter.notifyDataSetChanged();
 
+                    List<RequestNewsDataBean.Data.Items> list = newsDataBean.getData().getItems();
+
+                //    LogUtil.i(data.toString());
+                    if (mCurrentPage == 1) {
+                        LogUtil.i("setdata");
+                        newsListviewAdapter.setData(data);
+//                        newsListviewAdapter=new NewsListviewAdapter(list,mActivity);
+//                         pullToRefresh.setAdapter(newsListviewAdapter);
+
+                        newsListviewAdapter.notifyDataSetChanged();
+                        //   pullToRefresh.setVisibility(View.VISIBLE);
 
                     } else {
+                        LogUtil.i("addLastList");
                         newsListviewAdapter.addLastList(data);
                         newsListviewAdapter.notifyDataSetChanged();
                     }
@@ -467,17 +488,15 @@ public class HomeFragment extends BaseFragment {
                 RequestImageNewsDataBean imageNewsDataBean = new RequestImageNewsDataBean();
                 imageNewsDataBean = gson.fromJson(s, RequestImageNewsDataBean.class);
                 if (imageNewsDataBean.getSuccess()) {
-                    //加入头布局
-                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
-                    if (imageNewsDataBean.getData().size()>0) {
+
+                    if (imageNewsDataBean.getData().size() > 0) {
                         imagelist = imageNewsDataBean.getData();
-                        topNewsAdapter.setData(imagelist);
-                        topNewsAdapter.notifyDataSetChanged();
-                        tv_indecater.setText((1) + "/" + imagelist.size());
-                        tv_image_title.setText(imagelist.get(1).getTitle());
-                        mHandler.sendMessageDelayed(Message.obtain(),
-                                TOP_NEWS_CHANGE_TIME);
-                    }else {
+
+                        Message message = Message.obtain();
+                        message.what = 1;
+                        mHandler2.sendMessage(message);
+
+                    } else {
                         ToastUtils.showToastShort("轮播图片为空");
                     }
 

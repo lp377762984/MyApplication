@@ -84,7 +84,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                .commit();
 
         if (getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[0]) == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, meFragment, FRAGMENT_TAG[3])
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, meFragment, FRAGMENT_TAG[3])
                     .hide(meFragment)
                     .add(R.id.fragment_container, homeFragment, FRAGMENT_TAG[0])
                     .show(homeFragment)

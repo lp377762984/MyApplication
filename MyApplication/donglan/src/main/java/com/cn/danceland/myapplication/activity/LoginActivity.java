@@ -275,11 +275,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //查询信息
                     queryUserInfo(mUserId);
 
-                    ToastUtils.showToastShort("登录成功");
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
-                    finish();
                 } else {
                     //注册失败
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
@@ -338,6 +334,12 @@ public class LoginActivity extends Activity implements OnClickListener {
                 //保存个人信息
                 Data data = requestInfoBean.getData();
                 DataInfoCache.saveOneCache(data,Constants.MY_INFO);
+                ToastUtils.showToastShort("登录成功");
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                finish();
+
 
                LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
             }

@@ -349,12 +349,6 @@ public class SelectionFragment extends BaseFragment {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //    JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
-              //  LogUtil.i("firstVisibleItem="+firstVisibleItem+"visibleItemCount="+visibleItemCount+"totalItemCount="+totalItemCount);
-
-//                if (firstVisibleItem==0){
-//                    visibleItemCount=visibleItemCount-1;
-//                }
 
                 JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
             }
