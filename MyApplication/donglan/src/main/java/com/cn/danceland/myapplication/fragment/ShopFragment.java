@@ -83,7 +83,7 @@ public class ShopFragment extends BaseFragment {
         storelist = v.findViewById(R.id.storelist);
 
 
-     //   getData();
+        getData();
         if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
@@ -101,7 +101,7 @@ public class ShopFragment extends BaseFragment {
         ll_top.getBackground().setAlpha(80);
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
-        mGridView.setVisibility(View.VISIBLE);
+       // mGridView.setVisibility(View.VISIBLE);
 
         return v;
     }
