@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -120,6 +122,7 @@ public class ShopFragment extends BaseFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.e("zzf",s);
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
                 itemsList = storeBean.getData().getItems();
                 if(itemsList!=null&&itemsList.size()>0){
@@ -149,6 +152,14 @@ public class ShopFragment extends BaseFragment {
     @Override
     public void initDta() {
 
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        if(!hidden){
+            getData();
+        }
     }
 
     @Override
@@ -287,7 +298,6 @@ public class ShopFragment extends BaseFragment {
             }
 
 
-
             if(itemsArrayList!=null){
                 StoreBean.Items items = itemsArrayList.get(position);
                 viewHolder.store_address.setText(items.getBname());
@@ -342,12 +352,25 @@ public class ShopFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("shopJingdu",shopJingdu);
+                    intent.putExtra("shopWeidu",shopWeidu);
+                    intent.putExtra("jingdu",jingdu);
+                    intent.putExtra("weidu",weidu);
+                    startActivityForResult(intent,111);
                 }
             });
 
             return convertView;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==111){
+            initViews();
+        }
+
     }
 
     private void join(final String shopID){
