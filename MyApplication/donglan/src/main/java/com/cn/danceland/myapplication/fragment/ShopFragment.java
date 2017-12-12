@@ -360,12 +360,14 @@ public class ShopFragment extends BaseFragment {
             viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                    intent.putExtra("shopJingdu",shopJingdu);
-                    intent.putExtra("shopWeidu",shopWeidu);
-                    intent.putExtra("jingdu",jingdu);
-                    intent.putExtra("weidu",weidu);
-                    startActivityForResult(intent,111);
+                    if(itemsArrayList!=null){
+                        Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLat()+"");
+                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLng()+"");
+                        intent.putExtra("jingdu",jingdu);
+                        intent.putExtra("weidu",weidu);
+                        startActivityForResult(intent,111);
+                    }
                 }
             });
 
