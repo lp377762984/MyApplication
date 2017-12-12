@@ -66,6 +66,7 @@ public class ShopDetailedActivity extends Activity{
         weidu = getIntent().getStringExtra("weidu");
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
+        branchID = getIntent().getStringExtra("branchID");
 
     }
 
@@ -181,7 +182,7 @@ public class ShopDetailedActivity extends Activity{
 
     private void getShopDetail(){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/1", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/"+branchID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
