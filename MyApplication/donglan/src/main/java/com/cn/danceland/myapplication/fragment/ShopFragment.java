@@ -45,6 +45,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,7 +168,7 @@ public class ShopFragment extends BaseFragment {
         switch (v.getId()) {
             case R.id.ibtn_call:
 
-                showDialog();
+                //showDialog();
                 break;
             case R.id.ibtn_gps:
 
@@ -182,16 +183,16 @@ public class ShopFragment extends BaseFragment {
     /**
      * 提示
      */
-    private void showDialog() {
+    private void showDialog(final String phoneNo) {
         AlertDialog.Builder dialog =
                 new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
-        dialog.setMessage("是否呼叫" + PhoneNo);
+        dialog.setMessage("是否呼叫" + phoneNo);
         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                call(PhoneNo);
+                call(phoneNo);
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -279,8 +280,9 @@ public class ShopFragment extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder=null;
+            StoreBean.Items items;
 
             if(convertView==null){
                 viewHolder = new ViewHolder();
@@ -299,30 +301,34 @@ public class ShopFragment extends BaseFragment {
 
 
             if(itemsArrayList!=null){
-                StoreBean.Items items = itemsArrayList.get(position);
+                items = itemsArrayList.get(position);
                 viewHolder.store_address.setText(items.getBname());
                 viewHolder.distance.setText(items.getAddress());
                 Glide.with(getActivity()).load(items.getLogo()).into(viewHolder.store_item_img);
-                PhoneNo = items.getTelphone_no();
-                shopJingdu = items.getLat()+"";
-                shopWeidu = items.getLng()+"";
-                branchId = items.getBranch_id()+"";
+                //PhoneNo = items.getTelphone_no();
+//                shopJingdu = items.getLat()+"";
+//                shopWeidu = items.getLng()+"";
+//                branchId = items.getBranch_id()+"";
             }
             viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showDialog();
+                    if(itemsArrayList!=null){
+                        showDialog(itemsArrayList.get(position).getTelphone_no());
+                    }
                 }
             });
             viewHolder.img_location.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), MapActivity.class);
-                    intent.putExtra("shopJingdu",shopJingdu);
-                    intent.putExtra("shopWeidu",shopWeidu);
-                    intent.putExtra("jingdu",jingdu);
-                    intent.putExtra("weidu",weidu);
-                    startActivity(intent);
+                    if(itemsArrayList!=null){
+                        Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLat()+"");
+                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLng()+"");
+                        intent.putExtra("jingdu",jingdu);
+                        intent.putExtra("weidu",weidu);
+                        startActivity(intent);
+                    }
                 }
             });
             viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
@@ -336,7 +342,10 @@ public class ShopFragment extends BaseFragment {
                     dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            join(branchId);
+                            if(itemsArrayList!=null){
+                                join(itemsArrayList.get(position).getBranch_id()+"");
+                            }
+
                         }
                     });
                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
