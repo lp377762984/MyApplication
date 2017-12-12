@@ -366,6 +366,7 @@ public class ShopFragment extends BaseFragment {
                         intent.putExtra("shopWeidu",itemsArrayList.get(position).getLng()+"");
                         intent.putExtra("jingdu",jingdu);
                         intent.putExtra("weidu",weidu);
+                        intent.putExtra("branchID",itemsArrayList.get(position).getBranch_id()+"");
                         startActivityForResult(intent,111);
                     }
                 }
