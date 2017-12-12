@@ -63,7 +63,6 @@ import static com.cn.danceland.myapplication.R.id.iv_comment;
 import static com.cn.danceland.myapplication.R.id.iv_transpond;
 import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
-import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by shy on 2017/10/24 17:40
@@ -143,7 +142,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
     private AnimationSet mAnimationSet;
 
-    private void buildAnima(int pos) {
+    private void buildAnima(final int pos) {
         ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation.setDuration(500);
@@ -168,7 +167,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                data.get(position).setAnimationFlag(false);
+                data.get(pos).setAnimationFlag(false);
             }
 
             @Override
