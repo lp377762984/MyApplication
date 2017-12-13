@@ -1,140 +1,140 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:2:1-79:12
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:2:1-79:12
 	package
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:3:5-44
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:3:5-44
 	android:versionName
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:5:5-32
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:5:5-32
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
 	android:versionCode
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:4:5-29
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:4:5-29
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
 	xmlns:android
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:2:11-69
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:2:11-69
 uses-sdk
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:7:5-9:41
-MERGED from [MyApplication:hellocharts-library:unspecified] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\MyApplication\hellocharts-library\unspecified\AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.support:support-v4:23.4.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:appcompat-v7:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:21:5-23:78
-MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
-MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:5:5-44
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:7:5-9:41
+MERGED from [MyApplication:hellocharts-library:unspecified] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\MyApplication\hellocharts-library\unspecified\AndroidManifest.xml:7:5-9:41
+MERGED from [com.android.support:support-v4:23.4.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:appcompat-v7:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:5:5-44
 	tools:overrideLibrary
-		ADDED from [com.android.support:appcompat-v7:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:23:9-75
+		ADDED from [com.android.support:appcompat-v7:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:23:9-75
 	android:targetSdkVersion
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:9:9-38
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:9:9-38
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
 	android:minSdkVersion
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:8:9-34
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
-		INJECTED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:8:9-34
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
+		INJECTED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml
 application
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:11:5-77:19
-MERGED from [com.android.support:support-v4:23.4.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:appcompat-v7:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
-MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:11:5-77:19
+MERGED from [com.android.support:support-v4:23.4.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:appcompat-v7:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-vector-drawable:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
+MERGED from [com.android.support:animated-vector-drawable:23.3.0] D:\new\dl-mobile-android\MyApplication\hellocharts-samples\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\AndroidManifest.xml:7:5-20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:14:9-41
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:14:9-41
 	android:allowBackup
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:12:9-35
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:12:9-35
 	android:icon
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:13:9-45
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:13:9-45
 	android:theme
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:15:9-40
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:15:9-40
 activity#lecho.lib.hellocharts.samples.MainActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:16:9-24:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:16:9-24:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:18:13-45
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:18:13-45
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:17:13-41
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:17:13-41
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:19:13-23:29
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:19:13-23:29
 action#android.intent.action.MAIN
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:20:17-69
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:20:17-69
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:20:25-66
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:20:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:22:17-77
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:22:17-77
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:22:27-74
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:22:27-74
 activity#lecho.lib.hellocharts.samples.LineChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:25:9-28:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:25:9-28:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:27:13-62
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:27:13-62
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:26:13-46
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:26:13-46
 activity#lecho.lib.hellocharts.samples.ColumnChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:29:9-32:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:29:9-32:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:31:13-64
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:31:13-64
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:30:13-48
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:30:13-48
 activity#lecho.lib.hellocharts.samples.PieChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:33:9-36:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:33:9-36:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:35:13-61
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:35:13-61
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:34:13-45
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:34:13-45
 activity#lecho.lib.hellocharts.samples.BubbleChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:37:9-40:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:37:9-40:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:39:13-64
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:39:13-64
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:38:13-48
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:38:13-48
 activity#lecho.lib.hellocharts.samples.PreviewLineChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:41:9-44:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:41:9-44:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:43:13-70
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:43:13-70
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:42:13-53
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:42:13-53
 activity#lecho.lib.hellocharts.samples.PreviewColumnChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:45:9-48:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:45:9-48:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:47:13-72
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:47:13-72
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:46:13-55
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:46:13-55
 activity#lecho.lib.hellocharts.samples.ComboLineColumnChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:49:9-52:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:49:9-52:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:51:13-75
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:51:13-75
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:50:13-57
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:50:13-57
 activity#lecho.lib.hellocharts.samples.LineColumnDependencyActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:53:9-56:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:53:9-56:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:55:13-74
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:55:13-74
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:54:13-57
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:54:13-57
 activity#lecho.lib.hellocharts.samples.GoodBadChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:57:9-60:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:57:9-60:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:59:13-60
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:59:13-60
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:58:13-49
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:58:13-49
 activity#lecho.lib.hellocharts.samples.TempoChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:61:9-64:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:61:9-64:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:63:13-63
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:63:13-63
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:62:13-47
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:62:13-47
 activity#lecho.lib.hellocharts.samples.SpeedChartActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:65:9-68:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:65:9-68:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:67:13-63
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:67:13-63
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:66:13-47
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:66:13-47
 activity#lecho.lib.hellocharts.samples.ViewPagerChartsActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:69:9-72:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:69:9-72:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:71:13-69
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:71:13-69
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:70:13-52
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:70:13-52
 activity#lecho.lib.hellocharts.samples.AboutActivity
-ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:73:9-76:20
+ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:73:9-76:20
 	android:label
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:75:13-57
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:75:13-57
 	android:name
-		ADDED from D:\WorkSpace\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:74:13-42
+		ADDED from D:\new\dl-mobile-android\MyApplication\hellocharts-samples\AndroidManifest.xml:74:13-42
