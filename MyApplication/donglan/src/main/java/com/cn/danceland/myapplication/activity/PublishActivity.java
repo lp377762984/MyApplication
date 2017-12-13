@@ -190,19 +190,21 @@ public class PublishActivity extends Activity {
         grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(PublishActivity.this,ImagesActivity.class);
-//                startActivityForResult(intent,0);
-                Matisse.from(PublishActivity.this)
-                        .choose(MimeType.allOf()) // 选择 mime 的类型
-                        .countable(true)
-                        .maxSelectable(9) // 图片选择的最多数量
-                        //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                        .thumbnailScale(0.85f) // 缩略图的比例
-                        .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
-                        .forResult(0); // 设置作为标记的请求码
+                getPic();
             }
         });
+
+    }
+    public void getPic(){
+        Matisse.from(PublishActivity.this)
+                .choose(MimeType.allOf()) // 选择 mime 的类型
+                .countable(true)
+                .maxSelectable(9) // 图片选择的最多数量
+                //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f) // 缩略图的比例
+                .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
+                .forResult(0); // 设置作为标记的请求码
 
     }
 
@@ -212,17 +214,7 @@ public class PublishActivity extends Activity {
             switch (v.getId()){
                 case R.id.publish_photo:
                     if("0".equals(isPhoto)){
-//                        Intent intent = new Intent(PublishActivity.this,ImagesActivity.class);
-//                        startActivityForResult(intent,0);
-                        Matisse.from(PublishActivity.this)
-                                .choose(MimeType.allOf()) // 选择 mime 的类型
-                                .countable(true)
-                                .maxSelectable(9) // 图片选择的最多数量
-                                //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                                .thumbnailScale(0.85f) // 缩略图的比例
-                                .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
-                                .forResult(0); // 设置作为标记的请求码
+                        getPic();
                     }else{
                         Intent intentr = new Intent(PublishActivity.this,RecordView.class);
                         startActivityForResult(intentr,111);
