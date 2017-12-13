@@ -54,6 +54,7 @@ import com.google.gson.Gson;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -204,6 +205,9 @@ public class PublishActivity extends Activity {
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f) // 缩略图的比例
                 .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
+                .capture(true)
+                .captureStrategy(
+                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
                 .forResult(0); // 设置作为标记的请求码
 
     }
