@@ -15,7 +15,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerInParent">true</item>
     </style>
+<style name="imgsStyle" parent="Matisse.Zhihu">
+    <item name="colorPrimary">@color/dl_blue</item>
 
+</style>
     <!--输入框样式-->
     <style name="EtStyle">
         <item name="android:layout_width">match_parent</item>

@@ -201,6 +201,7 @@ public class PublishActivity extends Activity {
                 .choose(MimeType.allOf()) // 选择 mime 的类型
                 .countable(true)
                 .maxSelectable(9) // 图片选择的最多数量
+                .theme(R.style.imgsStyle)
                 //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f) // 缩略图的比例
