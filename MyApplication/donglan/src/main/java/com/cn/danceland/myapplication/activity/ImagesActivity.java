@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,12 @@ import com.cn.danceland.myapplication.bean.ImageFolder;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.engine.impl.PicassoEngine;
+
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -65,12 +72,29 @@ public class ImagesActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_images);
-        initHost();
-        initView();
-        setOnclick();
-        setData();
+        setContentView(R.layout.images);
+        Matisse.from(ImagesActivity.this)
+                .choose(MimeType.allOf()) // 选择 mime 的类型
+                .countable(true)
+                .maxSelectable(9) // 图片选择的最多数量
+                //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f) // 缩略图的比例
+                .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
+                .forResult(100); // 设置作为标记的请求码
+//        initHost();
+//        initView();
+//        setOnclick();
+//        setData();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
 
     private void setOnclick() {
         sure.setOnClickListener(onClick);
@@ -138,6 +162,8 @@ public class ImagesActivity extends Activity{
     public void setData() {
         getImages();
     }
+
+
 
     public void getImages() {
 
@@ -318,9 +344,5 @@ public class ImagesActivity extends Activity{
         ImageView img,item_select,item_select_blue;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-    }
 }
