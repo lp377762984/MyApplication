@@ -114,7 +114,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.NewsDetailsActivity"
             android:screenOrientation="portrait"/>
-
+        <activity android:name=".activity.MyShopActivity"
+    android:screenOrientation="portrait"/>
         <receiver android:name=".Receiver.MessageReceiver" />
 
 

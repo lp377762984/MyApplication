@@ -121,6 +121,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ll_setting_location).setOnClickListener(this);
         findViewById(R.id.ll_about_us).setOnClickListener(this);
         findViewById(R.id.ll_clear).setOnClickListener(this);
+        findViewById(R.id.ll_my_shop).setOnClickListener(this);
 
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
@@ -198,6 +199,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 DataInfoCache.saveOneCache(mInfo,Constants.MY_INFO);
                 commitLocation(mZoneCode);
                 dismissWindow();
+                break;
+            case R.id.ll_my_shop:
+                startActivity(new Intent(SettingActivity.this,MyShopActivity.class));
                 break;
             default:
                 break;
