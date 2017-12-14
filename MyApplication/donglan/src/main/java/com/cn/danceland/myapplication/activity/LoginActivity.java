@@ -264,7 +264,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     //成功
-                    String mUserId = requestInfoBean.getData().getId();
+                    String mUserId = requestInfoBean.getData().getPersonId();
                     SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
                     SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id

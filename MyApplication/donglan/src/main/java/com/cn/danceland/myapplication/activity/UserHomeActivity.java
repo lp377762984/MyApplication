@@ -185,7 +185,7 @@ public class UserHomeActivity extends Activity {
         });
 
 
-        if (data.getFollower()) {
+        if (data.isFollower()) {
             if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
                 tv_add_gz.setVisibility(View.INVISIBLE);
             } else {
