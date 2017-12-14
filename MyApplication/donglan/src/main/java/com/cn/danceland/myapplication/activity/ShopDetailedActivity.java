@@ -23,9 +23,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -36,14 +39,15 @@ import java.util.Map;
  */
 
 public class ShopDetailedActivity extends Activity{
-    Button bt_back;
+    Button bt_back,join_button;
     RequestQueue requestQueue;
     Gson gson;
     TextView tv_adress,tv_time,tv_detail,store_name;
     String phoneNo;
     ImageView detail_phone,detail_adress;
-    String jingdu,weidu,shopJingdu,shopWeidu;
+    String jingdu,weidu,shopJingdu,shopWeidu,branchID;
     RelativeLayout s_button;
+    Data myInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,11 +60,13 @@ public class ShopDetailedActivity extends Activity{
     private void initHost() {
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        myInfo = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         jingdu = getIntent().getStringExtra("jingdu");
         weidu = getIntent().getStringExtra("weidu");
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
+        branchID = getIntent().getStringExtra("branchID");
 
     }
 
@@ -74,6 +80,7 @@ public class ShopDetailedActivity extends Activity{
         detail_adress = findViewById(R.id.detail_adress);
 
         s_button = findViewById(R.id.s_button);
+        join_button = findViewById(R.id.join_button);
 
         bt_back = findViewById(R.id.bt_back);
         bt_back.setOnClickListener(new View.OnClickListener() {
@@ -107,12 +114,75 @@ public class ShopDetailedActivity extends Activity{
             }
         });
 
+        join_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder dialog =
+                        new AlertDialog.Builder(ShopDetailedActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("是否加入此门店");
+                dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        join(branchID);
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
+            }
+        });
+
         getShopDetail();
+    }
+
+
+    private void join(final String shopID){
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if(s.contains("true")){
+                    join_button.setVisibility(View.GONE);
+                    ToastUtils.showToastShort("加入成功！");
+                    myInfo.setBranchId(branchID);
+                }else{
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("branchId",shopID);
+                map.put("follow","true");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+
     }
 
     private void getShopDetail(){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/1", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/"+branchID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -122,6 +192,7 @@ public class ShopDetailedActivity extends Activity{
                 tv_adress.setText(data.getAddress());
                 tv_detail.setText(data.getDescription());
                 phoneNo = data.getTelphone_no();
+                branchID = data.getBranch_id()+"";
             }
         }, new Response.ErrorListener() {
             @Override
