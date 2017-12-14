@@ -23,11 +23,14 @@ public class MessageReceiver extends PushMessageReceiver {
 
     }
 
+    @Override
+    public void onReceiveRegisterResult(Context context, MiPushCommandMessage miPushCommandMessage) {
+        super.onReceiveRegisterResult(context, miPushCommandMessage);
+    }
 
     @Override
     public void onCommandResult(Context context, MiPushCommandMessage message) {
         String command = message.getCommand();
-        LogUtil.e("zzf",command);
         List<String> arguments = message.getCommandArguments();
         String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);

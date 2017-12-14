@@ -233,6 +233,12 @@ public class DBData {
         List<MiMessage> messagesList = miMessageDao.loadAll();
         return messagesList;
     }
-
+    //添加记录
+    public void addMessageD(MiMessage d){
+        if(miMessageDao==null){
+            miMessageDao = MyApplication.getInstance().getMessageDaoSession().getMiMessageDao();
+        }
+        miMessageDao.insert(d);
+    }
 
 }
