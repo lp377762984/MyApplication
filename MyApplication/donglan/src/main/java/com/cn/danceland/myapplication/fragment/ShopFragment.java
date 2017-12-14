@@ -87,7 +87,7 @@ public class ShopFragment extends BaseFragment {
 
 
         getData();
-        if(info.getBranchId()!=null&&!info.getBranchId().equals("")){
+        if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
             ibtn_gps.setVisibility(View.VISIBLE);
@@ -389,6 +389,8 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 if(s.contains("true")){
+                    info.setDefault_branch(shopID);
+                    DataInfoCache.saveOneCache(info,Constants.MY_INFO);
                     mGridView.setVisibility(View.VISIBLE);
                     ibtn_call.setVisibility(View.VISIBLE);
                     ibtn_gps.setVisibility(View.VISIBLE);
@@ -407,7 +409,7 @@ public class ShopFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("branchId",shopID);
-                map.put("follow","true");
+                map.put("join","true");
                 return map;
             }
 

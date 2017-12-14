@@ -150,6 +150,7 @@ public class ShopDetailedActivity extends Activity{
                     join_button.setVisibility(View.GONE);
                     ToastUtils.showToastShort("加入成功！");
                     myInfo.setBranchId(branchID);
+                    DataInfoCache.saveOneCache(myInfo,Constants.MY_INFO);
                 }else{
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }

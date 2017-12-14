@@ -21,9 +21,10 @@ public class Constants {
     public static final String MODIFY_HEIGHT = HOST+"user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST+"user/modifyWeight";//修改身高
     public static final String BRANCH = HOST+"branch";//获取门店列表
-    public static final String JOINBRANCH = HOST+"branch/follow";//关注或者取消门店
+    public static final String JOINBRANCH = HOST+"branch/join";//加入或者取消门店
     public static final String FIND_JOIN_SHOP_URL = HOST+"/user/findJoinBranchs";//查找已经加入门店
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
+
 
     public static final String CHANGE_CURRENT_SHOP_URL = HOST+"branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注
