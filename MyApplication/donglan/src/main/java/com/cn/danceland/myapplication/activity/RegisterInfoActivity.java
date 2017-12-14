@@ -354,5 +354,6 @@ public class RegisterInfoActivity extends Activity{
             }
         };
         requestQueue.add(stringRequest);
+
     }
 }

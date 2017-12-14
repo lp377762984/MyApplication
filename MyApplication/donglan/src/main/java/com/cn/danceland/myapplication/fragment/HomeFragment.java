@@ -356,7 +356,7 @@ public class HomeFragment extends BaseFragment {
                     //添加要处理的内容
                 } else if (0 == (xDown - xUp)) {
 
-                    LogUtil.i("点击了图片");
+             //       LogUtil.i("点击了图片");
                     mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", imagelist.get(mCurrentIamgenews).getUrl()).putExtra("title", imagelist.get(mCurrentIamgenews).getTitle()));
 
 //                    int viewWidth = v.getWidth();
@@ -407,21 +407,17 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
-             //   pullToRefresh.onRefreshComplete();
+                //   pullToRefresh.onRefreshComplete();
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
                 if (newsDataBean.getSuccess()) {
                     data = newsDataBean.getData().getItems();
 
-                    List<RequestNewsDataBean.Data.Items> list = newsDataBean.getData().getItems();
 
-                //    LogUtil.i(data.toString());
+                    //    LogUtil.i(data.toString());
                     if (mCurrentPage == 1) {
-                        LogUtil.i("setdata");
                         newsListviewAdapter.setData(data);
-//                        newsListviewAdapter=new NewsListviewAdapter(list,mActivity);
-//                         pullToRefresh.setAdapter(newsListviewAdapter);
 
                         newsListviewAdapter.notifyDataSetChanged();
                         //   pullToRefresh.setVisibility(View.VISIBLE);
