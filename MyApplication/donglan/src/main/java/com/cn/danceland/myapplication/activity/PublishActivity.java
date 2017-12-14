@@ -45,6 +45,7 @@ import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
@@ -81,7 +82,7 @@ public class PublishActivity extends Activity {
     RelativeLayout publish_photo;
     TextView publish_location;
     TextView publish_share1;
-    List<Uri> arrayList;
+    List<String> arrayList;
     GridView grid_view;
     String location="";
     TextView location_img;
@@ -255,7 +256,6 @@ public class PublishActivity extends Activity {
                                 @Override
                                 public void run() {
                                     try {
-                                        LogUtil.e("zzf",arrayFileMap.toString());
                                         String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
                                         LogUtil.e("zzf",s);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
@@ -415,13 +415,20 @@ public class PublishActivity extends Activity {
         if(requestCode==0 && resultCode == RESULT_OK){
             if(data!=null){
 //                arrayList = data.getStringArrayListExtra("arrPath");
-                arrayList = Matisse.obtainResult(data);
-                if(arrayList!=null&&arrayList.size()!=0){
-                    publish_photo.setVisibility(View.GONE);
-                }else{
-                    publish_photo.setVisibility(View.VISIBLE);
+                List<Uri> uris = Matisse.obtainResult(data);
+                arrayList = new ArrayList<String>();
+                if(uris!=null){
+                    for(int i = 0;i<uris.size();i++){
+                        arrayList.add(PictureUtil.getRealPath(getApplicationContext(),uris.get(i)));
+                    }
+                    if(arrayList!=null&&arrayList.size()!=0){
+                        publish_photo.setVisibility(View.GONE);
+                    }else{
+                        publish_photo.setVisibility(View.VISIBLE);
+                    }
+                    grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
                 }
-                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+
             }
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
@@ -466,9 +473,9 @@ public class PublishActivity extends Activity {
 
         LayoutInflater mInflater;
         Context context;
-        List<Uri> arrayList;
+        List<String> arrayList;
 
-        SmallGridAdapter(Context context,List<Uri> asList){
+        SmallGridAdapter(Context context,List<String> asList){
             this.context = context;
             arrayList = asList;
             mInflater = LayoutInflater.from(context);
