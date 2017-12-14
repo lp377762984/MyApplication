@@ -17,6 +17,7 @@ import com.cn.danceland.myapplication.activity.MainActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.utils.LocationService;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -37,10 +38,10 @@ public class MyApplication extends Application {
     private SQLiteDatabase db,messagedb;
     private DaoMaster daoMaster,messageMaster;
     private DaoSession daoSession,messageSession;
-    // user your appid the key.
-    private static final String APP_ID = "1000270";
-    // user your appid the key.
-    private static final String APP_KEY = "670100056270";
+    // 小米推送ID.
+    private static final String APP_ID = "2882303761517681383";
+    // 小米推送KEY.
+    private static final String APP_KEY = "5681768120383";
     //private static DemoHandler sHandler = null;
     private static HomeActivity sMainActivity = null;
 
@@ -62,6 +63,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         locationClient = new LocationService(getApplicationContext());
         SDKInitializer.initialize(this);
@@ -70,9 +72,9 @@ public class MyApplication extends Application {
         setUpDb();
         // 注册push服务，注册成功后会向DemoMessageReceiver发送广播
         // 可以从DemoMessageReceiver的onCommandResult方法中MiPushCommandMessage对象参数中获取注册信息
-//        if (shouldInit()) {
-//            MiPushClient.registerPush(this, APP_ID, APP_KEY);
-//        }
+        if (shouldInit()) {
+            MiPushClient.registerPush(this, APP_ID, APP_KEY);
+        }
 ////        if (sHandler == null) {
 ////            sHandler = new DemoHandler(getApplicationContext());
 ////        }
