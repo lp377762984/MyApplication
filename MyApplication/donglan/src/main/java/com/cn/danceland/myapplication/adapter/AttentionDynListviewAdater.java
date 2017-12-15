@@ -343,9 +343,9 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
 
         //  LogUtil.i(data.get(position).getNickName());
-        if (!TextUtils.isEmpty(data.get(position).getNickName())) {
+     //   if (!TextUtils.isEmpty(data.get(position).getNickName())) {
             viewHolder.tv_nick_name.setText(data.get(position).getNickName());
-        }
+       // }
 
 
         //   viewHolder.tv_time.setText(data.get(position).getPublishTime());

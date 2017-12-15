@@ -39,7 +39,7 @@ public class RequestShopListInfo {
 
     public class Data {
 
-        private int branch_id;
+        private String branch_id;
         private String description;
         private String logo;
         private int enabled;
@@ -53,11 +53,11 @@ public class RequestShopListInfo {
         private int follows;
         private String logo_url;
 
-        public void setBranch_id(int branch_id) {
+        public void setBranch_id(String branch_id) {
             this.branch_id = branch_id;
         }
 
-        public int getBranch_id() {
+        public String getBranch_id() {
             return branch_id;
         }
 

@@ -25,7 +25,11 @@ public class Constants {
     public static final String GETMENUS = HOST+"appRoleFunction/getMenus";//获取菜单权限
 
 
+    public static final String FIND_JOIN_SHOP_URL = HOST+"/user/findJoinBranchs";//查找已经加入门店
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
+
+
+    public static final String CHANGE_CURRENT_SHOP_URL = HOST+"branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注
     public static final String ADD_ZAN_URL = HOST + "appDynMsg/giveThumbs";//加关注
 

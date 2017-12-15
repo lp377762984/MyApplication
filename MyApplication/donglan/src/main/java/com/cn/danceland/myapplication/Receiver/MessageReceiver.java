@@ -26,13 +26,16 @@ public class MessageReceiver extends PushMessageReceiver {
     @Override
     public void onReceiveRegisterResult(Context context, MiPushCommandMessage miPushCommandMessage) {
         super.onReceiveRegisterResult(context, miPushCommandMessage);
+
     }
 
     @Override
     public void onCommandResult(Context context, MiPushCommandMessage message) {
         String command = message.getCommand();
+
         List<String> arguments = message.getCommandArguments();
         String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
+        LogUtil.i("RAGID="+cmdArg1);
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
