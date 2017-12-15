@@ -22,6 +22,7 @@ public class Constants {
     public static final String MODIFY_WEIGHT = HOST+"user/modifyWeight";//修改身高
     public static final String BRANCH = HOST+"branch";//获取门店列表
     public static final String JOINBRANCH = HOST+"branch/join";//加入或者取消门店
+    public static final String GETMENUS = HOST+"appRoleFunction/getMenus";//获取菜单权限
 
 
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友

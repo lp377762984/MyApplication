@@ -67,6 +67,9 @@ public class ShopDetailedActivity extends Activity{
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
+        if(branchID==null){
+            branchID = myInfo.getDefault_branch();
+        }
 
     }
 
@@ -80,7 +83,11 @@ public class ShopDetailedActivity extends Activity{
         detail_adress = findViewById(R.id.detail_adress);
 
         s_button = findViewById(R.id.s_button);
+
         join_button = findViewById(R.id.join_button);
+        if(branchID!=null){
+            join_button.setVisibility(View.GONE);
+        }
 
         bt_back = findViewById(R.id.bt_back);
         bt_back.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +156,7 @@ public class ShopDetailedActivity extends Activity{
                 if(s.contains("true")){
                     join_button.setVisibility(View.GONE);
                     ToastUtils.showToastShort("加入成功！");
-                    myInfo.setBranchId(branchID);
+                    myInfo.setDefault_branch(branchID);
                     DataInfoCache.saveOneCache(myInfo,Constants.MY_INFO);
                 }else{
                     ToastUtils.showToastShort("加入失败！请检查网络！");
@@ -189,11 +196,14 @@ public class ShopDetailedActivity extends Activity{
 
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
                 ShopDetailBean.Data data = shopDetailBean.getData();
-                store_name.setText(data.getBname());
-                tv_adress.setText(data.getAddress());
-                tv_detail.setText(data.getDescription());
-                phoneNo = data.getTelphone_no();
-                branchID = data.getBranch_id()+"";
+                if (data!=null){
+                    store_name.setText(data.getBname());
+                    tv_adress.setText(data.getAddress());
+                    tv_detail.setText(data.getDescription());
+                    phoneNo = data.getTelphone_no();
+                    branchID = data.getBranch_id()+"";
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override

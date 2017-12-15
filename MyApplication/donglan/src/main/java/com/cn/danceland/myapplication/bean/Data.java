@@ -33,7 +33,7 @@ public class Data implements Serializable {
     private String zone_code; // 区化编码
     private String enabled; // 是否启用
     private String auth; // 身份
-    private String branchId; // 所属门店
+    //private String branchId; // 所属门店
     private String gender; // 用户性别
     private String status; // 在线状态
     private String member_no; // 会员编号 Varchar(50)
@@ -207,7 +207,7 @@ public class Data implements Serializable {
                 ", zone_code='" + zone_code + '\'' +
                 ", enabled='" + enabled + '\'' +
                 ", auth='" + auth + '\'' +
-                ", branchId='" + branchId + '\'' +
+                //", branchId='" + branchId + '\'' +
                 ", gender='" + gender + '\'' +
                 ", status='" + status + '\'' +
                 ", member_no='" + member_no + '\'' +
@@ -335,13 +335,13 @@ public class Data implements Serializable {
         this.auth = auth;
     }
 
-    public String getBranchId() {
-        return branchId;
-    }
+//    //public String getBranchId() {
+//        return branchId;
+//    }
 
-    public void setBranchId(String branchId) {
-        this.branchId = branchId;
-    }
+//    public void setBranchId(String branchId) {
+//        this.branchId = branchId;
+//    }
 
     public String getGender() {
         return gender;

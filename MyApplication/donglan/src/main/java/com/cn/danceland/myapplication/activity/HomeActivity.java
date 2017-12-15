@@ -136,8 +136,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
             //LogUtil.e("zzf",location.getLocType()+"");
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                jingdu = location.getLatitude();
-                weidu = location.getLongitude();
+                weidu = location.getLatitude();
+                jingdu = location.getLongitude();
 
             }else{
                 ToastUtils.showToastShort("定位失败!");

@@ -31,12 +31,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.MenusBean;
+import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -63,9 +66,9 @@ public class ShopFragment extends BaseFragment {
     Data info;
     List<StoreBean.Items> itemsList;
     ImageButton ibtn_call,ibtn_gps;
-    String[] icon_name = {"健身圈", "私人教练", "会所动态", "在线售卡", "课程表", "会所商城", "意见反馈", "会所活动", "我的会员卡"};
-    int[] icons = {R.drawable.img_jsq, R.drawable.img_srjl, R.drawable.img_hsdt, R.drawable.img_zxsk
-            , R.drawable.img_kcb, R.drawable.img_hssc, R.drawable.img_yjfk, R.drawable.img_hshd, R.drawable.img_hyk};
+    List<MenusBean.Data> data;
+    LinearLayout ll_top;
+    TextView tv_shopname;
 
     @Override
     public View initViews() {
@@ -80,20 +83,26 @@ public class ShopFragment extends BaseFragment {
         ibtn_call = v.findViewById(R.id.ibtn_call);
         ibtn_gps = v.findViewById(R.id.ibtn_gps);
 
-        mGridView.setAdapter(new MyAdapter());
+        ll_top = v.findViewById(R.id.ll_top);
+
+        tv_shopname = v.findViewById(R.id.tv_shopname);
+
+
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
 
         storelist = v.findViewById(R.id.storelist);
 
-
-        getData();
+        getMenus();
+        getListData();
         if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
+            getShop(info.getDefault_branch());
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
             ibtn_gps.setVisibility(View.VISIBLE);
             storelist.setVisibility(View.GONE);
+            ll_top.setVisibility(View.VISIBLE);
         }else{
-
+            ll_top.setVisibility(View.GONE);
             mGridView.setVisibility(View.GONE);
             storelist.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.GONE);
@@ -104,9 +113,72 @@ public class ShopFragment extends BaseFragment {
         ll_top.getBackground().setAlpha(80);
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
+        tv_shopname.setOnClickListener(this);
        // mGridView.setVisibility(View.VISIBLE);
 
         return v;
+    }
+
+    private void getShop(String shopID) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/"+shopID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
+                ShopDetailBean.Data data = shopDetailBean.getData();
+                if(data!=null){
+                    tv_shopname.setText(data.getBname());
+                    shopWeidu = data.getLat()+"";
+                    shopJingdu = data.getLng()+"";
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    private void getMenus() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.GETMENUS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if(s.contains("true")){
+                    MenusBean menusBean = gson.fromJson(s, MenusBean.class);
+                    data = menusBean.getData();
+                    if(data!=null){
+                        mGridView.setAdapter(new MyAdapter(data));
+                    }
+                }else{
+                    ToastUtils.showToastShort("请查看网络连接");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     @Override
@@ -119,7 +191,7 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    public void getData(){
+    public void getListData(){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -147,18 +219,10 @@ public class ShopFragment extends BaseFragment {
 
     }
 
-
-
-    @Override
-    public void initDta() {
-
-    }
-
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(!hidden){
-            getData();
+            initViews();
         }
     }
 
@@ -167,12 +231,18 @@ public class ShopFragment extends BaseFragment {
         switch (v.getId()) {
             case R.id.ibtn_call:
 
-                //showDialog();
                 break;
             case R.id.ibtn_gps:
+                Intent intent = new Intent(getActivity(),MapActivity.class);
+                intent.putExtra("jingdu",jingdu);
+                intent.putExtra("weidu",weidu);
+                intent.putExtra("shopJingdu",shopJingdu);
+                intent.putExtra("shopWeidu",shopWeidu);
+                startActivity(intent);
 
-                ToastUtils.showToastShort("显示位置");
-
+                break;
+            case R.id.tv_shopname:
+                startActivity(new Intent(getActivity(),ShopDetailedActivity.class));
                 break;
             default:
                 break;
@@ -220,36 +290,13 @@ public class ShopFragment extends BaseFragment {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            ToastUtils.showToastShort(icon_name[i]);
-            switch (i) {
-                case 0:
-                    break;
-                case 1:
 
-                    break;
-                case 2:
-                    break;
-                case 3://在线售卡
+            if(data!=null){
+                if(data.get(i).getId()==1){
+                    //id为1,表示在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
-                    break;
-                case 7:
-                    break;
-                case 8:
-                    LogUtil.i(SPUtils.getString(Constants.MY_USERID,null));
-                    LogUtil.i(SPUtils.getString(Constants.MY_TOKEN,null));
-                    break;
-                default:
-                    break;
+                }
             }
-
 
         }
     }
@@ -322,8 +369,8 @@ public class ShopFragment extends BaseFragment {
                 public void onClick(View v) {
                     if(itemsArrayList!=null){
                         Intent intent = new Intent(getActivity(), MapActivity.class);
-                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLat()+"");
-                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLng()+"");
+                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLat()+"");
+                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLng()+"");
                         intent.putExtra("jingdu",jingdu);
                         intent.putExtra("weidu",weidu);
                         startActivity(intent);
@@ -379,6 +426,7 @@ public class ShopFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==111){
+
             initViews();
         }
 
@@ -391,6 +439,7 @@ public class ShopFragment extends BaseFragment {
                 if(s.contains("true")){
                     info.setDefault_branch(shopID);
                     DataInfoCache.saveOneCache(info,Constants.MY_INFO);
+                    ll_top.setVisibility(View.VISIBLE);
                     mGridView.setVisibility(View.VISIBLE);
                     ibtn_call.setVisibility(View.VISIBLE);
                     ibtn_gps.setVisibility(View.VISIBLE);
@@ -434,9 +483,16 @@ public class ShopFragment extends BaseFragment {
 
     class MyAdapter extends BaseAdapter {
 
+        List<MenusBean.Data> menuList;
+
+        MyAdapter(List<MenusBean.Data> list){
+            menuList = list;
+        }
+
+
         @Override
         public int getCount() {
-            return icon_name.length;
+            return menuList.size();
         }
 
         @Override
@@ -446,7 +502,7 @@ public class ShopFragment extends BaseFragment {
 
         @Override
         public long getItemId(int i) {
-            return icons.length;
+            return 0;
         }
 
         @Override
@@ -455,9 +511,8 @@ public class ShopFragment extends BaseFragment {
             view = View.inflate(mActivity, R.layout.gridview_item_shop, null);
             TextView tv_dcs = view.findViewById(R.id.tv_dcs);
             ImageView ibtn = view.findViewById(R.id.ibtn);
-            tv_dcs.setText(icon_name[i]);
-
-            ibtn.setBackgroundResource(icons[i]);
+            tv_dcs.setText(menuList.get(i).getName());
+            Glide.with(mActivity).load(menuList.get(i).getIcon()).into(ibtn);
             return view;
         }
     }
