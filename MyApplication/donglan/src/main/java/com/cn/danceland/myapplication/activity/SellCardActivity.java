@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,7 +101,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                startActivity(new Intent(SellCardActivity.this, SellCardConfirmActivity.class));
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cardinfo",sellCardsInfoBean.getData().get(i));
+                startActivity(new Intent(SellCardActivity.this, SellCardConfirmActivity.class).putExtras(bundle));
             }
         });
 
@@ -176,20 +179,33 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             }
 
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 1) {//计时卡
-                viewHolder.tv_cardtype.setText("计时卡");
+                viewHolder.tv_cardtype.setText("卡类型：计时卡");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 2) {//计次卡
-                viewHolder.tv_cardtype.setText("计次卡");
+                viewHolder.tv_cardtype.setText("卡类型：计次卡");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 3) {//储值卡
-                viewHolder.tv_cardtype.setText("储值卡");
+                viewHolder.tv_cardtype.setText("卡类型：储值卡");
             }
 
 
             viewHolder.tv_name.setText(sellCardsInfoBean.getData().get(i).getName());
-            viewHolder.tv_price.setText(sellCardsInfoBean.getData().get(i).getPrice() + "");
-            viewHolder.tv_number.setText(sellCardsInfoBean.getData().get(i).getTotal_count() + "");
-            viewHolder.tv_time.setText(sellCardsInfoBean.getData().get(i).getMonth_count() + "");
+            viewHolder.tv_price.setText("售价："+sellCardsInfoBean.getData().get(i).getPrice() + "");
+            if (!TextUtils.isEmpty(sellCardsInfoBean.getData().get(i).getTotal_count())){
+                viewHolder.tv_number.setText("次数："+sellCardsInfoBean.getData().get(i).getTotal_count() + "次");
+                viewHolder.tv_number.setVisibility(View.VISIBLE);
+            }else {
+                viewHolder.tv_number.setVisibility(View.GONE);
+            }
+
+            if (sellCardsInfoBean.getData().get(i).getTime_unit()==1){
+                viewHolder.tv_time.setText("使用时间："+sellCardsInfoBean.getData().get(i).getTime_value() + "年");
+            }
+            if (sellCardsInfoBean.getData().get(i).getTime_unit()==2){
+                viewHolder.tv_time.setText("使用时间："+sellCardsInfoBean.getData().get(i).getTime_value() + "月");
+            }
+
+
             return view;
         }
 

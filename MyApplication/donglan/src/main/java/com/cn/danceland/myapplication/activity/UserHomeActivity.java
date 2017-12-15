@@ -1,7 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -84,7 +86,8 @@ public class UserHomeActivity extends Activity {
     private LinearLayout ll_edit;
     private ImageView iv_sex;
 
-    private int from ;//来着那个页面
+    private int from;//来着那个页面
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +96,7 @@ public class UserHomeActivity extends Activity {
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
-        from=getIntent().getIntExtra("from",-1);
+        from = getIntent().getIntExtra("from", -1);
         //    LogUtil.i("userid:" + userId);
         //  userId="74";
 
@@ -107,7 +110,7 @@ public class UserHomeActivity extends Activity {
         super.onDestroy();
 
 
-        EventBus.getDefault().post(new IntEvent(from,8901));
+        EventBus.getDefault().post(new IntEvent(from, 8901));
 
         EventBus.getDefault().unregister(this);
     }
@@ -189,7 +192,7 @@ public class UserHomeActivity extends Activity {
             if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
                 tv_add_gz.setVisibility(View.INVISIBLE);
             } else {
-                tv_add_gz.setText("已关注");
+                tv_add_gz.setText("取消关注");
             }
 
         } else {
@@ -203,7 +206,9 @@ public class UserHomeActivity extends Activity {
 
                     addGuanzhu(userId, true);
                 } else {//已关注取消关注
-                    addGuanzhu(userId, false);
+
+                    showClearDialog();
+
                 }
 
             }
@@ -227,6 +232,30 @@ public class UserHomeActivity extends Activity {
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
         tv_head_nickname.setText(data.getNickName());
 
+    }
+
+
+    /**
+     * 取消关注
+     */
+    private void showClearDialog() {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        //  dialog.setTitle("提示");
+        dialog.setMessage("是否取消关注");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                addGuanzhu(userId, false);
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
     }
 
     private Handler handler = new Handler() {
@@ -259,7 +288,6 @@ public class UserHomeActivity extends Activity {
 
         }
     };
-
 
 
     //even事件处理
@@ -342,7 +370,7 @@ public class UserHomeActivity extends Activity {
                 break;
             case EventConstants.ADD_GUANZHU:
 
-                tv_add_gz.setText("已关注");
+                tv_add_gz.setText("取消关注");
                 requestInfoBean.getData().setFollower(true);
 
                 break;
@@ -392,18 +420,15 @@ public class UserHomeActivity extends Activity {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
 
 
-
                 userInfo = requestInfoBean.getData();
 
 
-
-                if (TextUtils.equals(id,SPUtils.getString(Constants.MY_USERID,null))){
+                if (TextUtils.equals(id, SPUtils.getString(Constants.MY_USERID, null))) {
                     //如果是本人更新本地缓存
-                    DataInfoCache.saveOneCache(userInfo,Constants.MY_INFO);
+                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
 
-                    EventBus.getDefault().post(new StringEvent("",EventConstants.UPDATE_USER_INFO));
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_USER_INFO));
                 }
-
 
 
                 Message msg = Message.obtain();
@@ -471,16 +496,18 @@ public class UserHomeActivity extends Activity {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
                     LogUtil.i(data.toString());
+
+                    //         myDynListviewAdater.notifyDataSetChanged();
+                    mCurrentPage = mCurrentPage + 1;
                     if (data.size() > 0) {
                         if (data.size() < 10) {
                             setEnd();
 
                         }
 
-
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-               //         myDynListviewAdater.notifyDataSetChanged();
-                        mCurrentPage = mCurrentPage + 1;
+                        myDynListviewAdater.notifyDataSetChanged();
+
                     } else {
                         // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
                         if (mCurrentPage == 1) {
