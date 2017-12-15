@@ -408,8 +408,8 @@ public class ShopFragment extends BaseFragment {
                 public void onClick(View v) {
                     if(itemsArrayList!=null){
                         Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLat()+"");
-                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLng()+"");
+                        intent.putExtra("shopWeidu",itemsArrayList.get(position).getLat()+"");
+                        intent.putExtra("shopJingdu",itemsArrayList.get(position).getLng()+"");
                         intent.putExtra("jingdu",jingdu);
                         intent.putExtra("weidu",weidu);
                         intent.putExtra("branchID",itemsArrayList.get(position).getBranch_id()+"");
