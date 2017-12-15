@@ -92,9 +92,8 @@ public class ShopFragment extends BaseFragment {
 
         storelist = v.findViewById(R.id.storelist);
 
-        getMenus();
-        getListData();
         if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
+            getMenus();
             getShop(info.getDefault_branch());
             mGridView.setVisibility(View.VISIBLE);
             ibtn_call.setVisibility(View.VISIBLE);
@@ -102,6 +101,7 @@ public class ShopFragment extends BaseFragment {
             storelist.setVisibility(View.GONE);
             ll_top.setVisibility(View.VISIBLE);
         }else{
+            getListData();
             ll_top.setVisibility(View.GONE);
             mGridView.setVisibility(View.GONE);
             storelist.setVisibility(View.VISIBLE);
@@ -192,7 +192,7 @@ public class ShopFragment extends BaseFragment {
     }
 
     public void getListData(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+weidu+"/"+jingdu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);

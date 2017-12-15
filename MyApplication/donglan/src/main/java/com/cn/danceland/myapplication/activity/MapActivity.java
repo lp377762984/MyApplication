@@ -112,12 +112,12 @@ public class MapActivity extends Activity {
             longitude = Double.valueOf(extras.getString("shopJingdu"));
         }
 
-        startlatLng = new LatLng(myLongitude, myLatitude);
-        finishlatLng = new LatLng(longitude,latitude);
+        startlatLng = new LatLng(myLatitude,myLongitude);
+        finishlatLng = new LatLng(latitude,longitude);
         stNode = PlanNode.withLocation(startlatLng);
         enNode = PlanNode.withLocation(finishlatLng);
 
-        midLng = new LatLng(myLongitude+(longitude-myLongitude)/2,myLatitude+(latitude-myLatitude)/2);
+        midLng = new LatLng(myLatitude+(latitude-myLatitude)/2,myLongitude+(longitude-myLongitude)/2);
 
         distance = DistanceUtil.getDistance(startlatLng, finishlatLng);
         lv = getZoomLevel(distance);
