@@ -1,6 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,13 +10,20 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
+import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+
+import java.util.Calendar;
 
 import static android.R.attr.value;
 
@@ -31,22 +40,75 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private TextView tv_select_date;
     private TextView tv_select_counselor;
     private EditText et_phone;
-
+    private RequestSellCardsInfoBean.Data CardsInfo;
+    private Calendar cal;
+    private int year,month,day;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_card_confirm);
-        initData();
+
         initView();
+        initData();
     }
 
     private void initData() {
+        getDate();
     }
 
+    //获取当前日期
+    private void getDate() {
+        cal=Calendar.getInstance();
+
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+    }
     private void initView() {
+        Bundle bundle = this.getIntent().getExtras();
+        CardsInfo = (RequestSellCardsInfoBean.Data) bundle.getSerializable("cardinfo");
+
+        TextView tv_name = findViewById(R.id.tv_cardname);
+        TextView tv_number = findViewById(R.id.tv_number);
+        TextView tv_time = findViewById(R.id.tv_time);
+        TextView tv_price = findViewById(R.id.tv_price);
+        TextView tv_cardtype = findViewById(R.id.tv_cardtype);
+
+
+        if (CardsInfo.getCharge_mode() == 1) {//计时卡
+           tv_cardtype.setText("卡类型：计时卡");
+        }
+        if (CardsInfo.getCharge_mode() == 2) {//计次卡
+            tv_cardtype.setText("卡类型：计次卡");
+        }
+        if (CardsInfo.getCharge_mode() == 3) {//储值卡
+            tv_cardtype.setText("卡类型：储值卡");
+        }
+
+
+      tv_name.setText(CardsInfo.getName());
+       tv_price.setText("售价："+CardsInfo.getPrice() + "");
+        if (!TextUtils.isEmpty(CardsInfo.getTotal_count())){
+           tv_number.setText("次数："+CardsInfo.getTotal_count() + "次");
+           tv_number.setVisibility(View.VISIBLE);
+        }else {
+           tv_number.setVisibility(View.GONE);
+        }
+
+        if (CardsInfo.getTime_unit()==1){
+          tv_time.setText("使用时间："+CardsInfo.getTime_value() + "年");
+        }
+        if (CardsInfo.getTime_unit()==2){
+            tv_time.setText("使用时间："+CardsInfo.getTime_value() + "月");
+        }
+
+
         RadioGroup radioGroup = findViewById(R.id.rg_who);
         tv_select_date = findViewById(R.id.tv_select_date);
+        tv_select_date.setOnClickListener(this);
         tv_select_counselor = findViewById(R.id.tv_select_counselor);
+        tv_select_counselor.setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
         ll_phone = findViewById(R.id.ll_phone);
 
@@ -129,6 +191,16 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
     }
 
+    private void showListDialog(){
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        dialog.setTitle("请选择会籍顾问");
+      //  dialog.setView()
+
+        dialog.show();
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -146,6 +218,30 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
             case R.id.iv_back://返回
                 finish();
+            case R.id.tv_select_counselor:
+
+
+
+                break;
+            case R.id.tv_select_date:
+
+                DatePickerDialog dialog=new DatePickerDialog(SellCardConfirmActivity.this, 0, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year1, int month2, int day3) {
+                        tv_select_date.setText(year1+"-"+(month2+1)+"-"+day3);
+
+                        if (TimeUtils.isDateOneBigger(tv_select_date.getText().toString(),year+"-"+(month+1)+"-"+day)){
+
+                        }else {
+                            tv_select_date.setText("*请选开卡日期");
+                            ToastUtils.showToastShort("不能选择今天以前的日期");
+                        }
+
+                    }
+                }, year, month, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
+                dialog.show();
+
+                break;
             case value:
                 break;
             default:

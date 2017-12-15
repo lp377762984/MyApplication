@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Email:644563767@qq.com
  */
 
-public class RequestSellCardsInfoBean {
+public class RequestSellCardsInfoBean implements Serializable {
 
     private boolean success;
     private String errorMsg;
@@ -46,7 +47,7 @@ public class RequestSellCardsInfoBean {
         return data;
     }
 
-    public class Data {
+    public class Data implements Serializable{
 
 
 //
@@ -70,7 +71,7 @@ public class RequestSellCardsInfoBean {
         private String id;
         private String branch_id;
         private String name;
-        private int charge_mode;
+        private int charge_mode;//1计时收费2计次收费3充值
         private String total_count;
         private float price;
         private int time_unit;
