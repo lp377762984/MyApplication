@@ -242,7 +242,12 @@ public class ShopFragment extends BaseFragment {
 
                 break;
             case R.id.tv_shopname:
-                startActivity(new Intent(getActivity(),ShopDetailedActivity.class));
+                Intent intent1 = new Intent(getActivity(),ShopDetailedActivity.class);
+                intent1.putExtra("jingdu",jingdu);
+                intent1.putExtra("weidu",weidu);
+                intent1.putExtra("shopJingdu",shopJingdu);
+                intent1.putExtra("shopWeidu",shopWeidu);
+                startActivity(intent1);
                 break;
             default:
                 break;
