@@ -89,12 +89,10 @@ public class ShopFragment extends BaseFragment {
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
 
         storelist = v.findViewById(R.id.storelist);
-        LogUtil.e("zzf",info.getDefault_branch());
         if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
             mGridView.setVisibility(View.VISIBLE);
 //            ibtn_call.setVisibility(View.VISIBLE);
 //            ibtn_gps.setVisibility(View.VISIBLE);
-            LogUtil.e("zzf","222222222");
             storelist.setVisibility(View.GONE);
             ll_top.setVisibility(View.VISIBLE);
             getMenus();
