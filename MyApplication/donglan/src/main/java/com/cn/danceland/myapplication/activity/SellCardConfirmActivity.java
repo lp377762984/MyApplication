@@ -1,8 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,18 +12,39 @@ import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import razerdp.basepopup.BasePopupWindow;
 
 import static android.R.attr.value;
 
@@ -42,7 +63,11 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private EditText et_phone;
     private RequestSellCardsInfoBean.Data CardsInfo;
     private Calendar cal;
-    private int year,month,day;
+    private int year, month, day;
+    private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
+    private MyPopupListAdapter myPopupListAdapter;
+    private ListPopup listPopup;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,21 +79,26 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
     private void initData() {
         getDate();
+
+        findConsultant(CardsInfo.getBranch_id());
     }
 
     //获取当前日期
     private void getDate() {
-        cal=Calendar.getInstance();
+        cal = Calendar.getInstance();
 
-        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
 
-        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day=cal.get(Calendar.DAY_OF_MONTH);
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
     }
+
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
         CardsInfo = (RequestSellCardsInfoBean.Data) bundle.getSerializable("cardinfo");
 
+        myPopupListAdapter = new MyPopupListAdapter(this);
+        listPopup = new ListPopup(this);
         TextView tv_name = findViewById(R.id.tv_cardname);
         TextView tv_number = findViewById(R.id.tv_number);
         TextView tv_time = findViewById(R.id.tv_time);
@@ -77,7 +107,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
 
         if (CardsInfo.getCharge_mode() == 1) {//计时卡
-           tv_cardtype.setText("卡类型：计时卡");
+            tv_cardtype.setText("卡类型：计时卡");
         }
         if (CardsInfo.getCharge_mode() == 2) {//计次卡
             tv_cardtype.setText("卡类型：计次卡");
@@ -87,20 +117,20 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
 
 
-      tv_name.setText(CardsInfo.getName());
-       tv_price.setText("售价："+CardsInfo.getPrice() + "");
-        if (!TextUtils.isEmpty(CardsInfo.getTotal_count())){
-           tv_number.setText("次数："+CardsInfo.getTotal_count() + "次");
-           tv_number.setVisibility(View.VISIBLE);
-        }else {
-           tv_number.setVisibility(View.GONE);
+        tv_name.setText(CardsInfo.getName());
+        tv_price.setText("售价：" + CardsInfo.getPrice() + "");
+        if (!TextUtils.isEmpty(CardsInfo.getTotal_count())) {
+            tv_number.setText("次数：" + CardsInfo.getTotal_count() + "次");
+            tv_number.setVisibility(View.VISIBLE);
+        } else {
+            tv_number.setVisibility(View.GONE);
         }
 
-        if (CardsInfo.getTime_unit()==1){
-          tv_time.setText("使用时间："+CardsInfo.getTime_value() + "年");
+        if (CardsInfo.getTime_unit() == 1) {
+            tv_time.setText("使用时间：" + CardsInfo.getTime_value() + "年");
         }
-        if (CardsInfo.getTime_unit()==2){
-            tv_time.setText("使用时间："+CardsInfo.getTime_value() + "月");
+        if (CardsInfo.getTime_unit() == 2) {
+            tv_time.setText("使用时间：" + CardsInfo.getTime_value() + "月");
         }
 
 
@@ -191,15 +221,108 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
     }
 
-    private void showListDialog(){
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        dialog.setTitle("请选择会籍顾问");
-      //  dialog.setView()
+//    private void showListDialog() {
+//        AlertDialog.Builder dialog =
+//                new AlertDialog.Builder(this);
+//        dialog.setTitle("请选择会籍顾问");
+//        //  dialog.setView()
+//
+//        dialog.show();
+//
+//    }
 
-        dialog.show();
 
+
+    class ListPopup extends BasePopupWindow {
+
+
+        Context context;
+
+        public ListPopup(Context context) {
+            super(context);
+            ListView popup_list = (ListView) findViewById(R.id.popup_list);
+            popup_list.setAdapter(myPopupListAdapter);
+            this.context = context;
+        }
+
+        @Override
+        protected Animation initShowAnimation() {
+            return null;
+        }
+
+        @Override
+        public View getClickToDismissView() {
+            return getPopupWindowView();
+        }
+
+        @Override
+        public View onCreatePopupView() {
+
+          //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
+            return createPopupById(R.layout.popup_list_consultant);
+
+        }
+
+        @Override
+        public View initAnimaView() {
+            return null;
+        }
     }
+
+    class MyPopupListAdapter extends BaseAdapter {
+        private Context context;
+
+        public MyPopupListAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return consultantListInfo.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup viewGroup) {
+            LogUtil.i("asdasdjalsdllasjdlk");
+            ViewHolder vh = null;
+            if (convertView == null) {
+                vh = new ViewHolder();
+                convertView = View.inflate(context, R.layout.listview_item_list_consultant, null);
+                vh.mTextView = (TextView) convertView.findViewById(R.id.item_tx);
+                convertView.setTag(vh);
+            } else {
+                vh = (ViewHolder) convertView.getTag();
+            }
+            vh.mTextView.setText(consultantListInfo.get(position).getCname());
+
+            vh.mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tv_select_counselor.setText(consultantListInfo.get(position).getCname());
+                    listPopup.dismiss();
+                }
+            });
+
+            return convertView;
+
+        }
+
+
+        class ViewHolder {
+            public TextView mTextView;
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -218,21 +341,20 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
             case R.id.iv_back://返回
                 finish();
-            case R.id.tv_select_counselor:
+            case R.id.tv_select_counselor://选择会籍顾问
 
-
-
+                listPopup.showPopupWindow();
                 break;
-            case R.id.tv_select_date:
+            case R.id.tv_select_date://选择日期
 
-                DatePickerDialog dialog=new DatePickerDialog(SellCardConfirmActivity.this, 0, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog dialog = new DatePickerDialog(SellCardConfirmActivity.this, 0, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year1, int month2, int day3) {
-                        tv_select_date.setText(year1+"-"+(month2+1)+"-"+day3);
+                        tv_select_date.setText(year1 + "-" + (month2 + 1) + "-" + day3);
 
-                        if (TimeUtils.isDateOneBigger(tv_select_date.getText().toString(),year+"-"+(month+1)+"-"+day)){
+                        if (TimeUtils.isDateOneBigger(tv_select_date.getText().toString(), year + "-" + (month + 1) + "-" + day)) {
 
-                        }else {
+                        } else {
                             tv_select_date.setText("*请选开卡日期");
                             ToastUtils.showToastShort("不能选择今天以前的日期");
                         }
@@ -248,4 +370,59 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 break;
         }
     }
+
+    /**
+     * 查找会籍顾问
+     */
+    private void findConsultant(final String branchId) {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
+                if (requestConsultantInfoBean.getSuccess()) {
+                    consultantListInfo = requestConsultantInfoBean.getData();
+                    LogUtil.i(consultantListInfo.toString());
+                    myPopupListAdapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showToastShort(requestConsultantInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort(volleyError.toString());
+            }
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("branchId", branchId);
+
+                return map;
+
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
 }
