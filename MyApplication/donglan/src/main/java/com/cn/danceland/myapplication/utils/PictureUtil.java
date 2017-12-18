@@ -62,6 +62,10 @@ public  class PictureUtil {
         return BitmapFactory.decodeFile(filePath, options);
     }
 
+    public static int getSDKV(){
+        return Build.VERSION.SDK_INT;
+    }
+
     //从URI获取path绝对路径
     public static String getRealPath(Context context, Uri uri){
         int sdkInt = Build.VERSION.SDK_INT;

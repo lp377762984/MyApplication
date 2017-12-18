@@ -48,6 +48,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
@@ -665,13 +666,20 @@ public class MyProActivity extends Activity {
             if (!dir.exists()) {
                 dir.mkdirs();
             } // 把文件地址转换成Uri格式
+            if(PictureUtil.getSDKV()<24){
+                uri = Uri.fromFile(new File(cameraPath));
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }else{
+                // 设置系统相机拍摄照片完成后图片文件的存放地址
+                ContentValues contentValues = new ContentValues(1);
+                contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
+                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }
             //uri = Uri.fromFile(new File(cameraPath));
-            // 设置系统相机拍摄照片完成后图片文件的存放地址
-            ContentValues contentValues = new ContentValues(1);
-            contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
-            uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+
         }
         else {
             Toast.makeText(getApplicationContext(), "请确认已经插入SD卡",
@@ -724,12 +732,14 @@ public class MyProActivity extends Activity {
                     @Override
                     public void onResponse(String s) {
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                        selfAvatarPath = headImageBean.getData().getImgUrl();
-                        infoData.setSelfAvatarPath(selfAvatarPath);
-                        //发送事件
-                        EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
-                        commitSelf(Constants.MODIFYY_IMAGE,"self_Avatar_path",selfAvatarPath);
-                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        if(headImageBean!=null&&headImageBean.getData()!=null){
+                            selfAvatarPath = headImageBean.getData().getImgUrl();
+                            infoData.setSelfAvatarPath(selfAvatarPath);
+                            //发送事件
+                            EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
+                            commitSelf(Constants.MODIFYY_IMAGE,"self_Avatar_path",selfAvatarPath);
+                            DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                        }
                         //LogUtil.e("zzf",s);
                     }
                 }, new Response.ErrorListener() {
