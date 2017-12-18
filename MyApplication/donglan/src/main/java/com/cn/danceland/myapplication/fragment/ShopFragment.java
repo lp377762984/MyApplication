@@ -57,7 +57,6 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class ShopFragment extends BaseFragment {
-    RequestQueue requestQueue;
     ListView storelist;
     GridView mGridView;
     String jingdu,weidu,shopJingdu,shopWeidu,branchId;
@@ -77,7 +76,6 @@ public class ShopFragment extends BaseFragment {
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         gson = new Gson();
-        requestQueue = Volley.newRequestQueue(getActivity());
         mGridView = v.findViewById(R.id.gridview);
 
         ibtn_call = v.findViewById(R.id.ibtn_call);
@@ -91,24 +89,26 @@ public class ShopFragment extends BaseFragment {
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
 
         storelist = v.findViewById(R.id.storelist);
-
+        LogUtil.e("zzf",info.getDefault_branch());
         if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
-            getMenus();
-            getShop(info.getDefault_branch());
             mGridView.setVisibility(View.VISIBLE);
-            ibtn_call.setVisibility(View.VISIBLE);
-            ibtn_gps.setVisibility(View.VISIBLE);
+//            ibtn_call.setVisibility(View.VISIBLE);
+//            ibtn_gps.setVisibility(View.VISIBLE);
+            LogUtil.e("zzf","222222222");
             storelist.setVisibility(View.GONE);
             ll_top.setVisibility(View.VISIBLE);
+            getMenus();
+            getShop(info.getDefault_branch());
+
         }else{
-            getListData();
             ll_top.setVisibility(View.GONE);
             mGridView.setVisibility(View.GONE);
             storelist.setVisibility(View.VISIBLE);
-            ibtn_call.setVisibility(View.GONE);
-            ibtn_gps.setVisibility(View.GONE);
+//            ibtn_call.setVisibility(View.GONE);
+//            ibtn_gps.setVisibility(View.GONE);
+            getListData();
+
         }
-        LinearLayout ll_top = v.findViewById(R.id.ll_top);
         ll_top.setBackgroundColor(Color.WHITE);
         ll_top.getBackground().setAlpha(80);
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
@@ -215,7 +215,7 @@ public class ShopFragment extends BaseFragment {
             }
         };
 
-        requestQueue.add(stringRequest);
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -444,11 +444,26 @@ public class ShopFragment extends BaseFragment {
                 if(s.contains("true")){
                     info.setDefault_branch(shopID);
                     DataInfoCache.saveOneCache(info,Constants.MY_INFO);
-                    ll_top.setVisibility(View.VISIBLE);
-                    mGridView.setVisibility(View.VISIBLE);
-                    ibtn_call.setVisibility(View.VISIBLE);
-                    ibtn_gps.setVisibility(View.VISIBLE);
-                    storelist.setVisibility(View.GONE);
+                    //initViews();
+//                    ll_top.setVisibility(View.VISIBLE);
+//                    mGridView.setVisibility(View.VISIBLE);
+//                    ibtn_call.setVisibility(View.VISIBLE);
+//                    ibtn_gps.setVisibility(View.VISIBLE);
+//                    storelist.setVisibility(View.GONE);
+                    if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
+                        mGridView.setVisibility(View.VISIBLE);
+                        storelist.setVisibility(View.GONE);
+                        ll_top.setVisibility(View.VISIBLE);
+                        getMenus();
+                        getShop(info.getDefault_branch());
+
+                    }else{
+                        ll_top.setVisibility(View.GONE);
+                        mGridView.setVisibility(View.GONE);
+                        storelist.setVisibility(View.VISIBLE);
+                        getListData();
+
+                    }
                 }else{
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -475,7 +490,7 @@ public class ShopFragment extends BaseFragment {
             }
         };
 
-        requestQueue.add(stringRequest);
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
