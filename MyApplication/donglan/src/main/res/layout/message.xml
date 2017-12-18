@@ -28,9 +28,64 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/zan_message"
+        android:layout_below="@+id/message_title"
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+        <ImageView
+            android:id="@+id/im_zan"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@+id/im_zan"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:id="@+id/tv_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收到的赞"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_zan"
+                android:layout_marginTop="15dp"
+                android:textColor="#a9a9a9"
+                android:text="没有新的赞"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="12-18"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_bg_line"
+        />
+
     <ListView
         android:id="@+id/lv_message"
-        android:layout_below="@+id/message_title"
+        android:layout_below="@+id/zan_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

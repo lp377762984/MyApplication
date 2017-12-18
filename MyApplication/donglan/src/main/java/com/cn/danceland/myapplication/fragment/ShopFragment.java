@@ -130,6 +130,7 @@ public class ShopFragment extends BaseFragment {
                     tv_shopname.setText(data.getBname());
                     shopWeidu = data.getLat()+"";
                     shopJingdu = data.getLng()+"";
+                    PhoneNo = data.getTelphone_no();
                 }
 
             }
@@ -230,7 +231,7 @@ public class ShopFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_call:
-
+                showDialog(PhoneNo);
                 break;
             case R.id.ibtn_gps:
                 Intent intent = new Intent(getActivity(),MapActivity.class);
@@ -444,12 +445,6 @@ public class ShopFragment extends BaseFragment {
                 if(s.contains("true")){
                     info.setDefault_branch(shopID);
                     DataInfoCache.saveOneCache(info,Constants.MY_INFO);
-                    //initViews();
-//                    ll_top.setVisibility(View.VISIBLE);
-//                    mGridView.setVisibility(View.VISIBLE);
-//                    ibtn_call.setVisibility(View.VISIBLE);
-//                    ibtn_gps.setVisibility(View.VISIBLE);
-//                    storelist.setVisibility(View.GONE);
                     if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
                         mGridView.setVisibility(View.VISIBLE);
                         storelist.setVisibility(View.GONE);
