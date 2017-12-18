@@ -172,6 +172,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_02"
+                android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_top_bg"
@@ -183,7 +184,7 @@
                     android:id="@+id/ll_my_msg"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-
+                    android:clickable="true"
                     android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
@@ -306,6 +307,8 @@
                     android:layout_below="@id/ll_setting"
                     android:layout_centerVertical="true"
                     android:background="@color/color_bg_line" />
+
+
 
             </LinearLayout>
 

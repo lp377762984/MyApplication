@@ -75,4 +75,8 @@ public class Constants {
     public static final String MY_LOCATION = "my_location";//我的地区
 
     public static final String MY_INFO = "my_info";//我的资料
+    public static final String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
+
+
+
 }

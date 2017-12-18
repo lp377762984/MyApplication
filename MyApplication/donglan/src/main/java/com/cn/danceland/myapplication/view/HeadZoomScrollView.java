@@ -75,6 +75,8 @@ public class HeadZoomScrollView extends ScrollView {
         }
     }
 
+
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (zoomViewWidth <= 0 || zoomViewHeight <=0) {
