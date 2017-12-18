@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -664,8 +665,11 @@ public class MyProActivity extends Activity {
             if (!dir.exists()) {
                 dir.mkdirs();
             } // 把文件地址转换成Uri格式
-            uri = Uri.fromFile(new File(cameraPath));
+            //uri = Uri.fromFile(new File(cameraPath));
             // 设置系统相机拍摄照片完成后图片文件的存放地址
+            ContentValues contentValues = new ContentValues(1);
+            contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
+            uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         }

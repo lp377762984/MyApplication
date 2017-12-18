@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
@@ -196,6 +197,8 @@ public class MeFragment extends BaseFragment {
                 //  startActivity(intent);
                 break;
             case R.id.ll_my_msg://我的消息
+                Intent intent1 = new Intent(mActivity, MessageActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.ll_my_dyn://我的动态
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));

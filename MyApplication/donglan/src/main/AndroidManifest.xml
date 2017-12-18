@@ -116,6 +116,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.MyShopActivity"
     android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"
