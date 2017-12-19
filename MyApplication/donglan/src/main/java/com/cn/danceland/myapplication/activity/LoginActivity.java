@@ -337,7 +337,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 ToastUtils.showToastShort("登录成功");
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                 startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
+                setMipushId();
                 finish();
 
 
@@ -371,6 +371,55 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     }
 
+    /**
+     *
+     * 设置mipusid
+     */
+    private void setMipushId() {
 
+        StringRequest request = new StringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+             //   LogUtil.i(s);
+                Gson gson = new Gson();
+              RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()){
+                    LogUtil.i("设置mipush成功");
+                }else {
+                    LogUtil.i("设置mipush失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i("设置mipush失败"+volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
+                map.put("terminal","1");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+
+                return map;
+            }
+        };
+
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
 
 }
