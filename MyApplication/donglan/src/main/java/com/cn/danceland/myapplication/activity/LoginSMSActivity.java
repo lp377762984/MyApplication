@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -31,6 +32,9 @@ import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shy on 2017/9/22.
@@ -246,7 +250,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
                 startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
-
+                setMipushId();
 
                 finish();
             }
@@ -268,4 +272,54 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     *
+     * 设置mipusid
+     */
+    private void setMipushId() {
+
+        StringRequest request = new StringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //   LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()){
+                 //   LogUtil.i("设置mipush成功");
+                }else {
+                   // LogUtil.i("设置mipush失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+              //  LogUtil.i("设置mipush失败"+volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
+                map.put("terminal","1");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+
+                return map;
+            }
+        };
+
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
 }

@@ -42,6 +42,7 @@ public class Constants {
 
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
+    public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
 
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findById";//精选动态

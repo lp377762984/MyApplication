@@ -247,7 +247,13 @@
         style="@style/BtnCommitStyle"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="30dp"
-        android:text="确认并前往支付" />
+        android:text="全款购买" />
+    <Button
+        android:id="@+id/btn_dj_commit"
+        style="@style/BtnCommitStyle"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:text="预付定金" />
 
 
 </LinearLayout>

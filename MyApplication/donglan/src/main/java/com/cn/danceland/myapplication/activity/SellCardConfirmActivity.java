@@ -140,6 +140,8 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         tv_select_counselor = findViewById(R.id.tv_select_counselor);
         tv_select_counselor.setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.btn_dj_commit).setOnClickListener(this);
         ll_phone = findViewById(R.id.ll_phone);
 
         et_name = findViewById(R.id.et_name);
@@ -363,6 +365,11 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 }, year, month, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
                 dialog.show();
 
+                break;
+            case R.id.btn_commit://全款支付
+
+                break;
+            case R.id.btn_dj_commit://支付定金
                 break;
             case value:
                 break;
