@@ -10,12 +10,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -155,7 +157,23 @@ public class HomeFragment extends BaseFragment {
 
     private View initHeadview() {
         View headView = View.inflate(mActivity, R.layout.headview_homepage, null);
+        RelativeLayout lv_home_img_news=headView.findViewById(R.id.lv_home_img_news);
+        DisplayMetrics dm =getResources().getDisplayMetrics();
+        int w_screen = dm.widthPixels;
+        int h_screen = dm.heightPixels;
+        // 1、设置固定大小
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_screen, w_screen*9/16);
+//        // 设置包裹内容或者填充父窗体大小
+//        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        //设置padding值
+//        textView.setPadding(10, 10, 10, 10);
+//        //设置margin值
+//        lp.setMargins(20, 20, 0, 20);
+  //      view.addView(textView,lp);
+
         mViewPager = headView.findViewById(R.id.vp_images);
+        lv_home_img_news.setLayoutParams(lp);
         tv_image_title = headView.findViewById(R.id.tv_image_title);
         tv_indecater = headView.findViewById(R.id.tv_indecater);
         LinearLayout ll_image_title_bg = headView.findViewById(R.id.ll_image_title_bg);
