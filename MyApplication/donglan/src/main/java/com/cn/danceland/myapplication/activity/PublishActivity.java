@@ -201,15 +201,15 @@ public class PublishActivity extends Activity {
         Matisse.from(PublishActivity.this)
                 .choose(MimeType.allOf()) // 选择 mime 的类型
                 .countable(true)
+                .capture(true)
+                .captureStrategy(
+                        new CaptureStrategy(true, "com.cn.danceland.myapplication.Receiver.MyFileProvider"))
                 .maxSelectable(9) // 图片选择的最多数量
                 .theme(R.style.imgsStyle)
                 //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                 .thumbnailScale(0.85f) // 缩略图的比例
                 .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
-                .capture(true)
-                .captureStrategy(
-                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
                 .forResult(0); // 设置作为标记的请求码
 
     }
@@ -249,7 +249,7 @@ public class PublishActivity extends Activity {
                             arrayFileMap = new HashMap<String,File>();
                             File[] files = new File[arrayList.size()];
                             for (int i =0;i<arrayList.size();i++){
-                                File file = new File(arrayList.get(i).toString());
+                                File file = new File(arrayList.get(i));
                                 arrayFileMap.put(i+"",file);
                             }
                             new Thread(new Runnable() {
