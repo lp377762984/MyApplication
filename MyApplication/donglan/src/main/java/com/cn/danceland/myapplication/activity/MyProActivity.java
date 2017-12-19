@@ -89,7 +89,7 @@ public class MyProActivity extends Activity {
     public static String SAVED_IMAGE_DIR_PATH =
             Environment.getExternalStorageDirectory().getPath()
                     + "/donglan/camera/";// 拍照路径
-    String cameraPath,gemder,nickName,selfAvatarPath,strHeight,strWeight;
+    String cameraPath,gemder,nickName,selfAvatarPath,strHeight,strWeight,iden;
     Data infoData;
     Gson gson;
     RequestQueue queue;
@@ -158,6 +158,9 @@ public class MyProActivity extends Activity {
         if (!TextUtils.isEmpty(infoData.getPhone())) {
             tv_phone.setText(infoData.getPhone());
         }
+        if(infoData.getIdentity_card()!=null){
+            tv_identity.setText(infoData.getIdentity_card());
+        }
 
         if(infoData.getHeight()!=null){
             tv_height.setText(infoData.getHeight()+" cm");
@@ -219,6 +222,7 @@ public class MyProActivity extends Activity {
         lo_cancel_action.setOnClickListener(onClickListener);
         over_action.setOnClickListener(onClickListener);
         rl_phone.setOnClickListener(onClickListener);
+        identity.setOnClickListener(onClickListener);
     }
     public void dismissWindow(){
         if(null != head_image_window && head_image_window.isShowing()){
@@ -275,7 +279,7 @@ public class MyProActivity extends Activity {
                     dismissWindow();
                     break;
                 case R.id.name:{
-                    showName();
+                    showName(0);
                 }
                     break;
                 case R.id.sex:{
@@ -340,6 +344,9 @@ public class MyProActivity extends Activity {
                     break;
                 case R.id.rl_zone:
                     showLocation();
+                    break;
+                case R.id.identity:
+                    showName(1);
                     break;
             }
         }
@@ -572,13 +579,22 @@ public class MyProActivity extends Activity {
         //cancel1.setVisibility(View.GONE);
     }
 
-    public void showName(){
-
+    public void showName(final int i){
+            //i==0是编辑昵称i==1表示身份证
             AlertDialog.Builder normalDialog =
                     new AlertDialog.Builder(MyProActivity.this);
             View dialogView = LayoutInflater.from(MyProActivity.this)
                 .inflate(R.layout.edit_name,null);
-            TextView dialogTitle = dialogView.findViewById(R.id.tv_nick_name);
+
+            TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+            TextView dialogTitleIden = dialogView.findViewById(R.id.tv_ide);
+        if(i==0){
+            dialogTitleName.setVisibility(View.VISIBLE);
+            dialogTitleIden.setVisibility(View.GONE);
+        }else{
+            dialogTitleName.setVisibility(View.GONE);
+            dialogTitleIden.setVisibility(View.VISIBLE);
+        }
             //normalDialog.setTitle("编辑昵称");
            final EditText ed = dialogView.findViewById(R.id.edit_name);
             normalDialog.setView(dialogView);
@@ -586,13 +602,21 @@ public class MyProActivity extends Activity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            nickName = ed.getText().toString();
-                            text_name.setText(nickName);
-                            commitSelf(Constants.MODIFY_NAME,"nickName",nickName);
-                            infoData.setNickName(nickName);
-                            DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                            //发送事件
-                            EventBus.getDefault().post(new StringEvent(nickName,100));
+                            if(i==0){
+                                nickName = ed.getText().toString();
+                                text_name.setText(nickName);
+                                commitSelf(Constants.MODIFY_NAME,"nickName",nickName);
+                                infoData.setNickName(nickName);
+                                DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                                //发送事件
+                                EventBus.getDefault().post(new StringEvent(nickName,100));
+                            }else{
+                                iden = ed.getText().toString();
+                                tv_identity.setText(iden);
+                                commitSelf(Constants.MODIFY_IDENTIFY,"identityCard",iden);
+                                infoData.setIdentity_card(iden);
+                                DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                            }
                         }
                     });
             normalDialog.setNegativeButton("关闭",

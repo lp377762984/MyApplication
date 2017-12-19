@@ -20,6 +20,7 @@ public class Constants {
     public static final String MODIFY_GENDER = HOST+"user/modifyGender";//修改性别
     public static final String MODIFY_HEIGHT = HOST+"user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST+"user/modifyWeight";//修改身高
+    public static final String MODIFY_IDENTIFY = HOST+"user/modifyIdentityCard";//修改身份证
     public static final String BRANCH = HOST+"branch";//获取门店列表
     public static final String JOINBRANCH = HOST+"branch/join";//加入或者取消门店
     public static final String GETMENUS = HOST+"appRoleFunction/getMenus";//获取菜单权限
