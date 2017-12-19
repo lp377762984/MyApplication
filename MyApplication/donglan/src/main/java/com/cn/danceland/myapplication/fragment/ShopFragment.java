@@ -6,8 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -25,16 +23,15 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
+import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
@@ -48,7 +45,6 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,6 +295,13 @@ public class ShopFragment extends BaseFragment {
                 if(data.get(i).getId()==1){
                     //id为1,表示在线售卡
                     startActivity(new Intent(mActivity, SellCardActivity.class));
+                }
+                switch(data.get(i).getId()){
+                case 2://我的会员卡
+                    startActivity(new Intent(mActivity, MyCardActivity.class));
+                break;
+                default:
+                break;
                 }
             }
 

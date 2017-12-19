@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.Receiver;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -24,6 +23,11 @@ public class MessageReceiver extends PushMessageReceiver {
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
         LogUtil.e("zzf",message.getContent());
 
+    }
+
+    @Override
+    public void onNotificationMessageArrived(Context context, MiPushMessage miPushMessage) {
+        super.onNotificationMessageArrived(context, miPushMessage);
     }
 
     @Override

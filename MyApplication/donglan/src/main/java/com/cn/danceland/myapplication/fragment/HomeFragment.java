@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -162,7 +163,7 @@ public class HomeFragment extends BaseFragment {
         int w_screen = dm.widthPixels;
         int h_screen = dm.heightPixels;
         // 1、设置固定大小
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(w_screen, w_screen*9/16);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(w_screen, w_screen*9/16);
 //        // 设置包裹内容或者填充父窗体大小
 //        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
 //                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
