@@ -1,10 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -14,17 +17,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -79,29 +85,33 @@ public class PublishActivity extends Activity {
     TextView publish_cancel;
     TextView publish_ok;
     EditText publish_status;
-    RelativeLayout publish_photo;
+    RelativeLayout publish_photo,rl_video;
     TextView publish_location;
     TextView publish_share1;
-    List<String> arrayList;
+    List<String> arrayList = new ArrayList<String>();
     GridView grid_view;
     String location="";
     TextView location_img;
     Map<String,File> arrayFileMap;
     String videoPath,videoUrl;
+    String cameraPath;
     final static int CAPTURE_VIDEO_CODE = 100;
     static String SAVED_IMAGE_DIR_PATH =
             Environment.getExternalStorageDirectory().getPath()
                     + "/donglan/camera/";// 拍照路径
+    static String SAVED_IMAGE_PATH = Environment.getExternalStorageDirectory().getPath()
+            + "/DCIM/Donglan/";
     String stringstatus = "";
     //LocationClient mLocationClient;
     Gson gson;
     RequestQueue queue;
-    ImageView videoimg;
+    Button videoimg;
     String picUrl,vedioUrl;
     String isPhoto;
     File picFile,videoFile;
     public static Handler handler;
     ArrayList<String> arrImgUrl;
+    Uri uri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,7 +180,7 @@ public class PublishActivity extends Activity {
     }
 
     private void setOnclick() {
-        publish_photo.setOnClickListener(onClickListener);
+        //publish_photo.setOnClickListener(onClickListener);
         publish_location.setOnClickListener(onClickListener);
         location_img.setOnClickListener(onClickListener);
         publish_ok.setOnClickListener(onClickListener);
@@ -183,12 +193,22 @@ public class PublishActivity extends Activity {
         publish_ok.setClickable(true);
         location_img = findViewById(R.id.location_img);
         publish_status = findViewById(R.id.publish_status);
-        publish_photo = findViewById(R.id.publish_photo);
+        //publish_photo = findViewById(R.id.publish_photo);
         publish_location = findViewById(R.id.publish_location);
         publish_share1 = findViewById(R.id.publish_share1);
+        SPUtils.setInt("imgN",0);
         grid_view = findViewById(R.id.grid_view);
-        videoimg = findViewById(R.id.videoimg);
-        videoimg.setOnClickListener(onClickListener);
+        grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+//        videoimg = findViewById(R.id.videoimg);
+//        videoimg.setOnClickListener(onClickListener);
+//        rl_video = findViewById(R.id.rl_video);
+//        if("0".equals(isPhoto)){
+//            rl_video.setVisibility(View.GONE);
+//            grid_view.setVisibility(View.VISIBLE);
+//        }else{
+//            rl_video.setVisibility(View.VISIBLE);
+//            grid_view.setVisibility(View.GONE);
+//        }
         grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -198,19 +218,22 @@ public class PublishActivity extends Activity {
 
     }
     public void getPic(){
-        Matisse.from(PublishActivity.this)
-                .choose(MimeType.allOf()) // 选择 mime 的类型
-                .countable(true)
-                .capture(true)
-                .captureStrategy(
-                        new CaptureStrategy(true, "com.cn.danceland.myapplication.Receiver.MyFileProvider"))
-                .maxSelectable(9) // 图片选择的最多数量
-                .theme(R.style.imgsStyle)
-                //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f) // 缩略图的比例
-                .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
-                .forResult(0); // 设置作为标记的请求码
+        int m = SPUtils.getInt("imgN",0);
+        if(m<=9){
+            Matisse.from(PublishActivity.this)
+                    .choose(MimeType.allOf()) // 选择 mime 的类型
+                    .countable(true)
+//                .capture(true)
+//                .captureStrategy(
+//                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
+                    .maxSelectable(9-m) // 图片选择的最多数量
+                    .theme(R.style.imgsStyle)
+                    //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                    .thumbnailScale(0.85f) // 缩略图的比例
+                    .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
+                    .forResult(100); // 设置作为标记的请求码
+        }
 
     }
 
@@ -218,18 +241,18 @@ public class PublishActivity extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.publish_photo:
-                    if("0".equals(isPhoto)){
-                        getPic();
-                    }else{
-                        Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-                        startActivityForResult(intentr,111);
-                    }
-                    break;
-                case R.id.videoimg:
-                    Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-                    startActivityForResult(intentr,111);
-                    break;
+//                case R.id.publish_photo:
+//                    if("0".equals(isPhoto)){
+//                        showListDialog();
+//                    }else{
+//                        Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+//                        startActivityForResult(intentr,111);
+//                    }
+//                    break;
+//                case R.id.videoimg:
+//                    Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+//                    startActivityForResult(intentr,111);
+//                    break;
                 case R.id.location_img:
                     Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent1,1);
@@ -361,18 +384,62 @@ public class PublishActivity extends Activity {
         }
     };
 
-    /**
-     * 获得视频的缩略图
-     *
-     *
-     */
-    public Bitmap getBitmap(String imgPath) {
-
-        Bitmap bp = ThumbnailUtils.createVideoThumbnail(imgPath,
-                MediaStore.Video.Thumbnails.MINI_KIND);
-        return bp;
+    private void showListDialog() {
+        final String[] items = { "拍照","从相册选择"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(PublishActivity.this);
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==0){
+                    if(SPUtils.getInt("imgN",0)<9){
+                        showCamera();
+                    }else{
+                        ToastUtils.showToastShort("最多选择9张图片");
+                    }
+                }else{
+                    getPic();
+                }
+            }
+        });
+        listDialog.show();
     }
 
+    private void showCamera(){
+// 指定相机拍摄照片保存地址
+        String state = Environment.getExternalStorageState();
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            cameraPath = Environment.getExternalStorageDirectory().getPath()
+                    + "/DCIM/Donglan/" + System.currentTimeMillis() + ".png";
+            Intent intent = new Intent();
+            // 指定开启系统相机的Action
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            String out_file_path = SAVED_IMAGE_PATH;
+            File dir = new File(out_file_path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            } // 把文件地址转换成Uri格式
+            if(PictureUtil.getSDKV()<24){
+                uri = Uri.fromFile(new File(cameraPath));
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, 99);
+            }else{
+                // 设置系统相机拍摄照片完成后图片文件的存放地址
+                ContentValues contentValues = new ContentValues(1);
+                contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
+                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, 99);
+            }
+            //uri = Uri.fromFile(new File(cameraPath));
+
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "请确认已经插入SD卡",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
 
     public void commitUrl(final String str) throws JSONException {
 
@@ -412,37 +479,40 @@ public class PublishActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==0 && resultCode == RESULT_OK){
+        if(requestCode==100 && resultCode == RESULT_OK){
             if(data!=null){
 //                arrayList = data.getStringArrayListExtra("arrPath");
                 List<Uri> uris = Matisse.obtainResult(data);
-                arrayList = new ArrayList<String>();
+
                 if(uris!=null){
                     for(int i = 0;i<uris.size();i++){
                         arrayList.add(PictureUtil.getRealPath(getApplicationContext(),uris.get(i)));
                     }
-                    if(arrayList!=null&&arrayList.size()!=0){
-                        publish_photo.setVisibility(View.GONE);
-                    }else{
-                        publish_photo.setVisibility(View.VISIBLE);
-                    }
+                    SPUtils.setInt("imgN",arrayList.size()+SPUtils.getInt("imgN",0));
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
                 }
 
             }
+        }else if(requestCode==99&&resultCode == RESULT_OK){
+            arrayList.add(cameraPath);
+            SPUtils.setInt("imgN",arrayList.size()+SPUtils.getInt("imgN",0));
+            grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
                 publish_location.setText(location);
         }else if(resultCode == 111){
             videoPath = data.getStringExtra("videoPath");
+            arrayList.clear();
             if(videoPath!=null){
                 MediaMetadataRetriever media = new MediaMetadataRetriever();
                 media.setDataSource(videoPath);
                 Bitmap frameAtTime = media.getFrameAtTime();
                 picFile = saveBitmapFile(frameAtTime);
-                videoimg.setImageBitmap(frameAtTime);
-                publish_photo.setVisibility(View.GONE);
-                videoimg.setVisibility(View.VISIBLE);
+                arrayList.add(picFile.getAbsolutePath());
+                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+//                videoimg.setBackground(new BitmapDrawable(frameAtTime));
+//                //publish_photo.setVisibility(View.GONE);
+//                videoimg.setVisibility(View.VISIBLE);
             }
 
         }
@@ -473,18 +543,20 @@ public class PublishActivity extends Activity {
 
         LayoutInflater mInflater;
         Context context;
-        List<String> arrayList;
+        List<String> arrayLists;
+        int imgN;
 
         SmallGridAdapter(Context context,List<String> asList){
+            imgN = SPUtils.getInt("imgN",0);
             this.context = context;
-            arrayList = asList;
+            arrayLists = asList;
             mInflater = LayoutInflater.from(context);
         }
 
 
         @Override
         public int getCount() {
-            return arrayList.size();
+            return arrayLists.size()+1;
         }
 
         @Override
@@ -498,23 +570,64 @@ public class PublishActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder=null;
             if(convertView==null){
                 viewHolder = new ViewHolder();
                 convertView = mInflater.inflate(R.layout.images_item, null);
                 viewHolder.img = convertView.findViewById(R.id.image_item);
+                viewHolder.rl_item = convertView.findViewById(R.id.rl_item);
+                viewHolder.pl_sta = convertView.findViewById(R.id.pl_sta);
                 viewHolder.item_select = convertView.findViewById(R.id.item_select);
                 viewHolder.item_select.setVisibility(View.GONE);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            viewHolder.img.setMaxHeight(windowManager.getDefaultDisplay().getWidth()/4);
-            viewHolder.img.setMaxWidth(windowManager.getDefaultDisplay().getWidth()/4);
-            Glide.with(context).load(arrayList.get(position)).into(viewHolder.img);
-            //viewHolder.img.setImageBitmap(PictureUtil.getSmallBitmap(arrayList.get(position),windowManager.getDefaultDisplay().getWidth()/4,windowManager.getDefaultDisplay().getWidth()/4));
+
+            if("0".equals(isPhoto)){
+                if(arrayLists.size()==0){
+                    viewHolder.pl_sta.setVisibility(View.VISIBLE);
+                }else{
+                    if(position<arrayLists.size()){
+                        Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
+                        viewHolder.pl_sta.setVisibility(View.GONE);
+                    }else if(position==arrayLists.size()){
+                        viewHolder.pl_sta.setVisibility(View.VISIBLE);
+                    }
+                }
+            }else {
+                if(arrayLists.size()==0){
+                    viewHolder.pl_sta.setVisibility(View.VISIBLE);
+                }else{
+                    if(position<arrayLists.size()){
+                        Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
+                        viewHolder.pl_sta.setVisibility(View.GONE);
+                    }else if(position==arrayLists.size()){
+                        viewHolder.rl_item.setVisibility(View.GONE);
+                    }
+                }
+            }
+            viewHolder.img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(imgN<=9){
+                        LogUtil.e("zzf",imgN+"");
+                        if(position<=arrayLists.size()){
+                            if("0".equals(isPhoto)){
+                                showListDialog();
+                            }else{
+                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+                                startActivityForResult(intentr,111);
+                            }
+                        }
+                    }else{
+                        ToastUtils.showToastShort("最多选择9张图片");
+                    }
+
+                }
+            });
+
 
             return convertView;
         }
@@ -522,6 +635,8 @@ public class PublishActivity extends Activity {
 
     class ViewHolder{
         ImageView img,item_select;
+        TextView pl_sta;
+        RelativeLayout rl_item;
     }
 
 }
