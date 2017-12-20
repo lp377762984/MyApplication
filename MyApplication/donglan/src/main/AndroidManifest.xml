@@ -149,6 +149,8 @@
         <activity
             android:name=".activity.MyCardActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.OrderConfirmActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

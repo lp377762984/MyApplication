@@ -67,6 +67,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
     private MyPopupListAdapter myPopupListAdapter;
     private ListPopup listPopup;
+    private boolean isme = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,7 +160,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                         et_name.setVisibility(View.GONE);
                         tv_select_date.setVisibility(View.VISIBLE);
                         tv_select_counselor.setVisibility(View.VISIBLE);
-
+                        isme=true;
 
                         break;
                     case R.id.rbtn_other:
@@ -168,7 +169,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                         et_name.setVisibility(View.VISIBLE);
                         tv_select_date.setVisibility(View.GONE);
                         tv_select_counselor.setVisibility(View.GONE);
-
+                        isme=false;
 
                         break;
                     default:
@@ -234,7 +235,6 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 //    }
 
 
-
     class ListPopup extends BasePopupWindow {
 
 
@@ -260,7 +260,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         @Override
         public View onCreatePopupView() {
 
-          //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
+            //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
             return createPopupById(R.layout.popup_list_consultant);
 
         }
@@ -367,6 +367,11 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
                 break;
             case R.id.btn_commit://全款支付
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cardinfo", CardsInfo);
+                bundle.putBoolean("isme",isme);
+                startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
 
                 break;
             case R.id.btn_dj_commit://支付定金
