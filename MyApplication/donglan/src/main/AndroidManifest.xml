@@ -70,21 +70,6 @@
         <activity android:name=".pictureviewer.ImagePagerActivity"/>
         <activity android:name=".activity.ResetPhoneActivity"
             android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".activity.ConfirmPasswordActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ImagesActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PublishActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.LocationActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MapActivity"
-            android:screenOrientation="portrait" />
         <activity android:name=".activity.ConfirmPasswordActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ImagesActivity"
@@ -105,8 +90,33 @@
             android:process=":remote"></service>
 
 
-        <activity android:name=".activity.OrderConfirmActivity"
+        <activity android:name=".activity.AddFriendsActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.UserHomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellCardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellCardConfirmActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessManActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AboutUsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.RecordView"
+            />
+        <activity android:name=".activity.DynHomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.UserListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ShopDetailedActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CommentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.NewsDetailsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MyShopActivity"
+    android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"
@@ -144,7 +154,7 @@
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.cn.danceland.myapplication.fileprovider"
-            android:exported="false"
+            android:exported="true"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
