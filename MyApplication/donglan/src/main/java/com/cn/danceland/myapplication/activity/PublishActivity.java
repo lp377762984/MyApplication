@@ -199,16 +199,7 @@ public class PublishActivity extends Activity {
         SPUtils.setInt("imgN",0);
         grid_view = findViewById(R.id.grid_view);
         grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
-//        videoimg = findViewById(R.id.videoimg);
-//        videoimg.setOnClickListener(onClickListener);
-//        rl_video = findViewById(R.id.rl_video);
-//        if("0".equals(isPhoto)){
-//            rl_video.setVisibility(View.GONE);
-//            grid_view.setVisibility(View.VISIBLE);
-//        }else{
-//            rl_video.setVisibility(View.VISIBLE);
-//            grid_view.setVisibility(View.GONE);
-//        }
+
         grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -241,18 +232,6 @@ public class PublishActivity extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-//                case R.id.publish_photo:
-//                    if("0".equals(isPhoto)){
-//                        showListDialog();
-//                    }else{
-//                        Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-//                        startActivityForResult(intentr,111);
-//                    }
-//                    break;
-//                case R.id.videoimg:
-//                    Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-//                    startActivityForResult(intentr,111);
-//                    break;
                 case R.id.location_img:
                     Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
                     startActivityForResult(intent1,1);
@@ -291,11 +270,6 @@ public class PublishActivity extends Activity {
                                             }
                                         }
 
-//                                        publishBean.setContent(stringstatus);
-//                                        publishBean.setPublishPlace(location);
-//                                        if(arrImgUrl!=null&&arrImgUrl.size()>0){
-//                                            publishBean.setImgList(arrImgUrl);
-//                                        }
                                         Message message = new Message();
                                         message.what = 2;
                                         handler.sendMessage(message);
