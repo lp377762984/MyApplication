@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -76,6 +77,7 @@ public  class PictureUtil {
         }
     }
 
+
     public static String getImageAbsolutePath(Context context, Uri imageUri) {
         if (context == null || imageUri == null)
             return null;
@@ -109,6 +111,7 @@ public  class PictureUtil {
             }
         } // MediaStore (and general)
         else if ("content".equalsIgnoreCase(imageUri.getScheme())) {
+
             // Return the remote address
             if (isGooglePhotosUri(imageUri))
                 return imageUri.getLastPathSegment();

@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -64,10 +66,12 @@ public class ShopFragment extends BaseFragment {
     List<MenusBean.Data> data;
     LinearLayout ll_top;
     TextView tv_shopname;
+    View v;
 
     @Override
     public View initViews() {
-        View v = View.inflate(mActivity, R.layout.fragment_shop, null);
+
+        v = View.inflate(mActivity, R.layout.fragment_shop, null);
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
@@ -78,39 +82,36 @@ public class ShopFragment extends BaseFragment {
         ibtn_gps = v.findViewById(R.id.ibtn_gps);
 
         ll_top = v.findViewById(R.id.ll_top);
-
-        tv_shopname = v.findViewById(R.id.tv_shopname);
-
-
-        mGridView.setOnItemClickListener(new MyOnItemClickListener());
-
-        storelist = v.findViewById(R.id.storelist);
-        if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
-            mGridView.setVisibility(View.VISIBLE);
-//            ibtn_call.setVisibility(View.VISIBLE);
-//            ibtn_gps.setVisibility(View.VISIBLE);
-            storelist.setVisibility(View.GONE);
-            ll_top.setVisibility(View.VISIBLE);
-            getMenus();
-            getShop(info.getDefault_branch());
-
-        }else{
-            ll_top.setVisibility(View.GONE);
-            mGridView.setVisibility(View.GONE);
-            storelist.setVisibility(View.VISIBLE);
-//            ibtn_call.setVisibility(View.GONE);
-//            ibtn_gps.setVisibility(View.GONE);
-            getListData();
-
-        }
         ll_top.setBackgroundColor(Color.WHITE);
         ll_top.getBackground().setAlpha(80);
+        tv_shopname = v.findViewById(R.id.tv_shopname);
+
+        mGridView.setOnItemClickListener(new MyOnItemClickListener());
+        storelist = v.findViewById(R.id.storelist);
+        initData();
+
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
         tv_shopname.setOnClickListener(this);
        // mGridView.setVisibility(View.VISIBLE);
 
         return v;
+    }
+
+    public void initData(){
+        if(info.getDefault_branch()!=null&&!info.getDefault_branch().equals("")){
+            getMenus();
+            getShop(info.getDefault_branch());
+            mGridView.setVisibility(View.VISIBLE);
+            storelist.setVisibility(View.GONE);
+            ll_top.setVisibility(View.VISIBLE);
+        }else{
+            getListData();
+            ll_top.setVisibility(View.GONE);
+            mGridView.setVisibility(View.GONE);
+            storelist.setVisibility(View.VISIBLE);
+
+        }
     }
 
     private void getShop(String shopID) {
@@ -217,7 +218,8 @@ public class ShopFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         if(!hidden){
-            initViews();
+            info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            initData();
         }
     }
 
