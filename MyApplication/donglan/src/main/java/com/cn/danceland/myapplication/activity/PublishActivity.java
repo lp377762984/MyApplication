@@ -469,7 +469,7 @@ public class PublishActivity extends Activity {
             }
         }else if(requestCode==99&&resultCode == RESULT_OK){
             arrayList.add(cameraPath);
-            SPUtils.setInt("imgN",arrayList.size()+SPUtils.getInt("imgN",0));
+            SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
             grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
