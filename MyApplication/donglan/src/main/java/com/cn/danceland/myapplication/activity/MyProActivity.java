@@ -10,10 +10,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -47,7 +48,6 @@ import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -57,9 +57,7 @@ import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,10 +76,10 @@ public class MyProActivity extends Activity {
     MyAdapter arrayAdapter;
 
     PopupWindow head_image_window;
-    View headView,rootview,sexView;
+    View headView, rootview, sexView;
     ImageView back;
     int flag;
-    Uri uri,mCutUri;
+    Uri uri, mCutUri;
     ContentResolver resolver;
     public final static int ALBUM_REQUEST_CODE = 1;
     public final static int CROP_REQUEST = 2;
@@ -89,14 +87,14 @@ public class MyProActivity extends Activity {
     public static String SAVED_IMAGE_DIR_PATH =
             Environment.getExternalStorageDirectory().getPath()
                     + "/donglan/camera/";// 拍照路径
-    String cameraPath,gemder,nickName,selfAvatarPath,strHeight,strWeight,iden;
+
+    String cameraPath, gemder, nickName, selfAvatarPath, strHeight, strWeight, iden;
     Data infoData;
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout  headimage,name,sex,height,weight,rl_zone,rl_phone,identity;
-    TextView text_name,text_sex,photograph,photo_album,cancel,cancel1,male,female,tv_height
-            ,tv_weight,tv_zone,tv_phone,tv_identity,selecttitle,over,cancel_action,lo_cancel_action,over_action;
+    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity;
+    TextView text_name, text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
     View contentView;
     PopupWindow mPopWindow;
     ListView list_height;
@@ -104,11 +102,27 @@ public class MyProActivity extends Activity {
     PopupWindow locationWindow;
     LocationAdapter proAdapter, cityAdapter;
     int x = 999;
-    ArrayList<String> proList,cityList1;
+    ArrayList<String> proList, cityList1;
     ListView list_province, list_city;
     DBData dbData;
-    String zoneCode,mZoneCode;
-    List<Donglan> zoneArr,cityList;
+    String zoneCode, mZoneCode;
+    List<Donglan> zoneArr, cityList;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+
+                    Glide.with(MyProActivity.this).load(selfAvatarPath).into(circleImageView);
+                    file.delete();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +132,7 @@ public class MyProActivity extends Activity {
         setClick();
     }
 
-    public void initHost(){
+    public void initHost() {
         dbData = new DBData();
         gson = new Gson();
         resolver = getContentResolver();
@@ -126,17 +140,17 @@ public class MyProActivity extends Activity {
         queue = Volley.newRequestQueue(MyProActivity.this);
         zoneCode = infoData.getZoneCode();
         zoneArr = new ArrayList<Donglan>();
-        if(zoneCode!=null&&!"".equals(zoneCode)){
+        if (zoneCode != null && !"".equals(zoneCode)) {
             zoneArr = dbData.queryCityValue(zoneCode);
         }
         initLocationData();
     }
 
-    public void initView(){
+    public void initView() {
 
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
-        if(infoData.getSelfAvatarPath()!=null&&!infoData.getSelfAvatarPath().equals("")){
+        if (infoData.getSelfAvatarPath() != null && !infoData.getSelfAvatarPath().equals("")) {
             Glide.with(MyProActivity.this).load(infoData.getSelfAvatarPath()).into(circleImageView);
         }
         text_name = findViewById(R.id.text_name);
@@ -158,21 +172,21 @@ public class MyProActivity extends Activity {
         if (!TextUtils.isEmpty(infoData.getPhone())) {
             tv_phone.setText(infoData.getPhone());
         }
-        if(infoData.getIdentity_card()!=null){
+        if (infoData.getIdentity_card() != null) {
             tv_identity.setText(infoData.getIdentity_card());
         }
 
-        if(infoData.getHeight()!=null){
-            tv_height.setText(infoData.getHeight()+" cm");
+        if (infoData.getHeight() != null) {
+            tv_height.setText(infoData.getHeight() + " cm");
         }
-        if(infoData.getWeight()!=null){
-            tv_weight.setText(infoData.getWeight()+" kg");
+        if (infoData.getWeight() != null) {
+            tv_weight.setText(infoData.getWeight() + " kg");
         }
 
 
-        if("1".equals(infoData.getGender())){
+        if ("1".equals(infoData.getGender())) {
             text_sex.setText("男");
-        }else {
+        } else {
             text_sex.setText("女");
         }
         text_name.setText(infoData.getNickName());
@@ -183,7 +197,7 @@ public class MyProActivity extends Activity {
         photo_album = headView.findViewById(R.id.photo_album);
         cancel = headView.findViewById(R.id.cancel);
 
-        contentView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowsingle,null);
+        contentView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowsingle, null);
         mPopWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         list_height = contentView.findViewById(R.id.list_height);
@@ -200,13 +214,13 @@ public class MyProActivity extends Activity {
         over_action = locationView.findViewById(R.id.over_action);
         list_province = locationView.findViewById(R.id.list_province);
         list_city = locationView.findViewById(R.id.list_city);
-        if(zoneArr.size()>0){
-            tv_zone.setText(zoneArr.get(0).getProvince()+" "+zoneArr.get(0).getCity());
+        if (zoneArr.size() > 0) {
+            tv_zone.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
             zoneArr.clear();
         }
     }
 
-    public void setClick(){
+    public void setClick() {
         headimage.setOnClickListener(onClickListener);
         name.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
@@ -224,29 +238,31 @@ public class MyProActivity extends Activity {
         rl_phone.setOnClickListener(onClickListener);
         identity.setOnClickListener(onClickListener);
     }
-    public void dismissWindow(){
-        if(null != head_image_window && head_image_window.isShowing()){
+
+    public void dismissWindow() {
+        if (null != head_image_window && head_image_window.isShowing()) {
             head_image_window.dismiss();
         }
-        if(null != mPopWindow && mPopWindow.isShowing()){
+        if (null != mPopWindow && mPopWindow.isShowing()) {
             mPopWindow.dismiss();
         }
         if (null != locationWindow && locationWindow.isShowing()) {
             locationWindow.dismiss();
         }
     }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             int id = view.getId();
-            switch (id){
-                case R.id.head_image:{
+            switch (id) {
+                case R.id.head_image: {
                     flag = 0;
                     dismissWindow();
                     showEditImage();
                     showPop();
                 }
-                    break;
+                break;
                 case R.id.lo_cancel_action:
                     dismissWindow();
                     break;
@@ -265,77 +281,77 @@ public class MyProActivity extends Activity {
                     selecttitle.setText("选择体重");
                     break;
                 case R.id.over:
-                    if(x==0){
+                    if (x == 0) {
                         infoData.setHeight(strHeight);
-                        commitSelf(Constants.MODIFY_HEIGHT,"height",strHeight);
-                    }else if(x==1){
+                        commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
+                    } else if (x == 1) {
                         infoData.setWeight(strWeight);
-                        commitSelf(Constants.MODIFY_WEIGHT,"weight",strWeight);
+                        commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
                     }
-                    DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                     dismissWindow();
                     break;
                 case R.id.cancel_action:
                     dismissWindow();
                     break;
-                case R.id.name:{
+                case R.id.name: {
                     showName(0);
                 }
-                    break;
-                case R.id.sex:{
+                break;
+                case R.id.sex: {
                     flag = 1;
                     dismissWindow();
                     showSex();
                     showPop();
                 }
-                    break;
+                break;
                 case R.id.cancel:
-                    if(flag==0){
+                    if (flag == 0) {
                         dismissWindow();
-                    }else if(flag==1){
+                    } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("女");
                         infoData.setGender("2");
-                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        commitSelf(Constants.MODIFY_GENDER,"gender","2");
+                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                        commitSelf(Constants.MODIFY_GENDER, "gender", "2");
                     }
                     break;
                 case R.id.photo_album:
-                    if(flag==0){
+                    if (flag == 0) {
                         dismissWindow();
                         photoAlbum();
-                    }else if(flag==1){
+                    } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("男");
                         infoData.setGender("1");
-                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        commitSelf(Constants.MODIFY_GENDER,"gender","1");
+                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                        commitSelf(Constants.MODIFY_GENDER, "gender", "1");
                     }
                     break;
                 case R.id.photograph:
-                    if(flag==0){
+                    if (flag == 0) {
                         dismissWindow();
                         photoGraph();
-                    }else{
+                    } else {
                         break;
                     }
                     break;
                 case R.id.back:
                     Intent intent = new Intent();
-                    intent.putExtra("selfAvatarPath",selfAvatarPath);
-                    setResult(99,intent);
+                    intent.putExtra("selfAvatarPath", selfAvatarPath);
+                    setResult(99, intent);
                     finish();
                     break;
                 case R.id.over_action:
-                    if("".equals(mZoneCode)||mZoneCode==null){
+                    if ("".equals(mZoneCode) || mZoneCode == null) {
                         ToastUtils.showToastShort("请选择城市");
-                    }else{
+                    } else {
                         infoData.setZoneCode(mZoneCode);
-                        DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                        if(mZoneCode.contains(".0")){
-                            commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode.replace(".0",""));
-                        }else{
-                            commitSelf(Constants.MODIFY_ZONE,"zoneCode",mZoneCode);
+                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                        if (mZoneCode.contains(".0")) {
+                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode.replace(".0", ""));
+                        } else {
+                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode);
                         }
 
                         dismissWindow();
@@ -375,6 +391,7 @@ public class MyProActivity extends Activity {
         });
         dialog.show();
     }
+
     public void showLocation() {
 
         locationWindow.setContentView(locationView);
@@ -387,13 +404,13 @@ public class MyProActivity extends Activity {
                 String pro = proList.get(position);
                 tv_zone.setText(pro);
                 List<Donglan> queryPro = dbData.queryPro(pro);
-                mZoneCode="";
+                mZoneCode = "";
                 cityList1 = new ArrayList<String>();
-                for(int i=0;i<queryPro.size();i++){
+                for (int i = 0; i < queryPro.size(); i++) {
                     cityList1.add(queryPro.get(i).getCity());
                 }
                 //ArrayList<String> cityList = proCityMap.get(pro);
-                if(cityList1!=null&&cityList1.size()>0){
+                if (cityList1 != null && cityList1.size() > 0) {
                     cityAdapter = new LocationAdapter(cityList1, MyProActivity.this);
                     list_city.setAdapter(cityAdapter);
                 }
@@ -404,7 +421,7 @@ public class MyProActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String city = cityList1.get(position);
                 mZoneCode = dbData.queryCity(city).get(0).getCityValue();
-                tv_zone.setText(tv_zone.getText().toString().split(" ")[0]+" "+city);
+                tv_zone.setText(tv_zone.getText().toString().split(" ")[0] + " " + city);
             }
         });
 
@@ -414,17 +431,17 @@ public class MyProActivity extends Activity {
 
     }
 
-    public void initLocationData(){
+    public void initLocationData() {
         cityList = dbData.getCityList();
         //省份列表
         proList = new ArrayList<String>();
-        if(cityList!=null&&cityList.size()>0){
-            for(int i=0;i<cityList.size();i++){
+        if (cityList != null && cityList.size() > 0) {
+            for (int i = 0; i < cityList.size(); i++) {
                 //城市名字为key，城市代码为value
                 String prokey = cityList.get(i).getProvince();
                 proList.add(prokey);
-                for(int m=0;m<proList.size()-1;m++){
-                    if(proList.get(m).equals(proList.get(m+1))){
+                for (int m = 0; m < proList.size() - 1; m++) {
+                    if (proList.get(m).equals(proList.get(m + 1))) {
                         proList.remove(m);
                         m--;
                     }
@@ -434,6 +451,7 @@ public class MyProActivity extends Activity {
         }
 
     }
+
     public class LocationAdapter extends BaseAdapter {
 
         ArrayList<String> arrayList;
@@ -471,36 +489,36 @@ public class MyProActivity extends Activity {
         }
     }
 
-    public void showSelectorWindow(int x){
+    public void showSelectorWindow(int x) {
         final int j = x;
         mPopWindow.setContentView(contentView);
         //显示PopupWindow
 
-        String[] str  = new String[71];
+        String[] str = new String[71];
         Integer[] str1 = new Integer[165];
         final ArrayList<String> arHeight = new ArrayList<String>();
         int n;
-        if(j==0){
-            for(int i = 0;i<71;i++){
-                n = 150+i;
-                str[i] = n+"";
+        if (j == 0) {
+            for (int i = 0; i < 71; i++) {
+                n = 150 + i;
+                str[i] = n + "";
             }
             Arrays.sort(str);
-            for(int z = 0;z<str.length;z++){
+            for (int z = 0; z < str.length; z++) {
                 arHeight.add(str[z]);
             }
-        }else {
-            for(int y=0;y<165;y++){
-                n = 35+y;
+        } else {
+            for (int y = 0; y < 165; y++) {
+                n = 35 + y;
                 str1[y] = n;
             }
             Arrays.sort(str1);
-            for(int z = 0;z<str1.length;z++){
-                arHeight.add(str1[z]+"");
+            for (int z = 0; z < str1.length; z++) {
+                arHeight.add(str1[z] + "");
             }
         }
 
-        arrayAdapter = new MyAdapter(arHeight,this);
+        arrayAdapter = new MyAdapter(arHeight, this);
         list_height.setAdapter(arrayAdapter);
 
         //mPopWindow.showAsDropDown(identity,0,40);
@@ -510,25 +528,28 @@ public class MyProActivity extends Activity {
         list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(j==0){
-                    tv_height.setText(arHeight.get(i)+" cm");
-                    strHeight = arHeight.get(i)+"";
-                }else{
-                    tv_weight.setText(arHeight.get(i)+" kg");
-                    strWeight = arHeight.get(i)+"";
+                if (j == 0) {
+                    tv_height.setText(arHeight.get(i) + " cm");
+                    strHeight = arHeight.get(i) + "";
+                } else {
+                    tv_weight.setText(arHeight.get(i) + " kg");
+                    strWeight = arHeight.get(i) + "";
                 }
             }
         });
 
     }
+
     public class MyAdapter extends BaseAdapter {
 
         ArrayList<String> arrayList;
         LayoutInflater inflater = null;
-        public MyAdapter(ArrayList<String> list, Context context){
+
+        public MyAdapter(ArrayList<String> list, Context context) {
             arrayList = list;
             inflater = LayoutInflater.from(context);
         }
+
         @Override
         public int getCount() {
             return arrayList.size();
@@ -547,8 +568,8 @@ public class MyProActivity extends Activity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             TextView item_text = null;
-            if(view==null){
-                view  = inflater.inflate(R.layout.selector_item,null);
+            if (view == null) {
+                view = inflater.inflate(R.layout.selector_item, null);
             }
             item_text = view.findViewById(R.id.item_text);
             item_text.setText(arrayList.get(i));
@@ -556,7 +577,7 @@ public class MyProActivity extends Activity {
         }
     }
 
-    public void showPop(){
+    public void showPop() {
         head_image_window = new PopupWindow(headView,
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         head_image_window.setOutsideTouchable(true);
@@ -568,76 +589,77 @@ public class MyProActivity extends Activity {
 
     }
 
-    public void showEditImage(){
-        if(null != head_image_window && head_image_window.isShowing()){
+    public void showEditImage() {
+        if (null != head_image_window && head_image_window.isShowing()) {
             head_image_window.dismiss();
         }
         photograph.setText("拍照");
-        photograph.setTextColor(Color.rgb(46,167,224));
+        photograph.setTextColor(Color.rgb(46, 167, 224));
         photo_album.setText("从手机相册选择");
         cancel.setText("取消");
         //cancel1.setVisibility(View.GONE);
     }
 
-    public void showName(final int i){
-            //i==0是编辑昵称i==1表示身份证
-            AlertDialog.Builder normalDialog =
-                    new AlertDialog.Builder(MyProActivity.this);
-            View dialogView = LayoutInflater.from(MyProActivity.this)
-                .inflate(R.layout.edit_name,null);
+    public void showName(final int i) {
+        //i==0是编辑昵称i==1表示身份证
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(MyProActivity.this);
+        View dialogView = LayoutInflater.from(MyProActivity.this)
+                .inflate(R.layout.edit_name, null);
 
-            TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
-            TextView dialogTitleIden = dialogView.findViewById(R.id.tv_ide);
-        if(i==0){
+        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+        TextView dialogTitleIden = dialogView.findViewById(R.id.tv_ide);
+        if (i == 0) {
             dialogTitleName.setVisibility(View.VISIBLE);
             dialogTitleIden.setVisibility(View.GONE);
-        }else{
+        } else {
             dialogTitleName.setVisibility(View.GONE);
             dialogTitleIden.setVisibility(View.VISIBLE);
         }
-            //normalDialog.setTitle("编辑昵称");
-           final EditText ed = dialogView.findViewById(R.id.edit_name);
-            normalDialog.setView(dialogView);
-            normalDialog.setPositiveButton("确定",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(i==0){
-                                nickName = ed.getText().toString();
-                                text_name.setText(nickName);
-                                commitSelf(Constants.MODIFY_NAME,"nickName",nickName);
-                                infoData.setNickName(nickName);
-                                DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                                //发送事件
-                                EventBus.getDefault().post(new StringEvent(nickName,100));
-                            }else{
-                                iden = ed.getText().toString();
-                                tv_identity.setText(iden);
-                                commitSelf(Constants.MODIFY_IDENTIFY,"identityCard",iden);
-                                infoData.setIdentity_card(iden);
-                                DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
-                            }
+        //normalDialog.setTitle("编辑昵称");
+        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        normalDialog.setView(dialogView);
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (i == 0) {
+                            nickName = ed.getText().toString();
+                            text_name.setText(nickName);
+                            commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
+                            infoData.setNickName(nickName);
+                            DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                            //发送事件
+                            EventBus.getDefault().post(new StringEvent(nickName, 100));
+                        } else {
+                            iden = ed.getText().toString();
+                            tv_identity.setText(iden);
+                            commitSelf(Constants.MODIFY_IDENTIFY, "identityCard", iden);
+                            infoData.setIdentity_card(iden);
+                            DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
-                    });
-            normalDialog.setNegativeButton("关闭",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        normalDialog.setNegativeButton("关闭",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    });
-            // 显示
-            normalDialog.show();
+                    }
+                });
+        // 显示
+        normalDialog.show();
 
     }
-    public void commitSelf(String url, final String mapkey, final String mapvalue){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT,url , new Response.Listener<String>() {
+    public void commitSelf(String url, final String mapkey, final String mapvalue) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                if(s.contains("true")){
+                if (s.contains("true")) {
                     ToastUtils.showToastShort("修改成功！");
-                }else{
+                } else {
                     ToastUtils.showToastShort("修改失败！");
                 }
             }
@@ -646,18 +668,18 @@ public class MyProActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("修改失败！请检查网络");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put(mapkey,mapvalue);
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(mapkey, mapvalue);
                 return map;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
                 return map;
             }
@@ -666,17 +688,17 @@ public class MyProActivity extends Activity {
     }
 
 
-    public void showSex(){
-        if(null != head_image_window && head_image_window.isShowing()){
+    public void showSex() {
+        if (null != head_image_window && head_image_window.isShowing()) {
             head_image_window.dismiss();
         }
         photograph.setText("修改性别");
-        photograph.setTextColor(Color.rgb(153,153,153));
+        photograph.setTextColor(Color.rgb(153, 153, 153));
         photo_album.setText("男");
         cancel.setText("女");
     }
 
-    public void photoGraph (){
+    public void photoGraph() {
 
         // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
@@ -690,79 +712,99 @@ public class MyProActivity extends Activity {
             if (!dir.exists()) {
                 dir.mkdirs();
             } // 把文件地址转换成Uri格式
-            if(PictureUtil.getSDKV()<24){
+            if (PictureUtil.getSDKV() < 24) {
                 uri = Uri.fromFile(new File(cameraPath));
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
-            }else{
+            } else {
                 // 设置系统相机拍摄照片完成后图片文件的存放地址
                 ContentValues contentValues = new ContentValues(1);
                 contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
-                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
             //uri = Uri.fromFile(new File(cameraPath));
 
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "请确认已经插入SD卡",
                     Toast.LENGTH_LONG).show();
         }
     }
+
+    private File file = null;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             MultipartRequestParams params = new MultipartRequestParams();
-            File file = null;
+
             if (requestCode == CAMERA_REQUEST_CODE) {
-                startPhotoZoom(uri);
+                try {
+                    startPhotoZoom(uri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //   startPhotoZoom();
             }
-            if(requestCode == ALBUM_REQUEST_CODE){
-                startActivityForResult(CutForPhoto(data.getData()),10010);
+            if (requestCode == ALBUM_REQUEST_CODE) {
+                startActivityForResult(CutForPhoto(data.getData()), 10010);
 
             }
-            if(requestCode==10010){
+            if (requestCode == 10010) {
                 Glide.with(MyProActivity.this).load(mCutUri).into(circleImageView);
                 file = cutfile;
 
             }
-            if(requestCode==222){
-                Bundle extras = data.getExtras();
-                if (extras != null) {
-                    Bitmap photo = extras.getParcelable("data");
-                    File fileCut = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
-                    //LogUtil.e("zzf",fileCut.toString());
-                    file = fileCut;
-                    try{
-                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileCut));
-                        photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                        bos.flush();
-                        bos.close();
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-
-                    Drawable drawable = new BitmapDrawable(getResources(), photo);
-                    Glide.with(MyProActivity.this).load(drawable).into(circleImageView);
+            if (requestCode == 222) {
+                if (imagePath != null) {
+               //     Glide.with(MyProActivity.this).load(imagePath).into(circleImageView);
+                    file = new File(imagePath);
                 }
+
+
+                //           Bundle extras = data.getExtras();
+
+//                      if (extras != null) {
+//                    Bitmap photo = extras.getParcelable("data");
+//                    File fileCut = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
+//                    //LogUtil.e("zzf",fileCut.toString());
+//                    file = fileCut;
+//                    try{
+//                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileCut));
+//                        photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//                        bos.flush();
+//                        bos.close();
+//                    }catch (IOException e){
+//                        e.printStackTrace();
+//                    }
+//
+//                    Drawable drawable = new BitmapDrawable(getResources(), photo);
+//
+//
+//                Glide.with(MyProActivity.this).load(drawable).into(circleImageView);
+//                   }
             }
-            if(file!=null){
-                params.put("file",file);
+            if (file != null) {
+                params.put("file", file);
+
                 MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADFILE_URL, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String s) {
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                        if(headImageBean!=null&&headImageBean.getData()!=null){
+                        if (headImageBean != null && headImageBean.getData() != null) {
+
                             selfAvatarPath = headImageBean.getData().getImgUrl();
                             infoData.setSelfAvatarPath(selfAvatarPath);
                             //发送事件
-                            EventBus.getDefault().post(new StringEvent(selfAvatarPath,99));
-                            commitSelf(Constants.MODIFYY_IMAGE,"self_Avatar_path",selfAvatarPath);
-                            DataInfoCache.saveOneCache(infoData,Constants.MY_INFO);
+                            EventBus.getDefault().post(new StringEvent(selfAvatarPath, 99));
+                            Message message = Message.obtain();
+                            message.what = 1;
+                            handler.sendMessage(message);
+                            commitSelf(Constants.MODIFYY_IMAGE, "self_Avatar_path", selfAvatarPath);
+                            DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
                         //LogUtil.e("zzf",s);
                     }
@@ -782,8 +824,7 @@ public class MyProActivity extends Activity {
     }
 
 
-
-    public void  photoAlbum(){
+    public void photoAlbum() {
 
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -797,9 +838,9 @@ public class MyProActivity extends Activity {
             //直接裁剪
             Intent intent = new Intent("com.android.camera.action.CROP");
             //设置裁剪之后的图片路径文件
-             //随便命名一个
+            //随便命名一个
             cutfile = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
-            if (cutfile.exists()){ //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
+            if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
             cutfile.createNewFile();
@@ -811,16 +852,16 @@ public class MyProActivity extends Activity {
             mCutUri = outputUri;
             //Log.d(TAG, "mCameraUri: "+mCutUri);
             // crop为true是设置在开启的intent中设置显示的view可以剪裁
-            intent.putExtra("crop",true);
+            intent.putExtra("crop", true);
             // aspectX,aspectY 是宽高的比例，这里设置正方形
-            intent.putExtra("aspectX",1);
-            intent.putExtra("aspectY",1);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
             //设置要裁剪的宽高
-            intent.putExtra("outputX", 100); //200dp
-            intent.putExtra("outputY",100);
-            intent.putExtra("scale",true);
+            intent.putExtra("outputX", 500); //200dp
+            intent.putExtra("outputY", 500);
+            intent.putExtra("scale", true);
             //如果图片过大，会导致oom，这里设置为false
-            intent.putExtra("return-data",false);
+            intent.putExtra("return-data", false);
             if (imageUri != null) {
                 intent.setDataAndType(imageUri, "image/*");
             }
@@ -837,17 +878,36 @@ public class MyProActivity extends Activity {
         return null;
     }
 
-    public void startPhotoZoom(Uri uri) {
+    private String imagePath;
+
+    public void startPhotoZoom(Uri uri) throws IOException {
+        imagePath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + "cut.png";
+
+        cutfile = new File(imagePath);
+        if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
+            cutfile.delete();
+        }
+        cutfile.createNewFile();
+
+        //Uri imageUri = Uri.parse(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", true);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
-        intent.putExtra("return-data", true);
+        intent.putExtra("outputX", 500);
+        intent.putExtra("outputY", 500);
+        intent.putExtra("scale", true);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cutfile));//剪切后存文件
+        //  intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);//解决大图片oom
         intent.putExtra("noFaceDetection", true);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+
+
         startActivityForResult(intent, 222);
+
+
     }
 
 

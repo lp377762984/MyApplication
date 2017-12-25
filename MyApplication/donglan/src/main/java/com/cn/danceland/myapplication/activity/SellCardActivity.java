@@ -35,6 +35,7 @@ import com.cn.danceland.myapplication.bean.RequestSellCardsTypeBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -183,6 +184,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
+                viewHolder.   tv_cardtype.setText("卡类型：计次卡（"+sellCardsInfoBean.getData().get(i).getTotal_count() + "次）");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");
@@ -190,7 +192,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
 
 
             viewHolder.tv_name.setText(sellCardsInfoBean.getData().get(i).getName());
-            viewHolder.tv_price.setText("售价："+sellCardsInfoBean.getData().get(i).getPrice() + "");
+            viewHolder.tv_price.setText("售价："+ PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice()));
             if (!TextUtils.isEmpty(sellCardsInfoBean.getData().get(i).getTotal_count())){
                 viewHolder.tv_number.setText("次数："+sellCardsInfoBean.getData().get(i).getTotal_count() + "次");
                 viewHolder.tv_number.setVisibility(View.VISIBLE);

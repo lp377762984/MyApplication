@@ -410,6 +410,7 @@ public class SelectionFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            isEnd=false;
             findSelectionDyn_Down(1);
             init();
             return null;
@@ -608,13 +609,7 @@ public class SelectionFragment extends BaseFragment {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
                     LogUtil.i(requsetDynInfoBean.getData().toString());
-                    if (data.size() > 0&&data.size()<10) {
-
-                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        LogUtil.i(data.toString());
-                        myDynListviewAdater.notifyDataSetChanged();
-                        mCurrentPage = mCurrentPage + 1;
-                    } else {
+                    if (data.size() >= 0&&data.size()<10) {
                         isEnd = true;
                         ToastUtils.showToastShort("到底啦");
                         ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
@@ -623,6 +618,12 @@ public class SelectionFragment extends BaseFragment {
                         endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
                         endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
                         endLabels.setLoadingDrawable(null);
+
+                    } else {
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        LogUtil.i(data.toString());
+                        myDynListviewAdater.notifyDataSetChanged();
+                        mCurrentPage = mCurrentPage + 1;
                     }
                 } else {
                     ToastUtils.showToastShort("请求失败：" + requsetDynInfoBean.getErrorMsg());

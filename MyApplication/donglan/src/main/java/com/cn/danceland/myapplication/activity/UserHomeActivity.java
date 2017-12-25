@@ -161,6 +161,9 @@ public class UserHomeActivity extends Activity {
 
     private void setHeadViewData(final Data data) {
 
+
+
+
         if (TextUtils.equals(data.getGender(), "1")) {
             iv_sex.setImageResource(R.drawable.img_sex1);
         } else if (TextUtils.equals(data.getGender(), "2")) {
@@ -230,6 +233,14 @@ public class UserHomeActivity extends Activity {
         //m默认头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
+        iv_userifno_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getSelf_avatar_path()));
+            }
+        });
+
+
         tv_head_nickname.setText(data.getNickName());
 
     }
@@ -577,6 +588,8 @@ public class UserHomeActivity extends Activity {
                 finish();
             }
         });
+
+
 
 
         return headview;

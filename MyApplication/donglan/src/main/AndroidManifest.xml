@@ -180,6 +180,8 @@
         <activity
             android:name=".activity.OrderConfirmActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.AvatarActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

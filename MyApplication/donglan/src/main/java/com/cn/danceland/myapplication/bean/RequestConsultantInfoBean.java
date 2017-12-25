@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  */
 
 
-public class RequestConsultantInfoBean {
+public class RequestConsultantInfoBean  implements Serializable {
 
     private boolean success;
     private String errorMsg;
@@ -44,7 +45,7 @@ public class RequestConsultantInfoBean {
         return data;
     }
 
-    public class Data {
+    public class Data  implements Serializable{
 
         private int branch_id;
         private int person_id;
