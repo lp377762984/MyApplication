@@ -887,7 +887,11 @@ public class MyProActivity extends Activity {
         if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
             cutfile.delete();
         }
-        cutfile.createNewFile();
+        try{
+            cutfile.createNewFile();
+        }catch (Exception e){
+        }
+
 
         //Uri imageUri = Uri.parse(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
         Intent intent = new Intent("com.android.camera.action.CROP");
