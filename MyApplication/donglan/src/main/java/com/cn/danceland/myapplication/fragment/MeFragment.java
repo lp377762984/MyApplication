@@ -4,8 +4,10 @@ package com.cn.danceland.myapplication.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import q.rorbin.badgeview.QBadgeView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -38,7 +42,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_nick_name;
     private Data mInfo;
     private TextView tv_dyn;
-    private TextView tv_guanzhu;
+    private TextView tv_guanzhu,tv_message;
     private TextView tv_fans;
 
     @Override
@@ -72,6 +76,7 @@ public class MeFragment extends BaseFragment {
         tv_fans = v.findViewById(R.id.tv_fans);
         tv_nick_name = v.findViewById(R.id.tv_nick_name);
         iv_avatar = v.findViewById(R.id.iv_avatar);
+        tv_message = v.findViewById(R.id.tv_message);
         iv_avatar.setOnClickListener(this);
         return v;
     }
@@ -132,6 +137,9 @@ public class MeFragment extends BaseFragment {
             tv_nick_name.setText(event.getMsg());
         }
 
+        if(101 == event.getEventCode()){
+            new QBadgeView(mActivity).bindTarget(tv_message).setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.RIGHT);
+        }
 
         switch (event.getEventCode()) {
             case EventConstants.ADD_DYN:  //设置动态数+1

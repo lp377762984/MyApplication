@@ -2,7 +2,11 @@ package com.cn.danceland.myapplication.Receiver;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.format.Time;
 
+import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.db.MiMessage;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -13,7 +17,10 @@ import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by feng on 2017/12/8.
@@ -21,11 +28,48 @@ import java.util.List;
 
 public class MessageReceiver extends PushMessageReceiver {
 
+    int i;
+    int pinglunNum;
+    int dianzanNum;
+    int fansNum;
     @Override
     public void onReceivePassThroughMessage(Context context, MiPushMessage message) {
-        LogUtil.e("zzf", message.getContent());
-        ToastUtils.showToastLong("收到透传推送" + message.toString());
-        LogUtil.i("收到透传推送" + message.toString());
+        DBData db = new DBData();
+        i = SPUtils.getInt("messageN",1);
+        pinglunNum = SPUtils.getInt("pinglunNum",0);
+        dianzanNum = SPUtils.getInt("dianzanNum",0);
+        fansNum = SPUtils.getInt("fansNum",0);
+        MiMessage miMessage = new MiMessage();
+        Time time = new Time();
+        time.setToNow();
+        if(message!=null){
+            LogUtil.e("zzf",message.getContent());
+            EventBus.getDefault().post(new StringEvent(pinglunNum+dianzanNum+fansNum+"",101));
+            Map<String, String> extra = message.getExtra();
+            String type = extra.get("type");
+            miMessage.setType(type);
+            if(type.equals("1")){
+                SPUtils.setInt("dianzanNum",dianzanNum+1);
+            }else if(type.equals("2")){
+                SPUtils.setInt("dianzanNum",fansNum+1);
+            }else if(type.equals("3")){
+                SPUtils.setInt("dianzanNum",pinglunNum+1);
+            }
+            String personId = extra.get("personId");
+            miMessage.setPersonId(personId);
+            String personName = extra.get("personName");
+            miMessage.setPersonName(personName);
+            String dynId = extra.get("dynId");
+            miMessage.setDynId(dynId);
+            String selfPath = extra.get("selfPath");
+            miMessage.setSelfPath(selfPath);
+            miMessage.setId(i);
+            miMessage.setContent(message.getContent());
+            miMessage.setTime((time.month+1)+"-"+time.monthDay);
+            db.addMessageD(miMessage);
+            SPUtils.setInt("messageN",i+1);
+            //LogUtil.e("zzf",message.getContent());
+        }
     }
 
 

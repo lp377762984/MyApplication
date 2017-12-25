@@ -185,6 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:clickable="true"
+                    android:gravity="center_vertical"
                     android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
@@ -197,9 +198,10 @@
                         android:src="@drawable/img_msg_seting" />
 
                     <TextView
+                        android:id="@+id/tv_message"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="我的消息"

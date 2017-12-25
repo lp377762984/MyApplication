@@ -52,75 +52,6 @@ public class DBData {
     MiMessageDao miMessageDao;
     int id;
 
-    //从接口获取数据存入数据库
-    public void setCityInfo(Context context){
-        final Gson gson = new Gson();
-        final Donglan dl = new Donglan();
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.ZONE, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Type type = new TypeToken<ArrayList<CityBean>>() {
-                }.getType();
-                RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
-                ArrayList<CityBean> arrayList = gson.fromJson(rootBean.data, type);
-
-                if(arrayList!=null&&arrayList.size()>0){
-                    for(int i =0;i<arrayList.size();i++){
-                        StringBuilder sb = new StringBuilder();
-                        List childrenList = arrayList.get(i).getChildren();
-                        dl.setProvince(arrayList.get(i).getValue()+"@"+arrayList.get(i).getLabel());
-                        if(childrenList!=null&&childrenList.size()>0){
-                            for(int n=0;n<childrenList.size();n++){
-                                String str = childrenList.get(n).toString();
-                                dl.setProvinceValue(arrayList.get(i).getValue());
-                                dl.setProvince(arrayList.get(i).getLabel());
-                                dl.setId(++id);
-                                dl.setCity(getCity(str).substring(7));
-                                dl.setCityValue(getCityValue(str).substring(7));
-                                addD(dl);
-                                dl.clear();
-                            }
-                        }
-                        //LogUtil.e("zzf",arrayList.get(i).getChildren().get(0).toString());
-
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        });
-
-        requestQueue.add(jsonObjectRequest);
-
-
-    }
-
-//获取城市，直辖市获取区县
-    public String getCity(String str){
-        if(str!=null){
-            String[] split = str.split(",");
-            if(split!=null&&split.length>1){
-                return split[1];
-            }
-        }
-        return "";
-    }
-
-    public String getCityValue(String str){
-        if(str!=null){
-            String[] split = str.split(",");
-            if(split!=null&&split.length>1){
-                return split[0];
-            }
-        }
-        return "";
-    }
-
     //添加记录
     public void addD(Donglan d){
         if(donglanDao==null){
@@ -232,6 +163,13 @@ public class DBData {
         }
         List<MiMessage> messagesList = miMessageDao.loadAll();
         return messagesList;
+    }
+    //查询相应类型的消息
+    public List<MiMessage> getMessageList(String type){
+        if(miMessageDao==null){
+            miMessageDao = MyApplication.getInstance().getMessageDaoSession().getMiMessageDao();
+        }
+        return miMessageDao.queryBuilder().where(MiMessageDao.Properties.Type.eq(type)).list();
     }
     //添加记录
     public void addMessageD(MiMessage d){
