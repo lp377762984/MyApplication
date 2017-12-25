@@ -44,16 +44,16 @@ public class MessageReceiver extends PushMessageReceiver {
         time.setToNow();
         if(message!=null){
             LogUtil.e("zzf",message.getContent());
-            EventBus.getDefault().post(new StringEvent(pinglunNum+dianzanNum+fansNum+"",101));
+
             Map<String, String> extra = message.getExtra();
             String type = extra.get("type");
             miMessage.setType(type);
             if(type.equals("1")){
                 SPUtils.setInt("dianzanNum",dianzanNum+1);
             }else if(type.equals("2")){
-                SPUtils.setInt("dianzanNum",fansNum+1);
+                SPUtils.setInt("fansNum",fansNum+1);
             }else if(type.equals("3")){
-                SPUtils.setInt("dianzanNum",pinglunNum+1);
+                SPUtils.setInt("pinglunNum",pinglunNum+1);
             }
             String personId = extra.get("personId");
             miMessage.setPersonId(personId);
@@ -68,6 +68,10 @@ public class MessageReceiver extends PushMessageReceiver {
             miMessage.setTime((time.month+1)+"-"+time.monthDay);
             db.addMessageD(miMessage);
             SPUtils.setInt("messageN",i+1);
+            pinglunNum = SPUtils.getInt("pinglunNum",0);
+            dianzanNum = SPUtils.getInt("dianzanNum",0);
+            fansNum = SPUtils.getInt("fansNum",0);
+            EventBus.getDefault().post(new StringEvent(pinglunNum+dianzanNum+fansNum+"",101));
             //LogUtil.e("zzf",message.getContent());
         }
     }

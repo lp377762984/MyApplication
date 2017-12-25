@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
 /**
@@ -44,6 +45,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_dyn;
     private TextView tv_guanzhu,tv_message;
     private TextView tv_fans;
+    Badge badge;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,8 +80,11 @@ public class MeFragment extends BaseFragment {
         iv_avatar = v.findViewById(R.id.iv_avatar);
         tv_message = v.findViewById(R.id.tv_message);
         iv_avatar.setOnClickListener(this);
+
+        badge = new QBadgeView(mActivity).bindTarget(tv_message);
         return v;
     }
+
 
     @Override
     public void initDta() {
@@ -138,8 +143,16 @@ public class MeFragment extends BaseFragment {
         }
 
         if(101 == event.getEventCode()){
-            new QBadgeView(mActivity).bindTarget(tv_message).setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.RIGHT);
+            if(Integer.valueOf(event.getMsg())>0){
+                badge.setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.END);
+            }else{
+                badge.hide(false);
+            }
+
         }
+//        if(102 == event.getEventCode()){
+//            new QBadgeView(mActivity).bindTarget(tv_message).setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.END);
+//        }
 
         switch (event.getEventCode()) {
             case EventConstants.ADD_DYN:  //设置动态数+1
