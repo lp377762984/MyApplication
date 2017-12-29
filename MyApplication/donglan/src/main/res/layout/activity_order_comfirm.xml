@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,13 +62,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="商品名称：" />
+                        android:text="商品名称："
+                        android:textColor="#333333" />
 
                     <TextView
                         android:id="@+id/tv_product_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="超级年卡" />
+                        android:text=""
+                        android:textColor="#333333" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,13 +84,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="商品类型：" />
+                        android:text="商品类型："
+                        android:textColor="#333333" />
 
                     <TextView
                         android:id="@+id/tv_product_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="会员卡" />
+                        android:text=""
+                        android:textColor="#333333" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,56 +105,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="有效期限：" />
+                        android:text="有效期限："
+                        android:textColor="#333333" />
 
                     <TextView
 
                         android:id="@+id/tv_useful_life"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1年" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="商品数量：" />
-
-                    <TextView
-                       android:id="@+id/tv_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1" />
+                        android:text=""
+                        android:textColor="#333333" />
                 </LinearLayout>
 
                 <LinearLayout
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="商品单价：" />
-
-                    <TextView
-                        android:id="@+id/tv_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="￥1900.00" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -157,70 +126,168 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="商品金额："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#333333" />
+                </LinearLayout>
+
+             <!--   <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="优惠金额："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="#333333" />
+                </LinearLayout>-->
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="合计金额：" />
+                        android:text="合计金额："
+                        android:textColor="#333333" />
 
                     <TextView
                         android:id="@+id/tv_total_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥1900.00" />
+                        android:text=""
+                        android:textColor="#333333" />
                 </LinearLayout>
 
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_01"
+            <!--<LinearLayout-->
+            <!--android:id="@+id/ll_01"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="#fff"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="开卡日期：" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/tv_start_date"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="2017-10-25" />-->
+
+            <!--</LinearLayout>-->
+
+
+            <!--</LinearLayout>-->
+
+
+            <RadioGroup
+                android:id="@+id/rg_who"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginTop="10dp"
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#fff"
-                    android:orientation="horizontal">
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="开卡日期：" />
+                <RadioButton
+                    android:id="@+id/rbtn_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="本人购买"
+                    android:textColor="#333333" />
 
-                    <TextView
-                        android:id="@+id/tv_start_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="2017-10-25" />
+                <RadioButton
+                    android:id="@+id/rbtn_other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="为好友购买"
+                    android:textColor="#333333" />
+            </RadioGroup>
 
-                </LinearLayout>
-
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="完善信息"
+                android:textColor="#999" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+
+                android:background="@color/color_bg_line" />
+
+            <LinearLayout
+                android:id="@+id/ll_counselor"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#fff"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="会籍顾问：" />
+                    android:layout_weight="1"
+                    android:text="会籍顾问："
+                    android:textColor="#333333" />
 
                 <TextView
                     android:id="@+id/tv_counselor"
@@ -228,8 +295,25 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="小鲜肉" />
+                    android:layout_marginRight="10dp"
+                    android:text="请选择您的会籍顾问" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/img_arrow_r" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/color_bg_line" />
+
             <LinearLayout
                 android:id="@+id/ll_02"
                 android:layout_width="match_parent"
@@ -238,9 +322,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-
+                    android:layout_height="40dp"
                     android:background="#fff"
                     android:orientation="horizontal">
 
@@ -249,22 +331,33 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="赠予好友姓名：" />
+                        android:text="赠予好友姓名："
+                        android:textColor="#333333" />
 
-                    <TextView
-                        android:id="@+id/tv_grant_name"
+                    <EditText
+                        android:id="@+id/et_grant_name"
+                        style="@style/EtStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="张震峰" />
+                        android:background="@null"
+                        android:hint="请输入好友姓名"
+                        android:textColor="#333333"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/color_bg_line" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-
+                    android:layout_height="40dp"
                     android:background="#fff"
                     android:orientation="horizontal">
 
@@ -273,22 +366,35 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="赠予好友电话：" />
+                        android:text="赠予好友电话："
+                        android:textColor="#333333" />
 
-                    <TextView
-                        android:id="@+id/tv_grant_phone"
+                    <EditText
+                        android:id="@+id/et_grant_phone"
+                        style="@style/EtStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:hint="请输入好友电话"
+                        android:inputType="phone"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_phonebook"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="123123123434" />
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/img_phonebook" />
+
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_03"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
                 android:orientation="horizontal">
@@ -299,7 +405,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="使用定金:" />
+                    android:text="使用定金:"
+                    android:textColor="#333333" />
 
                 <TextView
                     android:id="@+id/tv_dingjin"
@@ -307,7 +414,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="10dp"
-                    android:text="未使用" />
+                    android:text="未使用"
+                    android:textColor="#333333" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -319,6 +428,102 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:background="#fff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:text="支付方式" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/color_bg_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/alipay_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="支付宝"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+
+
+                <CheckBox
+                    android:id="@+id/cb_alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/color_bg_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/wechat_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="微信"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/img_cb"
+                    android:visibility="gone" />
+
+                <CheckBox
+                    android:id="@+id/cb_wechat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
@@ -329,7 +534,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="商品说明:" />
+                    android:text="商品说明:"
+                    android:textColor="#333333" />
 
                 <TextView
                     android:id="@+id/tv_explain"
@@ -339,7 +545,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    />
+                    android:textColor="#333333" />
             </LinearLayout>
 
         </LinearLayout>
@@ -361,10 +567,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#333333"
-                android:text="待支付金额：" />
+                android:text="待支付金额："
+                android:textColor="#333333" />
 
             <TextView
                 android:id="@+id/tv_pay_price"
@@ -382,6 +589,26 @@
             android:background="@drawable/btn_bg_selector"
             android:text="提交订单"
             android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/btn_commit1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_bg_selector"
+            android:text="取消订单"
+            android:textColor="#fff"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btn_commit2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_bg_selector"
+            android:text="重新支付"
+            android:textColor="#fff"
+            android:visibility="gone" />
     </LinearLayout>
 
 

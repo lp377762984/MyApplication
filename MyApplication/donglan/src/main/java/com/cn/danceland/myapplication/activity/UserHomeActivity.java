@@ -506,7 +506,7 @@ public class UserHomeActivity extends Activity {
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
-                    LogUtil.i(data.toString());
+                  //  LogUtil.i(data.toString());
 
                     //         myDynListviewAdater.notifyDataSetChanged();
                     mCurrentPage = mCurrentPage + 1;

@@ -2,7 +2,8 @@ package com.cn.danceland.myapplication.utils;
 
 public class Constants {
 
-    public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+   public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+  //  public static final String HOST = "http://192.168.1.11:8003/";//服务器地址
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
     public static final String LOGIN_URL = HOST + "user/login ";//登录
@@ -17,21 +18,21 @@ public class Constants {
     public static final String MODIFY_NAME = HOST + "user/modifyNickName";//修改昵称
     public static final String MODIFYY_IMAGE = HOST + "user/modifySelfAvatar";//修改头像
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
-    public static final String MODIFY_GENDER = HOST+"user/modifyGender";//修改性别
-    public static final String MODIFY_HEIGHT = HOST+"user/modifyHeight";//修改身高
-    public static final String MODIFY_WEIGHT = HOST+"user/modifyWeight";//修改身高
-    public static final String MODIFY_IDENTIFY = HOST+"user/modifyIdentityCard";//修改身份证
-    public static final String BRANCH = HOST+"branch";//获取门店列表
-    public static final String JOINBRANCH = HOST+"branch/join";//加入或者取消门店
-    public static final String GETMENUS = HOST+"appRoleFunction/getMenus";//获取菜单权限
+    public static final String MODIFY_GENDER = HOST + "user/modifyGender";//修改性别
+    public static final String MODIFY_HEIGHT = HOST + "user/modifyHeight";//修改身高
+    public static final String MODIFY_WEIGHT = HOST + "user/modifyWeight";//修改身高
+    public static final String MODIFY_IDENTIFY = HOST + "user/modifyIdentityCard";//修改身份证
+    public static final String BRANCH = HOST + "branch";//获取门店列表
+    public static final String JOINBRANCH = HOST + "branch/join";//加入或者取消门店
+    public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
 
 
-    public static final String FIND_JOIN_SHOP_URL = HOST+"/user/findJoinBranchs";//查找已经加入门店
+    public static final String FIND_JOIN_SHOP_URL = HOST + "/user/findJoinBranchs";//查找已经加入门店
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
     public static final String FIND_CONSULTANT_URL = HOST + "/appDynMsg/findByBranchId";//查找会籍顾问
 
 
-    public static final String CHANGE_CURRENT_SHOP_URL = HOST+"branch/changeCurrentBranch";//更换默认店
+    public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注
     public static final String ADD_ZAN_URL = HOST + "appDynMsg/giveThumbs";//加关注
 
@@ -47,7 +48,6 @@ public class Constants {
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findById";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
-
     public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "appDynMsg/findByFollower";//查看关注的人
     public static final String FIND_FANS_USER_LIST_MSG = HOST + "appDynMsg/findByUserId";//查看粉丝
     public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appDynMsg/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
@@ -68,6 +68,16 @@ public class Constants {
     public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
 
+    //订单相关
+
+    public static final String COMMIT_DEPOSIT = HOST + "appDeposit/saveDeposit";//提交定金订单
+    public static final String FIND_ALL_DEPOSIT = HOST + "appDeposit/findAllDeposit";//查询订单
+    public static final String COMMIT_CARD_ORDER = HOST + "appOrder/saveCard";//提交卡订单
+  public static final String FIND_ALL__ORDER = HOST + "appOrder/findAllPage";//查询订单
+
+
+    public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
+    public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
@@ -75,10 +85,8 @@ public class Constants {
     public static final String MY_PSWD = "mypswd";//我的密码
     public static final String MY_TOKEN = "my_token";//我的token
     public static final String MY_LOCATION = "my_location";//我的地区
-
     public static final String MY_INFO = "my_info";//我的资料
     public static final String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
-
 
 
 }

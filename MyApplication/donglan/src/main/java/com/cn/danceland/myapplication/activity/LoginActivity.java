@@ -147,6 +147,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
         }
+        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{ Manifest.permission.READ_CONTACTS}, 6);
+        }
 
     }
 
@@ -187,6 +191,12 @@ public class LoginActivity extends Activity implements OnClickListener {
                                     if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
                                             != PackageManager.PERMISSION_GRANTED) {
                                         ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
+                                    }
+                                }
+                                else if (requestCode == 6){
+                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
+                                            != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{ Manifest.permission.READ_CONTACTS}, 6);
                                     }
                                 }
                                 //System.exit(0);

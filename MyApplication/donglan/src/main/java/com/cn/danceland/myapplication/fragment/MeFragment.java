@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -144,7 +143,7 @@ public class MeFragment extends BaseFragment {
 
         if(101 == event.getEventCode()){
             if(Integer.valueOf(event.getMsg())>0){
-                badge.setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.END);
+                badge.setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity( Gravity.END | Gravity.TOP);
             }else{
                 badge.hide(false);
             }

@@ -110,6 +110,8 @@ dependencies {
 
             }
             maven { url "https://jitpack.io" }
+            jcenter()
+            maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
         }
     }
     //
@@ -125,4 +127,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.android.support:design:26.0.0-alpha1'
+
+    compile("com.github.hotchemi:permissionsdispatcher:3.1.0") {
+        // if you don't use android.app.Fragment you can exclude support for them
+        exclude module: "support-v13"
+    }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
 }

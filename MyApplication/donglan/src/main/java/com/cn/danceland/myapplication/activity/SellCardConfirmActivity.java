@@ -115,7 +115,6 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         TextView tv_cardtype = findViewById(R.id.tv_cardtype);
 
 
-
         if (CardsInfo.getCharge_mode() == 1) {//计时卡
             tv_cardtype.setText("卡类型：计时卡");
         }
@@ -144,7 +143,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
 
 
-    //    RadioGroup radioGroup = findViewById(R.id.rg_who);
+        //    RadioGroup radioGroup = findViewById(R.id.rg_who);
         tv_select_date = findViewById(R.id.tv_select_date);
         tv_select_date.setOnClickListener(this);
         tv_select_counselor = findViewById(R.id.tv_select_counselor);
@@ -161,17 +160,17 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         findViewById(R.id.iv_phonebook).setOnClickListener(this);
 
 
-        CheckBox cb_forother=findViewById(R.id.cb_forother);
-        CheckBox cb_dingjin=findViewById(R.id.cb_dingjin);
+        CheckBox cb_forother = findViewById(R.id.cb_forother);
+        CheckBox cb_dingjin = findViewById(R.id.cb_dingjin);
         cb_forother.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
+                if (b) {
                     ll_phone.setVisibility(View.VISIBLE);
                     et_name.setVisibility(View.VISIBLE);
                     tv_select_date.setVisibility(View.GONE);
                     isme = false;
-                }else {
+                } else {
                     ll_phone.setVisibility(View.GONE);
                     et_name.setVisibility(View.GONE);
                     tv_select_date.setVisibility(View.VISIBLE);
@@ -182,15 +181,15 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         cb_dingjin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    btn_commit.setVisibility(View.GONE);
-                    btn_dj_commit.setVisibility(View.VISIBLE);
-                    tv_select_date.setVisibility(View.GONE);
+                if (b) {
+                    //  btn_commit.setVisibility(View.GONE);
+                    //   btn_dj_commit.setVisibility(View.VISIBLE);
+                    //    tv_select_date.setVisibility(View.GONE);
 
-                }else {
-                    tv_select_date.setVisibility(View.VISIBLE);
-                    btn_commit.setVisibility(View.VISIBLE);
-                    btn_dj_commit.setVisibility(View.GONE);
+                } else {
+                    //   tv_select_date.setVisibility(View.VISIBLE);
+                    //   btn_commit.setVisibility(View.VISIBLE);
+                    //    btn_dj_commit.setVisibility(View.GONE);
                 }
             }
         });
@@ -356,7 +355,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 @Override
                 public void onClick(View view) {
 
-                    consultantInfo=consultantListInfo.get(position);
+                    consultantInfo = consultantListInfo.get(position);
 
                     tv_select_counselor.setText(consultantListInfo.get(position).getCname());
                     listPopup.dismiss();
@@ -401,7 +400,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                     @Override
                     public void onDateSet(DatePicker datePicker, int year1, int month2, int day3) {
                         tv_select_date.setText(year1 + "-" + (month2 + 1) + "-" + day3);
-                        startDate=tv_select_date.getText().toString();
+                        startDate = tv_select_date.getText().toString();
                         if (!TimeUtils.isDateOneBigger(year + "-" + (month + 1) + "-" + day, tv_select_date.getText().toString())) {
 
                         } else {
@@ -418,34 +417,34 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("cardinfo", CardsInfo);
-                bundle.putSerializable("consultantInfo", consultantInfo);
-                bundle.putBoolean("isme", isme);
-                if (consultantInfo==null){
-                    ToastUtils.showToastLong("请选择会籍顾问");
-                    return;
-                }
-                if (!isme){
-                    if (TextUtils.isEmpty(et_name.getText().toString().trim())){
-
-                        ToastUtils.showToastLong("名字不能为空");
-                        return;
-                    }
-                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())){
-
-                        ToastUtils.showToastLong("电话不能为空");
-                        return;
-                    }
-
-                    bundle.putString("name",et_name.getText().toString().trim());
-                    bundle.putString("phone",et_phone.getText().toString().trim());
-                }else {
-                    if (TextUtils.isEmpty(startDate)){
-
-                        ToastUtils.showToastLong("日期不能为空");
-                        return;
-                    }
-                    bundle.putString("startDate",startDate);
-                }
+//                bundle.putSerializable("consultantInfo", consultantInfo);
+//                bundle.putBoolean("isme", isme);
+//                if (consultantInfo == null) {
+//                    ToastUtils.showToastLong("请选择会籍顾问");
+//                    return;
+//                }
+//                if (!isme) {
+//                    if (TextUtils.isEmpty(et_name.getText().toString().trim())) {
+//
+//                        ToastUtils.showToastLong("名字不能为空");
+//                        return;
+//                    }
+//                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())) {
+//
+//                        ToastUtils.showToastLong("电话不能为空");
+//                        return;
+//                    }
+//
+//                    bundle.putString("name", et_name.getText().toString().trim());
+//                    bundle.putString("phone", et_phone.getText().toString().trim());
+//                } else {
+//                    if (TextUtils.isEmpty(startDate)) {
+//
+//                        ToastUtils.showToastLong("日期不能为空");
+//                        return;
+//                    }
+//                    bundle.putString("startDate", startDate);
+//                }
 
                 bundle.putInt("product_type", 1);
                 startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
@@ -453,42 +452,31 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 break;
             case R.id.btn_dj_commit://支付定金
 
-
-
-
                 Bundle bundle1 = new Bundle();
                 bundle1.putSerializable("cardinfo", CardsInfo);
-                bundle1.putSerializable("consultantInfo", consultantInfo);
-                bundle1.putBoolean("isme", isme);
-                if (consultantInfo==null){
-                    ToastUtils.showToastLong("请选择会籍顾问");
-                    return;
-                }
-                if (!isme){
-                    if (TextUtils.isEmpty(et_name.getText().toString().trim())){
-
-                        ToastUtils.showToastLong("名字不能为空");
-                        return;
-                    }
-                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())){
-
-                        ToastUtils.showToastLong("电话不能为空");
-                        return;
-                    }
-
-                    bundle1.putString("name",et_name.getText().toString().trim());
-                    bundle1.putString("phone",et_phone.getText().toString().trim());
-                }else {
-
-//                    if (TextUtils.isEmpty(startDate)){
+//            //    bundle1.putSerializable("consultantInfo", consultantInfo);
+//                bundle1.putBoolean("isme", isme);
+////                if (consultantInfo==null){
+////                    ToastUtils.showToastLong("请选择会籍顾问");
+////                    return;
+////                }
+//                if (!isme){
+//                    if (TextUtils.isEmpty(et_name.getText().toString().trim())){
 //
-//                        ToastUtils.showToastLong("日期不能为空");
+//                        ToastUtils.showToastLong("名字不能为空");
 //                        return;
 //                    }
-//                    bundle1.putString("startDate",startDate);
-
-                }
-
+//                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())){
+//
+//                        ToastUtils.showToastLong("电话不能为空");
+//                        return;
+//                    }
+//
+//                    bundle1.putString("name",et_name.getText().toString().trim());
+//                    bundle1.putString("phone",et_phone.getText().toString().trim());
+//                }else {
+//
+//                }
 
 
                 bundle1.putInt("product_type", 2);

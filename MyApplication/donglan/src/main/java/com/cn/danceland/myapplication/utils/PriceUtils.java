@@ -31,7 +31,12 @@ public class PriceUtils {
      * @return
      */
     public static float formatPrice2float(float price) {
-        float p = (float)(Math.round(price*100)/100);
+
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String s = decimalFormat.format(price);
+     //   LogUtil.i(s);
+        float p =Float.parseFloat(s);
+      //  LogUtil.i(p+"");
         return p;
     }
 
@@ -59,7 +64,9 @@ public class PriceUtils {
      * @return
      */
     public static float formatPrice2float(String price) {
-        float p = (float)(Math.round(Float.parseFloat(price)*100)/100);
+        DecimalFormat decimalFormat = new DecimalFormat(".00");
+        String s = decimalFormat.format(Float.parseFloat(price));
+        float p =Float.parseFloat(s);
         return p;
     }
 

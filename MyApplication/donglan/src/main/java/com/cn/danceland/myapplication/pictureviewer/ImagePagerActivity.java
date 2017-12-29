@@ -35,9 +35,12 @@ public class ImagePagerActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); //透明状态栏
         }
+
         setContentView(R.layout.activity_image_detail_pager);
         pagerPosition = getIntent().getIntExtra(EXTRA_IMAGE_INDEX, 0);
         List<String> urls = getIntent().getStringArrayListExtra(EXTRA_IMAGE_URLS);

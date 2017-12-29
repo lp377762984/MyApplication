@@ -31,6 +31,14 @@ public class MenusBean {
         return data;
     }
 
+    @Override
+    public String toString() {
+        return "MenusBean{" +
+                "success=" + success +
+                ", errorMsg='" + errorMsg + '\'' +
+                ", data=" + data +
+                '}';
+    }
 
     public class Data {
 
@@ -42,6 +50,21 @@ public class MenusBean {
         private String remark;
         private int status;
         private String fun_type;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "id=" + id +
+                    ", type=" + type +
+                    ", icon='" + icon + '\'' +
+                    ", name='" + name + '\'' +
+                    ", parent_id=" + parent_id +
+                    ", remark='" + remark + '\'' +
+                    ", status=" + status +
+                    ", fun_type='" + fun_type + '\'' +
+                    '}';
+        }
+
         public void setId(int id) {
             this.id = id;
         }
