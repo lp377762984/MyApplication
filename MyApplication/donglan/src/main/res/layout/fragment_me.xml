@@ -247,7 +247,42 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
-                        android:text="数据中心"
+                        android:text="体测数据"
+                        android:textColor="@color/color_content_text"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+
+                        android:layout_marginRight="25dp"
+                        android:src="@drawable/img_arrow_r" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_my_shouhuan"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+
+                    android:background="@drawable/bg_setting_item_selector"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="25dp"
+                        android:src="@drawable/img_my_data" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="智能手环"
                         android:textColor="@color/color_content_text"
                         android:textSize="15sp" />
 

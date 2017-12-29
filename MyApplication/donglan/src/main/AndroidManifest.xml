@@ -195,7 +195,27 @@
         <activity
             android:name=".activity.OrderDetailsActivity"
             android:screenOrientation="portrait" />
-
+        <activity android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait"
+            />
+  <activity
+            android:name=".activity.AvatarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DepositActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyDepositListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.OrderDetailsActivity"
+            android:screenOrientation="portrait" />
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true">
