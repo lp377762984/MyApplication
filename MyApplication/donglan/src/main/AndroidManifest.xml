@@ -182,6 +182,12 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.AvatarActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait"
+            />
 
 
         <receiver
