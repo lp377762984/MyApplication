@@ -621,7 +621,7 @@ public class SelectionFragment extends BaseFragment {
 
                     } else {
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
-                        LogUtil.i(data.toString());
+                   //     LogUtil.i(data.toString());
                         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     }

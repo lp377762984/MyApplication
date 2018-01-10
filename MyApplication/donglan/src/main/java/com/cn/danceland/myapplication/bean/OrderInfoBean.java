@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.bean;
 /**
  * Created by shy on 2017/12/22 15:49
  * Email:644563767@qq.com
+ * 订单请求参数
  */
 
 
@@ -27,6 +28,11 @@ public class OrderInfoBean {
     private String deposit_id;//定金id
     private String deposit_price;//定金金额
 
+    private String deposit_type;  //定金类型
+    private String card_name;//卡名称
+    private String month_count;// 使用期限月数
+    private String total_count; //次卡总次数
+
     @Override
     public String toString() {
         return "OrderInfoBean{" +
@@ -47,7 +53,43 @@ public class OrderInfoBean {
                 ", card_type_id='" + card_type_id + '\'' +
                 ", deposit_id='" + deposit_id + '\'' +
                 ", deposit_price='" + deposit_price + '\'' +
+                ", deposit_type='" + deposit_type + '\'' +
+                ", card_name='" + card_name + '\'' +
+                ", month_count='" + month_count + '\'' +
+                ", total_count='" + total_count + '\'' +
                 '}';
+    }
+
+    public String getMonth_count() {
+        return month_count;
+    }
+
+    public void setMonth_count(String month_count) {
+        this.month_count = month_count;
+    }
+
+    public String getTotal_count() {
+        return total_count;
+    }
+
+    public void setTotal_count(String total_count) {
+        this.total_count = total_count;
+    }
+
+    public String getDeposit_type() {
+        return deposit_type;
+    }
+
+    public void setDeposit_type(String deposit_type) {
+        this.deposit_type = deposit_type;
+    }
+
+    public String getCard_name() {
+        return card_name;
+    }
+
+    public void setCard_name(String card_name) {
+        this.card_name = card_name;
     }
 
     public String getDeposit_price() {

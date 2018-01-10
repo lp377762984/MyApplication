@@ -473,7 +473,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 return map;
             }
         };
-        MyApplication.getHttpQueues().add(stringRequest);
+        //   MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -524,7 +524,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 return map;
             }
         };
-        MyApplication.getHttpQueues().add(stringRequest);
+        //   MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -648,11 +648,16 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     orderInfoBean.setPrice(pay_price + "");
                     orderInfoBean.setPay_way(pay_way + "");
                     orderInfoBean.setCard_type_id(CardsInfo.getId());
+                    orderInfoBean.setCard_name(CardsInfo.getName());
+                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count()+"");
                     if (!TextUtils.isEmpty(depositId)) {
                         orderInfoBean.setDeposit_id(depositId);
-                        orderInfoBean.setDeposit_price(deposit_price+"");
+                        orderInfoBean.setDeposit_price(deposit_price + "");
                     }
+                    if (CardsInfo.getCharge_mode() == 2) {//如果是计次卡
+                        orderInfoBean.setTotal_count(CardsInfo.getTotal_count());
 
+                    }
                     if (isme) {
                         orderInfoBean.setFor_other(0);
                     } else {
@@ -700,7 +705,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     orderInfoBean.setMember_no(data.getMember_no());
                     orderInfoBean.setPrice(pay_price + "");
                     orderInfoBean.setPay_way(pay_way + "");
-
+                    orderInfoBean.setDeposit_type("1");//定金类型
+                    orderInfoBean.setMonth_count("3");
                     if (isme) {
                         orderInfoBean.setFor_other(0);
                     } else {
@@ -721,7 +727,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                     Gson gson = new Gson();
                     String strBean = gson.toJson(orderInfoBean);
-                        LogUtil.i(strBean.toString());
+                    LogUtil.i(strBean.toString());
                     try {
                         commit_deposit(strBean.toString());
                     } catch (JSONException e) {

@@ -85,6 +85,7 @@ import razerdp.basepopup.BasePopupWindow;
 /**
  * Created by shy on 2017/11/17 17:32
  * Email:644563767@qq.com
+ * 动态详情页
  */
 
 
@@ -512,6 +513,31 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         }
 
         if (oneDynInfo.getImgList() != null && oneDynInfo.getImgList().size() > 0) {
+
+
+            if (oneDynInfo.getImgList() .size()==1){
+                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
+               gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
+            }
+            else   if (oneDynInfo.getImgList() .size()==4){
+                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+               gridView.setNumColumns(2);
+                int width = DensityUtils.dp2px(DynHomeActivity.this,205f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
+                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
+            }else {
+               gridView.setNumColumns(3);
+                int width = DensityUtils.dp2px(DynHomeActivity.this,310f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
+                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+            }
 
             gridView.setVisibility(View.VISIBLE);
             gridView.setAdapter(new ImageGridAdapter(DynHomeActivity.this, oneDynInfo.getImgList()));

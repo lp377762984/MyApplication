@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
 import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -374,6 +375,30 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         }
 
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+
+            if (data.get(position).getImgList().size()==1){
+                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
+            }
+            else   if (data.get(position).getImgList().size()==4){
+                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                viewHolder.gridView.setNumColumns(2);
+                int width = DensityUtils.dp2px(context,205f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
+            }else {
+                viewHolder.gridView.setNumColumns(3);
+                int width = DensityUtils.dp2px(context,310f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+            }
 
             viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));

@@ -274,7 +274,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                map.put("romType", "0");
+                map.put("romType", "1");
                 return map;
             }
         };

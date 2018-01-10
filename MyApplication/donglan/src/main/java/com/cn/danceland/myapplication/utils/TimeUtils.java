@@ -125,4 +125,33 @@ public class TimeUtils {
     }
 
 
+    /**
+     * 计算剩余时间
+     * @param orderTime
+     * @return
+     */
+    public static String leftTime(String orderTime){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.get(Calendar.DAY_OF_MONTH);
+        long now = calendar.getTimeInMillis();
+        Date date = strToDate(orderTime, "yyyy-MM-dd HH:mm:ss");
+        calendar.setTime(date);
+        long end = calendar.getTimeInMillis()+24*60*60*1000;
+
+        // 相差的秒数
+        long time = (end -now ) / 1000;
+        StringBuffer sb = new StringBuffer();
+        if (end<now){
+            return "支付超时";
+        }else {
+            return sb.append(time/3600+"小时"+ (time%3600)/ 60+"分钟").toString();
+
+        }
+
+
+    }
+
+
+
 }

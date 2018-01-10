@@ -1,7 +1,10 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -54,6 +58,8 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     private List<RequestOrderListBean.Data.Content> datalist = new ArrayList<>();
     private MyListAatapter myListAatapter;
     private Gson gson = new Gson();
+    private int mCurrentPage = 1;//起始请求页
+    private boolean isEnd = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,13 +76,82 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
         mListView.setAdapter(myListAatapter);
         //设置下拉刷新模式both是支持下拉和上拉
         mListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                new DownRefresh().execute();
+            }
 
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                new UpRefresh().execute();
+            }
+        });
         init_pullToRefresh();
 
     }
 
-    private void init_pullToRefresh() {
 
+    /**
+     * 下拉刷新
+     */
+    private class DownRefresh extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            init_pullToRefresh();
+            mCurrentPage = 1;
+            try {
+                find_all_order(mCurrentPage);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            myListAatapter.notifyDataSetChanged();
+            mListView.onRefreshComplete();
+        }
+    }
+
+
+    /**
+     * 上拉拉刷新
+     */
+    private class UpRefresh extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (!isEnd) {//还有数据请求
+                try {
+                    find_all_order(mCurrentPage);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+       //   myListAatapter.notifyDataSetChanged();
+            mListView.onRefreshComplete();
+            myListAatapter.notifyDataSetChanged();
+            if (isEnd) {//没数据了
+                mListView.onRefreshComplete();
+            }
+        }
+    }
+
+    private void init_pullToRefresh() {
+         mListView.setMode(PullToRefreshBase.Mode.BOTH);
         // 设置下拉刷新文本
         ILoadingLayout startLabels = mListView
                 .getLoadingLayoutProxy(true, false);
@@ -92,11 +167,9 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
-        StrBean strBean = new StrBean();
-        strBean.pageCount = "0";
-        String s = gson.toJson(strBean);
+
         try {
-            find_all_order(s.toString());
+            find_all_order(mCurrentPage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -114,6 +187,90 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 确认对话框
+     */
+    private void showCanselDialog(final int pos) {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        dialog.setTitle("提示");
+        dialog.setMessage("是否取消订单");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                try {
+
+                    cancel_order(datalist.get(pos).getId(), pos);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+            }
+        });
+        dialog.show();
+    }
+
+
+    class RequestBean {
+        public String id;
+
+
+    }
+
+    class RequestOrderBean {
+        public boolean success;
+        public String errorMsg;
+        public String data;
+    }
+
+
+    public void cancel_order(final String id, final int pos) throws JSONException {
+
+        RequestBean requestBean = new RequestBean();
+        requestBean.id = id;
+        JSONObject jsonObject = new JSONObject(gson.toJson(requestBean).toString());
+        LogUtil.i(jsonObject.toString());
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.CANSEL_ORDER, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestOrderBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequestOrderBean.class);
+                if (requestOrderBean.success) {
+                    datalist.get(pos).setStatus(4);
+                    myListAatapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showToastShort("取消订单失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
 
     class MyListAatapter extends BaseAdapter {
 
@@ -164,11 +321,21 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
 
             if (datalist.get(position).getBus_type() == 1) {
                 vh.tv_product_type.setText("预付定金");
+                vh.tv_product_name.setText("会员卡定金");
+                if (content.getDeposit_type() == 1) {
+                    vh.tv_product_name.setText("会员卡定金");
+                } else if (content.getDeposit_type() == 2) {
+                    vh.tv_product_name.setText("私教定金");
+                } else if (content.getDeposit_type() == 3) {
+                    vh.tv_product_name.setText("租柜定金");
+                }
+
                 //vh.tv_product_name
                 vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
             }
             if (datalist.get(position).getBus_type() == 2) {
-                vh.tv_product_type.setText("会员卡");
+                vh.tv_product_type.setText("会员卡 ");
+                vh.tv_product_name.setText(content.getCard_name());
                 vh.tv_price.setText(PriceUtils.formatPrice2String(content.getSell_price()));
                 if (!TextUtils.isEmpty(content.getDeposit_id())) {
                     vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price() - content.getDeposit_price()));
@@ -180,11 +347,17 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
             if (datalist.get(position).getStatus() == 1) {
                 vh.tv_status.setText("待付款");
                 vh.ll_pay.setVisibility(View.VISIBLE);
-            } else {
+            } else if (datalist.get(position).getStatus() == 2) {
                 vh.tv_status.setText("已付款");
                 vh.ll_pay.setVisibility(View.GONE);
+            } else if (datalist.get(position).getStatus() == 3) {
+                vh.tv_status.setText("已完成");
+                vh.ll_pay.setVisibility(View.GONE);
+            } else if (datalist.get(position).getStatus() == 4) {
+                vh.tv_status.setText("已取消");
+                vh.ll_pay.setVisibility(View.GONE);
             }
-            LogUtil.i(PriceUtils.formatPrice2String(datalist.get(position).getPrice()) + PriceUtils.formatPrice2String(content.getSell_price()));
+            //     LogUtil.i(PriceUtils.formatPrice2String(datalist.get(position).getPrice()) + PriceUtils.formatPrice2String(content.getSell_price()));
 
 
             vh.ll_item.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +372,13 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
                 }
             });
 
+            vh.btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showCanselDialog(position);
+
+                }
+            });
             return convertView;
 
         }
@@ -220,28 +400,68 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     }
 
     class StrBean {
-        public String pageCount;
+        public String page;
+    }
+
+    private void setEnd() {
+        //没数据了
+        isEnd = true;
+        ILoadingLayout endLabels = mListView.getLoadingLayoutProxy(
+                false, true);
+        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
+        endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
+        endLabels.setLoadingDrawable(null);
+      //  mListView.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
     /**
-     * 提交卡订单
+     * 查询订单
      *
-     * @param str
+     * @param pageCount
      * @throws JSONException
      */
-    public void find_all_order(final String str) throws JSONException {
+    public void find_all_order(final int pageCount) throws JSONException {
 
-        JSONObject jsonObject = new JSONObject(str);
+        StrBean strBean = new StrBean();
+        strBean.page = pageCount-1 + "";
+        String s = gson.toJson(strBean);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ALL__ORDER, jsonObject, new Response.Listener<JSONObject>() {
+        JSONObject jsonObject = new JSONObject(s.toString());
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ALL_ORDER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
                 RequestOrderListBean orderinfo = new RequestOrderListBean();
                 Gson gson = new Gson();
                 orderinfo = gson.fromJson(jsonObject.toString(), RequestOrderListBean.class);
-                datalist = orderinfo.getData().getContent();
-                myListAatapter.notifyDataSetChanged();
+                LogUtil.i(orderinfo.getData().getLast()+ "" + mCurrentPage);
+
+                if (orderinfo.getSuccess()){
+                    if (orderinfo.getData().getLast()) {
+                        //    mCurrentPage = mCurrentPage + 1;
+                        isEnd = true;
+                        setEnd();
+                    } else {
+                        //  datalist.addAll( orderinfo.getData().getContent());
+                        //  myListAatapter.notifyDataSetChanged();
+                        isEnd = false;
+                        init_pullToRefresh();
+                    }
+
+                    if (mCurrentPage == 1) {
+                        datalist = orderinfo.getData().getContent();
+                        myListAatapter.notifyDataSetChanged();
+                    } else {
+                        datalist.addAll(orderinfo.getData().getContent());
+                        myListAatapter.notifyDataSetChanged();
+                    }
+                    mCurrentPage=mCurrentPage+1;
+                }else {
+                    ToastUtils.showToastLong(orderinfo.getErrorMsg());
+                }
+
 
             }
         }, new Response.ErrorListener() {

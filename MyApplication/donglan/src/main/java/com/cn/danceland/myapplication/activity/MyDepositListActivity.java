@@ -53,7 +53,7 @@ public class MyDepositListActivity extends Activity implements View.OnClickListe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deposit);
+        setContentView(R.layout.activity_my_deposit);
         initView();
         initData();
 

@@ -48,6 +48,7 @@ public class DiscoverFragment extends BaseFragment {
         mTabPageIndicator = v.findViewById(R.id.id_indicator);
         mAdapter = new TabAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
+        //mViewPager.setOffscreenPageLimit(3);
         mTabPageIndicator.setViewPager(mViewPager, 0);
         mTabPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -138,9 +139,6 @@ public class DiscoverFragment extends BaseFragment {
                 break;
             case R.id.iv_photo://发布动态
 
-//                initDroppyMenu(iv_photo);
-//                showDroppyMenu();
-                //      showListDialog();
                 autoLocatedPopup.showPopupWindow(v);
                 break;
             case value:

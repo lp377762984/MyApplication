@@ -313,10 +313,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_deposit"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -371,6 +373,7 @@
 
 
         <Button
+            android:visibility="gone"
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -380,6 +383,7 @@
             android:textColor="#fff" />
 
         <Button
+            android:visibility="gone"
             android:id="@+id/btn_pay"
             android:layout_width="wrap_content"
             android:layout_height="40dp"

@@ -236,7 +236,12 @@ public class UserHomeActivity extends Activity {
         iv_userifno_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getSelf_avatar_path()));
+                if (!TextUtils.isEmpty(data.getSelf_avatar_path())){
+                    startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getSelf_avatar_path()));
+                }else {
+                    ToastUtils.showToastLong("未设置头像");
+                }
+
             }
         });
 

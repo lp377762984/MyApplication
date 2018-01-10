@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 
 public class OrderExtendsInfoBean implements Serializable {
-    private String admin_emp_id;
-    private String admin_emp_name;
-    private String admin_emp_phone;
-    private String branch_id;
-    private String branch_name;
+    private String admin_emp_id;//会籍顾问id
+    private String admin_emp_name;//会籍顾问名称
+    private String admin_emp_phone;//会籍顾问电话
+    private String branch_id;//店id
+    private String branch_name;//店名称
     private int charge_mode;
     private String deposit_id;
-    private float deposit_price;
+    private float deposit_price;//定金
     private float face_value;
     private String gender;
     private String member_id;
@@ -31,6 +31,9 @@ public class OrderExtendsInfoBean implements Serializable {
     private float sell_price;
     private int total_count;
     private String type_id;
+    private String  card_name;//会员卡名称
+    private int  deposit_type;//定金类型
+
 
     @Override
     public String toString() {
@@ -57,7 +60,25 @@ public class OrderExtendsInfoBean implements Serializable {
                 ", sell_price=" + sell_price +
                 ", total_count=" + total_count +
                 ", type_id='" + type_id + '\'' +
+                ", card_name='" + card_name + '\'' +
+                ", deposit_type=" + deposit_type +
                 '}';
+    }
+
+    public String getCard_name() {
+        return card_name;
+    }
+
+    public void setCard_name(String card_name) {
+        this.card_name = card_name;
+    }
+
+    public int getDeposit_type() {
+        return deposit_type;
+    }
+
+    public void setDeposit_type(int deposit_type) {
+        this.deposit_type = deposit_type;
     }
 
     public String getAdmin_emp_id() {

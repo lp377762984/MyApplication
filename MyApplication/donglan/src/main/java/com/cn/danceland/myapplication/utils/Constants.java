@@ -2,8 +2,8 @@ package com.cn.danceland.myapplication.utils;
 
 public class Constants {
 
-   public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-  //  public static final String HOST = "http://192.168.1.11:8003/";//服务器地址
+    public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+    //  public static final String HOST = "http://192.168.1.11:8003/";//服务器地址
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
     public static final String LOGIN_URL = HOST + "user/login ";//登录
@@ -73,7 +73,9 @@ public class Constants {
     public static final String COMMIT_DEPOSIT = HOST + "appDeposit/saveDeposit";//提交定金订单
     public static final String FIND_ALL_DEPOSIT = HOST + "appDeposit/findAllDeposit";//查询订单
     public static final String COMMIT_CARD_ORDER = HOST + "appOrder/saveCard";//提交卡订单
-  public static final String FIND_ALL__ORDER = HOST + "appOrder/findAllPage";//查询订单
+    public static final String FIND_ALL_ORDER = HOST + "appOrder/findAllPage";//查询订单
+    public static final String FIND_ALL_MY_CARD_LIST = HOST + "card/list";//查询我的会员卡
+    public static final String CANSEL_ORDER = HOST + "/appOrder/updateStatus";//取消订单
 
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
@@ -87,6 +89,10 @@ public class Constants {
     public static final String MY_LOCATION = "my_location";//我的地区
     public static final String MY_INFO = "my_info";//我的资料
     public static final String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
+
+    public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
+    public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
+    public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数
 
 
 }

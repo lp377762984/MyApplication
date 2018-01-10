@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -89,7 +88,7 @@ public class HomeFragment extends BaseFragment {
             switch (msg.what) {
                 case 1:
                     //加入头布局
-                    pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+                   // pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
                     topNewsAdapter.setData(imagelist);
                     topNewsAdapter.notifyDataSetChanged();
                     tv_indecater.setText((1) + "/" + imagelist.size());
@@ -151,6 +150,7 @@ public class HomeFragment extends BaseFragment {
         });
         // pullToRefresh.setVisibility(View.GONE);
         pullToRefresh.setAdapter(newsListviewAdapter);
+        pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
         return v;
     }
 
@@ -219,6 +219,7 @@ public class HomeFragment extends BaseFragment {
             init();
             mCurrentPage = 1;
             findNews(mCurrentPage);
+            findImageNews();
             return null;
         }
 
@@ -480,8 +481,8 @@ public class HomeFragment extends BaseFragment {
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findNews");
         // 设置超时时间
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
 
@@ -545,8 +546,8 @@ public class HomeFragment extends BaseFragment {
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findImageNews");
         // 设置超时时间
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
 

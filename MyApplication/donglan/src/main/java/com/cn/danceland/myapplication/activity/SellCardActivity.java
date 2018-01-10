@@ -57,8 +57,7 @@ import static com.cn.danceland.myapplication.R.id.tv_cardtype;
 
 public class SellCardActivity extends Activity implements View.OnClickListener {
 
-    private String[] names = {"黄金年卡", "白金年卡", "钻石年卡"};
-    private String[] data = new String[]{"全部", "年卡", "季卡", "月卡", "限时活动"};
+
     private ImageView iv_fenlie;
     private LinearLayout ll_fenlie;
     private TextView tv_tiltle;
@@ -121,12 +120,6 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_fenlie://分类
-//                if (sellCardsTypeBean.getData() != null && sellCardsTypeBean.getData().size() > 0) {
-//                    initDroppyMenu(ll_fenlie, sellCardsTypeBean.getData());
-//                    showDroppyMenu();
-//                } else {
-//                    ToastUtils.showToastShort("没有数据");
-//                }
 
                 listPopup.showPopupWindow(v);
                 iv_fenlie.setImageResource(R.drawable.img_down);

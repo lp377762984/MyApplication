@@ -70,7 +70,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
 
     private MyPopupListAdapter myPopupListAdapter;
-    private ListPopup listPopup;
+   // private ListPopup listPopup;
     private boolean isme = true;//是不是本人
     private String startDate;
     private Button btn_commit;
@@ -89,7 +89,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private void initData() {
         getDate();
 
-        findConsultant(CardsInfo.getBranch_id());
+    //    findConsultant(CardsInfo.getBranch_id());
     }
 
     //获取当前日期
@@ -107,7 +107,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         CardsInfo = (RequestSellCardsInfoBean.Data) bundle.getSerializable("cardinfo");
 
         myPopupListAdapter = new MyPopupListAdapter(this);
-        listPopup = new ListPopup(this);
+        //listPopup = new ListPopup(this);
         TextView tv_name = findViewById(R.id.tv_cardname);
         TextView tv_number = findViewById(R.id.tv_number);
         TextView tv_time = findViewById(R.id.tv_time);
@@ -358,7 +358,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                     consultantInfo = consultantListInfo.get(position);
 
                     tv_select_counselor.setText(consultantListInfo.get(position).getCname());
-                    listPopup.dismiss();
+             //       listPopup.dismiss();
                 }
             });
 
@@ -392,7 +392,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 finish();
             case R.id.tv_select_counselor://选择会籍顾问
 
-                listPopup.showPopupWindow();
+                //listPopup.showPopupWindow();
                 break;
             case R.id.tv_select_date://选择日期
 

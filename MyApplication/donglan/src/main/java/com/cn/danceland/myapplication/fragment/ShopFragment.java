@@ -34,6 +34,7 @@ import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
+import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
@@ -308,6 +309,15 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 11://我的订单
                         startActivity(new Intent(mActivity, MyOrderActivity.class));
+                        break;
+                    case 13://潜客维护
+                        startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class));
+                        break;
+                    case 14://会员维护
+                      //  startActivity(new Intent(mActivity, MyOrderActivity.class));
+                        break;
+                    case 15://待办事项
+                   //    startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     default:
                         break;
