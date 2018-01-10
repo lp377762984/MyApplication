@@ -195,7 +195,26 @@
         <activity
             android:name=".activity.OrderDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity
+        <activity android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.ReadyTestActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.EquipmentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TestingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessHistoryActivity"
+            android:screenOrientation="portrait"
+            />
+
+
+ 
+ <activity
             android:name=".activity.FitnessTestActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -210,7 +229,6 @@
             android:name=".activity.AddPotentialActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
-
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true">

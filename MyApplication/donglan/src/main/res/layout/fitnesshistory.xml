@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/history_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/dl_blue"
+        >
+        <ImageView
+            android:id="@+id/history_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="历史记录"
+            android:textSize="16sp"
+            android:textColor="@color/color_white"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_history"
+        android:layout_below="@+id/history_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+</RelativeLayout>
