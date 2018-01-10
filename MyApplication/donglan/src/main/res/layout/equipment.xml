@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_equipment"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/dl_blue"
+        >
+        <ImageView
+            android:id="@+id/equ_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="15dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="连接设备"
+            android:textSize="18sp"
+            android:textColor="@color/color_white"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_equipment"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        >
+        <TextView
+            android:id="@+id/tv_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择体测仪"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_select"
+            android:layout_marginTop="15dp"
+            android:text="请将手机靠近体测仪"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            />
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_below="@+id/rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="25dp"
+        android:background="#dcdcdc"
+        />
+    <ListView
+        android:id="@+id/lv_equ"
+        android:layout_below="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+    </ListView>
+
+</RelativeLayout>

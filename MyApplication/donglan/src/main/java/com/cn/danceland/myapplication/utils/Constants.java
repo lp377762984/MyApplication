@@ -88,5 +88,14 @@ public class Constants {
     public static final String MY_INFO = "my_info";//我的资料
     public static final String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
 
+    public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
+    public static final String REAYTEST = HOST +"appBca/findMemberBca";//提交用户信息
+    public static final String GETEQUIPMENT = HOST+"appBca/findPageBranchBca";//获取门店体测仪列表
+    public static final String CONNECTEQU = HOST+"appBca/connectTester";//连接设备
+    public static final String ISFINISHED = HOST+"appBca/isFinishedBca";//体测是否完成
+    public static final String FITNESS_HITORY= HOST + "appBca/findHistoryRecord";//体测历史记录
+    public static final String FINDONEHISTORY = HOST+"appBca/findOneHistoryRecord";//查看某条历史记录
+    public static final String FINDBODYAGE = HOST+"appBca/findBodyAge";//查询身体年龄
+
 
 }

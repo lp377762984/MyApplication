@@ -8,11 +8,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.BodyAgeBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -31,16 +46,60 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class BodyAgeActivity extends Activity {
     LineChartView lineChartView;
     ImageView body_back;
+    Gson gson;
+    List<BodyAgeBean.Data> data;
+    TextView no_content;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bodyage);
+
+        gson = new Gson();
         initView();
-        initLines();
+        initData();
+
+    }
+
+    private void initData() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDBODYAGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                BodyAgeBean bodyAgeBean = gson.fromJson(s, BodyAgeBean.class);
+                if(bodyAgeBean!=null){
+                    data = bodyAgeBean.getData();
+                    if(data!=null&&data.size()>=2){
+                        initLines(data);
+                    }else{
+                        no_content.setVisibility(View.VISIBLE);
+                        lineChartView.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请检查网络！");
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void initView() {
         lineChartView = findViewById(R.id.lineChartView);
+        no_content = findViewById(R.id.no_content);
 
         body_back = findViewById(R.id.body_back);
         body_back.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +112,7 @@ public class BodyAgeActivity extends Activity {
     }
 
 
-    private void initLines() {
+    private void initLines(List<BodyAgeBean.Data> data) {
 
         List<PointValue> pointValues = new ArrayList<PointValue>();// 身体年龄数据结合
         List<PointValue> realPoint = new ArrayList<PointValue>();// 身体年龄数据结合
@@ -77,44 +136,66 @@ public class BodyAgeActivity extends Activity {
         axisX.setHasSeparationLine(true);// 设置是否有分割线
         axisX.setInside(false);// 设置X轴文字是否在X轴内部
 
-        for (int j = 25; j <= 35; j++) {//循环为节点、X、Y轴添加数据
-            axisValuesY.add(new AxisValue(j));// 添加Y轴显示的刻度值
+        if(data!=null){
+            Float aFloat = Float.valueOf(data.get(0).getFaceAge());
+            for(int i=1;i<=data.size()+5;i++){
+                //axisValuesY.add(new AxisValue(i,(aFloat-i-2+"").toCharArray()));
+                axisValuesX.add(new AxisValue(i,("第"+i+"次").toCharArray()));
+            }
         }
-        for (int i=1; i <= 12; i++){
-            axisValuesX.add(new AxisValue(i,(i+"月").toCharArray()));
-        }
+
+//        for (int j = 25; j <= 35; j++) {//循环为节点、X、Y轴添加数据
+//            axisValuesY.add(new AxisValue(j));// 添加Y轴显示的刻度值
+//        }
+//        for (int i=1; i <= 12; i++){
+//            axisValuesX.add(new AxisValue(i,(i+"月").toCharArray()));
+//        }
         axisX.setValues(axisValuesX);//为X轴显示的刻度值设置数据集合
-        axisY.setValues(axisValuesY);
+        //axisY.setValues(axisValuesY);
         //for (int k=1; k<= 3; k++){
             //pointValues.add(new PointValue(k,Float.parseFloat(tempPoint.get(i))));
 
-        pointValues.add(new PointValue(1, 28));
-        pointValues.add(new PointValue(2, 25));
-        pointValues.add(new PointValue(3, 33));
-        pointValues.add(new PointValue(4, 26));
-        pointValues.add(new PointValue(5, 28));
-        pointValues.add(new PointValue(6, 31));
-        pointValues.add(new PointValue(7, 30));
-        pointValues.add(new PointValue(8, 31));
-        pointValues.add(new PointValue(9, 27));
-        pointValues.add(new PointValue(10, 25));
-        pointValues.add(new PointValue(11, 25));
-        pointValues.add(new PointValue(12, 26));
+        if(data!=null){
+            for(int i =0;i<data.size()+5;i++){
+//                PointValue pointValue = new PointValue();
+//                pointValue.set(i,Float.valueOf(data.get(0).getBodyage()));
+//                pointValue.setLabel(data.get(0).getBodyage());
+                pointValues.add(new PointValue(i,Float.valueOf(data.get(i).getBodyage())));
+                //pointValues.add(new PointValue(i,Float.valueOf(data.get(i).getBodyage())));
+//                PointValue pointValue1 = new PointValue();
+//                pointValue1.set(i,Float.valueOf(data.get(0).getFaceAge()));
+                //pointValue1.setLabel(data.get(i).getFaceAge());
+                realPoint.add(new PointValue(i,Float.valueOf(data.get(i).getFaceAge())));
+                //realPoint.add(new PointValue(i,Float.valueOf(data.get(i).getFaceAge())));
+            }
+        }
+//        pointValues.add(new PointValue(1, 28));
+//        pointValues.add(new PointValue(2.1f, 25));
+//        pointValues.add(new PointValue(3, 33));
+//        pointValues.add(new PointValue(4, 26));
+//        pointValues.add(new PointValue(5, 28));
+//        pointValues.add(new PointValue(6, 31));
+//        pointValues.add(new PointValue(7, 30));
+//        pointValues.add(new PointValue(8, 31));
+//        pointValues.add(new PointValue(9, 27));
+//        pointValues.add(new PointValue(10, 25));
+//        pointValues.add(new PointValue(11, 25));
+//        pointValues.add(new PointValue(12, 26));
        // }
 
 
-        realPoint.add(new PointValue(1, 29));
-        realPoint.add(new PointValue(2, 29));
-        realPoint.add(new PointValue(3, 29));
-        realPoint.add(new PointValue(4, 29));
-        realPoint.add(new PointValue(5, 29));
-        realPoint.add(new PointValue(6, 29));
-        realPoint.add(new PointValue(7, 29));
-        realPoint.add(new PointValue(8, 29));
-        realPoint.add(new PointValue(9, 29));
-        realPoint.add(new PointValue(10, 29));
-        realPoint.add(new PointValue(11, 29));
-        realPoint.add(new PointValue(12, 29));
+//        realPoint.add(new PointValue(1, 29));
+//        realPoint.add(new PointValue(2, 29));
+//        realPoint.add(new PointValue(3, 29));
+//        realPoint.add(new PointValue(4, 29));
+//        realPoint.add(new PointValue(5, 29));
+//        realPoint.add(new PointValue(6, 29));
+//        realPoint.add(new PointValue(7, 29));
+//        realPoint.add(new PointValue(8, 29));
+//        realPoint.add(new PointValue(9, 29));
+//        realPoint.add(new PointValue(10, 29));
+//        realPoint.add(new PointValue(11, 29));
+//        realPoint.add(new PointValue(12, 29));
 
         List<Line> lines = new ArrayList<Line>();//定义线的集合
         Line line = new Line(pointValues);//将值设置给折线

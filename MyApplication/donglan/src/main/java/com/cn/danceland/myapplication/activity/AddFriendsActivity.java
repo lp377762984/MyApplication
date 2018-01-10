@@ -57,12 +57,16 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     private TextView tv_nickname;
     private ImageView iv_avatar;
     private TextView tv_guanzhu;
-    private TextView tv_result_null;
+    private TextView tv_result_null,tv_title;
     private RequestAddFriendInfoBean userInfo;
+    private String from;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
+
+        from = getIntent().getStringExtra("from");
         iv_del = findViewById(R.id.iv_del);
         ll_search = findViewById(R.id.ll_search);
         ll_result = findViewById(R.id.ll_result);
@@ -71,6 +75,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
         tv_nickname = findViewById(R.id.tv_nickname);
         iv_avatar = findViewById(R.id.iv_avatar);
         iv_avatar.setOnClickListener(this);
+        ll_result.setOnClickListener(this);
 //        iv_avatar.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -80,6 +85,11 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
 
 
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
+        tv_title = findViewById(R.id.tv_title);
+        if("体测".equals(from)){
+            tv_guanzhu.setVisibility(View.GONE);
+            tv_title.setText("搜索会员");
+        }
         findViewById(R.id.tv_guanzhu).setOnClickListener(this);
         tv_result_null = findViewById(R.id.tv_result_null);
         setListener();
@@ -155,8 +165,14 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 findUser(mEtPhone.getText().toString().trim());
 
                 break;
-            case R.id.iv_avatar:
-                startActivity(new Intent(AddFriendsActivity.this,UserHomeActivity.class).putExtra("id", userInfo.getData().getUserId()));
+            case R.id.ll_result:
+                if("体测".equals(from)){
+                    Intent intent = new Intent(AddFriendsActivity.this,ReadyTestActivity.class);
+                    intent.putExtra("id",userInfo.getData().getUserId());
+                    startActivity(intent);
+                }else{
+                    startActivity(new Intent(AddFriendsActivity.this,UserHomeActivity.class).putExtra("id", userInfo.getData().getUserId()));
+                }
                 break;
             default:
                 break;

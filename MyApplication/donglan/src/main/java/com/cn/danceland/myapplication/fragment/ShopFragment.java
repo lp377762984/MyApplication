@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
@@ -165,6 +166,7 @@ public class ShopFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                ll_top.setVisibility(View.GONE);
                 ToastUtils.showToastShort("请查看网络连接");
             }
         }) {
@@ -308,6 +310,11 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 11://我的订单
                         startActivity(new Intent(mActivity, MyOrderActivity.class));
+                        break;
+                    case 12://体测
+                        Intent intent = new Intent(mActivity,AddFriendsActivity.class);
+                        intent.putExtra("from","体测");
+                        startActivity(intent);
                         break;
                     default:
                         break;
