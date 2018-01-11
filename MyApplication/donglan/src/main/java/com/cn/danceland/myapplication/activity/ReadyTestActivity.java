@@ -126,7 +126,7 @@ public class ReadyTestActivity extends Activity {
                 new DatePickerDialog(ReadyTestActivity.this,new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
                         //et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
-                        ed_birthday.setText(year+"年"+(month+1)+"月"+dayOfMonth+"日");
+                        ed_birthday.setText(year+"-"+(month+1)+"-"+dayOfMonth);
                     }
                 }, c.get(Calendar.YEAR), // 传入年份
                         c.get(Calendar.MONTH), // 传入月份
