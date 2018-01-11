@@ -77,6 +77,12 @@ public class Constants {
     public static final String FIND_ALL_MY_CARD_LIST = HOST + "card/list";//查询我的会员卡
     public static final String CANSEL_ORDER = HOST + "/appOrder/updateStatus";//取消订单
 
+    public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
+
+
+    //参数相关
+
+    public static final String FIND_BY_TYPE_CODE = HOST + "appDict/findByTypeCode/";//查询潜客资料相关参数
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调

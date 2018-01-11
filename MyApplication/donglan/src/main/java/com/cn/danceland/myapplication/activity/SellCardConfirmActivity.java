@@ -70,7 +70,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
 
     private MyPopupListAdapter myPopupListAdapter;
-   // private ListPopup listPopup;
+    // private ListPopup listPopup;
     private boolean isme = true;//是不是本人
     private String startDate;
     private Button btn_commit;
@@ -89,7 +89,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private void initData() {
         getDate();
 
-    //    findConsultant(CardsInfo.getBranch_id());
+        //    findConsultant(CardsInfo.getBranch_id());
     }
 
     //获取当前日期
@@ -358,7 +358,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                     consultantInfo = consultantListInfo.get(position);
 
                     tv_select_counselor.setText(consultantListInfo.get(position).getCname());
-             //       listPopup.dismiss();
+                    //       listPopup.dismiss();
                 }
             });
 
@@ -448,7 +448,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
                 bundle.putInt("product_type", 1);
                 startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
-
+                finish();
                 break;
             case R.id.btn_dj_commit://支付定金
 
@@ -481,7 +481,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
                 bundle1.putInt("product_type", 2);
                 startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle1));
-
+                finish();
 
                 break;
             case value:

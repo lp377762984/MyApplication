@@ -2,7 +2,9 @@ package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -35,9 +37,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.OrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
+import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -91,7 +93,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     private TextView tv_dingjin;
     private String depositId;
     private float deposit_price;
-
+    private Button btn_repay;
+    private String strBean;
+    private String unpaidOrder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,6 +137,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         findViewById(R.id.ll_counselor).setOnClickListener(this);
         findViewById(R.id.iv_phonebook).setOnClickListener(this);
         btn_commit = findViewById(R.id.btn_commit);
+        btn_repay = findViewById(R.id.btn_commit2);
+        btn_repay.setOnClickListener(this);
         findViewById(R.id.btn_commit).setOnClickListener(this);
         tv_counselor = findViewById(R.id.tv_counselor);
         et_grant_name = findViewById(R.id.et_grant_name);
@@ -321,13 +327,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 if (requestOrderInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
-                    if (pay_way == 1) {//支付宝
-                        alipay(requestOrderInfoBean.getData().getId());
-                    }
-                    if (pay_way == 2) {
-                        //微信
-                        wechatPay(requestOrderInfoBean.getData().getId());
-                    }
+                    showPayDialog(pay_way, requestOrderInfoBean.getData().getId());
+
 
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
@@ -375,13 +376,16 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 if (requestOrderInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
-                    if (pay_way == 1) {//支付宝
-                        alipay(requestOrderInfoBean.getData().getId());
-                    }
-                    if (pay_way == 2) {
-                        //微信
-                        wechatPay(requestOrderInfoBean.getData().getId());
-                    }
+
+                    showPayDialog(pay_way, requestOrderInfoBean.getData().getId());
+
+//                    if (pay_way == 1) {//支付宝
+//                        alipay(requestOrderInfoBean.getData().getId());
+//                    }
+//                    if (pay_way == 2) {
+//                        //微信
+//                        wechatPay(requestOrderInfoBean.getData().getId());
+//                    }
 
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
@@ -426,6 +430,35 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     }
 
+    private void showPayDialog(final int pay_way, final String orderId) {
+        AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(this);
+        normalDialog.setMessage("订单已提交，是否现在支付");
+        normalDialog.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (pay_way == 1) {
+                            //支付宝
+                            alipay(orderId);
+                        }
+                        if (pay_way == 2) {
+                            //微信
+                            wechatPay(orderId);
+                        }
+                    }
+                });
+        normalDialog.setNegativeButton("稍后",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        btn_repay.setVisibility(View.VISIBLE);
+                        unpaidOrder=orderId;
+                    }
+                });
+        // 显示
+        normalDialog.show();
+    }
 
     /**
      * 支付宝支付
@@ -452,8 +485,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
+                    finish();
                 } else {
                     ToastUtils.showToastShort("支付失败");
+                    btn_repay.setVisibility(View.VISIBLE);
                 }
 
 
@@ -503,8 +538,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
+                    finish();
                 } else {
                     ToastUtils.showToastShort("支付失败");
+                    btn_repay.setVisibility(View.VISIBLE);
                 }
 
 
@@ -524,7 +561,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 return map;
             }
         };
-        //   MyApplication.getHttpQueues().add(stringRequest);
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -649,7 +686,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     orderInfoBean.setPay_way(pay_way + "");
                     orderInfoBean.setCard_type_id(CardsInfo.getId());
                     orderInfoBean.setCard_name(CardsInfo.getName());
-                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count()+"");
+                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count() + "");
                     if (!TextUtils.isEmpty(depositId)) {
                         orderInfoBean.setDeposit_id(depositId);
                         orderInfoBean.setDeposit_price(deposit_price + "");
@@ -677,7 +714,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
 
                     Gson gson = new Gson();
-                    String strBean = gson.toJson(orderInfoBean);
+                    strBean = gson.toJson(orderInfoBean);
                     LogUtil.i(strBean.toString());
                     try {
                         commit_card(strBean.toString());
@@ -726,7 +763,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
 
                     Gson gson = new Gson();
-                    String strBean = gson.toJson(orderInfoBean);
+                    strBean = gson.toJson(orderInfoBean);
                     LogUtil.i(strBean.toString());
                     try {
                         commit_deposit(strBean.toString());
@@ -738,6 +775,19 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
 
                 break;
+            case R.id.btn_commit2://重新支付
+
+                if (pay_way == 1) {
+                    //支付宝
+                    alipay(unpaidOrder);
+                }
+                if (pay_way == 2) {
+                    //微信
+                    wechatPay(unpaidOrder);
+                }
+
+                break;
+
 
             default:
                 break;

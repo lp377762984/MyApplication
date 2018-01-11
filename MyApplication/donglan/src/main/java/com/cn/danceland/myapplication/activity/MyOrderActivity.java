@@ -25,6 +25,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.OrderExtendsInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderListBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PriceUtils;
@@ -141,7 +142,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-       //   myListAatapter.notifyDataSetChanged();
+            //   myListAatapter.notifyDataSetChanged();
             mListView.onRefreshComplete();
             myListAatapter.notifyDataSetChanged();
             if (isEnd) {//没数据了
@@ -151,7 +152,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     }
 
     private void init_pullToRefresh() {
-         mListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mListView.setMode(PullToRefreshBase.Mode.BOTH);
         // 设置下拉刷新文本
         ILoadingLayout startLabels = mListView
                 .getLoadingLayoutProxy(true, false);
@@ -167,7 +168,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
-
+        mCurrentPage = 1;
         try {
             find_all_order(mCurrentPage);
         } catch (JSONException e) {
@@ -379,6 +380,29 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
 
                 }
             });
+            vh.btn_pay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    float price = 0;
+                    if (datalist.get(position).getBus_type() == 1) {
+                        price = datalist.get(position).getPrice();
+                    }
+                    if (datalist.get(position).getBus_type() == 2) {
+                        if (!TextUtils.isEmpty(content.getDeposit_id())) {
+                            price = content.getSell_price() - content.getDeposit_price();
+                        } else {
+                            price = content.getSell_price();
+                        }
+                    }
+
+                    if (datalist.get(position).getPay_way() == 1) {
+                        alipay(datalist.get(position).getId(),price,position );
+                    }
+                    if (datalist.get(position).getPay_way() == 2) {
+                        wechatPay(datalist.get(position).getId(),price,position );
+                    }
+                }
+            });
             return convertView;
 
         }
@@ -412,8 +436,134 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
         endLabels.setRefreshingLabel("—我是有底线的—");// 刷新时
         endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
         endLabels.setLoadingDrawable(null);
-      //  mListView.setMode(PullToRefreshBase.Mode.DISABLED);
+        //  mListView.setMode(PullToRefreshBase.Mode.DISABLED);
     }
+
+
+    /**
+     * 微信支付
+     */
+    private void wechatPay(String id, float pay_price, final int pos) {
+        PayBean payBean = new PayBean();
+        payBean.id = id;
+        payBean.order_no = 12345 + "";
+        payBean.price = pay_price;
+        String str = gson.toJson(payBean);
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(str);
+            LogUtil.i(jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_WECHAT_PAY, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+                if (requestSimpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("支付成功");
+                    datalist.get(pos).setStatus(2);
+                    myListAatapter.notifyDataSetChanged();
+                } else {
+                    ToastUtils.showToastShort("支付失败");
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        //   MyApplication.getHttpQueues().add(stringRequest);
+
+    }
+
+
+    class PayBean {
+        public String id;
+        public String order_no;
+        public float price;
+
+        @Override
+        public String toString() {
+            return "PayBean{" +
+                    "id='" + id + '\'' +
+                    ", order_no='" + order_no + '\'' +
+                    ", price='" + price + '\'' +
+                    '}';
+        }
+
+
+    }
+
+    /**
+     * 支付宝支付
+     */
+    private void alipay(String id, float pay_price, final int pos) {
+        PayBean payBean = new PayBean();
+        payBean.id = id;
+        payBean.order_no = 12345 + "";
+        payBean.price = pay_price;
+        String str = gson.toJson(payBean);
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(str);
+            LogUtil.i(jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+                if (requestSimpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("支付成功");
+                    datalist.get(pos).setStatus(2);
+                    myListAatapter.notifyDataSetChanged();
+
+                } else {
+                    ToastUtils.showToastShort("支付失败");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
+
 
     /**
      * 查询订单
@@ -424,7 +574,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
     public void find_all_order(final int pageCount) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.page = pageCount-1 + "";
+        strBean.page = pageCount - 1 + "";
         String s = gson.toJson(strBean);
 
         JSONObject jsonObject = new JSONObject(s.toString());
@@ -436,9 +586,9 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
                 RequestOrderListBean orderinfo = new RequestOrderListBean();
                 Gson gson = new Gson();
                 orderinfo = gson.fromJson(jsonObject.toString(), RequestOrderListBean.class);
-                LogUtil.i(orderinfo.getData().getLast()+ "" + mCurrentPage);
+                LogUtil.i(orderinfo.getData().getLast() + "" + mCurrentPage);
 
-                if (orderinfo.getSuccess()){
+                if (orderinfo.getSuccess()) {
                     if (orderinfo.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
                         isEnd = true;
@@ -457,8 +607,8 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
                         datalist.addAll(orderinfo.getData().getContent());
                         myListAatapter.notifyDataSetChanged();
                     }
-                    mCurrentPage=mCurrentPage+1;
-                }else {
+                    mCurrentPage = mCurrentPage + 1;
+                } else {
                     ToastUtils.showToastLong(orderinfo.getErrorMsg());
                 }
 
@@ -483,4 +633,6 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
+
+
 }
