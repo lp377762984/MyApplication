@@ -141,7 +141,7 @@ public class MyProActivity extends Activity {
         zoneCode = infoData.getZoneCode();
         zoneArr = new ArrayList<Donglan>();
         if (zoneCode != null && !"".equals(zoneCode)) {
-            zoneArr = dbData.queryCityValue(zoneCode);
+            zoneArr = dbData.queryCityValue(zoneCode+".0");
         }
         initLocationData();
     }
