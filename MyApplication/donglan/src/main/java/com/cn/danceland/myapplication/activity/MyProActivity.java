@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -618,6 +619,9 @@ public class MyProActivity extends Activity {
         }
         //normalDialog.setTitle("编辑昵称");
         final EditText ed = dialogView.findViewById(R.id.edit_name);
+        if (i==1){
+            ed.setInputType(InputType.TYPE_CLASS_NUMBER);
+        }
         normalDialog.setView(dialogView);
         normalDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
