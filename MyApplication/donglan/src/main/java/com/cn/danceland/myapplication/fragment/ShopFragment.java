@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
+import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
@@ -306,6 +307,9 @@ public class ShopFragment extends BaseFragment {
                 switch (data.get(i).getId()) {
                     case 2://我的会员卡
                         startActivity(new Intent(mActivity, MyCardActivity.class));
+                        break;
+                    case 4://购买私教
+                        startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
                         break;
                     case 6://课程表
                         startActivity(new Intent(mActivity, CourseActivity.class));

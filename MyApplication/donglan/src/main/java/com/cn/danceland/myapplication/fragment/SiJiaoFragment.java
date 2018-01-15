@@ -118,6 +118,7 @@ public class SiJiaoFragment extends BaseFragment {
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
             }
             MyListView mylist = convertView.findViewById(R.id.mylist);
+            mylist.setDividerHeight(0);
             mylist.setAdapter(new MyListAdapter());
 
             return convertView;
