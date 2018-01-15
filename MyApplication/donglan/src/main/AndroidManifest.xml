@@ -212,16 +212,6 @@
             android:screenOrientation="portrait"
             />
 
-
- 
- <activity
-            android:name=".activity.FitnessTestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.BodyAgeActivity"
-            android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".activity.PotentialCustomerRevisitActivity"
             android:screenOrientation="portrait" />
@@ -229,6 +219,13 @@
             android:name=".activity.AddPotentialActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.CourseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TuanKeDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SiJiaoDetailActivity"
+            android:screenOrientation="portrait"/>
+
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true">

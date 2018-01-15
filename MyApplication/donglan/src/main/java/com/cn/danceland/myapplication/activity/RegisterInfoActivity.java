@@ -1,13 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +37,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,19 +55,23 @@ import java.util.Map;
 public class RegisterInfoActivity extends Activity{
 
     String strSex = "1",strBirthday = "1990-12-10",strHeight = "170",strWeight  = "55";
-    TextView text_birthday,cancel_action,text_height,text_name,text_male,text_female,over,text_weight,
-            selecttitle,button;
+    TextView text_birthday,text_height,text_name,text_male,text_female,text_weight,
+            button,tv_start,over_time;
     PopupWindow mPopWindow;
-    ListView list_year,list_date,list_height;
+    //ListView list_year,list_date,list_height;
     SimpleAdapter mSchedule;
     MyAdapter arrayAdapter;
-    View contentView;
+    //View contentView;
+    View inflate;
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
     RequestQueue requestQueue;
     String id,strName,gender = "1";//性别:1、男，2、女，3、未知，4、保密
     Data mData;
     Gson gson;
+    AlertDialog.Builder alertdialog;
+    LoopView loopview;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,15 +93,23 @@ public class RegisterInfoActivity extends Activity{
     }
 
     public void intiView(){
-        contentView = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.selectorwindowsingle,null);
-        mPopWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        inflate = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.timeselect, null);
+        tv_start = inflate.findViewById(R.id.tv_start);
+        tv_start.setVisibility(View.GONE);
+        loopview = inflate.findViewById(R.id.loopview);
+        over_time = inflate.findViewById(R.id.over_time);
+        over_time.setVisibility(View.GONE);
+
+        alertdialog = new AlertDialog.Builder(RegisterInfoActivity.this);
+        //contentView = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.selectorwindowsingle,null);
+//        mPopWindow = new PopupWindow(contentView,
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
 //        list_year = contentView.findViewById(R.id.list_year);
 //        list_date = contentView.findViewById(R.id.list_date);
-        list_height = contentView.findViewById(R.id.list_height);
-        cancel_action = contentView.findViewById(R.id.cancel_action);
-        over = contentView.findViewById(R.id.over);
-        selecttitle = contentView.findViewById(R.id.selecttitle);
+//        list_height = contentView.findViewById(R.id.list_height);
+//        cancel_action = contentView.findViewById(R.id.cancel_action);
+//        over = contentView.findViewById(R.id.over);
+//        selecttitle = contentView.findViewById(R.id.selecttitle);
         button = findViewById(R.id.button);
         text_birthday = findViewById(R.id.text_birthday);
         text_height = findViewById(R.id.text_height);
@@ -108,12 +122,12 @@ public class RegisterInfoActivity extends Activity{
     }
     public void setClick(){
         text_birthday.setOnClickListener(onclick);
-        cancel_action.setOnClickListener(onclick);
+        //cancel_action.setOnClickListener(onclick);
         text_height.setOnClickListener(onclick);
         text_name.setOnClickListener(onclick);
         text_male.setOnClickListener(onclick);
         text_female.setOnClickListener(onclick);
-        over.setOnClickListener(onclick);
+        //over.setOnClickListener(onclick);
         text_weight.setOnClickListener(onclick);
         button.setOnClickListener(onclick);
     }
@@ -139,12 +153,14 @@ public class RegisterInfoActivity extends Activity{
                 }
                 break;
                 case R.id.text_height:
-                    showSelectorWindow(0);
-                    selecttitle.setText("选择身高");
+                    //showSelectorWindow(0);
+                    //selecttitle.setText("选择身高");
+                    showWH(0);
                     break;
                 case R.id.text_weight:
-                    showSelectorWindow(1);
-                    selecttitle.setText("选择体重");
+                    //showSelectorWindow(1);
+                    //selecttitle.setText("选择体重");
+                    showWH(1);
                     break;
                 case R.id.text_name:
                     text_name.setText("");
@@ -182,6 +198,55 @@ public class RegisterInfoActivity extends Activity{
         }
     };
 
+    private void showWH(final int j){
+        int n;
+        final ArrayList<String> arrayList = new ArrayList<String>();
+        ViewGroup parent = (ViewGroup)inflate.getParent();
+        if(parent!=null){
+            parent.removeAllViews();
+        }
+        if(j==0){
+            for(int i = 0;i<71;i++){
+                n = 150+i;
+                arrayList.add(n+"");
+            }
+        }else {
+            for(int y=0;y<165;y++){
+                n = 35+y;
+                arrayList.add(n+"");
+            }
+        }
+        loopview.setNotLoop();
+        loopview.setItems(arrayList);
+        //设置初始位置
+        loopview.setInitPosition(0);
+        loopview.setTextSize(18);
+        loopview.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                if(j==0){
+                    text_height.setText(arrayList.get(index)+" cm");
+                }else{
+                    text_weight.setText(arrayList.get(index)+" kg");
+                }
+            }
+        });
+        if(j==0){
+            alertdialog.setTitle("选择身高");
+        }else{
+            alertdialog.setTitle("选择体重");
+        }
+
+        alertdialog.setView(inflate);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alertdialog.show();
+    }
+
     public void showName(){
 
         AlertDialog.Builder normalDialog =
@@ -211,55 +276,55 @@ public class RegisterInfoActivity extends Activity{
 
     }
 
-    public void showSelectorWindow(int x){
-        final int j = x;
-        mPopWindow.setContentView(contentView);
-        //显示PopupWindow
-        View rootview = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.activity_register_info, null);
-        String[] str  = new String[71];
-        Integer[] str1 = new Integer[165];
-        final ArrayList<String> arHeight = new ArrayList<String>();
-        int n;
-        if(j==0){
-            for(int i = 0;i<71;i++){
-                n = 150+i;
-                str[i] = n+"";
-            }
-            Arrays.sort(str);
-            for(int z = 0;z<str.length;z++){
-                arHeight.add(str[z]);
-            }
-        }else {
-            for(int y=0;y<165;y++){
-                n = 35+y;
-                str1[y] = n;
-            }
-            Arrays.sort(str1);
-            for(int z = 0;z<str1.length;z++){
-                arHeight.add(str1[z]+"");
-            }
-        }
+//    public void showSelectorWindow(int x){
+//        final int j = x;
+//        mPopWindow.setContentView(contentView);
+//        //显示PopupWindow
+//        View rootview = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.activity_register_info, null);
+//        String[] str  = new String[71];
+//        Integer[] str1 = new Integer[165];
+//        final ArrayList<String> arHeight = new ArrayList<String>();
+//        int n;
+//        if(j==0){
+//            for(int i = 0;i<71;i++){
+//                n = 150+i;
+//                str[i] = n+"";
+//            }
+//            Arrays.sort(str);
+//            for(int z = 0;z<str.length;z++){
+//                arHeight.add(str[z]);
+//            }
+//        }else {
+//            for(int y=0;y<165;y++){
+//                n = 35+y;
+//                str1[y] = n;
+//            }
+//            Arrays.sort(str1);
+//            for(int z = 0;z<str1.length;z++){
+//                arHeight.add(str1[z]+"");
+//            }
+//        }
 
-        arrayAdapter = new MyAdapter(arHeight,this);
-        list_height.setAdapter(arrayAdapter);
-
-        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
-        mPopWindow.setAnimationStyle(R.style.selectorMenuAnim);
-
-        list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(j==0){
-                    text_height.setText(arHeight.get(i)+" cm");
-                    strHeight = arHeight.get(i);
-                }else{
-                    text_weight.setText(arHeight.get(i)+" kg");
-                    strWeight = arHeight.get(i);
-                }
-            }
-        });
-
-    }
+//        arrayAdapter = new MyAdapter(arHeight,this);
+//        list_height.setAdapter(arrayAdapter);
+//
+//        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+//        mPopWindow.setAnimationStyle(R.style.selectorMenuAnim);
+//
+//        list_height.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                if(j==0){
+//                    text_height.setText(arHeight.get(i)+" cm");
+//                    strHeight = arHeight.get(i);
+//                }else{
+//                    text_weight.setText(arHeight.get(i)+" kg");
+//                    strWeight = arHeight.get(i);
+//                }
+//            }
+//        });
+//
+//    }
 
     public void dismissWindow(){
         if(null != mPopWindow && mPopWindow.isShowing()){
