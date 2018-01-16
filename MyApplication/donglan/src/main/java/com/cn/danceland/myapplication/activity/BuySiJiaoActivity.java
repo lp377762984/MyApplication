@@ -22,6 +22,7 @@ import com.cn.danceland.myapplication.R;
 
 public class BuySiJiaoActivity extends Activity {
     ListView lv_sijiaocard;
+    ImageView buy_img;
 
 
     @Override
@@ -39,6 +40,14 @@ public class BuySiJiaoActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(new Intent(BuySiJiaoActivity.this,SellSiJiaoConfirmActivity.class));
+                finish();
+            }
+        });
+
+        buy_img = findViewById(R.id.buy_img);
+        buy_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });

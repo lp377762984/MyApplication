@@ -229,6 +229,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SellSiJiaoConfirmActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SiJiaoOrderActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
