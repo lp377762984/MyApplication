@@ -2,8 +2,8 @@ package com.cn.danceland.myapplication.utils;
 
 public class Constants {
 
-    public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
- //   public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
+    //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+    public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
     public static final String LOGIN_URL = HOST + "user/login ";//登录
