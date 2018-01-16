@@ -7,6 +7,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 往SDCard写入数据权限 -->
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--请求访问使用照相设备-->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -45,6 +46,9 @@
 
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <permission
         android:name="com.cn.danceland.myapplication.permission.MIPUSH_RECEIVE"
@@ -124,6 +128,9 @@
         <activity
             android:name=".activity.MapActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PotentialDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -136,6 +143,12 @@
 
         <activity
             android:name=".activity.AddFriendsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddRevisiterRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AddUpcomingMatterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.UserHomeActivity"
@@ -195,31 +208,26 @@
         <activity
             android:name=".activity.OrderDetailsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.FitnessTestActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.BodyAgeActivity"
-            android:screenOrientation="portrait"
-            />
-
-        <activity android:name=".activity.ReadyTestActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.EquipmentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.TestingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.FitnessHistoryActivity"
-            android:screenOrientation="portrait"
-            />
-
-
- 
- <activity
+        <activity
             android:name=".activity.FitnessTestActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BodyAgeActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ReadyTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TestingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FitnessHistoryActivity"
+            android:screenOrientation="portrait" />
+
 
 
         <activity
@@ -227,8 +235,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddPotentialActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true">

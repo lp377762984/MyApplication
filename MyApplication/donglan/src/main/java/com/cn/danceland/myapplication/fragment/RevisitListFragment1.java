@@ -45,7 +45,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +58,11 @@ import static com.cn.danceland.myapplication.R.id.tv_name;
 /**
  * Created by shy on 2018/1/9 09:39
  * Email:644563767@qq.com
- * //回访人员列表
+ * //回访人员列表1
  */
 
 
-public class RevisitListFragment extends BaseFragment {
+public class RevisitListFragment1 extends BaseFragment {
     private PullToRefreshListView mListView;
     private List<RequsetPotentialListBean.Data.Content> datalist = new ArrayList<>();
     private MyListAatapter myListAatapter;
@@ -88,70 +91,70 @@ public class RevisitListFragment extends BaseFragment {
 
         switch (event.getEventCode()) {
 
-            case 161://刷新页面
-                mCurrentPage = 1;
-                strBean.page = strBean.page = mCurrentPage - 1 + "";
-                try {
-                    find_potential_list(gson.toJson(strBean).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case 162://最近维护
-                strBean = new StrBean(auth);
-                mCurrentPage = 1;
-                StrBean.Order order=new StrBean.Order();
-                order.setLast_time("desc");//最近维护
-                strBean.setOrder(order);
-                try {
-                    find_potential_list(gson.toJson(strBean).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case 163://最晚维护
-                strBean = new StrBean(auth);
-                mCurrentPage = 1;
-                strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order1=new StrBean.Order();
-                order1.setLast_time("asc");
-                strBean.setOrder(order1);
-                try {
-                    find_potential_list(gson.toJson(strBean).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case 164://健身指数
-                strBean = new StrBean(auth);
-                mCurrentPage = 1;
-                strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order2=new StrBean.Order();
-                order2.setLast_time("desc");
-                order2.setFitness_level("desc");
-                strBean.setOrder(order2);
-
-                try {
-                    find_potential_list(gson.toJson(strBean).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case 165://关注程度
-                strBean = new StrBean(auth);
-                mCurrentPage = 1;
-                strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order3=new StrBean.Order();
-                order3.setLast_time("desc");//最近维护
-                order3.setFollow_level("desc");
-                strBean.setOrder(order3);
-
-                try {
-                    find_potential_list(gson.toJson(strBean).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
+//            case 161://刷新页面
+//                mCurrentPage = 1;
+//                strBean.page = strBean.page = mCurrentPage - 1 + "";
+//                try {
+//                    find_potential_list(gson.toJson(strBean).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case 162://最近维护
+//                strBean = new StrBean(auth);
+//                mCurrentPage = 1;
+//                StrBean.Order order=new StrBean.Order();
+//                order.setLast_time("desc");//最近维护
+//                strBean.setOrder(order);
+//                try {
+//                    find_potential_list(gson.toJson(strBean).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case 163://最晚维护
+//                strBean = new StrBean(auth);
+//                mCurrentPage = 1;
+//                strBean.setPage(mCurrentPage - 1 + "");
+//                StrBean.Order order1=new StrBean.Order();
+//                order1.setLast_time("asc");
+//                strBean.setOrder(order1);
+//                try {
+//                    find_potential_list(gson.toJson(strBean).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case 164://健身指数
+//                strBean = new StrBean(auth);
+//                mCurrentPage = 1;
+//                strBean.setPage(mCurrentPage - 1 + "");
+//                StrBean.Order order2=new StrBean.Order();
+//                order2.setLast_time("desc");
+//                order2.setFitness_level("desc");
+//                strBean.setOrder(order2);
+//
+//                try {
+//                    find_potential_list(gson.toJson(strBean).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            case 165://关注程度
+//                strBean = new StrBean(auth);
+//                mCurrentPage = 1;
+//                strBean.setPage(mCurrentPage - 1 + "");
+//                StrBean.Order order3=new StrBean.Order();
+//                order3.setLast_time("desc");//最近维护
+//                order3.setFollow_level("desc");
+//                strBean.setOrder(order3);
+//
+//                try {
+//                    find_potential_list(gson.toJson(strBean).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
 
             default:
                 break;
@@ -203,13 +206,23 @@ public class RevisitListFragment extends BaseFragment {
 
     @Override
     public void initDta() {
+       // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, -1);//减一个月
+        Date m = c.getTime();
+        String date = format.format(m);
+       // LogUtil.i("过去一个月："+date);
+
         strBean = new StrBean(auth);
         mCurrentPage = 1;
         strBean.setPage(mCurrentPage - 1 + "");
-        StrBean.Order order=new StrBean.Order();
+        StrBean.Order order = new StrBean.Order();
         order.setLast_time("desc");//最近维护
         strBean.setOrder(order);
-        LogUtil.i(strBean.toString());
+        strBean.setLast_time_lt(date);//最近一个未维护
+        LogUtil.i(gson.toJson(strBean).toString());
         try {
             find_potential_list(gson.toJson(strBean).toString());
         } catch (JSONException e) {
@@ -300,6 +313,7 @@ public class RevisitListFragment extends BaseFragment {
         public String page;
         public String auth;
         public Order order;
+        public String last_time_lt;
 
         @Override
         public String toString() {
@@ -307,7 +321,16 @@ public class RevisitListFragment extends BaseFragment {
                     "page='" + page + '\'' +
                     ", auth='" + auth + '\'' +
                     ", order=" + order +
+                    ", last_time_lt='" + last_time_lt + '\'' +
                     '}';
+        }
+
+        public String getLast_time_lt() {
+            return last_time_lt;
+        }
+
+        public void setLast_time_lt(String last_time_lt) {
+            this.last_time_lt = last_time_lt;
         }
 
         public String getPage() {
@@ -437,7 +460,7 @@ public class RevisitListFragment extends BaseFragment {
                 public void onClick(View view) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("info", datalist.get(position));
-                    startActivity(new Intent(mActivity, PotentialDetailsActivity.class).putExtra("id", datalist.get(position).getId()).putExtra("auth",auth).putExtras(bundle));
+                    startActivity(new Intent(mActivity, PotentialDetailsActivity.class).putExtra("id", datalist.get(position).getId()).putExtra("auth", auth).putExtras(bundle));
                 }
             });
             vh.iv_callphone.setOnClickListener(new View.OnClickListener() {

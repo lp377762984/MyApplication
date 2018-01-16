@@ -1,9 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +24,7 @@ import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,10 +35,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
-import com.cn.danceland.myapplication.fragment.PotentialUpcomingMatterFragment;
-import com.cn.danceland.myapplication.fragment.RevisitListFragment;
-import com.cn.danceland.myapplication.fragment.RevisitListFragment1;
+import com.cn.danceland.myapplication.fragment.RevisiterInfoFragment;
+import com.cn.danceland.myapplication.fragment.RevisiterRecordFragment;
+import com.cn.danceland.myapplication.fragment.UpcomingMatterFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -66,48 +72,56 @@ import java.util.Map;
 import razerdp.basepopup.BasePopupWindow;
 
 /**
- * Created by shy on 2018/1/8 16:00
+ * Created by shy on 2018/1/11 16:53
  * Email:644563767@qq.com
- * 潜客回访
+ * 潜客详情页
  */
 
 
-public class PotentialCustomerRevisitActivity extends FragmentActivity implements View.OnClickListener {
+public class PotentialDetailsActivity extends FragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    public String[] TITLES = new String[]{"最近维护", "本月未维护", "未处理待办事项"};
+    public  String[] TITLES = new String[]{"详细资料", "回访记录", "未处理待办事项"};
     public  String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
-    public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
-    public String[] LIST_TYPE1 = new String[]{"待办", "已办", "全部"};
+    private String id;
+    private RequsetPotentialListBean.Data.Content info;
+    private int current_page = 0;
+    private Button btn_add;
+    private Gson gson = new Gson();
     private int untreated_num = 0;
     private ListPopup listPopup;
-    private Gson gson = new Gson();
-    private int current_page = 0;
-    private SimplePagerTitleView simplePagerTitleView;
-    private BadgePagerTitleView badgePagerTitleView;
-    private MyListPopupViewAdapter myListPopupViewAdapter;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                LogUtil.i("" + untreated_num);
+//                TextView badgeTextView = (TextView) LayoutInflater.from(PotentialDetailsActivity.this).inflate(R.layout.simple_count_badge_layout, null);
+//                badgeTextView.setText("" + untreated_num);
+//                badgePagerTitleView.setBadgeView(badgeTextView);
+//                commonNavigatorAdapter.notifyDataSetChanged();
+            }
+        }
+    };
     private String auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_potential_customer_revisit);
+        setContentView(R.layout.activity_potential_customer_details);
         EventBus.getDefault().register(this);
         initView();
-        initData();
-
-    }
-
-    private void initData() {
         try {
-            find_upcoming_list();
+            find_upcoming_list(id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //注册event事件
+
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
@@ -129,7 +143,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 break;
             case 151:
                 try {
-                    find_upcoming_list();
+                    find_upcoming_list(id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -142,18 +156,26 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
 
     private void initView() {
+        id = getIntent().getStringExtra("id");
+        auth = getIntent().getStringExtra("auth");
+        //  LogUtil.i(id);
+        info = (RequsetPotentialListBean.Data.Content) getIntent().getExtras().getSerializable("info");
+        //  LogUtil.i(info.toString());
 
         TextView tv_tiltle=findViewById(R.id.tv_tiltle);
         auth = getIntent().getStringExtra("auth");
         if (TextUtils.equals(auth,"2")){
-            tv_tiltle.setText("会员维护");
+            tv_tiltle.setText("会员详情");
         }
         findViewById(R.id.iv_back).setOnClickListener(this);
-
+        btn_add = findViewById(R.id.btn_add);
+        btn_add.setOnClickListener(this);
+        btn_add.setVisibility(View.GONE);
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(myViewPagerAdapter);
+
         initMagicIndicator1();
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -164,6 +186,11 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
             @Override
             public void onPageSelected(int position) {
                 current_page = position;
+                if (position == 0) {
+                    btn_add.setVisibility(View.GONE);
+                } else {
+                    btn_add.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -174,8 +201,11 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         listPopup = new ListPopup(this);
     }
 
+    private TextView badgeTextView;
+    private BadgePagerTitleView badgePagerTitleView;
+    private CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
 
-    CommonNavigatorAdapter commonNavigatorAdapter=new CommonNavigatorAdapter() {
+
         @Override
         public int getCount() {
             return TITLES == null ? 0 : TITLES.length;
@@ -185,7 +215,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         public IPagerTitleView getTitleView(Context context, final int index) {
             badgePagerTitleView = new BadgePagerTitleView(context);
 
-            simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+            SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
             simplePagerTitleView.setText(TITLES[index]);
 
             simplePagerTitleView.setNormalColor(Color.GRAY);
@@ -194,27 +224,19 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 @Override
                 public void onClick(View v) {
 
-                    if (index == 0 && current_page == 0) {
-                        myListPopupViewAdapter.setData(LIST_TYPE);
-                        listPopup.showPopupWindow(v);
-                    }
-
-
+                    //badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
                     if (index == 2 && current_page == 2) {
-                        myListPopupViewAdapter.setData(UPCOMING_CONDITION);
                         listPopup.showPopupWindow(v);
                     }
                     mViewPager.setCurrentItem(index);
-                    //      badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
                 }
             });
 
             badgePagerTitleView.setInnerPagerTitleView(simplePagerTitleView);
 //
 //                // setup badge
-
             if (index == 2) {
-                TextView badgeTextView = (TextView) LayoutInflater.from(context).inflate(R.layout.simple_count_badge_layout, null);
+                badgeTextView = (TextView) LayoutInflater.from(context).inflate(R.layout.simple_count_badge_layout, null);
                 badgeTextView.setText("" + untreated_num);
                 badgePagerTitleView.setBadgeView(badgeTextView);
             }
@@ -228,7 +250,6 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
             // don't cancel badge when tab selected
             badgePagerTitleView.setAutoCancelBadge(false);
-
             if (untreated_num == 0) {
                 badgePagerTitleView.setBadgeView(null);
             }
@@ -249,8 +270,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdjustMode(true);
         commonNavigator.setAdapter(commonNavigatorAdapter);
-        magicIndicator.setNavigator(commonNavigator);
 
+        magicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicator, mViewPager);
     }
 
@@ -259,8 +280,35 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                finish();
                 break;
+            case R.id.btn_add:
+                if (current_page == 1) {
 
+                    Bundle bundle = new Bundle();
+                    //    bundle.putString("time", CallLogUtils.getLastCallHistoryDuration(null, cr) + "");
+                    bundle.putString("id", info.getId());
+                    bundle.putString("auth", info.getAuth());
+                    bundle.putString("member_name", info.getCname());
+                    bundle.putString("member_no", info.getMember_no());
+                    startActivity(new Intent(PotentialDetailsActivity.this, AddRevisiterRecordActivity.class)
+                            .putExtras(bundle));
+                }
+
+                if (current_page == 2) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("person_id", info.getPerson_id());
+                    bundle.putString("id", info.getId());
+                    bundle.putString("auth", info.getAuth());
+                    bundle.putString("member_name", info.getCname());
+                    bundle.putString("member_no", info.getMember_no());
+                    startActivity(new Intent(PotentialDetailsActivity.this, AddUpcomingMatterActivity.class)
+                            .putExtras(bundle));
+                }
+
+
+                //     startActivity(new Intent(PotentialCustomerRevisitActivity.this, AddPotentialActivity.class));
+                break;
             default:
                 break;
         }
@@ -277,18 +325,20 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         @Override
         public Fragment getItem(int arg0) {
             Bundle bundle = new Bundle();
-            bundle.putString("auth", auth);
-
+            bundle.putString("id", id);
+            bundle.putString("auth",auth);
             if (arg0 == 0) {
-                RevisitListFragment fragment = new RevisitListFragment();
+                RevisiterInfoFragment fragment = new RevisiterInfoFragment();
+
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                RevisitListFragment1 fragment = new RevisitListFragment1();
+                RevisiterRecordFragment fragment = new RevisiterRecordFragment();
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
-                PotentialUpcomingMatterFragment fragment = new PotentialUpcomingMatterFragment();
+
+                UpcomingMatterFragment fragment = new UpcomingMatterFragment();
                 fragment.setArguments(bundle);
                 return fragment;
             }
@@ -308,10 +358,45 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
     }
 
+    /**
+     * 是否添加回访记录
+     */
+    public void showDialogRrcord(final int pos) {
+//        final ContentResolver cr;
+//        cr = this.getContentResolver();
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        dialog.setTitle("提示");
+        dialog.setMessage("是否读取通话记录，并添加到回访记录");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                Bundle bundle = new Bundle();
+                //    bundle.putString("time", CallLogUtils.getLastCallHistoryDuration(null, cr) + "");
+                bundle.putString("id", info.getId());
+                bundle.putString("auth", info.getAuth());
+                bundle.putString("member_name", info.getCname());
+                bundle.putString("member_no", info.getMember_no());
+                startActivity(new Intent(PotentialDetailsActivity.this, AddRevisiterRecordActivity.class)
+                        .putExtras(bundle));
+
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
+
+
     class StrBean {
         public String page;
-        public String auth ;
-        // public String member_id;
+        //public String auth = "1";
+        public String member_id;
     }
 
     class RequsetSimpleBean1 {
@@ -358,12 +443,11 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
      *
      * @throws JSONException
      */
-    public void find_upcoming_list() throws JSONException {
+    public void find_upcoming_list(final String id) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.auth=auth;
-        //   strBean.page = pageCount - 1 + "";
-        //  strBean.member_id = id;
+        //  strBean.page = pageCount - 1 + "";
+        strBean.member_id = id;
         String s = gson.toJson(strBean);
 
         JSONObject jsonObject = new JSONObject(s.toString());
@@ -380,7 +464,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 //LogUtil.i(requsetSimpleBean.toString());
                 if (requsetSimpleBean.isSuccess()) {
                     untreated_num = requsetSimpleBean.data;
-                    //handler.sendMessage(message);
+                    handler.sendMessage(message);
                     // initMagicIndicator1();
                     EventBus.getDefault().post(new IntEvent(requsetSimpleBean.data, 150));
                 }
@@ -429,7 +513,6 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
             TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, -DensityUtils.dp2px(getContext(), 350f), 0);
             translateAnimation.setDuration(450);
             translateAnimation.setInterpolator(new OvershootInterpolator(1));
-
             return translateAnimation;
         }
 
@@ -457,54 +540,32 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         @Override
         public View initAnimaView() {
 
-
-           // return findViewById(R.id.popup_contianer);
             return null;
+       //     return findViewById(R.id.popup_contianer);
         }
 
         private void bindEvent() {
             if (popupView != null) {
                 listView = popupView.findViewById(R.id.listview);
-                myListPopupViewAdapter = new MyListPopupViewAdapter(UPCOMING_CONDITION);
+                MyListPopupViewAdapter myListPopupViewAdapter = new MyListPopupViewAdapter();
                 listView.setAdapter(myListPopupViewAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (current_page == 2) {
-                            if (i == 0) {//查询未处理
-                                EventBus.getDefault().post(new IntEvent(0, 152));
-                                TITLES[2]="未处理待办事项";
-                            } else if (i == 1) {//查询已处理
-                                TITLES[2]="已处理待办事项";
-                                EventBus.getDefault().post(new IntEvent(0, 153));
-                            } else {//查询全部
-                                TITLES[2]="全部待办事项";
-                                EventBus.getDefault().post(new IntEvent(0, 154));
-                            }
+
+                        if (i == 0) {//查询未处理
+                            TITLES[2] = "未处理待办事项";
+                            EventBus.getDefault().post(new IntEvent(0, 152));
+                        } else if (i == 1) {//查询已处理
+                            TITLES[2] = "已处理待办事项";
+                            EventBus.getDefault().post(new IntEvent(0, 153));
+                        } else {//查询全部
+                            EventBus.getDefault().post(new IntEvent(0, 154));
+                            TITLES[2] = "全部待办事项";
 
                         }
-                        if (current_page==0){
-
-                            if (i == 0) {//最近
-                                EventBus.getDefault().post(new IntEvent(0, 162));
-                                TITLES[0]="最近维护";
-                            } else if (i == 1) {//最晚
-                                EventBus.getDefault().post(new IntEvent(0, 163));
-                                TITLES[0]="最晚维护";
-                            } else if (i==2){//健身指数
-                                TITLES[0]="健身指数";
-                                EventBus.getDefault().post(new IntEvent(0, 164));
-                            } else if (i==3){//关注程度
-                                TITLES[0]="关注程度";
-                                EventBus.getDefault().post(new IntEvent(0, 165));
-                            }
-
-
-                        }
-                        commonNavigatorAdapter.notifyDataSetChanged();
-
-
                         listPopup.dismiss();
+                        commonNavigatorAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -514,21 +575,12 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
     }
 
-
     class MyListPopupViewAdapter extends BaseAdapter {
-        String[] data = new String[]{};
 
-        public MyListPopupViewAdapter(String[] data) {
-            this.data = data;
-        }
-
-        public void setData(String[] data) {
-            this.data = data;
-        }
 
         @Override
         public int getCount() {
-            return data.length;
+            return UPCOMING_CONDITION.length;
         }
 
         @Override
@@ -543,7 +595,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            view = View.inflate(PotentialCustomerRevisitActivity.this, R.layout.listview_item_popup, null);
+            view = View.inflate(PotentialDetailsActivity.this, R.layout.listview_item_popup, null);
 
             TextView tv_cardname = view.findViewById(R.id.tv_cardname);
 //            if (i == 0) {
@@ -551,7 +603,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 //            } else {
 //                tv_cardname.setText(cardTypeData.get(i - 1).getName());
 //            }
-            tv_cardname.setText(data[i]);
+            tv_cardname.setText(UPCOMING_CONDITION[i]);
 
             return view;
         }

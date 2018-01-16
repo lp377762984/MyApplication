@@ -239,7 +239,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
 
 
         public ListPopup(Activity context) {
-            super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            super(context, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             setAutoLocatePopup(true);
             bindEvent();
 

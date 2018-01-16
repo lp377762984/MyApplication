@@ -59,7 +59,6 @@ public class MeFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-
     @Override
     public View initViews() {
 

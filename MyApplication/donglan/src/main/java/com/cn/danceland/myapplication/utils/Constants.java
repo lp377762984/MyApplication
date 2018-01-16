@@ -3,7 +3,7 @@ package com.cn.danceland.myapplication.utils;
 public class Constants {
 
     public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-    //  public static final String HOST = "http://192.168.1.11:8003/";//服务器地址
+ //   public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
     public static final String LOGIN_URL = HOST + "user/login ";//登录
@@ -87,6 +87,19 @@ public class Constants {
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
 
+    //潜客相关
+    public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
+    public static final String FIND_POTENTIAL_LIST = HOST + "/appPotential/recentMaintain";//查询潜客列表
+    public static final String ADD_VISIT_RECOR = HOST + "/appPotential/saveVisitRecord";//添加回访记录
+    public static final String FIND_BY_ID_POTENTIAL = HOST + "/appPotential/findByIdPotential/";//查询潜客详情
+    public static final String FIND_VISIT_RECORD = HOST + "/appPotential/findVisitRecord";//查询回访记录
+    public static final String ADD_UPCOMING_MATTER = HOST + "/appPotential/saveUpcomingMatter";//添加待办
+    public static final String FIND_UPCOMING_MATTER_PARAM = HOST + "appWorkResult/queryList";//查询待办参数
+    public static final String FIND_UPCOMING_MATTER = HOST + "/appPotential/findUpcomingMatter";//查询待办列表
+    public static final String UPDATE_MATTER_STATUS = HOST + "/appPotential/updateMatterStatus";//处理待办
+   public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/appPotential/findNotUpcomingMatter";//查询未处理待办
+
+
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
     public static final String MY_MEMBERNO = "memberNo";//我的会员号
@@ -98,14 +111,14 @@ public class Constants {
 
     public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
-    public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数    public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
-    public static final String REAYTEST = HOST +"appBca/findMemberBca";//提交用户信息
-    public static final String GETEQUIPMENT = HOST+"appBca/findPageBranchBca";//获取门店体测仪列表
-    public static final String CONNECTEQU = HOST+"appBca/connectTester";//连接设备
-    public static final String ISFINISHED = HOST+"appBca/isFinishedBca";//体测是否完成
-    public static final String FITNESS_HITORY= HOST + "appBca/findHistoryRecord";//体测历史记录
-    public static final String FINDONEHISTORY = HOST+"appBca/findOneHistoryRecord";//查看某条历史记录
-    public static final String FINDBODYAGE = HOST+"appBca/findBodyAge";//查询身体年龄
+    public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数
+    public static final String REAYTEST = HOST + "appBca/findMemberBca";//提交用户信息
+    public static final String GETEQUIPMENT = HOST + "appBca/findPageBranchBca";//获取门店体测仪列表
+    public static final String CONNECTEQU = HOST + "appBca/connectTester";//连接设备
+    public static final String ISFINISHED = HOST + "appBca/isFinishedBca";//体测是否完成
+    public static final String FITNESS_HITORY = HOST + "appBca/findHistoryRecord";//体测历史记录
+    public static final String FINDONEHISTORY = HOST + "appBca/findOneHistoryRecord";//查看某条历史记录
+    public static final String FINDBODYAGE = HOST + "appBca/findBodyAge";//查询身体年龄
 
 
 }

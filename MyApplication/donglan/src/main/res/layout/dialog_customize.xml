@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <EditText
+    android:id="@+id/edit_text"
     android:layout_width="match_parent"
+    android:paddingLeft="10dp"
     android:layout_height="wrap_content"
     android:background="@null"
-    android:hint="请输入电话号码"
+    android:hint="请输入内容"
     />
 </LinearLayout>

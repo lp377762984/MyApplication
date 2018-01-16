@@ -427,6 +427,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
         public String page;
     }
 
+
     private void setEnd() {
         //没数据了
         isEnd = true;
@@ -586,7 +587,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
                 RequestOrderListBean orderinfo = new RequestOrderListBean();
                 Gson gson = new Gson();
                 orderinfo = gson.fromJson(jsonObject.toString(), RequestOrderListBean.class);
-                LogUtil.i(orderinfo.getData().getLast() + "" + mCurrentPage);
+              //  LogUtil.i(orderinfo.getData().getLast() + "" + mCurrentPage);
 
                 if (orderinfo.getSuccess()) {
                     if (orderinfo.getData().getLast()) {

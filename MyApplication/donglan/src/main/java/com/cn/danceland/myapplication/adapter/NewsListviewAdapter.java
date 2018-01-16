@@ -101,7 +101,7 @@ public class NewsListviewAdapter extends BaseAdapter {
                 .into(viewHolder.iv_image);
         viewHolder.tv_title.setText(data.get(position).getTitle());
         viewHolder.tv_time.setText(data.get(position).getPublish_time());
-        viewHolder.tv_content.setText(data.get(position).getNews_content());
+        viewHolder.tv_content.setText(data.get(position).getNews_txt());
 
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override

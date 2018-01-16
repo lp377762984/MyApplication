@@ -23,18 +23,26 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ParamInfoBean;
+import com.cn.danceland.myapplication.bean.PotentialInfo;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +63,9 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
     public static final int REGISTER_CHANNEL = 1;//客户来源
     public static final int VISIT_TYPE = 9;//回访方式
-
+    public static final int TARGET = 8;//健身目的
+    public static final int LIKE = 7;//喜欢项目
+    public static final int MEDICAL = 11;//病史
     private EditText et_remark;//备注
     private TextView tv_medical_history;//慢性病史
     private EditText et_phone;//电话
@@ -71,13 +81,14 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
     private TextView tv_target;//健身目的
     private TextView tv_card_type;//意向卡型
     private TextView tv_like;//喜欢项目
-    private Gson gson = new Gson();
     private List<ParamInfoBean.Data> mParamInfoList = new ArrayList<>();
     private List<RequestSellCardsInfoBean.Data> mParamCradList = new ArrayList<>();
     private ListPopup listPopup;
     private int codeType = 0;
     private ListPopupMultiSelect listPopupMultiSelect;
     private ListCardPopup listCardPopup;
+    private PotentialInfo potentialInfo = new PotentialInfo();
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,15 +123,20 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             @Override
             public void onRatingChange(BaseRatingBar baseRatingBar, float rating) {
 
-                LogUtil.i("sr_fitness_level: " + (int) rating);
+
+                if ((int) rating != 0) {
+                    potentialInfo.setFitness_level((int) rating + "");
+                }
             }
         });
         sr_follow_level = findViewById(R.id.sr_follow_level);
         sr_follow_level.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChange(BaseRatingBar baseRatingBar, float rating) {
+                if ((int) rating != 0) {
+                    potentialInfo.setFollow_level((int) rating + "");
+                }
 
-                LogUtil.i("sr_follow_level: " + (int) rating);
             }
         });
         tv_target = findViewById(R.id.tv_target);
@@ -156,19 +172,46 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
                 break;
             case R.id.tv_target://选择健身目的
-                codeType = 5;
+                codeType = TARGET;
                 findParams(codeType);
                 break;
             case R.id.tv_like://选择喜欢项目
-                codeType = 6;
+                codeType = LIKE;
                 findParams(codeType);
                 break;
             case R.id.tv_medical_history://选择慢性病史
-                codeType = 13;
+                codeType = MEDICAL;
                 findParams(codeType);
                 break;
             case R.id.btn_commit://保存
+                if (TextUtils.isEmpty(et_phone.getText().toString().trim())) {
+                    ToastUtils.showToastShort("手机号码必须填写");
+                    return;
+                }
+                potentialInfo.setPhone_no(et_phone.getText().toString());
+                if (TextUtils.isEmpty(potentialInfo.getGender())) {
+                    ToastUtils.showToastShort("性别必须填写");
+                    return;
+                }
+                if (TextUtils.isEmpty(et_name.getText().toString().trim())) {
+                    ToastUtils.showToastShort("姓名必须填写");
+                    return;
+                }
+                potentialInfo.setCname(et_name.getText().toString());
+                potentialInfo.setCompany(et_company.getText().toString());
+                potentialInfo.setAddress(et_address.getText().toString());
+                potentialInfo.setMail(et_email.getText().toString());
+                potentialInfo.setRemark(et_remark.getText().toString());
+                potentialInfo.setWeichat_no(et_weixin_no.getText().toString());
+                Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                potentialInfo.setDefault_branch(data.getDefault_branch());
 
+                LogUtil.i(gson.toJson(potentialInfo).toString());
+                try {
+                    add_potential(gson.toJson(potentialInfo).toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
                 break;
@@ -188,10 +231,12 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     case 0:
 
                         tv_sex.setText("男");
+                        potentialInfo.setGender("1");
                         break;
                     case 1:
 
                         tv_sex.setText("女");
+                        potentialInfo.setGender("2");
                         break;
                     default:
                         break;
@@ -227,6 +272,49 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         inputDialog.show();
     }
 
+    /**
+     * 添加潜客
+     *
+     * @param data
+     * @throws JSONException
+     */
+    public void add_potential(final String data) throws JSONException {
+
+
+        JSONObject jsonObject = new JSONObject(data);
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.ADD_POTENTIAL, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (requestOrderBean.isSuccess()) {
+                    ToastUtils.showToastShort("潜客添加成功");
+                    finish();
+                } else {
+                    ToastUtils.showToastShort("潜客添加失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
 
     /**
      * 查询所有在售卡by id
@@ -286,14 +374,22 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
+
                 ParamInfoBean paramInfoBean = gson.fromJson(s, ParamInfoBean.class);
-                mParamInfoList = paramInfoBean.getData();
-                if (codetype == 1) {
-                    listPopup.showPopupWindow();
+
+                if (paramInfoBean.getSuccess()){
+                    mParamInfoList = paramInfoBean.getData();
+
+
+
+                    if (codetype == REGISTER_CHANNEL) {
+                        listPopup.showPopupWindow();
+                    }
+                    if (codetype == LIKE || codetype == TARGET || codetype == MEDICAL) {
+                        listPopupMultiSelect.showPopupWindow();
+                    }
                 }
-                if (codetype == 5 || codetype == 6 || codetype == 13) {
-                    listPopupMultiSelect.showPopupWindow();
-                }
+
 
             }
         }, new Response.ErrorListener() {
@@ -399,6 +495,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                         switch (codeType) {
                             case 1:
                                 tv_guest_aware_way.setText(mParamInfoList.get(position).getData_value());
+                                potentialInfo.setGuest_aware_way(mParamInfoList.get(position).getData_key()+"");
                                 break;
                             default:
                                 break;
@@ -419,6 +516,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             }
         }
     }
+
 
 
     class ListCardPopup extends BasePopupWindow {
@@ -500,6 +598,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                         switch (codeType) {
                             case 20:
                                 tv_card_type.setText(mParamCradList.get(position).getName());
+                                potentialInfo.setCard_type(tv_card_type.getText().toString());
                                 break;
                             default:
                                 break;
@@ -535,6 +634,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 @Override
                 public void onClick(View view) {
                     String s = "";
+                    List<String> list = new ArrayList<String>();
                     for (int j = 0; j < mParamInfoList.size(); j++) {
                         if (mParamInfoList.get(j).isCheck()) {
                             if (s == "") {
@@ -542,29 +642,37 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                             } else {
                                 s = s + "," + mParamInfoList.get(j).getData_value();
                             }
+                            list.add(mParamInfoList.get(j).getData_key() + "");
+
                         }
 
                     }
                     switch (codeType) {
-                        case 5:
+                        case TARGET:
                             if (!TextUtils.isEmpty(s)) {
                                 tv_target.setText(s);
+                                potentialInfo.setTarget_ids(list);
                             } else {
                                 tv_target.setText("未选择");
+                                potentialInfo.setTarget_ids(null);
                             }
                             break;
-                        case 6:
+                        case LIKE:
                             if (!TextUtils.isEmpty(s)) {
                                 tv_like.setText(s);
+                                potentialInfo.setProject_ids(list);
                             } else {
                                 tv_like.setText("未选择");
+                                potentialInfo.setProject_ids(null);
                             }
                             break;
-                        case 13:
+                        case MEDICAL:
                             if (!TextUtils.isEmpty(s)) {
                                 tv_medical_history.setText(s);
+                                potentialInfo.setChronic_ids(list);
                             } else {
                                 tv_medical_history.setText("未选择");
+                                potentialInfo.setChronic_ids(null);
                             }
                             break;
                         default:

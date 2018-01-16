@@ -81,7 +81,6 @@ public class RequestNewsDataBean {
         public class Items {
 
 
-
             private String id;// 主键，自增
             private String img_url;// 缩略图
             private String title;// 新闻的title
@@ -92,6 +91,7 @@ public class RequestNewsDataBean {
             private String end_time;// 显示结束时间
             private String start_time;// 显示开始时间
             private String publish_time;// 发布时间
+            private String news_txt;
 
             @Override
             public String toString() {
@@ -106,7 +106,16 @@ public class RequestNewsDataBean {
                         ", end_time='" + end_time + '\'' +
                         ", start_time='" + start_time + '\'' +
                         ", publish_time='" + publish_time + '\'' +
+                        ", news_txt='" + news_txt + '\'' +
                         '}';
+            }
+
+            public String getNews_txt() {
+                return news_txt;
+            }
+
+            public void setNews_txt(String news_txt) {
+                this.news_txt = news_txt;
             }
 
             public void setId(String id) {
