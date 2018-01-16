@@ -76,11 +76,15 @@ public class ImageDetailFragment2 extends Fragment {
         //  mImageUrl="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1512389262840&di=039fd750ee1b4ecaeb5d8bbf649bb8ec&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F13%2F19%2F62%2F61B58PICvc2_1024.jpg";
         //  LogUtil.i("mImageUrl=" + mImageUrl);
 
+        StringBuilder  sb = new StringBuilder (mImageUrl);
+        sb.insert(mImageUrl.length()-4,"_400X300");
+
 
         BigImageViewer.prefetch(Uri.parse(mImageUrl));
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
 
-        bigImageView.showImage(Uri.parse(mImageUrl));
+      //  bigImageView.showImage(Uri.parse(mImageUrl));
+        bigImageView.showImage(Uri.parse(sb.toString()),Uri.parse(mImageUrl));
         bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE);
         bigImageView.setImageSaveCallback(new ImageSaveCallback() {
             @Override

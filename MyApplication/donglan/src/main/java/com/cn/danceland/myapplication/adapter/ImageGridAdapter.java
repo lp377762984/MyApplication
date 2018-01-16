@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.List;
 
@@ -54,10 +55,12 @@ public class ImageGridAdapter extends BaseAdapter {
               //  .placeholder(R.drawable.img_loading)//加载占位图
                 .error(R.drawable.img_loadfail)//
                 .priority(Priority.HIGH);
-
+        StringBuilder  sb = new StringBuilder (imgUrls.get(i));
+        sb.insert(imgUrls.get(i).length()-4,"_400X300");
+       LogUtil.i(sb.toString());
         Glide
                 .with(context)
-                .load(imgUrls.get(i))
+                .load(sb.toString())
                 .apply(options)
                 .into(imageView);
 
