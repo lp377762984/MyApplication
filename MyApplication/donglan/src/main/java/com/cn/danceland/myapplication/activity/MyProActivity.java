@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -55,6 +55,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.google.gson.Gson;
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -108,6 +110,10 @@ public class MyProActivity extends Activity {
     DBData dbData;
     String zoneCode, mZoneCode;
     List<Donglan> zoneArr, cityList;
+    View inflate;
+    AlertDialog.Builder alertdialog;
+    LoopView loopview;
+    TextView tv_start,over_time;
 
     private Handler handler = new Handler() {
         @Override
@@ -148,6 +154,15 @@ public class MyProActivity extends Activity {
     }
 
     public void initView() {
+
+        inflate = LayoutInflater.from(MyProActivity.this).inflate(R.layout.timeselect, null);
+        tv_start = inflate.findViewById(R.id.tv_start);
+        tv_start.setVisibility(View.GONE);
+        loopview = inflate.findViewById(R.id.loopview);
+        over_time = inflate.findViewById(R.id.over_time);
+        over_time.setVisibility(View.GONE);
+
+        alertdialog = new android.support.v7.app.AlertDialog.Builder(MyProActivity.this);
 
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
@@ -198,13 +213,13 @@ public class MyProActivity extends Activity {
         photo_album = headView.findViewById(R.id.photo_album);
         cancel = headView.findViewById(R.id.cancel);
 
-        contentView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowsingle, null);
-        mPopWindow = new PopupWindow(contentView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        list_height = contentView.findViewById(R.id.list_height);
-        selecttitle = contentView.findViewById(R.id.selecttitle);
-        over = contentView.findViewById(R.id.over);
-        cancel_action = contentView.findViewById(R.id.cancel_action);
+//        contentView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowsingle, null);
+//        mPopWindow = new PopupWindow(contentView,
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+//        list_height = contentView.findViewById(R.id.list_height);
+//        selecttitle = contentView.findViewById(R.id.selecttitle);
+//        over = contentView.findViewById(R.id.over);
+//        cancel_action = contentView.findViewById(R.id.cancel_action);
 
         locationView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.selectorwindowlocation, null);
         locationWindow = new PopupWindow(locationView,
@@ -231,8 +246,8 @@ public class MyProActivity extends Activity {
         back.setOnClickListener(onClickListener);
         height.setOnClickListener(onClickListener);
         weight.setOnClickListener(onClickListener);
-        over.setOnClickListener(onClickListener);
-        cancel_action.setOnClickListener(onClickListener);
+        //over.setOnClickListener(onClickListener);
+        //cancel_action.setOnClickListener(onClickListener);
         rl_zone.setOnClickListener(onClickListener);
         lo_cancel_action.setOnClickListener(onClickListener);
         over_action.setOnClickListener(onClickListener);
@@ -244,9 +259,9 @@ public class MyProActivity extends Activity {
         if (null != head_image_window && head_image_window.isShowing()) {
             head_image_window.dismiss();
         }
-        if (null != mPopWindow && mPopWindow.isShowing()) {
-            mPopWindow.dismiss();
-        }
+//        if (null != mPopWindow && mPopWindow.isShowing()) {
+//            mPopWindow.dismiss();
+//        }
         if (null != locationWindow && locationWindow.isShowing()) {
             locationWindow.dismiss();
         }
@@ -273,28 +288,28 @@ public class MyProActivity extends Activity {
                 case R.id.height:
                     //修改身高
                     x = 0;
-                    showSelectorWindow(x);
-                    selecttitle.setText("选择身高");
+                    showWH(x);
+                    //selecttitle.setText("选择身高");
                     break;
                 case R.id.weight:
                     x = 1;
-                    showSelectorWindow(x);
-                    selecttitle.setText("选择体重");
+                    showWH(x);
+                    //selecttitle.setText("选择体重");
                     break;
-                case R.id.over:
-                    if (x == 0) {
-                        infoData.setHeight(strHeight);
-                        commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
-                    } else if (x == 1) {
-                        infoData.setWeight(strWeight);
-                        commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
-                    }
-                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-                    dismissWindow();
-                    break;
-                case R.id.cancel_action:
-                    dismissWindow();
-                    break;
+//                case R.id.over:
+//                    if (x == 0) {
+//                        infoData.setHeight(strHeight);
+//                        commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
+//                    } else if (x == 1) {
+//                        infoData.setWeight(strWeight);
+//                        commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
+//                    }
+//                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+//                    dismissWindow();
+//                    break;
+//                case R.id.cancel_action:
+//                    dismissWindow();
+//                    break;
                 case R.id.name: {
                     showName(0);
                 }
@@ -368,6 +383,64 @@ public class MyProActivity extends Activity {
             }
         }
     };
+
+    private void showWH(final int j){
+        int n;
+        final ArrayList<String> arrayList = new ArrayList<String>();
+        ViewGroup parent = (ViewGroup)inflate.getParent();
+        if(parent!=null){
+            parent.removeAllViews();
+        }
+        if(j==0){
+            for(int i = 0;i<71;i++){
+                n = 150+i;
+                arrayList.add(n+"");
+            }
+        }else {
+            for(int y=0;y<165;y++){
+                n = 35+y;
+                arrayList.add(n+"");
+            }
+        }
+        loopview.setNotLoop();
+        loopview.setItems(arrayList);
+        //设置初始位置
+        loopview.setInitPosition(0);
+        loopview.setTextSize(18);
+        loopview.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                if(j==0){
+                    tv_height.setText(arrayList.get(index)+" cm");
+                    strHeight = arrayList.get(index)+"";
+                }else{
+                    tv_weight.setText(arrayList.get(index)+" kg");
+                    strWeight = arrayList.get(index)+"";
+                }
+            }
+        });
+        if(j==0){
+            alertdialog.setTitle("选择身高");
+        }else{
+            alertdialog.setTitle("选择体重");
+        }
+
+        alertdialog.setView(inflate);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (j == 0) {
+                    infoData.setHeight(strHeight);
+                    commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
+                } else if (j == 1) {
+                    infoData.setWeight(strWeight);
+                    commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
+                }
+                DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+            }
+        });
+        alertdialog.show();
+    }
 
     /**
      * 设置手机号
