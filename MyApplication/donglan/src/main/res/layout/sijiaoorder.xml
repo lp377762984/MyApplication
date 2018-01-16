@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ScrollView
+        android:id="@+id/sc_view"
+        android:layout_above="@+id/tongyi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/sijiaoorder_title"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/dl_blue"
+                >
+                <ImageView
+                    android:id="@+id/back_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img_back"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="15dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="私教订单"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:layout_centerInParent="true"
+                    />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_detail"
+                android:layout_below="@+id/sijiaoorder_title"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#f5f5f5"
+                >
+
+                <TextView
+                    android:id="@+id/tv_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="订单详情"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    />
+                <LinearLayout
+                    android:layout_below="@+id/tv_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="25dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品名称：kkkk"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品类型：一对一私教"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="有效期：1年"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品数量：1"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品单价：￥2000"
+                        android:layout_weight="1"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="合计金额：￥2000"
+                        android:layout_weight="1"
+                        />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_below="@+id/rl_detail"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#f5f5f5"
+                />
+
+            <RelativeLayout
+                android:id="@+id/rl_forme"
+                android:layout_below="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="为自己购买"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    />
+                <RadioButton
+                    android:id="@+id/btn_forme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    />
+
+            </RelativeLayout>
+            <View
+                android:id="@+id/line2"
+                android:layout_below="@+id/rl_forme"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#f5f5f5"
+                />
+            <RelativeLayout
+                android:id="@+id/rl_foryou"
+                android:layout_below="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="为好友购买"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    />
+
+                <RadioButton
+                    android:id="@+id/btn_foryou"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_wanshan"
+                android:layout_below="@+id/rl_foryou"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <RelativeLayout
+                    android:id="@+id/rl_tv_wanshan"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#f5f5f5">
+
+                    <TextView
+                        android:id="@+id/tv_wanshan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:text="完善信息"
+                        android:textSize="16sp"
+                        />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_jiaolian"
+                    android:layout_below="@+id/rl_tv_wanshan"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="选择教练"
+                        android:textSize="14sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        />
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line3"
+                    android:layout_below="@+id/rl_jiaolian"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#f5f5f5"
+                    />
+                <RelativeLayout
+                    android:id="@+id/rl_kaikeshijian"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/line3"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="选择开课时间"
+                        android:layout_marginLeft="15dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="14sp"
+                        />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/line3"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="好友姓名"
+                        android:layout_marginLeft="15dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="14sp"
+                        />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/line7"
+                    android:layout_below="@+id/rl_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#f5f5f5"
+                    android:visibility="gone"
+                    />
+                <RelativeLayout
+                    android:id="@+id/rl_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/line7"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="好友联系方式"
+                        android:layout_marginLeft="15dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="14sp"
+                        />
+
+
+                </RelativeLayout>
+
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:id="@+id/rl_zhifu"
+                android:layout_below="@+id/rl_wanshan"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#f5f5f5"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="支付方式"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_zhifubao"
+                android:layout_below="@+id/rl_zhifu"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="支付宝"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"
+                    />
+                <RadioButton
+                    android:id="@+id/btn_zhifubao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    />
+
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/line5"
+                android:layout_below="@+id/rl_zhifubao"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#f5f5f5"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_weixin"
+                android:layout_below="@id/line5"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="15dp"
+                    android:text="微信"
+                    android:layout_centerVertical="true"
+                    />
+                <RadioButton
+                    android:id="@+id/btn_weixin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/line4"
+                android:layout_below="@+id/rl_weixin"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#f5f5f5"
+                />
+
+            <RelativeLayout
+                android:layout_below="@+id/line4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f5f5f5"
+                >
+                <TextView
+                    android:id="@+id/tv_shuoming"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="购买私教说明"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+                <TextView
+                    android:layout_below="@+id/tv_shuoming"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="      动岚健健身创办于2005年，做为全国连锁健身俱乐部，目前在北京市、河北省、河南省、山东省、广西省、广东省、山西省、四川省、江苏省、陕西省、甘肃、湖南. 湖北 已经拥有近50家连锁店，总营业面积已达6万平米，会员总量已达数十万人，员工总量已达2000人 短短7年就已发展到近50家连锁店，是全国发展最快的健身俱乐部之一。"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="5dp"
+                    />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/tongyi"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_button"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="我已阅读并同意购买说明"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                />
+            <RadioButton
+                android:id="@+id/btn_tongyi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_below="@+id/rl_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="待支付:￥2000"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                />
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@color/dl_blue"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="去支付"
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
+                    android:textSize="16sp"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -208,10 +208,96 @@
         <activity
             android:name=".activity.OrderDetailsActivity"
             android:screenOrientation="portrait" />
+  <activity android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.ReadyTestActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.EquipmentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TestingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessHistoryActivity"
+            android:screenOrientation="portrait"
+            />
+<<<<<<< .mine
         <activity
             android:name=".activity.FitnessTestActivity"
             android:screenOrientation="portrait" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+        <activity android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity android:name=".activity.ReadyTestActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.EquipmentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TestingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FitnessHistoryActivity"
+            android:screenOrientation="portrait"
+            />
+
+>>>>>>> .theirs
         <activity
+<activity
+            android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FitnessTestActivity"
+            android:screenOrientation="portrait" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <activity
+            android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".activity.BodyAgeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ReadyTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TestingActivity"
+            android:screenOrientation="portrait" />
+<<<<<<< .mine
             android:name=".activity.BodyAgeActivity"
             android:screenOrientation="portrait" />
 
@@ -231,12 +317,46 @@
 
 
         <activity
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
             android:name=".activity.PotentialCustomerRevisitActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddPotentialActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
+        <activity android:name=".activity.CourseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.TuanKeDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SiJiaoDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BuySiJiaoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellSiJiaoConfirmActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SiJiaoOrderActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

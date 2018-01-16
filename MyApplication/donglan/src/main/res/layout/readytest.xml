@@ -176,7 +176,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/tv_birthday"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:focusableInTouchMode="false"
+            />
 
     </LinearLayout>
 

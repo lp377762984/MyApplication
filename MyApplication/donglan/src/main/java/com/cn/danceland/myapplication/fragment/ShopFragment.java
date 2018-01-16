@@ -30,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
+import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
+import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
@@ -306,6 +308,12 @@ public class ShopFragment extends BaseFragment {
                     case 2://我的会员卡
                         startActivity(new Intent(mActivity, MyCardActivity.class));
                         break;
+                    case 4://购买私教
+                        startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
+                        break;
+                    case 6://课程表
+                        startActivity(new Intent(mActivity, CourseActivity.class));
+                        break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
                         break;
@@ -317,9 +325,9 @@ public class ShopFragment extends BaseFragment {
                         intent.putExtra("from", "体测");
                         startActivity(intent);
                         break;
-                    case 13://潜客维护
-                        startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth","1"));
-                        break;
+                        
+
+ startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth","1"));                        break;
                     case 14://会员维护
                         startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth","2"));
                         //  startActivity(new Intent(mActivity, MyOrderActivity.class));

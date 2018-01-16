@@ -46,6 +46,7 @@ public class EquipmentActivity extends Activity {
     Gson gson;
     String id;
     List<EquipmentBean.Data.Content> content;
+    TextView tv_ticeyi;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class EquipmentActivity extends Activity {
     private void initView() {
 
         lv_equ = findViewById(R.id.lv_equ);
+        tv_ticeyi = findViewById(R.id.tv_ticeyi);
 
 
         equ_back = findViewById(R.id.equ_back);
@@ -132,6 +134,8 @@ public class EquipmentActivity extends Activity {
                 if (equipmentBean!=null&&equipmentBean.getData()!=null){
                     content = equipmentBean.getData().getContent();
                     lv_equ.setAdapter(new MyListAdapter(content));
+                }else{
+                    tv_ticeyi.setVisibility(View.VISIBLE);
                 }
             }
         }, new Response.ErrorListener() {

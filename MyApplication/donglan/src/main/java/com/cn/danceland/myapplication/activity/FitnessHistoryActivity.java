@@ -63,10 +63,11 @@ public class FitnessHistoryActivity extends Activity {
             public void onResponse(String s) {
                 FitnessHistoryBean fitnessHistoryBean = gson.fromJson(s, FitnessHistoryBean.class);
                 if(fitnessHistoryBean!=null){
-
-                    content = fitnessHistoryBean.getData().getContent();
-                    if(content!=null){
-                        lv_history.setAdapter(new MyAdapter(content));
+                    if(fitnessHistoryBean.getData()!=null){
+                        content = fitnessHistoryBean.getData().getContent();
+                        if(content!=null){
+                            lv_history.setAdapter(new MyAdapter(content));
+                        }
                     }
                 }
             }
