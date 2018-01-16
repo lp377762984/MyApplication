@@ -411,10 +411,10 @@ public class MyProActivity extends Activity {
             @Override
             public void onItemSelected(int index) {
                 if(j==0){
-                    tv_height.setText(arrayList.get(index)+" cm");
+                    //tv_height.setText(arrayList.get(index)+" cm");
                     strHeight = arrayList.get(index)+"";
                 }else{
-                    tv_weight.setText(arrayList.get(index)+" kg");
+                    //tv_weight.setText(arrayList.get(index)+" kg");
                     strWeight = arrayList.get(index)+"";
                 }
             }
@@ -430,9 +430,11 @@ public class MyProActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (j == 0) {
+                    tv_height.setText(strHeight+" cm");
                     infoData.setHeight(strHeight);
                     commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
                 } else if (j == 1) {
+                    tv_weight.setText(strWeight+" kg");
                     infoData.setWeight(strWeight);
                     commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
                 }
