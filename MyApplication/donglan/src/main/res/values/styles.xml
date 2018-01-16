@@ -16,7 +16,7 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 <style name="imgsStyle" parent="Matisse.Zhihu">
-    <item name="colorPrimary">@color/dl_blue</item>
+    <item name="colorPrimary">@color/dl_gery</item>
 
 </style>
     <!--输入框样式-->

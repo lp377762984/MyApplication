@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
 
         >
 
@@ -43,9 +43,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_03"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -299,20 +299,20 @@
             </LinearLayout>
 
             <TextView
+                style="@style/BtnCommitStyle"
                 android:id="@+id/tv_quit"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@id/ll_02"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/bg_setting_item_selector"
+
                 android:gravity="center"
                 android:text="退出登录"
-                android:textColor="#61C5E7"
+
                 android:textSize="18sp" />
 
         </RelativeLayout>
     </com.cn.danceland.myapplication.view.ReboundScrollView>
-
 
 
 </LinearLayout>

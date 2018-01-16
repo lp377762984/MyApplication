@@ -7,7 +7,7 @@
         android:id="@+id/test_title"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
         >
         <ImageView
             android:layout_width="wrap_content"

@@ -11,8 +11,10 @@
     <color name="color_bg_line">#EAEAEA</color>
     <!--主页面浅灰背景-->
     <color name="color_bg_mianlayout">#F9F9F9</color>
-    <!--动岚蓝-->
-    <color name="dl_blue">#61C5E7</color>
+    <!--动岚灰-->
+    <color name="dl_gery">#333643</color>
+    <color name="dl_light_gery">#5e6379</color>
+  <!--  <color name="dl_blue">#61C5E7</color>-->
     <color name="black">#000000</color>
 
 

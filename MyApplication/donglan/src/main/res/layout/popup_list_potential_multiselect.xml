@@ -41,7 +41,7 @@
             android:id="@+id/btn_ok"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/dl_blue"
+            android:background="@color/dl_gery"
             android:text="确定"
             android:textSize="16sp"
             android:textColor="#fff"

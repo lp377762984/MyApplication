@@ -10,7 +10,7 @@
         android:id="@+id/course_title"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
         >
 
         <ImageView
@@ -42,8 +42,8 @@
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            app:tabSelectedTextColor="@color/dl_blue"
-            app:tabIndicatorColor="@color/dl_blue"
+            app:tabSelectedTextColor="@color/dl_gery"
+            app:tabIndicatorColor="@color/dl_gery"
             >
             <android.support.design.widget.TabItem
                 android:id="@+id/tab1"
@@ -160,7 +160,7 @@
         app:defaultCalendar="Week"
         app:firstDayOfWeek="Sunday"
         app:isShowLunar="false"
-        app:selectCircleColor="@color/dl_blue"
+        app:selectCircleColor="@color/dl_gery"
         app:backgroundColor="#f5f5f5"
         app:selectCircleRadius="30"
         app:calendarHeight="160dp"

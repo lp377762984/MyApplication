@@ -9,7 +9,7 @@
         android:id="@+id/readytest_title"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
         >
         <ImageView
             android:id="@+id/readytest_back"
@@ -275,7 +275,7 @@
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
         >
         <TextView
             android:layout_width="wrap_content"

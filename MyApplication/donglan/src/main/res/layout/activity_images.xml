@@ -6,7 +6,7 @@
     <RelativeLayout
         android:id="@+id/photo_album_title"
         android:layout_width="match_parent"
-        android:background="@color/dl_blue"
+        android:background="@color/dl_gery"
         android:layout_height="45dp">
 
         <ImageView

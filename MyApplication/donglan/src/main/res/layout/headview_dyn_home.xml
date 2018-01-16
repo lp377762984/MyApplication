@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
 
-                android:textColor="@color/dl_blue"
+                android:textColor="@color/dl_gery"
                 android:textSize="14sp" />
 
             <TextView
