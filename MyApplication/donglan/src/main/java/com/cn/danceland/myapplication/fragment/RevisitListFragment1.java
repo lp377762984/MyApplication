@@ -242,7 +242,7 @@ public class RevisitListFragment1 extends BaseFragment {
         protected Void doInBackground(Void... voids) {
             init_pullToRefresh();
             mCurrentPage = 1;
-            strBean.page = strBean.page = mCurrentPage - 1 + "";
+            strBean.setPage(mCurrentPage - 1 + "");
             try {
                 find_potential_list(gson.toJson(strBean).toString());
             } catch (JSONException e) {
@@ -269,8 +269,7 @@ public class RevisitListFragment1 extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-                mCurrentPage = 1;
-                strBean.page = strBean.page = mCurrentPage - 1 + "";
+                strBean.setPage(mCurrentPage - 1 + "");
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
                 } catch (JSONException e) {
