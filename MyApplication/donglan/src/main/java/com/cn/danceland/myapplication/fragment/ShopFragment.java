@@ -325,11 +325,11 @@ public class ShopFragment extends BaseFragment {
                         intent.putExtra("from", "体测");
                         startActivity(intent);
                         break;
-                        
-
- startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth","1"));                        break;
+                    case 13://潜客维护
+                        startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth", "1"));
+                        break;
                     case 14://会员维护
-                        startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth","2"));
+                        startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth", "2"));
                         //  startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 15://待办事项
