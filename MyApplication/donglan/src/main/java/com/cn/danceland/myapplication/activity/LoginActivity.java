@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -64,6 +66,15 @@ public class LoginActivity extends Activity implements OnClickListener {
     public static final String PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE;
     public static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            permissions();
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +134,24 @@ public class LoginActivity extends Activity implements OnClickListener {
 //            }
 //        };
 //        thread.start();
-        permissions();
+      permissions();
+        //  handler.sendMessage(Message.obtain());
+    //    showdialog();
     }
+
+//    private void showdialog() {
+//        AlertDialog.Builder dialog =
+//                new AlertDialog.Builder(this);
+//        dialog.setTitle("提示");
+//        dialog.setMessage("请授权一些权限，以确保APP能正常使用");
+//        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                permissions();
+//            }
+//        });
+//        dialog.show();
+//    }
 
     public void permissions() {
         if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
@@ -149,7 +176,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
         if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{ Manifest.permission.READ_CONTACTS}, 6);
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 6);
         }
 
     }
@@ -158,50 +185,52 @@ public class LoginActivity extends Activity implements OnClickListener {
     public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1 || requestCode == 3 || requestCode == 2 || requestCode == 4 || requestCode == 5 || requestCode == 6) {
-            if (grantResults[0] != 0) {
-                AlertDialog.Builder inputDialog =
-                        new AlertDialog.Builder(LoginActivity.this);
-                inputDialog.setTitle("请在系统应用管理中开启相机定位等必要权限，否则程序无法正常使用");
-                inputDialog.setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (requestCode == 1) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
+            if (grantResults.length>0){
+                if (grantResults[0] != 0) {
+                    AlertDialog.Builder inputDialog =
+                            new AlertDialog.Builder(LoginActivity.this);
+                    inputDialog.setTitle("请在系统应用管理中开启相机定位等必要权限，否则程序无法正常使用");
+                    inputDialog.setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (requestCode == 1) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
+                                        }
                                     }
+                                    if (requestCode == 2) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
+                                        }
+                                    } else if (requestCode == 3) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
+                                        }
+                                    } else if (requestCode == 4) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
+                                        }
+                                    } else if (requestCode == 5) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
+                                        }
+                                    } else if (requestCode == 6) {
+                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
+                                                != PackageManager.PERMISSION_GRANTED) {
+                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 6);
+                                        }
+                                    }
+                                    //System.exit(0);
                                 }
-                                if (requestCode == 2) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
-                                    }
-                                } else if (requestCode == 3) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
-                                    }
-                                } else if (requestCode == 4) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
-                                    }
-                                } else if (requestCode == 5) {
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
-                                    }
-                                }
-                                else if (requestCode == 6){
-                                    if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
-                                            != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(LoginActivity.this, new String[]{ Manifest.permission.READ_CONTACTS}, 6);
-                                    }
-                                }
-                                //System.exit(0);
-                            }
-                        }).show();
+                            }).show();
+            }
+
 
             }
         }
