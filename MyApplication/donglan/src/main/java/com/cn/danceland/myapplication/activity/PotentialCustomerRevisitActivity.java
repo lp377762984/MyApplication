@@ -259,6 +259,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_back:
+                finish();
                 break;
 
             default:
