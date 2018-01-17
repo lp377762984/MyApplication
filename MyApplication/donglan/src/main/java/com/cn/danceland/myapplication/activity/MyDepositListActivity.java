@@ -210,7 +210,7 @@ public class MyDepositListActivity extends Activity implements View.OnClickListe
             }
             if (mDepositList.get(position).getStatus() == 1) {
                 vh.tv_useful_life.setText("有效期:30天");
-                vh.cradview.setCardBackgroundColor(Color.parseColor("#ff33b5e5"));
+                vh.cradview.setCardBackgroundColor(Color.parseColor("#333643"));
 
             } else {
                 vh.tv_useful_life.setText("已使用");
