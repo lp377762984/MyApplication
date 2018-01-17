@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -18,7 +19,7 @@ public class SiJiaoOrderActivity extends Activity {
 
     String type;
     RelativeLayout rl_jiaolian,rl_kaikeshijian,rl_name,rl_phone;
-    RadioButton btn_forme,btn_foryou,btn_zhifubao,btn_weixin;
+    CheckBox btn_forme,btn_foryou,btn_zhifubao,btn_weixin;
     View line7;
     ImageView back_img;
 
