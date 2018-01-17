@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -20,7 +21,7 @@ public class SellSiJiaoConfirmActivity extends Activity {
     int state=999;
 
     RelativeLayout rl_buy;
-    RadioButton btn_sijiao,btn_sijiaodingjin;
+    CheckBox btn_sijiao,btn_sijiaodingjin;
     ImageView sell_img;
 
     @Override

@@ -128,7 +128,7 @@
                     android:textSize="14sp"
                     android:layout_centerVertical="true"
                     />
-                <RadioButton
+                <CheckBox
                     android:id="@+id/btn_forme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -160,7 +160,7 @@
                     android:layout_marginLeft="15dp"
                     />
 
-                <RadioButton
+                <CheckBox
                     android:id="@+id/btn_foryou"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -318,7 +318,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_centerVertical="true"
                     />
-                <RadioButton
+                <CheckBox
                     android:id="@+id/btn_zhifubao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -352,7 +352,7 @@
                     android:text="微信"
                     android:layout_centerVertical="true"
                     />
-                <RadioButton
+                <CheckBox
                     android:id="@+id/btn_weixin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -421,7 +421,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 />
-            <RadioButton
+            <CheckBox
                 android:id="@+id/btn_tongyi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
