@@ -144,7 +144,9 @@ public class MapActivity extends Activity {
                     sb.append(string+"→");
                 }
             }
-            linesInfo = sb.toString().substring(0,sb.toString().length()-1);
+            if(sb.toString().length()>0){
+                linesInfo = sb.toString().substring(0,sb.toString().length()-1);
+            }
         }
         tv_station.setText(linesInfo);
     }
