@@ -84,7 +84,7 @@ public class BuySiJiaoActivity extends Activity {
             }else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
-            Glide.with(BuySiJiaoActivity.this).load("http://imgsrc.baidu.com/imgad/pic/item/574e9258d109b3de609f4e55c7bf6c81800a4cef.jpg").into(viewHolder.card_img);
+            Glide.with(BuySiJiaoActivity.this).load(R.drawable.sijiao_card).into(viewHolder.card_img);
 
 
             return convertView;
