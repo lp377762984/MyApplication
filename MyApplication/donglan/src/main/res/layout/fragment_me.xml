@@ -274,7 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/img_my_data" />
+                        android:src="@drawable/img_shou_huan" />
 
                     <TextView
                         android:layout_width="0dp"
