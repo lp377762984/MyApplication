@@ -7,5 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>
+    <TextView
+        android:id="@+id/tv_no"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="16sp"
+        android:text="暂无消息"
+        android:gravity="center"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
