@@ -71,7 +71,7 @@
 
 
     <style name="MyTheme" parent="AppTheme">
-        <item name="vpiTabPageIndicatorStyle">@style/MyWidget.TabPageIndicator</item>
+    <!--    <item name="vpiTabPageIndicatorStyle">@style/MyWidget.TabPageIndicator</item>-->
         <item name="android:windowNoTitle">true</item>
         <item name="android:animationDuration">5000</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -84,28 +84,28 @@
 
     </style>
 
-    <style name="MyWidget.TabPageIndicator" parent="Widget">
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/indicator_bg_selector</item>
-        <!--       <item name="android:src">@drawable/indicator_bg_selector</item>
-               <item name="android:scaleType">fitEnd</item>-->
-        <item name="android:paddingLeft">22dip</item>
-        <item name="android:paddingRight">22dip</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:textAppearance">@style/MyTextAppearance.TabPageIndicator</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:width">10dp</item>
+    <!--<style name="MyWidget.TabPageIndicator" parent="Widget">-->
+        <!--<item name="android:gravity">center</item>-->
+        <!--<item name="android:background">@drawable/indicator_bg_selector</item>-->
+        <!--&lt;!&ndash;       <item name="android:src">@drawable/indicator_bg_selector</item>-->
+               <!--<item name="android:scaleType">fitEnd</item>&ndash;&gt;-->
+        <!--<item name="android:paddingLeft">22dip</item>-->
+        <!--<item name="android:paddingRight">22dip</item>-->
+        <!--<item name="android:paddingTop">8dp</item>-->
+        <!--<item name="android:paddingBottom">8dp</item>-->
+        <!--<item name="android:textAppearance">@style/MyTextAppearance.TabPageIndicator</item>-->
+        <!--<item name="android:textSize">16sp</item>-->
+        <!--<item name="android:maxLines">1</item>-->
+        <!--<item name="android:width">10dp</item>-->
 
-    </style>
+    <!--</style>-->
 
-    <style name="MyTextAppearance.TabPageIndicator" parent="Widget">
+    <!--<style name="MyTextAppearance.TabPageIndicator" parent="Widget">-->
 
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/tabtext_color_selector</item>
-        <!--  <item name="android:background">@drawable/indicator_bg_selector</item>-->
-    </style>
+        <!--<item name="android:textSize">18sp</item>-->
+        <!--<item name="android:textColor">@drawable/tabtext_color_selector</item>-->
+        <!--&lt;!&ndash;  <item name="android:background">@drawable/indicator_bg_selector</item>&ndash;&gt;-->
+    <!--</style>-->
 
 
 <!--    <style name="customMenuItemIcon" parent="Droppy.DroppyMenuItemIcon">

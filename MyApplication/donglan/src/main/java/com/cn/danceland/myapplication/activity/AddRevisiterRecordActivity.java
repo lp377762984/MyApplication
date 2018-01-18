@@ -25,6 +25,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ParamInfoBean;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -32,6 +33,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -147,6 +149,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
                 if (requestOrderBean.isSuccess()) {
                     ToastUtils.showToastShort("回访记录添加成功");
+                    EventBus.getDefault().post(new IntEvent(0,210));//通知刷新回记录页面
                     finish();
                 } else {
                     ToastUtils.showToastShort("回访记录添加失败");

@@ -116,6 +116,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
         findViewById(R.id.tv_login_others).setOnClickListener(this);
+        findViewById(R.id.logo).setOnClickListener(this);
         iv_pswd_see = findViewById(R.id.iv_pswd_see);
         iv_pswd_see.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
@@ -134,9 +135,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 //            }
 //        };
 //        thread.start();
-      permissions();
+        permissions();
         //  handler.sendMessage(Message.obtain());
-    //    showdialog();
+        //    showdialog();
     }
 
 //    private void showdialog() {
@@ -185,7 +186,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1 || requestCode == 3 || requestCode == 2 || requestCode == 4 || requestCode == 5 || requestCode == 6) {
-            if (grantResults.length>0){
+            if (grantResults.length > 0) {
                 if (grantResults[0] != 0) {
                     AlertDialog.Builder inputDialog =
                             new AlertDialog.Builder(LoginActivity.this);
@@ -229,7 +230,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                                     //System.exit(0);
                                 }
                             }).show();
-            }
+                }
 
 
             }
@@ -287,6 +288,19 @@ public class LoginActivity extends Activity implements OnClickListener {
                     iv_pswd_see.setImageResource(R.drawable.img_look);
                 }
 
+                break;
+            case R.id.logo:
+//                if (TextUtils.equals("http://192.168.1.94:8003/", Constants.HOST)) {
+//                    Constants.HOST = "http://47.104.3.118:8003/";
+//                    LogUtil.i(Constants.HOST);
+//                    ToastUtils.showToastLong("已切换至正式版");
+//                    //  about_verson.setText("正式版:"+ AppUtils.getVersionName(AboutUsActivity.this));
+//                } else if (TextUtils.equals("http://47.104.3.118:8003/", Constants.HOST)) {
+//                    Constants.HOST = "http://192.168.1.94:8003/";
+//                    ToastUtils.showToastLong("已切换至测试版");
+//                    LogUtil.i(Constants.HOST);
+//                    // about_verson.setText("测试版:"+ AppUtils.getVersionName(AboutUsActivity.this));
+//                }
                 break;
             default:
                 break;

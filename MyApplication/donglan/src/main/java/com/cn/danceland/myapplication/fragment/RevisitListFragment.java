@@ -209,9 +209,10 @@ public class RevisitListFragment extends BaseFragment {
         StrBean.Order order=new StrBean.Order();
         order.setLast_time("desc");//最近维护
         strBean.setOrder(order);
-        LogUtil.i(strBean.toString());
+
         try {
             find_potential_list(gson.toJson(strBean).toString());
+            LogUtil.i(gson.toJson(strBean).toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -175,7 +175,7 @@ public class CommentListviewAdapter extends BaseAdapter {
         TextView tv_nickname;//昵称
         ImageView iv_avatar;//头像
         TextView tv_time;//时间
-        TextView tv_content;//内容
+        hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;//内容
         LinearLayout ll_item;
     }
 

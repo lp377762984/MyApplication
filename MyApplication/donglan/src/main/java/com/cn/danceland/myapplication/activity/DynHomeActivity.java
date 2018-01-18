@@ -114,7 +114,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private TextView tv_guanzhu;
     private TextView tv_location;
     private LinearLayout ll_location;
-    private TextView tv_content;
+    private hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
     private ImageView iv_avatar;
     private NoScrollGridView gridView;
     private JZVideoPlayerStandard jzVideoPlayer;

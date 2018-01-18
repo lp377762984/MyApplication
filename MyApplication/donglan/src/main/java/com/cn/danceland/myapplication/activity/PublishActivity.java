@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -80,7 +79,7 @@ import java.util.Map;
 public class PublishActivity extends Activity {
     TextView publish_cancel;
     TextView publish_ok;
-    EditText publish_status;
+    hani.momanii.supernova_emoji_library.Helper.EmojiconEditText publish_status;
     RelativeLayout publish_photo,rl_video;
     TextView publish_location;
     TextView publish_share1;

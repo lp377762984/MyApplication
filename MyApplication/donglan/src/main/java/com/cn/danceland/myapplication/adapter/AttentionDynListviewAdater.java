@@ -485,7 +485,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
     class ViewHolder {
         TextView tv_nick_name;
         TextView tv_time;
-        TextView tv_content;
+        hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
         TextView tv_location;//地点
         TextView tv_zan_num;//点赞数量
         TextView tv_guanzhu;

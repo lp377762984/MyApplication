@@ -1,5 +1,7 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by shy on 2018/1/12 15:37
  * Email:644563767@qq.com
@@ -44,7 +46,7 @@ public class RequsetPotentialInfoBean {
         return data;
     }
 
-    public class Data extends PotentialInfo {
+    public class Data extends PotentialInfo implements Serializable {
 
     }
 }

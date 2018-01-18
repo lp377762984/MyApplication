@@ -187,7 +187,7 @@ public class PotentialInfo implements Serializable {
         this.targetList = targetList;
     }
 
-    public class TargetList {
+    public class TargetList implements Serializable{
 
         private String id;
         private String data_key;
@@ -246,7 +246,7 @@ public class PotentialInfo implements Serializable {
             this.type_name = type_name;
         }
     }
-    public class ProjectList {
+    public class ProjectList implements Serializable {
 
         private String id;
         private String data_key;
@@ -305,7 +305,7 @@ public class PotentialInfo implements Serializable {
             this.type_name = type_name;
         }
     }
-    public class ChonicList {
+    public class ChonicList implements Serializable{
 
         private String id;
         private String data_key;

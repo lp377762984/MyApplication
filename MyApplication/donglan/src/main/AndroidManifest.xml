@@ -101,6 +101,11 @@
             android:name=".activity.MyProActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.EditPotentialActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
@@ -228,18 +233,6 @@
         <activity
             android:name=".activity.FitnessTestActivity"
             android:screenOrientation="portrait" />
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <activity

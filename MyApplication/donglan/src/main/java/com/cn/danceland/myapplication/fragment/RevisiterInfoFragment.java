@@ -23,8 +23,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
+import com.cn.danceland.myapplication.activity.EditPotentialActivity;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
 import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -42,7 +44,7 @@ import java.util.Map;
  */
 
 
-public class RevisiterInfoFragment extends BaseFragment {
+public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private String id;
     private Gson gson = new Gson();
     private RequsetPotentialInfoBean potentialInfoBean;
@@ -103,10 +105,10 @@ public class RevisiterInfoFragment extends BaseFragment {
         tv_address.setText(info.getAddress());
         tv_email.setText(info.getMail());
         tv_guest_aware_way.setText(info.getGuest_aware_way());
-        if (!TextUtils.isEmpty(info.getFitness_level())){
+        if (!TextUtils.isEmpty(info.getFitness_level())) {
             sr_fitness_level.setRating(Integer.parseInt(info.getFitness_level()));
         }
-        if (!TextUtils.isEmpty(info.getFollow_level())){
+        if (!TextUtils.isEmpty(info.getFollow_level())) {
             sr_follow_level.setRating(Integer.parseInt(info.getFollow_level()));
         }
 
@@ -116,7 +118,7 @@ public class RevisiterInfoFragment extends BaseFragment {
 
 
         //  List<String> list = new ArrayList<String>();
-        if (info.getTargetList()!=null&&info.getTargetList().size()>0){
+        if (info.getTargetList() != null && info.getTargetList().size() > 0) {
             String s = "";
             for (int j = 0; j < info.getTargetList().size(); j++) {
 
@@ -129,30 +131,30 @@ public class RevisiterInfoFragment extends BaseFragment {
             }
             tv_target.setText(s);
         }
-        if (info.getProjectList()!=null&&info.getProjectList().size()>0){
+        if (info.getProjectList() != null && info.getProjectList().size() > 0) {
             String s1 = "";
             for (int j = 0; j < info.getProject_ids().size(); j++) {
 
                 if (s1 == "") {
                     s1 = info.getProjectList().get(j).getData_value();
                 } else {
-                    s1 = s1 + "," +  info.getProjectList().get(j).getData_value();
+                    s1 = s1 + "," + info.getProjectList().get(j).getData_value();
                 }
             }
             tv_like.setText(s1);
         }
-       if (info.getChonicList()!=null&&info.getChonicList().size()>0){
-           String s2 = "";
-           for (int j = 0; j < info.getChonicList().size(); j++) {
+        if (info.getChonicList() != null && info.getChonicList().size() > 0) {
+            String s2 = "";
+            for (int j = 0; j < info.getChonicList().size(); j++) {
 
-               if (s2 == "") {
-                   s2 = info.getChonicList().get(j).getData_value();
-               } else {
-                   s2 = s2 + "," + info.getChonicList().get(j).getData_value();
-               }
-           }
-           tv_medical_history.setText(s2);
-       }
+                if (s2 == "") {
+                    s2 = info.getChonicList().get(j).getData_value();
+                } else {
+                    s2 = s2 + "," + info.getChonicList().get(j).getData_value();
+                }
+            }
+            tv_medical_history.setText(s2);
+        }
         iv_callphone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,22 +164,25 @@ public class RevisiterInfoFragment extends BaseFragment {
         iv_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doSendSMSTo(info.getPhone_no(),"");
+                doSendSMSTo(info.getPhone_no(), "");
             }
         });
     }
+
     /**
      * 调起系统发短信功能
+     *
      * @param phoneNumber
      * @param message
      */
-    public void doSendSMSTo(String phoneNumber,String message){
-        if(PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)){
-            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
+    public void doSendSMSTo(String phoneNumber, String message) {
+        if (PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber));
             intent.putExtra("sms_body", message);
             startActivity(intent);
         }
     }
+
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_revisiter_details, null);
@@ -200,7 +205,7 @@ public class RevisiterInfoFragment extends BaseFragment {
         tv_like = v.findViewById(R.id.tv_like);
         tv_medical_history = v.findViewById(R.id.tv_medical_history);
         tv_remark = v.findViewById(R.id.tv_remark);
-
+        v.findViewById(R.id.iv_more).setOnClickListener(this);
         return v;
     }
 
@@ -214,17 +219,34 @@ public class RevisiterInfoFragment extends BaseFragment {
     }
 
     @Override
-    public void onClick(View view) {
+    public void onEventMainThread(IntEvent event) {
 
-
+        switch(event.getEventCode()){
+        case 211://刷新页面
+            find_by_id_potential(id);
+        break;
+        default:
+        break;
+        }
     }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.iv_more:
+                showListDialog();
+                break;
+            default:
+                break;
+        }
+    }
 
 
     /**
      * 是否添加回访记录
      */
-    public void showDialogRrcord( ) {
+    public void showDialogRrcord() {
         final ContentResolver cr;
         cr = getActivity().getContentResolver();
         AlertDialog.Builder dialog =
@@ -236,7 +258,7 @@ public class RevisiterInfoFragment extends BaseFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 Bundle bundle = new Bundle();
-                bundle.putString("time", CallLogUtils.getLastCallHistoryDuration(null,cr) + "");
+                bundle.putString("time", CallLogUtils.getLastCallHistoryDuration(null, cr) + "");
                 bundle.putString("id", info.getId());
                 bundle.putString("auth", info.getAuth());
                 bundle.putString("member_name", info.getCname());
@@ -254,6 +276,39 @@ public class RevisiterInfoFragment extends BaseFragment {
         });
         dialog.show();
     }
+
+
+    private void showListDialog() {
+        final String[] items = {"编辑资料", "转让", "放弃维护"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(mActivity);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("info", potentialInfoBean.getData());
+                        startActivity(new Intent(mActivity, EditPotentialActivity.class).putExtras(bundle));
+
+                    case 1:
+
+
+                        break;
+                    case 2:
+
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
     /**
      * 提示
      */
@@ -301,7 +356,7 @@ public class RevisiterInfoFragment extends BaseFragment {
     private void find_by_id_potential(String id) {
 
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL+id, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL + id, new Response.Listener<String>() {
 
 
             @Override
@@ -309,11 +364,11 @@ public class RevisiterInfoFragment extends BaseFragment {
                 LogUtil.i(s);
                 potentialInfoBean = new RequsetPotentialInfoBean();
                 potentialInfoBean = gson.fromJson(s, RequsetPotentialInfoBean.class);
-                LogUtil.i(potentialInfoBean.toString());
+            //    LogUtil.i(potentialInfoBean.toString());
                 if (potentialInfoBean.getSuccess()) {
-                    LogUtil.i(potentialInfoBean.getData().toString());
+                //    LogUtil.i(potentialInfoBean.getData().toString());
                     info = potentialInfoBean.getData();
-                    LogUtil.i(info.toString());
+                 //   LogUtil.i(info.toString());
                     Message message = Message.obtain();
                     message.what = 1;
                     handler.sendMessage(message);
@@ -338,7 +393,6 @@ public class RevisiterInfoFragment extends BaseFragment {
         };
         MyApplication.getHttpQueues().add(request);
     }
-
 
 
 }

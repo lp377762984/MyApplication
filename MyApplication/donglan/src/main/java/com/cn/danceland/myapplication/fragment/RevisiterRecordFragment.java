@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequsetRevisiterRecordListBean;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -43,7 +44,7 @@ import static com.cn.danceland.myapplication.R.id.tv_name;
  */
 
 
-public class RevisiterRecordFragment extends BaseFragment {
+public class RevisiterRecordFragment extends BaseFragmentEventBus {
 
     private PullToRefreshListView mListView;
     private List<RequsetRevisiterRecordListBean.Data.Content> datalist = new ArrayList<>();
@@ -79,6 +80,25 @@ public class RevisiterRecordFragment extends BaseFragment {
 
 
         return v;
+    }
+
+
+    @Override
+    public void onEventMainThread(IntEvent event) {
+        switch (event.getEventCode()) {
+
+
+            case 210://刷新页面
+                mCurrentPage = 1;
+                try {
+                    find_record_list(id, mCurrentPage);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -268,9 +288,6 @@ public class RevisiterRecordFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
-
-
-
 
 
     class MyListAatapter extends BaseAdapter {

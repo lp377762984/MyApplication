@@ -42,7 +42,7 @@
 
                 android:background="@drawable/img_add_friends"/>
 
-            <com.viewpagerindicator.TabPageIndicator
+     <!--       <com.viewpagerindicator.TabPageIndicator
                 android:id="@+id/id_indicator"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -50,7 +50,18 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:visibility="gone"/>
+-->
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center"
+                android:background="#fff" />
 
             <ImageButton
                 android:id="@+id/iv_photo"

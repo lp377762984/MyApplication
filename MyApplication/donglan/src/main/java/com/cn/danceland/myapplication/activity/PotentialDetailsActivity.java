@@ -276,6 +276,7 @@ public class PotentialDetailsActivity extends FragmentActivity implements View.O
     }
 
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

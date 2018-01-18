@@ -2,12 +2,15 @@ package com.cn.danceland.myapplication.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
@@ -16,7 +19,16 @@ import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
 
-import com.viewpagerindicator.TabPageIndicator;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.badge.BadgePagerTitleView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,9 +40,9 @@ import static android.R.attr.value;
  * 发现页面
  */
 public class DiscoverFragment extends BaseFragment {
-
+    public  String[] TITLES = new String[]{"精选动态", "关注动态"};
     private ViewPager mViewPager;
-    private TabPageIndicator mTabPageIndicator;
+  //  private TabPageIndicator mTabPageIndicator;
     private TabAdapter mAdapter;
     private ImageButton iv_photo;
     private AutoLocatedPopup autoLocatedPopup;
@@ -41,36 +53,113 @@ public class DiscoverFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_discover, null);
         v.findViewById(R.id.iv_add_friends).setOnClickListener(this);
-        autoLocatedPopup = new AutoLocatedPopup(mActivity);
+      //  autoLocatedPopup = new AutoLocatedPopup(mActivity);
         iv_photo = v.findViewById(R.id.iv_photo);
         iv_photo.setOnClickListener(this);
         mViewPager = v.findViewById(R.id.id_viewpager);
-        mTabPageIndicator = v.findViewById(R.id.id_indicator);
+     //   mTabPageIndicator = v.findViewById(R.id.id_indicator);
         mAdapter = new TabAdapter(getFragmentManager());
         mViewPager.setAdapter(mAdapter);
         //mViewPager.setOffscreenPageLimit(3);
-        mTabPageIndicator.setViewPager(mViewPager, 0);
-        mTabPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//        mTabPageIndicator.setViewPager(mViewPager, 0);
+//
+//        mTabPageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                curentpage = position;
+//                EventBus.getDefault().post(new IntEvent(position, 8901));
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
 
-            }
+        MagicIndicator magicIndicator = (MagicIndicator) v.findViewById(R.id.magic_indicator);
+        CommonNavigator commonNavigator = new CommonNavigator(mActivity);
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(commonNavigatorAdapter);
 
-            @Override
-            public void onPageSelected(int position) {
-                curentpage = position;
-                EventBus.getDefault().post(new IntEvent(position, 8901));
-            }
+        magicIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magicIndicator, mViewPager);
+      mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+          @Override
+          public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+          }
 
-            }
-        });
+          @Override
+          public void onPageSelected(int position) {
+              curentpage = position;
+              EventBus.getDefault().post(new IntEvent(position, 8901));
+          }
+
+          @Override
+          public void onPageScrollStateChanged(int state) {
+
+          }
+      });
         return v;
     }
 
+    private TextView badgeTextView;
+    private BadgePagerTitleView badgePagerTitleView;
+    private CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
 
+
+        @Override
+        public int getCount() {
+            return TITLES == null ? 0 : TITLES.length;
+        }
+
+        @Override
+        public IPagerTitleView getTitleView(Context context, final int index) {
+            badgePagerTitleView = new BadgePagerTitleView(context);
+
+            SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+            simplePagerTitleView.setText(TITLES[index]);
+
+            simplePagerTitleView.setNormalColor(Color.GRAY);
+            simplePagerTitleView.setSelectedColor(Color.BLACK);
+            simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
+                    mViewPager.setCurrentItem(index);
+                }
+            });
+
+            badgePagerTitleView.setInnerPagerTitleView(simplePagerTitleView);
+//
+
+
+            return badgePagerTitleView;
+        }
+
+        @Override
+        public IPagerIndicator getIndicator(Context context) {
+            LinePagerIndicator indicator = new LinePagerIndicator(context);
+            indicator.setColors(Color.parseColor("#40c4ff"));
+            return indicator;
+        }
+    };
+
+//    private void initMagicIndicator1() {
+//        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
+//        CommonNavigator commonNavigator = new CommonNavigator(mActivity);
+//        commonNavigator.setAdjustMode(true);
+//        commonNavigator.setAdapter(commonNavigatorAdapter);
+//
+//        magicIndicator.setNavigator(commonNavigator);
+//        ViewPagerHelper.bind(magicIndicator, mViewPager);
+//    }
     private void showListDialog() {
         final String[] items = {"发布图文", "发布视频"};
         AlertDialog.Builder listDialog =
@@ -139,7 +228,8 @@ public class DiscoverFragment extends BaseFragment {
                 break;
             case R.id.iv_photo://发布动态
 
-                autoLocatedPopup.showPopupWindow(v);
+               // autoLocatedPopup.showPopupWindow(v);
+                showListDialog();
                 break;
             case value:
                 break;
