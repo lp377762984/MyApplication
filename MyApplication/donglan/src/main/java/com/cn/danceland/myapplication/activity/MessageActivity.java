@@ -121,7 +121,7 @@ public class MessageActivity extends FragmentActivity {
                     showFragment("2");//关注
                 }else if(i==3){
                     showFragment("4");
-                    ToastUtils.showToastShort("没有系统消息");
+                    //ToastUtils.showToastShort("没有系统消息");
                 }
             }
 
