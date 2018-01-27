@@ -38,13 +38,14 @@ public class ShowCameraActivity extends Activity {
 
     JCameraView jCameraView;
     CaptureLayout capture_layout;
-
+    String isPhoto;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.showcamera);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        isPhoto = getIntent().getStringExtra("isPhoto");
 
         initView();
 
@@ -57,10 +58,19 @@ public class ShowCameraActivity extends Activity {
         capture_layout = jCameraView.findViewById(R.id.capture_layout);
 
 //        //设置视频保存路径
-//        jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "JCamera");
+        jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/vedio/");
 
-        //设置只能录像或只能拍照或两种都可以（默认两种都可以）
-        jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
+        if("0".equals(isPhoto)){
+            //只能拍照
+            jCameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_CAPTURE);
+        }else if("1".equals(isPhoto)){
+            //只能录像
+            jCameraView.setFeatures(JCameraView.BUTTON_STATE_ONLY_RECORDER);
+        }else{
+            //设置只能录像或只能拍照或两种都可以（默认两种都可以）
+            jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
+        }
 
         //设置视频质量
         jCameraView.setMediaQuality(5*1024*1024);
@@ -84,19 +94,18 @@ public class ShowCameraActivity extends Activity {
             public void captureSuccess(Bitmap bitmap) {
                 File file = saveBitmapFile(bitmap);
                 Intent intent = new Intent();
-                intent.putExtra("path", file.getAbsolutePath());
+                intent.putExtra("picpath", file.getAbsolutePath());
                 LogUtil.e("zzf",file.getAbsolutePath());
-                setResult(101, intent);
+                setResult(99, intent);
                 finish();
             }
             //获取视频路径
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
                 LogUtil.e("zzf",url);
-                File path = saveBitmapFile(firstFrame);
                 Intent intent = new Intent();
-                intent.putExtra("path", path);
-                setResult(101, intent);
+                intent.putExtra("videoPath", url);
+                setResult(111, intent);
                 finish();
 
             }
@@ -105,17 +114,13 @@ public class ShowCameraActivity extends Activity {
         jCameraView.setLeftClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                //CameraActivity.this.finish();
-                //finish();
-                LogUtil.e("zzf","1111");
+                finish();
             }
         });
         //右边按钮点击事件
         jCameraView.setRightClickListener(new ClickListener() {
             @Override
             public void onClick() {
-                LogUtil.e("zzf","2222");
-
                 //finish();
             }
         });

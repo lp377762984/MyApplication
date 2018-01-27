@@ -352,7 +352,7 @@ public class PublishActivity extends Activity {
     };
 
     private void showListDialog() {
-        final String[] items = { "拍摄(长按拍视频)","从相册选择"};
+        final String[] items = { "拍摄","从相册选择"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -361,11 +361,16 @@ public class PublishActivity extends Activity {
                 if(which==0){
                     if(SPUtils.getInt("imgN",0)<9){
                         //showCamera();
-                        startActivity(new Intent(PublishActivity.this,ShowCameraActivity.class));
+                        startActivityForResult(new Intent(PublishActivity.this,ShowCameraActivity.class).putExtra("isPhoto",isPhoto),102);
+                        //startActivity(new Intent(PublishActivity.this,ShowCameraActivity.class));
                     }else{
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
                 }else{
+                    if("1".equals(isPhoto)){
+                        isPhoto = "0";
+                        arrayList.clear();
+                    }
                     getPic();
                 }
             }
@@ -461,14 +466,19 @@ public class PublishActivity extends Activity {
                 }
 
             }
-        }else if(requestCode==99&&resultCode == RESULT_OK){
-            arrayList.add(cameraPath);
-            SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
-            grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+        }else if(resultCode == 99){
+            isPhoto = "0";
+            cameraPath = data.getStringExtra("picpath");
+            if(cameraPath!=null){
+                arrayList.add(cameraPath);
+                SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
+                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+            }
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
                 publish_location.setText(location);
         }else if(resultCode == 111){
+            isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
             arrayList.clear();
             if(videoPath!=null){
