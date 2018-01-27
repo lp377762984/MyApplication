@@ -155,6 +155,7 @@ public class ShopFragment extends BaseFragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.GETMENUS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 if (s.contains("true")) {
                     MenusBean menusBean = gson.fromJson(s, MenusBean.class);
                     data = menusBean.getData();

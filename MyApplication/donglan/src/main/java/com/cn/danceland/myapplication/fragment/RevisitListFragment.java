@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -163,6 +164,10 @@ public class RevisitListFragment extends BaseFragment {
     public View initViews() {
         auth = getArguments().getString("auth");
         View v = View.inflate(mActivity, R.layout.fragment_revist_list, null);
+        Button btn_add=v.findViewById(R.id.btn_add);
+        if (TextUtils.equals(auth,"2")){//如果是会员隐藏添加按钮
+            btn_add.setVisibility(View.GONE);
+        }
         v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
         myListAatapter = new MyListAatapter();

@@ -82,7 +82,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
-     //   buildAnima();
+        //   buildAnima();
     }
 
 
@@ -118,7 +118,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 
     private AnimationSet mAnimationSet;
 
-    private void buildAnima(final  int pos) {
+    private void buildAnima(final int pos) {
         ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation.setDuration(500);
@@ -204,7 +204,7 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
-
+            viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
             viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
@@ -345,9 +345,9 @@ public class MyDynListviewAdater extends BaseAdapter {
 
 
         //  LogUtil.i(data.get(position).getNickName());
-    //    if (!TextUtils.isEmpty(data.get(position).getNickName())) {
-            viewHolder.tv_nick_name.setText(data.get(position).getNickName());
-      // }
+        //    if (!TextUtils.isEmpty(data.get(position).getNickName())) {
+        viewHolder.tv_nick_name.setText(data.get(position).getNickName());
+        // }
 
 
         //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
@@ -421,29 +421,67 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.gridView.setVisibility(View.VISIBLE);
 
 
+            if (data.get(position).getImgList().size() == 1) {
+                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
+//                RequestOptions options1 = new RequestOptions()
+//                        //  .placeholder(R.drawable.img_loading)//加载占位图
+//                        .error(R.drawable.img_loadfail)//
+//                        .priority(Priority.HIGH);
+//
+//
+//                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+//                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X300");
+//                LogUtil.i(sb.toString());
+//                Glide.with(context)
+//                        .load(sb.toString())
+//                        .apply(options1)
+//                        .into(viewHolder.iv_pic);
+//
+//
+//                Glide.with(context)
+//                        .asBitmap()//强制Glide返回一个Bitmap对象
+//                        .load(sb.toString())
+//                        .into(new SimpleTarget<Bitmap>() {
+//                                  @Override
+//                                  public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+//                                      int width = bitmap.getWidth();
+//                                      int height = bitmap.getHeight();
+//
+//                                      ViewGroup.LayoutParams params = iviewHolder.iv_pic.getLayoutParams();
+//                                      int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
+//                                      //float scale = (float) vw / (float) resource.getIntrinsicWidth();
+//                                      int vh = (int) ((float) vw / (float) 1.78);
+//                                      params.height = vh + imageView.getPaddingTop() + imageView.getPaddingBottom();
+//                                      imageView.setLayoutParams(params);
+//                                  }
+//                              }
+//
+//
+//                        );
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, height);
+//                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+//                viewHolder.iv_pic.setLayoutParams(linearParams);
 
-
-            if (data.get(position).getImgList().size()==1){
-              //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-             //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//
 
-            }
-          else   if (data.get(position).getImgList().size()==4){
+
+            } else if (data.get(position).getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 viewHolder.gridView.setNumColumns(2);
-                 int width = DensityUtils.dp2px(context,205f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            }else {
+            } else {
                 viewHolder.gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(context,310f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
@@ -501,6 +539,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         ImageView iv_comment;//评论
         LinearLayout ll_location;
         NoScrollGridView gridView;
+        ImageView iv_pic;
         JZVideoPlayerStandard jzVideoPlayer;
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数

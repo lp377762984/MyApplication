@@ -260,7 +260,8 @@ public class PotentialDetailsActivity extends FragmentActivity implements View.O
         @Override
         public IPagerIndicator getIndicator(Context context) {
             LinePagerIndicator indicator = new LinePagerIndicator(context);
-            indicator.setColors(Color.parseColor("#40c4ff"));
+          //  indicator.setColors(Color.parseColor("#40c4ff"));
+            indicator.setColors(Color.parseColor("#5e6379"));
             return indicator;
         }
     };
