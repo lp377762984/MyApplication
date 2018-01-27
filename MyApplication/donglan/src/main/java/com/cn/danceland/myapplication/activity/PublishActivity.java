@@ -158,7 +158,6 @@ public class PublishActivity extends Activity {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
                     }else{
                         String strBean = gson.toJson(bean);
-                        LogUtil.e("zzf",strBean);
                         try {
                             commitUrl(strBean);
                             //LogUtil.e("zzf",strBean);
@@ -254,7 +253,6 @@ public class PublishActivity extends Activity {
                                 public void run() {
                                     try {
                                         String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
-                                        LogUtil.e("zzf",s);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
@@ -354,7 +352,7 @@ public class PublishActivity extends Activity {
     };
 
     private void showListDialog() {
-        final String[] items = { "拍照","从相册选择"};
+        final String[] items = { "拍摄(长按拍视频)","从相册选择"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -362,7 +360,8 @@ public class PublishActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 if(which==0){
                     if(SPUtils.getInt("imgN",0)<9){
-                        showCamera();
+                        //showCamera();
+                        startActivity(new Intent(PublishActivity.this,ShowCameraActivity.class));
                     }else{
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
@@ -581,13 +580,13 @@ public class PublishActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if(imgN<=9){
-                        LogUtil.e("zzf",imgN+"");
                         if(position<=arrayLists.size()){
                             if("0".equals(isPhoto)){
                                 showListDialog();
                             }else{
-                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-                                startActivityForResult(intentr,111);
+//                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+//                                startActivityForResult(intentr,111);
+                                showListDialog();
                             }
                         }
                     }else{

@@ -160,36 +160,36 @@ public class DiscoverFragment extends BaseFragment {
 //        magicIndicator.setNavigator(commonNavigator);
 //        ViewPagerHelper.bind(magicIndicator, mViewPager);
 //    }
-    private void showListDialog() {
-        final String[] items = {"发布图文", "发布视频"};
-        AlertDialog.Builder listDialog =
-                new AlertDialog.Builder(mActivity);
-        //listDialog.setTitle("我是一个列表Dialog");
-        listDialog.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                switch (which) {
-                    case 0:
-                        //ToastUtils.showToastShort("发布动态");
-                        Intent intent = new Intent(mActivity, PublishActivity.class);
-                        intent.putExtra("isPhoto", "0");
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        Intent intent1 = new Intent(mActivity, PublishActivity.class);
-                        intent1.putExtra("isPhoto", "1");
-                        startActivity(intent1);
-                        //ToastUtils.showToastShort("发布视频");
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        });
-        listDialog.show();
-    }
+//    private void showListDialog() {
+//        final String[] items = {"发布图文", "发布视频"};
+//        AlertDialog.Builder listDialog =
+//                new AlertDialog.Builder(mActivity);
+//        //listDialog.setTitle("我是一个列表Dialog");
+//        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//                switch (which) {
+//                    case 0:
+//                        //ToastUtils.showToastShort("发布动态");
+//                        Intent intent = new Intent(mActivity, PublishActivity.class);
+//                        intent.putExtra("isPhoto", "0");
+//                        startActivity(intent);
+//                        break;
+//                    case 1:
+//                        Intent intent1 = new Intent(mActivity, PublishActivity.class);
+//                        intent1.putExtra("isPhoto", "1");
+//                        startActivity(intent1);
+//                        //ToastUtils.showToastShort("发布视频");
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//            }
+//        });
+//        listDialog.show();
+//    }
 
 
     @Override
@@ -229,7 +229,8 @@ public class DiscoverFragment extends BaseFragment {
             case R.id.iv_photo://发布动态
 
                // autoLocatedPopup.showPopupWindow(v);
-                showListDialog();
+                Intent intent = new Intent(mActivity, PublishActivity.class);
+                startActivity(intent);
                 break;
             case value:
                 break;
