@@ -95,14 +95,12 @@ public class ShowCameraActivity extends Activity {
                 File file = saveBitmapFile(bitmap);
                 Intent intent = new Intent();
                 intent.putExtra("picpath", file.getAbsolutePath());
-                LogUtil.e("zzf",file.getAbsolutePath());
                 setResult(99, intent);
                 finish();
             }
             //获取视频路径
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
-                LogUtil.e("zzf",url);
                 Intent intent = new Intent();
                 intent.putExtra("videoPath", url);
                 setResult(111, intent);
