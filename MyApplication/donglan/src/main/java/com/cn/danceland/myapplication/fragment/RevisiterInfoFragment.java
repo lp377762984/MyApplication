@@ -322,9 +322,9 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                //  call(phoneNo);
+             call(phoneNo);
 
-                call("13436907535");
+               // call("13436907535");
                 showDialogRrcord();
 
             }

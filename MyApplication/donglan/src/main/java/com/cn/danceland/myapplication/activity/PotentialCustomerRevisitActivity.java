@@ -239,7 +239,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         @Override
         public IPagerIndicator getIndicator(Context context) {
             LinePagerIndicator indicator = new LinePagerIndicator(context);
-            indicator.setColors(Color.parseColor("#40c4ff"));
+           // indicator.setColors(Color.parseColor("#40c4ff"));
+            indicator.setColors(Color.parseColor("#5e6379"));
             return indicator;
         }
     };

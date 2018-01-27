@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/img_about_us" />
+                        android:src="@drawable/img_my_shop" />
 
                     <TextView
                         android:layout_width="0dp"

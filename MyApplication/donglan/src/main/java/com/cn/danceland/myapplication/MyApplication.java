@@ -1,23 +1,17 @@
 package com.cn.danceland.myapplication;
 
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Process;
-import android.text.TextUtils;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
-import com.cn.danceland.myapplication.activity.MainActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.utils.LocationService;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -29,7 +23,7 @@ import java.util.List;
  */
 
 
-public class MyApplication extends Application {
+public class MyApplication extends android.support.multidex.MultiDexApplication {
     private static RequestQueue requestQueue;
     public static Context applicationContext;
     private static MyApplication instance;
@@ -92,7 +86,7 @@ public class MyApplication extends Application {
         return applicationContext;
     }
 
-    private void setUpDb(){
+    private void  setUpDb(){
 
         donglan = new DaoMaster.DevOpenHelper(this, "donglan", null);
         message = new DaoMaster.DevOpenHelper(this, "message", null);
