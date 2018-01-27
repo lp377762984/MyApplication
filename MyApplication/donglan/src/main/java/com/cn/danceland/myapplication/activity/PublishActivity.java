@@ -368,9 +368,9 @@ public class PublishActivity extends Activity {
                     }
                 }else{
                     if("1".equals(isPhoto)){
-                        isPhoto = "0";
                         arrayList.clear();
                     }
+                    isPhoto = "0";
                     getPic();
                 }
             }
