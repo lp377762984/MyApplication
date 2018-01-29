@@ -177,4 +177,5 @@ public class ShowCameraActivity extends Activity {
         }
         return file;
     }
+
 }
