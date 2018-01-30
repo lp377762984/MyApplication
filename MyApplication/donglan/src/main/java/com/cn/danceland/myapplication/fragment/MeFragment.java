@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
@@ -216,6 +217,7 @@ public class MeFragment extends BaseFragment {
                 //  startActivity(intent);
                 break;
             case R.id.ll_my_msg://我的消息
+                ShortcutBadger.removeCount(mActivity.getApplicationContext());
                 Intent intent1 = new Intent(mActivity, MessageActivity.class);
                 startActivity(intent1);
                 break;

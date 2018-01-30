@@ -115,6 +115,9 @@ public class PublishActivity extends Activity {
         queue = Volley.newRequestQueue(PublishActivity.this);
         gson = new Gson();
         isPhoto = getIntent().getStringExtra("isPhoto");
+        if(isPhoto==null){
+            isPhoto = "0";
+        }
         initView();
         setOnclick();
         handler = new Handler(){

@@ -22,6 +22,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 import java.util.Map;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 /**
  * Created by feng on 2017/12/8.
  */
@@ -73,6 +75,8 @@ public class MessageReceiver extends PushMessageReceiver {
             fansNum = SPUtils.getInt("fansNum",0);
             EventBus.getDefault().post(new StringEvent(pinglunNum+dianzanNum+fansNum+"",101));
             //LogUtil.e("zzf",message.getContent());
+            //int badgeCount = 1;
+            ShortcutBadger.applyCount(context, pinglunNum+dianzanNum+fansNum); //for 1.1.4+
         }
     }
 
