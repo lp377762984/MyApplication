@@ -115,6 +115,9 @@ public class PublishActivity extends Activity {
         queue = Volley.newRequestQueue(PublishActivity.this);
         gson = new Gson();
         isPhoto = getIntent().getStringExtra("isPhoto");
+        if(isPhoto==null){
+            isPhoto = "0";
+        }
         initView();
         setOnclick();
         handler = new Handler(){
@@ -158,7 +161,6 @@ public class PublishActivity extends Activity {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
                     }else{
                         String strBean = gson.toJson(bean);
-                        LogUtil.e("zzf",strBean);
                         try {
                             commitUrl(strBean);
                             //LogUtil.e("zzf",strBean);
@@ -254,7 +256,6 @@ public class PublishActivity extends Activity {
                                 public void run() {
                                     try {
                                         String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
-                                        LogUtil.e("zzf",s);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
@@ -354,7 +355,7 @@ public class PublishActivity extends Activity {
     };
 
     private void showListDialog() {
-        final String[] items = { "拍照","从相册选择"};
+        final String[] items = { "拍摄","从相册选择"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -362,11 +363,17 @@ public class PublishActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 if(which==0){
                     if(SPUtils.getInt("imgN",0)<9){
-                        showCamera();
+                        //showCamera();
+                        startActivityForResult(new Intent(PublishActivity.this,ShowCameraActivity.class).putExtra("isPhoto",isPhoto),102);
+                        //startActivity(new Intent(PublishActivity.this,ShowCameraActivity.class));
                     }else{
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
                 }else{
+                    if("1".equals(isPhoto)){
+                        arrayList.clear();
+                    }
+                    isPhoto = "0";
                     getPic();
                 }
             }
@@ -462,14 +469,19 @@ public class PublishActivity extends Activity {
                 }
 
             }
-        }else if(requestCode==99&&resultCode == RESULT_OK){
-            arrayList.add(cameraPath);
-            SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
-            grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+        }else if(resultCode == 99){
+            isPhoto = "0";
+            cameraPath = data.getStringExtra("picpath");
+            if(cameraPath!=null){
+                arrayList.add(cameraPath);
+                SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
+                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+            }
         }else if(resultCode==1){
                 location = data.getStringExtra("location");
                 publish_location.setText(location);
         }else if(resultCode == 111){
+            isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
             arrayList.clear();
             if(videoPath!=null){
@@ -581,13 +593,13 @@ public class PublishActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if(imgN<=9){
-                        LogUtil.e("zzf",imgN+"");
                         if(position<=arrayLists.size()){
                             if("0".equals(isPhoto)){
                                 showListDialog();
                             }else{
-                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-                                startActivityForResult(intentr,111);
+//                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
+//                                startActivityForResult(intentr,111);
+                                showListDialog();
                             }
                         }
                     }else{

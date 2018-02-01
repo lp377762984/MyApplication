@@ -98,6 +98,8 @@ android {
         compile 'com.necer.ncalendar:ncalendar:2.4.5'
         compile 'com.github.codbking:CalendarExaple:v1.0.0'
         compile 'com.weigan:loopView:0.1.2'
+        compile 'cjt.library.wheel:camera:1.1.9'
+        compile "me.leolin:ShortcutBadger:1.1.21@aar"
     }
 }
 

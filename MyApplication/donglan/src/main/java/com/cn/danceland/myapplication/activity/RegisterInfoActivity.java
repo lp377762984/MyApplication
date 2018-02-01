@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.format.Time;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
@@ -62,16 +64,18 @@ public class RegisterInfoActivity extends Activity{
     SimpleAdapter mSchedule;
     MyAdapter arrayAdapter;
     //View contentView;
-    View inflate;
+    View inflate,inflate1;
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
     RequestQueue requestQueue;
-    String id,strName,gender = "1";//性别:1、男，2、女，3、未知，4、保密
+    String id,strName,gender = "1",syear,smonth,sdate;//性别:1、男，2、女，3、未知，4、保密
     Data mData;
     Gson gson;
     AlertDialog.Builder alertdialog;
-    LoopView loopview;
-
+    LoopView loopview,lp_year,lp_month,lp_date;
+    int year;
+    String isleapyear;
+    int daysByYearMonth;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +87,9 @@ public class RegisterInfoActivity extends Activity{
     }
 
     private void initHost() {
+        Time time = new Time();
+        time.setToNow();
+        year = time.year;
 
         gson = new Gson();
         requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
@@ -92,15 +99,107 @@ public class RegisterInfoActivity extends Activity{
 
     }
 
+    private void showDate(){
+        ViewGroup parent = (ViewGroup)inflate1.getParent();
+        if(parent!=null){
+            parent.removeAllViews();
+        }
+
+        final ArrayList<String> yearList = new ArrayList<String>();
+        final ArrayList<String> monthList = new ArrayList<String>();
+        final ArrayList<String> dateList = new ArrayList<String>();
+        int n=1950;
+        int len = year-n;
+        for(int i=0;i<=len;i++){
+            yearList.add((n+i)+"");
+        }
+        for(int j = 0;j<12;j++){
+            monthList.add((1+j)+"");
+        }
+        lp_year.setNotLoop();
+        lp_date.setNotLoop();
+        lp_month.setNotLoop();
+        lp_year.setItems(yearList);
+        lp_month.setItems(monthList);
+
+        lp_year.setInitPosition(yearList.size()-20);
+        syear = yearList.get(yearList.size()-20);
+        lp_month.setInitPosition(0);
+        smonth = monthList.get(0);
+
+        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+        dateList.clear();
+        for(int z=1;z<=daysByYearMonth;z++){
+            dateList.add(z+"");
+        }
+        lp_date.setItems(dateList);
+
+        //设置字体大小
+        lp_year.setTextSize(16);
+        lp_month.setTextSize(16);
+        lp_date.setTextSize(16);
+
+        lp_year.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                syear = yearList.get(index);
+                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+                dateList.clear();
+                for(int z=1;z<=daysByYearMonth;z++){
+                    dateList.add(z+"");
+                }
+                lp_date.setItems(dateList);
+            }
+        });
+
+        lp_month.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                smonth = monthList.get(index);
+                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+                dateList.clear();
+                for(int z=1;z<=daysByYearMonth;z++){
+                    dateList.add(z+"");
+                }
+                lp_date.setItems(dateList);
+            }
+        });
+
+        lp_date.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                sdate = dateList.get(index);
+            }
+        });
+
+        alertdialog.setTitle("选择出生年月");
+        alertdialog.setView(inflate1);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                text_birthday.setText(syear+"年"+smonth+"月"+sdate+"日");
+                strBirthday = syear+"-"+smonth+"-"+sdate;
+            }
+        });
+        alertdialog.show();
+
+    }
+
     public void intiView(){
         inflate = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.timeselect, null);
+        inflate1 = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.birthdayselect,null);
         tv_start = inflate.findViewById(R.id.tv_start);
         tv_start.setVisibility(View.GONE);
         loopview = inflate.findViewById(R.id.loopview);
         over_time = inflate.findViewById(R.id.over_time);
         over_time.setVisibility(View.GONE);
 
+        lp_year = inflate1.findViewById(R.id.lp_year);
+        lp_month  = inflate1.findViewById(R.id.lp_month);
+        lp_date = inflate1.findViewById(R.id.lp_date);
+
         alertdialog = new AlertDialog.Builder(RegisterInfoActivity.this);
+
         //contentView = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.selectorwindowsingle,null);
 //        mPopWindow = new PopupWindow(contentView,
 //                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
@@ -138,17 +237,18 @@ public class RegisterInfoActivity extends Activity{
             int v = view.getId();
             switch(v){
                 case R.id.text_birthday:{
-                    c = Calendar.getInstance();
-                    new DatePickerDialog(RegisterInfoActivity.this,new DatePickerDialog.OnDateSetListener() {
-                        public void onDateSet(DatePicker dp, int year,int month, int dayOfMonth) {
-                            //et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
-                            text_birthday.setText(year+"年"+(month+1)+"月"+dayOfMonth+"日");
-                            strBirthday = year+"-"+(month+1)+"-"+dayOfMonth;
-                        }
-                    }, c.get(Calendar.YEAR), // 传入年份
-                            c.get(Calendar.MONTH), // 传入月份
-                            c.get(Calendar.DAY_OF_MONTH) // 传入天数
-                    ).show();
+                    showDate();
+//                    c = Calendar.getInstance();
+//                    new DatePickerDialog(RegisterInfoActivity.this,new DatePickerDialog.OnDateSetListener() {
+//                        public void onDateSet(DatePicker dp, int year,int month, int dayOfMonth) {
+//                            //et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
+//                            text_birthday.setText(year+"年"+(month+1)+"月"+dayOfMonth+"日");
+//                            strBirthday = year+"-"+(month+1)+"-"+dayOfMonth;
+//                        }
+//                    }, c.get(Calendar.YEAR), // 传入年份
+//                            c.get(Calendar.MONTH), // 传入月份
+//                            c.get(Calendar.DAY_OF_MONTH) // 传入天数
+//                    ).show();
                     //showSelectorWindow();
                 }
                 break;

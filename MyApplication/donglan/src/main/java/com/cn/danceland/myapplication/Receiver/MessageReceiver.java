@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.Receiver;
 
+import android.app.Notification;
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -19,8 +20,11 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Created by feng on 2017/12/8.
@@ -73,6 +77,8 @@ public class MessageReceiver extends PushMessageReceiver {
             fansNum = SPUtils.getInt("fansNum",0);
             EventBus.getDefault().post(new StringEvent(pinglunNum+dianzanNum+fansNum+"",101));
             //LogUtil.e("zzf",message.getContent());
+            //int badgeCount = 1;
+            ShortcutBadger.applyCount(context, pinglunNum+dianzanNum+fansNum); //for 1.1.4+
         }
     }
 

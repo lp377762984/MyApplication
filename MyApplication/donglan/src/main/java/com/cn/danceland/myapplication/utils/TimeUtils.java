@@ -152,6 +152,24 @@ public class TimeUtils {
 
     }
 
+    public static String isleapyear(int year) {
+        String is;
+        is=((year%4==0&&year%100!=0)||year%400==0)?"是闰年":"不是闰年";
+        return is;
+    }
 
+    /**
+     * 根据年 月 获取对应的月份 天数
+     * */
+    public static int getDaysByYearMonth(int year, int month) {
+
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR, year);
+        a.set(Calendar.MONTH, month - 1);
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
+    }
 
 }
