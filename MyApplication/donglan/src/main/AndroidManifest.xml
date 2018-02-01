@@ -264,6 +264,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.ShowCameraActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CabinetActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
