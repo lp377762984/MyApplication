@@ -76,6 +76,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.PaiMingActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChartActivity"
             android:screenOrientation="portrait" />

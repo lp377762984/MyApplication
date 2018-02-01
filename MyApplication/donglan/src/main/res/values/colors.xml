@@ -6,7 +6,7 @@
     <color name="common_botton_bar_blue">#2ea7e0</color>
     <color name="color_tab_text_grey">#4c4c4c</color>
     <color name="color_tab_text_yellow">#f7d915</color>
-
+    <color name="color_dl_yellow">#ff6600</color>
 
     <color name="color_content_text">#333333</color>
     <color name="color_white">#fff</color>

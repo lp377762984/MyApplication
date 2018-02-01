@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 
@@ -53,6 +54,7 @@ public class ImageGridAdapter extends BaseAdapter {
                 .centerCrop()
                 //  .placeholder(R.drawable.img_loading)//加载占位图
                 .error(R.drawable.img_loadfail)//
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .priority(Priority.HIGH);
         StringBuilder sb = new StringBuilder(imgUrls.get(i));
         sb.insert(imgUrls.get(i).length() - 4, "_400X300");

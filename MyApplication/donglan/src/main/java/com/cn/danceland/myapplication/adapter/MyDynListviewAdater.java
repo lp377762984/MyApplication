@@ -28,7 +28,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
@@ -424,19 +427,26 @@ public class MyDynListviewAdater extends BaseAdapter {
             if (data.get(position).getImgList().size() == 1) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-//                RequestOptions options1 = new RequestOptions()
-//                        //  .placeholder(R.drawable.img_loading)//加载占位图
-//                        .error(R.drawable.img_loadfail)//
-//                        .priority(Priority.HIGH);
+                RequestOptions options1 = new RequestOptions()
+                        //  .placeholder(R.drawable.img_loading)//加载占位图
+                        .error(R.drawable.img_loadfail)//
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .priority(Priority.HIGH);
+
+                viewHolder.iv_pic.setVisibility(View.GONE);
+                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X300");
+          //      LogUtil.i(sb.toString());
 //
-//
-//                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
-//                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X300");
-//                LogUtil.i(sb.toString());
-//                Glide.with(context)
-//                        .load(sb.toString())
-//                        .apply(options1)
-//                        .into(viewHolder.iv_pic);
+//                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+//                viewHolder.iv_pic.setLayoutParams(linearParams);
+                Glide.with(context)
+                        .load(sb.toString())
+                        .apply(options1)
+                     //   .into( viewHolder.iv_pic);
+
+                        .into(new DrawableImageViewTarget(viewHolder.iv_pic, /*waitForLayout=*/ false));
 //
 //
 //                Glide.with(context)
@@ -463,13 +473,14 @@ public class MyDynListviewAdater extends BaseAdapter {
 //                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
 //                viewHolder.iv_pic.setLayoutParams(linearParams);
 
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
 
             } else if (data.get(position).getImgList().size() == 4) {
+                viewHolder.iv_pic.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 viewHolder.gridView.setNumColumns(2);
                 int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
@@ -478,6 +489,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             } else {
+                viewHolder.iv_pic.setVisibility(View.GONE);
                 viewHolder.gridView.setNumColumns(3);
                 int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
