@@ -83,7 +83,7 @@
             android:layout_alignParentRight="true"
             android:text="小猴子"
             android:textSize="13sp"
-            android:textColor="#C0C0C0"
+            android:textColor="@color/color_dl_yellow"
             />
 
     </RelativeLayout>
@@ -117,7 +117,7 @@
             android:layout_alignParentRight="true"
             android:text="女"
             android:textSize="13sp"
-            android:textColor="#C0C0C0"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
 
@@ -152,7 +152,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
-            android:textColor="#c0c0c0"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
 
@@ -187,8 +187,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
-            android:textColor="#c0c0c0"
-            />
+            android:textColor="@color/color_dl_yellow"            />
     </RelativeLayout>
 
     <View
@@ -222,7 +221,7 @@
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="#C0C0C0"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
     <View
@@ -256,7 +255,7 @@
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="#C0C0C0"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
 
@@ -292,7 +291,7 @@
             android:layout_centerVertical="true"
             android:text=""
             android:textSize="13sp"
-            android:textColor="#C0C0C0"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
 
