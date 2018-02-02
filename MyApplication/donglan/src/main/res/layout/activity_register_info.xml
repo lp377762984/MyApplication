@@ -107,7 +107,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
                 android:text="点击输入昵称"
-                android:textColor="#333333"
+                android:textColor="@color/color_dl_yellow"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 />
@@ -150,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1990年12月10日"
-                android:textColor="#333333"
+                android:textColor="@color/color_dl_yellow"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 />
@@ -163,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="170 cm"
-                android:textColor="#333333"
+                android:textColor="@color/color_dl_yellow"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 />
@@ -176,7 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="55 kg"
-                android:textColor="#333333"
+                android:textColor="@color/color_dl_yellow"
                 android:textSize="18sp"
                 android:layout_weight="1"
                 />
@@ -190,7 +190,7 @@
         android:layout_marginTop="34dp"
         android:textSize="22sp"
         android:src="@mipmap/login_button"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:text="保存"
         android:layout_width="match_parent"
         android:layout_height="40dp"

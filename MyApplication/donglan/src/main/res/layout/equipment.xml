@@ -52,7 +52,7 @@
             android:layout_marginTop="15dp"
             android:text="请将手机靠近体测仪"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/black"
+            android:textColor="@color/color_dl_yellow"
             android:textSize="14sp"
             />
 
