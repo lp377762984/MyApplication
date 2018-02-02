@@ -86,8 +86,8 @@ public class ShopFragment extends BaseFragment {
         ibtn_gps = v.findViewById(R.id.ibtn_gps);
 
         ll_top = v.findViewById(R.id.ll_top);
-        ll_top.setBackgroundColor(Color.WHITE);
-        ll_top.getBackground().setAlpha(80);
+        ll_top.setBackgroundColor(Color.BLACK);
+        ll_top.getBackground().setAlpha(88);
         tv_shopname = v.findViewById(R.id.tv_shopname);
 
         mGridView.setOnItemClickListener(new MyOnItemClickListener());

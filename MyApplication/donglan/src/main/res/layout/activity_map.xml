@@ -48,7 +48,7 @@
                     android:id="@+id/tv_walk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     android:textSize="12sp"
                     android:textColor="#999999"
@@ -84,6 +84,7 @@
                     android:text="暂无路线"
                     android:textSize="12sp"
                     android:textColor="#999999"
+                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     />
             </RelativeLayout>
@@ -117,6 +118,7 @@
                     android:text="暂无路线"
                     android:textSize="12sp"
                     android:textColor="#999999"
+                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
                     />
 
