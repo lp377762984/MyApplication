@@ -3,70 +3,98 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:background="@color/dl_gery">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
-    <de.hdodenhof.circleimageview.CircleImageView
 
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/img_leijijinchang" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-    <LinearLayout
-     android:id="@+id/ll_riji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="25dp"
-        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="130dp"
+            android:layout_height="130dp"
 
-        <ImageView
+            android:layout_centerInParent="true">
 
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
-            android:src="@drawable/img_jianshenriji" />
+            <de.hdodenhof.circleimageview.CircleImageView
 
-        <TextView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/img_leijijinchang" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:text="累计进场"
+                android:textColor="#fff"
+                android:textSize="13dp" />
+
+            <com.cn.danceland.myapplication.view.NumberAnimTextView
+                android:id="@+id/natv_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"
+                android:text="60"
+                android:textColor="#fff"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_riji"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="健身日记"
-            android:textColor="#fff" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_paiming"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="25dp"
-        android:orientation="vertical">
+            <ImageView
 
-        <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_jianshenriji" />
 
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
-            android:src="@drawable/img_paiming" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="健身日记"
+                android:textColor="#fff" />
+        </LinearLayout>
 
-        <TextView
-
+        <LinearLayout
+            android:id="@+id/ll_paiming"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="排行榜"
-            android:textColor="#fff" />
-    </LinearLayout>
-</RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical">
+
+            <ImageView
+
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/img_paiming" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="排行榜"
+                android:textColor="#fff" />
+        </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

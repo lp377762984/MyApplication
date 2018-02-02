@@ -2,9 +2,9 @@ package com.cn.danceland.myapplication.utils;
 
 public class Constants {
 
-   // public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-    public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
- 
+    public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+    // public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
+
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
     public static final String LOGIN_URL = HOST + "user/login ";//登录
@@ -99,7 +99,7 @@ public class Constants {
     public static final String FIND_UPCOMING_MATTER = HOST + "/appPotential/findUpcomingMatter";//查询待办列表
     public static final String UPDATE_MATTER_STATUS = HOST + "/appPotential/updateMatterStatus";//处理待办
     public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/appPotential/findNotUpcomingMatter";//查询未处理待办
-   public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
+    public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
 
     public static final String ISLOGINED = "islogined";//是否登录
