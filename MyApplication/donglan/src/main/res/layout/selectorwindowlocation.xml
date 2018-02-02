@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="取消"
-            android:textColor="#87CEFA"
+            android:textColor="@color/color_dl_yellow"
             android:textSize="20sp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:text="完成"
-            android:textColor="#87CEFA"
+            android:textColor="@color/color_dl_yellow"
             android:textSize="20sp" />
 
     </RelativeLayout>
