@@ -39,6 +39,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.NumberAnimTextView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -103,7 +104,6 @@ public class HomeFragment extends BaseFragment {
 //                            TOP_NEWS_CHANGE_TIME);
 
 
-
                     // 设置数据
                     mMZBanner.setPages(imagelist, new MZHolderCreator<BannerViewHolder>() {
                         @Override
@@ -112,7 +112,10 @@ public class HomeFragment extends BaseFragment {
                         }
                     });
                     mMZBanner.start();
-
+            // 设置动画时长
+                    natv_number.setDuration(2000);
+            // 设置数字增加范围
+                    natv_number.setNumberString("0", "60");
 
                     break;
                 default:
@@ -126,6 +129,7 @@ public class HomeFragment extends BaseFragment {
     private TextView tv_indecater;
     private TextView tv_image_title;
     private MZBannerView mMZBanner;
+    private NumberAnimTextView natv_number;
 
     @Override
     public View initViews() {
@@ -172,8 +176,7 @@ public class HomeFragment extends BaseFragment {
         pullToRefresh.setAdapter(newsListviewAdapter);
         pullToRefresh.getRefreshableView().addHeaderView(initPMHeadView());
         pullToRefresh.getRefreshableView().addHeaderView(initBanner());
-       // pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
-
+        // pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
 
         return v;
@@ -181,11 +184,14 @@ public class HomeFragment extends BaseFragment {
 
     private TopNewsAdapter topNewsAdapter;
 
-//初始化banner
+    //初始化banner
     private View initPMHeadView() {
         View v = View.inflate(mActivity, R.layout.headview_paiming, null);
-        LinearLayout ll_paiming= v.findViewById(R.id.ll_paiming);
-        LinearLayout ll_riji= v.findViewById(R.id.ll_riji);
+        LinearLayout ll_paiming = v.findViewById(R.id.ll_paiming);
+        LinearLayout ll_riji = v.findViewById(R.id.ll_riji);
+        natv_number = v.findViewById(R.id.natv_number);
+
+
         ll_paiming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,14 +209,13 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-
-    private View initBanner(){
+    private View initBanner() {
         View v = View.inflate(mActivity, R.layout.headview_banner, null);
         mMZBanner = (MZBannerView) v.findViewById(R.id.banner);
         mMZBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
-             //   Toast.makeText(getContext(),"click page:"+position,Toast.LENGTH_LONG).show();
+                //   Toast.makeText(getContext(),"click page:"+position,Toast.LENGTH_LONG).show();
                 mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", imagelist.get(i).getUrl()).putExtra("title", imagelist.get(i).getTitle()));
 
             }
@@ -230,12 +235,14 @@ public class HomeFragment extends BaseFragment {
         super.onResume();
         mMZBanner.start();//开始轮播
     }
+
     public static class BannerViewHolder implements MZViewHolder<RequestImageNewsDataBean.Data> {
         private ImageView mImageView;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
@@ -243,10 +250,11 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onBind(Context context, int position, RequestImageNewsDataBean.Data data) {
             // 数据绑定
-           // mImageView.setImageResource(data);
+            // mImageView.setImageResource(data);
             Glide.with(context).load(data.getImg_url()).into(mImageView);
         }
     }
+
     private View initHeadview() {
         View headView = View.inflate(mActivity, R.layout.headview_homepage, null);
         RelativeLayout lv_home_img_news = headView.findViewById(R.id.lv_home_img_news);
