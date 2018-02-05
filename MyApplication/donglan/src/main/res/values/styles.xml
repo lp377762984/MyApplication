@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/menu_bg</item>
         <item name="colorPrimaryDark">@color/dl_gery</item>
         <item name="colorAccent">@color/color_dl_yellow</item>
+
     </style>
     <!--标题样式-->
     <style name="TextViewTitileStyle">

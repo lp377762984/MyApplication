@@ -138,7 +138,8 @@
         <activity
             android:name=".activity.PotentialDetailsActivity"
             android:screenOrientation="portrait" />
-
+        <meta-data android:name="android.max_aspect"
+            android:value="2.1"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ngEPVQS7Y2ZlQWDDyuOGRe63SnMkvbLz"></meta-data>
