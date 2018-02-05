@@ -115,9 +115,9 @@ public class PublishActivity extends Activity {
         queue = Volley.newRequestQueue(PublishActivity.this);
         gson = new Gson();
         isPhoto = getIntent().getStringExtra("isPhoto");
-//        if(isPhoto==null){
-//            isPhoto = "999";
-//        }
+        if(isPhoto==null){
+            isPhoto = "999";
+        }
         initView();
         setOnclick();
         handler = new Handler(){
@@ -343,6 +343,23 @@ public class PublishActivity extends Activity {
                                 finish();
                                 publish_ok.setClickable(false);
                             }
+                        }else{
+                            PublishBean bean = new PublishBean();
+                            if(!"".equals(stringstatus)){
+                                bean.setContent(stringstatus);
+                            }
+                            bean.setPublishPlace(location);
+                            if(bean.getVedioUrl()==null&&bean.getContent()==null){
+                                ToastUtils.showToastShort("请填写需要发布的动态！");
+                            }else{
+                                try {
+                                    commitUrl(gson.toJson(bean));
+                                    finish();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                         }
                     }
 

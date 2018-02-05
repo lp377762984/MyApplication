@@ -670,7 +670,7 @@ public class MyProActivity extends Activity {
             head_image_window.dismiss();
         }
         photograph.setText("拍照");
-        photograph.setTextColor(Color.rgb(46, 167, 224));
+        photograph.setTextColor(Color.parseColor("#ff6600"));
         photo_album.setText("从手机相册选择");
         cancel.setText("取消");
         //cancel1.setVisibility(View.GONE);
