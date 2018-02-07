@@ -7,10 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CabinetBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,6 +38,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CabinetActivity extends Activity {
 
     ListView cabinet_lv;
+    ImageView cabinet_back;
+    CabinetBean cabinetBean;
+    Gson gson;
+    List<CabinetBean.Data> dataList;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,16 +52,63 @@ public class CabinetActivity extends Activity {
 
     private void initView() {
 
-        cabinet_lv = findViewById(R.id.cabinet_lv);
-        cabinet_lv.setAdapter(new MyAdapter());
+        gson = new Gson();
+        cabinet_back = findViewById(R.id.cabinet_back);
+        cabinet_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+        cabinet_lv = findViewById(R.id.cabinet_lv);
+
+        getData();
     }
 
+
+    private void getData(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDMyLOCKERS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.e("zzf",s);
+                cabinetBean = gson.fromJson(s, CabinetBean.class);
+                dataList = cabinetBean.getData();
+                if(dataList!=null){
+                    cabinet_lv.setAdapter(new MyAdapter(dataList));
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+
+                return map;
+            }
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+
+
     private class MyAdapter extends BaseAdapter{
+        List<CabinetBean.Data> list;
+        MyAdapter(List<CabinetBean.Data> list){
+            this.list = list;
+
+        }
 
         @Override
         public int getCount() {
-            return 3;
+            return list.size();
         }
 
         @Override
@@ -61,6 +130,11 @@ public class CabinetActivity extends Activity {
             TextView starttime = inflate.findViewById(R.id.starttime);
             TextView overtime = inflate.findViewById(R.id.overtime);
 
+            cabinet_num.setText("柜号："+list.get(position).getLocker_no());
+
+            starttime.setText("开始日期："+TimeUtils.millToDate(list.get(position).getStart_date()));
+
+            overtime.setText("结束日期："+TimeUtils.millToDate(list.get(position).getEnd_date()));
 
 
             return inflate;

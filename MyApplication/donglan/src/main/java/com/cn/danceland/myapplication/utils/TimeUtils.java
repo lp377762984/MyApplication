@@ -64,6 +64,13 @@ public class TimeUtils {
         return DATE_FORMAT_TILL_DAY_CH.format(date);
     }
 
+    //毫秒转日期
+    public static String millToDate(long time3){
+        Date date2 = new Date();
+        date2.setTime(time3);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(date2);
+    }
     /**
      * 日期逻辑
      * @param dateStr 日期字符串
