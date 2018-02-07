@@ -12,7 +12,7 @@
             android:layout_height="80dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@drawable/app_launcher"
+            android:src="@drawable/cabinet"
             />
         <TextView
             android:id="@+id/cabinet_num"
