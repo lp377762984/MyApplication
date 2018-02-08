@@ -49,14 +49,15 @@ public class FitnessTestActivity extends Activity {
     ImageView fitness_back;
     Gson gson;
     Data myInfo;
-    String id;
+    String member_no;
     String bcaId;
     TextView tv_age,tv_height_mubiao,tv_height_kongzhi,tv_fat_kongzhi,tv_muscle_kongzhi
             ,tv_height_dengji,tv_fat_baifenbi,tv_fat_yaotunbi,tv_danbaizhi,tv_fat_yingyang,tv_wujiyan
             ,tv_jichudaixie,tv_zuoshangzhi,tv_youshangzhi,tv_zuoxiazhi,tv_youxiazhi,tv_qugan,tv_neizang
             ,tv_shuifenlv,tv_neiye,tv_waiye,tv_zuoshangzhishuifen,tv_zuoxiazhishuifen,tv_youshangzhishuifen
-            ,tv_youxiazhishuifen,tv_xishu,history,no_data;
+            ,tv_youxiazhishuifen,tv_xishu,history,no_data,test_score,test_classify,test_time;
     ScrollView sv;
+    String xingbie;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,10 +76,21 @@ public class FitnessTestActivity extends Activity {
 
     private void initHost() {
         myInfo = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
+        if(xingbie==null){
+            xingbie = myInfo.getGender();
+        }
         gson = new Gson();
-        id = getIntent().getStringExtra("id");
-        if(id==null){
-            id = myInfo.getId();
+        if(member_no==null){
+            member_no = myInfo.getMember_no();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==101){
+
         }
     }
 
@@ -158,7 +170,7 @@ public class FitnessTestActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
-                map.put("memberId",id);
+                map.put("memberNo",member_no);
                 return map;
             }
 
@@ -191,6 +203,20 @@ public class FitnessTestActivity extends Activity {
         tv_zuoxiazhi.setText(data.getLl_fat());
         tv_youxiazhi.setText(data.getRl_fat());
         tv_qugan.setText(data.getTr_fat());
+        tv_neizang.setText(data.getVfi());
+        tv_shuifenlv.setText(data.getWater());
+        tv_neiye.setText(data.getIcw());
+        tv_waiye.setText(data.getEcw());
+        tv_zuoshangzhishuifen.setText(data.getLa_water());
+        tv_youshangzhishuifen.setText(data.getRa_water());
+        tv_zuoxiazhishuifen.setText(data.getLl_water());
+        tv_youxiazhishuifen.setText(data.getRl_water());
+        tv_xishu.setText(data.getEdema());
+        test_score.setText(data.getScore());
+        test_time.setText("测试日期 "+data.getDate());
+
+        test_classify.setText(tiXing(Float.valueOf(data.getBmi()),Float.valueOf(data.getPbf()),xingbie));
+
         initPie(data);
 
 
@@ -211,7 +237,8 @@ public class FitnessTestActivity extends Activity {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FitnessTestActivity.this,FitnessHistoryActivity.class).putExtra("id",id));
+                startActivityForResult(new Intent(FitnessTestActivity.this,FitnessHistoryActivity.class).putExtra("member_no",member_no),101);
+                finish();
             }
         });
 
@@ -252,9 +279,12 @@ public class FitnessTestActivity extends Activity {
         tv_youshangzhishuifen = findViewById(R.id.tv_youshangzhishuifen);
         tv_youxiazhishuifen = findViewById(R.id.tv_youxiazhishuifen);
         tv_xishu = findViewById(R.id.tv_xishu);
-
+        test_score = findViewById(R.id.test_score);
+        test_classify = findViewById(R.id.test_classify);
+        test_time = findViewById(R.id.test_time);
 
     }
+
 
     private void initPie(FitnessTestBean.Data data){
         /**
@@ -292,6 +322,66 @@ public class FitnessTestActivity extends Activity {
 
         }
 
+    }
+
+    //判断体形
+    //bmi体质指数，pbf体脂百分比,gender==1男，2女
+    private String tiXing(float bmi,float pbf,String gender){
+        String tixing = "体型未知";
+        if("1".equals(gender)){
+            if(bmi<18.5){
+                if(pbf>20){
+                    tixing = "隐性肥胖型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "肌肉不足型";
+                }else{
+                    tixing = "消瘦型";
+                }
+            }else if(bmi>=18.5&&bmi<=23.9){
+                if(pbf>20){
+                    tixing = "脂肪过多型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "健康匀称型";
+                }else{
+                    tixing = "低脂肪型";
+                }
+            }else {
+                if(pbf>20){
+                    tixing = "肥胖型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "超重肌肉型";
+                }else{
+                    tixing = "运动员型";
+                }
+            }
+        }else if("2".equals(gender)){
+            if(bmi<18.5){
+                if(pbf>28){
+                    tixing = "隐性肥胖型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "肌肉不足型";
+                }else{
+                    tixing = "消瘦型";
+                }
+            }else if(bmi>=18.5&&bmi<=23.9){
+                if(pbf>28){
+                    tixing = "脂肪过多型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "健康匀称型";
+                }else{
+                    tixing = "低脂肪型";
+                }
+            }else {
+                if(pbf>28){
+                    tixing = "肥胖型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "超重肌肉型";
+                }else{
+                    tixing = "运动员型";
+                }
+            }
+        }
+        return tixing;
     }
 
 }

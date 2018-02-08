@@ -44,7 +44,7 @@ public class EquipmentActivity extends Activity {
     Data info;
     String branchId;
     Gson gson;
-    String id;
+    String memberId,member_no;
     List<EquipmentBean.Data.Content> content;
     TextView tv_ticeyi;
 
@@ -99,7 +99,8 @@ public class EquipmentActivity extends Activity {
                 if(s.contains("连接失败")){
                     ToastUtils.showToastShort("连接失败！");
                 }else {
-                    startActivity(new Intent(EquipmentActivity.this,TestingActivity.class).putExtra("deviceId",eqn).putExtra("id",id));
+                    startActivity(new Intent(EquipmentActivity.this,TestingActivity.class).putExtra("deviceId",eqn).putExtra("memberId",memberId).putExtra("member_no",member_no));
+                    finish();
                 }
             }
         }, new Response.ErrorListener() {
@@ -112,6 +113,7 @@ public class EquipmentActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("deviceId",eqn);
+                map.put("memberId",memberId);
                 return map;
             }
 
@@ -150,7 +152,7 @@ public class EquipmentActivity extends Activity {
 
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("page","1");
-                map.put("branch_id","5");
+                map.put("branch_id",info.getDefault_branch());
 
                 return map;
             }
@@ -168,7 +170,8 @@ public class EquipmentActivity extends Activity {
 
     private void initHost() {
 
-        id = getIntent().getStringExtra("id");
+        memberId = getIntent().getStringExtra("memberId");
+        member_no = getIntent().getStringExtra("member_no");
         gson = new Gson();
         info = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
         if(info!=null){

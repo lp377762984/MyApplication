@@ -156,7 +156,7 @@ public class BodyAgeActivity extends Activity {
             //pointValues.add(new PointValue(k,Float.parseFloat(tempPoint.get(i))));
 
         if(data!=null){
-            for(int i =0;i<data.size()+5;i++){
+            for(int i =0;i<data.size();i++){
 //                PointValue pointValue = new PointValue();
 //                pointValue.set(i,Float.valueOf(data.get(0).getBodyage()));
 //                pointValue.setLabel(data.get(0).getBodyage());
@@ -165,7 +165,7 @@ public class BodyAgeActivity extends Activity {
 //                PointValue pointValue1 = new PointValue();
 //                pointValue1.set(i,Float.valueOf(data.get(0).getFaceAge()));
                 //pointValue1.setLabel(data.get(i).getFaceAge());
-                realPoint.add(new PointValue(i,Float.valueOf(data.get(i).getFaceAge())));
+                realPoint.add(new PointValue(i,Float.valueOf("24")));
                 //realPoint.add(new PointValue(i,Float.valueOf(data.get(i).getFaceAge())));
             }
         }

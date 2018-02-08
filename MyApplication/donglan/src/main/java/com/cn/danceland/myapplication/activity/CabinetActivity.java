@@ -89,6 +89,7 @@ public class CabinetActivity extends Activity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
 
                 return map;
             }

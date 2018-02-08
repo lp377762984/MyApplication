@@ -2,8 +2,8 @@ package com.cn.danceland.myapplication.utils;
 
 public class Constants {
 
-    //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-    public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
+    public static final String HOST = "http://192.168.1.119:8003/";//服务器地址
+    //public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
@@ -26,6 +26,7 @@ public class Constants {
     public static final String BRANCH = HOST + "branch";//获取门店列表
     public static final String JOINBRANCH = HOST + "branch/join";//加入或者取消门店
     public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
+    public static final String FINDMyLOCKERS = HOST+"appLocker/findMyLockers";//我的租柜
 
 
     public static final String FIND_JOIN_SHOP_URL = HOST + "/user/findJoinBranchs";//查找已经加入门店
@@ -68,6 +69,7 @@ public class Constants {
 
     public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
+    public static final String FINDMEMBER = HOST+"appBca/searchMember";//
 
     //订单相关
 
@@ -114,13 +116,14 @@ public class Constants {
     public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
     public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数
-    public static final String REAYTEST = HOST + "appBca/findMemberBca";//提交用户信息
+    public static final String REAYTEST = HOST + "appBca/bcaTestUpdateMemberAndPerson";//提交用户信息
     public static final String GETEQUIPMENT = HOST + "appBca/findPageBranchBca";//获取门店体测仪列表
     public static final String CONNECTEQU = HOST + "appBca/connectTester";//连接设备
     public static final String ISFINISHED = HOST + "appBca/isFinishedBca";//体测是否完成
     public static final String FITNESS_HITORY = HOST + "appBca/findHistoryRecord";//体测历史记录
     public static final String FINDONEHISTORY = HOST + "appBca/findOneHistoryRecord";//查看某条历史记录
     public static final String FINDBODYAGE = HOST + "appBca/findBodyAge";//查询身体年龄
+    public static final String CANCELTEST = HOST+"appBca/cancelTester";//取消体测
 
 
 }
