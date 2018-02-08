@@ -169,33 +169,7 @@ public class BodyAgeActivity extends Activity {
                 //realPoint.add(new PointValue(i,Float.valueOf(data.get(i).getFaceAge())));
             }
         }
-//        pointValues.add(new PointValue(1, 28));
-//        pointValues.add(new PointValue(2.1f, 25));
-//        pointValues.add(new PointValue(3, 33));
-//        pointValues.add(new PointValue(4, 26));
-//        pointValues.add(new PointValue(5, 28));
-//        pointValues.add(new PointValue(6, 31));
-//        pointValues.add(new PointValue(7, 30));
-//        pointValues.add(new PointValue(8, 31));
-//        pointValues.add(new PointValue(9, 27));
-//        pointValues.add(new PointValue(10, 25));
-//        pointValues.add(new PointValue(11, 25));
-//        pointValues.add(new PointValue(12, 26));
-       // }
 
-
-//        realPoint.add(new PointValue(1, 29));
-//        realPoint.add(new PointValue(2, 29));
-//        realPoint.add(new PointValue(3, 29));
-//        realPoint.add(new PointValue(4, 29));
-//        realPoint.add(new PointValue(5, 29));
-//        realPoint.add(new PointValue(6, 29));
-//        realPoint.add(new PointValue(7, 29));
-//        realPoint.add(new PointValue(8, 29));
-//        realPoint.add(new PointValue(9, 29));
-//        realPoint.add(new PointValue(10, 29));
-//        realPoint.add(new PointValue(11, 29));
-//        realPoint.add(new PointValue(12, 29));
 
         List<Line> lines = new ArrayList<Line>();//定义线的集合
         Line line = new Line(pointValues);//将值设置给折线
