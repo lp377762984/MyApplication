@@ -196,7 +196,7 @@ public class FitnessTestActivity extends Activity {
         tv_fat_yaotunbi.setText(data.getWhr());
         tv_danbaizhi.setText(data.getProtein());
         tv_fat_yingyang.setText(data.getFat());
-        //tv_wujiyan.setText(data.get);
+        tv_wujiyan.setText(data.getBone());
         tv_jichudaixie.setText(data.getBmr());
         tv_zuoshangzhi.setText(data.getLa_fat());
         tv_youshangzhi.setText(data.getRa_fat());
