@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/color_white"
     >
 
     <RelativeLayout
@@ -138,7 +137,7 @@
                 android:id="@+id/rl_age"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="#F5F5F5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -164,7 +163,7 @@
                 android:layout_below="@+id/rl_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_heightcon"
@@ -303,7 +302,7 @@
                 android:layout_below="@+id/rl_height"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_fatcon"
@@ -411,7 +410,7 @@
                 android:layout_below="@+id/rl_fat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_yingyang"
@@ -551,7 +550,7 @@
                 android:layout_below="@+id/rl_yingyang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_zhifang"
@@ -748,7 +747,7 @@
                 android:layout_below="@+id/rl_zhifang"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_shuifen"
@@ -1006,7 +1005,7 @@
                 android:layout_below="@+id/rl_shuifen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
+                android:background="@color/white"
                 >
                 <TextView
                     android:id="@+id/tv_base"
@@ -1041,7 +1040,7 @@
                     android:id="@+id/base_line1"
                     android:layout_below="@+id/tizhong"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1049,11 +1048,22 @@
                     android:progress="100"
                     style="?android:attr/progressBarStyleHorizontal"
                     />
+
+                <TextView
+                    android:id="@+id/tv_line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line1"
+                    android:text="56kg"
+                    android:textSize="12sp"
+                    />
+
+
                 <TextView
                     android:id="@+id/jirou"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line1"
+                    android:layout_below="@+id/tv_line1"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="肌肉"
@@ -1072,7 +1082,7 @@
                     android:id="@+id/base_line2"
                     android:layout_below="@+id/jirou"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1082,10 +1092,19 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line2"
+                    android:text="10kg"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
                     android:id="@+id/tizhilv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line2"
+                    android:layout_below="@+id/tv_line2"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="体脂百分比"
@@ -1104,7 +1123,7 @@
                     android:id="@+id/base_line3"
                     android:layout_below="@+id/tizhilv"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1113,12 +1132,21 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     />
 
+                <TextView
+                    android:id="@+id/tv_line3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line3"
+                    android:text="20%"
+                    android:textSize="12sp"
+                    />
+
 
                 <TextView
                     android:id="@+id/guzhi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line3"
+                    android:layout_below="@+id/tv_line3"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="骨质"
@@ -1137,7 +1165,7 @@
                     android:id="@+id/base_line4"
                     android:layout_below="@+id/guzhi"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1145,11 +1173,20 @@
                     android:progress="100"
                     style="?android:attr/progressBarStyleHorizontal"
                     />
+
+                <TextView
+                    android:id="@+id/tv_line4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line4"
+                    android:text="3.8"
+                    android:textSize="12sp"
+                    />
                 <TextView
                     android:id="@+id/zongshuifen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line4"
+                    android:layout_below="@+id/tv_line4"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="总水分"
@@ -1168,7 +1205,7 @@
                     android:id="@+id/base_line5"
                     android:layout_below="@+id/zongshuifen"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1176,11 +1213,20 @@
                     android:progress="100"
                     style="?android:attr/progressBarStyleHorizontal"
                     />
+
+                <TextView
+                    android:id="@+id/tv_line5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line5"
+                    android:text="33"
+                    android:textSize="12sp"
+                    />
                 <TextView
                     android:id="@+id/gugeji"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line5"
+                    android:layout_below="@+id/tv_line5"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="骨骼肌"
@@ -1199,7 +1245,7 @@
                     android:id="@+id/base_line6"
                     android:layout_below="@+id/gugeji"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
@@ -1208,10 +1254,18 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     />
                 <TextView
+                    android:id="@+id/tv_line6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line6"
+                    android:text="18.5"
+                    android:textSize="12sp"
+                    />
+                <TextView
                     android:id="@+id/tizhishu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line6"
+                    android:layout_below="@+id/tv_line6"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="体质指数"
@@ -1228,21 +1282,28 @@
                     />
                 <ProgressBar
                     android:id="@+id/base_line7"
-                    android:layout_below="@+id/tizhishu"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:max="100"
                     android:progress="100"
                     style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_below="@+id/tizhishu"
+                    android:layout_alignLeft="@+id/base_line8"
+                    android:layout_alignStart="@+id/base_line8" />
+                <TextView
+                    android:id="@+id/tv_line7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line7"
+                    android:text="19.5"
+                    android:textSize="12sp"
                     />
                 <TextView
                     android:id="@+id/yaotunbi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/base_line7"
+                    android:layout_below="@+id/tv_line7"
                     android:paddingTop="10dp"
                     android:paddingLeft="15dp"
                     android:text="腰臀比"
@@ -1261,13 +1322,21 @@
                     android:id="@+id/base_line8"
                     android:layout_below="@+id/yaotunbi"
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:max="100"
                     android:progress="100"
                     style="?android:attr/progressBarStyleHorizontal"
+                    />
+                <TextView
+                    android:id="@+id/tv_line8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/base_line8"
+                    android:text="0.89"
+                    android:textSize="12sp"
                     />
             </RelativeLayout>
 

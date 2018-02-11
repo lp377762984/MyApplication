@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.utils;
 import android.text.TextUtils;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -178,5 +179,13 @@ public class TimeUtils {
         int maxDate = a.get(Calendar.DATE);
         return maxDate;
     }
+    /**
+    * 厘米转换成米
+    * */
+    public static String convertMi(String limi){
+        DecimalFormat df2 = new DecimalFormat("###.0");
+        return df2.format(Float.valueOf(limi)/100d);
+    }
+
 
 }
