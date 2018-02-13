@@ -36,7 +36,7 @@ import java.util.Map;
 public class FitnessHistoryActivity extends Activity {
     ListView lv_history;
     Gson gson;
-    String id;
+    String member_no;
     List<FitnessHistoryBean.Content> content;
     ImageView history_back;
 
@@ -52,7 +52,7 @@ public class FitnessHistoryActivity extends Activity {
     private void initHost() {
         gson = new Gson();
 
-        id = getIntent().getStringExtra("id");
+        member_no = getIntent().getStringExtra("member_no");
 
     }
 
@@ -81,7 +81,7 @@ public class FitnessHistoryActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String,String> map = new HashMap<String,String>();
-                map.put("memberId",id);
+                map.put("memberNo",member_no);
 
                 return map;
             }
@@ -104,8 +104,9 @@ public class FitnessHistoryActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(content!=null){
-                    int id1 = content.get(position).getId();
+                    String id1 = content.get(position).getId()+"";
                     startActivity(new Intent(FitnessHistoryActivity.this,FitnessTestActivity.class).putExtra("bcaId",id1));
+                    finish();
                 }
             }
         });

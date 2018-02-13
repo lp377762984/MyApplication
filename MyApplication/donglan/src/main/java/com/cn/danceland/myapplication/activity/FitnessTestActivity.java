@@ -3,10 +3,14 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -21,10 +25,12 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.FitnessTestBean;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -49,14 +55,18 @@ public class FitnessTestActivity extends Activity {
     ImageView fitness_back;
     Gson gson;
     Data myInfo;
-    String id;
+    String member_no;
     String bcaId;
     TextView tv_age,tv_height_mubiao,tv_height_kongzhi,tv_fat_kongzhi,tv_muscle_kongzhi
             ,tv_height_dengji,tv_fat_baifenbi,tv_fat_yaotunbi,tv_danbaizhi,tv_fat_yingyang,tv_wujiyan
             ,tv_jichudaixie,tv_zuoshangzhi,tv_youshangzhi,tv_zuoxiazhi,tv_youxiazhi,tv_qugan,tv_neizang
             ,tv_shuifenlv,tv_neiye,tv_waiye,tv_zuoshangzhishuifen,tv_zuoxiazhishuifen,tv_youshangzhishuifen
-            ,tv_youxiazhishuifen,tv_xishu,history,no_data;
+            ,tv_youxiazhishuifen,tv_xishu,history,no_data,test_score,test_classify,test_time,tv_line1,tv_line2,tv_line3,tv_line4
+    ,tv_line5,tv_line6,tv_line7,tv_line8,tv_tizhong,tv_jirou,tv_tizhilv,tv_guzhi,tv_zongshuifen,tv_gugeji,tv_yaotunbi,tv_tizhishu;
     ScrollView sv;
+    String xingbie,height,weight;
+    ProgressBar base_line1,base_line2,base_line3,base_line4,base_line5,base_line6,base_line7,base_line8;
+    int width,low,normal,high;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,12 +85,27 @@ public class FitnessTestActivity extends Activity {
 
     private void initHost() {
         myInfo = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
-        gson = new Gson();
-        id = getIntent().getStringExtra("id");
-        if(id==null){
-            id = myInfo.getId();
+        if(xingbie==null){
+            xingbie = myInfo.getGender();
         }
+        if(height==null){
+            height = myInfo.getHeight();
+        }
+        if (weight==null){
+            weight = myInfo.getWeight();
+        }
+        gson = new Gson();
+        if(member_no==null){
+            member_no = myInfo.getMember_no();
+        }
+
+        width = AppUtils.getWidth();
+
+        low = width/4;
+        normal = width/2-20;
+        high = width*3/4-40;
     }
+
 
     private void initHistory(){
 
@@ -158,7 +183,7 @@ public class FitnessTestActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
-                map.put("memberId",id);
+                map.put("memberNo",member_no);
                 return map;
             }
 
@@ -184,16 +209,250 @@ public class FitnessTestActivity extends Activity {
         tv_fat_yaotunbi.setText(data.getWhr());
         tv_danbaizhi.setText(data.getProtein());
         tv_fat_yingyang.setText(data.getFat());
-        //tv_wujiyan.setText(data.get);
+        tv_wujiyan.setText(data.getBone());
         tv_jichudaixie.setText(data.getBmr());
         tv_zuoshangzhi.setText(data.getLa_fat());
         tv_youshangzhi.setText(data.getRa_fat());
         tv_zuoxiazhi.setText(data.getLl_fat());
         tv_youxiazhi.setText(data.getRl_fat());
         tv_qugan.setText(data.getTr_fat());
+        tv_neizang.setText(data.getVfi());
+        tv_shuifenlv.setText(data.getWater());
+        tv_neiye.setText(data.getIcw());
+        tv_waiye.setText(data.getEcw());
+        tv_zuoshangzhishuifen.setText(data.getLa_water());
+        tv_youshangzhishuifen.setText(data.getRa_water());
+        tv_zuoxiazhishuifen.setText(data.getLl_water());
+        tv_youxiazhishuifen.setText(data.getRl_water());
+        tv_xishu.setText(data.getEdema());
+        test_score.setText(data.getScore());
+        test_time.setText("测试日期 "+data.getDate());
+        setLine("体重",data.getWeight());
+        setLine("肌肉",data.getMuscle());
+        setLine("体脂百分比",data.getPbf());
+        setLine("骨质",data.getBone());
+        setLine("总水分",data.getWater());
+        setLine("骨骼肌",data.getSmm());
+        setLine("体质指数",data.getBmi());
+        setLine("腰臀比",data.getWhr());
+
+        test_classify.setText(tiXing(Float.valueOf(data.getBmi()),Float.valueOf(data.getPbf()),xingbie));
+
         initPie(data);
 
 
+    }
+
+    private void setLine(String type,String value){
+        double realValue = Float.valueOf(value);
+        double dw = Double.valueOf(weight);
+        double h = Double.valueOf(height);
+        double sm1= 0.00344*h*h-0.37678*h+14.40021;
+        double sm2= 0.00351*h*h -0.4661*h +23.04821;
+
+
+        if("体重".equals(type)){
+            tv_line1.setText(value);
+            String mi = TimeUtils.convertMi(height);
+            double m = Double.valueOf(mi);
+            double min = m*m*18.5;
+            double max = m*m*23.9;
+            if(realValue<min){
+                setLowLine(base_line1,tv_line1);
+                tv_tizhong.setText("偏低");
+            }else if(realValue>=min&&realValue<=max){
+                setNormalLine(base_line1,tv_line1);
+                tv_tizhong.setText("正常");
+            }else{
+                setHighLine(base_line1,tv_line1);
+                tv_tizhong.setText("偏高");
+            }
+        }else if("肌肉".equals(type)){
+            tv_line2.setText(value);
+            if("1".equals(xingbie)){
+                if(realValue<(sm1-5)){
+                    setLowLine(base_line2,tv_line2);
+                    tv_jirou.setText("偏低");
+                }else if(realValue>=(sm1-5)&&realValue<=(sm1-5)){
+                    setNormalLine(base_line2,tv_line2);
+                    tv_jirou.setText("正常");
+                }else{
+                    setHighLine(base_line2,tv_line2);
+                    tv_jirou.setText("偏高");
+                }
+            }else if("2".equals(xingbie)){
+                if(realValue<(sm2-3)){
+                    setLowLine(base_line2,tv_line2);
+                    tv_jirou.setText("偏低");
+                }else if(realValue>=(sm2-3)&&realValue<=(sm2-3)){
+                    setNormalLine(base_line2,tv_line2);
+                    tv_jirou.setText("正常");
+                }else{
+                    setHighLine(base_line2,tv_line2);
+                    tv_jirou.setText("偏高");
+                }
+            }
+
+        }else if("体脂百分比".equals(type)){
+            tv_line3.setText(value);
+            if("1".equals(xingbie)){
+                if(realValue<10){
+                    setLowLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("偏低");
+                }else if(realValue>20){
+                    setHighLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("偏高");
+                }else{
+                    setNormalLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("正常");
+                }
+
+            }else if("2".equals(xingbie)){
+                if(realValue<18){
+                    setLowLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("偏低");
+                }else if(realValue>28){
+                    setHighLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("偏高");
+                }else{
+                    setNormalLine(base_line3,tv_line3);
+                    tv_tizhilv.setText("正常");
+                }
+            }
+        }else if("骨质".equals(type)){
+            tv_line4.setText(value);
+            double min = 0.045*dw;
+            double max = 0.055*dw;
+            if(realValue<min){
+                setLowLine(base_line4,tv_line4);
+                tv_guzhi.setText("偏低");
+            }else if(realValue>max){
+                setHighLine(base_line4,tv_line4);
+                tv_guzhi.setText("偏高");
+            }else {
+                setNormalLine(base_line4,tv_line4);
+                tv_guzhi.setText("正常");
+            }
+
+        }else if("总水分".equals(type)){
+            tv_line5.setText(value);
+            double min = 0.54*dw;
+            double max = 0.66*dw;
+            if(realValue<min){
+                setLowLine(base_line5,tv_line5);
+                tv_zongshuifen.setText("偏低");
+            }else if(realValue>max){
+                setHighLine(base_line5,tv_line5);
+                tv_zongshuifen.setText("偏高");
+            }else {
+                setNormalLine(base_line5,tv_line5);
+                tv_zongshuifen.setText("正常");
+            }
+
+        }else if("骨骼肌".equals(type)){
+            tv_line6.setText(value);
+            if("1".equals(xingbie)){
+                double min = (sm1-5)*0.75;
+                double max = (sm1+5)*0.75;
+                if(realValue<min){
+                    setLowLine(base_line6,tv_line6);
+                    tv_gugeji.setText("偏低");
+                }else if(realValue>max){
+                    setHighLine(base_line6,tv_line6);
+                    tv_gugeji.setText("偏高");
+                }else{
+                    setNormalLine(base_line6,tv_line6);
+                    tv_gugeji.setText("正常");
+                }
+            }else if("2".equals(xingbie)){
+                double min = (sm2-3)*0.75;
+                double max = (sm2+3)*0.75;
+                if(realValue<min){
+                    setLowLine(base_line6,tv_line6);
+                    tv_gugeji.setText("偏低");
+                }else if(realValue>max){
+                    setHighLine(base_line6,tv_line6);
+                    tv_gugeji.setText("偏高");
+                }else{
+                    setNormalLine(base_line6,tv_line6);
+                    tv_gugeji.setText("正常");
+                }
+            }
+
+        }else if("体质指数".equals(type)){
+            tv_line7.setText(value);
+            if(realValue<18.5){
+                setLowLine(base_line7,tv_line7);
+                tv_tizhishu.setText("体重较轻");
+            }else if(realValue>23.9){
+                setHighLine(base_line7,tv_line7);
+                tv_tizhishu.setText("超重");
+            }else {
+                setNormalLine(base_line7,tv_line7);
+                tv_tizhishu.setText("正常");
+            }
+
+        }else if("腰臀比".equals(type)){
+            tv_line8.setText(value);
+            if("1".equals(xingbie)){
+                if(realValue<0.85){
+                    setLowLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("梨型");
+                }else if(realValue>0.95){
+                    setHighLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("苹果型");
+                }else{
+                    setNormalLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("正常");
+                }
+
+            }else if("2".equals(xingbie)){
+                if(realValue<0.7){
+                    setLowLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("梨型");
+                }else if(realValue>0.8){
+                    setHighLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("苹果型");
+                }else{
+                    setNormalLine(base_line8,tv_line8);
+                    tv_yaotunbi.setText("正常");
+                }
+            }
+
+        }
+
+
+
+    }
+
+    private void setLowLine(ProgressBar pb,TextView tv){
+        ClipDrawable drawableLow = new ClipDrawable(new ColorDrawable(0xff3fc1f7), Gravity.LEFT, ClipDrawable.HORIZONTAL);
+        pb.setProgressDrawable(drawableLow);
+        drawableLow.setLevel(25*100);
+        pb.setProgressDrawable(drawableLow);
+        pb.setProgress(25);
+        tv.setPadding(low,0,0,0);
+        tv.setTextColor(0xff3fc1f7);
+    }
+
+    private  void setNormalLine(ProgressBar pb,TextView tv){
+        ClipDrawable drawableNormal = new ClipDrawable(new ColorDrawable(0xffff6600), Gravity.LEFT, ClipDrawable.HORIZONTAL);
+        pb.setProgressDrawable(drawableNormal);
+        drawableNormal.setLevel(50*100);
+        pb.setProgressDrawable(drawableNormal);
+        pb.setProgress(50);
+        tv.setPadding(normal,0,0,0);
+        tv.setTextColor(0xffff6600);
+    }
+
+    private  void setHighLine(ProgressBar pb,TextView tv){
+        ClipDrawable drawableHigh = new ClipDrawable(new ColorDrawable(0xff007ef1), Gravity.LEFT, ClipDrawable.HORIZONTAL);
+        pb.setProgressDrawable(drawableHigh);
+        drawableHigh.setLevel(75*100);
+        pb.setProgressDrawable(drawableHigh);
+        pb.setProgress(75);
+        tv.setPadding(high,0,0,0);
+        tv.setTextColor(0xff007ef1);
     }
 
     private void initView() {
@@ -211,7 +470,8 @@ public class FitnessTestActivity extends Activity {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(FitnessTestActivity.this,FitnessHistoryActivity.class).putExtra("id",id));
+                startActivityForResult(new Intent(FitnessTestActivity.this,FitnessHistoryActivity.class).putExtra("member_no",member_no),101);
+                finish();
             }
         });
 
@@ -252,9 +512,36 @@ public class FitnessTestActivity extends Activity {
         tv_youshangzhishuifen = findViewById(R.id.tv_youshangzhishuifen);
         tv_youxiazhishuifen = findViewById(R.id.tv_youxiazhishuifen);
         tv_xishu = findViewById(R.id.tv_xishu);
-
+        test_score = findViewById(R.id.test_score);
+        test_classify = findViewById(R.id.test_classify);
+        test_time = findViewById(R.id.test_time);
+        tv_line1 = findViewById(R.id.tv_line1);
+        tv_line2 = findViewById(R.id.tv_line2);
+        tv_line3 = findViewById(R.id.tv_line3);
+        tv_line4 = findViewById(R.id.tv_line4);
+        tv_line5 = findViewById(R.id.tv_line5);
+        tv_line6 = findViewById(R.id.tv_line6);
+        tv_line7 = findViewById(R.id.tv_line7);
+        tv_line8 = findViewById(R.id.tv_line8);
+        base_line1 = findViewById(R.id.base_line1);
+        base_line2 = findViewById(R.id.base_line2);
+        base_line3 = findViewById(R.id.base_line3);
+        base_line4 = findViewById(R.id.base_line4);
+        base_line5 = findViewById(R.id.base_line5);
+        base_line6 = findViewById(R.id.base_line6);
+        base_line7 = findViewById(R.id.base_line7);
+        base_line8 = findViewById(R.id.base_line8);
+        tv_tizhong = findViewById(R.id.tv_tizhong);
+        tv_jirou = findViewById(R.id.tv_jirou);
+        tv_tizhilv = findViewById(R.id.tv_tizhilv);
+        tv_guzhi = findViewById(R.id.tv_guzhi);
+        tv_zongshuifen = findViewById(R.id.tv_zongshuifen);
+        tv_gugeji = findViewById(R.id.tv_gugeji);
+        tv_tizhishu = findViewById(R.id.tv_tizhishu);
+        tv_yaotunbi = findViewById(R.id.tv_yaotunbi);
 
     }
+
 
     private void initPie(FitnessTestBean.Data data){
         /**
@@ -269,7 +556,7 @@ public class FitnessTestActivity extends Activity {
             pieChardata.setSlicesSpacing(0);
         if(data.getWater()!=null&&data.getFat()!=null&&data.getBone()!=null&&data.getProtein()!=null){
             Double[] lv = {Double.valueOf(data.getWater()),Double.valueOf(data.getFat()),Double.valueOf(data.getBone()),Double.valueOf(data.getProtein())};
-            Integer[] color = {0xFFF5F5F5,0xFFD3D3D3,0xFFA9A9A9,0xFF696969};
+            Integer[] color = {0xFFFF6600,0xFFFFBE0E,0xFFFD8403,0xFFFF004E};
             String[] str = {"水分","脂肪","骨质","蛋白质"};
             for(int i=0;i<=3;i++){
                 SliceValue sliceValue = new SliceValue(lv[i].floatValue(), color[i]);//这里的颜色是我写了一个工具类 是随机选择颜色的
@@ -278,8 +565,8 @@ public class FitnessTestActivity extends Activity {
             }
 
             pieChardata.setValues(values);//填充数据
-            pieChardata.setCenterCircleColor(Color.WHITE);//设置环形中间的颜色
-            pieChardata.setCenterCircleScale(0.65f);//设置环形的大小级别
+            pieChardata.setCenterCircleColor(0x00FFFFFF);//设置环形中间的颜色
+            pieChardata.setCenterCircleScale(0.75f);//设置环形的大小级别
             //pieChardata.setCenterText1("身体成分");//环形中间的文字1
             pieChardata.setCenterText1Color(Color.BLACK);//文字颜色
             pieChardata.setCenterText1FontSize(12);//文字大小
@@ -292,6 +579,66 @@ public class FitnessTestActivity extends Activity {
 
         }
 
+    }
+
+    //判断体形
+    //bmi体质指数，pbf体脂百分比,gender==1男，2女
+    private String tiXing(float bmi,float pbf,String gender){
+        String tixing = "体型未知";
+        if("1".equals(gender)){
+            if(bmi<18.5){
+                if(pbf>20){
+                    tixing = "隐性肥胖型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "肌肉不足型";
+                }else{
+                    tixing = "消瘦型";
+                }
+            }else if(bmi>=18.5&&bmi<=23.9){
+                if(pbf>20){
+                    tixing = "脂肪过多型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "健康匀称型";
+                }else{
+                    tixing = "低脂肪型";
+                }
+            }else {
+                if(pbf>20){
+                    tixing = "肥胖型";
+                }else if(pbf>=10&&pbf<=20){
+                    tixing = "超重肌肉型";
+                }else{
+                    tixing = "运动员型";
+                }
+            }
+        }else if("2".equals(gender)){
+            if(bmi<18.5){
+                if(pbf>28){
+                    tixing = "隐性肥胖型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "肌肉不足型";
+                }else{
+                    tixing = "消瘦型";
+                }
+            }else if(bmi>=18.5&&bmi<=23.9){
+                if(pbf>28){
+                    tixing = "脂肪过多型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "健康匀称型";
+                }else{
+                    tixing = "低脂肪型";
+                }
+            }else {
+                if(pbf>28){
+                    tixing = "肥胖型";
+                }else if(pbf>=18&&pbf<=28){
+                    tixing = "超重肌肉型";
+                }else{
+                    tixing = "运动员型";
+                }
+            }
+        }
+        return tixing;
     }
 
 }

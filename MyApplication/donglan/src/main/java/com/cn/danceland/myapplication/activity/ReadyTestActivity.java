@@ -55,6 +55,7 @@ public class ReadyTestActivity extends Activity {
     RelativeLayout rl_connect;
     ReadyTestBean readyTestBean;
     private Calendar c = null;
+    String memberId,member_no;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,11 +112,18 @@ public class ReadyTestActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try{
-                    commit();
+                    if(gender==1||gender==2){
+                        commit();
+                    }else{
+                        ToastUtils.showToastShort("请选择性别！");
+                    }
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
-                startActivity(new Intent(ReadyTestActivity.this,EquipmentActivity.class).putExtra("id",id));
+                if(gender==1||gender==2){
+                    startActivity(new Intent(ReadyTestActivity.this,EquipmentActivity.class).putExtra("memberId",memberId).putExtra("member_no",member_no));
+                    finish();
+                }
             }
         });
 
@@ -170,6 +178,10 @@ public class ReadyTestActivity extends Activity {
 
         readyTestBean = new ReadyTestBean();
         id = getIntent().getStringExtra("id");
+
+        memberId = getIntent().getStringExtra("memberId");
+        member_no = getIntent().getStringExtra("member_no");
+
         gson = new Gson();
 
     }

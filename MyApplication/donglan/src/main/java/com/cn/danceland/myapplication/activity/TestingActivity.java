@@ -2,6 +2,8 @@ package com.cn.danceland.myapplication.activity;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -41,7 +43,8 @@ public class TestingActivity extends Activity {
     static Handler handler;
     String eqId;
     Gson gson;
-    String id;
+    String memberId,member_no;
+    ImageView testing_back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +58,8 @@ public class TestingActivity extends Activity {
 
         gson = new Gson();
         eqId = getIntent().getStringExtra("deviceId");
-        id = getIntent().getStringExtra("id");
+        memberId = getIntent().getStringExtra("memberId");
+        member_no = getIntent().getStringExtra("member_no");
         handler = new Handler();
         timer = new Timer();
         task = new Task();
@@ -95,7 +99,7 @@ public class TestingActivity extends Activity {
                 TestingBean testingBean = gson.fromJson(s, TestingBean.class);
                 if(testingBean!=null){
                     if(testingBean.getData().getStatus()==1){
-                        startActivity(new Intent(TestingActivity.this,FitnessHistoryActivity.class).putExtra("id",id));
+                        startActivity(new Intent(TestingActivity.this,FitnessHistoryActivity.class).putExtra("member_no",member_no));
                         finish();
                     }
                 }
@@ -132,6 +136,65 @@ public class TestingActivity extends Activity {
         animator.setDuration(2000);
         animator.setRepeatCount(-1);
         animator.start();
+        testing_back = findViewById(R.id.testing_back);
+        testing_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
 
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(TestingActivity.this);
+        dialog.setTitle("提示");
+        dialog.setMessage("取消体测将无法完成身体评估");
+        dialog.setPositiveButton("确认取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                cancelTest();
+                finish();
+            }
+        });
+        dialog.setNegativeButton("继续测试", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
+
+    private void cancelTest(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.CANCELTEST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                HashMap<String,String> map = new HashMap<>();
+                map.put("deviceId",eqId);
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 }
