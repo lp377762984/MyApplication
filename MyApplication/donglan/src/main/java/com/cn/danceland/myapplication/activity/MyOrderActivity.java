@@ -315,12 +315,12 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
             }
             vh.tv_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
 
-            LogUtil.i(datalist.get(position).getExtends_info());
+        //    LogUtil.i(datalist.get(position).getExtends_info());
             final OrderExtendsInfoBean content = gson.fromJson(datalist.get(position).getExtends_info(), OrderExtendsInfoBean.class);
             vh.tv_branch_name.setText(content.getBranch_name());
 
 
-            if (datalist.get(position).getBus_type() == 1) {
+            if (datalist.get(position).getBus_type() == 31||datalist.get(position).getBus_type() == 33) {
                 vh.tv_product_type.setText("预付定金");
                 vh.tv_product_name.setText("会员卡定金");
                 if (content.getDeposit_type() == 1) {
@@ -332,19 +332,20 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
                 }
 
                 //vh.tv_product_name
-                vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
+             //   vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
             }
-            if (datalist.get(position).getBus_type() == 2) {
+            if (datalist.get(position).getBus_type() == 32||datalist.get(position).getBus_type() == 34) {
                 vh.tv_product_type.setText("会员卡 ");
                 vh.tv_product_name.setText(content.getCard_name());
-                vh.tv_price.setText(PriceUtils.formatPrice2String(content.getSell_price()));
-                if (!TextUtils.isEmpty(content.getDeposit_id())) {
-                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price() - content.getDeposit_price()));
-                } else {
-                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price()));
-                }
+                vh.tv_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getReceive()));
+//                if (!TextUtils.isEmpty(content.getDeposit_id())&&!TextUtils.equals("0",content.getDeposit_id())) {
+//                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price() - content.getDeposit_price()));
+//                } else {
+//                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price()));
+//                }
 
             }
+            vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
             if (datalist.get(position).getStatus() == 1) {
                 vh.tv_status.setText("待付款");
                 vh.ll_pay.setVisibility(View.VISIBLE);

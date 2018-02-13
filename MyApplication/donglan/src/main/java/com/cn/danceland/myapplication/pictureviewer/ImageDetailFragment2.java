@@ -77,7 +77,7 @@ public class ImageDetailFragment2 extends Fragment {
         //  LogUtil.i("mImageUrl=" + mImageUrl);
 
         StringBuilder  sb = new StringBuilder (mImageUrl);
-        sb.insert(mImageUrl.length()-4,"_400X300");
+        sb.insert(mImageUrl.length()-4,"_400X400");
 
 
         BigImageViewer.prefetch(Uri.parse(mImageUrl));

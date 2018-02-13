@@ -94,8 +94,8 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         btn_cancel.setOnClickListener(this);
         btn_pay.setOnClickListener(this);
 
-        if (orderInfo.getBus_type() == 1) {
-            tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getPrice()));
+        if (orderInfo.getBus_type() == 31||orderInfo.getBus_type() == 33) {
+            tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
             tv_counselor.setText(orderExtendsInfo.getAdmin_emp_name());
             tv_product_type.setText("预付定金");
             if (orderExtendsInfo.getDeposit_type() == 1) {
@@ -106,10 +106,19 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 tv_product_name.setText("租柜定金");
             }
             tv_useful_life.setText("1个月");
+
+            if(orderInfo.getBus_type() == 33){
+                findViewById(R.id.ll_other).setVisibility(View.VISIBLE);
+                TextView tv_friend_name=findViewById(R.id.tv_friend_name);
+                tv_friend_name.setText(orderExtendsInfo.getMember_name());
+                TextView tv_friend_phone=findViewById(R.id.tv_friend_phone);
+                tv_friend_phone.setText(orderExtendsInfo.getPhone_no());
+            }
+
         }
 
-        if (orderInfo.getBus_type() == 2) {
-            tv_price.setText(PriceUtils.formatPrice2String(orderExtendsInfo.getSell_price()));
+        if (orderInfo.getBus_type() == 32||orderInfo.getBus_type() == 34) {
+            tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
             tv_counselor.setText(orderExtendsInfo.getSell_name());
             tv_product_type.setText("会员卡");
             if (orderExtendsInfo.getCharge_mode() == 2) {
@@ -120,9 +129,17 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 tv_product_name.setText(orderExtendsInfo.getCard_name());
             }
 
+            tv_useful_life.setText(orderExtendsInfo.getMonth_count()+"个月");
 
+            if(orderInfo.getBus_type() == 34){
+                findViewById(R.id.ll_other).setVisibility(View.VISIBLE);
+                TextView tv_friend_name=findViewById(R.id.tv_friend_name);
+                tv_friend_name.setText(orderExtendsInfo.getMember_name());
+                TextView tv_friend_phone=findViewById(R.id.tv_friend_phone);
+                tv_friend_phone.setText(orderExtendsInfo.getPhone_no());
+            }
         }
-        tv_useful_life.setText(orderExtendsInfo.getMonth_count()+"个月");
+
 
 
 //        if (CardsInfo.getTime_unit() == 1) {

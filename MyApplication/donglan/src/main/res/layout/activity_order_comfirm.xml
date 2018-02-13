@@ -240,12 +240,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
+                    android:background="@drawable/bg_radiobtn"
                     android:layout_weight="1"
                     android:checked="true"
                     android:text="本人购买"
+                    android:button="@null"
+                    android:gravity="center"
                     android:textColor="#333333" />
 
                 <RadioButton
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bg_radiobtn"
                     android:id="@+id/rbtn_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -253,6 +258,8 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:text="为好友购买"
+                    android:button="@null"
+                    android:gravity="center"
                     android:textColor="#333333" />
             </RadioGroup>
 
