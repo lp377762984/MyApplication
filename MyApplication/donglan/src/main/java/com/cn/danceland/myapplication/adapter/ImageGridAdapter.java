@@ -57,7 +57,7 @@ public class ImageGridAdapter extends BaseAdapter {
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .priority(Priority.HIGH);
         StringBuilder sb = new StringBuilder(imgUrls.get(i));
-        sb.insert(imgUrls.get(i).length() - 4, "_400X300");
+        sb.insert(imgUrls.get(i).length() - 4, "_400X400");
         //    LogUtil.i(sb.toString());
         Glide
                 .with(context)

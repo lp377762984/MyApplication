@@ -51,7 +51,7 @@ public class RequestOrderListBean implements Serializable {
 
 
 
-    public class Data implements Serializable{
+    public class Data implements Serializable {
 
         private List<Content> content;
         private int number;
@@ -129,128 +129,97 @@ public class RequestOrderListBean implements Serializable {
         public boolean getLast() {
             return last;
         }
-        public class Content implements Serializable{
+
+        public class Content implements Serializable {
+
+//            private String id;
+//            private int bus_type;
+//            private int for_other;
+//            private String order_time;
+//            private String person_id;
+//            private String member_no;
+//            private String member_id;
+//            private String member_name;
+//            private String branch_id;
+//            private int status;
+//            private int pay_way;
+//            private float price;
+//            private String extends_info;
+//            private String order_no;
+//            private String phone_no;
+//            private String name;
+//            private String admin_emp_id;
+//            private String admin_emp_name;
+//            private String branch_name;
+//            private String belong_id;
+//            private String card_type_id;
+//            private String deposit_id;
+//            private String deposit_price;
+//            private String admin_emp_phone;
+//            private String chip_number;
+//            private String open_date;
+//            private String card_no;
+
 
             private String id;
             private int bus_type;
-            private int for_other;
+            private String bus_id;
+            private String for_other;
             private String order_time;
             private String person_id;
-            private String member_no;
             private String member_id;
-            private String member_name;
             private String branch_id;
             private int status;
             private int pay_way;
-            private float price;
-            private String extends_info;
+            private int price;
             private String order_no;
-            private String phone_no;
-            private String name;
-            private String admin_emp_id;
-            private String admin_emp_name;
-            private String branch_name;
-            private String belong_id;
-            private String card_type_id;
+            private String order_remark;
+            private String pay_remark;
+            private String receive;
+            private String pledge;
+            private String platform;
             private String deposit_id;
-            private String deposit_price;
-            private String admin_emp_phone;
-            private String chip_number;
-            private String open_date;
-            private String card_no;
+            private String operator_id;
+            private long pay_time;
+            private String extends_info;
+            private String extends_params;
+            private int gender;
+            private String member_name;
+            private String member_no;
+            private String money;
+            private String phone_no;
 
             @Override
             public String toString() {
                 return "Content{" +
                         "id='" + id + '\'' +
                         ", bus_type=" + bus_type +
-                        ", for_other=" + for_other +
+                        ", bus_id='" + bus_id + '\'' +
+                        ", for_other='" + for_other + '\'' +
                         ", order_time='" + order_time + '\'' +
                         ", person_id='" + person_id + '\'' +
-                        ", member_no='" + member_no + '\'' +
                         ", member_id='" + member_id + '\'' +
-                        ", member_name='" + member_name + '\'' +
                         ", branch_id='" + branch_id + '\'' +
                         ", status=" + status +
                         ", pay_way=" + pay_way +
                         ", price=" + price +
-                        ", extends_info='" + extends_info + '\'' +
                         ", order_no='" + order_no + '\'' +
-                        ", phone_no='" + phone_no + '\'' +
-                        ", name='" + name + '\'' +
-                        ", admin_emp_id='" + admin_emp_id + '\'' +
-                        ", admin_emp_name='" + admin_emp_name + '\'' +
-                        ", branch_name='" + branch_name + '\'' +
-                        ", belong_id='" + belong_id + '\'' +
-                        ", card_type_id='" + card_type_id + '\'' +
+                        ", order_remark='" + order_remark + '\'' +
+                        ", pay_remark='" + pay_remark + '\'' +
+                        ", receive='" + receive + '\'' +
+                        ", pledge='" + pledge + '\'' +
+                        ", platform='" + platform + '\'' +
                         ", deposit_id='" + deposit_id + '\'' +
-                        ", deposit_price='" + deposit_price + '\'' +
-                        ", admin_emp_phone='" + admin_emp_phone + '\'' +
-                        ", chip_number='" + chip_number + '\'' +
-                        ", open_date='" + open_date + '\'' +
-                        ", card_no='" + card_no + '\'' +
+                        ", operator_id='" + operator_id + '\'' +
+                        ", pay_time=" + pay_time +
+                        ", extends_info='" + extends_info + '\'' +
+                        ", extends_params='" + extends_params + '\'' +
+                        ", gender=" + gender +
+                        ", member_name='" + member_name + '\'' +
+                        ", member_no='" + member_no + '\'' +
+                        ", money='" + money + '\'' +
+                        ", phone_no='" + phone_no + '\'' +
                         '}';
-            }
-
-            public void setBus_type(int bus_type) {
-                this.bus_type = bus_type;
-            }
-
-            public int getBus_type() {
-                return bus_type;
-            }
-
-            public void setFor_other(int for_other) {
-                this.for_other = for_other;
-            }
-
-            public int getFor_other() {
-                return for_other;
-            }
-
-            public void setOrder_time(String order_time) {
-                this.order_time = order_time;
-            }
-
-            public String getOrder_time() {
-                return order_time;
-            }
-
-
-
-            public void setMember_no(String member_no) {
-                this.member_no = member_no;
-            }
-
-            public String getMember_no() {
-                return member_no;
-            }
-
-
-
-            public void setMember_name(String member_name) {
-                this.member_name = member_name;
-            }
-
-            public String getMember_name() {
-                return member_name;
-            }
-
-
-            public void setStatus(int status) {
-                this.status = status;
-            }
-
-            public int getStatus() {
-                return status;
-            }
-
-            public void setPay_way(int pay_way) {
-                this.pay_way = pay_way;
-            }
-
-            public int getPay_way() {
-                return pay_way;
             }
 
             public String getId() {
@@ -259,6 +228,38 @@ public class RequestOrderListBean implements Serializable {
 
             public void setId(String id) {
                 this.id = id;
+            }
+
+            public int getBus_type() {
+                return bus_type;
+            }
+
+            public void setBus_type(int bus_type) {
+                this.bus_type = bus_type;
+            }
+
+            public String getBus_id() {
+                return bus_id;
+            }
+
+            public void setBus_id(String bus_id) {
+                this.bus_id = bus_id;
+            }
+
+            public String getFor_other() {
+                return for_other;
+            }
+
+            public void setFor_other(String for_other) {
+                this.for_other = for_other;
+            }
+
+            public String getOrder_time() {
+                return order_time;
+            }
+
+            public void setOrder_time(String order_time) {
+                this.order_time = order_time;
             }
 
             public String getPerson_id() {
@@ -285,134 +286,156 @@ public class RequestOrderListBean implements Serializable {
                 this.branch_id = branch_id;
             }
 
-            public float getPrice() {
+            public int getStatus() {
+                return status;
+            }
+
+            public void setStatus(int status) {
+                this.status = status;
+            }
+
+            public int getPay_way() {
+                return pay_way;
+            }
+
+            public void setPay_way(int pay_way) {
+                this.pay_way = pay_way;
+            }
+
+            public int getPrice() {
                 return price;
             }
 
-            public void setPrice(float price) {
+            public void setPrice(int price) {
                 this.price = price;
-            }
-
-            public void setExtends_info(String extends_info) {
-                this.extends_info = extends_info;
-            }
-
-            public String getExtends_info() {
-                return extends_info;
-            }
-
-            public void setOrder_no(String order_no) {
-                this.order_no = order_no;
             }
 
             public String getOrder_no() {
                 return order_no;
             }
 
-            public void setPhone_no(String phone_no) {
-                this.phone_no = phone_no;
+            public void setOrder_no(String order_no) {
+                this.order_no = order_no;
             }
 
-            public String getPhone_no() {
-                return phone_no;
+            public String getOrder_remark() {
+                return order_remark;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setOrder_remark(String order_remark) {
+                this.order_remark = order_remark;
             }
 
-            public String getName() {
-                return name;
+            public String getPay_remark() {
+                return pay_remark;
             }
 
-            public void setAdmin_emp_id(String admin_emp_id) {
-                this.admin_emp_id = admin_emp_id;
+            public void setPay_remark(String pay_remark) {
+                this.pay_remark = pay_remark;
             }
 
-            public String getAdmin_emp_id() {
-                return admin_emp_id;
+            public String getReceive() {
+                return receive;
             }
 
-            public void setAdmin_emp_name(String admin_emp_name) {
-                this.admin_emp_name = admin_emp_name;
+            public void setReceive(String receive) {
+                this.receive = receive;
             }
 
-            public String getAdmin_emp_name() {
-                return admin_emp_name;
+            public String getPledge() {
+                return pledge;
             }
 
-            public void setBranch_name(String branch_name) {
-                this.branch_name = branch_name;
+            public void setPledge(String pledge) {
+                this.pledge = pledge;
             }
 
-            public String getBranch_name() {
-                return branch_name;
+            public String getPlatform() {
+                return platform;
             }
 
-            public void setBelong_id(String belong_id) {
-                this.belong_id = belong_id;
-            }
-
-            public String getBelong_id() {
-                return belong_id;
-            }
-
-            public void setCard_type_id(String card_type_id) {
-                this.card_type_id = card_type_id;
-            }
-
-            public String getCard_type_id() {
-                return card_type_id;
-            }
-
-            public void setDeposit_id(String deposit_id) {
-                this.deposit_id = deposit_id;
+            public void setPlatform(String platform) {
+                this.platform = platform;
             }
 
             public String getDeposit_id() {
                 return deposit_id;
             }
 
-            public void setDeposit_price(String deposit_price) {
-                this.deposit_price = deposit_price;
+            public void setDeposit_id(String deposit_id) {
+                this.deposit_id = deposit_id;
             }
 
-            public String getDeposit_price() {
-                return deposit_price;
+            public String getOperator_id() {
+                return operator_id;
             }
 
-            public void setAdmin_emp_phone(String admin_emp_phone) {
-                this.admin_emp_phone = admin_emp_phone;
+            public void setOperator_id(String operator_id) {
+                this.operator_id = operator_id;
             }
 
-            public String getAdmin_emp_phone() {
-                return admin_emp_phone;
+            public long getPay_time() {
+                return pay_time;
             }
 
-            public void setChip_number(String chip_number) {
-                this.chip_number = chip_number;
+            public void setPay_time(long pay_time) {
+                this.pay_time = pay_time;
             }
 
-            public String getChip_number() {
-                return chip_number;
+            public String getExtends_info() {
+                return extends_info;
             }
 
-            public void setOpen_date(String open_date) {
-                this.open_date = open_date;
+            public void setExtends_info(String extends_info) {
+                this.extends_info = extends_info;
             }
 
-            public String getOpen_date() {
-                return open_date;
+            public String getExtends_params() {
+                return extends_params;
             }
 
-            public void setCard_no(String card_no) {
-                this.card_no = card_no;
+            public void setExtends_params(String extends_params) {
+                this.extends_params = extends_params;
             }
 
-            public String getCard_no() {
-                return card_no;
+            public int getGender() {
+                return gender;
             }
 
+            public void setGender(int gender) {
+                this.gender = gender;
+            }
+
+            public String getMember_name() {
+                return member_name;
+            }
+
+            public void setMember_name(String member_name) {
+                this.member_name = member_name;
+            }
+
+            public String getMember_no() {
+                return member_no;
+            }
+
+            public void setMember_no(String member_no) {
+                this.member_no = member_no;
+            }
+
+            public String getMoney() {
+                return money;
+            }
+
+            public void setMoney(String money) {
+                this.money = money;
+            }
+
+            public String getPhone_no() {
+                return phone_no;
+            }
+
+            public void setPhone_no(String phone_no) {
+                this.phone_no = phone_no;
+            }
         }
-    }
-}
+    }}

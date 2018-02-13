@@ -32,6 +32,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.activity.PaiMingActivity;
+import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
@@ -201,7 +202,7 @@ public class HomeFragment extends BaseFragment {
         ll_riji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
             }
         });
 

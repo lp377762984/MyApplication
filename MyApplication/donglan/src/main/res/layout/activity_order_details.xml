@@ -201,6 +201,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_other"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -223,8 +224,7 @@
                         android:textColor="#333333" />
 
                     <TextView
-
-
+                        android:id="@+id/tv_friend_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -250,6 +250,7 @@
                         android:textColor="#333333" />
 
                     <TextView
+                        android:id="@+id/tv_friend_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

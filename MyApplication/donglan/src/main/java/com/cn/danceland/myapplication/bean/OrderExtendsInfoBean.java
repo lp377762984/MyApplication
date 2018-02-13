@@ -31,7 +31,7 @@ public class OrderExtendsInfoBean implements Serializable {
     private float sell_price;
     private int total_count;
     private String type_id;
-    private String  card_name;//会员卡名称
+    private String  type_name;//会员卡名称
     private int  deposit_type;//定金类型
 
 
@@ -60,17 +60,17 @@ public class OrderExtendsInfoBean implements Serializable {
                 ", sell_price=" + sell_price +
                 ", total_count=" + total_count +
                 ", type_id='" + type_id + '\'' +
-                ", card_name='" + card_name + '\'' +
+                ", type_name='" + type_name + '\'' +
                 ", deposit_type=" + deposit_type +
                 '}';
     }
 
     public String getCard_name() {
-        return card_name;
+        return type_name;
     }
 
     public void setCard_name(String card_name) {
-        this.card_name = card_name;
+        this.type_name = card_name;
     }
 
     public int getDeposit_type() {

@@ -96,6 +96,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     private Button btn_repay;
     private String strBean;
     private String unpaidOrder;
+    public static int ORDER_BUS_TYPE_DEPOSIT_APP = 31;// app买定金
+    public static int ORDER_BUS_TYPE_CARD_OPEN_APP = 32;// APP卖卡,业务系统取卡
+    private int order_bustype = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,6 +118,13 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         //  consultantInfo = (RequestConsultantInfoBean.Data) bundle.getSerializable("consultantInfo");
         isme = bundle.getBoolean("isme", true);
         product_type = bundle.getInt("product_type", 1);
+
+        if (product_type == 1) {//如实卡
+            order_bustype = ORDER_BUS_TYPE_CARD_OPEN_APP;
+
+        } else if (product_type == 2) {//如果是定金
+            order_bustype = ORDER_BUS_TYPE_DEPOSIT_APP;
+        }
         myPopupListAdapter = new MyPopupListAdapter(this);
 
         listPopup = new ListPopup(this);
@@ -417,6 +427,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         public String id;
         public String order_no;
         public float price;
+        public int bus_type;
 
         @Override
         public String toString() {
@@ -438,6 +449,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        unpaidOrder = orderId;
                         if (pay_way == 1) {
                             //支付宝
                             alipay(orderId);
@@ -453,7 +465,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         btn_repay.setVisibility(View.VISIBLE);
-                        unpaidOrder=orderId;
+                        unpaidOrder = orderId;
                     }
                 });
         // 显示
@@ -461,13 +473,14 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     }
 
     /**
-     * 支付宝支付
+     * weixin支付
      */
     private void wechatPay(String id) {
         PayBean payBean = new PayBean();
         payBean.id = id;
         payBean.order_no = 12345 + "";
         payBean.price = pay_price;
+        payBean.bus_type = order_bustype;
         String str = gson.toJson(payBean);
 
         JSONObject jsonObject = null;
@@ -521,6 +534,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         payBean.id = id;
         payBean.order_no = 12345 + "";
         payBean.price = pay_price;
+        payBean.bus_type = order_bustype;
         String str = gson.toJson(payBean);
 
         JSONObject jsonObject = null;
@@ -668,12 +682,38 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             case R.id.btn_commit://提交订单
 
                 if (product_type == 1) {//卡订单
-
+                    final NewOrderInfoBean newOrderInfoBean = new NewOrderInfoBean();
                     final OrderInfoBean orderInfoBean = new OrderInfoBean();
+
+
                     if (consultantInfo == null) {
                         ToastUtils.showToastLong("请选择会籍顾问");
                         break;
                     }
+                    newOrderInfoBean.setBranch_id(consultantInfo.getBranch_id());
+                    newOrderInfoBean.setBus_type(order_bustype);
+                    NewOrderInfoBean.ExtendsParams extendsParams = new NewOrderInfoBean.ExtendsParams();
+                    extendsParams.setSell_id(consultantInfo.getId() + "");
+                    extendsParams.setBus_type("1");
+                    extendsParams.setFace_value(CardsInfo.getPrice() + "");
+                    extendsParams.setBranch_name(consultantInfo.getBranch_name());
+                    extendsParams.setSell_name(consultantInfo.getCname());
+                    extendsParams.setMonth_count(CardsInfo.getMonth_count() + "");
+                    extendsParams.setType_id(CardsInfo.getId());
+                    extendsParams.setCharge_mode(CardsInfo.getCharge_mode() + "");
+                    extendsParams.setType_name(CardsInfo.getName());
+                    newOrderInfoBean.setPay_way(pay_way + "");
+                    newOrderInfoBean.setPrice(pay_price + "");
+                    newOrderInfoBean.setReceive(CardsInfo.getPrice() + "");
+                    if (isme) {
+                        newOrderInfoBean.setFor_other(0);
+                    } else {
+                        newOrderInfoBean.setFor_other(1);
+                        extendsParams.setMember_name(et_grant_name.getText().toString().trim());
+                        extendsParams.setPhone_no(et_grant_phone.getText().toString().trim());
+                    }
+
+
                     orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
                     orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
                     orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
@@ -690,14 +730,18 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     if (!TextUtils.isEmpty(depositId)) {
                         orderInfoBean.setDeposit_id(depositId);
                         orderInfoBean.setDeposit_price(deposit_price + "");
+                        newOrderInfoBean.setDeposit_id(depositId);
                     }
                     if (CardsInfo.getCharge_mode() == 2) {//如果是计次卡
                         orderInfoBean.setTotal_count(CardsInfo.getTotal_count());
-
+                        extendsParams.setTotal_count(CardsInfo.getTotal_count());
                     }
                     if (isme) {
+                        newOrderInfoBean.setBus_type(32);//给别人买定金
                         orderInfoBean.setFor_other(0);
                     } else {
+                        order_bustype=34;
+                        newOrderInfoBean.setBus_type(34);//给别人买定金
                         orderInfoBean.setFor_other(1);
                         orderInfoBean.setName(et_grant_name.getText().toString().trim());
                         orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
@@ -712,9 +756,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         ToastUtils.showToastLong("请输入好友手机号");
                         break;
                     }
-
+                    newOrderInfoBean.setExtends_params(extendsParams);
                     Gson gson = new Gson();
-                    strBean = gson.toJson(orderInfoBean);
+                    strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
                     try {
                         commit_card(strBean.toString());
@@ -728,10 +772,38 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 if (product_type == 2) {//定金订单
 
                     final OrderInfoBean orderInfoBean = new OrderInfoBean();
+                    final NewOrderInfoBean newOrderInfoBean = new NewOrderInfoBean();
                     if (consultantInfo == null) {
                         ToastUtils.showToastLong("请选择会籍顾问");
                         break;
                     }
+                    newOrderInfoBean.setBranch_id(consultantInfo.getBranch_id());
+                    newOrderInfoBean.setBus_type(31);
+                    NewOrderInfoBean.ExtendsParams extendsParams = new NewOrderInfoBean.ExtendsParams();
+                    extendsParams.setAdmin_emp_id(consultantInfo.getId() + "");
+                    extendsParams.setBus_type("1");
+                    extendsParams.setMoney(pay_price + "");
+                    extendsParams.setAdmin_emp_name(consultantInfo.getCname());
+                    extendsParams.setDeposit_type("1");//定金类型
+
+
+                    if (isme) {
+                        newOrderInfoBean.setFor_other(0);
+                        newOrderInfoBean.setBus_type(31);
+                    } else {
+                        order_bustype=33;
+                        newOrderInfoBean.setBus_type(33);//给别人买定金
+                        newOrderInfoBean.setFor_other(1);
+                        extendsParams.setMember_name(et_grant_name.getText().toString().trim());
+                        extendsParams.setPhone_no(et_grant_phone.getText().toString().trim());
+                    }
+
+                    newOrderInfoBean.setExtends_params(extendsParams);
+                    newOrderInfoBean.setPay_way(pay_way + "");
+                    newOrderInfoBean.setPrice(pay_price + "");
+                    newOrderInfoBean.setReceive(pay_price + "");
+
+
                     orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
                     orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
                     orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
@@ -763,7 +835,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
 
                     Gson gson = new Gson();
-                    strBean = gson.toJson(orderInfoBean);
+                    strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
                     try {
                         commit_deposit(strBean.toString());
@@ -794,6 +866,364 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         }
     }
 
+
+    static class NewOrderInfoBean
+
+    {
+
+//        private int admin_emp_id;//会籍顾问id
+//        private String admin_emp_name;//会籍顾问名称
+//        private String admin_emp_phone;//会籍顾问电话
+//   //     private int branch_id;//门店id
+//        private String branch_name;//门店名称
+//        private int for_other;//0自己1别人
+//        private String name;//
+//        private String order_no;
+//        private String order_time;
+//     //   private String pay_way;//1是支付宝，2是微信
+//
+//      //  private String price;//
+//        private String member_no;//会员编号
+//        private String member_name;//会员自己的真实姓名
+//  private String phone_no;//
+//        private String card_type_id;//卡id
+//        private String deposit_id;//定金id
+//        private String deposit_price;//定金金额
+//
+//        private String deposit_type;  //定金类型
+//        private String card_name;//卡名称
+//        private String month_count;// 使用期限月数
+//        private String total_count; //次卡总次数
+
+        public int bus_type;// 业务类型
+        //	byte ORDER_BUS_TYPE_DEPOSIT_APP = 31;// app买定金
+        //	byte ORDER_BUS_TYPE_CARD_OPEN_APP = 32;// APP卖卡,业务系统取卡
+        public String person_id;// 人主键
+        public String member_id;// 会员主键
+        public int branch_id;// 门店主键
+        public String pay_way;// 支付方式
+        public String price;// 支付金额
+        public String receive;
+        public int platform = 2;
+        public ExtendsParams extends_params;
+        private String deposit_id;//定金id
+        private int for_other;//0自己1别人
+
+        @Override
+        public String toString() {
+            return "NewOrderInfoBean{" +
+                    "bus_type=" + bus_type +
+                    ", person_id='" + person_id + '\'' +
+                    ", member_id='" + member_id + '\'' +
+                    ", branch_id=" + branch_id +
+                    ", pay_way='" + pay_way + '\'' +
+                    ", price='" + price + '\'' +
+                    ", receive='" + receive + '\'' +
+                    ", platform=" + platform +
+                    ", extends_params=" + extends_params +
+                    ", deposit_id='" + deposit_id + '\'' +
+                    ", for_other=" + for_other +
+                    '}';
+        }
+
+        public int getFor_other() {
+            return for_other;
+        }
+
+        public void setFor_other(int for_other) {
+            this.for_other = for_other;
+        }
+
+        public String getDeposit_id() {
+            return deposit_id;
+        }
+
+        public void setDeposit_id(String deposit_id) {
+            this.deposit_id = deposit_id;
+        }
+
+        public int getBus_type() {
+            return bus_type;
+        }
+
+        public void setBus_type(int bus_type) {
+            this.bus_type = bus_type;
+        }
+
+        public String getPerson_id() {
+            return person_id;
+        }
+
+        public void setPerson_id(String person_id) {
+            this.person_id = person_id;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public int getBranch_id() {
+            return branch_id;
+        }
+
+        public void setBranch_id(int branch_id) {
+            this.branch_id = branch_id;
+        }
+
+        public String getPay_way() {
+            return pay_way;
+        }
+
+        public void setPay_way(String pay_way) {
+            this.pay_way = pay_way;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getReceive() {
+            return receive;
+        }
+
+        public void setReceive(String receive) {
+            this.receive = receive;
+        }
+
+        public int getPlatform() {
+            return platform;
+        }
+
+        public void setPlatform(int platform) {
+            this.platform = platform;
+        }
+
+        public ExtendsParams getExtends_params() {
+            return extends_params;
+        }
+
+        public void setExtends_params(ExtendsParams extends_params) {
+            this.extends_params = extends_params;
+        }
+
+        static class ExtendsParams {
+            public String admin_emp_id;
+            public String bus_type;
+            public String member_id;
+            public String money;
+            public String remark;
+
+
+            public String month_count;// 使用期限月数
+            public String type_id;
+            public String total_count; //次卡总次数
+            public String face_value;//type.price
+            public String charge_mode;
+            public String sell_id;
+            public String sell_name;//会藉顾问名
+            public String sell_price;//=type.price-定金
+            public String branch_name;// 门店名
+            public String type_name;//卡名称
+
+            public String admin_emp_name;
+            //        private String card_type_id;//卡id
+//        private String deposit_id;//定金id
+//        private String deposit_price;//定金金额
+//
+            private String deposit_type;  //定金类型
+//        private String card_name;//卡名称
+//        private String month_count;// 使用期限月数
+//        private String total_count; //次卡总次数
+
+       //     private String member_name;//好友真实姓名
+            private String phone_no;//好友电话
+            private String other_name;//好友真实姓名
+            @Override
+            public String toString() {
+                return "ExtendsParams{" +
+                        "admin_emp_id='" + admin_emp_id + '\'' +
+                        ", bus_type='" + bus_type + '\'' +
+                        ", member_id='" + member_id + '\'' +
+                        ", money='" + money + '\'' +
+                        ", remark='" + remark + '\'' +
+                        ", month_count='" + month_count + '\'' +
+                        ", type_id='" + type_id + '\'' +
+                        ", total_count='" + total_count + '\'' +
+                        ", face_value='" + face_value + '\'' +
+                        ", charge_mode='" + charge_mode + '\'' +
+                        ", sell_id='" + sell_id + '\'' +
+                        ", sell_name='" + sell_name + '\'' +
+                        ", sell_price='" + sell_price + '\'' +
+                        ", branch_name='" + branch_name + '\'' +
+                        ", type_name='" + type_name + '\'' +
+                        ", admin_emp_name='" + admin_emp_name + '\'' +
+                        ", deposit_type='" + deposit_type + '\'' +
+                        ", other_name='" + other_name + '\'' +
+                        ", phone_no='" + phone_no + '\'' +
+                        '}';
+            }
+
+            public String getMember_name() {
+                return other_name;
+            }
+
+            public void setMember_name(String member_name) {
+                this.other_name = member_name;
+            }
+
+            public String getPhone_no() {
+                return phone_no;
+            }
+
+            public void setPhone_no(String phone_no) {
+                this.phone_no = phone_no;
+            }
+
+            public String getDeposit_type() {
+                return deposit_type;
+            }
+
+            public void setDeposit_type(String deposit_type) {
+                this.deposit_type = deposit_type;
+            }
+
+            public String getAdmin_emp_name() {
+                return admin_emp_name;
+            }
+
+            public void setAdmin_emp_name(String admin_emp_name) {
+                this.admin_emp_name = admin_emp_name;
+            }
+
+            public String getType_name() {
+                return type_name;
+            }
+
+            public void setType_name(String type_name) {
+                this.type_name = type_name;
+            }
+
+            public String getMonth_count() {
+                return month_count;
+            }
+
+            public void setMonth_count(String month_count) {
+                this.month_count = month_count;
+            }
+
+            public String getType_id() {
+                return type_id;
+            }
+
+            public void setType_id(String type_id) {
+                this.type_id = type_id;
+            }
+
+            public String getTotal_count() {
+                return total_count;
+            }
+
+            public void setTotal_count(String total_count) {
+                this.total_count = total_count;
+            }
+
+            public String getFace_value() {
+                return face_value;
+            }
+
+            public void setFace_value(String face_value) {
+                this.face_value = face_value;
+            }
+
+            public String getCharge_mode() {
+                return charge_mode;
+            }
+
+            public void setCharge_mode(String charge_mode) {
+                this.charge_mode = charge_mode;
+            }
+
+            public String getSell_id() {
+                return sell_id;
+            }
+
+            public void setSell_id(String sell_id) {
+                this.sell_id = sell_id;
+            }
+
+            public String getSell_name() {
+                return sell_name;
+            }
+
+            public void setSell_name(String sell_name) {
+                this.sell_name = sell_name;
+            }
+
+            public String getSell_price() {
+                return sell_price;
+            }
+
+            public void setSell_price(String sell_price) {
+                this.sell_price = sell_price;
+            }
+
+            public String getBranch_name() {
+                return branch_name;
+            }
+
+            public void setBranch_name(String branch_name) {
+                this.branch_name = branch_name;
+            }
+
+            public String getAdmin_emp_id() {
+                return admin_emp_id;
+            }
+
+            public void setAdmin_emp_id(String admin_emp_id) {
+                this.admin_emp_id = admin_emp_id;
+            }
+
+            public String getBus_type() {
+                return bus_type;
+            }
+
+            public void setBus_type(String bus_type) {
+                this.bus_type = bus_type;
+            }
+
+            public String getMember_id() {
+                return member_id;
+            }
+
+            public void setMember_id(String member_id) {
+                this.member_id = member_id;
+            }
+
+            public String getMoney() {
+                return money;
+            }
+
+            public void setMoney(String money) {
+                this.money = money;
+            }
+
+            public String getRemark() {
+                return remark;
+            }
+
+            public void setRemark(String remark) {
+                this.remark = remark;
+            }
+        }
+    }
 
     @NeedsPermission({Manifest.permission.READ_CONTACTS, Manifest.permission_group.CONTACTS})
     void read_contacts() {

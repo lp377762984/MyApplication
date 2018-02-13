@@ -3,7 +3,11 @@ package com.cn.danceland.myapplication.utils;
 public class Constants {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-    public static final String HOST = "http://47.104.3.118:8003/";//服务器地址
+    public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
+ //   public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
+   // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
+
+
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "user/register";//注册用户
@@ -71,12 +75,12 @@ public class Constants {
 
     //订单相关
 
-    public static final String COMMIT_DEPOSIT = HOST + "appDeposit/saveDeposit";//提交定金订单
+    public static final String COMMIT_DEPOSIT = HOST + "appOrder/saveOrder";//提交定金订单
     public static final String FIND_ALL_DEPOSIT = HOST + "appDeposit/findAllDeposit";//查询订单
-    public static final String COMMIT_CARD_ORDER = HOST + "appOrder/saveCard";//提交卡订单
+    public static final String COMMIT_CARD_ORDER = HOST + "appOrder/saveOrder";//提交卡订单
     public static final String FIND_ALL_ORDER = HOST + "appOrder/findAllPage";//查询订单
     public static final String FIND_ALL_MY_CARD_LIST = HOST + "card/list";//查询我的会员卡
-    public static final String CANSEL_ORDER = HOST + "/appOrder/updateStatus";//取消订单
+    public static final String CANSEL_ORDER = HOST + "/appOrder/cancelOrder";//取消订单
 
     public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
 

@@ -31,7 +31,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
@@ -435,18 +434,18 @@ public class MyDynListviewAdater extends BaseAdapter {
 
                 viewHolder.iv_pic.setVisibility(View.GONE);
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
-                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X300");
-          //      LogUtil.i(sb.toString());
+                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
+             LogUtil.i(sb.toString());
 //
 //                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
 //                viewHolder.iv_pic.setLayoutParams(linearParams);
                 Glide.with(context)
                         .load(sb.toString())
-                        .apply(options1)
-                     //   .into( viewHolder.iv_pic);
+                       // .apply(options1)
+                        .into(viewHolder.iv_pic);
 
-                        .into(new DrawableImageViewTarget(viewHolder.iv_pic, /*waitForLayout=*/ false));
+                    //    .into(new DrawableImageViewTarget(viewHolder.iv_pic, /*waitForLayout=*/ false));
 //
 //
 //                Glide.with(context)

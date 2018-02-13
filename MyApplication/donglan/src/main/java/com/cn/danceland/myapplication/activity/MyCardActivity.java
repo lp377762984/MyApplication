@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -42,6 +43,7 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
     private List<RequestMyCardListBean.Data> mCardList = new ArrayList<>();
     private MyListViewAdapter myListViewAdapter;
     Gson gson = new Gson();
+
     @Override
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +77,9 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestMyCardListBean myCardListBean=new RequestMyCardListBean();
-                myCardListBean=gson.fromJson(s,RequestMyCardListBean.class);
-                mCardList=myCardListBean.getData();
+                RequestMyCardListBean myCardListBean = new RequestMyCardListBean();
+                myCardListBean = gson.fromJson(s, RequestMyCardListBean.class);
+                mCardList = myCardListBean.getData();
                 myListViewAdapter.notifyDataSetChanged();
 
 
@@ -154,7 +156,7 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
             }
             if (mCardList.get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                viewHolder.   tv_cardtype.setText("卡类型：计次卡（剩余次数："+mCardList.get(i).getTotal_count() + "次）");
+                viewHolder.tv_cardtype.setText("卡类型：计次卡（剩余次数：" + mCardList.get(i).getTotal_count() + "次）");
             }
             if (mCardList.get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");
@@ -169,8 +171,11 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
 //            }else {
 //                viewHolder.tv_number.setVisibility(View.GONE);
 //            }
-
-            viewHolder.tv_time.setText(mCardList.get(i).getEnd_date()+"到期");
+            if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
+                viewHolder.tv_time.setText("未开卡");
+            } else {
+                viewHolder.tv_time.setText(mCardList.get(i).getEnd_date() + "到期");
+            }
 
 
             return view;
