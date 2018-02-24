@@ -94,7 +94,14 @@
         android:stretchMode="spacingWidth"
         android:verticalSpacing="5dp"
         android:visibility="gone" />
-
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        />
     <LinearLayout
         android:id="@+id/ll_location"
         android:layout_width="match_parent"

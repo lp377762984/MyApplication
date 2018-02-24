@@ -3,7 +3,7 @@
     package="com.cn.danceland.myapplication"
 
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.06">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 往SDCard写入数据权限 -->

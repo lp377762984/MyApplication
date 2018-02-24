@@ -1,15 +1,16 @@
 package com.cn.danceland.myapplication.bean;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by feng on 2017/11/14.
+ * <p>
+ * Copyright 2017 bejson.com
  */
 /**
  * Copyright 2017 bejson.com
  */
-import java.util.List;
-import java.util.Date;
 
 /**
  * Auto-generated: 2017-11-15 9:47:39
@@ -19,21 +20,21 @@ import java.util.Date;
  */
 public class PublishBean {
 
-    private int author;
+    private Integer author;
     private String content;
     private boolean enabled;
-    private int id;
+    private Integer id;
     private List<String> imgList;
     private String imgs;
-    private int msgType;
-    private int privacyType;
-    private String publishPlace;
-    private Date publishTime;
-    private int publishType;
-    private int shareId;
+    private Integer msg_type;
+    private Integer privacy_type;
+    private String publish_place;
+    private Date publish_time;
+    private Integer publish_type;
+    private Integer share_id;
     private String title;
-    private String vedioUrl;
-    private String vedioImg;
+    private String vedio_url;
+    private String vedio_img;
     public void setAuthor(int author) {
         this.author = author;
     }
@@ -77,45 +78,45 @@ public class PublishBean {
     }
 
     public void setMsgType(int msgType) {
-        this.msgType = msgType;
+        this.msg_type = msgType;
     }
     public int getMsgType() {
-        return msgType;
+        return msg_type;
     }
 
-    public void setPrivacyType(int privacyType) {
-        this.privacyType = privacyType;
+    public void setprivacy_type(int privacy_type) {
+        this.privacy_type = privacy_type;
     }
-    public int getPrivacyType() {
-        return privacyType;
+    public int getprivacy_type() {
+        return privacy_type;
     }
 
     public void setPublishPlace(String publishPlace) {
-        this.publishPlace = publishPlace;
+        this.publish_place = publishPlace;
     }
     public String getPublishPlace() {
-        return publishPlace;
+        return publish_place;
     }
 
     public void setPublishTime(Date publishTime) {
-        this.publishTime = publishTime;
+        this.publish_time = publishTime;
     }
     public Date getPublishTime() {
-        return publishTime;
+        return publish_time;
     }
 
     public void setPublishType(int publishType) {
-        this.publishType = publishType;
+        this.publish_type = publishType;
     }
     public int getPublishType() {
-        return publishType;
+        return publish_type;
     }
 
     public void setShareId(int shareId) {
-        this.shareId = shareId;
+        this.share_id = shareId;
     }
     public int getShareId() {
-        return shareId;
+        return share_id;
     }
 
     public void setTitle(String title) {
@@ -130,39 +131,19 @@ public class PublishBean {
     }
 
     public String getVedioUrl() {
-        return vedioUrl;
+        return vedio_url;
     }
 
     public void setVedioUrl(String vedioUrl) {
-        this.vedioUrl = vedioUrl;
+        this.vedio_url = vedioUrl;
     }
 
     public String getVedioImg() {
-        return vedioImg;
+        return vedio_img;
     }
 
     public void setVedioImg(String vedioImg) {
-        this.vedioImg = vedioImg;
+        this.vedio_img = vedioImg;
     }
 
-    @Override
-    public String toString() {
-        return "PublishBean{" +
-                "author=" + author +
-                ", content='" + content + '\'' +
-                ", enabled=" + enabled +
-                ", id=" + id +
-                ", imgList=" + imgList +
-                ", imgs='" + imgs + '\'' +
-                ", msgType=" + msgType +
-                ", privacyType=" + privacyType +
-                ", publishPlace='" + publishPlace + '\'' +
-                ", publishTime=" + publishTime +
-                ", publishType=" + publishType +
-                ", shareId=" + shareId +
-                ", title='" + title + '\'' +
-                ", vedioUrl='" + vedioUrl + '\'' +
-                ", vedioImg='" + vedioImg + '\'' +
-                '}';
-    }
 }

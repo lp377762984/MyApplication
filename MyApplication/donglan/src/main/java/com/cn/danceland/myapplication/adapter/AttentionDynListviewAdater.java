@@ -28,6 +28,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -208,6 +210,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
             //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
+            viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -415,14 +418,63 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
+            viewHolder.gridView.setVisibility(View.VISIBLE);
 
 
-            if (data.get(position).getImgList().size()==1){
+            if (data.get(position).getImgList().size() == 1) {
+                viewHolder.gridView.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                RequestOptions options1 = new RequestOptions()
+                        //  .placeholder(R.drawable.img_loading)//加载占位图
+                        .error(R.drawable.img_loadfail)//
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .priority(Priority.HIGH);
+
+                viewHolder.iv_pic.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
+                String[] b = sb.toString().split("_");
+                String[] c = b[2].toString().toString().split("X");
+
+//                LogUtil.i(b[2].toString());
+//
+//                LogUtil.i(c[0]);
+//                LogUtil.i(c[1]);
+//                LogUtil.i(sb.toString());
+                if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.iv_pic.setLayoutParams(linearParams);
+                } else {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.iv_pic.setLayoutParams(linearParams);
+                }
+
+                Glide.with(context)
+                        .load(sb.toString())
+                        // .apply(options1)
+                        .into(viewHolder.iv_pic);
+                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(false)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(context, config);
+                    }
+                });
+                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+//
+
 
             }
             else   if (data.get(position).getImgList().size()==4){
@@ -430,18 +482,17 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 viewHolder.gridView.setNumColumns(2);
                 int width = DensityUtils.dp2px(context,205f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                linearParams.setMargins( DensityUtils.dp2px(context,15f), DensityUtils.dp2px(context, 5f),0,0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             }else {
                 viewHolder.gridView.setNumColumns(3);
                 int width = DensityUtils.dp2px(context,310f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                linearParams.setMargins( DensityUtils.dp2px(context,15f), DensityUtils.dp2px(context, 5f),0,0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
-            viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
             /**
              * 图片列表点击事件
@@ -501,6 +552,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
+        ImageView iv_pic;
     }
 
     private void showListDialog(final int pos) {
