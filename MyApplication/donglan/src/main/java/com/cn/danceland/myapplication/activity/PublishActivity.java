@@ -138,6 +138,7 @@ public class PublishActivity extends Activity {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
                     }else{
                         try {
+
                             commitUrl(gson.toJson(bean));
                        //     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                            //finish();
@@ -161,6 +162,7 @@ public class PublishActivity extends Activity {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
                     }else{
                         String strBean = gson.toJson(bean);
+                        LogUtil.i(gson.toJson(bean).toString());
                         try {
                             commitUrl(strBean);
                             //LogUtil.e("zzf",strBean);

@@ -125,8 +125,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:layout_marginTop="5dp"
-
-                    android:src="@drawable/aaaa123123"
                     android:visibility="gone"
                     />
             </LinearLayout>

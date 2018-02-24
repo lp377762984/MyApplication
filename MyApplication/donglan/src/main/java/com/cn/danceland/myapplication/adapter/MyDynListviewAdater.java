@@ -421,9 +421,12 @@ public class MyDynListviewAdater extends BaseAdapter {
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
             viewHolder.gridView.setVisibility(View.VISIBLE);
-
+//            if (data.get(position).getImgList().size() == 1) {
+//                viewHolder.gridView.setVisibility(View.GONE);
+//            }
 
             if (data.get(position).getImgList().size() == 1) {
+                viewHolder.gridView.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 RequestOptions options1 = new RequestOptions()
@@ -432,48 +435,47 @@ public class MyDynListviewAdater extends BaseAdapter {
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .priority(Priority.HIGH);
 
-                viewHolder.iv_pic.setVisibility(View.GONE);
+                viewHolder.iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
                 sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
-             LogUtil.i(sb.toString());
+                String[] b = sb.toString().split("_");
+                String[] c = b[2].toString().toString().split("X");
+
+//                LogUtil.i(b[2].toString());
 //
-//                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
-//                viewHolder.iv_pic.setLayoutParams(linearParams);
+//                LogUtil.i(c[0]);
+//                LogUtil.i(c[1]);
+//                LogUtil.i(sb.toString());
+                if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.iv_pic.setLayoutParams(linearParams);
+                } else {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.iv_pic.setLayoutParams(linearParams);
+                }
+
                 Glide.with(context)
                         .load(sb.toString())
-                       // .apply(options1)
+                        // .apply(options1)
                         .into(viewHolder.iv_pic);
-
-                    //    .into(new DrawableImageViewTarget(viewHolder.iv_pic, /*waitForLayout=*/ false));
-//
-//
-//                Glide.with(context)
-//                        .asBitmap()//强制Glide返回一个Bitmap对象
-//                        .load(sb.toString())
-//                        .into(new SimpleTarget<Bitmap>() {
-//                                  @Override
-//                                  public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-//                                      int width = bitmap.getWidth();
-//                                      int height = bitmap.getHeight();
-//
-//                                      ViewGroup.LayoutParams params = iviewHolder.iv_pic.getLayoutParams();
-//                                      int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
-//                                      //float scale = (float) vw / (float) resource.getIntrinsicWidth();
-//                                      int vh = (int) ((float) vw / (float) 1.78);
-//                                      params.height = vh + imageView.getPaddingTop() + imageView.getPaddingBottom();
-//                                      imageView.setLayoutParams(params);
-//                                  }
-//                              }
-//
-//
-//                        );
-//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, height);
-//                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
-//                viewHolder.iv_pic.setLayoutParams(linearParams);
-
+                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(false)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(context, config);
+                    }
+                });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
@@ -484,7 +486,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 viewHolder.gridView.setNumColumns(2);
                 int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             } else {
@@ -492,7 +494,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 viewHolder.gridView.setNumColumns(3);
                 int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 

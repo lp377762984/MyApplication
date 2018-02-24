@@ -39,6 +39,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -125,6 +127,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     SlideFromBottomPopup slideFromBottomPopup;
     private EmojiconEditText et_popup_comment;
     private TextView tv_popup_title;
+    private ImageView iv_pic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,9 +162,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             et_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
             //    LogUtil.i("id" + data.get(replypos).getId() + "#########" + data.get(replypos).getReplyUserId());
 
-        //    slideFromBottomPopup.showPopupWindow();
-          //  tv_popup_title.setText("回复评论");
-          //  et_popup_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
+            //    slideFromBottomPopup.showPopupWindow();
+            //  tv_popup_title.setText("回复评论");
+            //  et_popup_comment.setHint("回复" + data.get(replypos).getNickName() + ":");
         }
 
 
@@ -267,8 +270,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
         });
         emojIcon.addEmojiconEditTextList(et_comment);
-      //  et_comment.setImeOptions();
-       // android:imeOptions="actionDone"
+        //  et_comment.setImeOptions();
+        // android:imeOptions="actionDone"
 
         findViewById(R.id.tv_comment).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,12 +281,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
             }
         });
-
-
-
-
-
-
 
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
@@ -515,31 +512,79 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         if (oneDynInfo.getImgList() != null && oneDynInfo.getImgList().size() > 0) {
 
 
-            if (oneDynInfo.getImgList() .size()==1){
+            gridView.setVisibility(View.VISIBLE);
+
+
+            if (oneDynInfo.getImgList().size() == 1) {
+                gridView.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
-               gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                RequestOptions options1 = new RequestOptions()
+                        //  .placeholder(R.drawable.img_loading)//加载占位图
+                        .error(R.drawable.img_loadfail)//
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .priority(Priority.HIGH);
+                iv_pic.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder(oneDynInfo.getImgList().get(0));
+                sb.insert(oneDynInfo.getImgList().get(0).length() - 4, "_400X400");
+                String[] b = sb.toString().split("_");
+                String[] c = b[2].toString().toString().split("X");
 
-            }
-            else   if (oneDynInfo.getImgList() .size()==4){
+//                LogUtil.i(b[2].toString());
+//
+//                LogUtil.i(c[0]);
+//                LogUtil.i(c[1]);
+//                LogUtil.i(sb.toString());
+                if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f), DensityUtils.dp2px(this, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                    linearParams.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
+                   iv_pic.setLayoutParams(linearParams);
+                } else {
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(this, 200f));
+                    linearParams.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
+                   iv_pic.setLayoutParams(linearParams);
+                }
+
+                Glide.with(this)
+                        .load(sb.toString())
+                        // .apply(options1)
+                        .into(iv_pic);
+             iv_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>)oneDynInfo.getImgList())//图片数据List<String> list
+                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(false)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(DynHomeActivity.this, config);
+                    }
+                });
+                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams1.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
+                gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+//
+
+            } else if (oneDynInfo.getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-               gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(DynHomeActivity.this,205f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
+                gridView.setNumColumns(2);
+                int width = DensityUtils.dp2px(DynHomeActivity.this, 205f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            }else {
-               gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(DynHomeActivity.this,310f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(DynHomeActivity.this,15f),0,0,0);
+            } else {
+                gridView.setNumColumns(3);
+                int width = DensityUtils.dp2px(DynHomeActivity.this, 310f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
-            gridView.setVisibility(View.VISIBLE);
+
             gridView.setAdapter(new ImageGridAdapter(DynHomeActivity.this, oneDynInfo.getImgList()));
             /**
              * 图片列表点击事件
@@ -575,8 +620,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         View headview = View.inflate(this, R.layout.headview_dyn_home, null);
 
         tv_nick_name = headview.findViewById(R.id.tv_nick_name);
-        tv_time =
-                headview.findViewById(R.id.tv_time);
+        tv_time = headview.findViewById(R.id.tv_time);
         tv_guanzhu = headview.findViewById(R.id.tv_guanzhu);
         tv_location = headview.findViewById(R.id.tv_location);
         ll_location = headview.findViewById(R.id.ll_location);
@@ -586,7 +630,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         jzVideoPlayer = headview.findViewById(R.id.videoplayer);
 
         rl_more = headview.findViewById(R.id.rl_more);
-
+        iv_pic = headview.findViewById(R.id.iv_pic);
 
         //创建默认的线性LayoutManager
         mRecyclerView = headview.findViewById(R.id.my_recycler_view);
