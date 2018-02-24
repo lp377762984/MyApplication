@@ -118,7 +118,13 @@ public class FitnessTestActivity extends Activity {
                         FitnessTestBean.Data data = fitnessTestBean.getData();
                         if(data!=null){
                             setData(data);
+                        }else{
+                            sv.setVisibility(View.GONE);
+                            no_data.setVisibility(View.VISIBLE);
                         }
+                    }else{
+                        sv.setVisibility(View.GONE);
+                        no_data.setVisibility(View.VISIBLE);
                     }
                 }else {
                     //noPie();
@@ -163,7 +169,13 @@ public class FitnessTestActivity extends Activity {
                         FitnessTestBean.Data data = fitnessTestBean.getData();
                         if(data!=null){
                             setData(data);
+                        }else{
+                            sv.setVisibility(View.GONE);
+                            no_data.setVisibility(View.VISIBLE);
                         }
+                    }else{
+                        sv.setVisibility(View.GONE);
+                        no_data.setVisibility(View.VISIBLE);
                     }
                 }else {
                     //noPie();
