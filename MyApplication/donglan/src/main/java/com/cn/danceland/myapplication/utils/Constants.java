@@ -4,9 +4,10 @@ public class Constants {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
  
-    public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
+    //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
  //   public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
+     public static final String HOST = "http://192.168.1.119:8003/";//佳楠服务器地址
 
 
 
@@ -129,6 +130,10 @@ public class Constants {
     public static final String FINDONEHISTORY = HOST + "appBca/findOneHistoryRecord";//查看某条历史记录
     public static final String FINDBODYAGE = HOST + "appBca/findBodyAge";//查询身体年龄
     public static final String CANCELTEST = HOST+"appBca/cancelTester";//取消体测
+
+    //私教相关
+    public static final String COURSETYPELIST = HOST +"appCourse/findPageCourseType";
+
 
 
 }

@@ -114,12 +114,18 @@ public class SiJiaoFragment extends BaseFragment {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
+            ViewHolder viewHolder=null;
             if (convertView==null){
+                viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
+                viewHolder.mylist = convertView.findViewById(R.id.mylist);
+
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
             }
-            MyListView mylist = convertView.findViewById(R.id.mylist);
-            mylist.setDividerHeight(0);
-            mylist.setAdapter(new MyListAdapter());
+            viewHolder.mylist.setDividerHeight(0);
+            viewHolder.mylist.setAdapter(new MyListAdapter());
 
             return convertView;
         }
@@ -128,6 +134,10 @@ public class SiJiaoFragment extends BaseFragment {
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             return false;
         }
+    }
+
+     class ViewHolder{
+        MyListView mylist;
     }
 
     private class MyListAdapter extends BaseAdapter{

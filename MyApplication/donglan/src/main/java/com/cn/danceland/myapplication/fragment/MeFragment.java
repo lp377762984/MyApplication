@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
+import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
@@ -234,7 +236,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
             case R.id.ll_my_data://数据中心
-                Intent intent2 = new Intent(mActivity,FitnessTestActivity.class);
+                Intent intent2 = new Intent(mActivity,BuySiJiaoActivity.class);
                 startActivity(intent2);
                 break;
 
