@@ -411,7 +411,7 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             isEnd=false;
-            findSelectionDyn_Down(1);
+            findSelectionDyn_Down(0);
             init();
             return null;
         }
@@ -434,7 +434,7 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-                findSelectionDyn_Up(mCurrentPage);
+                findSelectionDyn_Up(mCurrentPage-1);
             }
 
             return null;
@@ -540,6 +540,7 @@ public class SelectionFragment extends BaseFragment {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 dialog.dismiss();
                 pullToRefresh.onRefreshComplete();
                 Gson gson = new Gson();
@@ -573,7 +574,7 @@ public class SelectionFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("id", "");//用户id
-                map.put("currentPage", page + "");//页数
+                map.put("page", page + "");//页数
                 return map;
             }
 
@@ -641,7 +642,7 @@ public class SelectionFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("id", SPUtils.getString(Constants.MY_USERID, ""));//用户id
-                map.put("currentPage", page + "");//页数
+                map.put("page", page + "");//页数
                 return map;
             }
 
