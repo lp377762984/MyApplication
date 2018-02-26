@@ -236,7 +236,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
             case R.id.ll_my_data://数据中心
-                Intent intent2 = new Intent(mActivity,BuySiJiaoActivity.class);
+                Intent intent2 = new Intent(mActivity,FitnessTestActivity.class);
                 startActivity(intent2);
                 break;
 

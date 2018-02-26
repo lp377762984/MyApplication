@@ -32,6 +32,16 @@ public class VideoBean {
     public class Data {
 
         private String imgUrl;
+        private String imgPath;
+
+        public String getImgPath() {
+            return imgPath;
+        }
+
+        public void setImgPath(String imgPath) {
+            this.imgPath = imgPath;
+        }
+
         public void setImgUrl(String imgUrl) {
             this.imgUrl = imgUrl;
         }

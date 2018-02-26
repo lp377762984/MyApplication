@@ -101,11 +101,11 @@ public class PublishActivity extends Activity {
     Gson gson;
     RequestQueue queue;
     Button videoimg;
-    String picUrl,vedioUrl;
+    String picUrl,picPath,vedioUrl,vedioPath;
     String isPhoto;
     File picFile,videoFile;
     public static Handler handler;
-    ArrayList<String> arrImgUrl;
+    ArrayList<String> arrImgUrl,arrImgPath;
     Uri uri;
 
     @Override
@@ -128,9 +128,9 @@ public class PublishActivity extends Activity {
                     if(!"".equals(stringstatus)){
                         bean.setContent(stringstatus);
                     }
-                    if(picUrl!=null&&vedioUrl!=null){
-                        bean.setVedioUrl(vedioUrl);
-                        bean.setVedioImg(picUrl);
+                    if(picPath!=null&&vedioPath!=null){
+                        bean.setVedioUrl(vedioPath);
+                        bean.setVedioImg(picPath);
                         bean.setMsgType(1);
                     }
                     bean.setPublishPlace(location);
@@ -153,8 +153,8 @@ public class PublishActivity extends Activity {
                     if(!"".equals(stringstatus)){
                         bean.setContent(stringstatus);
                     }
-                    if(arrImgUrl!=null&&arrImgUrl.size()>0){
-                        bean.setImgList(arrImgUrl);
+                    if(arrImgPath!=null&&arrImgPath.size()>0){
+                        bean.setImgList(arrImgPath);
                         bean.setMsgType(0);
                     }
                     bean.setPublishPlace(location);
@@ -262,9 +262,11 @@ public class PublishActivity extends Activity {
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
                                         arrImgUrl = new ArrayList<String>();
+                                        arrImgPath = new ArrayList<String>();
                                         if(beanList!=null&&beanList.size()>0){
                                             for(int k = 0;k<beanList.size();k++){
                                                 arrImgUrl.add(beanList.get(k).getImgUrl());
+                                                arrImgPath.add(beanList.get(k).getImgPath());
                                             }
                                         }
 
@@ -312,6 +314,7 @@ public class PublishActivity extends Activity {
                                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                                         if(headImageBean!=null&&headImageBean.getData()!=null){
                                             picUrl = headImageBean.getData().getImgUrl();
+                                            picPath = headImageBean.getData().getImgPath();
                                         }
                                     }
                                 }, new Response.ErrorListener() {
@@ -333,6 +336,7 @@ public class PublishActivity extends Activity {
                                             VideoBean videoBean = gson.fromJson(s, VideoBean.class);
                                             if(videoBean!=null&&videoBean.getData()!=null){
                                                 vedioUrl = videoBean.getData().getImgUrl();
+                                                vedioPath = videoBean.getData().getImgPath();
                                                 Message message = new Message();
                                                 message.what = 1;
                                                 handler.sendMessage(message);
@@ -464,6 +468,7 @@ public class PublishActivity extends Activity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String,String> map  = new HashMap<String,String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
         };
