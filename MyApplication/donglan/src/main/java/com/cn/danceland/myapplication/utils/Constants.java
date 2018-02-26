@@ -4,10 +4,10 @@ public class Constants {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
  
-    public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
- //   public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
+   // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
+   public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-
+// public static final String HOST = " http://192.168.1.119:8003/";//
 
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -53,7 +53,7 @@ public class Constants {
     public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
 
 
-    public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findById";//精选动态
+    public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
     public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "appDynMsg/findByFollower";//查看关注的人
     public static final String FIND_FANS_USER_LIST_MSG = HOST + "appDynMsg/findByUserId";//查看粉丝
