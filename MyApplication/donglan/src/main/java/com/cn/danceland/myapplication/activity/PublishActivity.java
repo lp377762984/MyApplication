@@ -131,8 +131,8 @@ public class PublishActivity extends Activity {
                     if(picPath!=null&&vedioPath!=null){
                         bean.setVedioUrl(vedioPath);
                         bean.setVedioImg(picPath);
-                        bean.setMsgType(1);
                     }
+                    bean.setMsgType(1);
                     bean.setPublishPlace(location);
                     if(bean.getVedioUrl()==null&&bean.getContent()==null){
                         ToastUtils.showToastShort("请填写需要发布的动态！");
