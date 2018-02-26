@@ -81,9 +81,9 @@
                     android:layout_toRightOf="@id/buy"
                     android:layout_marginLeft="5dp"
                     android:layout_centerVertical="true"
-                    android:text="购买节数：30节"
+                    android:text="剩余节数：30节"
                     android:textColor="#c0c0c0"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     />
                 <TextView
                     android:layout_width="wrap_content"

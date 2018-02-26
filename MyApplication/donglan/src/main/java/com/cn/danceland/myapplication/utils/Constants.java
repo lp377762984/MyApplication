@@ -130,5 +130,9 @@ public class Constants {
     public static final String FINDBODYAGE = HOST + "appBca/findBodyAge";//查询身体年龄
     public static final String CANCELTEST = HOST+"appBca/cancelTester";//取消体测
 
+    //私教相关
+    public static final String COURSETYPELIST = HOST +"appCourse/findPageCourseType";
+
+
 
 }

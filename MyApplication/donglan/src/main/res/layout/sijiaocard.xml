@@ -32,6 +32,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/sijiao_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="私教名称：增肌"
@@ -39,6 +40,7 @@
                     android:layout_weight="1"
                     />
                 <TextView
+                    android:id="@+id/sijiao_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="课程类型：一对一"
@@ -46,6 +48,7 @@
                     android:layout_weight="1"
                     />
                 <TextView
+                    android:id="@+id/sijiao_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="课程节数：30节"
@@ -53,6 +56,7 @@
                     android:layout_weight="1"
                     />
                 <TextView
+                    android:id="@+id/sijiao_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="金额：3000元"
