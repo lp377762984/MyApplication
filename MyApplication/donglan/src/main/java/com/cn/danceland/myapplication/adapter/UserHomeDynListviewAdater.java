@@ -70,12 +70,12 @@ import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 
 public class UserHomeDynListviewAdater extends BaseAdapter {
-    public List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
+    public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     private LayoutInflater mInflater;
     private Context context;
     boolean isMe = false;
 
-    public UserHomeDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
+    public UserHomeDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
@@ -83,24 +83,24 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
     }
 
 
-    public void addFirst(RequsetDynInfoBean.Data.Items bean) {
+    public void addFirst(RequsetDynInfoBean.Data.Content bean) {
         data.add(0, bean);
     }
 
-    public void addFirstList(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void addFirstList(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
         data.addAll(0, bean);
     }
 
-    public void addLast(RequsetDynInfoBean.Data.Items bean) {
+    public void addLast(RequsetDynInfoBean.Data.Content bean) {
         data.add(bean);
     }
 
-    public void addLastList(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void addLastList(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
         data.addAll(bean);
     }
 
 
-    public void setData(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void setData(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
 
         data = bean;
     }

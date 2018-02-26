@@ -68,7 +68,7 @@ import static com.cn.danceland.myapplication.R.id.tv_nickname;
 public class UserHomeActivity extends Activity {
     private PullToRefreshListView pullToRefresh;
     //  private List<PullBean> data = new ArrayList<PullBean>();
-    public List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
+    public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
@@ -123,7 +123,7 @@ public class UserHomeActivity extends Activity {
         dialog.setMessage("正在加载……");
 
 
-        myDynListviewAdater = new UserHomeDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater = new UserHomeDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Content>) data);
         myDynListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
@@ -521,7 +521,7 @@ public class UserHomeActivity extends Activity {
 
                         }
 
-                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                         myDynListviewAdater.notifyDataSetChanged();
 
                     } else {

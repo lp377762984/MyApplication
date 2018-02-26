@@ -53,13 +53,22 @@ public class RequsetDynInfoBean {
     public class Data {
 
         private int total;
-        private List<Items> items;
+    //    private List<Items> items;
+
+
+        private List<Content> content;
+        private int number;
+        private int size;
+        private int totalElements;
+        private boolean last;
+        private int totalPages;
+        private int numberOfElements;
 
         @Override
         public String toString() {
             return "Data{" +
                     "total=" + total +
-                    ", items=" + items +
+                    ", items=" + content +
                     '}';
         }
 
@@ -71,44 +80,52 @@ public class RequsetDynInfoBean {
             return total;
         }
 
-        public void setItems(List<Items> items) {
-            this.items = items;
+        public void setItems(List<Content> items) {
+            this.content = items;
         }
 
-        public List<Items> getItems() {
-            return items;
+        public List<Content> getItems() {
+            return content;
         }
 
-        public class Items {
+
+
+
+        public class Content {
 
 
             private boolean animationFlag=false;
             private String id;
             private String title;
             private String content;
-            private int privacyType;
-            private int msgType;
+            private int privacy_type;
+            private int msg_type;
             private String author;
-            private int publishType;
-            private int shareId;
+            private int publish_type;
+            private int share_id;
             private boolean enabled;
-            private String publishTime;
-            private String publishPlace;
+            private String publish_time;
+            private String publish_place;
             private List<String> imgList;
             private String success;
             private String errorMsg;
             private String userName;
             private String userId;
-            private String selfUrl;
-            private String nickName;
-            private int priaseNumber;
-            private int replyNumber;
+            private String self_url;
+            private String nick_name;
+            private int priase_number;
+            private int reply_number;
             private int followerNumber;
-            private boolean follower;
-            private boolean praise;
+            private boolean is_follower;
+            private boolean is_praise;
 
-            private String vedioImg;
-            private String vedioUrl;
+            private String vedio_img;
+            private String vedio_url;
+
+
+            private String imgs;
+
+
 
             public boolean isAnimationFlag() {
                 return animationFlag;
@@ -119,19 +136,19 @@ public class RequsetDynInfoBean {
             }
 
             public String getVedioImg() {
-                return vedioImg;
+                return vedio_img;
             }
 
             public void setVedioImg(String vedioImg) {
-                this.vedioImg = vedioImg;
+                this.vedio_img = vedioImg;
             }
 
             public String getVedioUrl() {
-                return vedioUrl;
+                return vedio_url;
             }
 
             public void setVedioUrl(String vedioUrl) {
-                this.vedioUrl = vedioUrl;
+                this.vedio_url = vedioUrl;
             }
 
             public boolean isEnabled() {
@@ -139,19 +156,19 @@ public class RequsetDynInfoBean {
             }
 
             public boolean isFollower() {
-                return follower;
+                return is_follower;
             }
 
             public void setFollower(boolean follower) {
-                this.follower = follower;
+                this.is_follower = follower;
             }
 
             public boolean isPraise() {
-                return praise;
+                return is_praise;
             }
 
             public void setPraise(boolean praise) {
-                this.praise = praise;
+                this.is_praise = praise;
             }
 
             @Override
@@ -160,28 +177,28 @@ public class RequsetDynInfoBean {
                         "id='" + id + '\'' +
                         ", title='" + title + '\'' +
                         ", content='" + content + '\'' +
-                        ", privacyType=" + privacyType +
-                        ", msgType=" + msgType +
+                        ", privacyType=" + privacy_type +
+                        ", msgType=" + msg_type +
                         ", author='" + author + '\'' +
-                        ", publishType=" + publishType +
-                        ", shareId=" + shareId +
+                        ", publishType=" + publish_type +
+                        ", shareId=" + share_id +
                         ", enabled=" + enabled +
-                        ", publishTime='" + publishTime + '\'' +
-                        ", publishPlace='" + publishPlace + '\'' +
+                        ", publishTime='" + publish_time + '\'' +
+                        ", publishPlace='" + publish_place + '\'' +
                         ", imgList=" + imgList +
                         ", success='" + success + '\'' +
                         ", errorMsg='" + errorMsg + '\'' +
                         ", userName='" + userName + '\'' +
                         ", userId='" + userId + '\'' +
-                        ", selfUrl='" + selfUrl + '\'' +
-                        ", nickName='" + nickName + '\'' +
-                        ", priaseNumber=" + priaseNumber +
-                        ", replyNumber=" + replyNumber +
+                        ", selfUrl='" + self_url + '\'' +
+                        ", nickName='" + nick_name + '\'' +
+                        ", priaseNumber=" + priase_number +
+                        ", replyNumber=" + reply_number +
                         ", followerNumber=" + followerNumber +
-                        ", follower=" + follower +
-                        ", praise=" + praise +
-                        ", vedioImg='" + vedioImg + '\'' +
-                        ", vedioUrl='" + vedioUrl + '\'' +
+                        ", follower=" + is_follower +
+                        ", praise=" + is_praise +
+                        ", vedioImg='" + vedio_img + '\'' +
+                        ", vedioUrl='" + vedio_url + '\'' +
                         '}';
             }
 
@@ -211,19 +228,19 @@ public class RequsetDynInfoBean {
             }
 
             public void setPrivacyType(int privacyType) {
-                this.privacyType = privacyType;
+                this.privacy_type = privacyType;
             }
 
             public int getPrivacyType() {
-                return privacyType;
+                return privacy_type;
             }
 
             public void setMsgType(int msgType) {
-                this.msgType = msgType;
+                this.msg_type = msgType;
             }
 
             public int getMsgType() {
-                return msgType;
+                return msg_type;
             }
 
             public void setAuthor(String author) {
@@ -235,19 +252,19 @@ public class RequsetDynInfoBean {
             }
 
             public void setPublishType(int publishType) {
-                this.publishType = publishType;
+                this.publish_type = publishType;
             }
 
             public int getPublishType() {
-                return publishType;
+                return publish_type;
             }
 
             public void setShareId(int shareId) {
-                this.shareId = shareId;
+                this.share_id = shareId;
             }
 
             public int getShareId() {
-                return shareId;
+                return share_id;
             }
 
             public void setEnabled(boolean enabled) {
@@ -259,19 +276,19 @@ public class RequsetDynInfoBean {
             }
 
             public void setPublishTime(String publishTime) {
-                this.publishTime = publishTime;
+                this.publish_time = publishTime;
             }
 
             public String getPublishTime() {
-                return publishTime;
+                return publish_time;
             }
 
             public void setPublishPlace(String publishPlace) {
-                this.publishPlace = publishPlace;
+                this.publish_place = publishPlace;
             }
 
             public String getPublishPlace() {
-                return publishPlace;
+                return publish_place;
             }
 
             public void setImgList(List<String> imgList) {
@@ -315,35 +332,35 @@ public class RequsetDynInfoBean {
             }
 
             public void setSelfUrl(String selfUrl) {
-                this.selfUrl = selfUrl;
+                this.self_url = selfUrl;
             }
 
             public String getSelfUrl() {
-                return selfUrl;
+                return self_url;
             }
 
             public void setNickName(String nickName) {
-                this.nickName = nickName;
+                this.nick_name = nickName;
             }
 
             public String getNickName() {
-                return nickName;
+                return nick_name;
             }
 
             public void setPriaseNumber(int priaseNumber) {
-                this.priaseNumber = priaseNumber;
+                this.priase_number = priaseNumber;
             }
 
             public int getPriaseNumber() {
-                return priaseNumber;
+                return priase_number;
             }
 
             public void setReplyNumber(int replyNumber) {
-                this.replyNumber = replyNumber;
+                this.reply_number = replyNumber;
             }
 
             public int getReplyNumber() {
-                return replyNumber;
+                return reply_number;
             }
 
             public void setFollowerNumber(int followerNumber) {

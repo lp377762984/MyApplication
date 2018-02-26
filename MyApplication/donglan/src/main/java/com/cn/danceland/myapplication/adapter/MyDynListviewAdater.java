@@ -74,12 +74,12 @@ import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 
 public class MyDynListviewAdater extends BaseAdapter {
-    public List<RequsetDynInfoBean.Data.Items> data = new ArrayList<RequsetDynInfoBean.Data.Items>();
+    public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     private LayoutInflater mInflater;
     private Context context;
     boolean isMe = false;
 
-    public MyDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Items> data) {
+    public MyDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
@@ -88,24 +88,24 @@ public class MyDynListviewAdater extends BaseAdapter {
     }
 
 
-    public void addFirst(RequsetDynInfoBean.Data.Items bean) {
+    public void addFirst(RequsetDynInfoBean.Data.Content bean) {
         data.add(0, bean);
     }
 
-    public void addFirstList(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void addFirstList(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
         data.addAll(0, bean);
     }
 
-    public void addLast(RequsetDynInfoBean.Data.Items bean) {
+    public void addLast(RequsetDynInfoBean.Data.Content bean) {
         data.add(bean);
     }
 
-    public void addLastList(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void addLastList(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
         data.addAll(bean);
     }
 
 
-    public void setData(ArrayList<RequsetDynInfoBean.Data.Items> bean) {
+    public void setData(ArrayList<RequsetDynInfoBean.Data.Content> bean) {
 
         data = bean;
     }
@@ -353,7 +353,10 @@ public class MyDynListviewAdater extends BaseAdapter {
 
 
         //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
-        viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
+        if (!TextUtils.isEmpty(data.get(position).getPublishTime())){
+            viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
+        }
+
 
         if (TextUtils.isEmpty(data.get(position).getContent())) {
             viewHolder.tv_content.setVisibility(View.GONE);
@@ -441,11 +444,11 @@ public class MyDynListviewAdater extends BaseAdapter {
                 String[] b = sb.toString().split("_");
                 String[] c = b[2].toString().toString().split("X");
 
-//                LogUtil.i(b[2].toString());
-//
-//                LogUtil.i(c[0]);
-//                LogUtil.i(c[1]);
-//                LogUtil.i(sb.toString());
+                LogUtil.i(b[2].toString());
+
+                LogUtil.i(c[0]);
+                LogUtil.i(c[1]);
+                LogUtil.i(sb.toString());
                 if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
                     linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);

@@ -57,7 +57,7 @@ import cn.jzvd.JZVideoPlayer;
 
 public class AttentionFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
-    private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<>();
+    private List<RequsetDynInfoBean.Data.Content> data = new ArrayList<>();
     private RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
     private List<Data> pushUserDatas = new ArrayList<>();
     AttentionDynListviewAdater myDynListviewAdater;
@@ -303,7 +303,7 @@ public class AttentionFragment extends BaseFragment {
         dialog.setMessage("加载中……");
 
 
-        myDynListviewAdater = new AttentionDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater = new AttentionDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Content>) data);
         myDynListviewAdater.setGzType(true);//bu'xia不显示关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
@@ -562,7 +562,7 @@ public class AttentionFragment extends BaseFragment {
                         if (requsetDynInfoBean.getData().getItems() != null) {
                             rl_no_info.setVisibility(View.GONE);
                             data = requsetDynInfoBean.getData().getItems();
-                            myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                            myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                             myDynListviewAdater.notifyDataSetChanged();
 
 
@@ -651,7 +651,7 @@ public class AttentionFragment extends BaseFragment {
                     LogUtil.i(requsetDynInfoBean.getData().toString());
                     if (data.size() > 0) {
                         rl_no_info.setVisibility(View.GONE);
-                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                         LogUtil.i(data.toString());
                         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;

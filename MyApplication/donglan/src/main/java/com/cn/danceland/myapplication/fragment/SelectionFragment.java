@@ -55,7 +55,7 @@ import cn.jzvd.JZVideoPlayer;
 
 public class SelectionFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
-    private List<RequsetDynInfoBean.Data.Items> data = new ArrayList<>();
+    private List<RequsetDynInfoBean.Data.Content> data = new ArrayList<>();
     private RequsetDynInfoBean requsetDynInfoBean = new RequsetDynInfoBean();
     private List<Data> pushUserDatas = new ArrayList<>();
     MyDynListviewAdater myDynListviewAdater;
@@ -309,7 +309,7 @@ public class SelectionFragment extends BaseFragment {
         //    data = getData();
 
 
-        myDynListviewAdater = new MyDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Items>) data);
+        myDynListviewAdater = new MyDynListviewAdater(mActivity, (ArrayList<RequsetDynInfoBean.Data.Content>) data);
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
         /// pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
@@ -552,7 +552,7 @@ public class SelectionFragment extends BaseFragment {
 
 
                         data = requsetDynInfoBean.getData().getItems();
-                        myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.setData((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                         myDynListviewAdater.notifyDataSetChanged();
                     }
 
@@ -621,7 +621,7 @@ public class SelectionFragment extends BaseFragment {
                         endLabels.setLoadingDrawable(null);
 
                     } else {
-                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Items>) data);
+                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                    //     LogUtil.i(data.toString());
                         myDynListviewAdater.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
