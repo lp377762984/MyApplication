@@ -122,7 +122,7 @@ public class ReadyTestActivity extends Activity {
                 }
                 if(gender==1||gender==2){
                     startActivity(new Intent(ReadyTestActivity.this,EquipmentActivity.class).putExtra("memberId",memberId).putExtra("member_no",member_no));
-                    finish();
+                    //finish();
                 }
             }
         });

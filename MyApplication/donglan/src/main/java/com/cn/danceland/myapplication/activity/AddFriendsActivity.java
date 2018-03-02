@@ -184,7 +184,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                     intent.putExtra("memberId",memberId+"");
                     intent.putExtra("member_no",member_no);
                     startActivity(intent);
-                    finish();
+                    //finish();
                 }else{
                     startActivity(new Intent(AddFriendsActivity.this,UserHomeActivity.class).putExtra("id", userInfo.getData().getUserId()));
                 }
