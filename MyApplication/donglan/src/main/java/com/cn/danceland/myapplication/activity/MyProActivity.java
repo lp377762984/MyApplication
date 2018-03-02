@@ -875,6 +875,7 @@ public class MyProActivity extends Activity {
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                         if (headImageBean != null && headImageBean.getData() != null) {
 
+                            String compath = headImageBean.getData().getImgPath();
                             selfAvatarPath = headImageBean.getData().getImgUrl();
                             infoData.setSelfAvatarPath(selfAvatarPath);
                             //发送事件
@@ -882,7 +883,7 @@ public class MyProActivity extends Activity {
                             Message message = Message.obtain();
                             message.what = 1;
                             handler.sendMessage(message);
-                            commitSelf(Constants.MODIFYY_IMAGE, "self_Avatar_path", selfAvatarPath);
+                            commitSelf(Constants.MODIFYY_IMAGE, "self_Avatar_path", compath);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
                         //LogUtil.e("zzf",s);
