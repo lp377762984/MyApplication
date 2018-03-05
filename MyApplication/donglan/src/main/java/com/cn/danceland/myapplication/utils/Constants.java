@@ -3,11 +3,13 @@ package com.cn.danceland.myapplication.utils;
 public class Constants {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
- 
-   // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
-   public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
-   // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
+
+    // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
+   //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
+    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
 // public static final String HOST = " http://192.168.1.119:8003/";//
+
+   public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
 
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -31,21 +33,21 @@ public class Constants {
     public static final String BRANCH = HOST + "branch";//获取门店列表
     public static final String JOINBRANCH = HOST + "branch/join";//加入或者取消门店
     public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
-    public static final String FINDMyLOCKERS = HOST+"appLocker/findMyLockers";//我的租柜
+    public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
 
     public static final String FIND_JOIN_SHOP_URL = HOST + "/user/findJoinBranchs";//查找已经加入门店
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
-    public static final String FIND_CONSULTANT_URL = HOST + "/appDynMsg/findByBranchId";//查找会籍顾问
+    public static final String FIND_CONSULTANT_URL = HOST + "user/findByBranchId";//查找会籍顾问
 
 
     public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
-    public static final String ADD_GUANZHU = HOST + "appDynMsg/saveFollower";//加关注
-    public static final String ADD_ZAN_URL = HOST + "appDynMsg/giveThumbs";//加关注
+    public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//加关注
+    public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
 
-    public static final String FIND_COMMENT_LIST = HOST + "/appDynMsg/findByReplyUserId";//动态评论列表
+    public static final String FIND_COMMENT_LIST = HOST + "/reply/queryReplyByMsgId";//动态评论列表
     public static final String FIND_ONE_DYN = HOST + "/appDynMsg/findOneDynMsg";   //查一条动态
 
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
@@ -55,9 +57,9 @@ public class Constants {
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
-    public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "appDynMsg/findByFollower";//查看关注的人
-    public static final String FIND_FANS_USER_LIST_MSG = HOST + "appDynMsg/findByUserId";//查看粉丝
-    public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appDynMsg/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
+    public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看关注的人
+    public static final String FIND_FANS_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看粉丝
+    public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appPraise/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
     public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appDynMsg/findByMsgId";//查看点赞（全部）
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
@@ -69,12 +71,12 @@ public class Constants {
     public static final String FIND_NEWS_URL = HOST + "appHome/showNews/";//查找新闻列表
     public static final String FIND_IMAGE_NEWS_URL = HOST + "appHome/showCarousel";//查找新闻轮播图片
 
-    public static final String SEND_COMMENT_REPLY = HOST + "/reply";//发布评论
+    public static final String SEND_COMMENT_REPLY = HOST + "reply/saveReply";//发布评论
     public static final String DEL_COMMENT_REPLY = HOST + "/reply";//删除发布评论
 
     public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
-    public static final String FINDMEMBER = HOST+"appBca/searchMember";//
+    public static final String FINDMEMBER = HOST + "appBca/searchMember";//
 
     //订单相关
 
@@ -128,11 +130,10 @@ public class Constants {
     public static final String FITNESS_HITORY = HOST + "appBca/findHistoryRecord";//体测历史记录
     public static final String FINDONEHISTORY = HOST + "appBca/findOneHistoryRecord";//查看某条历史记录
     public static final String FINDBODYAGE = HOST + "appBca/findBodyAge";//查询身体年龄
-    public static final String CANCELTEST = HOST+"appBca/cancelTester";//取消体测
+    public static final String CANCELTEST = HOST + "appBca/cancelTester";//取消体测
 
     //私教相关
-    public static final String COURSETYPELIST = HOST +"appCourse/findPageCourseType";
-
+    public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";
 
 
 }
