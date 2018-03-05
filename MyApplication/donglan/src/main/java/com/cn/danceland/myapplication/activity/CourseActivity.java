@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
@@ -18,10 +19,12 @@ import com.cn.danceland.myapplication.fragment.CommentFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeFragment;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 
 import org.joda.time.DateTime;
+import org.json.JSONException;
 
 
 /**
@@ -38,13 +41,22 @@ public class CourseActivity extends FragmentActivity {
     TabItem tab1,tab2;
     TabLayout tablayout;
     SiJiaoFragment siJiaoFragment;
+    String type;
+    Long startTime,endTime;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course);
+        initHost();
         initView();
         setOnclick();
+    }
+
+    private void initHost() {
+
+
     }
 
     private void setOnclick() {
@@ -55,12 +67,24 @@ public class CourseActivity extends FragmentActivity {
                 if(dateTime!=null){
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
+
+                    startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd 00:00:00");
+                    endTime = startTime+86399;
+                    showFragment(type);
                 }
             }
 
 
         });
 
+        nccalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(CourseActivity.this,SiJiaoOrderActivity.class));
+
+            }
+        });
 
     }
 
@@ -85,10 +109,12 @@ public class CourseActivity extends FragmentActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
-                        showFragment("0");
+                        type = "0";
+                        showFragment(type);
                         break;
                     case 1:
-                        showFragment("1");
+                        type="1";
+                        showFragment(type);
                         break;
                 }
             }
@@ -115,6 +141,11 @@ public class CourseActivity extends FragmentActivity {
             fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
         }else if("1".equals(str)){
             siJiaoFragment = new SiJiaoFragment();
+            try {
+                siJiaoFragment.refresh(startTime,endTime);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             fragmentTransaction.replace(R.id.rl_nv,siJiaoFragment);
         }
 

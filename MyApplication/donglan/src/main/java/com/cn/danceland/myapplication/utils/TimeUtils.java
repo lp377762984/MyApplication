@@ -188,4 +188,34 @@ public class TimeUtils {
     }
 
 
+    // 将字符串转为时间戳
+    //string为字符串的日期格式，如："yyyy年MM月dd日HH时mm分ss秒"
+    /**
+     22      * 日期格式字符串转换成时间戳
+     23      * @param date 字符串日期
+     24      * @param format 如：yyyy-MM-dd HH:mm:ss
+     25      * @return
+     26      */
+     public static Long date2TimeStamp(String date_str,String format){
+                 try {
+                         SimpleDateFormat sdf = new SimpleDateFormat(format);
+                         return sdf.parse(date_str).getTime()/1000;
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+                 return System.currentTimeMillis();
+             }
+
+//时间戳转字符串
+    public static String timeStamp2Date(String seconds,String format) {
+        if(seconds == null || seconds.isEmpty() || seconds.equals("null")){
+            return "";
+        }
+        if(format == null || format.isEmpty()){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(new Date(Long.valueOf(seconds+"000")));
+    }
+
 }

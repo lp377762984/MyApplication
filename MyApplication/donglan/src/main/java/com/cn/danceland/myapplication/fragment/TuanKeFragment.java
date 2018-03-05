@@ -14,11 +14,32 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.TuanKeDetailActivity;
+import com.cn.danceland.myapplication.bean.CourseBean;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.GroupClassBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.ListViewUtil;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by feng on 2018/1/11.
@@ -27,12 +48,19 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 public class TuanKeFragment extends BaseFragment {
     FragmentManager fragmentManager;
     ListView lv_tuanke;
+    Gson gson = new Gson();
+    Data info;
 
 
     @Override
     public View initViews() {
 
         View view = View.inflate(mActivity, R.layout.tuanke, null);
+        try {
+            getData();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         lv_tuanke = view.findViewById(R.id.lv_tuanke);
         lv_tuanke.setAdapter(new MyAdapter());
         lv_tuanke.setDividerHeight(0);
@@ -44,6 +72,8 @@ public class TuanKeFragment extends BaseFragment {
             }
         });
 
+
+
         return view;
     }
 
@@ -51,6 +81,42 @@ public class TuanKeFragment extends BaseFragment {
     public void onClick(View v) {
 
     }
+
+
+
+    private void getData() throws JSONException {
+        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        GroupClassBean groupClassBean = new GroupClassBean();
+        groupClassBean.setPageCount(12);
+        groupClassBean.setPage(0);
+        groupClassBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        groupClassBean.setCourse_date(System.currentTimeMillis());
+        String s = gson.toJson(groupClassBean);
+        JSONObject jsonObject = new JSONObject(s);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCLASS, jsonObject,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                CourseBean courseBean = gson.fromJson(jsonObject.toString(), CourseBean.class);
+                List<CourseBean.Content> content = courseBean.getData().getContent();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+    }
+
 
 
 

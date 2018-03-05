@@ -24,8 +24,10 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.FindSiJiaoBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
@@ -46,6 +48,9 @@ public class BuySiJiaoActivity extends Activity {
     ImageView buy_img;
     Gson gson;
     FindSiJiaoBean findSiJiaoBean;
+    List<BuySiJiaoBean.Content> content;
+
+    Data info;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class BuySiJiaoActivity extends Activity {
     }
 
     private void initHost() {
+        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         findSiJiaoBean = new FindSiJiaoBean();
 
@@ -64,6 +70,7 @@ public class BuySiJiaoActivity extends Activity {
     private void getData() throws JSONException {
         findSiJiaoBean.setPage(0);
         findSiJiaoBean.setSize(15);
+        findSiJiaoBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
         String s = gson.toJson(findSiJiaoBean);
         JSONObject jsonObject = new JSONObject(s);
 
@@ -71,9 +78,10 @@ public class BuySiJiaoActivity extends Activity {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject!=null){
+                    LogUtil.e("zzf",jsonObject.toString());
                     String string = jsonObject.toString();
                     BuySiJiaoBean buySiJiaoBean = gson.fromJson(string, BuySiJiaoBean.class);
-                    List<BuySiJiaoBean.Content> content = buySiJiaoBean.getData().getContent();
+                    content = buySiJiaoBean.getData().getContent();
                     if(content!=null){
                         lv_sijiaocard.setAdapter(new MyAdapter(content));
                     }
@@ -107,8 +115,12 @@ public class BuySiJiaoActivity extends Activity {
         lv_sijiaocard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(BuySiJiaoActivity.this,SellSiJiaoConfirmActivity.class));
-                finish();
+                if(content!=null){
+                    BuySiJiaoBean.Content itemContent = BuySiJiaoActivity.this.content.get(position);
+                    startActivity(new Intent(BuySiJiaoActivity.this,SellSiJiaoConfirmActivity.class).putExtra("itemContent",itemContent));
+                    finish();
+                }
+
             }
         });
 
@@ -170,7 +182,7 @@ public class BuySiJiaoActivity extends Activity {
             }else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
-            Glide.with(BuySiJiaoActivity.this).load(R.drawable.sijiao_card).into(viewHolder.card_img);
+            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img);
             viewHolder.sijiao_name.setText("私教名称："+contentList.get(position).getName());
             viewHolder.sijiao_type.setText("课程类型："+contentList.get(position).getCourse_category_name());
             viewHolder.sijiao_amount.setText("课程节数："+contentList.get(position).getCount()+"节");
