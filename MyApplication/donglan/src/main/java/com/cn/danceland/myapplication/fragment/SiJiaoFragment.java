@@ -10,6 +10,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,6 +21,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -38,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,7 +57,6 @@ public class SiJiaoFragment extends BaseFragment {
         View inflate = View.inflate(mActivity, R.layout.sijiao, null);
         ex_lv = inflate.findViewById(R.id.ex_lv);
         ex_lv.setGroupIndicator(null);
-        ex_lv.setAdapter(new MyExAdapter());
         ex_lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -71,6 +73,11 @@ public class SiJiaoFragment extends BaseFragment {
             }
         });
 
+        try {
+            refresh();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return inflate;
     }
@@ -81,9 +88,8 @@ public class SiJiaoFragment extends BaseFragment {
 
     }
     
-    
-    public void refresh(Long startTime,Long endTime) throws JSONException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public void refresh() throws JSONException {
+        //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         MyCourseConBean myCourseConBean = new MyCourseConBean();
         if(info!=null){
@@ -91,12 +97,20 @@ public class SiJiaoFragment extends BaseFragment {
             myCourseConBean.setPage(0);
             myCourseConBean.setPageCount(12);
         }
-        Gson gson = new Gson();
+        final Gson gson = new Gson();
         String s = gson.toJson(myCourseConBean);
         JSONObject jsonObject = new JSONObject(s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDMEMBERCOURSE, jsonObject,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
+                if(myCourseBean!=null){
+                    List<MyCourseBean.Data> myCourseList = myCourseBean.getData();
+                    if(myCourseList!=null){
+                        ex_lv.setAdapter(new MyExAdapter(myCourseList));
+                    }
+
+                }
 
                 LogUtil.e("zzf",jsonObject.toString());
 
@@ -123,11 +137,17 @@ public class SiJiaoFragment extends BaseFragment {
     
 
     private class MyExAdapter extends BaseExpandableListAdapter{
+        List<MyCourseBean.Data> list;
+
+        MyExAdapter(List<MyCourseBean.Data> list){
+            this.list = list;
+        }
+
 
 
         @Override
         public int getGroupCount() {
-            return 5;
+            return list.size();
         }
 
         @Override
@@ -161,17 +181,50 @@ public class SiJiaoFragment extends BaseFragment {
         }
 
         @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder=null;
             if(convertView == null){
+                viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_parent_item, null);
+
+                viewHolder.sijiao_title = convertView.findViewById(R.id.sijiao_title);
+                viewHolder.sijiao_jiaolian = convertView.findViewById(R.id.sijiao_jiaolian);
+                viewHolder.sijiao_num = convertView.findViewById(R.id.sijiao_num);
+                viewHolder.sijiao_shengyu = convertView.findViewById(R.id.sijiao_shengyu);
+                viewHolder.sijiao_date = convertView.findViewById(R.id.sijiao_date);
+                viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
+
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             RelativeLayout sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
+            final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
+            final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
             sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(mActivity, SiJiaoDetailActivity.class));
+                    startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).putExtra("item",list.get(groupPosition)).putExtra("startTime",startTime).putExtra("endTime",endTime));
                 }
             });
+            viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());
+            viewHolder.sijiao_num.setText("购买节数："+list.get(groupPosition).getCount()+"节");
+            viewHolder.sijiao_shengyu.setText("剩余节数："+list.get(groupPosition).getSurplus_count()+"节");
+
+            viewHolder.sijiao_date.setText("有效期："+startTime+"至"+endTime);
+            if(list.get(groupPosition).getCourse_category()==1){
+                viewHolder.sijiao_fangshi.setText("一对一");
+            }else if(list.get(groupPosition).getCourse_category()==2){
+                viewHolder.sijiao_fangshi.setText("小团体");
+            }else {
+                viewHolder.sijiao_fangshi.setText("");
+            }
+
+            if(list.get(groupPosition).getEmployee_name()!=null){
+                viewHolder.sijiao_jiaolian.setText("上课教练："+list.get(groupPosition).getEmployee_name());
+            }else{
+                viewHolder.sijiao_jiaolian.setVisibility(View.GONE);
+            }
 
             return convertView;
         }
@@ -185,12 +238,14 @@ public class SiJiaoFragment extends BaseFragment {
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
                 viewHolder.mylist = convertView.findViewById(R.id.mylist);
 
+
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.mylist.setDividerHeight(0);
             viewHolder.mylist.setAdapter(new MyListAdapter());
+
 
             return convertView;
         }
@@ -203,6 +258,7 @@ public class SiJiaoFragment extends BaseFragment {
 
      class ViewHolder{
         MyListView mylist;
+        TextView sijiao_title,sijiao_jiaolian,sijiao_num,sijiao_shengyu,sijiao_date,sijiao_fangshi;
     }
 
     private class MyListAdapter extends BaseAdapter{

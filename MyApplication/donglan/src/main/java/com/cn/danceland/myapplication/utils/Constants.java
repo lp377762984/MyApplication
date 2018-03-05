@@ -7,7 +7,8 @@ public class Constants {
     // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
- public static final String HOST = " http://192.168.1.123:8003/";//
+ //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   public static final String HOST = " http://192.168.1.123:8003/";//
 
     //public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
 
@@ -137,6 +138,7 @@ public class Constants {
     public static final String FINDCourseTypeEmployee = HOST + "appCourse/findCourseTypeEmployee";//查私教教练
     public static final String FINDGROUPCLASS = HOST + "appGroupClass/queryPage";//小团课列表
     public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse ";//我的私教
+
 
 
 }
