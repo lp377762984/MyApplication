@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
-import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,33 +27,33 @@ import java.util.List;
 
 
 public class UserListviewAdapter extends BaseAdapter {
-    private List<RequsetUserListBean.Data.Items> data = new ArrayList<RequsetUserListBean.Data.Items>();
+    private List<RequsetUserListBean.Data.Content> data = new ArrayList<RequsetUserListBean.Data.Content>();
     private LayoutInflater mInflater;
     private Context context;
     private int type = 1;//等于3是点赞，默认是1
 
-    public UserListviewAdapter(Context context, List<RequsetUserListBean.Data.Items> data, int type) {
+    public UserListviewAdapter(Context context, List<RequsetUserListBean.Data.Content> data, int type) {
         mInflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
         this.type = type;
     }
 
-    public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean) {
+    public void addLastList(ArrayList<RequsetUserListBean.Data.Content> bean) {
         this.data.addAll(bean);
     }
 
-    public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean, int type) {
+    public void addLastList(ArrayList<RequsetUserListBean.Data.Content> bean, int type) {
         this.type = type;
         this.data.addAll(bean);
     }
 
-    public void setData(ArrayList<RequsetUserListBean.Data.Items> bean) {
+    public void setData(ArrayList<RequsetUserListBean.Data.Content> bean) {
 
         this.data = bean;
     }
 
-    public void setData(ArrayList<RequsetUserListBean.Data.Items> bean, int type) {
+    public void setData(ArrayList<RequsetUserListBean.Data.Content> bean, int type) {
         this.type = type;
         this.data = bean;
 
@@ -95,7 +94,9 @@ public class UserListviewAdapter extends BaseAdapter {
                 .load(data.get(position).getSelfUrl())
                 .apply(options)
                 .into(viewHolder.iv_avatar);
+       // LogUtil.i(data.get(position).getSelfUrl());
         viewHolder.tv_nickname.setText(data.get(position).getNickName());
+
         // LogUtil.i(data.get(position).getNickName());
         if (data.get(position).getGender() == 1) {
             viewHolder.iv_sex.setImageResource(R.drawable.img_sex1);
@@ -107,7 +108,7 @@ public class UserListviewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                LogUtil.i("TYPE+"+type);
+               // LogUtil.i("TYPE+"+type);
                 switch (type) {
                     case 1://查看关注
                         context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));

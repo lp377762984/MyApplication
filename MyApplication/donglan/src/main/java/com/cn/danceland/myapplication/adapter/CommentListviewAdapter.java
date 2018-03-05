@@ -59,28 +59,28 @@ import java.util.Map;
 
 public class CommentListviewAdapter extends BaseAdapter {
 
-    public List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
+    public List<RequstCommentInfoBean.Content> data = new ArrayList<RequstCommentInfoBean.Content>();
     private LayoutInflater mInflater;
     private Context context;
     private String msgId;
 
-    public CommentListviewAdapter(List<RequstCommentInfoBean.Items> data, Context context, String msgId) {
+    public CommentListviewAdapter(List<RequstCommentInfoBean.Content> data, Context context, String msgId) {
         this.data = data;
         this.context = context;
         this.msgId = msgId;
         mInflater = LayoutInflater.from(context);
     }
 
-    public void addFirst(RequstCommentInfoBean.Items bean) {
+    public void addFirst(RequstCommentInfoBean.Content bean) {
         data.add(0, bean);
     }
 
-    public void setData(List<RequstCommentInfoBean.Items> data) {
+    public void setData(List<RequstCommentInfoBean.Content> data) {
         this.data = data;
     }
 
     //增加数据
-    public void addLastList(List<RequstCommentInfoBean.Items> bean) {
+    public void addLastList(List<RequstCommentInfoBean.Content> bean) {
 
         data.addAll(bean);
         // LogUtil.i(data.toString());

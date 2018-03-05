@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 
-public class RequsetUserListBean {
+public class RequsetUserListBeanZan {
 
     private boolean success;
     private String errorMsg;
@@ -68,8 +68,8 @@ public class RequsetUserListBean {
             return total;
         }
 
-        public void setItems(List<Content> items) {
-            this.content = items;
+        public void setItems(List<Content> content) {
+            this.content = content;
         }
 
         public List<Content> getItems() {
@@ -84,13 +84,13 @@ public class RequsetUserListBean {
 
             @Override
             public String toString() {
-                return "Content{" +
+                return "Items{" +
                         "id='" + id + '\'' +
                         ", follower='" + follower + '\'' +
                         ", user_id='" + user_id + '\'' +
                         ", success='" + success + '\'' +
                         ", error_msg='" + error_msg + '\'' +
-                        ", self_url='" + self_path + '\'' +
+                        ", self_url='" + self_url + '\'' +
                         ", nick_name='" + nick_name + '\'' +
                         ", gender=" + gender +
                         ", praise_user_id='" + praise_user_id + '\'' +
@@ -102,7 +102,7 @@ public class RequsetUserListBean {
             private String user_id;
             private String success;
             private String error_msg;
-            private String self_path;
+            private String self_url;
             private String nick_name;
             private int gender;
             private String praise_user_id;
@@ -166,11 +166,11 @@ public class RequsetUserListBean {
             }
 
             public void setSelfUrl(String selfUrl) {
-                this.self_path = selfUrl;
+                this.self_url = selfUrl;
             }
 
             public String getSelfUrl() {
-                return self_path;
+                return self_url;
             }
 
             public void setNickName(String nickName) {
@@ -188,6 +188,7 @@ public class RequsetUserListBean {
             public int getGender() {
                 return gender;
             }
+
         }
 
     }

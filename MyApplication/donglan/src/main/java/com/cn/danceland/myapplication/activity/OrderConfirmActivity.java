@@ -414,7 +414,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
+             //   LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
                 return map;
             }
         };
@@ -771,7 +771,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 if (product_type == 2) {//定金订单
 
-                    final OrderInfoBean orderInfoBean = new OrderInfoBean();
+                 //   final OrderInfoBean orderInfoBean = new OrderInfoBean();
                     final NewOrderInfoBean newOrderInfoBean = new NewOrderInfoBean();
                     if (consultantInfo == null) {
                         ToastUtils.showToastLong("请选择会籍顾问");
@@ -803,26 +803,26 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     newOrderInfoBean.setPrice(pay_price + "");
                     newOrderInfoBean.setReceive(pay_price + "");
 
-
-                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
-                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
-                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
-                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
-                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
-                    Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    orderInfoBean.setCname(data.getCname());
-                    orderInfoBean.setMember_no(data.getMember_no());
-                    orderInfoBean.setPrice(pay_price + "");
-                    orderInfoBean.setPay_way(pay_way + "");
-                    orderInfoBean.setDeposit_type("1");//定金类型
-                    orderInfoBean.setMonth_count("3");
-                    if (isme) {
-                        orderInfoBean.setFor_other(0);
-                    } else {
-                        orderInfoBean.setFor_other(1);
-                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
-                        orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
-                    }
+//
+//                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
+//                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
+//                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
+//                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
+//                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
+//                    Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    orderInfoBean.setCname(data.getCname());
+//                    orderInfoBean.setMember_no(data.getMember_no());
+//                    orderInfoBean.setPrice(pay_price + "");
+//                    orderInfoBean.setPay_way(pay_way + "");
+//                    orderInfoBean.setDeposit_type("1");//定金类型
+//                    orderInfoBean.setMonth_count("3");
+//                    if (isme) {
+//                        orderInfoBean.setFor_other(0);
+//                    } else {
+//                        orderInfoBean.setFor_other(1);
+//                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
+//                        orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
+//                    }
                     //   LogUtil.i(orderInfoBean.toString());
 
                     if (!isme && TextUtils.isEmpty(et_grant_name.getText().toString().trim())) {

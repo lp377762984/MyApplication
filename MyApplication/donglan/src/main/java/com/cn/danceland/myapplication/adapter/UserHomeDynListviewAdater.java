@@ -431,7 +431,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
-
+//            viewHolder.iv_pic.setVisibility(View.GONE);
 
         }
 

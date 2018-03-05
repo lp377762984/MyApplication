@@ -13,7 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
-import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.bean.RequsetUserListBeanZan;
 
 import java.util.List;
 
@@ -23,17 +23,17 @@ import java.util.List;
  */
 
 public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZanHeadviewRecylerViewAdapter.ViewHolder> {
-    public List<RequsetUserListBean.Data.Items> datas = null;
+    public List<RequsetUserListBeanZan.Data.Content> datas = null;
     private Context context;
     private String msgId;
   //  private String userId;
 
-    public DynZanHeadviewRecylerViewAdapter(Context context, List<RequsetUserListBean.Data.Items> datas) {
+    public DynZanHeadviewRecylerViewAdapter(Context context, List<RequsetUserListBeanZan.Data.Content> datas) {
         this.datas = datas;
         this.context = context;
     }
 
-    public void setData(List<RequsetUserListBean.Data.Items> datas, String msgId) {
+    public void setData(List<RequsetUserListBeanZan.Data.Content> datas, String msgId) {
         this.datas = datas;
         this.msgId = msgId;
       //  this.userId = userId;

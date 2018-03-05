@@ -72,7 +72,7 @@ public class UserHomeActivity extends Activity {
     UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
-    private int mCurrentPage = 1;//当前请求页
+    private int mCurrentPage = 0;//当前请求页
     private String userId;
     private boolean isdyn = false;
     private ImageView iv_userifno_avatar;
@@ -526,7 +526,7 @@ public class UserHomeActivity extends Activity {
 
                     } else {
                         // LogUtil.i(mCurrentPage + "@@@@@" + data.size());
-                        if (mCurrentPage == 1) {
+                        if (mCurrentPage == 0) {
                             Message message = Message.obtain();
                             message.what = 3;
                             handler.sendMessage(message);

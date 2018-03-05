@@ -388,7 +388,7 @@ public class AttentionFragment extends BaseFragment {
             dialog.show();
 
 
-            findSelectionDyn_Down(mCurrentPage);
+            findSelectionDyn_Down(mCurrentPage-1);
 
 
             // findPushUser();
@@ -411,7 +411,7 @@ public class AttentionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             mCurrentPage=1;
-            findSelectionDyn_Down(mCurrentPage);
+            findSelectionDyn_Down(mCurrentPage-1);
             init();
             return null;
         }
@@ -434,7 +434,7 @@ public class AttentionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-                findSelectionDyn_Up(mCurrentPage);
+                findSelectionDyn_Up(mCurrentPage-1);
             }
 
             return null;

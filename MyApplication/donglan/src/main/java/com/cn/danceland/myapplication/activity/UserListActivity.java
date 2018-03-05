@@ -13,6 +13,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -26,6 +28,8 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,10 +45,10 @@ import java.util.Map;
 public class UserListActivity extends Activity implements View.OnClickListener {
 
     private PullToRefreshListView pullToRefresh;
-    List<RequsetUserListBean.Data.Items> data = new ArrayList<RequsetUserListBean.Data.Items>();
+    List<RequsetUserListBean.Data.Content> data = new ArrayList<RequsetUserListBean.Data.Content>();
     UserListviewAdapter mListviewAdapter;
     ProgressDialog dialog;
-    private int mCurrentPage = 1;//当前请求页
+    private int mCurrentPage = 0;//当前请求页
     private String userId;
     private String msgId;
     private boolean isdyn = false;
@@ -56,7 +60,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
         userId = getIntent().getStringExtra("id");
-        msgId=getIntent().getStringExtra("msgId");
+        msgId = getIntent().getStringExtra("msgId");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
         type = getIntent().getIntExtra("type", 1);
 
@@ -69,15 +73,15 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         switch (type) {
             case 1:
                 tv_tiltle.setText("关注");
-                findGZuserList(userId, 1);
+                findGZuserList(userId, 0);
                 break;
             case 2:
                 tv_tiltle.setText("粉丝");
-                findFansUserList(userId, 1);
+                findFansUserList(userId, 0);
                 break;
             case 3:
                 tv_tiltle.setText("点赞");
-              findZanUserList(msgId,1);
+                findZanUserList(msgId, 0);
                 break;
             default:
                 break;
@@ -93,7 +97,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         dialog.setMessage("正在加载……");
         findViewById(R.id.iv_back).setOnClickListener(this);
 
-        mListviewAdapter = new UserListviewAdapter(this, data,type);
+        mListviewAdapter = new UserListviewAdapter(this, data, type);
         pullToRefresh.setAdapter(mListviewAdapter);
         //加入头布局
         //  pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
@@ -139,7 +143,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                         findFansUserList(userId, mCurrentPage);
                         break;
                     case 3:
-                        findZanUserList(userId,mCurrentPage);
+                        findZanUserList(userId, mCurrentPage);
                         break;
                     default:
                         break;
@@ -189,7 +193,19 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
-   private RequsetUserListBean UserListBean = new RequsetUserListBean();
+    private RequsetUserListBean UserListBean = new RequsetUserListBean();
+
+
+    class StrBean {
+        public Integer page;
+        public Integer size;
+        public String reply_msg_id;
+        public String msg_id;
+        public String user_id;
+        public String follower;
+    }
+
+
     /**
      * 查找关注人数
      *
@@ -198,6 +214,63 @@ public class UserListActivity extends Activity implements View.OnClickListener {
      */
     private void findGZuserList(final String followerId, final int page) {
         dialog.show();
+
+        StrBean strBean = new StrBean();
+        strBean.page = page;
+        strBean.follower=followerId;
+        strBean.size = 20;
+        LogUtil.i(new Gson().toJson(strBean));
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_GUANZHU_USER_LIST_MSG, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                dialog.dismiss();
+                Gson gson = new Gson();
+
+                UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
+                LogUtil.i(UserListBean.toString());
+                if (UserListBean.getSuccess()) {
+                    data = UserListBean.getData().getItems();
+                    // requsetDynInfoBean.getData().getItems().toString();
+
+
+                    if (data.size() > 0) {
+                        if (data.size() < 20) {
+                            setEnd();
+                        }
+
+
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
+                        mListviewAdapter.notifyDataSetChanged();
+
+
+                        mCurrentPage = mCurrentPage + 1;
+                    } else {
+                        ToastUtils.showToastShort("到底啦");
+                        setEnd();
+                    }
+                } else {
+                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+        };
+
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_GUANZHU_USER_LIST_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -218,7 +291,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                         }
 
 
-                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Items>) data);
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
                         mListviewAdapter.notifyDataSetChanged();
 
 
@@ -263,7 +336,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             }
 
         };
-        MyApplication.getHttpQueues().add(request);
+        MyApplication.getHttpQueues().add(jsonRequest);
 
     }
 
@@ -276,6 +349,61 @@ public class UserListActivity extends Activity implements View.OnClickListener {
      */
     private void findFansUserList(final String userId, final int page) {
         dialog.show();
+        StrBean strBean = new StrBean();
+        strBean.page = page;
+        strBean.user_id=userId;
+        strBean.size = 20;
+        LogUtil.i(new Gson().toJson(strBean));
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_FANS_USER_LIST_MSG, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                dialog.dismiss();
+                Gson gson = new Gson();
+
+                UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
+                LogUtil.i(UserListBean.toString());
+                if (UserListBean.getSuccess()) {
+                    data = UserListBean.getData().getItems();
+                    // requsetDynInfoBean.getData().getItems().toString();
+
+
+                    if (data.size() > 0) {
+                        if (data.size() < 20) {
+                            setEnd();
+                        }
+
+
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
+                        mListviewAdapter.notifyDataSetChanged();
+
+
+                        mCurrentPage = mCurrentPage + 1;
+                    } else {
+                        ToastUtils.showToastShort("到底啦");
+                        setEnd();
+                    }
+                } else {
+                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+        };
+
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_FANS_USER_LIST_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -295,7 +423,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                         }
 
 
-                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Items>) data);
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
                         mListviewAdapter.notifyDataSetChanged();
 
 
@@ -340,10 +468,9 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             }
 
         };
-        MyApplication.getHttpQueues().add(request);
+        MyApplication.getHttpQueues().add(jsonRequest);
 
     }
-
 
 
     /**
@@ -354,13 +481,20 @@ public class UserListActivity extends Activity implements View.OnClickListener {
      */
     private void findZanUserList(final String msgId, final int page) {
         dialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG, new Response.Listener<String>() {
+
+
+        StrBean strBean = new StrBean();
+        strBean.page = page;
+        strBean.reply_msg_id = msgId;
+        strBean.size = 20;
+
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
+            public void onResponse(JSONObject jsonObject) {
                 dialog.dismiss();
                 Gson gson = new Gson();
 
-                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+                UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
                 LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
@@ -373,7 +507,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                         }
 
                         LogUtil.i(data.toString());
-                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Items>) data,type);
+                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data, type);
                         mListviewAdapter.notifyDataSetChanged();
 
 
@@ -393,25 +527,75 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                 LogUtil.i(volleyError.toString());
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("msgId", msgId);//用户id
-                map.put("page", page + "");//页数
-                return map;
-            }
-
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
+                HashMap<String, String> hm = new HashMap<String, String>();
                 String token = SPUtils.getString(Constants.MY_TOKEN, "");
                 hm.put("Authorization", token);
                 return hm;
             }
-
         };
-        MyApplication.getHttpQueues().add(request);
+
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                dialog.dismiss();
+//                Gson gson = new Gson();
+//
+//                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+//                LogUtil.i(UserListBean.toString());
+//                if (UserListBean.getSuccess()) {
+//                    data = UserListBean.getData().getItems();
+//                    // requsetDynInfoBean.getData().getItems().toString();
+//
+//
+//                    if (data.size() > 0) {
+//                        if (data.size() < 20) {
+//                            setEnd();
+//                        }
+//
+//                        LogUtil.i(data.toString());
+//                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data, type);
+//                        mListviewAdapter.notifyDataSetChanged();
+//
+//
+//                        mCurrentPage = mCurrentPage + 1;
+//                    } else {
+//                        ToastUtils.showToastShort("到底啦");
+//                        setEnd();
+//                    }
+//                } else {
+//                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                dialog.dismiss();
+//                LogUtil.i(volleyError.toString());
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<>();
+//                map.put("msgId", msgId);//用户id
+//                map.put("page", page + "");//页数
+//                return map;
+//            }
+//
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> hm = new HashMap<String, String>();
+//                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+//                hm.put("Authorization", token);
+//                return hm;
+//            }
+//
+//        };
+        MyApplication.getHttpQueues().add(jsonRequest);
 
     }
 

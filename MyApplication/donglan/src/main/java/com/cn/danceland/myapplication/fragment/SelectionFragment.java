@@ -391,7 +391,7 @@ public class SelectionFragment extends BaseFragment {
     @Override
     public void initDta() {
         dialog.show();
-        findSelectionDyn_Down(mCurrentPage);
+        findSelectionDyn_Down(mCurrentPage-1);
         // findPushUser();
     }
 

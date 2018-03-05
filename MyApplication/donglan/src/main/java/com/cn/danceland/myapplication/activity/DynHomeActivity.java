@@ -37,6 +37,8 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -48,7 +50,8 @@ import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
 import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
+import com.cn.danceland.myapplication.bean.RequsetUserListBeanZan;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.bean.RequstOneDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -71,6 +74,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,15 +97,15 @@ import razerdp.basepopup.BasePopupWindow;
 
 public class DynHomeActivity extends FragmentActivity implements View.OnClickListener {
     private PullToRefreshListView pullToRefresh;
-    private List<RequstCommentInfoBean.Items> data = new ArrayList<RequstCommentInfoBean.Items>();
+    private List<RequstCommentInfoBean.Content> data = new ArrayList<RequstCommentInfoBean.Content>();
     private RequstCommentInfoBean commentInfoBean;
     private RequstOneDynInfoBean.Data oneDynInfo;
     private CommentListviewAdapter myAdater;
     private ProgressDialog dialog;
-    private int mCurrentPage = 1;//当前请求页
+    private int mCurrentPage = 0;//当前请求页
     private String msgId;
     private String userId;
-    private List<RequsetUserListBean.Data.Items> zanUserList = new ArrayList<RequsetUserListBean.Data.Items>();
+    private List<RequsetUserListBeanZan.Data.Content> zanUserList = new ArrayList<RequsetUserListBeanZan.Data.Content>();
 
     private DynZanHeadviewRecylerViewAdapter mRecylerViewAdapter;
     private TextView tv_zan_num;
@@ -537,23 +541,23 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 //                LogUtil.i(sb.toString());
                 if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f), DensityUtils.dp2px(this, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                    linearParams.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
-                   iv_pic.setLayoutParams(linearParams);
+                    linearParams.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                    iv_pic.setLayoutParams(linearParams);
                 } else {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(this, 200f));
-                    linearParams.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
-                   iv_pic.setLayoutParams(linearParams);
+                    linearParams.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                    iv_pic.setLayoutParams(linearParams);
                 }
 
                 Glide.with(this)
                         .load(sb.toString())
                         // .apply(options1)
                         .into(iv_pic);
-             iv_pic.setOnClickListener(new View.OnClickListener() {
+                iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>)oneDynInfo.getImgList())//图片数据List<String> list
+                                .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
                                 .setPosition(0)//图片下标（从第position张图片开始浏览）
                                 .setDownloadPath("DCIM")//图片下载文件夹地址
                                 .setIsShowNumber(false)//是否显示数字下标
@@ -564,7 +568,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     }
                 });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
+                linearParams1.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
@@ -580,7 +584,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 gridView.setNumColumns(3);
                 int width = DensityUtils.dp2px(DynHomeActivity.this, 310f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f),  DensityUtils.dp2px(this, 5f), 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
@@ -660,11 +664,74 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
+    class StrBean {
+        public Integer page;
+        public Integer size;
+        public String reply_msg_id;
+        public String msg_id;
+    }
+
     /***
      * 加载评论列表
      * @param page
      */
     private void findCommentList(final String msgId, final int page) {
+
+        StrBean strBean = new StrBean();
+        strBean.page = page;
+        strBean.reply_msg_id = msgId;
+        strBean.size = 20;
+
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                dialog.dismiss();
+                pullToRefresh.onRefreshComplete();
+                Gson gson = new Gson();
+                commentInfoBean = gson.fromJson(jsonObject.toString(), RequstCommentInfoBean.class);
+                //  LogUtil.i(commentInfoBean.toString());
+                if (commentInfoBean.getSuccess()) {
+
+                    if (commentInfoBean.getData().getItems() != null) {
+                        data = commentInfoBean.getData().getItems();
+
+                        if (mCurrentPage == 0) {
+                            myAdater.setData(data);
+                        } else {
+                            myAdater.addLastList(data);
+                        }
+
+
+                        myAdater.notifyDataSetChanged();
+                    }
+                    if (commentInfoBean.getData().isLast()) {
+                        setEnd();
+                    }
+
+
+                    mCurrentPage = mCurrentPage + 1;//下次从第二页请求
+                } else {
+                    ToastUtils.showToastShort(commentInfoBean.getErrorMsg());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+        };
+
+
         StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -679,7 +746,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     if (commentInfoBean.getData().getItems() != null) {
                         data = commentInfoBean.getData().getItems();
 
-                        if (mCurrentPage == 1) {
+                        if (mCurrentPage == 0) {
                             myAdater.setData(data);
                         } else {
                             myAdater.addLastList(data);
@@ -688,11 +755,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
                         myAdater.notifyDataSetChanged();
                     }
-
-                    if (data.size() > 0) {
-                        if (data.size() < 20) {
-                            setEnd();
-                        }
+                    if (commentInfoBean.getData().isLast()) {
+                        setEnd();
                     }
 
 
@@ -728,7 +792,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
 
         };
-        MyApplication.getHttpQueues().add(request);
+        MyApplication.getHttpQueues().add(jsonRequest);
 
     }
 
@@ -742,6 +806,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             @Override
             public void onResponse(String s) {
 
+                LogUtil.i(s);
                 Gson gson = new Gson();
                 requstOneDynInfoBean = new RequstOneDynInfoBean();
                 requstOneDynInfoBean = gson.fromJson(s, RequstOneDynInfoBean.class);
@@ -798,15 +863,21 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
      * @param page//页数
      */
     private void findZanUserList_5(final String msgId, final int page) {
+        StrBean strBean=new StrBean();
+        strBean.size=5;
+        strBean.page=0;
+        strBean.msg_id=msgId;
+
         // dialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Response.Listener<String>() {
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+
+                LogUtil.i(jsonObject.toString());
                 dialog.dismiss();
                 Gson gson = new Gson();
-                RequsetUserListBean UserListBean = new RequsetUserListBean();
-                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+                RequsetUserListBeanZan UserListBean = new RequsetUserListBeanZan();
+                UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBeanZan.class);
 
                 zanUserList = UserListBean.getData().getItems();
                 //     LogUtil.i(UserListBean.toString());
@@ -829,6 +900,131 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 } else {
                     ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+        };
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                LogUtil.i(s);
+//                dialog.dismiss();
+//                Gson gson = new Gson();
+//                RequsetUserListBean UserListBean = new RequsetUserListBean();
+//                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+//
+//                zanUserList = UserListBean.getData().getItems();
+//                //     LogUtil.i(UserListBean.toString());
+//                if (UserListBean.getSuccess()) {
+//
+//
+//                    if (zanUserList.size() > 0) {
+//
+//
+//                        mRecylerViewAdapter.setData(zanUserList, msgId);
+//
+//                        mRecylerViewAdapter.notifyDataSetChanged();
+//
+//
+//                    } else {
+//                        // ToastUtils.showToastShort("没有点赞数据");
+//                        mRecylerViewAdapter.setData(zanUserList, msgId);
+//                        mRecylerViewAdapter.notifyDataSetChanged();
+//                    }
+//                } else {
+//                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+//                }
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                dialog.dismiss();
+//                LogUtil.i(volleyError.toString());
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<>();
+//                map.put("msgId", msgId);//用户id
+//                map.put("page", page + "");//页数
+//                return map;
+//            }
+//
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> hm = new HashMap<String, String>();
+//                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+//                hm.put("Authorization", token);
+//                return hm;
+//            }
+//
+//        };
+        MyApplication.getHttpQueues().add(jsonRequest);
+
+    }
+
+
+    public class ReplyBean {
+        public String id;
+        public String content;
+        public String nick_name;
+        public String parent_id;
+        public String reply_msg_id;
+        public String reply_user_id;
+    }
+
+    /**
+     * 发送评论
+     *
+     * @param msgId
+     * @param content
+     */
+    private void sendCommentReply(final String msgId, final String content) {
+        ReplyBean replyBean = new ReplyBean();
+        replyBean.reply_msg_id = msgId;
+        replyBean.content = content;
+        LogUtil.i(new Gson().toJson(replyBean));
+
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                LogUtil.i(jsonObject.toString());
+
+                Gson gson = new Gson();
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("评论成功");
+                    mCurrentPage = 0;
+                    findCommentList(msgId, mCurrentPage);
+
+
+                    et_comment.setText("");
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
+
+                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
+                    slideFromBottomPopup.dismiss();
+                } else {
+                    ToastUtils.showToastShort("评论失败");
+                }
 
 
             }
@@ -839,14 +1035,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 LogUtil.i(volleyError.toString());
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("msgId", msgId);//用户id
-                map.put("page", page + "");//页数
-                return map;
-            }
-
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -855,19 +1043,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 hm.put("Authorization", token);
                 return hm;
             }
-
         };
-        MyApplication.getHttpQueues().add(request);
-
-    }
-
-    /**
-     * 发送评论
-     *
-     * @param msgId
-     * @param content
-     */
-    private void sendCommentReply(final String msgId, final String content) {
 
 
         final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
@@ -876,24 +1052,13 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("评论成功");
-                    mCurrentPage = 1;
+                    mCurrentPage = 0;
                     findCommentList(msgId, mCurrentPage);
 
-//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
-//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//                    commentinfo.setNickName(userInfo.getNickName());
-//                    commentinfo.setContent(content);
-//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
-//                    commentinfo.setReplyUserId(userInfo.getId());
-//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                    String date = sDateFormat.format(new java.util.Date());
-//                    commentinfo.setTime(date);
-//                    myAdater.addFirst(commentinfo);
-//                    myAdater.notifyDataSetChanged();
 
                     et_comment.setText("");
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
@@ -901,7 +1066,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     slideFromBottomPopup.dismiss();
                 } else {
-                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("评论失败");
                 }
 
 
@@ -932,7 +1097,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
 
         };
-        MyApplication.getHttpQueues().add(request);
+        MyApplication.getHttpQueues().add(jsonRequest);
     }
 
     /**
@@ -944,6 +1109,73 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private void sendCommentReply(final String msgId, final String content, final String parentId, final String replyUserId) {
 
         LogUtil.i("这是一条评论回复" + "msgId=" + msgId + "content=" + content + "parentId=" + parentId + "replyUserId=" + replyUserId);
+
+
+        ReplyBean replyBean = new ReplyBean();
+        replyBean.reply_msg_id = msgId;
+        replyBean.content = content;
+        replyBean.reply_user_id = replyUserId;
+        replyBean.parent_id = parentId;
+        LogUtil.i(new Gson().toJson(replyBean));
+
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    ToastUtils.showToastShort("评论成功");
+                    mCurrentPage = 0;
+                    findCommentList(msgId, mCurrentPage);
+
+//
+//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
+//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    commentinfo.setNickName(userInfo.getNickName());
+//                    commentinfo.setContent(content);
+//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
+//                    commentinfo.setReplyUserId(userInfo.getId());
+//                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
+//                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
+//                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
+//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    String date = sDateFormat.format(new java.util.Date());
+//                    commentinfo.setTime(date);
+//                    myAdater.addFirst(commentinfo);
+//                    myAdater.notifyDataSetChanged();
+                    replypos = -1;
+                    et_comment.setText("");
+                    et_comment.setHint("写评论");
+                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
+                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
+                    slideFromBottomPopup.dismiss();
+                } else {
+                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                dialog.dismiss();
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                hm.put("Authorization", token);
+                return hm;
+            }
+        };
+
+
         final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -954,7 +1186,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("评论成功");
-                    mCurrentPage = 1;
+                    mCurrentPage = 0;
                     findCommentList(msgId, mCurrentPage);
 
 //
@@ -1011,7 +1243,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
 
         };
-        MyApplication.getHttpQueues().add(request);
+        MyApplication.getHttpQueues().add(jsonRequest);
     }
 
 

@@ -47,16 +47,24 @@ public class RequstCommentInfoBean {
     }
 
     public class Data {
-
+            private boolean last;
         private int total;
-        private List<Items> items;
+        private List<Content> content;
 
         @Override
         public String toString() {
             return "Data{" +
                     "total=" + total +
-                    ", items=" + items +
+                    ", items=" + content +
                     '}';
+        }
+
+        public boolean isLast() {
+            return last;
+        }
+
+        public void setLast(boolean last) {
+            this.last = last;
         }
 
         public void setTotal(int total) {
@@ -67,76 +75,82 @@ public class RequstCommentInfoBean {
             return total;
         }
 
-        public void setItems(List<Items> items) {
-            this.items = items;
+        public void setItems(List<Content> items) {
+            this.content = items;
         }
 
-        public List<Items> getItems() {
-            return items;
+        public List<Content> getItems() {
+            return content;
         }
 
     }
 
-    public static class Items {
+    public static class Content {
 
         private String id;//评论的id
-        private String replyUserId;//发评论人的id
+        private String reply_user_id;//发评论人的id
         private String content;//发评论的内容
         private String time;
-        private String parentId;//回复评论的id
-        private String replyMsgId;//动态的id
+        private String parent_id;//回复评论的id
+        private String reply_msgI_id;//动态的id
         private String success;
-        private String errorMsg;
-        private String selfUrl;//发评论的头像
-        private String nickName;//发评论人的昵称
-        private int gender;
-        private String replyUser;//要回复的人id
-        private String replySelfUrl;//要回复的头像
-        private String replyNickName;//要回复人的昵称
+        private String error_msg;
+        private String self_url;//发评论的头像
+        private String nick_name;//发评论人的昵称
+        private Integer gender;
+//        private String replyed_user_id;//要回复的人id
+//        private String replyed_self_url;//要回复的头像
+//        private String replyed_nick_name;//要回复人的昵称
 
-        public String getReplyUser() {
-            return replyUser;
-        }
+        private String replyed_user_id;// 被回复的人id
+        private String replyed_self_url;// 被回复的头像
+        private String replyed_nick_name;// 被回复人的昵称
 
-        public void setReplyUser(String replyUser) {
-            this.replyUser = replyUser;
-        }
-
-        public String getReplySelfUrl() {
-            return replySelfUrl;
-        }
-
-        public void setReplySelfUrl(String replySelfUrl) {
-            this.replySelfUrl = replySelfUrl;
-        }
-
-        public String getReplyNickName() {
-            return replyNickName;
-        }
-
-        public void setReplyNickName(String replyNickName) {
-            this.replyNickName = replyNickName;
-        }
 
         @Override
         public String toString() {
             return "Items{" +
-                    "id=" + id +
-                    ", replyUserId='" + replyUserId + '\'' +
+                    "id='" + id + '\'' +
+                    ", reply_user_id='" + reply_user_id + '\'' +
                     ", content='" + content + '\'' +
                     ", time='" + time + '\'' +
-                    ", parentId='" + parentId + '\'' +
-                    ", replyMsgId='" + replyMsgId + '\'' +
+                    ", parent_id='" + parent_id + '\'' +
+                    ", reply_msgI_id='" + reply_msgI_id + '\'' +
                     ", success='" + success + '\'' +
-                    ", errorMsg='" + errorMsg + '\'' +
-                    ", selfUrl='" + selfUrl + '\'' +
-                    ", nickName='" + nickName + '\'' +
+                    ", error_msg='" + error_msg + '\'' +
+                    ", self_url='" + self_url + '\'' +
+                    ", nick_name='" + nick_name + '\'' +
                     ", gender=" + gender +
-                    ", replyUser='" + replyUser + '\'' +
-                    ", replySelfUrl='" + replySelfUrl + '\'' +
-                    ", replyNickName='" + replyNickName + '\'' +
+                    ", reply_user='" + replyed_user_id + '\'' +
+                    ", reply_self_url='" + replyed_self_url + '\'' +
+                    ", reply_nick_name='" + replyed_nick_name + '\'' +
                     '}';
         }
+
+        public String getReplyUser() {
+            return replyed_user_id;
+        }
+
+        public void setReplyUser(String replyUser) {
+            this.replyed_user_id = replyUser;
+        }
+
+        public String getReplySelfUrl() {
+            return replyed_self_url;
+        }
+
+        public void setReplySelfUrl(String replySelfUrl) {
+            this.replyed_self_url = replySelfUrl;
+        }
+
+        public String getReplyNickName() {
+            return replyed_nick_name;
+        }
+
+        public void setReplyNickName(String replyNickName) {
+            this.replyed_nick_name = replyNickName;
+        }
+
 
         public void setId(String id) {
             this.id = id;
@@ -147,11 +161,11 @@ public class RequstCommentInfoBean {
         }
 
         public void setReplyUserId(String replyUserId) {
-            this.replyUserId = replyUserId;
+            this.reply_user_id = replyUserId;
         }
 
         public String getReplyUserId() {
-            return replyUserId;
+            return reply_user_id;
         }
 
         public void setContent(String content) {
@@ -171,19 +185,19 @@ public class RequstCommentInfoBean {
         }
 
         public void setParentId(String parentId) {
-            this.parentId = parentId;
+            this.parent_id = parentId;
         }
 
         public String getParentId() {
-            return parentId;
+            return parent_id;
         }
 
         public void setReplyMsgId(String replyMsgId) {
-            this.replyMsgId = replyMsgId;
+            this.reply_msgI_id = replyMsgId;
         }
 
         public String getReplyMsgId() {
-            return replyMsgId;
+            return reply_msgI_id;
         }
 
         public void setSuccess(String success) {
@@ -195,27 +209,27 @@ public class RequstCommentInfoBean {
         }
 
         public void setErrorMsg(String errorMsg) {
-            this.errorMsg = errorMsg;
+            this.error_msg = errorMsg;
         }
 
         public String getErrorMsg() {
-            return errorMsg;
+            return error_msg;
         }
 
         public void setSelfUrl(String selfUrl) {
-            this.selfUrl = selfUrl;
+            this.self_url = selfUrl;
         }
 
         public String getSelfUrl() {
-            return selfUrl;
+            return self_url;
         }
 
         public void setNickName(String nickName) {
-            this.nickName = nickName;
+            this.nick_name = nickName;
         }
 
         public String getNickName() {
-            return nickName;
+            return nick_name;
         }
 
         public void setGender(int gender) {

@@ -47,10 +47,10 @@ public class Data implements Serializable {
     private String adminMumberId; // 所属会籍
     private String remark; // 备注
     private boolean follower;
-    private int  followNumber;//关注数
-    private int   dynMsgNumber;//动态数
+    private int  follow_no;//关注数
+    private int   dyn_no;//动态数
 
-    private int  fansNum;//粉丝数
+    private int  fanse_no;//粉丝数
     private String token;
     private String verCode;
 
@@ -221,9 +221,9 @@ public class Data implements Serializable {
                 ", adminMumberId='" + adminMumberId + '\'' +
                 ", remark='" + remark + '\'' +
                 ", follower=" + follower +
-                ", followNumber=" + followNumber +
-                ", dynMsgNumber=" + dynMsgNumber +
-                ", fansNum=" + fansNum +
+                ", followNumber=" + follow_no +
+                ", dynMsgNumber=" + dyn_no +
+                ", fansNum=" + fanse_no +
                 ", token='" + token + '\'' +
                 ", verCode='" + verCode + '\'' +
                 ", selfUrl='" + selfUrl + '\'' +
@@ -231,11 +231,11 @@ public class Data implements Serializable {
     }
 
     public int getDynMsgNumber() {
-        return dynMsgNumber;
+        return dyn_no;
     }
 
     public void setDynMsgNumber(int dynMsgNumber) {
-        this.dynMsgNumber = dynMsgNumber;
+        this.dyn_no = dynMsgNumber;
     }
 
     public String getPersonId() {
@@ -448,19 +448,19 @@ public class Data implements Serializable {
     }
 
     public int getFollowNumber() {
-        return followNumber;
+        return follow_no;
     }
 
     public void setFollowNumber(int followNumber) {
-        this.followNumber = followNumber;
+        this.follow_no = followNumber;
     }
 
     public int getFansNum() {
-        return fansNum;
+        return fanse_no;
     }
 
     public void setFansNum(int fansNum) {
-        this.fansNum = fansNum;
+        this.fanse_no = fansNum;
     }
 
     public String getToken() {

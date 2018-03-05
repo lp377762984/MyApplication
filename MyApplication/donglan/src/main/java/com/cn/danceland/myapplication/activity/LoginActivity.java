@@ -266,7 +266,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 dialog.show();
                 login();
-
+                LogUtil.i(MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 break;
             case R.id.tv_forgetpsw://忘记密码
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));

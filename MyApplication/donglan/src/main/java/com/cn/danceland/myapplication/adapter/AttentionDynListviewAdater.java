@@ -26,6 +26,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -37,6 +38,7 @@ import com.cn.danceland.myapplication.activity.DynHomeActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -53,6 +55,8 @@ import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -263,12 +267,20 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 if (data.get(position).isPraise()) {//已点赞
 
                     int pos = position;
-                    addZan(data.get(position).getId(), false, pos);
+                    try {
+                        addZan(data.get(position).getId(), false, pos);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
                 } else {//未点赞
                     int pos = position;
-                    addZan(data.get(position).getId(), true, pos);
+                    try {
+                        addZan(data.get(position).getId(), true, pos);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
 
                 }
@@ -523,7 +535,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
-
+            viewHolder.iv_pic.setVisibility(View.GONE);
 
         }
 
@@ -629,6 +641,11 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         dialog.show();
     }
 
+    class StrBean {
+        public boolean is_praise;
+        public String msg_id;
+
+    }
 
     /**
      * 点赞
@@ -636,20 +653,23 @@ public class AttentionDynListviewAdater extends BaseAdapter {
      * @param isPraise
      * @param isPraise
      */
-    private void addZan(final String msgId, final boolean isPraise, final int pos) {
+    private void addZan(final String msgId, final boolean isPraise, final int pos) throws JSONException {
 
-
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
-
-
+        StrBean strBean = new StrBean();
+        strBean.is_praise = isPraise;
+        strBean.msg_id = msgId;
+        Gson gson=new Gson();
+        JSONObject jsonObject=new JSONObject(gson.toJson(strBean).toString());
+        LogUtil.i(gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "appPraise/giveThumbs",jsonObject , new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject json) {
+                LogUtil.i(json.toString());
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(json.toString(), RequsetSimpleBean.class);
 
-                if (requestInfoBean.getSuccess()) {
+                if (requestInfoBean.isSuccess()) {
 
                     if (data.get(pos).isPraise()) {//如果已点赞
                         data.get(pos).setPraise(false);
@@ -669,38 +689,22 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 } else {
                     ToastUtils.showToastShort("点赞失败");
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-
+            public void onErrorResponse(VolleyError error) {
+                ToastUtils.showToastShort("请检查手机网络！");
             }
-
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("msgId", msgId);
-                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
-                map.put("isPraise", String.valueOf(isPraise));
-                return map;
-            }
-
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                //       LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
-        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("addGuanzhu");
+
+        request.setTag("addzan");
         // 设置超时时间
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -708,6 +712,85 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         MyApplication.getHttpQueues().add(request);
 
     }
+
+//    /**
+//     * 点赞
+//     *
+//     * @param isPraise
+//     * @param isPraise
+//     */
+//    private void addZan(final String msgId, final boolean isPraise, final int pos) {
+//
+//
+//        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
+//
+//
+//            @Override
+//            public void onResponse(String s) {
+//                LogUtil.i(s);
+//                Gson gson = new Gson();
+//                RequestInfoBean requestInfoBean = new RequestInfoBean();
+//                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+//
+//                if (requestInfoBean.getSuccess()) {
+//
+//                    if (data.get(pos).isPraise()) {//如果已点赞
+//                        data.get(pos).setPraise(false);
+//                        int i = data.get(pos).getPriaseNumber() - 1;
+//                        data.get(pos).setPriaseNumber(i);
+//                        ToastUtils.showToastShort("取消点赞成功");
+//                    } else {
+//                        data.get(pos).setPraise(true);
+//                        int i = data.get(pos).getPriaseNumber() + 1;
+//                        data.get(pos).setPriaseNumber(i);
+//                        ToastUtils.showToastShort("点赞成功");
+//                    }
+//
+//
+//                    notifyDataSetChanged();
+//
+//                } else {
+//                    ToastUtils.showToastShort("点赞失败");
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(final VolleyError volleyError) {
+//                LogUtil.i(volleyError.toString());
+//
+//            }
+//
+//        }
+//        ) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//                map.put("msgId", msgId);
+//                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
+//                map.put("isPraise", String.valueOf(isPraise));
+//                return map;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+//                //       LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
+//                return map;
+//            }
+//        };
+//        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+//        request.setTag("addGuanzhu");
+//        // 设置超时时间
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        // 将请求加入全局队列中
+//        MyApplication.getHttpQueues().add(request);
+//
+//    }
 
 
     /**
@@ -785,23 +868,37 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
         String Params = Constants.DEL_DYN_MSG + "/" + msgId;
 
-        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
 
-                Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    ToastUtils.showToastShort("删除成功");
-                    // data.remove(pos);
-                    //   notifyDataSetChanged();
-                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
-                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
-                } else {
-                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
-                }
+                final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        LogUtil.i(s);
+
+                        Gson gson = new Gson();
+                        RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                        requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
+                        if (requestInfoBean.isSuccess()) {
+                            ToastUtils.showToastShort("删除成功");
+                            // data.remove(pos);
+                            //   notifyDataSetChanged();
+                            EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
+                            EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
+                        } else {
+                            ToastUtils.showToastShort("删除失败");
+                        }
+//
+//                Gson gson = new Gson();
+//                 requestInfoBean = new RequestInfoBean();
+//                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+//                if (requestInfoBean.getSuccess()) {
+//                    ToastUtils.showToastShort("删除成功");
+//                    // data.remove(pos);
+//                    //   notifyDataSetChanged();
+//                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
+//                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
+//                } else {
+//                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
+//                }
 
 
             }

@@ -50,29 +50,28 @@ public class RequstOneDynInfoBean {
         private String id;
         private String title;
         private String content;
-        private int privacyType;
-        private int msgType;
+        private int privacy_type;
+        private int msg_type;
         private String author;
-        private int publishType;
-        private int shareId;
+        private int publish_type;
+        private int share_id;
         private boolean enabled;
-        private String publishTime;
-        private String publishPlace;
+        private String publish_time;
+        private String publish_place;
         private List<String> imgList;
         private String success;
         private String errorMsg;
         private String userName;
         private String userId;
-        private String selfUrl;
-        private String nickName;
-        private int priaseNumber;
-        private int replyNumber;
+        private String self_url;
+        private String nick_name;
+        private int priase_number;
+        private int reply_number;
         private int followerNumber;
-        private boolean follower;
-        private boolean praise;
-
-        private String vedioImg;
-        private String vedioUrl;
+        private String vedio_img;
+        private String vedio_url;
+        private boolean is_praise;
+        private boolean is_follower;
 
         @Override
         public String toString() {
@@ -80,28 +79,28 @@ public class RequstOneDynInfoBean {
                     "id='" + id + '\'' +
                     ", title='" + title + '\'' +
                     ", content='" + content + '\'' +
-                    ", privacyType=" + privacyType +
-                    ", msgType=" + msgType +
+                    ", privacy_type=" + privacy_type +
+                    ", msg_type=" + msg_type +
                     ", author='" + author + '\'' +
-                    ", publishType=" + publishType +
-                    ", shareId=" + shareId +
+                    ", publish_type=" + publish_type +
+                    ", share_id=" + share_id +
                     ", enabled=" + enabled +
-                    ", publishTime='" + publishTime + '\'' +
-                    ", publishPlace='" + publishPlace + '\'' +
+                    ", publish_time='" + publish_time + '\'' +
+                    ", publish_place='" + publish_place + '\'' +
                     ", imgList=" + imgList +
                     ", success='" + success + '\'' +
                     ", errorMsg='" + errorMsg + '\'' +
                     ", userName='" + userName + '\'' +
                     ", userId='" + userId + '\'' +
-                    ", selfUrl='" + selfUrl + '\'' +
-                    ", nickName='" + nickName + '\'' +
-                    ", priaseNumber=" + priaseNumber +
-                    ", replyNumber=" + replyNumber +
+                    ", self_url='" + self_url + '\'' +
+                    ", nick_name='" + nick_name + '\'' +
+                    ", priase_number=" + priase_number +
+                    ", reply_number=" + reply_number +
                     ", followerNumber=" + followerNumber +
-                    ", follower=" + follower +
-                    ", praise=" + praise +
-                    ", vedioImg='" + vedioImg + '\'' +
-                    ", vedioUrl='" + vedioUrl + '\'' +
+                    ", vedio_img='" + vedio_img + '\'' +
+                    ", vedio_url='" + vedio_url + '\'' +
+                    ", is_praise=" + is_praise +
+                    ", is_follower=" + is_follower +
                     '}';
         }
 
@@ -130,19 +129,19 @@ public class RequstOneDynInfoBean {
         }
 
         public void setPrivacyType(int privacyType) {
-            this.privacyType = privacyType;
+            this.privacy_type = privacyType;
         }
 
         public int getPrivacyType() {
-            return privacyType;
+            return privacy_type;
         }
 
         public void setMsgType(int msgType) {
-            this.msgType = msgType;
+            this.msg_type = msgType;
         }
 
         public int getMsgType() {
-            return msgType;
+            return msg_type;
         }
 
 
@@ -191,27 +190,27 @@ public class RequstOneDynInfoBean {
         }
 
         public boolean isFollower() {
-            return follower;
+            return is_follower;
         }
 
         public boolean isPraise() {
-            return praise;
+            return is_praise;
         }
 
         public void setPublishType(int publishType) {
-            this.publishType = publishType;
+            this.publish_type = publishType;
         }
 
         public int getPublishType() {
-            return publishType;
+            return publish_type;
         }
 
         public void setShareId(int shareId) {
-            this.shareId = shareId;
+            this.share_id = shareId;
         }
 
         public int getShareId() {
-            return shareId;
+            return share_id;
         }
 
         public void setEnabled(boolean enabled) {
@@ -223,35 +222,35 @@ public class RequstOneDynInfoBean {
         }
 
         public void setPublishTime(String publishTime) {
-            this.publishTime = publishTime;
+            this.publish_time = publishTime;
         }
 
         public String getPublishTime() {
-            return publishTime;
+            return publish_time;
         }
 
         public void setPublishPlace(String publishPlace) {
-            this.publishPlace = publishPlace;
+            this.publish_place = publishPlace;
         }
 
         public String getPublishPlace() {
-            return publishPlace;
+            return publish_place;
         }
 
         public void setVedioUrl(String vedioUrl) {
-            this.vedioUrl = vedioUrl;
+            this.vedio_url = vedioUrl;
         }
 
         public String getVedioUrl() {
-            return vedioUrl;
+            return vedio_url;
         }
 
         public void setVedioImg(String vedioImg) {
-            this.vedioImg = vedioImg;
+            this.vedio_img = vedioImg;
         }
 
         public String getVedioImg() {
-            return vedioImg;
+            return vedio_img;
         }
 
 
@@ -272,51 +271,51 @@ public class RequstOneDynInfoBean {
         }
 
         public void setSelfUrl(String selfUrl) {
-            this.selfUrl = selfUrl;
+            this.self_url = selfUrl;
         }
 
         public String getSelfUrl() {
-            return selfUrl;
+            return self_url;
         }
 
         public void setNickName(String nickName) {
-            this.nickName = nickName;
+            this.nick_name = nickName;
         }
 
         public String getNickName() {
-            return nickName;
+            return nick_name;
         }
 
         public void setPriaseNumber(int priaseNumber) {
-            this.priaseNumber = priaseNumber;
+            this.priase_number = priaseNumber;
         }
 
         public int getPriaseNumber() {
-            return priaseNumber;
+            return priase_number;
         }
 
         public void setReplyNumber(int replyNumber) {
-            this.replyNumber = replyNumber;
+            this.reply_number = replyNumber;
         }
 
         public int getReplyNumber() {
-            return replyNumber;
+            return reply_number;
         }
 
         public void setPraise(boolean praise) {
-            this.praise = praise;
+            this.is_praise = praise;
         }
 
         public boolean getPraise() {
-            return praise;
+            return is_praise;
         }
 
         public void setFollower(boolean follower) {
-            this.follower = follower;
+            this.is_follower = follower;
         }
 
         public boolean getFollower() {
-            return follower;
+            return is_follower;
         }
 
     }

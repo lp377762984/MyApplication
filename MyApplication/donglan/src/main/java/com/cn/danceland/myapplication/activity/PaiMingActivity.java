@@ -80,24 +80,24 @@ public class PaiMingActivity extends Activity {
     }
 
     public class MyUserListviewAdapter extends BaseAdapter {
-        private List<RequsetUserListBean.Data.Items> data = new ArrayList<RequsetUserListBean.Data.Items>();
+        private List<RequsetUserListBean.Data.Content> data = new ArrayList<RequsetUserListBean.Data.Content>();
         private LayoutInflater mInflater;
         private Context context;
 
 
-        public MyUserListviewAdapter(Context context, List<RequsetUserListBean.Data.Items> data) {
+        public MyUserListviewAdapter(Context context, List<RequsetUserListBean.Data.Content> data) {
             mInflater = LayoutInflater.from(context);
             this.data = data;
             this.context = context;
 
         }
 
-        public void addLastList(ArrayList<RequsetUserListBean.Data.Items> bean) {
+        public void addLastList(ArrayList<RequsetUserListBean.Data.Content> bean) {
             this.data.addAll(bean);
         }
 
 
-        public void setData(ArrayList<RequsetUserListBean.Data.Items> bean) {
+        public void setData(ArrayList<RequsetUserListBean.Data.Content> bean) {
 
             this.data = bean;
         }
