@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
 
+import java.io.Serializable;
+
 /**
  * Created by feng on 2018/1/15.
  */
@@ -23,11 +25,14 @@ public class SellSiJiaoConfirmActivity extends Activity {
     RelativeLayout rl_buy;
     CheckBox btn_sijiao,btn_sijiaodingjin;
     ImageView sell_img;
+    Serializable itemContent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sellsijiaoconfirm);
+
+        itemContent = getIntent().getSerializableExtra("itemContent");
         initView();
     }
 
@@ -66,9 +71,9 @@ public class SellSiJiaoConfirmActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(state==0){
-                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","0"));
+                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","0").putExtra("itemContent",itemContent));
                 }else if(state==1){
-                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","1"));
+                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","1").putExtra("itemContent",itemContent));
                 }
 
             }

@@ -31,9 +31,11 @@ public class OrderExtendsInfoBean implements Serializable {
     private float sell_price;
     private int total_count;
     private String type_id;
-    private String  type_name;//会员卡名称
-    private int  deposit_type;//定金类型
-
+    private String type_name;//会员卡名称
+    private int deposit_type;//定金类型
+    private String course_type_name;//私教类型名称
+    private int   time_length;//私教有效天数
+    private String employee_name;//教练名称
 
     @Override
     public String toString() {
@@ -62,7 +64,43 @@ public class OrderExtendsInfoBean implements Serializable {
                 ", type_id='" + type_id + '\'' +
                 ", type_name='" + type_name + '\'' +
                 ", deposit_type=" + deposit_type +
+                ", course_type_name='" + course_type_name + '\'' +
+                ", time_length=" + time_length +
+                ", employee_name='" + employee_name + '\'' +
                 '}';
+    }
+
+    public String getEmployee_name() {
+        return employee_name;
+    }
+
+    public void setEmployee_name(String employee_name) {
+        this.employee_name = employee_name;
+    }
+
+    public int getTime_length() {
+
+        return time_length;
+    }
+
+    public void setTime_length(int time_length) {
+        this.time_length = time_length;
+    }
+
+    public String getType_name() {
+        return type_name;
+    }
+
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
+    }
+
+    public String getCourse_type_name() {
+        return course_type_name;
+    }
+
+    public void setCourse_type_name(String course_type_name) {
+        this.course_type_name = course_type_name;
     }
 
     public String getCard_name() {

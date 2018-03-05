@@ -337,7 +337,7 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
             if (datalist.get(position).getBus_type() == 32||datalist.get(position).getBus_type() == 34) {
                 vh.tv_product_type.setText("会员卡 ");
                 vh.tv_product_name.setText(content.getCard_name());
-                vh.tv_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getReceive()));
+                vh.tv_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
 //                if (!TextUtils.isEmpty(content.getDeposit_id())&&!TextUtils.equals("0",content.getDeposit_id())) {
 //                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price() - content.getDeposit_price()));
 //                } else {
@@ -345,7 +345,21 @@ public class MyOrderActivity extends Activity implements View.OnClickListener {
 //                }
 
             }
-            vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
+            if (datalist.get(position).getBus_type() == 56||datalist.get(position).getBus_type() == 57) {
+                vh.tv_product_type.setText("私教课程");
+                vh.tv_product_name.setText(content.getCourse_type_name());
+                vh.tv_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getPrice()));
+//                if (!TextUtils.isEmpty(content.getDeposit_id())&&!TextUtils.equals("0",content.getDeposit_id())) {
+//                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price() - content.getDeposit_price()));
+//                } else {
+//                    vh.tv_pay_price.setText(PriceUtils.formatPrice2String(content.getSell_price()));
+//                }
+
+            }
+
+
+
+            vh.tv_pay_price.setText(PriceUtils.formatPrice2String(datalist.get(position).getReceive()));
             if (datalist.get(position).getStatus() == 1) {
                 vh.tv_status.setText("待付款");
                 vh.ll_pay.setVisibility(View.VISIBLE);

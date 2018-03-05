@@ -59,6 +59,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     private TextView tv_pay_way;
     private TextView tv_deposit_price;
     private LinearLayout ll_deposit;
+    private TextView tv_employee;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,11 +91,11 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
         tv_pay_price = findViewById(R.id.tv_pay_price);
         btn_cancel = findViewById(R.id.btn_cancel);
         btn_pay = findViewById(R.id.btn_pay);
-
+        tv_employee = findViewById(R.id.tv_employee);
         btn_cancel.setOnClickListener(this);
         btn_pay.setOnClickListener(this);
 
-        if (orderInfo.getBus_type() == 31||orderInfo.getBus_type() == 33) {
+        if (orderInfo.getBus_type() == 31 || orderInfo.getBus_type() == 33) {
             tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
             tv_counselor.setText(orderExtendsInfo.getAdmin_emp_name());
             tv_product_type.setText("预付定金");
@@ -102,22 +103,24 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 tv_product_name.setText("会员卡定金");
             } else if (orderExtendsInfo.getDeposit_type() == 2) {
                 tv_product_name.setText("私教定金");
+
             } else if (orderExtendsInfo.getDeposit_type() == 3) {
                 tv_product_name.setText("租柜定金");
+
             }
             tv_useful_life.setText("1个月");
 
-            if(orderInfo.getBus_type() == 33){
+            if (orderInfo.getBus_type() == 33) {
                 findViewById(R.id.ll_other).setVisibility(View.VISIBLE);
-                TextView tv_friend_name=findViewById(R.id.tv_friend_name);
+                TextView tv_friend_name = findViewById(R.id.tv_friend_name);
                 tv_friend_name.setText(orderExtendsInfo.getMember_name());
-                TextView tv_friend_phone=findViewById(R.id.tv_friend_phone);
+                TextView tv_friend_phone = findViewById(R.id.tv_friend_phone);
                 tv_friend_phone.setText(orderExtendsInfo.getPhone_no());
             }
 
         }
 
-        if (orderInfo.getBus_type() == 32||orderInfo.getBus_type() == 34) {
+        if (orderInfo.getBus_type() == 32 || orderInfo.getBus_type() == 34) {
             tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
             tv_counselor.setText(orderExtendsInfo.getSell_name());
             tv_product_type.setText("会员卡");
@@ -129,17 +132,34 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 tv_product_name.setText(orderExtendsInfo.getCard_name());
             }
 
-            tv_useful_life.setText(orderExtendsInfo.getMonth_count()+"个月");
+            tv_useful_life.setText(orderExtendsInfo.getMonth_count() + "个月");
 
-            if(orderInfo.getBus_type() == 34){
+            if (orderInfo.getBus_type() == 34) {
                 findViewById(R.id.ll_other).setVisibility(View.VISIBLE);
-                TextView tv_friend_name=findViewById(R.id.tv_friend_name);
+                TextView tv_friend_name = findViewById(R.id.tv_friend_name);
                 tv_friend_name.setText(orderExtendsInfo.getMember_name());
-                TextView tv_friend_phone=findViewById(R.id.tv_friend_phone);
+                TextView tv_friend_phone = findViewById(R.id.tv_friend_phone);
                 tv_friend_phone.setText(orderExtendsInfo.getPhone_no());
             }
         }
 
+        if (orderInfo.getBus_type() == 56 || orderInfo.getBus_type() == 57) {
+            tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
+            tv_employee.setText("私教姓名");
+            tv_counselor.setText(orderExtendsInfo.getEmployee_name());
+            tv_product_type.setText("私教课程");
+            tv_product_name.setText(orderExtendsInfo.getCourse_type_name());
+            if (orderExtendsInfo.getTime_length()!=0)
+                tv_useful_life.setText(orderExtendsInfo.getTime_length() + "天");
+
+            if (orderInfo.getBus_type() == 57) {//给别人买私教
+                findViewById(R.id.ll_other).setVisibility(View.VISIBLE);
+                TextView tv_friend_name = findViewById(R.id.tv_friend_name);
+                tv_friend_name.setText(orderExtendsInfo.getMember_name());
+                TextView tv_friend_phone = findViewById(R.id.tv_friend_phone);
+                tv_friend_phone.setText(orderExtendsInfo.getPhone_no());
+            }
+        }
 
 
 //        if (CardsInfo.getTime_unit() == 1) {
@@ -239,7 +259,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                     e.printStackTrace();
                 }
                 break;
-            case R.id. btn_pay:
+            case R.id.btn_pay:
                 float price = 0;
                 if (orderInfo.getBus_type() == 1) {
                     price = orderInfo.getPrice();
@@ -253,10 +273,10 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
                 }
 
                 if (orderInfo.getPay_way() == 1) {
-                    alipay(orderInfo.getId(),price );
+                    alipay(orderInfo.getId(), price);
                 }
                 if (orderInfo.getPay_way() == 2) {
-                    wechatPay(orderInfo.getId(),price);
+                    wechatPay(orderInfo.getId(), price);
                 }
 
 
@@ -267,18 +287,18 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
     }
 
 
-
     class RequestBean {
         public String id;
 
     }
+
     class RequestOrderBean {
         public boolean success;
         public String errorMsg;
         public String data;
     }
-    Gson gson=new Gson();
 
+    Gson gson = new Gson();
 
 
     /**

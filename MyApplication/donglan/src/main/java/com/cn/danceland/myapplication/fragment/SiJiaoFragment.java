@@ -11,11 +11,34 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.MyCourseConBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by feng on 2018/1/12.
@@ -52,10 +75,52 @@ public class SiJiaoFragment extends BaseFragment {
         return inflate;
     }
 
+
     @Override
     public void onClick(View v) {
 
     }
+    
+    
+    public void refresh(Long startTime,Long endTime) throws JSONException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        MyCourseConBean myCourseConBean = new MyCourseConBean();
+        if(info!=null){
+            myCourseConBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+            myCourseConBean.setPage(0);
+            myCourseConBean.setPageCount(12);
+        }
+        Gson gson = new Gson();
+        String s = gson.toJson(myCourseConBean);
+        JSONObject jsonObject = new JSONObject(s);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDMEMBERCOURSE, jsonObject,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+                LogUtil.e("zzf",jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+    }
+    
 
     private class MyExAdapter extends BaseExpandableListAdapter{
 

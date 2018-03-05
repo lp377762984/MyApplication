@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -43,11 +44,13 @@ import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -197,13 +200,15 @@ public class ShopFragment extends BaseFragment {
     }
 
     public void getListData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/1/" + weidu + "/" + jingdu, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/0/" + weidu + "/" + jingdu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
-                itemsList = storeBean.getData().getItems();
-                if (itemsList != null && itemsList.size() > 0) {
-                    storelist.setAdapter(new MyStoreAdapter(getActivity(), itemsList));
+                if(storeBean!=null&&storeBean.getData()!=null){
+                    itemsList = storeBean.getData().getItems();
+                    if (itemsList != null && itemsList.size() > 0) {
+                        storelist.setAdapter(new MyStoreAdapter(getActivity(), itemsList));
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -398,7 +403,7 @@ public class ShopFragment extends BaseFragment {
                 items = itemsArrayList.get(position);
                 viewHolder.store_address.setText(items.getBname());
                 viewHolder.distance.setText(items.getAddress());
-                Glide.with(getActivity()).load(items.getLogo()).into(viewHolder.store_item_img);
+                Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
                 //PhoneNo = items.getTelphone_no();
 //                shopJingdu = items.getLat()+"";
 //                shopWeidu = items.getLng()+"";
@@ -485,22 +490,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
-                    info.setDefault_branch(shopID);
-                    DataInfoCache.saveOneCache(info, Constants.MY_INFO);
-                    if (info.getDefault_branch() != null && !info.getDefault_branch().equals("")) {
-                        mGridView.setVisibility(View.VISIBLE);
-                        storelist.setVisibility(View.GONE);
-                        ll_top.setVisibility(View.VISIBLE);
-                        getMenus();
-                        getShop(info.getDefault_branch());
-
-                    } else {
-                        ll_top.setVisibility(View.GONE);
-                        mGridView.setVisibility(View.GONE);
-                        storelist.setVisibility(View.VISIBLE);
-                        getListData();
-
-                    }
+                    login(shopID);
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -508,6 +498,7 @@ public class ShopFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
 
             }
         }) {
@@ -574,5 +565,115 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
+    private void login(final String shopID) {
+        String url = Constants.LOGIN_URL;
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = new RequestInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
+                    //成功
+                    String mUserId = requestInfoBean.getData().getPersonId();
+                    info.setDefault_branch(shopID);
+                    DataInfoCache.saveOneCache(info, Constants.MY_INFO);
+                    if (info.getDefault_branch() != null && !info.getDefault_branch().equals("")) {
+                        mGridView.setVisibility(View.VISIBLE);
+                        storelist.setVisibility(View.GONE);
+                        ll_top.setVisibility(View.VISIBLE);
+                        getMenus();
+                        getShop(info.getDefault_branch());
+
+                    } else {
+                        ll_top.setVisibility(View.GONE);
+                        mGridView.setVisibility(View.GONE);
+                        storelist.setVisibility(View.VISIBLE);
+                        getListData();
+
+                    }
+                    //查询信息
+                    queryUserInfo(mUserId);
+                } else {
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("name", info.getPhone());
+                map.put("password", SPUtils.getString(Constants.MY_PSWD,""));
+                // map.put("romType", "0");
+                return map;
+            }
+        };
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
+
+    private void queryUserInfo(String id) {
+
+        String params = id;
+
+        String url = Constants.QUERY_USERINFO_URL + params;
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+
+                //      LogUtil.i(requestInfoBean.toString());
+//                ArrayList<Data> mInfoBean = new ArrayList<>();
+//                mInfoBean.add(requestInfoBean.getData());
+//                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
+                //保存个人信息
+                Data data = requestInfoBean.getData();
+                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("queryUserInfo");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
 
 }

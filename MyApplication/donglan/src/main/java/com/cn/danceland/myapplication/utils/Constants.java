@@ -5,11 +5,11 @@ public class Constants {
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
     // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
-   //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
+    //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-// public static final String HOST = " http://192.168.1.119:8003/";//
+ public static final String HOST = " http://192.168.1.123:8003/";//
 
-   public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
+    //public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
 
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -133,7 +133,10 @@ public class Constants {
     public static final String CANCELTEST = HOST + "appBca/cancelTester";//取消体测
 
     //私教相关
-    public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";
+    public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";//购买私教课程列表
+    public static final String FINDCourseTypeEmployee = HOST + "appCourse/findCourseTypeEmployee";//查私教教练
+    public static final String FINDGROUPCLASS = HOST + "appGroupClass/queryPage";//小团课列表
+    public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse ";//我的私教
 
 
 }
