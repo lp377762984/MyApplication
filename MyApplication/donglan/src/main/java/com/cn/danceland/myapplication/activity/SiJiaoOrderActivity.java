@@ -250,9 +250,28 @@ public class SiJiaoOrderActivity extends Activity {
             public void onClick(View v) {
                 try {
                     if("0".equals(type)){
-                        confirmOrder();
+                        if("0".equals(forme)){
+                            if(tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()){
+                                ToastUtils.showToastShort("请选择教练！");
+                            }else{
+                                confirmOrder();
+                            }
+                        }else if("1".equals(forme)){
+                            if (tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()||ed_name.getText().toString().isEmpty()||ed_phone.getText().toString().isEmpty()){
+                                ToastUtils.showToastShort("请补全订单信息！");
+                            }else{
+                                confirmOrder();
+                            }
+                        }
+
                     }else if("1".equals(type)){
-                        commit_deposit();
+                        if("1".equals(forme)){
+                            if (tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()||ed_name.getText().toString().isEmpty()||ed_phone.getText().toString().isEmpty()){
+                                ToastUtils.showToastShort("请补全订单信息！");
+                            }
+                        }else{
+                            commit_deposit();
+                        }
                     }
 
                 } catch (JSONException e) {
@@ -264,7 +283,7 @@ public class SiJiaoOrderActivity extends Activity {
         if(itemContent!=null){
             goods_name.setText("商品名称："+itemContent.getName());
             goods_type.setText("商品类型："+itemContent.getCourse_category_name());
-            goods_time.setText("有效期："+time_length+"个月");
+            goods_time.setText("有效期："+time_length+"天");
             goods_price.setText("商品单价："+itemContent.getPrice()+"元");
 //            goods_all_price.setText("合计金额："+itemContent.getPrice()+"元");
 //            goods_num.setText("商品数量："+itemContent.getCount()+"节");
@@ -442,6 +461,7 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setCourse_type_name(course_category_name);
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
+        extends_params.setTime_length(time_length);
         sijiaoOrderConfirmBean.setReceive((price-10)+"");
         sijiaoOrderConfirmBean.setPrice(price+"");
         if("1".equals(forme)){

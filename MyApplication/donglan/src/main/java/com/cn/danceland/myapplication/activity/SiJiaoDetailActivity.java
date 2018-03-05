@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 import com.weigan.loopview.LoopView;
@@ -27,6 +28,7 @@ import com.weigan.loopview.OnItemSelectedListener;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +46,28 @@ public class SiJiaoDetailActivity extends Activity {
             ,"15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00"};
 
     List<String> timeList;
-    TextView over_time,tv_date;
+    TextView over_time,tv_date,course_name,course_jiaolian,buy,course_shengyu,course_length;
     int pos=999;
     ImageView sijiao_back,detail_img;
     MyListF myListF;
     MyListS myListS;
     AlertDialog.Builder alertdialog;
     NCalendar nccalendar;
+    MyCourseBean.Data item;
+    String startTime,endTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sijiao_detail);
+        initHost();
         iniView();
+    }
+
+    private void initHost() {
+        item = (MyCourseBean.Data)getIntent().getSerializableExtra("item");
+        startTime = getIntent().getStringExtra("startTime");
+        endTime = getIntent().getStringExtra("endTime");
     }
 
     private void iniView() {
@@ -64,10 +75,28 @@ public class SiJiaoDetailActivity extends Activity {
         inflate = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.timeselect, null);
         alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
         detail_img = findViewById(R.id.detail_img);
+        course_name = findViewById(R.id.course_name);
+        course_jiaolian = findViewById(R.id.course_jiaolian);
+        buy = findViewById(R.id.buy);
+        course_shengyu = findViewById(R.id.course_shengyu);
+        course_length = findViewById(R.id.course_length);
+        if(item!=null){
+            course_name.setText(item.getCourse_type_name());
+            if(item.getEmployee_name()!=null){
+                course_jiaolian.setText(item.getEmployee_name());
+            }else{
+                course_jiaolian.setText("");
+            }
+            buy.setText("购买节数："+item.getCount());
+            course_shengyu.setText("剩余节数："+item.getSurplus_count());
+        }
+        course_length.setText("有效期："+startTime+"至"+endTime);
+
         Glide.with(SiJiaoDetailActivity.this).load("http://file06.16sucai.com/2016/0407/06368ac0797a6a7cb6e3f10bcc1ea36e.jpg").into(detail_img);
 
         loopview = inflate.findViewById(R.id.loopview);
         over_time = inflate.findViewById(R.id.over_time);
+
         sijiao_back = findViewById(R.id.sijiao_back);
         sijiao_back.setOnClickListener(new View.OnClickListener() {
             @Override

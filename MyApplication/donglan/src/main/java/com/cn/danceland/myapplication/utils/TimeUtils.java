@@ -206,7 +206,7 @@ public class TimeUtils {
                  return System.currentTimeMillis();
              }
 
-//时间戳转字符串
+//毫秒转字符串
     public static String timeStamp2Date(String seconds,String format) {
         if(seconds == null || seconds.isEmpty() || seconds.equals("null")){
             return "";
@@ -215,7 +215,7 @@ public class TimeUtils {
             format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.format(new Date(Long.valueOf(seconds+"000")));
+        return sdf.format(new Date(Long.valueOf(seconds)));
     }
 
 }

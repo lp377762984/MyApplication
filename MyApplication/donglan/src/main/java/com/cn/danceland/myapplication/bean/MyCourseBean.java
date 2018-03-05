@@ -26,7 +26,7 @@ public class MyCourseBean implements Serializable {
     }
 
 
-    public class Data {
+    public class Data implements Serializable{
 
         private Integer branch_id;
         private Integer count;
@@ -35,6 +35,7 @@ public class MyCourseBean implements Serializable {
         private String course_type_name;
         private Integer delete_remark;
         private Integer employee_id;
+        private String employee_name;
         private long end_date;
         private Integer id;
         private Integer member_id;
@@ -140,6 +141,14 @@ public class MyCourseBean implements Serializable {
         }
         public long getStart_date() {
             return start_date;
+        }
+
+        public String getEmployee_name() {
+            return employee_name;
+        }
+
+        public void setEmployee_name(String employee_name) {
+            this.employee_name = employee_name;
         }
 
         public void setSurplus_count(Integer surplus_count) {

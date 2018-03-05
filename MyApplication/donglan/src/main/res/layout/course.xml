@@ -49,14 +49,14 @@
                 android:id="@+id/tab1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="团课"
+                android:text="私教"
 
                 />
             <android.support.design.widget.TabItem
                 android:id="@+id/tab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="私教"
+                android:text="记录"
                 />
 
         </android.support.design.widget.TabLayout>

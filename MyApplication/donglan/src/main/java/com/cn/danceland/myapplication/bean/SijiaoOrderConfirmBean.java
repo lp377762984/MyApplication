@@ -90,6 +90,15 @@ public class SijiaoOrderConfirmBean implements Serializable{
         private String employee_name;
         private String start_date;
         private String end_date;
+        private Integer time_length;
+
+        public Integer getTime_length() {
+            return time_length;
+        }
+
+        public void setTime_length(Integer time_length) {
+            this.time_length = time_length;
+        }
 
         public void setPhone_no(String phone_no) {
             this.phone_no = phone_no;

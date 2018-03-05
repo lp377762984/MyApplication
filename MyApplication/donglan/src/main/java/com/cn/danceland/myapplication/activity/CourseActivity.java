@@ -137,16 +137,18 @@ public class CourseActivity extends FragmentActivity {
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if("0".equals(str)){
-            tuanKeFragment = new TuanKeFragment();
-            fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
-        }else if("1".equals(str)){
             siJiaoFragment = new SiJiaoFragment();
-            try {
-                siJiaoFragment.refresh(startTime,endTime);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             fragmentTransaction.replace(R.id.rl_nv,siJiaoFragment);
+//            tuanKeFragment = new TuanKeFragment();
+//            fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
+        }else if("1".equals(str)){
+
+//            try {
+//                siJiaoFragment.refresh(startTime,endTime);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+
         }
 
         fragmentTransaction.commit();
