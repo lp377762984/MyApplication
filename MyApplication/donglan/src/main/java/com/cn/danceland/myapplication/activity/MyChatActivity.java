@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cn.danceland.myapplication.R;
-import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.cn.danceland.myapplication.fragment.MyChatFragment;
 
-public class ECChatActivity extends AppCompatActivity {
+public class MyChatActivity extends AppCompatActivity {
 
     // 当前聊天的 ID
     private String mChatId;
-    private EaseChatFragment chatFragment;
+    private MyChatFragment chatFragment;
 
 
     @Override
@@ -19,7 +19,7 @@ public class ECChatActivity extends AppCompatActivity {
         setContentView(R.layout.em_activity_chat);
 
         // 这里直接使用EaseUI封装好的聊天界面
-        chatFragment = new EaseChatFragment();
+        chatFragment = new MyChatFragment();
         // 将参数传递给聊天界面
         chatFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();

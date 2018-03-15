@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +20,18 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MainActivity;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.EaseUI;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
@@ -34,9 +41,10 @@ import com.hyphenate.util.PathUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
+public class MyChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
 	// Constants start from 11 to avoid conflict with Constants in base class
     private static final int ITEM_VIDEO = 11;
@@ -91,6 +99,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 onBackPressed();
             }
         });
+
+
+
       //  ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         if(chatType == EaseConstant.CHATTYPE_GROUP){
             inputMenu.getPrimaryMenu().getEditText().addTextChangedListener(new TextWatcher() {
@@ -234,10 +245,22 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override
     public void onSetMessageAttributes(EMMessage message) {
-        if(isRobot){
-            //set message extension
-            message.setAttribute("em_robot_message", isRobot);
+//        if (isRobot) {
+//            // set message extension
+//            message.setAttribute("em_robot_message", isRobot);
+//
+//        }
+        // 通过扩展属性，将userPic和userName发送出去。
+       Data myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        String userPic = myInfo.getSelf_avatar_path();
+        if (!TextUtils.isEmpty(userPic)) {
+            message.setAttribute("userPic", userPic);
         }
+        String userName =  myInfo.getNick_name();
+        if (!TextUtils.isEmpty(userName)) {
+            message.setAttribute("userName", userName);
+        }
+
     }
     
     @Override
@@ -284,9 +307,73 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         return false;
     }
     @Override
-    public void onCmdMessageReceived(List<EMMessage> messages) {
-        super.onCmdMessageReceived(messages);
+    public void onMessageReceived(List<EMMessage> messages) {
+        //  LogUtil.i("收到消息");
+
+        for (EMMessage message : messages) {
+            // message.setMsgTime(System.currentTimeMillis());
+            //LogUtil.i(DateUtils.getTimestampString(new Date(message.getMsgTime())) + message.getBody());
+            //  LogUtil.i(DateUtils.getTimestampString(new Date(System.currentTimeMillis() + 1L)) + message.getBody());
+
+
+
+            String username = null;
+            // 群消息
+            if (message.getChatType() == EMMessage.ChatType.GroupChat || message.getChatType() == EMMessage.ChatType
+                    .ChatRoom) {
+                username = message.getTo();
+            } else {
+                // 个人消息
+                username = message.getFrom();
+            }
+            // if the message is for current conversation
+            if (username.equals(toChatUsername) || message.getTo().equals(toChatUsername)) {
+                messageList.refreshSelectLast();
+                EaseUI.getInstance().getNotifier().vibrateAndPlayTone(message);
+            } else {
+                EaseUI.getInstance().getNotifier().onNewMsg(message);
+            }
+
+            //更新对话列表，设置通知声音
+            messageList.refreshSelectLast();
+            EaseUI.getInstance().getNotifier().vibrateAndPlayTone(message);
+            //   messageList.refresh();
+            //    message.setMsgTime(System.currentTimeMillis());
+            //************接收并处理扩展消息***********************
+            String userName = message.getStringAttribute("userName", "");
+            String userPic = message.getStringAttribute("userPic", "");
+            LogUtil.i(userName+userPic);
+            String hxIdFrom = message.getFrom();
+            EaseUser easeUser = new EaseUser(hxIdFrom);
+            easeUser.setAvatar(userPic);
+            easeUser.setNick(userName);
+
+            List<EaseUser> users = new ArrayList<EaseUser>();
+            users.add(easeUser);
+
+//            // 存入内存
+//            DemoHelper.getInstance().getContactList();
+//            DemoHelper.contactList.put(hxIdFrom, easeUser);
+//            // 存入db
+//            UserDao dao = new UserDao(MesApplication.getInstance().getContext());
+//            dao.saveContactList(users);
+
+            DemoHelper.getInstance().updateContactList(users);
+//
+//            DemoHelper.getInstance().getModel().setContactSynced(true);
+//            // 通知listeners联系人同步完毕
+//            DemoHelper.getInstance().notifyContactsSyncListener(true);
+//            if (DemoHelper.getInstance().isGroupsSyncedWithServer()) {
+//                //  notifyForRecevingEvents();
+//                DemoHelper.getInstance().notify();
+//                //   notifyNewInviteMessage();
+//            }
+
+        }
+
+        super.onMessageReceived(messages);
     }
+
 
     @Override
     public void onMessageBubbleLongClick(EMMessage message) {
