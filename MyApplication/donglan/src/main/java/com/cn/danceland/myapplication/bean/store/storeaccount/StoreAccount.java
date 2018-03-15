@@ -1,0 +1,56 @@
+package com.cn.danceland.myapplication.bean.store.storeaccount;
+
+/**
+ * @类说明:储值帐户--实体类
+ * @author:高振中
+ * @date:2018-03-14 10:16:26
+ **/
+public class StoreAccount {
+
+	//原始属性
+	private Long id;// 主键
+	private Long member_id;// 会员ID
+	private Long branch_id;// 门店ID
+	private Float remain;// 余额
+	private Float giving;// 赠送金额
+	private Byte enable;// 状态
+
+	//新增属性
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Long getMember_id() {
+		return member_id;
+	}
+	public void setMember_id(Long member_id) {
+		this.member_id = member_id;
+	}
+	public Long getBranch_id() {
+		return branch_id;
+	}
+	public void setBranch_id(Long branch_id) {
+		this.branch_id = branch_id;
+	}
+	public Float getRemain() {
+		return remain;
+	}
+	public void setRemain(Float remain) {
+		this.remain = remain;
+	}
+	public Float getGiving() {
+		return giving;
+	}
+	public void setGiving(Float giving) {
+		this.giving = giving;
+	}
+	public Byte getEnable() {
+		return enable;
+	}
+	public void setEnable(Byte enable) {
+		this.enable = enable;
+	}
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/storecardbill_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="卡名称"
+
+        />
+    <TextView
+        android:id="@+id/storecardbill_price"
+        android:layout_below="@+id/storecardbill_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="卡面值"
+
+        />
+    <TextView
+        android:id="@+id/storecardbill_zengsong"
+        android:layout_below="@+id/storecardbill_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="赠送金额"
+
+        />
+    <TextView
+        android:id="@+id/storecardbill_status"
+        android:layout_below="@+id/storecardbill_zengsong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="状态"
+
+        />
+    <RelativeLayout
+        android:id="@+id/rl_button"
+        android:layout_below="@+id/storecardbill_status"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/color_dl_yellow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交订单"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

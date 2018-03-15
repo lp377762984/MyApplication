@@ -1,7 +1,7 @@
 package com.cn.danceland.myapplication.utils;
-
-public class Constants extends EaseConstant{
 import com.hyphenate.easeui.EaseConstant;
+public class Constants extends EaseConstant{
+
 
 
 
