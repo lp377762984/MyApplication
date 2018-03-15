@@ -63,6 +63,7 @@
                             android:layout_centerVertical="true"
                             android:text="加入"
                             android:textSize="15sp"
+                            android:visibility="gone"
                             />
                     </RelativeLayout>
                 </RelativeLayout>

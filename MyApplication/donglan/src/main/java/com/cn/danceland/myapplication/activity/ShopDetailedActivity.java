@@ -109,9 +109,9 @@ public class ShopDetailedActivity extends Activity{
 
         s_button = findViewById(R.id.s_button);
 
-        join_button = findViewById(R.id.join_button);
+//        join_button = findViewById(R.id.join_button);
         if(branchID!=null){
-            join_button.setVisibility(View.GONE);
+            s_button.setVisibility(View.GONE);
         }
 
         bt_back = findViewById(R.id.bt_back);
@@ -138,15 +138,15 @@ public class ShopDetailedActivity extends Activity{
                 startActivity(intent);
             }
         });
-        s_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),SellCardActivity.class);
-                startActivity(intent);
-            }
-        });
+//        s_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(),SellCardActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        join_button.setOnClickListener(new View.OnClickListener() {
+        s_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -179,7 +179,7 @@ public class ShopDetailedActivity extends Activity{
             @Override
             public void onResponse(String s) {
                 if(s.contains("true")){
-                    join_button.setVisibility(View.GONE);
+                    //join_button.setVisibility(View.GONE);
                     ToastUtils.showToastShort("加入成功！");
                     myInfo.setDefault_branch(branchID);
                     DataInfoCache.saveOneCache(myInfo,Constants.MY_INFO);

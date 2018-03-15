@@ -14,7 +14,18 @@
             android:layout_height="240dp"
             android:background="@drawable/img_man"
             android:scaleType="centerCrop"
-            />I
+            />
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#FF8C00"
+            android:popupBackground="#FF8C00"
+            >
+
+        </Spinner>
 
         <LinearLayout
             android:id="@+id/ll_top"

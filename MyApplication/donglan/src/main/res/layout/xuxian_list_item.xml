@@ -24,6 +24,14 @@
         android:background="@color/dl_gery"
         android:visibility="gone"
         >
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已被预约"
+            android:textColor="@color/white"
+            />
 
     </RelativeLayout>
 </RelativeLayout>

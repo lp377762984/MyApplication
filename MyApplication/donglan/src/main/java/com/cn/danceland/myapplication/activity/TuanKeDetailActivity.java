@@ -10,11 +10,27 @@ import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.TuanKeBean;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.google.gson.Gson;
+
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,12 +41,26 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TuanKeDetailActivity extends Activity {
     ImageView kecheng_img,img_1,img_2,img_3,tuanke_back,down_img,up_img;
     NestedExpandaleListView kecheng_ex;
+    int groupId;
+    Gson gson;
+    TextView kecheng_name,kecheng_time,kecheng_place,tv_jieshao,
+    kecheng_room;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tuankedetail);
+        initHost();
         initView();
+    }
+
+    private void initHost() {
+
+        gson = new Gson();
+
+        groupId = getIntent().getIntExtra("groupId",999);
+
+
     }
 
     private void initView() {
@@ -43,13 +73,16 @@ public class TuanKeDetailActivity extends Activity {
         });
 
         kecheng_img =  findViewById(R.id.kecheng_img);
+        kecheng_name = findViewById(R.id.kecheng_name);
+        kecheng_time = findViewById(R.id.kecheng_time);
+        kecheng_place = findViewById(R.id.kecheng_place);
+        kecheng_room = findViewById(R.id.kecheng_room);
+        tv_jieshao = findViewById(R.id.tv_jieshao);
+
+
         img_1 = findViewById(R.id.img_1);
         img_2 = findViewById(R.id.img_2);
         img_3 = findViewById(R.id.img_3);
-        Glide.with(TuanKeDetailActivity.this).load("http://file06.16sucai.com/2016/0407/d3e6a989a0dc78464a96c0b506871705.jpg").into(kecheng_img);
-        Glide.with(TuanKeDetailActivity.this).load("http://scimg.jb51.net/allimg/160829/103-160R91H143142.jpg").into(img_1);
-        Glide.with(TuanKeDetailActivity.this).load("http://file06.16sucai.com/2016/0407/04a36c003aacf5654804b93df7c8db43.jpg").into(img_2);
-        Glide.with(TuanKeDetailActivity.this).load("http://img.sc115.com/uploads/sc/jpgs/1412/apic7673_sc115.com.jpg").into(img_3);
 
 
         kecheng_ex = findViewById(R.id.kecheng_ex);
@@ -71,6 +104,73 @@ public class TuanKeDetailActivity extends Activity {
                 return false;
             }
         });
+        if(groupId!=999){
+            getData(groupId);
+        }
+    }
+
+    public void initData(TuanKeBean.Data detailData){
+
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).into(kecheng_img);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).into(img_1);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).into(img_2);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).into(img_3);
+        String startTime,endTime;
+        if(detailData.getStart_time()%60==0){
+            startTime = detailData.getStart_time()/60+":00";
+        }else{
+            startTime = detailData.getStart_time()/60+":"+detailData.getStart_time()%60;
+        }
+
+        if(detailData.getEnd_time()%60==0){
+            endTime = detailData.getEnd_time()/60+":00";
+        }else{
+            endTime = detailData.getEnd_time()/60+":"+detailData.getEnd_time()%60;
+        }
+        kecheng_time.setText("上课时间:"+startTime+"-"+endTime);
+        kecheng_place.setText("上课场馆:"+detailData.getBranch_name());
+        kecheng_room.setText("上课场地:"+detailData.getRoom_name());
+        kecheng_name.setText(detailData.getCourse_type_name());
+        tv_jieshao.setText(detailData.getCourse_describe());
+
+
+    }
+
+
+    private void getData(final int groupId){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDGROUP, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                TuanKeBean tuanKeBean = gson.fromJson(s, TuanKeBean.class);
+                if(tuanKeBean!=null){
+                    TuanKeBean.Data detailData = tuanKeBean.getData();
+                    initData(detailData);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("id",groupId+"");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 

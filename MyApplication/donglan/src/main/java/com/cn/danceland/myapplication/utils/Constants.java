@@ -7,8 +7,8 @@ public class Constants {
    // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
    //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
- //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   public static final String HOST = " http://192.168.1.123:8003/";//
+ public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   //public static final String HOST = " http://192.168.1.115:8003/";//
 
 
     public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -134,8 +134,21 @@ public class Constants {
     //私教相关
     public static final String COURSETYPELIST = HOST +"appCourse/findPageCourseType";//购买私教课程列表
     public static final String FINDCourseTypeEmployee = HOST+"appCourse/findCourseTypeEmployee";//查私教教练
-   public static final String FINDGROUPCLASS = HOST+"appGroupClass/queryPage";//小团课列表
-   public static final String FINDMEMBERCOURSE  = HOST+"appCourse/findMemberCourse ";//我的私教
+    public static final String FINDGROUPCLASS = HOST+"appGroupClass/queryPage";//小团课列表
+    public static final String FINDMEMBERCOURSE  = HOST+"appCourse/findMemberCourse ";//我的私教
+    public static final String FINDAVAI  = HOST+"appCourse/availableList";//我的私教
+    public static final String COURSEAPPOIN  = HOST+"appCourse/courseAppoint";//预约私教
+    public static final String QUERYKECHENGBIAO = HOST+"appGroupCourse/queryGroupCourseByData";//小团课课程表
+    public static final String GROUPAPPOINT = HOST+"appGroupCourse/groupAppoint";//小团课课程表
+    public static final String FINDGROUP = HOST+"appGroupCourse/findById";//单节小团课详情
+    public static final String FreeCourse = HOST+"appFreeGroupCourse/queryFreeGroupCourseByData";//免费团课课程表
+    public static final String FreeCourseApply = HOST+"appFreeGroupCourse/freeGroupApply";//免费团课课程表
+    public static final String APPOINTLIST = HOST+"appCourse/findCourseAppointList";//免费团课课程表
+    public static final String APPOINTCANCEL = HOST+"appCourse/courseAppointCancel";//取消私教
+    public static final String FREECOURSELIST = HOST+"appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
+    public static final String FREECANCELGROUP = HOST+"appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
+
+
 
 
 

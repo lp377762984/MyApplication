@@ -269,6 +269,12 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.CabinetActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AdviseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.StoreCardActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SellStoreCardActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

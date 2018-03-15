@@ -83,6 +83,8 @@ public class SijiaoOrderConfirmBean implements Serializable{
     public class Extends_params {
         private String phone_no;
         private String other_name;
+        private String face;
+        private String giving;
 
         private String course_type_id;
         private String course_type_name;
@@ -91,6 +93,22 @@ public class SijiaoOrderConfirmBean implements Serializable{
         private String start_date;
         private String end_date;
         private Integer time_length;
+
+        public String getFace() {
+            return face;
+        }
+
+        public void setFace(String face) {
+            this.face = face;
+        }
+
+        public String getGiving() {
+            return giving;
+        }
+
+        public void setGiving(String giving) {
+            this.giving = giving;
+        }
 
         public Integer getTime_length() {
             return time_length;
