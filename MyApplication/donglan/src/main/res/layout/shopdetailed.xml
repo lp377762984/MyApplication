@@ -46,7 +46,7 @@
                             android:id="@+id/store_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
+                            android:text="门店名称"
                             android:textSize="15sp"
                             android:layout_centerVertical="true"
                             android:textColor="#ffffff"
@@ -57,13 +57,13 @@
                             android:id="@+id/join_button"
                             android:layout_width="70dp"
                             android:layout_height="28dp"
-                            android:background="@drawable/circle_button"
+                            style="@style/BtnCommitStyle"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
                             android:layout_centerVertical="true"
                             android:text="加入"
-                            android:textColor="#61c5e7"
                             android:textSize="15sp"
+                            android:visibility="gone"
                             />
                     </RelativeLayout>
                 </RelativeLayout>
@@ -107,7 +107,7 @@
                         android:id="@+id/detail_adress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/store_adress"
+                        android:src="@drawable/img_gps_white"
                         android:layout_toLeftOf="@+id/detail_phone"
                         android:layout_marginRight="20dp"
                         android:layout_centerVertical="true"
@@ -116,7 +116,7 @@
                         android:id="@+id/detail_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/store_phone"
+                        android:src="@drawable/img_call_phone"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="20dp"
                         android:layout_centerVertical="true"
@@ -136,18 +136,57 @@
                     android:textColor="#333333"
                     />
 
-                <TextView
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/tv_detail"
+                    android:layout_below="@id/rl_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    expandableTextView:maxCollapsedLines="5"
+                    expandableTextView:animDuration="200">
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="16sp"
+                        android:textColor="#666666" />
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|bottom"
+                        android:background="@android:color/transparent"/>
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
+
+
+                <TextView
+                    android:id="@+id/tv_kechenganpai"
+                    android:layout_below="@+id/tv_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:layout_below="@+id/rl_detail"
-                    android:text=""
+                    android:text="课程安排"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_kechenganpai"
+                    android:layout_below="@+id/tv_kechenganpai"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="#666666"
+                    android:scaleType="centerCrop"
                     />
+
+
                 <TextView
                     android:id="@+id/rl_jiaolian"
                     android:layout_width="wrap_content"
@@ -155,19 +194,79 @@
                     android:text="教练团队"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:layout_below="@+id/tv_detail"
+                    android:layout_below="@+id/img_kechenganpai"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
-                <GridView
+                <com.cn.danceland.myapplication.utils.NestedExpandaleListView
                     android:id="@+id/jiaolian_grid"
                     android:layout_marginTop="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/rl_jiaolian"
-                    android:numColumns="4"
                     >
-                </GridView>
+                </com.cn.danceland.myapplication.utils.NestedExpandaleListView>
+
+                <TextView
+                    android:id="@+id/rl_huiji"
+                    android:text="教练团队"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:layout_below="@+id/jiaolian_grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"/>
+
+
+                <com.cn.danceland.myapplication.utils.NestedExpandaleListView
+                    android:id="@+id/huiji_grid"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/rl_huiji"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </com.cn.danceland.myapplication.utils.NestedExpandaleListView>
+
+                <TextView
+                    android:id="@+id/rl_shopImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="门店照片"
+                    android:textColor="#333333"
+                    android:layout_below="@+id/huiji_grid"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    />
+                <LinearLayout
+                    android:id="@+id/ll_image"
+                    android:layout_below="@+id/rl_shopImage"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:id="@+id/img_01"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        />
+                    <ImageView
+                        android:id="@+id/img_02"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"/>
+
+                </LinearLayout>
+
             </RelativeLayout>
 
 
@@ -181,14 +280,14 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
-        android:background="@color/dl_gery"
+        style="@style/BtnCommitStyle"
 
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="我要购卡"
+            android:text="加入"
             android:textSize="18sp"
             android:textColor="#FFFFFF"
             />

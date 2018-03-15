@@ -79,68 +79,12 @@ public class Data implements Serializable {
 
     private String selfUrl;
 
-    @Override
-    public String toString() {
-        return "Data{" +
-                "mail='" + mail + '\'' +
-                ", follow_level='" + follow_level + '\'' +
-                ", fitness_level='" + fitness_level + '\'' +
-                ", emergency_name='" + emergency_name + '\'' +
-                ", address='" + address + '\'' +
-                ", company='" + company + '\'' +
-                ", nationality='" + nationality + '\'' +
-                ", certificate_type='" + certificate_type + '\'' +
-                ", emergency_phone='" + emergency_phone + '\'' +
-                ", honor='" + honor + '\'' +
-                ", sign='" + sign + '\'' +
-                ", fitness='" + fitness + '\'' +
-                ", good_at='" + good_at + '\'' +
-                ", hobby='" + hobby + '\'' +
-                ", qq_no='" + qq_no + '\'' +
-                ", p_consume='" + p_consume + '\'' +
-                ", chronic_ids='" + chronic_ids + '\'' +
-                ", chonicList='" + chonicList + '\'' +
-                ", employee='" + employee + '\'' +
-                ", member=" + member +
-                ", roles=" + roles +
-                ", id='" + id + '\'' +
-                ", personId='" + personId + '\'' +
-                ", cname='" + cname + '\'' +
-                ", default_branch='" + default_branch + '\'' +
-                ", phone_no='" + phone_no + '\'' +
-                ", nick_name='" + nick_name + '\'' +
-                ", sys_role=" + sys_role +
-                ", login_name='" + login_name + '\'' +
-                ", weichat_no='" + weichat_no + '\'' +
-                ", identity_card='" + identity_card + '\'' +
-                ", department_id='" + department_id + '\'' +
-                ", height='" + height + '\'' +
-                ", weight='" + weight + '\'' +
-                ", reg_date='" + reg_date + '\'' +
-                ", birthday='" + birthday + '\'' +
-                ", zone_code='" + zone_code + '\'' +
-                ", enabled='" + enabled + '\'' +
-                ", auth='" + auth + '\'' +
-                ", gender='" + gender + '\'' +
-                ", status='" + status + '\'' +
-                ", member_no='" + member_no + '\'' +
-                ", password='" + password + '\'' +
-                ", platform=" + platform +
-                ", userName='" + userName + '\'' +
-                ", avatar_path='" + avatar_path + '\'' +
-                ", self_avatar_path='" + self_avatar_path + '\'' +
-                ", teachMumberId='" + teachMumberId + '\'' +
-                ", aware_way='" + aware_way + '\'' +
-                ", adminMumberId='" + adminMumberId + '\'' +
-                ", remark='" + remark + '\'' +
-                ", is_follow=" + is_follow +
-                ", follow_no=" + follow_no +
-                ", dyn_no=" + dyn_no +
-                ", fanse_no=" + fanse_no +
-                ", token='" + token + '\'' +
-                ", verCode='" + verCode + '\'' +
-                ", selfUrl='" + selfUrl + '\'' +
-                '}';
+    public List<Integer> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Integer> roles) {
+        this.roles = roles;
     }
 
     public Member getMember() {
@@ -231,91 +175,6 @@ public class Data implements Serializable {
         private String appRanking;
         private String branchScore;
         private String appScore;
-
-        @Override
-        public String toString() {
-            return "Member{" +
-                    "id=" + id +
-                    ", person_id=" + person_id +
-                    ", admin_emp_id=" + admin_emp_id +
-                    ", teach_emp_id=" + teach_emp_id +
-                    ", branch_id=" + branch_id +
-                    ", enabled=" + enabled +
-                    ", auth=" + auth +
-                    ", branch_name='" + branch_name + '\'' +
-                    ", guest_recom='" + guest_recom + '\'' +
-                    ", member_recom='" + member_recom + '\'' +
-                    ", guest_aware_way='" + guest_aware_way + '\'' +
-                    ", member_aware_way='" + member_aware_way + '\'' +
-                    ", card_type='" + card_type + '\'' +
-                    ", total_money='" + total_money + '\'' +
-                    ", type='" + type + '\'' +
-                    ", create_time=" + create_time +
-                    ", final_admin_id='" + final_admin_id + '\'' +
-                    ", final_teach_id='" + final_teach_id + '\'' +
-                    ", last_time='" + last_time + '\'' +
-                    ", maintain_status='" + maintain_status + '\'' +
-                    ", remark='" + remark + '\'' +
-                    ", cname='" + cname + '\'' +
-                    ", member_no='" + member_no + '\'' +
-                    ", phone_no='" + phone_no + '\'' +
-                    ", gender=" + gender +
-                    ", nick_name='" + nick_name + '\'' +
-                    ", height=" + height +
-                    ", weight=" + weight +
-                    ", birthday='" + birthday + '\'' +
-                    ", reg_date=" + reg_date +
-                    ", password='" + password + '\'' +
-                    ", default_branch='" + default_branch + '\'' +
-                    ", zone_code='" + zone_code + '\'' +
-                    ", platform=" + platform +
-                    ", avatar_path='" + avatar_path + '\'' +
-                    ", self_avatar_path='" + self_avatar_path + '\'' +
-                    ", reg_id='" + reg_id + '\'' +
-                    ", identity_card='" + identity_card + '\'' +
-                    ", login_name='" + login_name + '\'' +
-                    ", terminal=" + terminal +
-                    ", department_id='" + department_id + '\'' +
-                    ", weichat_no='" + weichat_no + '\'' +
-                    ", mail='" + mail + '\'' +
-                    ", follow_level='" + follow_level + '\'' +
-                    ", fitness_level='" + fitness_level + '\'' +
-                    ", emergency_name='" + emergency_name + '\'' +
-                    ", address='" + address + '\'' +
-                    ", company='" + company + '\'' +
-                    ", nationality='" + nationality + '\'' +
-                    ", certificate_type='" + certificate_type + '\'' +
-                    ", sys_role='" + sys_role + '\'' +
-                    ", emergency_phone='" + emergency_phone + '\'' +
-                    ", honor='" + honor + '\'' +
-                    ", sign='" + sign + '\'' +
-                    ", fitness='" + fitness + '\'' +
-                    ", good_at='" + good_at + '\'' +
-                    ", hobby='" + hobby + '\'' +
-                    ", qq_no='" + qq_no + '\'' +
-                    ", score='" + score + '\'' +
-                    ", member_name='" + member_name + '\'' +
-                    ", m_consume='" + m_consume + '\'' +
-                    ", project_ids='" + project_ids + '\'' +
-                    ", chronic_ids='" + chronic_ids + '\'' +
-                    ", target_ids='" + target_ids + '\'' +
-                    ", avatar_url='" + avatar_url + '\'' +
-                    ", self_avatar_url='" + self_avatar_url + '\'' +
-                    ", chonicList='" + chonicList + '\'' +
-                    ", projectList='" + projectList + '\'' +
-                    ", targetList='" + targetList + '\'' +
-                    ", guest_way='" + guest_way + '\'' +
-                    ", admin_name='" + admin_name + '\'' +
-                    ", teach_name='" + teach_name + '\'' +
-                    ", final_admin_name='" + final_admin_name + '\'' +
-                    ", final_teach_name='" + final_teach_name + '\'' +
-                    ", branchRanking='" + branchRanking + '\'' +
-                    ", appRanking='" + appRanking + '\'' +
-                    ", branchScore='" + branchScore + '\'' +
-                    ", appScore='" + appScore + '\'' +
-                    '}';
-        }
-
         public void setId(int id) {
             this.id = id;
         }
@@ -994,6 +853,50 @@ public class Data implements Serializable {
         this.aware_way = aware_way;
     }
 
+
+    @Override
+    public String toString() {
+        return "Data{" +
+                "id='" + id + '\'' +
+                ", personId='" + personId + '\'' +
+                ", cname='" + cname + '\'' +
+                ", default_branch='" + default_branch + '\'' +
+                ", phone_no='" + phone_no + '\'' +
+                ", nick_name='" + nick_name + '\'' +
+                ", sys_role=" + sys_role +
+                ", login_name='" + login_name + '\'' +
+                ", weichat_no='" + weichat_no + '\'' +
+                ", identity_card='" + identity_card + '\'' +
+                ", department_id='" + department_id + '\'' +
+                ", height='" + height + '\'' +
+                ", weight='" + weight + '\'' +
+                ", reg_date='" + reg_date + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", zone_code='" + zone_code + '\'' +
+                ", enabled='" + enabled + '\'' +
+                ", auth='" + auth + '\'' +
+                //", branchId='" + branchId + '\'' +
+                ", gender='" + gender + '\'' +
+                ", status='" + status + '\'' +
+                ", member_no='" + member_no + '\'' +
+                ", password='" + password + '\'' +
+                ", platform=" + platform +
+                ", userName='" + userName + '\'' +
+                ", avatar_path='" + avatar_path + '\'' +
+                ", self_avatar_path='" + self_avatar_path + '\'' +
+                ", teachMumberId='" + teachMumberId + '\'' +
+                ", aware_way='" + aware_way + '\'' +
+                ", adminMumberId='" + adminMumberId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", follower=" + is_follow +
+                ", followNumber=" + follow_no +
+                ", dynMsgNumber=" + dyn_no +
+                ", fansNum=" + fanse_no +
+                ", token='" + token + '\'' +
+                ", verCode='" + verCode + '\'' +
+                ", selfUrl='" + selfUrl + '\'' +
+                '}';
+    }
 
     public int getDynMsgNumber() {
         return dyn_no;

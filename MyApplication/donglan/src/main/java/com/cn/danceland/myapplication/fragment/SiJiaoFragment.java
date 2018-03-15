@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
@@ -95,7 +96,7 @@ public class SiJiaoFragment extends BaseFragment {
         if(info!=null){
             myCourseConBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
             myCourseConBean.setPage(0);
-            myCourseConBean.setPageCount(12);
+            myCourseConBean.setPageCount(30);
         }
         final Gson gson = new Gson();
         String s = gson.toJson(myCourseConBean);
@@ -109,11 +110,7 @@ public class SiJiaoFragment extends BaseFragment {
                     if(myCourseList!=null){
                         ex_lv.setAdapter(new MyExAdapter(myCourseList));
                     }
-
                 }
-
-                LogUtil.e("zzf",jsonObject.toString());
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -204,7 +201,18 @@ public class SiJiaoFragment extends BaseFragment {
             sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).putExtra("item",list.get(groupPosition)).putExtra("startTime",startTime).putExtra("endTime",endTime));
+                    if(list.get(groupPosition).getCourse_category()==1){
+                        startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).
+                                putExtra("item",list.get(groupPosition)).
+                                putExtra("startTime",startTime).
+                                putExtra("endTime",endTime));
+                    }else if(list.get(groupPosition).getCourse_category()==2){
+                    CourseActivity activity = (CourseActivity) getActivity();
+                    if(activity!=null){
+                        activity.getItemId(list.get(groupPosition).getId(),list.get(groupPosition).getCourse_type_id(),"2");
+                        activity.showFragment("2","");
+                    }
+                    }
                 }
             });
             viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());

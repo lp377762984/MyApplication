@@ -4,12 +4,12 @@
 
 
 
-    <ListView
+    <com.cn.danceland.myapplication.utils.MyListView
         android:id="@+id/lv_tuanke"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ListView>
+    </com.cn.danceland.myapplication.utils.MyListView>
 
 
 </RelativeLayout>

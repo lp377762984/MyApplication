@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -31,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
+import com.cn.danceland.myapplication.activity.AdviseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
@@ -43,6 +46,7 @@ import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
+import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
@@ -55,6 +59,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +80,9 @@ public class ShopFragment extends BaseFragment {
     LinearLayout ll_top;
     TextView tv_shopname;
     View v;
+    Spinner spinner;
+    ArrayList<String> roleList;
+    ArrayAdapter arrayAdapter;
 
     @Override
     public View initViews() {
@@ -82,6 +90,27 @@ public class ShopFragment extends BaseFragment {
         v = View.inflate(mActivity, R.layout.fragment_shop, null);
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        roleList = new ArrayList<String>();
+        spinner = v.findViewById(R.id.spinner);
+        addRoles();
+        arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
+        //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         gson = new Gson();
         mGridView = v.findViewById(R.id.gridview);
@@ -105,6 +134,45 @@ public class ShopFragment extends BaseFragment {
         // mGridView.setVisibility(View.VISIBLE);
 
         return v;
+    }
+
+    private void addRoles() {
+        if(info!=null){
+            List<Integer> roles = info.getRoles();
+            if(roles!=null&&roles.size()>0){
+                for(int i=0;i<roles.size();i++){
+                    if(roles.get(i)==1){
+                        roleList.add("会籍顾问");
+                    }else if(roles.get(i)==2){
+                        roleList.add("教练");
+                    }else if(roles.get(i)==3){
+                        roleList.add("前台");
+                    }else if(roles.get(i)==4){
+                        roleList.add("店长");
+                    }else if(roles.get(i)==5){
+                        roleList.add("会籍主管");
+                    }else if(roles.get(i)==6){
+                        roleList.add("教练主管");
+                    }else if(roles.get(i)==7){
+                        roleList.add("前台主管");
+                    }else if(roles.get(i)==8){
+                        roleList.add("操教");
+                    }else if(roles.get(i)==9){
+                        roleList.add("出纳");
+                    }else if(roles.get(i)==10){
+                        roleList.add("收银");
+                    }else if(roles.get(i)==11){
+                        roleList.add("兼职教练");
+                    }
+                }
+            }
+            if("1".equals(info.getAuth())){
+                roleList.add("潜客");
+            }else if("2".equals(info.getAuth())){
+                roleList.add("会员");
+            }
+        }
+
     }
 
     public void initData() {
@@ -319,8 +387,11 @@ public class ShopFragment extends BaseFragment {
                     case 4://购买私教
                         startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
                         break;
-                    case 6://课程表
-                        startActivity(new Intent(mActivity, CourseActivity.class));
+                    case 6://预约私教
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","1"));
+                        break;
+                    case 20://预约团课
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
                         break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
@@ -344,7 +415,11 @@ public class ShopFragment extends BaseFragment {
                         //    startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 16://我的租柜
-                        startActivity(new Intent(mActivity, CabinetActivity.class));
+                        //startActivity(new Intent(mActivity, CabinetActivity.class));
+                        startActivity(new Intent(mActivity, StoreCardActivity.class));
+                        break;
+                    case 18://意见反馈
+                        startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 17://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
