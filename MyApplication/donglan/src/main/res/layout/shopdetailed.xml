@@ -160,6 +160,32 @@
                         android:layout_gravity="center|bottom"
                         android:background="@android:color/transparent"/>
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
+
+
+                <TextView
+                    android:id="@+id/tv_kechenganpai"
+                    android:layout_below="@+id/tv_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="课程安排"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_kechenganpai"
+                    android:layout_below="@+id/tv_kechenganpai"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="centerCrop"
+                    />
+
+
                 <TextView
                     android:id="@+id/rl_jiaolian"
                     android:layout_width="wrap_content"
@@ -167,7 +193,7 @@
                     android:text="教练团队"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:layout_below="@+id/tv_detail"
+                    android:layout_below="@+id/img_kechenganpai"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
                     />
@@ -227,6 +253,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
+                        android:scaleType="centerCrop"
                         />
                     <ImageView
                         android:id="@+id/img_02"
@@ -234,7 +261,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"/>
 
                 </LinearLayout>
 
