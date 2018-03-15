@@ -57,7 +57,7 @@ public class ShopDetailedActivity extends Activity{
     TextView tv_adress,tv_time,store_name;
     ExpandableTextView tv_detail;
     String phoneNo;
-    ImageView detail_phone,detail_adress,img_01,img_02;
+    ImageView detail_phone,detail_adress,img_01,img_02,img_kechenganpai;
     String jingdu,weidu,shopJingdu,shopWeidu,branchID;
     RelativeLayout s_button;
     Data myInfo;
@@ -89,6 +89,7 @@ public class ShopDetailedActivity extends Activity{
 
     private void initView() {
 
+        img_kechenganpai = findViewById(R.id.img_kechenganpai);
         jiaolian_grid = findViewById(R.id.jiaolian_grid);
         huiji_grid = findViewById(R.id.huiji_grid);
         jiaolian_grid.setAdapter(new MyAdapter());
@@ -97,6 +98,7 @@ public class ShopDetailedActivity extends Activity{
         img_02 = findViewById(R.id.img_02);
         Glide.with(ShopDetailedActivity.this).load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1521091228318&di=fdf182a124da7454353241da6e101ab5&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F15%2F25%2F82%2F47I58PICGQK_1024.jpg").into(img_01);
         Glide.with(ShopDetailedActivity.this).load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1521091228318&di=fdf182a124da7454353241da6e101ab5&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F15%2F25%2F82%2F47I58PICGQK_1024.jpg").into(img_02);
+        Glide.with(ShopDetailedActivity.this).load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1521091228318&di=fdf182a124da7454353241da6e101ab5&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F15%2F25%2F82%2F47I58PICGQK_1024.jpg").into(img_kechenganpai);
 
         tv_adress = findViewById(R.id.tv_adress);
         tv_time = findViewById(R.id.tv_time);
