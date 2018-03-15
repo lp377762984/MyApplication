@@ -35,7 +35,6 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
-import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
@@ -424,9 +423,9 @@ public class ShopFragment extends BaseFragment {
                     case 17://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
-                    case 18:
-
-                        break;
+//                    case 18:
+//
+//                        break;
                     default:
                         break;
                 }
