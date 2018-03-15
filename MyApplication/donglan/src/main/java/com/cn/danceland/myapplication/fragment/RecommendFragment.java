@@ -276,7 +276,7 @@ public class RecommendFragment extends BaseFragment {
 
             tv_name.setText(dataList.get(i).getName());
             tv_phone.setText(dataList.get(i).getPhone_no());
-            tv_time.setText(TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date()+"",new String("YYYY-MM-dd")));
+            tv_time.setText(TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date()+"",new String("yyyy-MM-dd")));
             if (dataList.get(i).getGender()==1){
 
                 iv_sex.setImageResource(R.drawable.img_sex1);
