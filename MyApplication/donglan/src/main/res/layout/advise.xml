@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/advise_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/dl_gery"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="意见反馈"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="20dp"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:text="记录"
+            />
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/advise_rg"
+        android:layout_below="@+id/advise_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        >
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="表扬"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="建议"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="需求"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="投诉"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+    </RadioGroup>
+    <View
+        android:id="@+id/line"
+        android:layout_below="@+id/advise_rg"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/dl_gery"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <EditText
+        android:id="@+id/advise_ed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line"
+        android:background="@null"
+        android:minLines="8"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        />
+
+    <RelativeLayout
+        android:layout_below="@+id/advise_ed"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/color_dl_yellow"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
