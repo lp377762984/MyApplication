@@ -103,7 +103,7 @@ public class RequsetDynInfoBean {
             private String author;
             private int publish_type;
             private int share_id;
-            private boolean enabled;
+            private int enabled;
             private String publish_time;
             private String publish_place;
             private List<String> imgList;
@@ -151,7 +151,7 @@ public class RequsetDynInfoBean {
                 this.vedio_url = vedioUrl;
             }
 
-            public boolean isEnabled() {
+            public int isEnabled() {
                 return enabled;
             }
 
@@ -267,11 +267,11 @@ public class RequsetDynInfoBean {
                 return share_id;
             }
 
-            public void setEnabled(boolean enabled) {
+            public void setEnabled(int enabled) {
                 this.enabled = enabled;
             }
 
-            public boolean getEnabled() {
+            public int getEnabled() {
                 return enabled;
             }
 

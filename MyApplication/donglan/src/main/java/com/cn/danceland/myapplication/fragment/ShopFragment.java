@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
+import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.Data;
@@ -50,7 +51,6 @@ import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -345,6 +345,12 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 16://我的租柜
                         startActivity(new Intent(mActivity, CabinetActivity.class));
+                        break;
+                    case 17://推荐好友
+                        startActivity(new Intent(mActivity, RecommendActivity.class));
+                        break;
+                    case 18:
+
                         break;
                     default:
                         break;

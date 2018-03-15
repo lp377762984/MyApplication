@@ -145,7 +145,7 @@ public class OrderDetailsActivity extends Activity implements View.OnClickListen
 
         if (orderInfo.getBus_type() == 56 || orderInfo.getBus_type() == 57) {
             tv_price.setText(PriceUtils.formatPrice2String(orderInfo.getReceive()));
-            tv_employee.setText("私教姓名");
+            tv_employee.setText("私教姓名:");
             tv_counselor.setText(orderExtendsInfo.getEmployee_name());
             tv_product_type.setText("私教课程");
             tv_product_name.setText(orderExtendsInfo.getCourse_type_name());

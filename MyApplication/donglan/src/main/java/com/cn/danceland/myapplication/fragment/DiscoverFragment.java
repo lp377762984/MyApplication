@@ -1,9 +1,7 @@
 package com.cn.danceland.myapplication.fragment;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
-import com.cn.danceland.myapplication.activity.PublishActivity;
+import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
@@ -229,9 +227,42 @@ public class DiscoverFragment extends BaseFragment {
                 break;
             case R.id.iv_photo://发布动态
 
-               // autoLocatedPopup.showPopupWindow(v);
-                Intent intent = new Intent(mActivity, PublishActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(mActivity, RecommendActivity.class);
+               startActivity(intent);
+
+//
+//                EMClient.getInstance().login("dlkj0002","q",new EMCallBack() {//回调
+//                    @Override
+//                    public void onSuccess() {
+//                        EMClient.getInstance().groupManager().loadAllGroups();
+//                        EMClient.getInstance().chatManager().loadAllConversations();
+//                        Log.d("taginfo", "登录聊天服务器成功！");
+//                        Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                      //  EaseUserUtils.setUserAvatar();
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
+//                        PreferenceManager.getInstance().setCurrentUserNick(myinfo.getNick_name());
+//                        PreferenceManager.getInstance().setCurrentUserName("dlkj0002");
+//                        PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getSelf_avatar_path());
+//                        startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+//
+//                    }
+//
+//                    @Override
+//                    public void onProgress(int progress, String status) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(int code, String message) {
+//                        Log.d("taginfo", "登录聊天服务器失败！");
+//                    }
+//                });
+
+
+                // autoLocatedPopup.showPopupWindow(v);
+//                Intent intent = new Intent(mActivity, PublishActivity.class);
+//                startActivity(intent);
                 break;
             case value:
                 break;

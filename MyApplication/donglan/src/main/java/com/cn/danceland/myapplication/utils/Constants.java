@@ -1,14 +1,16 @@
 package com.cn.danceland.myapplication.utils;
 
-public class Constants {
+import com.hyphenate.easeui.EaseConstant;
 
-    //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+public class Constants extends EaseConstant{
+
+   //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
     // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
- //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   public static final String HOST = " http://192.168.1.123:8003/";//
+ public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+ //  public static final String HOST = " http://192.168.1.123:8003/";//
 
     //public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
 
@@ -111,6 +113,10 @@ public class Constants {
     public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/appPotential/findNotUpcomingMatter";//查询未处理待办
     public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
+   public static final String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
+   public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐
+   public static final String INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
+
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
@@ -140,5 +146,23 @@ public class Constants {
     public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse ";//我的私教
 
 
+
+ //环信相关
+ public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
+ public static final String GROUP_USERNAME = "item_groups";
+ public static final String CHAT_ROOM = "item_chatroom";
+ public static final String ACCOUNT_REMOVED = "account_removed";
+ public static final String ACCOUNT_CONFLICT = "conflict";
+ public static final String ACCOUNT_FORBIDDEN = "user_forbidden";
+ public static final String ACCOUNT_KICKED_BY_CHANGE_PASSWORD = "kicked_by_change_password";
+ public static final String ACCOUNT_KICKED_BY_OTHER_DEVICE = "kicked_by_another_device";
+ public static final String CHAT_ROBOT = "item_robots";
+ public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";
+ public static final String ACTION_GROUP_CHANAGED = "action_group_changed";
+ public static final String ACTION_CONTACT_CHANAGED = "action_contact_changed";
+
+ public static final String EXTRA_CONFERENCE_ID = "confId";
+ public static final String EXTRA_CONFERENCE_PASS = "password";
+ public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
 
 }

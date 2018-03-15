@@ -12,8 +12,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
-import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
@@ -26,6 +24,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -197,6 +196,11 @@ public class MeFragment extends BaseFragment {
 
 
                 updateUserInfo((Data) DataInfoCache.loadOneCache(Constants.MY_INFO));
+                Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                //更新聊天头像和昵称
+                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getNick_name());
+                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getSelf_avatar_path());
+
 
 
                 break;

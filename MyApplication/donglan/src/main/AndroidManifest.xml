@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cn.danceland.myapplication"
 
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="1.06">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -50,6 +50,32 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
+    <!--环信相关权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!--bugly start-->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--bugly end-->
+
     <permission
         android:name="com.cn.danceland.myapplication.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -66,6 +92,33 @@
 
         android:theme="@style/MyTheme">
 
+
+        <!-- 设置环信应用的AppKey -->
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="1103171109178312#donglan" />
+        <!-- 声明SDK所需的service SDK核心功能-->
+        <service
+            android:name="com.hyphenate.chat.EMChatService"
+            android:exported="true" />
+        <service
+            android:name="com.hyphenate.chat.EMJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!-- 声明SDK所需的receiver -->
+        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <!-- 可选filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
@@ -75,8 +128,51 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.RecommendActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.PaiMingActivity"
+        <activity
+            android:name=".activity.ChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding msg send activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding ack user list activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- 显示下载大图页面 -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
+        <!-- 下载文件 -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
+        <!-- 地图 -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
+
+        <activity
+            android:name=".activity.PaiMingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChartActivity"
@@ -104,8 +200,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.EditPotentialActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
             android:name=".activity.HomeActivity"
@@ -138,16 +234,18 @@
         <activity
             android:name=".activity.PotentialDetailsActivity"
             android:screenOrientation="portrait" />
-        <meta-data android:name="android.max_aspect"
-            android:value="2.1"/>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ngEPVQS7Y2ZlQWDDyuOGRe63SnMkvbLz"></meta-data>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote"></service>
-
 
         <activity
             android:name=".activity.AddFriendsActivity"
@@ -265,10 +363,12 @@
         <activity
             android:name=".activity.SiJiaoOrderActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.ShowCameraActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.CabinetActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.ShowCameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CabinetActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

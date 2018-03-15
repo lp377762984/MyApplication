@@ -10,24 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LocationService;
-import com.cn.danceland.myapplication.utils.LogUtil;
-
 
 import java.util.ArrayList;
 
@@ -168,6 +162,7 @@ public class LocationActivity extends Activity {
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
             //LogUtil.e("zzf",location.getLocType()+"");
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+
                 loading.setVisibility(View.GONE);
                 StringBuffer sb = new StringBuffer(256);
                 sb.append("time : ");

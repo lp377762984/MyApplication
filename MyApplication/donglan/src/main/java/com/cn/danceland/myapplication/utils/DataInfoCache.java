@@ -104,7 +104,7 @@ public class DataInfoCache {
                 file.delete();
             }
 
-            //   Log.d("taginfo", file.getAbsolutePath());
+               Log.d("taginfo", file.getAbsolutePath());
             try {
                 ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
                 oos.writeObject(data);

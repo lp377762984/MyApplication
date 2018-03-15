@@ -11,6 +11,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
+import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -28,10 +29,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     public static Context applicationContext;
     private static MyApplication instance;
     public LocationService locationClient;
-    private DaoMaster.DevOpenHelper donglan,message;
-    private SQLiteDatabase db,messagedb;
-    private DaoMaster daoMaster,messageMaster;
-    private DaoSession daoSession,messageSession;
+    private DaoMaster.DevOpenHelper donglan, message;
+    private SQLiteDatabase db, messagedb;
+    private DaoMaster daoMaster, messageMaster;
+    private DaoSession daoSession, messageSession;
     // 小米推送ID.
     private static final String APP_ID = "2882303761517681383";
     // 小米推送KEY.
@@ -72,7 +73,18 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 ////        if (sHandler == null) {
 ////            sHandler = new DemoHandler(getApplicationContext());
 ////        }
+
+
+       // EaseUI.getInstance().init(applicationContext, null);
+//在做打包混淆时，关闭debug模式，避免消耗不必要的资源
+     //   EMClient.getInstance().setDebugMode(true);
+
+        DemoHelper.getInstance().init(applicationContext);
     }
+
+
+
+
 
     public static RequestQueue getHttpQueues() {
         return requestQueue;
@@ -86,7 +98,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         return applicationContext;
     }
 
-    private void  setUpDb(){
+    private void setUpDb() {
 
         donglan = new DaoMaster.DevOpenHelper(this, "donglan", null);
         message = new DaoMaster.DevOpenHelper(this, "message", null);
@@ -101,17 +113,20 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         messageSession = messageMaster.newSession();
     }
 
-    public SQLiteDatabase getDb(){
+    public SQLiteDatabase getDb() {
         return db;
     }
-    public SQLiteDatabase getMessageDb(){
+
+    public SQLiteDatabase getMessageDb() {
         return messagedb;
     }
-    public DaoSession getDaoSession(){
+
+    public DaoSession getDaoSession() {
 
         return daoSession;
     }
-    public DaoSession getMessageDaoSession(){
+
+    public DaoSession getMessageDaoSession() {
 
         return messageSession;
     }

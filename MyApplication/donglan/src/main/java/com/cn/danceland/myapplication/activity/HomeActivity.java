@@ -129,7 +129,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         mLocationClient.stop();
     }
 
-    public class MyLocationListener extends BDAbstractLocationListener {
+    public class MyLocationListener extends BDAbstractLocationListener  {
         @Override
         public void onReceiveLocation(BDLocation location){
             //获取周边POI信息

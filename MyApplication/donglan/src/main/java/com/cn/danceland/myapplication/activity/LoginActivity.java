@@ -269,7 +269,9 @@ public class LoginActivity extends Activity implements OnClickListener {
                 LogUtil.i(MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 break;
             case R.id.tv_forgetpsw://忘记密码
-                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+
+
+            startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
             case R.id.tv_login_others://其他方式登陆
                 Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
@@ -311,9 +313,12 @@ public class LoginActivity extends Activity implements OnClickListener {
      * 登录
      */
     private void login() {
-        dialog.show();
-        String url = Constants.LOGIN_URL;
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+
+
+
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.fragment.ChatFragment;
+import com.cn.danceland.myapplication.fragment.MyChatFragment;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.util.EasyUtils;
@@ -28,7 +28,7 @@ public class ChatActivity extends EaseBaseActivity {
         //get user id or group id
         toChatUsername = getIntent().getExtras().getString("userId");
         //use EaseChatFratFragment
-        chatFragment = new ChatFragment();
+        chatFragment = new MyChatFragment();
         //pass parameters to chat fragment
         chatFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();
