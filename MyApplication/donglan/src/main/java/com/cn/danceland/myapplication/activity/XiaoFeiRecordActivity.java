@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class XiaoFeiRecordActivity extends Activity {
     private Gson gson;
     Data info;
     private SimpleDateFormat sdf;
+    ImageView xiaofei_back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +70,13 @@ public class XiaoFeiRecordActivity extends Activity {
 
     private void initView() {
         lv_xiaofei = findViewById(R.id.lv_xiaofei);
+        xiaofei_back = findViewById(R.id.xiaofei_back);
+        xiaofei_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
