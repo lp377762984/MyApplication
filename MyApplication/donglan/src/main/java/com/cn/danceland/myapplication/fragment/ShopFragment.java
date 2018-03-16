@@ -35,6 +35,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
+import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
@@ -414,8 +415,7 @@ public class ShopFragment extends BaseFragment {
                         //    startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 16://我的租柜
-                        //startActivity(new Intent(mActivity, CabinetActivity.class));
-                        startActivity(new Intent(mActivity, StoreCardActivity.class));
+                        startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
@@ -423,9 +423,9 @@ public class ShopFragment extends BaseFragment {
                     case 17://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
-//                    case 18:
-//
-//                        break;
+                    case 21:
+                        startActivity(new Intent(mActivity, StoreCardActivity.class));
+                        break;
                     default:
                         break;
                 }
