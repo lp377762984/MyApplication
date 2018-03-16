@@ -113,7 +113,7 @@ public class StoreAccountRequest {
 			// LogUtil.i(storeAccount.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/queryList", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/findAccount ", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}

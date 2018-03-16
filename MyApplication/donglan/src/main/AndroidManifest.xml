@@ -376,6 +376,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SellStoreCardActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.XiaoFeiRecordActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

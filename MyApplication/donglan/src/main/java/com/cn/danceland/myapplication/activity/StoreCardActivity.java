@@ -1,17 +1,36 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.MyStoreFragment;
 import com.cn.danceland.myapplication.fragment.SellStoreCardFragment;
+
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -21,58 +40,124 @@ import com.cn.danceland.myapplication.fragment.SellStoreCardFragment;
 public class StoreCardActivity extends FragmentActivity {
 
     TabLayout tl;
+    MagicIndicator magic_indicator;
+    ViewPager view_pager;
+    ArrayList<String> mTitleDataList;
+    FragmentManager supportFragmentManager;
+    ArrayList<Fragment> fragmentArrayList;
+    ImageView storecard_back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.storecard);
+        initHost();
+
         initView();
 
     }
 
-    private void initView() {
-        tl = findViewById(R.id.tl);
-        showFragment(0);
-        tl.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()){
-                    case 0:
-                        showFragment(0);
-                        break;
-                    case 1:
-                        showFragment(1);
-                        break;
-                }
-            }
+    private void initHost() {
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
+        supportFragmentManager = getSupportFragmentManager();
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+        fragmentArrayList = new ArrayList<>();
+        fragmentArrayList.add(new MyStoreFragment());
+        fragmentArrayList.add(new SellStoreCardFragment());
 
-            }
-        });
 
     }
 
-    public void showFragment(int type){
+    public void showFragment(int i){
+
+        view_pager.setCurrentItem(i);
+    }
+
+    private void initView() {
 
 
-        FragmentManager supportFragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
-        if(type==0){
-            MyStoreFragment myStoreFragment = new MyStoreFragment();
-            fragmentTransaction.replace(R.id.rl_fragment,myStoreFragment);
-        }else if(type==1){
-            SellStoreCardFragment sellStoreCardFragment = new SellStoreCardFragment();
-            fragmentTransaction.replace(R.id.rl_fragment,sellStoreCardFragment);
+
+        mTitleDataList = new ArrayList<>();
+        mTitleDataList.add("我的储值");
+        mTitleDataList.add("我要充值");
+
+        magic_indicator = findViewById(R.id.magic_indicator);
+        view_pager = findViewById(R.id.view_pager);
+
+        view_pager.setAdapter(new myFragmentPagerAdapter(supportFragmentManager,fragmentArrayList));
+        storecard_back = findViewById(R.id.storecard_back);
+        storecard_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+
+        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
+        CommonNavigator commonNavigator = new CommonNavigator(this);
+        commonNavigator.setAdjustMode(true);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+
+            @Override
+            public int getCount() {
+                return mTitleDataList == null ? 0 : mTitleDataList.size();
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
+                colorTransitionPagerTitleView.setSelectedColor(Color.parseColor("#ff6600"));
+                colorTransitionPagerTitleView.setText(mTitleDataList.get(index));
+                colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        view_pager.setCurrentItem(index);
+                    }
+                });
+                return colorTransitionPagerTitleView;
+            }
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                indicator.setMode(LinePagerIndicator.MODE_MATCH_EDGE);
+                indicator.setColors(Color.parseColor("#ff6600"));
+                return indicator;
+            }
+        });
+        magicIndicator.setNavigator(commonNavigator);
+
+        ViewPagerHelper.bind(magicIndicator,view_pager);
+    }
+
+
+    public class myFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        private FragmentManager fragmetnmanager;  //创建FragmentManager
+        private List<Fragment> listfragment; //创建一个List<Fragment>
+        public myFragmentPagerAdapter(FragmentManager fm,List<Fragment> list) {
+            super(fm);
+            this.fragmetnmanager=fm;
+            this.listfragment=list;
         }
 
-        fragmentTransaction.commit();
+        @Override
+        public Fragment getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return listfragment.get(arg0); //返回第几个fragment
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return listfragment.size(); //总共有多少个fragment
+        }
+
+
     }
 
 }
