@@ -71,7 +71,7 @@ public class SiJiaoOrderActivity extends Activity {
     EditText ed_phone,ed_name;
     LinearLayout rl_jiaolian,rl_kaikeshijian,rl_name,rl_phone,ll_dingjin;
     RadioButton btn_forme,btn_foryou;
-    CheckBox btn_zhifubao,btn_weixin;
+    CheckBox btn_zhifubao,btn_weixin,btn_chuzhika;
     View line7;
     ImageView back_img,iv_phonebook;
     BuySiJiaoBean.Content itemContent;
@@ -220,6 +220,7 @@ public class SiJiaoOrderActivity extends Activity {
 
         ed_time = findViewById(R.id.ed_time);
         ed_time.setText(nowyear+"年"+month+"月"+monthDay+"日");
+        strTime = nowyear+"-"+month+"-"+monthDay;
 
         btn_forme = findViewById(R.id.btn_forme);
         btn_foryou = findViewById(R.id.btn_foryou);
@@ -229,6 +230,7 @@ public class SiJiaoOrderActivity extends Activity {
         line7 = findViewById(R.id.line7);
         btn_zhifubao = findViewById(R.id.btn_zhifubao);
         btn_weixin = findViewById(R.id.btn_weixin);
+        btn_chuzhika = findViewById(R.id.btn_chuzhika);
         back_img = findViewById(R.id.back_img);
         ed_phone = findViewById(R.id.ed_phone);
         ed_name = findViewById(R.id.ed_name);
@@ -340,7 +342,8 @@ public class SiJiaoOrderActivity extends Activity {
             public void onClick(View v) {
                 btn_zhifubao.setChecked(true);
                 btn_weixin.setChecked(false);
-                zhifu = "0";
+                btn_chuzhika.setChecked(false);
+                zhifu = "1";
             }
         });
 
@@ -349,7 +352,17 @@ public class SiJiaoOrderActivity extends Activity {
             public void onClick(View v) {
                 btn_zhifubao.setChecked(false);
                 btn_weixin.setChecked(true);
-                zhifu = "1";
+                btn_chuzhika.setChecked(false);
+                zhifu = "2";
+            }
+        });
+        btn_chuzhika.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_zhifubao.setChecked(false);
+                btn_weixin.setChecked(false);
+                btn_chuzhika.setChecked(true);
+                zhifu="5";
             }
         });
         iv_phonebook = findViewById(R.id.iv_phonebook);
@@ -450,7 +463,7 @@ public class SiJiaoOrderActivity extends Activity {
         }else if("0".equals(forme)){
             sijiaoOrderConfirmBean.setBus_type(56);
         }
-        sijiaoOrderConfirmBean.setPay_way("1");//1支付宝
+        sijiaoOrderConfirmBean.setPay_way(zhifu);//1支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
         extends_params.setCourse_type_id(course_category+"");
@@ -458,7 +471,7 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
         extends_params.setTime_length(time_length);
-        sijiaoOrderConfirmBean.setReceive((price-10)+"");
+        sijiaoOrderConfirmBean.setReceive((price)+"");
         sijiaoOrderConfirmBean.setPrice(price+"");
         if("1".equals(forme)){
             extends_params.setOther_name(ed_name.getText().toString());
@@ -582,7 +595,7 @@ public class SiJiaoOrderActivity extends Activity {
         PayBean payBean = new PayBean();
         payBean.id = id;
         payBean.order_no = 12345 + "";
-        payBean.price = 100;
+        payBean.price = price;
         if("1".equals(forme)){
             payBean.bus_type = 57;
             if("1".equals(type)){
@@ -605,7 +618,15 @@ public class SiJiaoOrderActivity extends Activity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
+        String url;
+        if("5".equals(zhifu)){
+            url = Constants.COMMIT_CHUZHIKA;
+
+        }else{
+            url = Constants.COMMIT_ALIPAY;
+        }
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());

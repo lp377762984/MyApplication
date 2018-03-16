@@ -100,6 +100,7 @@ public class Constants extends EaseConstant{
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
+    public static final String COMMIT_CHUZHIKA  = HOST+"appOrder/storeConsume";//储值卡消费回调
 
     //潜客相关
     public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
