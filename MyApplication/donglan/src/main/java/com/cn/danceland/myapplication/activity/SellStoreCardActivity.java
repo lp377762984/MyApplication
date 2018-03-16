@@ -122,6 +122,7 @@ public class SellStoreCardActivity extends Activity{
         sijiaoOrderConfirmBean.setPlatform(2);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
         sijiaoOrderConfirmBean.setBus_type(16);
+        extends_params.setStore_type_id(cardid.getId()+"");
         extends_params.setFace(cardid.getFace()+"");
         extends_params.setGiving(cardid.getGiving()+"");
         sijiaoOrderConfirmBean.setReceive(price);

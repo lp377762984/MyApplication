@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +21,8 @@ import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+
+import java.util.HashMap;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -42,11 +45,11 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     double jingdu,weidu;
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        //不处理崩溃时页面保存信息
-        // super.onSaveInstanceState(outState);
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        //不处理崩溃时页面保存信息
+//        // super.onSaveInstanceState(outState);
+//    }
 
     @Override
     public void onBackPressed() {
@@ -107,6 +110,44 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
         // 默认首页
         mTabs[0].setSelected(true);
+
+
+        SharedPreferences bus_type = getSharedPreferences("bus_type", MODE_PRIVATE);
+        SharedPreferences.Editor edit = bus_type.edit();
+        edit.putString(11+"","PC买定金");
+        edit.putString(13+"","PC退定金");
+        edit.putString(14+"","PC储值卡充值");
+        edit.putString(15+"","PC储值卡退钱");
+        edit.putString(16+"","App储值卡充值");
+        edit.putString(31+"","App买定金");
+        edit.putString(32+"","App买卡");
+        edit.putString(33+"","App为他人买定金");
+        edit.putString(34+"","App为他人买卡");
+        edit.putString(21+"","开卡");
+        edit.putString(22+"","卡升级");
+        edit.putString(23+"","续卡");
+        edit.putString(24+"","补卡");
+        edit.putString(25+"","转卡");
+        edit.putString(26+"","退卡");
+        edit.putString(27+"","停卡");
+        edit.putString(28+"","延期");
+        edit.putString(29+"","挂失");
+        edit.putString(41+"","租柜");
+        edit.putString(42+"","续柜");
+        edit.putString(43+"","退柜");
+        edit.putString(44+"","转柜");
+        edit.putString(45+"","换柜");
+        edit.putString(51+"","购买私教");
+        edit.putString(52+"","私教转会员");
+        edit.putString(53+"","私教转教练");
+        edit.putString(54+"","购买小团课");
+        edit.putString(55+"","小团课转会员");
+        edit.putString(56+"","App购买私教");
+        edit.putString(57+"","为他人购买私教");
+
+        edit.apply();
+
+
     }
 
     @Override

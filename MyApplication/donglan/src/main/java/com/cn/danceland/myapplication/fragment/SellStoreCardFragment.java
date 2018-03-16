@@ -127,6 +127,7 @@ public class SellStoreCardFragment extends BaseFragment {
             TextView address_name = inflate.findViewById(R.id.address_name);
             TextView cardname = inflate.findViewById(R.id.cardname);
             TextView tv_jine = inflate.findViewById(R.id.tv_jine);
+            TextView tv_zengsong = inflate.findViewById(R.id.tv_zengsong);
             //RelativeLayout chongzhicard = inflate.findViewById(R.id.chongzhicard);
             XCRoundRectImageView card_img=  (XCRoundRectImageView) inflate.findViewById(R.id.card_img);
 
@@ -134,6 +135,7 @@ public class SellStoreCardFragment extends BaseFragment {
             address_name.setText(list.get(position).getAddress_name());
             cardname.setText(list.get(position).getFace()+"元储值卡");
             tv_jine.setText("￥"+list.get(position).getFace());
+            tv_zengsong.setText("赠送：￥ "+list.get(position).getGiving()+"元");
 
             Glide.with(mActivity).load(list.get(position).getImg_url()).into(card_img);
 

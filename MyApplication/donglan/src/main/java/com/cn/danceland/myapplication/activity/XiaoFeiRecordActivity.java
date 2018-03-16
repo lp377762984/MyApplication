@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,6 +46,7 @@ public class XiaoFeiRecordActivity extends Activity {
     ImageView xiaofei_back;
     float allchongzhi,allxiaofei;
     TextView tv_leijichongzhi,tv_leijixiaofei;
+    SharedPreferences bus_type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class XiaoFeiRecordActivity extends Activity {
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        bus_type = getSharedPreferences("bus_type", MODE_PRIVATE);
     }
 
     private void initView() {
@@ -158,21 +162,20 @@ public class XiaoFeiRecordActivity extends Activity {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            Byte type = list.get(position).getBus_type();
             if(list.get(position).getType()==1){
-                viewHolder.tv_goodtype.setText("充值");
                 viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#ff6600"));
             }else if(list.get(position).getType()==3){
-                viewHolder.tv_goodtype.setText("购物");
                 viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
             }else if(list.get(position).getType()==2){
-                viewHolder.tv_goodtype.setText("退款");
                 viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
             }
-
+            if(type!=null){
+                viewHolder.tv_goodtype.setText(bus_type.getString(type.toString(), ""));
+            }
             viewHolder.tv_time.setText(sdf.format(list.get(position).getOperate_time()));
 
             return convertView;

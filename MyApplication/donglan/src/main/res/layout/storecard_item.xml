@@ -75,11 +75,22 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_zengsong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/chongzhicard"
+            android:layout_toRightOf="@+id/chongzhicard"
+            android:layout_marginLeft="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/color_dl_yellow"
+            />
+
+        <TextView
             android:id="@+id/cardname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/chongzhicard"
-            android:layout_marginLeft="15sp"
+            android:layout_marginLeft="15dp"
             android:layout_toRightOf="@+id/chongzhicard"
             android:text=""
             android:textColor="@color/black"
@@ -97,7 +108,7 @@
 
         <RelativeLayout
             style="@style/BtnCommitStyle"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="30dp"
             android:layout_alignBottom="@+id/chongzhicard"
             android:layout_alignParentRight="true"

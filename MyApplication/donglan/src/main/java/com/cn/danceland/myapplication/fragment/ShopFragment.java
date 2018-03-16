@@ -423,7 +423,7 @@ public class ShopFragment extends BaseFragment {
                     case 17://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
-                    case 21:
+                    case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
                     default:
