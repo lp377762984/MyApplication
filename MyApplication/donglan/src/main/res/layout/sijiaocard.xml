@@ -9,14 +9,34 @@
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/card_img"
             android:layout_width="208dp"
             android:layout_height="130dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/sijiao_card"
-            />
+            android:layout_marginLeft="10dp">
+            <com.cn.danceland.myapplication.view.XCRoundRectImageView
+                android:id="@+id/card_img_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/sijiao_card"
+                />
+
+            <TextView
+                android:id="@+id/sijiao_amount"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/shape_corner"
+                android:textSize="14sp"
+                android:paddingLeft="5dp"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                />
+
+        </FrameLayout>
+
+
         <RelativeLayout
             android:id="@+id/rl_tv"
             android:layout_toRightOf="@+id/card_img"
@@ -36,7 +56,7 @@
                     android:id="@+id/sijiao_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="私教名称：增肌"
+                    android:text="私教名称："
                     android:textSize="14sp"
                     android:layout_weight="1"
                     />
@@ -44,23 +64,16 @@
                     android:id="@+id/sijiao_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="课程类型：一对一"
+                    android:text="课程类型："
                     android:textSize="14sp"
                     android:layout_weight="1"
                     />
-                <TextView
-                    android:id="@+id/sijiao_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="课程节数：30节"
-                    android:textSize="14sp"
-                    android:layout_weight="1"
-                    />
+
                 <TextView
                     android:id="@+id/sijiao_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="金额：3000元"
+                    android:text="费用："
                     android:textSize="14sp"
                     android:layout_weight="1"
                     />
@@ -76,7 +89,7 @@
             android:layout_below="@+id/rl_tv"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@color/dl_gery"
+            style="@style/BtnCommitStyle"
             android:gravity="center"
             >
             <TextView

@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -118,7 +119,6 @@ public class BuySiJiaoActivity extends Activity {
                 if(content!=null){
                     BuySiJiaoBean.Content itemContent = BuySiJiaoActivity.this.content.get(position);
                     startActivity(new Intent(BuySiJiaoActivity.this,SellSiJiaoConfirmActivity.class).putExtra("itemContent",itemContent));
-                    finish();
                 }
 
             }
@@ -172,7 +172,7 @@ public class BuySiJiaoActivity extends Activity {
             if(convertView==null){
                 viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(BuySiJiaoActivity.this).inflate(R.layout.sijiaocard, null);
-                viewHolder.card_img = convertView.findViewById(R.id.card_img);
+                viewHolder.card_img_1 = convertView.findViewById(R.id.card_img_1);
                 viewHolder.sijiao_name = convertView.findViewById(R.id.sijiao_name);
                 viewHolder.sijiao_type = convertView.findViewById(R.id.sijiao_type);
                 viewHolder.sijiao_amount = convertView.findViewById(R.id.sijiao_amount);
@@ -182,11 +182,11 @@ public class BuySiJiaoActivity extends Activity {
             }else{
                 viewHolder = (ViewHolder)convertView.getTag();
             }
-            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img);
+            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img_1);
             viewHolder.sijiao_name.setText("私教名称："+contentList.get(position).getName());
             viewHolder.sijiao_type.setText("课程类型："+contentList.get(position).getCourse_category_name());
-            viewHolder.sijiao_amount.setText("课程节数："+contentList.get(position).getCount()+"节");
-            viewHolder.sijiao_price.setText("金额："+contentList.get(position).getPrice()+"元");
+            viewHolder.sijiao_amount.setText(contentList.get(position).getCount()+"节私教课");
+            viewHolder.sijiao_price.setText("费用："+contentList.get(position).getPrice()+"元");
 
 
             return convertView;
@@ -194,7 +194,7 @@ public class BuySiJiaoActivity extends Activity {
     }
 
     class ViewHolder{
-        ImageView card_img;
+        XCRoundRectImageView card_img_1;
         TextView sijiao_name,sijiao_type,sijiao_amount,sijiao_price;
 
     }
