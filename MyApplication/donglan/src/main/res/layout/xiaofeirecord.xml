@@ -42,7 +42,7 @@
             android:textColor="@color/color_dl_yellow"
             android:textSize="16sp"
             android:layout_centerVertical="true"
-            android:text="累计充值：¥"
+            android:text="累计充值：¥ "
             android:layout_marginLeft="15dp"
             />
         <TextView
@@ -65,7 +65,7 @@
                 android:id="@+id/rl_leijixiaofei"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="累计消费：¥"
+                android:text="累计消费：¥ "
                 android:layout_centerVertical="true"
                 android:textSize="16sp"
                 />

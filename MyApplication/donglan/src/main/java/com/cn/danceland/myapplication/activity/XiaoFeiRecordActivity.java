@@ -43,6 +43,8 @@ public class XiaoFeiRecordActivity extends Activity {
     Data info;
     private SimpleDateFormat sdf;
     ImageView xiaofei_back;
+    float allchongzhi,allxiaofei;
+    TextView tv_leijichongzhi,tv_leijixiaofei;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +72,9 @@ public class XiaoFeiRecordActivity extends Activity {
 
     private void initView() {
         lv_xiaofei = findViewById(R.id.lv_xiaofei);
+        tv_leijichongzhi = findViewById(R.id.tv_leijichongzhi);
+        tv_leijixiaofei = findViewById(R.id.tv_leijixiaofei);
+
         xiaofei_back = findViewById(R.id.xiaofei_back);
         xiaofei_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +99,16 @@ public class XiaoFeiRecordActivity extends Activity {
                 if (result.isSuccess()) {
                     List<StoreBill> list = result.getData();
                     if(list!=null){
+
+                        for(int i=0;i<list.size();i++){
+                            if(list.get(i).getType()==1){
+                                allchongzhi = allchongzhi+list.get(i).getPrice();
+                            }else if(list.get(i).getType()==3){
+                                allxiaofei = allxiaofei+list.get(i).getPrice();
+                            }
+                        }
+                        tv_leijichongzhi.setText(allchongzhi+"元");
+                        tv_leijixiaofei.setText(allxiaofei+"元");
                         lv_xiaofei.setAdapter(new MyAdapter(list));
                     }
                     System.out.println(list);
@@ -145,10 +160,17 @@ public class XiaoFeiRecordActivity extends Activity {
             }
 
             if(list.get(position).getType()==1){
-                viewHolder.tv_xiaofei.setText("+ ¥"+list.get(position).getPrice()+"元");
+                viewHolder.tv_goodtype.setText("充值");
+                viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#ff6600"));
-            }else{
-                viewHolder.tv_xiaofei.setText("- ¥"+list.get(position).getPrice()+"元");
+            }else if(list.get(position).getType()==3){
+                viewHolder.tv_goodtype.setText("购物");
+                viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
+                viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
+            }else if(list.get(position).getType()==2){
+                viewHolder.tv_goodtype.setText("退款");
+                viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
+                viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
             }
 
             viewHolder.tv_time.setText(sdf.format(list.get(position).getOperate_time()));
