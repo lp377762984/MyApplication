@@ -378,6 +378,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.XiaoFeiRecordActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PingJiaActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

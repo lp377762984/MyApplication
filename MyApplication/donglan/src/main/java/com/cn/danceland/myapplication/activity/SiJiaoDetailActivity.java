@@ -272,7 +272,7 @@ public class SiJiaoDetailActivity extends Activity {
     private void getData() throws JSONException {
 
         TimeAxisCon timeAxis = new TimeAxisCon();
-        timeAxis.setEmployee_id(item.getEmployee_id());
+        //timeAxis.setEmployee_id(item.getEmployee_id());
         timeAxis.setWeek(weekDay);
         timeAxis.setCourse_date(Long.valueOf(startTime+"000"));
         String s = gson.toJson(timeAxis);
@@ -450,11 +450,14 @@ public class SiJiaoDetailActivity extends Activity {
             }
 
             if(pos!=999){//用户选择了预约
-                if(position==arrIndex.get(arrIndex.size()-1)/2){
-                    viewHolder.tv_status.setText("等待对方确认");
-                    viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                    viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+                if(arrIndex.size()>0){
+                    if(position==arrIndex.get(arrIndex.size()-1)/2){
+                        viewHolder.tv_status.setText("等待对方确认");
+                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
+                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+                    }
                 }
+
             }else{//默认时间轴（包括已经预约和预约成功）
                 if(arrIndex.size()>0){
                     for(int i=0;i<arrIndex.size();i++){
