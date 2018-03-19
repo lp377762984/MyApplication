@@ -23,7 +23,7 @@ public class SellSiJiaoConfirmActivity extends Activity {
     int state=999;
 
     RelativeLayout rl_buy;
-    CheckBox btn_sijiao,btn_sijiaodingjin;
+    RadioButton btn_sijiao,btn_sijiaodingjin;
     ImageView sell_img;
     Serializable itemContent;
 
@@ -52,8 +52,8 @@ public class SellSiJiaoConfirmActivity extends Activity {
         btn_sijiao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_sijiao.setChecked(true);
-                btn_sijiaodingjin.setChecked(false);
+//                btn_sijiao.setChecked(true);
+//                btn_sijiaodingjin.setChecked(false);
                 state = 0;
             }
         });
@@ -61,8 +61,8 @@ public class SellSiJiaoConfirmActivity extends Activity {
         btn_sijiaodingjin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_sijiao.setChecked(false);
-                btn_sijiaodingjin.setChecked(true);
+//                btn_sijiao.setChecked(false);
+//                btn_sijiaodingjin.setChecked(true);
                 state = 1;
             }
         });
