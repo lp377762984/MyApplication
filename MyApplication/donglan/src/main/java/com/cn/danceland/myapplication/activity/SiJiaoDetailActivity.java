@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -188,7 +189,8 @@ public class SiJiaoDetailActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(click){
-                    showTime();
+                    startActivity(new Intent(SiJiaoDetailActivity.this,PingJiaActivity.class).putExtra("item",item));
+                    //showTime();
                 }else{
                     ToastUtils.showToastShort("不可重复预约！");
                 }
