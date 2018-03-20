@@ -63,14 +63,14 @@ public class Person  implements Serializable {
     private String cname;
     private String member_no;
     private String phone_no;
-    private int gender;
+    private String gender;
     private String nick_name;
-    private int height;
-    private int weight;
+    private String height;
+    private String weight;
     private String birthday;
     private long reg_date;
     private String password;
-    private int default_branch;
+    private String default_branch;
     private String zone_code;
     private int platform;
     private String avatar_path;
@@ -130,10 +130,10 @@ public class Person  implements Serializable {
         return phone_no;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
@@ -144,18 +144,19 @@ public class Person  implements Serializable {
         return nick_name;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-    public int getWeight() {
+    public String getWeight() {
         return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public void setBirthday(String birthday) {
@@ -179,10 +180,10 @@ public class Person  implements Serializable {
         return password;
     }
 
-    public void setDefault_branch(int default_branch) {
+    public void setDefault_branch(String default_branch) {
         this.default_branch = default_branch;
     }
-    public int getDefault_branch() {
+    public String getDefault_branch() {
         return default_branch;
     }
 

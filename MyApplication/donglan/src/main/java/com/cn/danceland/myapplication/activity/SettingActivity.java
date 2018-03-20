@@ -30,7 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -52,7 +52,7 @@ import java.util.Map;
 public class SettingActivity extends Activity implements View.OnClickListener {
 
     View locationView;
-    TextView lo_cancel_action, over_action,tx_location;
+    TextView lo_cancel_action, over_action, tx_location;
     PopupWindow locationWindow;
     ListView list_province, list_city;
     LocationAdapter proAdapter, cityAdapter;
@@ -62,9 +62,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
     DBData dbData;
-    String zoneCode,mZoneCode;
+    String zoneCode, mZoneCode;
 
-    List<Donglan> zoneArr,codeArr;
+    List<Donglan> zoneArr, codeArr;
     ArrayList<String> cityList1;
     String location;
     List<Donglan> cityList;
@@ -93,7 +93,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (99==event.getEventCode()){
+        if (99 == event.getEventCode()) {
             String msg = event.getMsg();
 
             tv_phone.setText(msg);
@@ -105,9 +105,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private void initHost() {
         dbData = new DBData();
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        zoneCode = mInfo.getZoneCode();
+        zoneCode = mInfo.getPerson().getZone_code();
         zoneArr = new ArrayList<Donglan>();
-        if(zoneCode!=null&&!"".equals(zoneCode)){
+        if (zoneCode != null && !"".equals(zoneCode)) {
             zoneArr = dbData.queryCityValue(zoneCode);
         }
         initLocationData();
@@ -127,22 +127,22 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_phone = findViewById(R.id.tv_phone);
         tx_location = findViewById(R.id.tx_location);
 
-        if(zoneArr.size()>0){
-            tx_location.setText(zoneArr.get(0).getProvince()+" "+zoneArr.get(0).getCity());
+        if (zoneArr.size() > 0) {
+            tx_location.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
             zoneArr.clear();
         }
 
         location = tx_location.getText().toString();
 
-       // mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        // mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-        if (!TextUtils.isEmpty(mInfo.getPhone())) {
-            tv_phone.setText(mInfo.getPhone());
+        if (!TextUtils.isEmpty(mInfo.getPerson().getPhone_no())) {
+            tv_phone.setText(mInfo.getPerson().getPhone_no());
         }
 
         //设置会员号
-        if (!TextUtils.isEmpty(mInfo.getMemberNo())) {
-            tv_number.setText(mInfo.getUserName());
+        if (!TextUtils.isEmpty(mInfo.getPerson().getMember_no())) {
+            tv_number.setText(mInfo.getPerson().getNick_name());
         } else {
             tv_number.setText("未设置");
         }
@@ -195,13 +195,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.over_action:
                 location = tx_location.getText().toString();
-                mInfo.setZoneCode(mZoneCode);
-                DataInfoCache.saveOneCache(mInfo,Constants.MY_INFO);
+                mInfo.getPerson().setZone_code(mZoneCode);
+                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                 commitLocation(mZoneCode);
                 dismissWindow();
                 break;
             case R.id.ll_my_shop:
-                startActivity(new Intent(SettingActivity.this,MyShopActivity.class));
+                startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
                 break;
             default:
                 break;
@@ -209,11 +209,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     }
 
     private void showAboutUs() {
-        Intent intent = new Intent(SettingActivity.this,AboutUsActivity.class);
+        Intent intent = new Intent(SettingActivity.this, AboutUsActivity.class);
         startActivity(intent);
     }
 
-    public void commitLocation(final String str){
+    public void commitLocation(final String str) {
 
         RequestQueue queueLocation = Volley.newRequestQueue(SettingActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.MODIFY_ZONE, new Response.Listener<String>() {
@@ -226,19 +226,19 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> hm = new HashMap<String,String>();
+                HashMap<String, String> hm = new HashMap<String, String>();
                 String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization",token);
+                hm.put("Authorization", token);
                 return hm;
             }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("zoneCode",str);
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("zoneCode", str);
                 return map;
             }
         };
@@ -308,7 +308,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
                                 dialogView.findViewById(R.id.et_number);
 
-                        mInfo.setMemberNo(et_number.getText().toString());
+                        mInfo.getPerson().setMember_no(et_number.getText().toString());
                         // DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
 
                         tv_number.setText(et_number.getText().toString());
@@ -327,17 +327,17 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         inputDialog.show();
     }
 
-    public void initLocationData(){
+    public void initLocationData() {
         cityList = dbData.getCityList();
         //省份列表
         proList = new ArrayList<String>();
-        if(cityList!=null&&cityList.size()>0){
-            for(int i=0;i<cityList.size();i++){
+        if (cityList != null && cityList.size() > 0) {
+            for (int i = 0; i < cityList.size(); i++) {
                 //城市名字为key，城市代码为value
                 String prokey = cityList.get(i).getProvince();
                 proList.add(prokey);
-                for(int m=0;m<proList.size()-1;m++){
-                    if(proList.get(m).equals(proList.get(m+1))){
+                for (int m = 0; m < proList.size() - 1; m++) {
+                    if (proList.get(m).equals(proList.get(m + 1))) {
                         proList.remove(m);
                         m--;
                     }
@@ -362,11 +362,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 List<Donglan> queryPro = dbData.queryPro(pro);
 
                 cityList1 = new ArrayList<String>();
-                for(int i=0;i<queryPro.size();i++){
+                for (int i = 0; i < queryPro.size(); i++) {
                     cityList1.add(queryPro.get(i).getCity());
                 }
                 //ArrayList<String> cityList = proCityMap.get(pro);
-                if(cityList1!=null&&cityList1.size()>0){
+                if (cityList1 != null && cityList1.size() > 0) {
                     cityAdapter = new LocationAdapter(cityList1, SettingActivity.this);
                     list_city.setAdapter(cityAdapter);
                 }
@@ -377,7 +377,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String city = cityList1.get(position);
                 mZoneCode = dbData.queryCity(city).get(0).getCityValue();
-                tx_location.setText(tx_location.getText().toString().split(" ")[0]+" "+city);
+                tx_location.setText(tx_location.getText().toString().split(" ")[0] + " " + city);
             }
         });
 
@@ -442,8 +442,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
                     //成功
                     startActivity(new Intent(SettingActivity.this, LoginActivity.class));
@@ -453,7 +453,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     finish();
                 } else {
                     //失败
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("退出登录失败");
                 }
 
             }
@@ -461,31 +461,28 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-//                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-//                        + ">>" + volleyError.networkResponse.statusCode
-//                        + ">>" + volleyError.networkResponse.data
-//                        + ">>" + volleyError.getCause()
-//                        + ">>" + volleyError.getMessage());
+
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
-
+                map.put("terminal", "1");
+                map.put("member_no", mInfo.getPerson().getMember_no());
+                map.put("person_id", SPUtils.getString(Constants.MY_USERID, null));
                 // map.put("romType", "0");
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
-               // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+//                return map;
+//            }
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找

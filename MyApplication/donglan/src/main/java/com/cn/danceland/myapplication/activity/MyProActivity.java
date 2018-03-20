@@ -145,7 +145,7 @@ public class MyProActivity extends Activity {
         resolver = getContentResolver();
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         queue = Volley.newRequestQueue(MyProActivity.this);
-        zoneCode = infoData.getZoneCode();
+        zoneCode = infoData.getPerson().getZone_code();
         zoneArr = new ArrayList<Donglan>();
         if (zoneCode != null && !"".equals(zoneCode)) {
             zoneArr = dbData.queryCityValue(zoneCode+".0");
@@ -166,8 +166,8 @@ public class MyProActivity extends Activity {
 
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
-        if (infoData.getSelfAvatarPath() != null && !infoData.getSelfAvatarPath().equals("")) {
-            Glide.with(MyProActivity.this).load(infoData.getSelfAvatarPath()).into(circleImageView);
+        if (infoData.getPerson().getSelf_avatar_path() != null && !infoData.getPerson().getSelf_avatar_path().equals("")) {
+            Glide.with(MyProActivity.this).load(infoData.getPerson().getSelf_avatar_path()).into(circleImageView);
         }
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
@@ -185,27 +185,27 @@ public class MyProActivity extends Activity {
         tv_zone = findViewById(R.id.tv_zone);
         tv_phone = findViewById(R.id.tv_phone);
         tv_identity = findViewById(R.id.tv_identity);
-        if (!TextUtils.isEmpty(infoData.getPhone())) {
-            tv_phone.setText(infoData.getPhone());
+        if (!TextUtils.isEmpty(infoData.getPerson().getPhone_no())) {
+            tv_phone.setText(infoData.getPerson().getPhone_no());
         }
-        if (infoData.getIdentity_card() != null) {
-            tv_identity.setText(infoData.getIdentity_card());
-        }
-
-        if (infoData.getHeight() != null) {
-            tv_height.setText(infoData.getHeight() + " cm");
-        }
-        if (infoData.getWeight() != null) {
-            tv_weight.setText(infoData.getWeight() + " kg");
+        if (infoData.getPerson().getIdentity_card() != null) {
+            tv_identity.setText(infoData.getPerson().getIdentity_card());
         }
 
+        if (infoData.getPerson().getHeight() != null) {
+            tv_height.setText(infoData.getPerson().getHeight() + " cm");
+        }
+        if (infoData.getPerson().getWeight() != null) {
+            tv_weight.setText(infoData.getPerson().getWeight() + " kg");
+        }
 
-        if ("1".equals(infoData.getGender())) {
+
+        if ("1".equals(infoData.getPerson().getGender())) {
             text_sex.setText("男");
         } else {
             text_sex.setText("女");
         }
-        text_name.setText(infoData.getNickName());
+        text_name.setText(infoData.getPerson().getNick_name());
 
         headView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.head_image_popwindow, null);
 
@@ -327,7 +327,7 @@ public class MyProActivity extends Activity {
                     } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("女");
-                        infoData.setGender("2");
+                        infoData.getPerson().setGender("2");
                         DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         commitSelf(Constants.MODIFY_GENDER, "gender", "2");
                     }
@@ -339,7 +339,7 @@ public class MyProActivity extends Activity {
                     } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("男");
-                        infoData.setGender("1");
+                        infoData.getPerson().setGender("1");
                         DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         commitSelf(Constants.MODIFY_GENDER, "gender", "1");
                     }
@@ -362,7 +362,7 @@ public class MyProActivity extends Activity {
                     if ("".equals(mZoneCode) || mZoneCode == null) {
                         ToastUtils.showToastShort("请选择城市");
                     } else {
-                        infoData.setZoneCode(mZoneCode);
+                        infoData.getPerson().setZone_code(mZoneCode);
                         DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         if (mZoneCode.contains(".0")) {
                             commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode.replace(".0", ""));
@@ -431,11 +431,11 @@ public class MyProActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 if (j == 0) {
                     tv_height.setText(strHeight+" cm");
-                    infoData.setHeight(strHeight);
+                    infoData.getPerson().setHeight(strHeight);
                     commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
                 } else if (j == 1) {
                     tv_weight.setText(strWeight+" kg");
-                    infoData.setWeight(strWeight);
+                    infoData.getPerson().setWeight(strWeight);
                     commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
                 }
                 DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
@@ -706,7 +706,7 @@ public class MyProActivity extends Activity {
                             nickName = ed.getText().toString();
                             text_name.setText(nickName);
                             commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
-                            infoData.setNickName(nickName);
+                            infoData.getPerson().setNick_name(nickName);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                             //发送事件
                             EventBus.getDefault().post(new StringEvent(nickName, 100));
@@ -714,7 +714,7 @@ public class MyProActivity extends Activity {
                             iden = ed.getText().toString();
                             tv_identity.setText(iden);
                             commitSelf(Constants.MODIFY_IDENTIFY, "identityCard", iden);
-                            infoData.setIdentity_card(iden);
+                            infoData.getPerson().setIdentity_card(iden);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
                     }
@@ -877,7 +877,7 @@ public class MyProActivity extends Activity {
 
                             String compath = headImageBean.getData().getImgPath();
                             selfAvatarPath = headImageBean.getData().getImgUrl();
-                            infoData.setSelfAvatarPath(selfAvatarPath);
+                            infoData.getPerson().setSelf_avatar_path(selfAvatarPath);
                             //发送事件
                             EventBus.getDefault().post(new StringEvent(selfAvatarPath, 99));
                             Message message = Message.obtain();

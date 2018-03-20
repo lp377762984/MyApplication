@@ -48,17 +48,17 @@ public class DynHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynHeadv
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.tv_pcikname.setText(datas.get(position).getNickName());
+        viewHolder.tv_pcikname.setText(datas.get(position).getPerson().getNick_name());
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id",datas.get(position).getId()));
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id",datas.get(position).getPerson().getId()));
             }
         });
         //m默认头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(context)
-                .load(datas.get(position).getSelfAvatarPath())
+                .load(datas.get(position).getPerson().getSelf_avatar_path())
                 .apply(options)
                 .into(viewHolder.iv_avatar);
     }

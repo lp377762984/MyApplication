@@ -44,7 +44,7 @@ public class MeFragment extends BaseFragment {
     private TextView tv_nick_name;
     private Data mInfo;
     private TextView tv_dyn;
-    private TextView tv_guanzhu,tv_message;
+    private TextView tv_guanzhu, tv_message;
     private TextView tv_fans;
     Badge badge;
 
@@ -90,38 +90,36 @@ public class MeFragment extends BaseFragment {
     public void initDta() {
         //获取本地用户信息缓存
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-
+        LogUtil.i(mInfo.getPerson().getSelf_avatar_path());
         //设置关注数
         //  LogUtil.i(mInfo.getFollowNumber()+"");
-        tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+        tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
         //设置粉丝数
-        tv_fans.setText(mInfo.getFansNum() + "");
+        tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
         //设置动态数
-        tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+        tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
         //设置头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(mActivity).load(mInfo.getSelfAvatarPath()).apply(options).into(iv_avatar);
-        tv_nick_name.setText(mInfo.getNickName());
+
+        Glide.with(mActivity).load(mInfo.getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
+        tv_nick_name.setText(mInfo.getPerson().getNick_name());
 
 
     }
 
 
     //更新用户信息
-    private void updateUserInfo(Data mInfo){
-
+    private void updateUserInfo(Data mInfo) {
         //设置关注数
-        //  LogUtil.i(mInfo.getFollowNumber()+"");
-        tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+        tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
         //设置粉丝数
-        tv_fans.setText(mInfo.getFansNum() + "");
+        tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
         //设置动态数
-        tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+        tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
         //设置头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(mActivity).load(mInfo.getSelfAvatarPath()).apply(options).into(iv_avatar);
-        tv_nick_name.setText(mInfo.getNickName());
-
+        Glide.with(mActivity).load(mInfo.getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
+        tv_nick_name.setText(mInfo.getPerson().getNick_name());
 
 
     }
@@ -129,7 +127,7 @@ public class MeFragment extends BaseFragment {
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-      //  LogUtil.i("收到消息" + event.getEventCode());
+        //  LogUtil.i("收到消息" + event.getEventCode());
 
         if (99 == event.getEventCode()) {
             String msg = event.getMsg();
@@ -142,10 +140,10 @@ public class MeFragment extends BaseFragment {
             tv_nick_name.setText(event.getMsg());
         }
 
-        if(101 == event.getEventCode()){
-            if(Integer.valueOf(event.getMsg())>0){
-                badge.setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity( Gravity.END | Gravity.TOP);
-            }else{
+        if (101 == event.getEventCode()) {
+            if (Integer.valueOf(event.getMsg()) > 0) {
+                badge.setBadgeNumber(Integer.valueOf(event.getMsg())).setBadgeGravity(Gravity.END | Gravity.TOP);
+            } else {
                 badge.hide(false);
             }
 
@@ -157,27 +155,36 @@ public class MeFragment extends BaseFragment {
         switch (event.getEventCode()) {
             case EventConstants.ADD_DYN:  //设置动态数+1
                 LogUtil.i("动态加1");
-                mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);
-                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
-                tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+                //mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);
+                //   DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                SPUtils.setInt(Constants.MY_DYN, SPUtils.getInt(Constants.MY_DYN, 0) + 1);
+                tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
                 break;
             case EventConstants.DEL_DYN:
                 //设置动态数-1
-                mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() - 1);
-                tv_dyn.setText(mInfo.getDynMsgNumber() + "");
-                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//                mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() - 1);
+//                tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                SPUtils.setInt(Constants.MY_DYN, SPUtils.getInt(Constants.MY_DYN, 0) - 1);
+                tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
+
                 break;
             case EventConstants.ADD_GUANZHU:
                 //设置关注数+1
-                mInfo.setFollowNumber(mInfo.getFollowNumber() + 1);
-                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
-                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//                mInfo.setFollowNumber(mInfo.getFollowNumber() + 1);
+//                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) + 1);
+                tv_dyn.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
+
                 break;
             case EventConstants.DEL_GUANZHU:
                 //设置关注数-1
-                mInfo.setFollowNumber(mInfo.getFollowNumber() - 1);
-                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
-                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//                mInfo.setFollowNumber(mInfo.getFollowNumber() - 1);
+//                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) - 1);
+                tv_dyn.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
                 break;
 //            case EventConstants.ADD_ZAN:
 //
@@ -188,19 +195,22 @@ public class MeFragment extends BaseFragment {
             case EventConstants.UPDATE_FANS:
 
                 //设置粉丝数
-                tv_fans.setText(mInfo.getFansNum() + "");
+                // tv_fans.setText(mInfo.getFansNum() + "");
                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+
+                //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
+                tv_dyn.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
+
                 break;
 
             case EventConstants.UPDATE_USER_INFO:
+                Data myinfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
+                updateUserInfo(myinfo);
 
-                updateUserInfo((Data) DataInfoCache.loadOneCache(Constants.MY_INFO));
-                Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 //更新聊天头像和昵称
-                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getNick_name());
-                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getSelf_avatar_path());
-
+                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getPerson().getNick_name());
+                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getPerson().getSelf_avatar_path());
 
 
                 break;
@@ -240,7 +250,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
             case R.id.ll_my_data://数据中心
-                Intent intent2 = new Intent(mActivity,FitnessTestActivity.class);
+                Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);
                 startActivity(intent2);
                 break;
 

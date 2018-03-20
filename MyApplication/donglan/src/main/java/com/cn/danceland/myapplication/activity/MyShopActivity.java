@@ -62,7 +62,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        defaultshopId = userInfo.getDefault_branch();
+        defaultshopId = userInfo.getPerson().getDefault_branch();
         findViewById(R.id.iv_back).setOnClickListener(this);
         lv_myshop = findViewById(R.id.lv_myshop);
         listViewAdapter = new MyListViewAdapter();
@@ -173,7 +173,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
                 shopListInfo = gson.fromJson(s, RequestShopListInfo.class);
                 if (shopListInfo.getSuccess()) {
                     defaultshopId = BranchId;
-                    userInfo.setDefault_branch(defaultshopId);
+                    userInfo.getPerson().setDefault_branch(defaultshopId);
                     DataInfoCache.saveOneCache(userInfo,Constants.MY_INFO);
                     listViewAdapter.notifyDataSetChanged();
 

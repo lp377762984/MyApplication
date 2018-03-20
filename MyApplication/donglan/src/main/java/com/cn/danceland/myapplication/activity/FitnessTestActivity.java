@@ -20,7 +20,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -28,7 +27,6 @@ import com.cn.danceland.myapplication.bean.FitnessTestBean;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -39,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
 import lecho.lib.hellocharts.view.PieChartView;
@@ -86,17 +83,17 @@ public class FitnessTestActivity extends Activity {
     private void initHost() {
         myInfo = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
         if(xingbie==null){
-            xingbie = myInfo.getGender();
+            xingbie = myInfo.getPerson().getGender()+"";
         }
         if(height==null){
-            height = myInfo.getHeight();
+            height = myInfo.getPerson().getHeight();
         }
         if (weight==null){
-            weight = myInfo.getWeight();
+            weight = myInfo.getPerson().getWeight();
         }
         gson = new Gson();
         if(member_no==null){
-            member_no = myInfo.getMember_no();
+            member_no = myInfo.getPerson().getMember_no();
         }
 
         width = AppUtils.getWidth();

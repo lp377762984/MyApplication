@@ -49,6 +49,7 @@ import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -165,9 +166,10 @@ public class ShopFragment extends BaseFragment {
                     }
                 }
             }
-            if("1".equals(info.getAuth())){
+
+            if("1".equals(info.getMember().getAuth())){
                 roleList.add("潜客");
-            }else if("2".equals(info.getAuth())){
+            }else if("2".equals(info.getMember().getAuth())){
                 roleList.add("会员");
             }
         }
@@ -175,9 +177,9 @@ public class ShopFragment extends BaseFragment {
     }
 
     public void initData() {
-        if (info.getDefault_branch() != null && !info.getDefault_branch().equals("")) {
+        if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
             getMenus();
-            getShop(info.getDefault_branch());
+            getShop(info.getPerson().getDefault_branch());
             mGridView.setVisibility(View.VISIBLE);
             storelist.setVisibility(View.GONE);
             ll_top.setVisibility(View.VISIBLE);
@@ -651,20 +653,20 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequestLoginInfoBean requestInfoBean = new RequestLoginInfoBean();
+                requestInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
                     //成功
-                    String mUserId = requestInfoBean.getData().getPersonId();
-                    info.setDefault_branch(shopID);
-                    DataInfoCache.saveOneCache(info, Constants.MY_INFO);
-                    if (info.getDefault_branch() != null && !info.getDefault_branch().equals("")) {
+                    String mUserId = requestInfoBean.getData().getPerson().getId();
+                  //  info.setDefault_branch(shopID);
+                    DataInfoCache.saveOneCache(requestInfoBean.getData(), Constants.MY_INFO);
+                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
                         mGridView.setVisibility(View.VISIBLE);
                         storelist.setVisibility(View.GONE);
                         ll_top.setVisibility(View.VISIBLE);
                         getMenus();
-                        getShop(info.getDefault_branch());
+                        getShop(info.getPerson().getDefault_branch());
 
                     } else {
                         ll_top.setVisibility(View.GONE);
@@ -689,7 +691,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("name", info.getPhone());
+                map.put("phone", info.getPerson().getPhone_no());
                 map.put("password", SPUtils.getString(Constants.MY_PSWD,""));
                 // map.put("romType", "0");
                 return map;

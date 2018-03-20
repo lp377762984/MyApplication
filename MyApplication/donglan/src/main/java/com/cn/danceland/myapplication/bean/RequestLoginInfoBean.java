@@ -12,7 +12,7 @@ import java.io.Serializable;
 
     private boolean success;
     private String errorMsg;
-    private String code;
+    private int code;
     private Data data;
 
     @Override
@@ -41,11 +41,11 @@ import java.io.Serializable;
         return errorMsg;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 

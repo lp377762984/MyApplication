@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -26,7 +25,6 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ReadyTestBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -218,17 +216,17 @@ public class ReadyTestActivity extends Activity {
     private void initDatas(Data data){
 
         if(data!=null){
-            Glide.with(ReadyTestActivity.this).load(data.getSelfAvatarPath()).into(circleimage);
-            nicheng.setText(data.getNickName());
-            tv_phone.setText(data.getPhone_no());
-            ed_birthday.setText(data.getBirthday());
-            ed_height.setText(data.getHeight());
-            if(data.getGender().equals("1")){
+            Glide.with(ReadyTestActivity.this).load(data.getPerson().getSelf_avatar_path()).into(circleimage);
+            nicheng.setText(data.getPerson().getNick_name());
+            tv_phone.setText(data.getPerson().getPhone_no());
+            ed_birthday.setText(data.getPerson().getBirthday());
+            ed_height.setText(data.getPerson().getHeight());
+            if(data.getPerson().getGender().equals("1")){
                 tv_blue.setVisibility(View.VISIBLE);
                 tv_gray.setVisibility(View.GONE);
                 tv_female_blue.setVisibility(View.GONE);
                 tv_female_gray.setVisibility(View.VISIBLE);
-            }else if(data.getGender().equals("2")){
+            }else if(data.getPerson().getGender().equals("2")){
                 tv_blue.setVisibility(View.GONE);
                 tv_gray.setVisibility(View.VISIBLE);
                 tv_female_blue.setVisibility(View.VISIBLE);

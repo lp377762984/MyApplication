@@ -291,7 +291,7 @@ public class AttentionFragment extends BaseFragment {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         View v = View.inflate(mActivity, R.layout.fragment_attention, null);
         rl_no_info = v.findViewById(R.id.rl_no_info);
-        if (userInfo.getFollowNumber() == 0) {
+        if (SPUtils.getInt(Constants.MY_FOLLOWS,0) == 0) {
 
             rl_no_info.setVisibility(View.VISIBLE);
         }
@@ -384,7 +384,7 @@ public class AttentionFragment extends BaseFragment {
 
         //  userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-        if (userInfo.getFollowNumber() != 0) {
+        if (SPUtils.getInt(Constants.MY_FOLLOWS,0) != 0) {
             dialog.show();
 
 

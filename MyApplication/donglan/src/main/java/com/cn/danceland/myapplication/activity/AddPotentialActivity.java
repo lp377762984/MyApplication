@@ -204,7 +204,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 potentialInfo.setRemark(et_remark.getText().toString());
                 potentialInfo.setWeichat_no(et_weixin_no.getText().toString());
                 Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                potentialInfo.setDefault_branch(data.getDefault_branch());
+                potentialInfo.setDefault_branch(data.getPerson().getDefault_branch());
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());
                 try {

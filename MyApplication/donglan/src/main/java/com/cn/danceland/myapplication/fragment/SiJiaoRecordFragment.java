@@ -3,11 +3,9 @@ package com.cn.danceland.myapplication.fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,7 +32,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +75,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
     private void initData() throws JSONException {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        siJiaoYuYueConBean.setMember_no(data.getMember_no());
+        siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         if(startTime!=null){
             siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
         }else{

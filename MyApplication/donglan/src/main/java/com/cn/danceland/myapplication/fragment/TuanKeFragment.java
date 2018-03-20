@@ -2,15 +2,12 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,7 +27,6 @@ import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.ListViewUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -40,7 +36,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,7 +197,7 @@ public class TuanKeFragment extends BaseFragment {
         GroupClassBean groupClassBean = new GroupClassBean();
         groupClassBean.setPageCount(12);
         groupClassBean.setPage(0);
-        groupClassBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        groupClassBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         groupClassBean.setCourse_date(System.currentTimeMillis());
         String s = gson.toJson(groupClassBean);
         JSONObject jsonObject = new JSONObject(s);

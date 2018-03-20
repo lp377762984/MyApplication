@@ -452,7 +452,7 @@ public class SiJiaoOrderActivity extends Activity {
         }
         sijiaoOrderConfirmBean.setPay_way("1");//1支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
-        sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         extends_params.setCourse_type_id(course_category+"");
         extends_params.setCourse_type_name(course_category_name);
         extends_params.setEmployee_id(employee_id+"");
@@ -518,7 +518,7 @@ public class SiJiaoOrderActivity extends Activity {
     public void commit_deposit() throws JSONException {
         CommitDepositBean commitDepositBean = new CommitDepositBean();
         CommitDepositBean.Extends_params extends_params = commitDepositBean.new Extends_params();
-        commitDepositBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        commitDepositBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         if("0".equals(forme)){//为自己买
             commitDepositBean.setBus_type(31);
         }else if("1".equals(forme)){

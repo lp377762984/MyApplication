@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -27,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.baidu.mapapi.map.Text;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -35,7 +32,6 @@ import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -82,7 +78,7 @@ public class ShopDetailedActivity extends Activity{
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
         if(branchID==null){
-            branchID = myInfo.getDefault_branch();
+            branchID = myInfo.getPerson().getDefault_branch();
         }
 
     }
@@ -181,7 +177,7 @@ public class ShopDetailedActivity extends Activity{
                 if(s.contains("true")){
                     //join_button.setVisibility(View.GONE);
                     ToastUtils.showToastShort("加入成功！");
-                    myInfo.setDefault_branch(branchID);
+                    myInfo.getPerson().setDefault_branch(branchID);
                     DataInfoCache.saveOneCache(myInfo,Constants.MY_INFO);
                 }else{
                     ToastUtils.showToastShort("加入失败！请检查网络！");

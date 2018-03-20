@@ -252,11 +252,11 @@ public class MyChatFragment extends EaseChatFragment implements EaseChatFragment
 //        }
         // 通过扩展属性，将userPic和userName发送出去。
        Data myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        String userPic = myInfo.getSelf_avatar_path();
+        String userPic = myInfo.getPerson().getSelf_avatar_path();
         if (!TextUtils.isEmpty(userPic)) {
             message.setAttribute("userPic", userPic);
         }
-        String userName =  myInfo.getNick_name();
+        String userName =  myInfo.getPerson().getNick_name();
         if (!TextUtils.isEmpty(userName)) {
             message.setAttribute("userName", userName);
         }

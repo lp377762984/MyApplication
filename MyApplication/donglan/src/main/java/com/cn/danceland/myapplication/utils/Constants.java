@@ -24,13 +24,15 @@ public class Constants extends EaseConstant {
  //   public static final String LOGIN_URL = HOST + "user/login ";//登录
     public static final String LOGIN_URL = HOST + "person/login ";//登录
     public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
-
+    public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
     public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
     //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
     public static final String SET_BASE_USERINFO_URL = HOST + "user/updateBase";//设置用户基本资料
     public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
-    public static final String LOGIN_BY_PHONE_URL = HOST + "user/findByPhone/";//短信登录
-    public static final String LOGOUT_URL = HOST + "user/logOut";//用户退出
+    public static final String LOGIN_BY_PHONE_URL = HOST + "/person/loginNoPwd";//短信登录
+
+    // public static final String LOGIN_BY_PHONE_URL = HOST + "user/findByPhone/";//短信登录
+    public static final String LOGOUT_URL = HOST + "/person/logout";//用户退出
     public static final String ZONE = HOST + "/zone";//城市区域
     public static final String MODIFY_ZONE = HOST + "/user/modifyZoneCode";//修改区域
     public static final String MODIFY_NAME = HOST + "user/modifyNickName";//修改昵称
@@ -128,6 +130,10 @@ public class Constants extends EaseConstant {
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
    public static final String MY_MEMBER_ID = "my_member_id";//我的member_ID
+
+    public static final String MY_DYN = "my_nyn";//我的动态数
+    public static final String MY_FANS = "my_fans";//我的粉丝数
+    public static final String MY_FOLLOWS = "my_follows";//我的评论数
 
     public static final String MY_MEMBERNO = "memberNo";//我的会员号
     public static final String MY_PSWD = "mypswd";//我的密码

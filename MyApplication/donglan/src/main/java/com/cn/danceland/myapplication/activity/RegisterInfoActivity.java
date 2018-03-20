@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,14 +8,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.format.Time;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.DatePicker;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -45,7 +40,6 @@ import com.weigan.loopview.OnItemSelectedListener;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -476,11 +470,11 @@ public class RegisterInfoActivity extends Activity{
                 RootBean rootBean = gson.fromJson(s, RootBean.class);
                 if("true".equals(rootBean.success)){
                     ToastUtils.showToastShort("提交成功！");
-                    mData.setBirthday(strBirthday);
-                    mData.setNickName(strName);
-                    mData.setHeight(strHeight);
-                    mData.setWeight(strWeight);
-                    mData.setGender(gender);
+                    mData.getPerson().setBirthday(strBirthday);
+                    mData.getPerson().setNick_name(strName);
+                    mData.getPerson().setHeight(strHeight);
+                    mData.getPerson().setWeight(strWeight);
+                    mData.getPerson().setGender(gender);
                     DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
                     EventBus.getDefault().post(new StringEvent("",1010));
                     Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
