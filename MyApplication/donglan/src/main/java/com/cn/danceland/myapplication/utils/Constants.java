@@ -10,8 +10,8 @@ public class Constants extends EaseConstant {
     // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-    public static final String HOST = " http://192.168.1.115:8003/";//佳楠
-    //  public static final String HOST = " http://192.168.1.123:8003/";//
+    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+    public static final String HOST = " http://192.168.1.115:8003/";//
 
     //public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
 
@@ -108,6 +108,7 @@ public class Constants extends EaseConstant {
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
+    public static final String COMMIT_CHUZHIKA  = HOST+"appOrder/storeConsume";//储值卡消费回调
 
     //潜客相关
     public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客

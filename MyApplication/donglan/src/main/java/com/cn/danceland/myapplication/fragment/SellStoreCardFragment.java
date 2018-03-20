@@ -1,14 +1,17 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.SellStoreCardActivity;
 import com.cn.danceland.myapplication.bean.DLResult;
@@ -20,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -118,8 +122,24 @@ public class SellStoreCardFragment extends BaseFragment {
 
             View inflate = View.inflate(mActivity, R.layout.storecard_item, null);
             //TextView card_name = inflate.findViewById(R.id.card_name);
+            TextView card_jine = inflate.findViewById(R.id.card_jine);
+            TextView address_name = inflate.findViewById(R.id.address_name);
+            TextView cardname = inflate.findViewById(R.id.cardname);
+            TextView tv_jine = inflate.findViewById(R.id.tv_jine);
+            TextView tv_zengsong = inflate.findViewById(R.id.tv_zengsong);
+            //RelativeLayout chongzhicard = inflate.findViewById(R.id.chongzhicard);
+            XCRoundRectImageView card_img=  (XCRoundRectImageView) inflate.findViewById(R.id.card_img);
+
+            card_jine.setText("￥"+list.get(position).getFace());
+            address_name.setText(list.get(position).getAddress_name());
+            cardname.setText(list.get(position).getFace()+"元储值卡");
+            tv_jine.setText("￥"+list.get(position).getFace());
+            tv_zengsong.setText("赠送：￥ "+list.get(position).getGiving()+"元");
+
+            Glide.with(mActivity).load(list.get(position).getImg_url()).into(card_img);
+
+
             RelativeLayout all_item = inflate.findViewById(R.id.all_item);
-            //card_name.setText(list.get(position).getName());
             all_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

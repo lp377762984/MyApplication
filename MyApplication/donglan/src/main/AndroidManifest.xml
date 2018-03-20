@@ -376,8 +376,11 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SellStoreCardActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.QRCodeActivity"/>
-
+        <activity android:name=".activity.XiaoFeiRecordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PingJiaActivity"
+            android:screenOrientation="portrait"/>
+ <activity android:name=".activity.QRCodeActivity"/>
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true">

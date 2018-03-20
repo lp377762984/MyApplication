@@ -14,8 +14,34 @@ public class StoreAccount {
 	private Float remain;// 余额
 	private Float giving;// 赠送金额
 	private Byte enable;// 状态
+	private String img_path;
+	private String img_url;// 图片地址
+	private String address_name;//地址
 
-	//新增属性
+	public String getImg_path() {
+		return img_path;
+	}
+
+	public void setImg_path(String img_path) {
+		this.img_path = img_path;
+	}
+
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+
+	public String getAddress_name() {
+		return address_name;
+	}
+
+	public void setAddress_name(String address_name) {
+		this.address_name = address_name;
+	}
+//新增属性
 
 	public Long getId() {
 		return id;

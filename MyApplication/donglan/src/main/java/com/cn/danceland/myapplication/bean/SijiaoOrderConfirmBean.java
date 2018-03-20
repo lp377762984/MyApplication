@@ -17,6 +17,7 @@ public class SijiaoOrderConfirmBean implements Serializable{
     private Integer platform;
     private String price;
     private String receive;
+
     public void setBranch_id(Integer branch_id) {
         this.branch_id = branch_id;
     }
@@ -93,6 +94,15 @@ public class SijiaoOrderConfirmBean implements Serializable{
         private String start_date;
         private String end_date;
         private Integer time_length;
+        private String store_type_id;
+
+        public String getStore_type_id() {
+            return store_type_id;
+        }
+
+        public void setStore_type_id(String store_type_id) {
+            this.store_type_id = store_type_id;
+        }
 
         public String getFace() {
             return face;

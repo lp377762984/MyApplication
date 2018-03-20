@@ -21,8 +21,16 @@ public class StoreBill {
 	private Long branch_id;// 门店ID
 	private Long member_id;// 会员ID
 	private Long account_id;// 帐号ID
+	private Byte bus_type;//订单业务类型
 
-	//新增属性
+	public Byte getBus_type() {
+		return bus_type;
+	}
+
+	public void setBus_type(Byte bus_type) {
+		this.bus_type = bus_type;
+	}
+//新增属性
 
 	public Long getId() {
 		return id;
