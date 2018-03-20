@@ -72,7 +72,6 @@ public class Data implements Serializable {
     private boolean is_follow;
     private int  follow_no;//关注数
     private int   dyn_no;//动态数
-
     private int  fanse_no;//粉丝数
     private String token;
     private String verCode;

@@ -458,7 +458,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
                 sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
                 String[] b = sb.toString().split("_");
-                String[] c = b[2].toString().toString().split("X");
+                String[] c = b[1].toString().toString().split("X");
 
 //                LogUtil.i(b[2].toString());
 //

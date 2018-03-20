@@ -1375,7 +1375,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("branchId", branchId);
+                map.put("branch_id", branchId);
 
                 return map;
 

@@ -376,6 +376,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SellStoreCardActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.QRCodeActivity"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
@@ -428,15 +429,15 @@
         </receiver>
 
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.cn.danceland.myapplication.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="com.cn.danceland.myapplication.fileprovider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/filepaths" />-->
+        <!--</provider>-->
 
 
     </application>

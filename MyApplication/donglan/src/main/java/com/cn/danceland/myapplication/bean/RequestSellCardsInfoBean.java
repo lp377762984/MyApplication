@@ -82,6 +82,7 @@ public class RequestSellCardsInfoBean implements Serializable {
         private int month_count;
         private int delete_remark;
         private String branch_name;
+        private String  img_url;
 
         @Override
         public String toString() {
@@ -100,7 +101,16 @@ public class RequestSellCardsInfoBean implements Serializable {
                     ", month_count=" + month_count +
                     ", delete_remark=" + delete_remark +
                     ", branch_name='" + branch_name + '\'' +
+                    ", img_url='" + img_url + '\'' +
                     '}';
+        }
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
         }
 
         public String getId() {

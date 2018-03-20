@@ -146,10 +146,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(RegisterActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
-                    Toast.makeText(RegisterActivity.this, "验证码有误，请重新输入", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
+//                    Toast.makeText(RegisterActivity.this, "验证码有误，请重新输入", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 //判断密码是否为空
                 if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
                     Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
@@ -248,7 +248,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     //      SPUtils.setString(Constants.MY_USERID, mUserId);
                     ToastUtils.showToastShort("注册成功");
 
-                    login();//直接登录
+                    //login();//直接登录
 
 
                 } else {
@@ -275,6 +275,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("romType", "1");
+                map.put("validateCode", mEtSms.getText().toString());
+
+                LogUtil.i(map.toString());
                 return map;
             }
         };

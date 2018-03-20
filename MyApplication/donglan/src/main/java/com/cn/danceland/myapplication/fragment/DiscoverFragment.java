@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
-import com.cn.danceland.myapplication.activity.RecommendActivity;
+import com.cn.danceland.myapplication.activity.QRCodeActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
@@ -227,8 +227,13 @@ public class DiscoverFragment extends BaseFragment {
                 break;
             case R.id.iv_photo://发布动态
 
-                Intent intent = new Intent(mActivity, RecommendActivity.class);
+
+
+                Intent intent = new Intent(mActivity,  QRCodeActivity.class);
                startActivity(intent);
+//
+//                Intent intent = new Intent(mActivity, RecommendActivity.class);
+//               startActivity(intent);
 
 //
 //                EMClient.getInstance().login("dlkj0002","q",new EMCallBack() {//回调

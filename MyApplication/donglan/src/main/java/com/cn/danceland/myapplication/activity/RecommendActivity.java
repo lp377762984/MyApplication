@@ -125,7 +125,7 @@ public class RecommendActivity extends FragmentActivity implements View.OnClickL
     public void onClick(View v) {
         switch(v.getId()){
         case R.id.iv_back:
-
+            finish();
         break;
         default:
         break;

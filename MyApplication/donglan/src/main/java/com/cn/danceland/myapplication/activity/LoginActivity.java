@@ -30,7 +30,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.Person;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -271,7 +273,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             case R.id.tv_forgetpsw://忘记密码
 
 
-            startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
             case R.id.tv_login_others://其他方式登陆
                 Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
@@ -315,9 +317,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void login() {
 
 
-
-
-
         StringRequest request = new StringRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -325,24 +324,45 @@ public class LoginActivity extends Activity implements OnClickListener {
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    //成功
-                    String mUserId = requestInfoBean.getData().getPersonId();
-                    SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
-                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
-                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
 
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                LogUtil.i(loginInfoBean.toString());
+                if (loginInfoBean.getSuccess()) {
 
-                    //查询信息
-                    queryUserInfo(mUserId);
+                    SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
+                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                    if(loginInfoBean.getData().getMember()!=null){
+                        SPUtils.setString(Constants.MY_MEMBER_ID,loginInfoBean.getData().getMember().getId());
+                    }
+                    Person data = loginInfoBean.getData().getPerson();
+                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                    ToastUtils.showToastShort("登录成功");
 
                 } else {
-                    //注册失败
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+
+                    ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
                 }
+
+//                RequestInfoBean requestInfoBean = new RequestInfoBean();
+//                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+//                if (requestInfoBean.getSuccess()) {
+//                    //成功
+//                    String mUserId = requestInfoBean.getData().getPersonId();
+//                    SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
+//                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
+//                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
+//
+//
+//                    //查询信息
+//                 //   queryUserInfo(mUserId);
+//
+//
+//                } else {
+//                    //注册失败
+//                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+//                }
 
             }
         }, new Response.ErrorListener() {
@@ -361,7 +381,7 @@ public class LoginActivity extends Activity implements OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("name", mEtPhone.getText().toString().trim());
+                map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 // map.put("romType", "0");
                 return map;
