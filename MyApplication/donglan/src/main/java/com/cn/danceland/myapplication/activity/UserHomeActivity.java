@@ -33,6 +33,7 @@ import com.cn.danceland.myapplication.adapter.UserHomeDynListviewAdater;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -80,7 +81,7 @@ public class UserHomeActivity extends Activity {
     private TextView tv_no_data;
     private TextView tv_add_gz;
 
-    private Data userInfo;
+    private RequsetUserDynInfoBean.Data userInfo;
     private TextView tv_fans;
     private TextView tv_guanzhu_num;
     private LinearLayout ll_edit;
@@ -159,21 +160,21 @@ public class UserHomeActivity extends Activity {
 
     }
 
-    private void setHeadViewData(final Data data) {
+    private void setHeadViewData(final RequsetUserDynInfoBean.Data data) {
 
 
 
 
-        if (TextUtils.equals(data.getGender(), "1")) {
+        if (TextUtils.equals(data.getPerson().getGender(), "1")) {
             iv_sex.setImageResource(R.drawable.img_sex1);
-        } else if (TextUtils.equals(data.getGender(), "2")) {
+        } else if (TextUtils.equals(data.getPerson().getGender(), "2")) {
             iv_sex.setImageResource(R.drawable.img_sex2);
         } else {
             iv_sex.setVisibility(View.INVISIBLE);
         }
 
 
-        tv_guanzhu_num.setText("关注 " + data.getFollowNumber());
+        tv_guanzhu_num.setText("关注 " + data.getFollow_no());
         tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//查看关注
@@ -181,7 +182,7 @@ public class UserHomeActivity extends Activity {
 
             }
         });
-        tv_fans.setText("粉丝 " + data.getFansNum());
+        tv_fans.setText("粉丝 " + data.getFanse_no());
         tv_fans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//查看粉丝
@@ -191,8 +192,8 @@ public class UserHomeActivity extends Activity {
         });
 
 
-        if (data.isFollower()) {
-            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getId())) {
+        if (data.getIs_follow()) {
+            if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getPerson().getId())) {
                 tv_add_gz.setVisibility(View.INVISIBLE);
             } else {
                 tv_add_gz.setText("取消关注");
@@ -218,7 +219,7 @@ public class UserHomeActivity extends Activity {
         });
 
 
-        if (TextUtils.equals(data.getId(), SPUtils.getString(Constants.MY_USERID, null))) {
+        if (TextUtils.equals(data.getPerson().getId(), SPUtils.getString(Constants.MY_USERID, null))) {
 
             ll_edit.setVisibility(View.VISIBLE);
             ll_edit.setOnClickListener(new View.OnClickListener() {
@@ -232,12 +233,12 @@ public class UserHomeActivity extends Activity {
 
         //m默认头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(this).load(data.getSelfAvatarPath()).apply(options).into(iv_userifno_avatar);
+        Glide.with(this).load(data.getPerson().getSelf_avatar_path()).apply(options).into(iv_userifno_avatar);
         iv_userifno_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(data.getSelf_avatar_path())){
-                    startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getSelf_avatar_path()));
+                if (!TextUtils.isEmpty(data.getPerson().getSelf_avatar_path())){
+                    startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getPerson().getSelf_avatar_path()));
                 }else {
                     ToastUtils.showToastLong("未设置头像");
                 }
@@ -246,7 +247,7 @@ public class UserHomeActivity extends Activity {
         });
 
 
-        tv_head_nickname.setText(data.getNickName());
+        tv_head_nickname.setText(data.getPerson().getNick_name());
 
     }
 
@@ -387,12 +388,12 @@ public class UserHomeActivity extends Activity {
             case EventConstants.ADD_GUANZHU:
 
                 tv_add_gz.setText("取消关注");
-                requestInfoBean.getData().setFollower(true);
+                requestInfoBean.getData().setIs_follow(true);
 
                 break;
             case EventConstants.DEL_GUANZHU:
                 tv_add_gz.setText("+关注");
-                requestInfoBean.getData().setFollower(false);
+                requestInfoBean.getData().setIs_follow(false);
                 break;
             case EventConstants.ADD_ZAN:
 
@@ -413,7 +414,7 @@ public class UserHomeActivity extends Activity {
         queryUserInfo(userId);
     }
 
-    private RequestInfoBean requestInfoBean;
+    private RequsetUserDynInfoBean requestInfoBean;
 
     /***
      * 查找个人资料
@@ -423,7 +424,7 @@ public class UserHomeActivity extends Activity {
 
         String params = id;
 
-        String url = Constants.QUERY_USERINFO_URL + params;
+        String url = Constants.QUERY_USER_DYN_INFO_URL + params;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -433,15 +434,21 @@ public class UserHomeActivity extends Activity {
 
                 LogUtil.i(s);
                 Gson gson = new Gson();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
 
-                userInfo = requestInfoBean.getData();
+               userInfo = requestInfoBean.getData();
 
 
                 if (TextUtils.equals(id, SPUtils.getString(Constants.MY_USERID, null))) {
                     //如果是本人更新本地缓存
-                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
+                    Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    data.setPerson(userInfo.getPerson());
+                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
+
 
                     EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_USER_INFO));
                 }
@@ -576,7 +583,7 @@ public class UserHomeActivity extends Activity {
 
     }
 
-    private View initHeadview(final Data data) {
+    private View initHeadview(final RequsetUserDynInfoBean.Data data) {
 
         View headview = View.inflate(this, R.layout.headview_user_home, null);
         iv_userifno_avatar = headview.findViewById(iv_avatar);

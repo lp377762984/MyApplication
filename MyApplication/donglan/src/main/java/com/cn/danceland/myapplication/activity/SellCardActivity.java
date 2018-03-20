@@ -28,6 +28,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
@@ -38,6 +40,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -102,7 +105,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("cardinfo",sellCardsInfoBean.getData().get(i));
+                bundle.putSerializable("cardinfo", sellCardsInfoBean.getData().get(i));
                 startActivity(new Intent(SellCardActivity.this, SellCardConfirmActivity.class).putExtras(bundle));
             }
         });
@@ -166,18 +169,21 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
                 viewHolder.tv_price = view.findViewById(R.id.tv_price);
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
-
+                viewHolder.iv_card = view.findViewById(R.id.iv_card);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
+            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            Glide.with(SellCardActivity.this).load(sellCardsInfoBean.getData().get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
+
 
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 1) {//计时卡
                 viewHolder.tv_cardtype.setText("卡类型：计时卡");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                viewHolder.   tv_cardtype.setText("卡类型：计次卡（"+sellCardsInfoBean.getData().get(i).getTotal_count() + "次）");
+                viewHolder.tv_cardtype.setText("卡类型：计次卡（" + sellCardsInfoBean.getData().get(i).getTotal_count() + "次）");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");
@@ -185,19 +191,19 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
 
 
             viewHolder.tv_name.setText(sellCardsInfoBean.getData().get(i).getName());
-            viewHolder.tv_price.setText("售价："+ PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice()));
-            if (!TextUtils.isEmpty(sellCardsInfoBean.getData().get(i).getTotal_count())){
-                viewHolder.tv_number.setText("次数："+sellCardsInfoBean.getData().get(i).getTotal_count() + "次");
+            viewHolder.tv_price.setText("售价：" + PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice()));
+            if (!TextUtils.isEmpty(sellCardsInfoBean.getData().get(i).getTotal_count())) {
+                viewHolder.tv_number.setText("次数：" + sellCardsInfoBean.getData().get(i).getTotal_count() + "次");
                 viewHolder.tv_number.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 viewHolder.tv_number.setVisibility(View.GONE);
             }
 
-            if (sellCardsInfoBean.getData().get(i).getTime_unit()==1){
-                viewHolder.tv_time.setText("使用时间："+sellCardsInfoBean.getData().get(i).getTime_value() + "年");
+            if (sellCardsInfoBean.getData().get(i).getTime_unit() == 1) {
+                viewHolder.tv_time.setText("使用时间：" + sellCardsInfoBean.getData().get(i).getTime_value() + "年");
             }
-            if (sellCardsInfoBean.getData().get(i).getTime_unit()==2){
-                viewHolder.tv_time.setText("使用时间："+sellCardsInfoBean.getData().get(i).getTime_value() + "月");
+            if (sellCardsInfoBean.getData().get(i).getTime_unit() == 2) {
+                viewHolder.tv_time.setText("使用时间：" + sellCardsInfoBean.getData().get(i).getTime_value() + "月");
             }
 
 
@@ -211,6 +217,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             TextView tv_number;
             TextView tv_time;
             TextView tv_cardtype;
+            XCRoundRectImageView iv_card;
         }
 
     }

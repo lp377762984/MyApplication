@@ -291,7 +291,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 info.setRemark(et_remark.getText().toString());
                 info.setWeichat_no(et_weixin_no.getText().toString());
                 Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                info.setDefault_branch(data.getDefault_branch());
+                info.setDefault_branch(data.getPerson().getDefault_branch());
 
                 LogUtil.i(gson.toJson(info).toString());
                 try {

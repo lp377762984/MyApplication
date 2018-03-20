@@ -447,13 +447,13 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
                 sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
                 String[] b = sb.toString().split("_");
-                String[] c = b[2].toString().toString().split("X");
+                String[] c = b[1].toString().toString().split("X");
 
-//                LogUtil.i(b[2].toString());
-//
-//                LogUtil.i(c[0]);
-//                LogUtil.i(c[1]);
-//                LogUtil.i(sb.toString());
+                LogUtil.i(b[1].toString());
+
+                LogUtil.i(c[0]);
+                LogUtil.i(c[1]);
+                LogUtil.i(sb.toString());
                 if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
                     linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);

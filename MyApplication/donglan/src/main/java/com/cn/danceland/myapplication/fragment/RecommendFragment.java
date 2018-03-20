@@ -67,7 +67,7 @@ public class RecommendFragment extends BaseFragment {
         strBean.gender = 1;
         strBean1 = new StrBean();
         Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        strBean1.member_no=data.getMember_no();
+        strBean1.member_no=data.getPerson().getMember_no();
         introduce_querylist(strBean1);
     }
 

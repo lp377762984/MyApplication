@@ -55,7 +55,7 @@ public class RecommendedFragment extends BaseFragment {
     public void initDta() {
         strBean1 = new StrBean();
         Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        strBean1.introduce_member_no=data.getMember_no();
+        strBean1.introduce_member_no=data.getPerson().getMember_no();
         introduce_querylist(strBean1);
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -26,7 +25,6 @@ import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
@@ -37,9 +35,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +89,7 @@ public class SiJiaoFragment extends BaseFragment {
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         MyCourseConBean myCourseConBean = new MyCourseConBean();
         if(info!=null){
-            myCourseConBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+            myCourseConBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
             myCourseConBean.setPage(0);
             myCourseConBean.setPageCount(30);
         }

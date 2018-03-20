@@ -26,6 +26,8 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -146,10 +148,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(RegisterActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
-                    Toast.makeText(RegisterActivity.this, "验证码有误，请重新输入", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
+//                    Toast.makeText(RegisterActivity.this, "验证码有误，请重新输入", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 //判断密码是否为空
                 if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
                     Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
@@ -243,9 +245,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 RequestInfoBean requestInfoBean = new RequestInfoBean();
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
-                    //成功
-                    String mUserId = requestInfoBean.getData().getId();
-                    //      SPUtils.setString(Constants.MY_USERID, mUserId);
+
                     ToastUtils.showToastShort("注册成功");
 
                     login();//直接登录
@@ -275,6 +275,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("romType", "1");
+                map.put("validateCode", mEtSms.getText().toString());
+
+                LogUtil.i(map.toString());
                 return map;
             }
         };
@@ -293,34 +296,37 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
      * 登录
      */
     private void login() {
-        dialog.show();
-        String url = Constants.LOGIN_URL;
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    //成功
-                    String mUserId = requestInfoBean.getData().getPersonId();
-                    SPUtils.setString(Constants.MY_USERID, mUserId);//保存id
-                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
-                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id
+
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                LogUtil.i(loginInfoBean.toString());
+                if (loginInfoBean.getSuccess()) {
+
+                    SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
+
+                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                    if (loginInfoBean.getData().getMember() != null) {
+                        SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                    }
+                    Data data = loginInfoBean.getData();
+                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                //    ToastUtils.showToastShort("登录成功");
                     //查询信息
-                    queryUserInfo(mUserId);
-
-                    // ToastUtils.showToastShort("登录成功");
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
+                    queryUserInfo(loginInfoBean.getData().getPerson().getId());
                 } else {
-                    //注册失败
-                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+
+                    ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
                 }
+
 
             }
         }, new Response.ErrorListener() {
@@ -328,20 +334,16 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
+
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("name", mEtPhone.getText().toString().trim());
+                map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                map.put("romType", "1");
+                // map.put("romType", "0");
                 return map;
             }
         };
@@ -359,30 +361,34 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         String params = id;
 
-        String url = Constants.QUERY_USERINFO_URL + params;
+        String url = Constants.QUERY_USER_DYN_INFO_URL + params;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetUserDynInfoBean requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
-                //       LogUtil.i(requestInfoBean.toString());
+                if (requestInfoBean.getSuccess()){
+                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
 
-                if (requestInfoBean.getSuccess()) {
-                    //保存个人信息
-                    Data data = requestInfoBean.getData();
-                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                    //跳转到填写资料页
-                    startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
-                    setMipushId();
-                    finish();
-                } else {
+
+                }else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
 
 
+
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                setMipushId();
+                finish();
+
+
+                // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
             }
         }, new Response.ErrorListener() {
             @Override

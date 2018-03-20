@@ -216,7 +216,7 @@ public class ResetPhoneActivity extends Activity implements View.OnClickListener
                     //发送事件
                     EventBus.getDefault().post(new StringEvent(mEtPhone.getText().toString().trim(),111));
                     Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    data.setPhone(mEtPhone.getText().toString().trim());
+                    data.getPerson().setPhone_no(mEtPhone.getText().toString().trim());
                     DataInfoCache.saveOneCache(data,Constants.MY_INFO);
 
                     finish();

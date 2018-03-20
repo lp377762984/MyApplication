@@ -102,7 +102,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 }
                 requsetBean.content = et_content.getText().toString().trim();
                 Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                requsetBean.branch_id = data.getDefault_branch();
+                requsetBean.branch_id = data.getPerson().getDefault_branch();
 
 
                 try {

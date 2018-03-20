@@ -720,8 +720,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
                     orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
                     Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    orderInfoBean.setCname(data.getCname());
-                    orderInfoBean.setMember_no(data.getMember_no());
+                    orderInfoBean.setCname(data.getPerson().getCname());
+                    orderInfoBean.setMember_no(data.getPerson().getMember_no());
                     orderInfoBean.setPrice(pay_price + "");
                     orderInfoBean.setPay_way(pay_way + "");
                     orderInfoBean.setCard_type_id(CardsInfo.getId());
@@ -1375,7 +1375,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("branchId", branchId);
+                map.put("branch_id", branchId);
 
                 return map;
 

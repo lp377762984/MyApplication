@@ -69,7 +69,7 @@ public class TuanKeRecordFragment extends BaseFragment {
 
     private void initData() throws JSONException {
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        siJiaoYuYueConBean.setMember_no(data.getMember_no());
+        siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         siJiaoYuYueConBean.setDate(startTime+"000");
 
         String s = gson.toJson(siJiaoYuYueConBean);

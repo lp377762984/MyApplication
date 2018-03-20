@@ -24,7 +24,6 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.EquipmentBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -32,7 +31,6 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.Inflater;
 
 /**
  * Created by feng on 2018/1/2.
@@ -152,7 +150,7 @@ public class EquipmentActivity extends Activity {
 
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("page","1");
-                map.put("branch_id",info.getDefault_branch());
+                map.put("branch_id",info.getPerson().getDefault_branch());
 
                 return map;
             }
@@ -175,7 +173,7 @@ public class EquipmentActivity extends Activity {
         gson = new Gson();
         info = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
         if(info!=null){
-            branchId = info.getDefault_branch();
+            branchId = info.getPerson().getDefault_branch();
         }
     }
 

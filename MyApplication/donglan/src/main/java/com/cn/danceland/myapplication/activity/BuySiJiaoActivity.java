@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -71,7 +69,7 @@ public class BuySiJiaoActivity extends Activity {
     private void getData() throws JSONException {
         findSiJiaoBean.setPage(0);
         findSiJiaoBean.setSize(15);
-        findSiJiaoBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        findSiJiaoBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         String s = gson.toJson(findSiJiaoBean);
         JSONObject jsonObject = new JSONObject(s);
 

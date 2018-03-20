@@ -120,7 +120,7 @@ public class SellStoreCardActivity extends Activity{
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         sijiaoOrderConfirmBean.setPay_way("1");//1支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
-        sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getDefault_branch()));
+        sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         sijiaoOrderConfirmBean.setBus_type(16);
         extends_params.setStore_type_id(cardid.getId()+"");
         extends_params.setFace(cardid.getFace()+"");
@@ -225,7 +225,7 @@ public class SellStoreCardActivity extends Activity{
         public String order_no;
         public float price;
         public int bus_type;
-        public int member_id;
+        public String member_id;
 
 
         @Override

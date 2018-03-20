@@ -14,7 +14,6 @@ import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.SellStoreCardActivity;
-import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.store.storetype.StoreType;
@@ -74,7 +73,7 @@ public class SellStoreCardFragment extends BaseFragment {
         StoreTypeCond cond = new StoreTypeCond();
         // TODO 准备查询条件
 
-        cond.setBranch_id(Long.valueOf(info.getDefault_branch()));
+        cond.setBranch_id(Long.valueOf(info.getPerson().getDefault_branch()));
 
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {

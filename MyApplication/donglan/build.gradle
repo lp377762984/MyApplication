@@ -145,4 +145,5 @@ dependencies {
     compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
     //banner
     compile project(':easeui')
+    compile project(':RxTools-library')
 }

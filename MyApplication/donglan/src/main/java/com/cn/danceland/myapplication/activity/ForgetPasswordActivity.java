@@ -168,15 +168,16 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                     return;
                 }
 
-                //判断验证码是否正确
-                if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
+//                //判断验证码是否正确
+//                if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
+//
+//                    resetPsw();
+//
+//                } else {
+//                    ToastUtils.showToastShort("验证码错误");
+//                }
 
-                    resetPsw();
-
-                } else {
-                    ToastUtils.showToastShort("验证码错误");
-                }
-
+                resetPsw();
 
                 break;
             case R.id.iv_back://返回
@@ -271,7 +272,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
 
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("pwd", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                // map.put("romType", "0");
+                map.put("validateCode", mEtSms.getText().toString());
                 return map;
             }
 

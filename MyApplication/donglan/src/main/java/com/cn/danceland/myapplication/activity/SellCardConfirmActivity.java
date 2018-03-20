@@ -28,6 +28,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
@@ -38,6 +40,7 @@ import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -88,8 +91,8 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
     private void initData() {
         getDate();
-
-        //    findConsultant(CardsInfo.getBranch_id());
+       // LogUtil.i(CardsInfo.getBranch_id());
+        findConsultant(CardsInfo.getBranch_id());
     }
 
     //获取当前日期
@@ -113,7 +116,9 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         TextView tv_time = findViewById(R.id.tv_time);
         TextView tv_price = findViewById(R.id.tv_price);
         TextView tv_cardtype = findViewById(R.id.tv_cardtype);
-
+        XCRoundRectImageView iv_card = findViewById(R.id.iv_card);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
+        Glide.with(SellCardConfirmActivity.this).load(CardsInfo.getImg_url()).apply(options).into(iv_card);
 
         if (CardsInfo.getCharge_mode() == 1) {//计时卡
             tv_cardtype.setText("卡类型：计时卡");
@@ -529,7 +534,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("branchId", branchId);
+                map.put("branch_id", branchId);
 
                 return map;
 
@@ -539,6 +544,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
                 return map;
             }
         };
