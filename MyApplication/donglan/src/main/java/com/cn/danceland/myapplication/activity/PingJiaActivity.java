@@ -178,7 +178,7 @@ public class PingJiaActivity extends Activity {
                     ToastUtils.showToastShort("评价成功！");
                     finish();
                 }else{
-                    ToastUtils.showToastShort("评价失败！");
+                    ToastUtils.showToastShort("评价失败！请检查手机网络");
                 }
 
             }
