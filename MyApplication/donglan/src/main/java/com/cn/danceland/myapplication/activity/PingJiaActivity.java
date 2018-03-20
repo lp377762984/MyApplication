@@ -176,6 +176,7 @@ public class PingJiaActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject.toString().contains("true")){
                     ToastUtils.showToastShort("评价成功！");
+                    finish();
                 }else{
                     ToastUtils.showToastShort("评价失败！");
                 }
