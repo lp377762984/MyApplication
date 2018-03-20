@@ -5,14 +5,11 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-4.1" />
+        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-4.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/ChatDemoUI3.0" />
-            <option value="$PROJECT_DIR$/EaseChat-easeui_dev" />
             <option value="$PROJECT_DIR$/PullToRefreshLibrary" />
-            <option value="$PROJECT_DIR$/ViewPagerIndicatorlibrary" />
             <option value="$PROJECT_DIR$/donglan" />
             <option value="$PROJECT_DIR$/easeui" />
             <option value="$PROJECT_DIR$/hellocharts-library" />
