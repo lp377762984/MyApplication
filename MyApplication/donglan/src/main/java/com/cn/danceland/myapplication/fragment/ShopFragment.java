@@ -86,7 +86,7 @@ public class ShopFragment extends BaseFragment {
     ArrayList<String> roleList;
     ArrayAdapter arrayAdapter;
     String role;
-    List<Integer> roles;
+    List<Data.Roles> roles;
     HashMap<String,String> roleMap,authMap;
 
     @Override
@@ -169,27 +169,27 @@ public class ShopFragment extends BaseFragment {
             roles = info.getRoles();
             if(roles!=null&&roles.size()>0){
                 for(int i=0;i<roles.size();i++){
-                    if(roles.get(i)==1){
+                    if(roles.get(i).getRole_type()==1){
                         roleList.add("会籍顾问");
-                    }else if(roles.get(i)==2){
+                    }else if(roles.get(i).getRole_type()==2){
                         roleList.add("教练");
-                    }else if(roles.get(i)==3){
+                    }else if(roles.get(i).getRole_type()==3){
                         roleList.add("前台");
-                    }else if(roles.get(i)==4){
+                    }else if(roles.get(i).getRole_type()==4){
                         roleList.add("店长");
-                    }else if(roles.get(i)==5){
+                    }else if(roles.get(i).getRole_type()==5){
                         roleList.add("会籍主管");
-                    }else if(roles.get(i)==6){
+                    }else if(roles.get(i).getRole_type()==6){
                         roleList.add("教练主管");
-                    }else if(roles.get(i)==7){
+                    }else if(roles.get(i).getRole_type()==7){
                         roleList.add("前台主管");
-                    }else if(roles.get(i)==8){
+                    }else if(roles.get(i).getRole_type()==8){
                         roleList.add("操教");
-                    }else if(roles.get(i)==9){
+                    }else if(roles.get(i).getRole_type()==9){
                         roleList.add("出纳");
-                    }else if(roles.get(i)==10){
+                    }else if(roles.get(i).getRole_type()==10){
                         roleList.add("收银");
-                    }else if(roles.get(i)==11){
+                    }else if(roles.get(i).getRole_type()==11){
                         roleList.add("兼职教练");
                     }
                 }
