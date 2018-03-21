@@ -84,6 +84,9 @@ public class ShopFragment extends BaseFragment {
     Spinner spinner;
     ArrayList<String> roleList;
     ArrayAdapter arrayAdapter;
+    String role;
+    List<Integer> roles;
+    HashMap<String,String> roleMap,authMap;
 
     @Override
     public View initViews() {
@@ -94,6 +97,7 @@ public class ShopFragment extends BaseFragment {
 
         roleList = new ArrayList<String>();
         spinner = v.findViewById(R.id.spinner);
+        setMap();
         addRoles();
         arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
         //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -101,9 +105,8 @@ public class ShopFragment extends BaseFragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
-
+                role = roleList.get(position);
+                initData();
             }
 
             @Override
@@ -137,9 +140,32 @@ public class ShopFragment extends BaseFragment {
         return v;
     }
 
+
+    private void setMap(){
+        roleMap = new HashMap<>();
+        authMap = new HashMap<>();
+        roleMap.put("会籍顾问","1");
+        roleMap.put("教练","2");
+        roleMap.put("前台","3");
+        roleMap.put("店长","4");
+        roleMap.put("会籍主管","5");
+        roleMap.put("教练主管","6");
+        roleMap.put("前台主管","7");
+        roleMap.put("操教","8");
+        roleMap.put("出纳","9");
+        roleMap.put("收银","10");
+        roleMap.put("兼职教练","11");
+
+        authMap.put("潜客","1");
+        authMap.put("会员","2");
+
+    }
+
+
+
     private void addRoles() {
         if(info!=null){
-            List<Integer> roles = info.getRoles();
+            roles = info.getRoles();
             if(roles!=null&&roles.size()>0){
                 for(int i=0;i<roles.size();i++){
                     if(roles.get(i)==1){
@@ -193,6 +219,7 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
+
     private void getShop(String shopID) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + shopID, new Response.Listener<String>() {
             @Override
@@ -226,11 +253,20 @@ public class ShopFragment extends BaseFragment {
     }
 
     private void getMenus() {
+        final String id;
+        String url;
+        if(!"潜客".equals(role)&&!"会员".equals(role)){
+            id = roleMap.get(role);
+            url = Constants.GETYUANGONGMENUS;
+        }else{
+            id = authMap.get(role);
+            url = Constants.GETHUIYUANMENUS;
+        }
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.GETMENUS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.i(s);
+                LogUtil.e("zzf",s);
                 if (s.contains("true")) {
                     MenusBean menusBean = gson.fromJson(s, MenusBean.class);
                     data = menusBean.getData();
@@ -247,8 +283,17 @@ public class ShopFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ll_top.setVisibility(View.GONE);
                 ToastUtils.showToastShort("请查看网络连接");
+                LogUtil.e("zzf",volleyError.toString());
             }
         }) {
+
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("role_type",id);
+//                return map;
+//            }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();

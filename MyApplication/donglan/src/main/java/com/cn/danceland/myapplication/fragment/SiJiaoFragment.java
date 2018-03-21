@@ -47,6 +47,7 @@ public class SiJiaoFragment extends BaseFragment {
 
     NestedExpandaleListView ex_lv;
     ImageView down_img,up_img;
+    String role,auth;
 
     @Override
     public View initViews() {
@@ -81,6 +82,14 @@ public class SiJiaoFragment extends BaseFragment {
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    public void getRoles(String role,String auth){
+
+        this.role = role;
+        this.auth = auth;
+
 
     }
     

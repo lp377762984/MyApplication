@@ -46,7 +46,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
     View inflate;
     Data data;
     Gson gson;
-    String startTime;
+    String startTime,role,auth;
 
     @Override
     public View initViews() {
@@ -72,9 +72,18 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     }
 
+    public void getRoles(String role,String auth){
+        this.role = role;
+        this.auth = auth;
+
+    }
+
     private void initData() throws JSONException {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+//        if(role!=null){
+//            siJiaoYuYueConBean.setEmployee_id(data.getEmployee());
+//        }
         siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         if(startTime!=null){
             siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
@@ -178,7 +187,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             }
 
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
-            String time = TimeUtils.timeStamp2Date(list.get(position).getCourse_date() + "", null);
+            String time = TimeUtils.timeStamp2Date(list.get(position).getConfirm_date() + "", null);
             viewHolder.course_date.setText("预约时间:"+time);
             viewHolder.course_type.setText("一对一");
             viewHolder.course_jiaolian.setText("上课教练:"+list.get(position).getEmployee_name());

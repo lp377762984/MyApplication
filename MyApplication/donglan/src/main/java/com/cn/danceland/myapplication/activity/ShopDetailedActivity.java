@@ -26,18 +26,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
+import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,6 +62,8 @@ public class ShopDetailedActivity extends Activity{
     RelativeLayout s_button;
     Data myInfo;
     ExpandableListView jiaolian_grid,huiji_grid;
+    ImageView down_img,up_img;
+    List<ShopJiaoLianBean.Data> jiaolianList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +96,24 @@ public class ShopDetailedActivity extends Activity{
         huiji_grid = findViewById(R.id.huiji_grid);
         jiaolian_grid.setAdapter(new MyAdapter());
         huiji_grid.setAdapter(new MyAdapter());
+        jiaolian_grid.setGroupIndicator(null);
+        huiji_grid.setGroupIndicator(null);
+        jiaolian_grid.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                down_img = v.findViewById(R.id.down_img);
+                up_img = v.findViewById(R.id.up_img);
+                if(down_img.getVisibility()==View.GONE){
+                    down_img.setVisibility(View.VISIBLE);
+                    up_img.setVisibility(View.GONE);
+                }else{
+                    down_img.setVisibility(View.GONE);
+                    up_img.setVisibility(View.VISIBLE);
+                }
+                return false;
+            }
+        });
+
         img_01 = findViewById(R.id.img_01);
         img_02 = findViewById(R.id.img_02);
         Glide.with(ShopDetailedActivity.this).load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1521091228318&di=fdf182a124da7454353241da6e101ab5&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F15%2F25%2F82%2F47I58PICGQK_1024.jpg").into(img_01);
@@ -167,6 +191,7 @@ public class ShopDetailedActivity extends Activity{
         });
 
         getShopDetail();
+        getJiaolian(branchID);
     }
 
 
@@ -206,6 +231,52 @@ public class ShopDetailedActivity extends Activity{
         };
 
         requestQueue.add(stringRequest);
+
+    }
+
+
+    private void getJiaolian(final String shopID){
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_JIAOLIAN_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.e("zzf",s);
+                ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
+                if(shopJiaoLianBean!=null){
+
+                    jiaolianList = shopJiaoLianBean.getData();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branch_id",shopID);
+
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+
+                return map;
+            }
+
+
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -323,6 +394,14 @@ public class ShopDetailedActivity extends Activity{
                 convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_parent,null);
             }
 
+//            if(jiaolianList!=null){
+//                if(jiaolianList.size()<=5){
+//                    for(int i=0;i<jiaolianList.size();i++){
+//
+//
+//                    }
+//                }
+//            }
             CircleImageView circle_1 = convertView.findViewById(R.id.circle_1);
             CircleImageView circle_2 = convertView.findViewById(R.id.circle_2);
             CircleImageView circle_3 = convertView.findViewById(R.id.circle_3);

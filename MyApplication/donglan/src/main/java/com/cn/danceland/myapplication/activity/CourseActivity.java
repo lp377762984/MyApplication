@@ -51,7 +51,7 @@ public class CourseActivity extends FragmentActivity {
     int id,course_type_id;
     String isTuanke;//团课isTuanke==0；一对一和小团课==1
     Time time;
-    String nowTime,nowTimeLen;
+    String nowTime,nowTimeLen,role,auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +73,16 @@ public class CourseActivity extends FragmentActivity {
         nowTime = time.year+"-"+time.month+"-"+time.monthDay+" 00:00:00";
         startTime = TimeUtils.date2TimeStamp(nowTime,"yyyy-MM-dd 00:00:00")+"";
 
+
+        role = getIntent().getStringExtra("role");
+        auth = getIntent().getStringExtra("auth");
+
     }
+
+
+
+
+
 
     private void setOnclick() {
 
@@ -176,6 +185,7 @@ public class CourseActivity extends FragmentActivity {
                 fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
             }else{
                 siJiaoFragment = new SiJiaoFragment();
+                siJiaoFragment.getRoles(role,auth);
                 fragmentTransaction.replace(R.id.rl_nv,siJiaoFragment);
             }
 
@@ -188,6 +198,7 @@ public class CourseActivity extends FragmentActivity {
             }else{
                 siJiaoRecordFragment = new SiJiaoRecordFragment();
                 siJiaoRecordFragment.getStartTime(startTime);
+                siJiaoRecordFragment.getRoles(role,auth);
                 fragmentTransaction.replace(R.id.rl_nv,siJiaoRecordFragment);
             }
 
