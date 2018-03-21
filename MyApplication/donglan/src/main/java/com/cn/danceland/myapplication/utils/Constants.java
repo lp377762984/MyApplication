@@ -52,6 +52,7 @@ public class Constants extends EaseConstant {
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
 
+    public static final String FIND_CLUBDYNAMIC_URL = HOST + "/clubDynamic/queryPage";//会所动态
 
     public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//加关注
