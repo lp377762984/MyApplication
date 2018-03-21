@@ -37,7 +37,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.OrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
@@ -683,7 +682,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 if (product_type == 1) {//卡订单
                     final NewOrderInfoBean newOrderInfoBean = new NewOrderInfoBean();
-                    final OrderInfoBean orderInfoBean = new OrderInfoBean();
+                    //final OrderInfoBean orderInfoBean = new OrderInfoBean();
 
 
                     if (consultantInfo == null) {
@@ -714,37 +713,37 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
 
 
-                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
-                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
-                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
-                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
-                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
+//                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
+//                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
+//                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
+//                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
+//                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
                     Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    orderInfoBean.setCname(data.getPerson().getCname());
-                    orderInfoBean.setMember_no(data.getPerson().getMember_no());
-                    orderInfoBean.setPrice(pay_price + "");
-                    orderInfoBean.setPay_way(pay_way + "");
-                    orderInfoBean.setCard_type_id(CardsInfo.getId());
-                    orderInfoBean.setCard_name(CardsInfo.getName());
-                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count() + "");
+//                    orderInfoBean.setCname(data.getPerson().getCname());
+//                    orderInfoBean.setMember_no(data.getPerson().getMember_no());
+//                    orderInfoBean.setPrice(pay_price + "");
+//                    orderInfoBean.setPay_way(pay_way + "");
+//                    orderInfoBean.setCard_type_id(CardsInfo.getId());
+//                    orderInfoBean.setCard_name(CardsInfo.getName());
+//                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count() + "");
                     if (!TextUtils.isEmpty(depositId)) {
-                        orderInfoBean.setDeposit_id(depositId);
-                        orderInfoBean.setDeposit_price(deposit_price + "");
+//                        orderInfoBean.setDeposit_id(depositId);
+//                        orderInfoBean.setDeposit_price(deposit_price + "");
                         newOrderInfoBean.setDeposit_id(depositId);
                     }
                     if (CardsInfo.getCharge_mode() == 2) {//如果是计次卡
-                        orderInfoBean.setTotal_count(CardsInfo.getTotal_count());
+//                        orderInfoBean.setTotal_count(CardsInfo.getTotal_count());
                         extendsParams.setTotal_count(CardsInfo.getTotal_count());
                     }
                     if (isme) {
                         newOrderInfoBean.setBus_type(32);//给别人买定金
-                        orderInfoBean.setFor_other(0);
+//                        orderInfoBean.setFor_other(0);
                     } else {
                         order_bustype=34;
                         newOrderInfoBean.setBus_type(34);//给别人买定金
-                        orderInfoBean.setFor_other(1);
-                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
-                        orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
+//                        orderInfoBean.setFor_other(1);
+//                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
+//                        orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
                     }
                     //   LogUtil.i(orderInfoBean.toString());
 

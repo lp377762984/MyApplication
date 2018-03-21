@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
+import com.cn.danceland.myapplication.activity.ClubDynActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
@@ -433,6 +434,9 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 4://购买私教
                         startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
+                        break;
+                    case 5://会所动态
+                        startActivity(new Intent(mActivity, ClubDynActivity.class));
                         break;
                     case 6://预约私教
                         startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","1"));
