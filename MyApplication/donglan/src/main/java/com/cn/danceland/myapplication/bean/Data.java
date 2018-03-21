@@ -866,7 +866,7 @@ public class Data implements Serializable {
 
     }
 
-    public class Employee {
+    public class Employee  implements Serializable{
 
         private int id;
         private int branch_id;
@@ -1262,7 +1262,7 @@ public class Data implements Serializable {
 
     }
 
-    public class Roles {
+    public class Roles implements Serializable {
 
         private int id;
         private int department_id;
