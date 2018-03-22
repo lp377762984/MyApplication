@@ -167,7 +167,8 @@ public class Constants extends EaseConstant {
     public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";//购买私教课程列表
     public static final String FINDCourseTypeEmployee = HOST + "appCourse/findCourseTypeEmployee";//查私教教练
     public static final String FINDGROUPCLASS = HOST + "appGroupClass/queryPage";//小团课列表
-    public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse ";//我的私教
+    public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse";//我的私教
+    public static final String FINDEMPCOURSE = HOST + "appCourse/findEmployeeCourse";//教练的私教
     public static final String FINDAVAI = HOST + "appCourse/availableList";//我的私教
     public static final String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
     public static final String QUERYKECHENGBIAO = HOST + "appGroupCourse/queryGroupCourseByData";//小团课课程表
