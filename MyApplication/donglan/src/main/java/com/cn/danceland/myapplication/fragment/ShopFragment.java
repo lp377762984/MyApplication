@@ -263,7 +263,7 @@ public class ShopFragment extends BaseFragment {
         final String id;
         String url;
         RolesBean rolesBean = new RolesBean();
-        if(!"潜客".equals(role)&&!"会员".equals(role)){
+        if(!"潜客".equals(role)&&!"会员".equals(role)&&role!=null){
             rolesBean.setRole_type(roleMap.get(role));
             //id = roleMap.get(role);
             url = Constants.GETYUANGONGMENUS;
