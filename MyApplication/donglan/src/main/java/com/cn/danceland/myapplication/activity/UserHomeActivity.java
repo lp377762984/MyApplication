@@ -24,6 +24,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -49,6 +50,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -653,6 +655,14 @@ public class UserHomeActivity extends Activity {
 
     }
 
+    class StrBean1 {
+        public boolean is_follower;
+        public String user_id;
+
+    }
+
+
+
     /**
      * 加关注
      *
@@ -661,15 +671,20 @@ public class UserHomeActivity extends Activity {
      */
     private void addGuanzhu(final String id, final boolean b) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
+        StrBean1 strBean1=new StrBean1();
+        strBean1.is_follower=b;
+        strBean1.user_id=id;
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
 
             @Override
-            public void onResponse(String s) {
-                //  LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
                 if (b) {
                     if (requestInfoBean.getSuccess()) {
 
@@ -693,8 +708,9 @@ public class UserHomeActivity extends Activity {
 
                 }
 
-
             }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
@@ -704,13 +720,7 @@ public class UserHomeActivity extends Activity {
 
         }
         ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", id);
-                map.put("isFollower", String.valueOf(b));
-                return map;
-            }
+
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -731,5 +741,8 @@ public class UserHomeActivity extends Activity {
         MyApplication.getHttpQueues().add(request);
 
     }
+
+
+
 
 }
