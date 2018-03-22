@@ -1,8 +1,5 @@
-package com.cn.danceland.myapplication.activity;
+package com.cn.danceland.myapplication.fragment;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,41 +27,31 @@ import java.util.Map;
 
 import static com.cn.danceland.myapplication.R.id.tv_cardtype;
 
-
 /**
- * Created by shy on 2017/12/19 09:34
+ * Created by shy on 2018/3/22 09:16
  * Email:644563767@qq.com
  */
 
 
-public class MyCardActivity extends Activity implements View.OnClickListener {
-
+public class MyCardFragment extends BaseFragment {
     private ListView mListView;
     private List<RequestMyCardListBean.Data> mCardList = new ArrayList<>();
     private MyListViewAdapter myListViewAdapter;
     Gson gson = new Gson();
-
-
     @Override
+    public View initViews() {
+        View v=View.inflate(mActivity,R.layout.fragment_my_card,null);
 
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_card);
-        initView();
-        initData();
-    }
-
-    private void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        mListView = findViewById(R.id.listview);
+        mListView = v.findViewById(R.id.listview);
         myListViewAdapter = new MyListViewAdapter();
         mListView.setAdapter(myListViewAdapter);
+        return null;
 
     }
 
-    private void initData() {
+    @Override
+    public void onClick(View view) {
 
-        findAllCard();
     }
 
     /**
@@ -102,16 +89,6 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            default:
-                break;
-        }
-    }
 
 
     class MyListViewAdapter extends BaseAdapter
@@ -139,7 +116,7 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
             ViewHolder viewHolder = null;
             if (view == null) {
                 viewHolder = new ViewHolder();
-                view = View.inflate(MyCardActivity.this, R.layout.listview_item_my_club_card, null);
+                view = View.inflate(mActivity, R.layout.listview_item_my_club_card, null);
                 viewHolder.tv_name = view.findViewById(R.id.tv_cardname);
                 viewHolder.tv_number = view.findViewById(R.id.tv_number);
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
@@ -190,6 +167,5 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
         }
 
     }
-
 
 }

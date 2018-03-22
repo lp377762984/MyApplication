@@ -318,6 +318,7 @@ public class HomeFragment extends BaseFragment {
             //  findSelectionDyn_Down(1);
             init();
             mCurrentPage = 1;
+            isEnd=false;
             findNews(mCurrentPage);
             findImageNews();
             return null;
@@ -356,7 +357,7 @@ public class HomeFragment extends BaseFragment {
                 pullToRefresh.onRefreshComplete();
             }
 
-            //    pullToRefresh.onRefreshComplete();
+              pullToRefresh.onRefreshComplete();
         }
     }
 

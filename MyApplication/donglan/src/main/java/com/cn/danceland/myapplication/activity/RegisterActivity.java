@@ -261,11 +261,11 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
+//                LogUtil.i(volleyError.toString() + "Error: " + volleyError
+//                        + ">>" + volleyError.networkResponse.statusCode
+//                        + ">>" + volleyError.networkResponse.data
+//                        + ">>" + volleyError.getCause()
+//                        + ">>" + volleyError.getMessage());
             }
         }) {
             @Override

@@ -674,8 +674,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
-                    reloadInfo();
-                  //  login(shopID);
+                    login(shopID);
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -748,61 +747,6 @@ public class ShopFragment extends BaseFragment {
             Glide.with(mActivity).load(menuList.get(i).getIcon()).into(ibtn);
             return view;
         }
-    }
-
-
-    private void  reloadInfo(){
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.HOST + "/person/reloadLoginInfo", new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                Gson gson = new Gson();
-                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
-                if (loginInfoBean.getSuccess()){
-
-                    DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
-                    info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    setMap();
-                    addRoles();
-                    arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
-                    //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                    spinner.setAdapter(arrayAdapter);
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            role = roleList.get(position);
-                            initData();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                    initData();
-                }else {
-                    ToastUtils.showToastShort("加入失败！请检查网络！");
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("请求失败，请查看网络连接");
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
-
-        };
-        MyApplication.getHttpQueues().add(request);
     }
 
     private void login(final String shopID) {

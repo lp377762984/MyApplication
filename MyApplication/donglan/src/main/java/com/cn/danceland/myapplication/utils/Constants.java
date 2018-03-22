@@ -12,8 +12,9 @@ public class Constants extends EaseConstant {
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     public static final String HOST = " http://192.168.1.115:8003/";//
+    //public static final String HOST = " http://192.168.1.118:8003/";//
 
-    //public static final String HOST = " http://192.168.1.106:8003/";//王丽萍服务器
+    //public static final String HOST = " http://192.168.1.115:8003/";//王丽萍服务器
 
 
     // public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -47,6 +48,8 @@ public class Constants extends EaseConstant {
     public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
     public static final String GETYUANGONGMENUS = HOST + "appMenuFunction/queryEmpFunctions";//获取员工菜单权限
     public static final String GETHUIYUANMENUS = HOST + "appMenuFunction/queryMemFunctions";//获取会员菜单权限
+    public static final String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
+
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
@@ -164,8 +167,7 @@ public class Constants extends EaseConstant {
     public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";//购买私教课程列表
     public static final String FINDCourseTypeEmployee = HOST + "appCourse/findCourseTypeEmployee";//查私教教练
     public static final String FINDGROUPCLASS = HOST + "appGroupClass/queryPage";//小团课列表
-    public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse";//我的私教
-    public static final String FINDEMPCOURSE = HOST + "appCourse/findEmployeeCourse";//教练的私教
+    public static final String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse ";//我的私教
     public static final String FINDAVAI = HOST + "appCourse/availableList";//我的私教
     public static final String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
     public static final String QUERYKECHENGBIAO = HOST + "appGroupCourse/queryGroupCourseByData";//小团课课程表
