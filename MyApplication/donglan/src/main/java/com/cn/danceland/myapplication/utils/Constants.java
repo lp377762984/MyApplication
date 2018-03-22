@@ -8,7 +8,7 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
     // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
-    //public static final String HOST = "http://192.168.1.121:8003/";//老高服务器地址
+    //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.118:8003/";//
@@ -54,7 +54,7 @@ public class Constants extends EaseConstant {
 
 
     public static final String FIND_JOIN_SHOP_URL = HOST + "/user/findJoinBranchs";//查找已经加入门店
-    public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/findByPhoneOrMemberNoUser";//搜索好友
+    public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone";//搜索好友
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
     public static final String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach ";//查找教练
 

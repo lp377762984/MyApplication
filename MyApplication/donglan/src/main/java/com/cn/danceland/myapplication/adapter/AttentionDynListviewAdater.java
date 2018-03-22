@@ -792,6 +792,13 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 //
 //    }
 
+    class StrBean1 {
+        public boolean is_follower;
+        public String user_id;
+
+    }
+
+
 
     /**
      * 加关注
@@ -801,15 +808,20 @@ public class AttentionDynListviewAdater extends BaseAdapter {
      */
     private void addGuanzhu(final String id, final boolean b, final int pos) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
+        StrBean1 strBean1=new StrBean1();
+        strBean1.is_follower=b;
+        strBean1.user_id=id;
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
 
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
 //                    data.get(pos).setFollower(true);
 //                    notifyDataSetChanged();
@@ -822,6 +834,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 }
 
             }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
@@ -831,13 +845,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
         }
         ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", id);
-                map.put("isFollower", String.valueOf(b));
-                return map;
-            }
+
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

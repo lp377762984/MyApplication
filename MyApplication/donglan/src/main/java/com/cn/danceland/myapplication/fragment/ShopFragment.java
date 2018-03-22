@@ -128,7 +128,7 @@ public class ShopFragment extends BaseFragment {
         ibtn_gps = v.findViewById(R.id.ibtn_gps);
 
         ll_top = v.findViewById(R.id.ll_top);
-      
+
         ll_top.setBackgroundColor(Color.BLACK);
         ll_top.getBackground().setAlpha(88);
         tv_shopname = v.findViewById(R.id.tv_shopname);
@@ -667,7 +667,7 @@ public class ShopFragment extends BaseFragment {
             public void onResponse(String s) {
                 if (s.contains("true")) {
                     reloadInfo();
-                  //  login(shopID);
+                    //  login(shopID);
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -744,7 +744,7 @@ public class ShopFragment extends BaseFragment {
 
 
     private void  reloadInfo(){
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.POST, Constants.HOST + "/person/reloadLoginInfo", new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -753,20 +753,25 @@ public class ShopFragment extends BaseFragment {
                 if (loginInfoBean.getSuccess()){
 
                     DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
-                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
-                        mGridView.setVisibility(View.VISIBLE);
-                        storelist.setVisibility(View.GONE);
-                        ll_top.setVisibility(View.VISIBLE);
-                        getMenus();
-                        getShop(info.getPerson().getDefault_branch());
+                    info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    setMap();
+                    addRoles();
+                    arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
+                    //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+                    spinner.setAdapter(arrayAdapter);
+                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            role = roleList.get(position);
+                            initData();
+                        }
 
-                    } else {
-                        ll_top.setVisibility(View.GONE);
-                        mGridView.setVisibility(View.GONE);
-                        storelist.setVisibility(View.VISIBLE);
-                        getListData();
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
 
-                    }
+                        }
+                    });
+                    initData();
                 }else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -804,7 +809,7 @@ public class ShopFragment extends BaseFragment {
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
                     //成功
                     String mUserId = requestInfoBean.getData().getPerson().getId();
-                  //  info.setDefault_branch(shopID);
+                    //  info.setDefault_branch(shopID);
                     DataInfoCache.saveOneCache(requestInfoBean.getData(), Constants.MY_INFO);
                     if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
                         mGridView.setVisibility(View.VISIBLE);

@@ -26,6 +26,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -49,6 +50,7 @@ import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -537,6 +539,13 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
     }
 
 
+    class StrBean {
+        public boolean is_praise;
+        public String msg_id;
+
+    }
+
+
     /**
      * 点赞
      *
@@ -545,16 +554,20 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
      */
     private void addZan(final String msgId, final boolean isPraise, final int pos) {
 
+        StrBean strBean=new StrBean();
+        strBean.is_praise=isPraise;
+        strBean.msg_id=msgId;
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL,new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
 
 
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
 
                 if (requestInfoBean.getSuccess()) {
 
@@ -580,6 +593,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                 }
 
             }
+
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {

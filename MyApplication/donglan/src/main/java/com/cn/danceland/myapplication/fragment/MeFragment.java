@@ -170,6 +170,7 @@ public class MeFragment extends BaseFragment {
 
                 break;
             case EventConstants.ADD_GUANZHU:
+                LogUtil.i("设置关注数+1");
                 //设置关注数+1
 //                mInfo.setFollowNumber(mInfo.getFollowNumber() + 1);
 //                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
@@ -179,6 +180,7 @@ public class MeFragment extends BaseFragment {
 
                 break;
             case EventConstants.DEL_GUANZHU:
+                LogUtil.i("设置关注数-1");
                 //设置关注数-1
 //                mInfo.setFollowNumber(mInfo.getFollowNumber() - 1);
 //                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
