@@ -189,8 +189,8 @@ public class SiJiaoDetailActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(click){
-                    startActivity(new Intent(SiJiaoDetailActivity.this,PingJiaActivity.class).putExtra("item",item));
-                    //showTime();
+                    //startActivity(new Intent(SiJiaoDetailActivity.this,PingJiaActivity.class).putExtra("item",item));
+                    showTime();
                 }else{
                     ToastUtils.showToastShort("不可重复预约！");
                 }
