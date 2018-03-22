@@ -484,7 +484,14 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, ClubDynActivity.class));
                         break;
                     case 6://预约私教
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","1"));
+                        Intent intent1 = new Intent(mActivity, CourseActivity.class);
+                        intent1.putExtra("isTuanke","1");
+                        if(role!=null&&!role.equals("潜客")&&!role.equals("会员")){
+                            intent1.putExtra("role",role);
+                        }else{
+                            intent1.putExtra("auth",role);
+                        }
+                        startActivity(intent1);
                         break;
                     case 20://预约团课
                         startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
