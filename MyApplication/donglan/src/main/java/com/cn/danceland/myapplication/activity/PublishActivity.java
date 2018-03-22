@@ -80,15 +80,15 @@ public class PublishActivity extends Activity {
     TextView publish_cancel;
     TextView publish_ok;
     hani.momanii.supernova_emoji_library.Helper.EmojiconEditText publish_status;
-    RelativeLayout publish_photo,rl_video;
+    RelativeLayout publish_photo, rl_video;
     TextView publish_location;
     TextView publish_share1;
     List<String> arrayList = new ArrayList<String>();
     GridView grid_view;
-    String location="";
+    String location = "";
     TextView location_img;
-    Map<String,File> arrayFileMap;
-    String videoPath,videoUrl;
+    Map<String, File> arrayFileMap;
+    String videoPath, videoUrl;
     String cameraPath;
     final static int CAPTURE_VIDEO_CODE = 100;
     static String SAVED_IMAGE_DIR_PATH =
@@ -101,11 +101,11 @@ public class PublishActivity extends Activity {
     Gson gson;
     RequestQueue queue;
     Button videoimg;
-    String picUrl,picPath,vedioUrl,vedioPath;
+    String picUrl, picPath, vedioUrl, vedioPath;
     String isPhoto;
-    File picFile,videoFile;
+    File picFile, videoFile;
     public static Handler handler;
-    ArrayList<String> arrImgUrl,arrImgPath;
+    ArrayList<String> arrImgUrl, arrImgPath;
     Uri uri;
 
     @Override
@@ -115,52 +115,52 @@ public class PublishActivity extends Activity {
         queue = Volley.newRequestQueue(PublishActivity.this);
         gson = new Gson();
         isPhoto = getIntent().getStringExtra("isPhoto");
-        if(isPhoto==null){
+        if (isPhoto == null) {
             isPhoto = "999";
         }
         initView();
         setOnclick();
-        handler = new Handler(){
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == 1){
+                if (msg.what == 1) {
                     PublishBean bean = new PublishBean();
-                    if(!"".equals(stringstatus)){
+                    if (!"".equals(stringstatus)) {
                         bean.setContent(stringstatus);
                     }
-                    if(picPath!=null&&vedioPath!=null){
+                    if (picPath != null && vedioPath != null) {
                         bean.setVedioUrl(vedioPath);
                         bean.setVedioImg(picPath);
                     }
                     bean.setMsgType(1);
                     bean.setPublishPlace(location);
-                    if(bean.getVedioUrl()==null&&bean.getContent()==null){
+                    if (bean.getVedioUrl() == null && bean.getContent() == null) {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
-                    }else{
+                    } else {
                         try {
-
+                            LogUtil.i(gson.toJson(bean));
                             commitUrl(gson.toJson(bean));
-                       //     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
-                           //finish();
+                            //     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
+                            //finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
 
-                }else if(msg.what == 2){
+                } else if (msg.what == 2) {
                     PublishBean bean = new PublishBean();
-                    if(!"".equals(stringstatus)){
+                    if (!"".equals(stringstatus)) {
                         bean.setContent(stringstatus);
                     }
-                    if(arrImgPath!=null&&arrImgPath.size()>0){
+                    if (arrImgPath != null && arrImgPath.size() > 0) {
                         bean.setImgList(arrImgPath);
                         bean.setMsgType(0);
                     }
                     bean.setPublishPlace(location);
-                    if(bean.getContent()==null && bean.getImgList()==null){
+                    if (bean.getContent() == null && bean.getImgList() == null) {
                         ToastUtils.showToastShort("请填写需要发布的动态！");
-                    }else{
+                    } else {
                         String strBean = gson.toJson(bean);
                         LogUtil.i(gson.toJson(bean).toString());
                         try {
@@ -169,7 +169,7 @@ public class PublishActivity extends Activity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    //    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
+                        //    EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                         //finish();
                     }
                 }
@@ -195,9 +195,9 @@ public class PublishActivity extends Activity {
         //publish_photo = findViewById(R.id.publish_photo);
         publish_location = findViewById(R.id.publish_location);
         publish_share1 = findViewById(R.id.publish_share1);
-        SPUtils.setInt("imgN",0);
+        SPUtils.setInt("imgN", 0);
         grid_view = findViewById(R.id.grid_view);
-        grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+        grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
 
         grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -207,16 +207,17 @@ public class PublishActivity extends Activity {
         });
 
     }
-    public void getPic(){
-        int m = SPUtils.getInt("imgN",0);
-        if(m<=9){
+
+    public void getPic() {
+        int m = SPUtils.getInt("imgN", 0);
+        if (m <= 9) {
             Matisse.from(PublishActivity.this)
                     .choose(MimeType.allOf()) // 选择 mime 的类型
                     .countable(true)
 //                .capture(true)
 //                .captureStrategy(
 //                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
-                    .maxSelectable(9-m) // 图片选择的最多数量
+                    .maxSelectable(9 - m) // 图片选择的最多数量
                     .theme(R.style.imgsStyle)
                     //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
                     .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
@@ -230,41 +231,41 @@ public class PublishActivity extends Activity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.location_img:
-                    Intent intent1 = new Intent(PublishActivity.this,LocationActivity.class);
-                    startActivityForResult(intent1,1);
+                    Intent intent1 = new Intent(PublishActivity.this, LocationActivity.class);
+                    startActivityForResult(intent1, 1);
                     break;
                 case R.id.publish_location:
-                    Intent intent2 = new Intent(PublishActivity.this,LocationActivity.class);
-                    startActivityForResult(intent2,1);
+                    Intent intent2 = new Intent(PublishActivity.this, LocationActivity.class);
+                    startActivityForResult(intent2, 1);
                     break;
                 case R.id.publish_ok:
                     //Intent intent3 = new Intent(PublishActivity.this,S);
                     final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
 
-                    if("0".equals(isPhoto)){
-                        if(arrayList!=null&&arrayList.size()>0){
+                    if ("0".equals(isPhoto)) {
+                        if (arrayList != null && arrayList.size() > 0) {
                             MultipartRequestParams params = new MultipartRequestParams();
-                            arrayFileMap = new HashMap<String,File>();
+                            arrayFileMap = new HashMap<String, File>();
                             File[] files = new File[arrayList.size()];
-                            for (int i =0;i<arrayList.size();i++){
+                            for (int i = 0; i < arrayList.size(); i++) {
                                 File file = new File(arrayList.get(i));
-                                arrayFileMap.put(i+"",file);
+                                arrayFileMap.put(i + "", file);
                             }
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
-                                        String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL,null,arrayFileMap);
+                                        String s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
                                         UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
                                         List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
                                         arrImgUrl = new ArrayList<String>();
                                         arrImgPath = new ArrayList<String>();
-                                        if(beanList!=null&&beanList.size()>0){
-                                            for(int k = 0;k<beanList.size();k++){
+                                        if (beanList != null && beanList.size() > 0) {
+                                            for (int k = 0; k < beanList.size(); k++) {
                                                 arrImgUrl.add(beanList.get(k).getImgUrl());
                                                 arrImgPath.add(beanList.get(k).getImgPath());
                                             }
@@ -281,8 +282,8 @@ public class PublishActivity extends Activity {
                             finish();
 //                                LogUtil.e("zzf",publishBean.getImgList().toString());
                             publish_ok.setClickable(false);
-                        }else{
-                            if(!"".equals(stringstatus)){
+                        } else {
+                            if (!"".equals(stringstatus)) {
                                 publish_ok.setClickable(false);
                                 publishBean.setContent(stringstatus);
                                 publishBean.setPublishPlace(location);
@@ -295,24 +296,24 @@ public class PublishActivity extends Activity {
                                 }
 
                                 finish();
-                            }else{
+                            } else {
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
 
                             }
 
                         }
-                    }else{
+                    } else {
 
-                        if(videoPath!=null&&!"".equals(videoPath)){
+                        if (videoPath != null && !"".equals(videoPath)) {
                             videoFile = new File(videoPath);
-                            if(picFile!=null){
+                            if (picFile != null) {
                                 MultipartRequestParams params = new MultipartRequestParams();
-                                params.put("file",picFile);
+                                params.put("file", picFile);
                                 MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String s) {
                                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                                        if(headImageBean!=null&&headImageBean.getData()!=null){
+                                        if (headImageBean != null && headImageBean.getData() != null) {
                                             picUrl = headImageBean.getData().getImgUrl();
                                             picPath = headImageBean.getData().getImgPath();
                                         }
@@ -325,16 +326,16 @@ public class PublishActivity extends Activity {
                                 });
                                 MyApplication.getHttpQueues().add(request);
                             }
-                            if(videoFile!=null){
+                            if (videoFile != null) {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
-                                            HashMap<String,File> fileHashMap = new HashMap<String,File>();
-                                            fileHashMap.put("vedio",videoFile);
-                                            String s=   UpLoadUtils.postUPloadIamges(Constants.UPLOADVEDIO,null,fileHashMap);
+                                            HashMap<String, File> fileHashMap = new HashMap<String, File>();
+                                            fileHashMap.put("vedio", videoFile);
+                                            String s = UpLoadUtils.postUPloadIamges(Constants.UPLOADVEDIO, null, fileHashMap);
                                             VideoBean videoBean = gson.fromJson(s, VideoBean.class);
-                                            if(videoBean!=null&&videoBean.getData()!=null){
+                                            if (videoBean != null && videoBean.getData() != null) {
                                                 vedioUrl = videoBean.getData().getImgUrl();
                                                 vedioPath = videoBean.getData().getImgPath();
                                                 Message message = new Message();
@@ -349,15 +350,15 @@ public class PublishActivity extends Activity {
                                 finish();
                                 publish_ok.setClickable(false);
                             }
-                        }else{
+                        } else {
                             PublishBean bean = new PublishBean();
-                            if(!"".equals(stringstatus)){
+                            if (!"".equals(stringstatus)) {
                                 bean.setContent(stringstatus);
                             }
                             bean.setPublishPlace(location);
-                            if(bean.getVedioUrl()==null&&bean.getContent()==null){
+                            if (bean.getVedioUrl() == null && bean.getContent() == null) {
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
-                            }else{
+                            } else {
                                 try {
                                     commitUrl(gson.toJson(bean));
                                     finish();
@@ -378,22 +379,22 @@ public class PublishActivity extends Activity {
     };
 
     private void showListDialog() {
-        final String[] items = { "拍摄","从相册选择"};
+        final String[] items = {"拍摄", "从相册选择"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(which==0){
-                    if(SPUtils.getInt("imgN",0)<9){
+                if (which == 0) {
+                    if (SPUtils.getInt("imgN", 0) < 9) {
                         //showCamera();
-                        startActivityForResult(new Intent(PublishActivity.this,ShowCameraActivity.class).putExtra("isPhoto",isPhoto),102);
+                        startActivityForResult(new Intent(PublishActivity.this, ShowCameraActivity.class).putExtra("isPhoto", isPhoto), 102);
                         //startActivity(new Intent(PublishActivity.this,ShowCameraActivity.class));
-                    }else{
+                    } else {
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
-                }else{
-                    if("1".equals(isPhoto)){
+                } else {
+                    if ("1".equals(isPhoto)) {
                         arrayList.clear();
                     }
                     isPhoto = "0";
@@ -404,7 +405,7 @@ public class PublishActivity extends Activity {
         listDialog.show();
     }
 
-    private void showCamera(){
+    private void showCamera() {
 // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
@@ -418,22 +419,21 @@ public class PublishActivity extends Activity {
             if (!dir.exists()) {
                 dir.mkdirs();
             } // 把文件地址转换成Uri格式
-            if(PictureUtil.getSDKV()<24){
+            if (PictureUtil.getSDKV() < 24) {
                 uri = Uri.fromFile(new File(cameraPath));
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, 99);
-            }else{
+            } else {
                 // 设置系统相机拍摄照片完成后图片文件的存放地址
                 ContentValues contentValues = new ContentValues(1);
                 contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
-                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues);
+                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, 99);
             }
             //uri = Uri.fromFile(new File(cameraPath));
 
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "请确认已经插入SD卡",
                     Toast.LENGTH_LONG).show();
         }
@@ -443,16 +443,16 @@ public class PublishActivity extends Activity {
     public void commitUrl(final String str) throws JSONException {
 
         JSONObject jsonObject = new JSONObject(str);
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,Constants.SAVE_DYN_MSG,jsonObject,new Response.Listener<JSONObject>() {
+        LogUtil.i(str);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_DYN_MSG, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
-                if("true".equals(rootBean.success)){
+                if ("true".equals(rootBean.success)) {
                     ToastUtils.showToastShort("发布成功！");
                     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                     //finish();
-                }else{
+                } else {
                     ToastUtils.showToastShort("发布失败！请检查网络连接");
                 }
             }
@@ -466,9 +466,9 @@ public class PublishActivity extends Activity {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map  = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -479,42 +479,42 @@ public class PublishActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==100 && resultCode == RESULT_OK){
-            if(data!=null){
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            if (data != null) {
 //                arrayList = data.getStringArrayListExtra("arrPath");
                 List<Uri> uris = Matisse.obtainResult(data);
 
-                if(uris!=null){
-                    for(int i = 0;i<uris.size();i++){
-                        arrayList.add(PictureUtil.getRealPath(getApplicationContext(),uris.get(i)));
+                if (uris != null) {
+                    for (int i = 0; i < uris.size(); i++) {
+                        arrayList.add(PictureUtil.getRealPath(getApplicationContext(), uris.get(i)));
                     }
-                    SPUtils.setInt("imgN",arrayList.size()+SPUtils.getInt("imgN",0));
-                    grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+                    SPUtils.setInt("imgN", arrayList.size() + SPUtils.getInt("imgN", 0));
+                    grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
 
             }
-        }else if(resultCode == 99){
+        } else if (resultCode == 99) {
             isPhoto = "0";
             cameraPath = data.getStringExtra("picpath");
-            if(cameraPath!=null){
+            if (cameraPath != null) {
                 arrayList.add(cameraPath);
-                SPUtils.setInt("imgN",1+SPUtils.getInt("imgN",0));
-                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+                SPUtils.setInt("imgN", 1 + SPUtils.getInt("imgN", 0));
+                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
             }
-        }else if(resultCode==1){
-                location = data.getStringExtra("location");
-                publish_location.setText(location);
-        }else if(resultCode == 111){
+        } else if (resultCode == 1) {
+            location = data.getStringExtra("location");
+            publish_location.setText(location);
+        } else if (resultCode == 111) {
             isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
             arrayList.clear();
-            if(videoPath!=null){
+            if (videoPath != null) {
                 MediaMetadataRetriever media = new MediaMetadataRetriever();
                 media.setDataSource(videoPath);
                 Bitmap frameAtTime = media.getFrameAtTime();
                 picFile = saveBitmapFile(frameAtTime);
                 arrayList.add(picFile.getAbsolutePath());
-                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this,arrayList));
+                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
 //                videoimg.setBackground(new BitmapDrawable(frameAtTime));
 //                //publish_photo.setVisibility(View.GONE);
 //                videoimg.setVisibility(View.VISIBLE);
@@ -525,8 +525,8 @@ public class PublishActivity extends Activity {
     }
 
     public File saveBitmapFile(Bitmap bitmap) {
-        File file=new File(Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/"+System.currentTimeMillis()+".png");//将要保存图片的路径
+        File file = new File(Environment.getExternalStorageDirectory().getPath()
+                + "/donglan/camera/" + System.currentTimeMillis() + ".png");//将要保存图片的路径
         File dir = new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/");
         if (!dir.exists()) {
@@ -537,22 +537,22 @@ public class PublishActivity extends Activity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
             bos.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return file;
     }
 
 
-    public class SmallGridAdapter extends BaseAdapter{
+    public class SmallGridAdapter extends BaseAdapter {
 
         LayoutInflater mInflater;
         Context context;
         List<String> arrayLists;
         int imgN;
 
-        SmallGridAdapter(Context context,List<String> asList){
-            imgN = SPUtils.getInt("imgN",0);
+        SmallGridAdapter(Context context, List<String> asList) {
+            imgN = SPUtils.getInt("imgN", 0);
             this.context = context;
             arrayLists = asList;
             mInflater = LayoutInflater.from(context);
@@ -561,7 +561,7 @@ public class PublishActivity extends Activity {
 
         @Override
         public int getCount() {
-            return arrayLists.size()+1;
+            return arrayLists.size() + 1;
         }
 
         @Override
@@ -576,8 +576,8 @@ public class PublishActivity extends Activity {
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder=null;
-            if(convertView==null){
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = mInflater.inflate(R.layout.images_item, null);
                 viewHolder.img = convertView.findViewById(R.id.image_item);
@@ -586,29 +586,29 @@ public class PublishActivity extends Activity {
                 viewHolder.item_select = convertView.findViewById(R.id.item_select);
                 viewHolder.item_select.setVisibility(View.GONE);
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if("0".equals(isPhoto)){
-                if(arrayLists.size()==0){
+            if ("0".equals(isPhoto)) {
+                if (arrayLists.size() == 0) {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
-                }else{
-                    if(position<arrayLists.size()){
+                } else {
+                    if (position < arrayLists.size()) {
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
-                    }else if(position==arrayLists.size()){
+                    } else if (position == arrayLists.size()) {
                         viewHolder.pl_sta.setVisibility(View.VISIBLE);
                     }
                 }
-            }else {
-                if(arrayLists.size()==0){
+            } else {
+                if (arrayLists.size() == 0) {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
-                }else{
-                    if(position<arrayLists.size()){
+                } else {
+                    if (position < arrayLists.size()) {
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
-                    }else if(position==arrayLists.size()){
+                    } else if (position == arrayLists.size()) {
                         viewHolder.rl_item.setVisibility(View.GONE);
                     }
                 }
@@ -616,17 +616,17 @@ public class PublishActivity extends Activity {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(imgN<=9){
-                        if(position<=arrayLists.size()){
-                            if("0".equals(isPhoto)){
+                    if (imgN <= 9) {
+                        if (position <= arrayLists.size()) {
+                            if ("0".equals(isPhoto)) {
                                 showListDialog();
-                            }else{
+                            } else {
 //                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
 //                                startActivityForResult(intentr,111);
                                 showListDialog();
                             }
                         }
-                    }else{
+                    } else {
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
 
@@ -638,8 +638,8 @@ public class PublishActivity extends Activity {
         }
     }
 
-    class ViewHolder{
-        ImageView img,item_select;
+    class ViewHolder {
+        ImageView img, item_select;
         TextView pl_sta;
         RelativeLayout rl_item;
     }

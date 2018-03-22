@@ -22,7 +22,7 @@ public class PublishBean {
 
     private Integer author;
     private String content;
-    private boolean enabled;
+    private String enabled;
     private Integer id;
     private List<String> imgList;
     private String imgs;
@@ -49,10 +49,10 @@ public class PublishBean {
         return content;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(String enabled) {
         this.enabled = enabled;
     }
-    public boolean getEnabled() {
+    public String getEnabled() {
         return enabled;
     }
 
@@ -126,7 +126,7 @@ public class PublishBean {
         return title;
     }
 
-    public boolean isEnabled() {
+    public String isEnabled() {
         return enabled;
     }
 

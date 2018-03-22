@@ -666,7 +666,8 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
-                    login(shopID);
+                    reloadInfo();
+                  //  login(shopID);
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -739,6 +740,56 @@ public class ShopFragment extends BaseFragment {
             Glide.with(mActivity).load(menuList.get(i).getIcon()).into(ibtn);
             return view;
         }
+    }
+
+
+    private void  reloadInfo(){
+        StringRequest request=new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                if (loginInfoBean.getSuccess()){
+
+                    DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
+                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
+                        mGridView.setVisibility(View.VISIBLE);
+                        storelist.setVisibility(View.GONE);
+                        ll_top.setVisibility(View.VISIBLE);
+                        getMenus();
+                        getShop(info.getPerson().getDefault_branch());
+
+                    } else {
+                        ll_top.setVisibility(View.GONE);
+                        mGridView.setVisibility(View.GONE);
+                        storelist.setVisibility(View.VISIBLE);
+                        getListData();
+
+                    }
+                }else {
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 
     private void login(final String shopID) {
