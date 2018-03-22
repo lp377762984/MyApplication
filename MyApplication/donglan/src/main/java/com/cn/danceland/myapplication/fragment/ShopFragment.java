@@ -263,90 +263,90 @@ public class ShopFragment extends BaseFragment {
         final String id;
         String url;
         RolesBean rolesBean = new RolesBean();
-        if(!"潜客".equals(role)&&!"会员".equals(role)){
-            rolesBean.setRole_type(roleMap.get(role));
-            //id = roleMap.get(role);
-            url = Constants.GETYUANGONGMENUS;
-            String s = gson.toJson(rolesBean);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    LogUtil.e("zzf",jsonObject.toString());
-                    if (jsonObject.toString().contains("true")) {
-                        MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
-                        data = menusBean.getData();
-                        if (data != null) {
-                            LogUtil.i(data.toString());
-                            mGridView.setAdapter(new MyAdapter(data));
+        if(role!=null){
+            if(!"潜客".equals(role)&&!"会员".equals(role)){
+                rolesBean.setRole_type(roleMap.get(role));
+                //id = roleMap.get(role);
+                url = Constants.GETYUANGONGMENUS;
+                String s = gson.toJson(rolesBean);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        LogUtil.e("zzf",jsonObject.toString());
+                        if (jsonObject.toString().contains("true")) {
+                            MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
+                            data = menusBean.getData();
+                            if (data != null) {
+                                LogUtil.i(data.toString());
+                                mGridView.setAdapter(new MyAdapter(data));
+                            }
+                        } else {
+                            ToastUtils.showToastShort("请查看网络连接");
                         }
-                    } else {
-                        ToastUtils.showToastShort("请查看网络连接");
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    ll_top.setVisibility(View.GONE);
-                    ToastUtils.showToastShort("请查看网络连接");
-                    LogUtil.e("zzf",volleyError.toString());
-                }
-            }){
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                    return map;
-                }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        ll_top.setVisibility(View.GONE);
+                        ToastUtils.showToastShort("请查看网络连接");
+                        LogUtil.e("zzf",volleyError.toString());
+                    }
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                        return map;
+                    }
 
-            };
+                };
 
-            MyApplication.getHttpQueues().add(jsonObjectRequest);
+                MyApplication.getHttpQueues().add(jsonObjectRequest);
 
-        }else{
-            id = authMap.get(role);
-            url = Constants.GETHUIYUANMENUS;
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String s) {
-                    LogUtil.e("zzf",s);
-                    if (s.contains("true")) {
-                        MenusBean menusBean = gson.fromJson(s, MenusBean.class);
-                        data = menusBean.getData();
-                        if (data != null) {
-                            LogUtil.i(data.toString());
-                            mGridView.setAdapter(new MyAdapter(data));
+            }else{
+                id = authMap.get(role);
+                url = Constants.GETHUIYUANMENUS;
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        LogUtil.e("zzf",s);
+                        if (s.contains("true")) {
+                            MenusBean menusBean = gson.fromJson(s, MenusBean.class);
+                            data = menusBean.getData();
+                            if (data != null) {
+                                LogUtil.i(data.toString());
+                                mGridView.setAdapter(new MyAdapter(data));
+                            }
+                        } else {
+                            ToastUtils.showToastShort("请查看网络连接");
                         }
-                    } else {
-                        ToastUtils.showToastShort("请查看网络连接");
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    ll_top.setVisibility(View.GONE);
-                    ToastUtils.showToastShort("请查看网络连接");
-                    LogUtil.e("zzf",volleyError.toString());
-                }
-            }) {
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        ll_top.setVisibility(View.GONE);
+                        ToastUtils.showToastShort("请查看网络连接");
+                        LogUtil.e("zzf",volleyError.toString());
+                    }
+                }) {
 
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("role_type",id);
-                    return map;
-                }
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("role_type",id);
+                        return map;
+                    }
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                    return map;
-                }
-            };
-            MyApplication.getHttpQueues().add(stringRequest);
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                        return map;
+                    }
+                };
+                MyApplication.getHttpQueues().add(stringRequest);
+            }
         }
-
-
 
     }
 
