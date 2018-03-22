@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
-import com.cn.danceland.myapplication.activity.QRCodeActivity;
+import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
@@ -229,8 +229,8 @@ public class DiscoverFragment extends BaseFragment {
 
 
 
-                Intent intent = new Intent(mActivity,  QRCodeActivity.class);
-               startActivity(intent);
+//                Intent intent = new Intent(mActivity,  QRCodeActivity.class);
+//               startActivity(intent);
 //
 //                Intent intent = new Intent(mActivity, RecommendActivity.class);
 //               startActivity(intent);
@@ -266,8 +266,8 @@ public class DiscoverFragment extends BaseFragment {
 
 
                 // autoLocatedPopup.showPopupWindow(v);
-//                Intent intent = new Intent(mActivity, PublishActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(mActivity, PublishActivity.class);
+                startActivity(intent);
                 break;
             case value:
                 break;
