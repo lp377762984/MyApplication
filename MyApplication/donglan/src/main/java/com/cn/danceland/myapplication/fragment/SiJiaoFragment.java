@@ -21,8 +21,11 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.JiaoLianBean;
+import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
+import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -48,6 +51,7 @@ public class SiJiaoFragment extends BaseFragment {
     NestedExpandaleListView ex_lv;
     ImageView down_img,up_img;
     String role,auth;
+    Data data;
 
     @Override
     public View initViews() {
@@ -69,6 +73,8 @@ public class SiJiaoFragment extends BaseFragment {
                 return false;
             }
         });
+
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         try {
             refresh();
@@ -97,45 +103,215 @@ public class SiJiaoFragment extends BaseFragment {
         //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         MyCourseConBean myCourseConBean = new MyCourseConBean();
+        String url;
         if(info!=null){
             myCourseConBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
             myCourseConBean.setPage(0);
             myCourseConBean.setPageCount(30);
-        }
-        final Gson gson = new Gson();
-        String s = gson.toJson(myCourseConBean);
-        JSONObject jsonObject = new JSONObject(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDMEMBERCOURSE, jsonObject,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
-                if(myCourseBean!=null){
-                    List<MyCourseBean.Data> myCourseList = myCourseBean.getData();
-                    if(myCourseList!=null){
-                        ex_lv.setAdapter(new MyExAdapter(myCourseList));
+            url = Constants.FINDMEMBERCOURSE;
+            if(role!=null){
+                myCourseConBean.setEmployee_id(info.getEmployee().getId());
+                url =Constants.FINDEMPCOURSE;
+            }
+            final Gson gson = new Gson();
+            String s = gson.toJson(myCourseConBean);
+            JSONObject jsonObject = new JSONObject(s);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    LogUtil.e("zzf",jsonObject.toString());
+                    if(role!=null){
+                        JiaoLianCourseBean jiaoLianCourseBean = gson.fromJson(jsonObject.toString(), JiaoLianCourseBean.class);
+                        if(jiaoLianCourseBean!=null&&jiaoLianCourseBean.getData()!=null){
+                            List<JiaoLianCourseBean.Content> content = jiaoLianCourseBean.getData().getContent();
+                            if(content!=null){
+                                ex_lv.setAdapter(new JiaoLianAdapter(content));
+                            }
+
+                        }
+
+                    }else{
+                        MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
+                        if(myCourseBean!=null){
+                            List<MyCourseBean.Data> myCourseList = myCourseBean.getData();
+                            if(myCourseList!=null){
+                                ex_lv.setAdapter(new MyExAdapter(myCourseList));
+                            }
+                        }
                     }
+
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    LogUtil.e("zzf",volleyError.toString());
 
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-        };
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                    return map;
+                }
+            };
 
 
-        MyApplication.getHttpQueues().add(jsonObjectRequest);
+            MyApplication.getHttpQueues().add(jsonObjectRequest);
+        }
+
 
     }
-    
+
+
+    private void getChildData(){
+
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        if(role!=null||!"".equals(role)){
+            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+        }else{
+            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        }
+
+
+
+
+    }
+
+    private  class JiaoLianAdapter extends BaseExpandableListAdapter{
+
+        List<JiaoLianCourseBean.Content> list;
+        JiaoLianAdapter(List<JiaoLianCourseBean.Content> list){
+            this.list = list;
+
+        }
+
+        @Override
+        public int getGroupCount() {
+            return list.size();
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return 1;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return null;
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return null;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return 0;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder=null;
+            if(convertView == null){
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_parent_item, null);
+
+                viewHolder.sijiao_title = convertView.findViewById(R.id.sijiao_title);
+                viewHolder.sijiao_jiaolian = convertView.findViewById(R.id.sijiao_jiaolian);
+                viewHolder.sijiao_num = convertView.findViewById(R.id.sijiao_num);
+                viewHolder.sijiao_shengyu = convertView.findViewById(R.id.sijiao_shengyu);
+                viewHolder.sijiao_date = convertView.findViewById(R.id.sijiao_date);
+                viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
+
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            RelativeLayout sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
+            final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
+            final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
+            sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(list.get(groupPosition).getCourse_category()==1){
+                        startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).
+                                putExtra("item",list.get(groupPosition)).
+                                putExtra("startTime",startTime).
+                                putExtra("endTime",endTime)
+                                .putExtra("role",role)
+                                .putExtra("auth",auth));
+                    }else if(list.get(groupPosition).getCourse_category()==2){
+                        CourseActivity activity = (CourseActivity) getActivity();
+                        if(activity!=null){
+                            activity.getItemId(list.get(groupPosition).getId(),list.get(groupPosition).getCourse_type_id(),"2");
+                            activity.showFragment("2","");
+                        }
+                    }
+                }
+            });
+            viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());
+            viewHolder.sijiao_num.setText("购买节数："+list.get(groupPosition).getCount()+"节");
+            viewHolder.sijiao_shengyu.setText("剩余节数："+list.get(groupPosition).getSurplus_count()+"节");
+
+            viewHolder.sijiao_date.setText("有效期："+startTime+"至"+endTime);
+            if(list.get(groupPosition).getCourse_category()==1){
+                viewHolder.sijiao_fangshi.setText("一对一");
+            }else if(list.get(groupPosition).getCourse_category()==2){
+                viewHolder.sijiao_fangshi.setText("小团体");
+            }else {
+                viewHolder.sijiao_fangshi.setText("");
+            }
+
+            if(list.get(groupPosition).getEmployee_name()!=null){
+                viewHolder.sijiao_jiaolian.setText("上课会员："+list.get(groupPosition).getEmployee_name());
+            }else{
+                viewHolder.sijiao_jiaolian.setVisibility(View.GONE);
+            }
+
+            return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder=null;
+            if (convertView==null){
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
+                viewHolder.mylist = convertView.findViewById(R.id.mylist);
+
+
+                convertView.setTag(viewHolder);
+            }else{
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            viewHolder.mylist.setDividerHeight(0);
+            viewHolder.mylist.setAdapter(new MyListAdapter());
+
+
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return false;
+        }
+    }
+
+
+
 
     private class MyExAdapter extends BaseExpandableListAdapter{
         List<MyCourseBean.Data> list;
@@ -143,7 +319,6 @@ public class SiJiaoFragment extends BaseFragment {
         MyExAdapter(List<MyCourseBean.Data> list){
             this.list = list;
         }
-
 
 
         @Override
@@ -209,7 +384,9 @@ public class SiJiaoFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).
                                 putExtra("item",list.get(groupPosition)).
                                 putExtra("startTime",startTime).
-                                putExtra("endTime",endTime));
+                                putExtra("endTime",endTime)
+                        .putExtra("role",role)
+                        .putExtra("auth",auth));
                     }else if(list.get(groupPosition).getCourse_category()==2){
                     CourseActivity activity = (CourseActivity) getActivity();
                     if(activity!=null){

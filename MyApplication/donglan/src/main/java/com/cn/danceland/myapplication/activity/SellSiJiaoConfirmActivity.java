@@ -37,6 +37,7 @@ public class SellSiJiaoConfirmActivity extends Activity {
     }
 
     private void initView() {
+        state = 0;
         sell_img = findViewById(R.id.sell_img);
         sell_img.setOnClickListener(new View.OnClickListener() {
             @Override

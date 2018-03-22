@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
@@ -69,7 +70,7 @@ public class SiJiaoDetailActivity extends Activity {
     String[] time = {"9:00","9:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00"
             ,"15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00"};
 
-    List<String> timeList;
+    List<String> timeList,timeMiList;
     TextView over_time,tv_date,course_name,course_jiaolian,buy,course_shengyu,course_length;
     int pos=999;
     ArrayList<Integer> status;
@@ -80,6 +81,7 @@ public class SiJiaoDetailActivity extends Activity {
     AlertDialog.Builder alertdialog;
     NCalendar nccalendar;
     MyCourseBean.Data item;
+    JiaoLianCourseBean.Content item1;
     String startTime,endTime,startTimeTv,endTimeTv;
     Gson gson;
     ArrayList<String> yuyueList;
@@ -88,6 +90,8 @@ public class SiJiaoDetailActivity extends Activity {
     boolean click=true;
     //int status=999;//1:等待对方确认,2:预约成功,3:上课中,4:已结束,5:待评分,6:已评分
     String weekDay;
+    String role;
+    String auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,10 +110,17 @@ public class SiJiaoDetailActivity extends Activity {
         yuyueList = new ArrayList<String>();
         yuyueStartList = new ArrayList<String>();
         gson = new Gson();
-        item = (MyCourseBean.Data)getIntent().getSerializableExtra("item");
+
         startTimeTv = getIntent().getStringExtra("startTime");
         startTime = TimeUtils.date2TimeStamp(startTimeTv+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
         endTimeTv = getIntent().getStringExtra("endTime");
+        role = getIntent().getStringExtra("role");
+        auth = getIntent().getStringExtra("auth");
+        if(role!=null){
+            item1 = (JiaoLianCourseBean.Content)getIntent().getSerializableExtra("item");
+        }else{
+            item = (MyCourseBean.Data)getIntent().getSerializableExtra("item");
+        }
         timeList = new ArrayList<String>();
         for(int i =0;i<time.length-2;i++){
             timeList.add(time[i]);
@@ -157,6 +168,16 @@ public class SiJiaoDetailActivity extends Activity {
             }
             buy.setText("购买节数："+item.getCount());
             course_shengyu.setText("剩余节数："+item.getSurplus_count());
+        }else{
+            course_name.setText(item1.getCourse_type_name());
+            if(item1.getEmployee_name()!=null){
+                course_jiaolian.setText(item1.getEmployee_name());
+            }else{
+                course_jiaolian.setText("");
+            }
+            buy.setText("购买节数："+item1.getCount());
+            course_shengyu.setText("剩余节数："+item1.getSurplus_count());
+
         }
         course_length.setText("有效期："+startTimeTv+"至"+endTimeTv);
 
@@ -253,8 +274,25 @@ public class SiJiaoDetailActivity extends Activity {
                     }
                 }
 
+                String[] split = timeList.get(pos).split(":");
+                Long start=null,end=null;
+                if(split.length>=2){
+                    if(split[1].equals("00")){
+                        start = Long.valueOf(split[0])*60;
+                    }else{
+                        start = Long.valueOf(Long.valueOf(split[0])*60+30);
+                    }
+
+                    end = Long.valueOf(start+60);
+                }
+
                 try {
-                    commitYuYue();
+                    if(startTime!=null&&start!=null&&end!=null){
+                        commitYuYue(start,end);
+                    }else{
+                        ToastUtils.showToastShort("请选择时间重新提交");
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -345,16 +383,23 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
 
-    private void commitYuYue() throws JSONException {
+    private void commitYuYue(Long startM,Long endM) throws JSONException {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        siJiaoYuYueConBean.setAppointment_type(2);
-        siJiaoYuYueConBean.setCourse_date(Long.valueOf("1520179200000"));
-        siJiaoYuYueConBean.setEmployee_id(item.getEmployee_id());
-        siJiaoYuYueConBean.setStart_time((long)780);
-        siJiaoYuYueConBean.setEnd_time((long)840);
-        siJiaoYuYueConBean.setMember_course_id(item.getId());
-        siJiaoYuYueConBean.setWeek(1);
+        if(role!=null){
+            siJiaoYuYueConBean.setAppointment_type(1);
+            siJiaoYuYueConBean.setEmployee_id(item1.getEmployee_id());
+            siJiaoYuYueConBean.setMember_course_id(item1.getId());
+        }else{
+            siJiaoYuYueConBean.setAppointment_type(2);
+            siJiaoYuYueConBean.setEmployee_id(item.getEmployee_id());
+            siJiaoYuYueConBean.setMember_course_id(item.getId());
+        }
+        siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
+        siJiaoYuYueConBean.setStart_time(startM);
+        siJiaoYuYueConBean.setEnd_time(endM);
+
+        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(startTime+"000")));
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JSONObject jsonObject = new JSONObject(s);

@@ -241,4 +241,44 @@ public class TimeUtils {
         return weekDays[w];
     }
 
+    /**
+     *
+     *date转calendar
+     * */
+    public static Calendar dataToCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+    /**
+    *
+    * 获取月初的毫秒时间戳
+    * */
+
+    public static long getMonthFirstDay(Calendar calendar) {
+        //Calendar calendar = Calendar.getInstance();// 获取当前日期
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);// 设置为1号,当前日期既为本月第一天
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTimeInMillis();
+        }
+
+    /**
+     *
+     * 获取月末的毫秒时间戳
+     * */
+
+    public static long getMonthLastDay(Calendar calendar) {
+        //Calendar calendar = Calendar.getInstance();// 获取当前日期
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));// 设置本月最后一天
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTimeInMillis();
+    }
+
 }

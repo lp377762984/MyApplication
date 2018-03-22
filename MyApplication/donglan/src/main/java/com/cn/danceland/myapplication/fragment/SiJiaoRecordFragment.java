@@ -81,10 +81,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
     private void initData() throws JSONException {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-//        if(role!=null){
-//            siJiaoYuYueConBean.setEmployee_id(data.getEmployee());
-//        }
-        siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        if(role!=null||!"".equals(role)){
+            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+        }else{
+            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        }
+
         if(startTime!=null){
             siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
         }else{

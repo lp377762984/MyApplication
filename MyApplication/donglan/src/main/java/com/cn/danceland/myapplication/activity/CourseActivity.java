@@ -15,19 +15,41 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
+import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.fragment.CommentFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoRecordFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeRecordFragment;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 
 import org.joda.time.DateTime;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -52,6 +74,10 @@ public class CourseActivity extends FragmentActivity {
     String isTuanke;//团课isTuanke==0；一对一和小团课==1
     Time time;
     String nowTime,nowTimeLen,role,auth;
+    Data data;
+    long monthFirstDay,monthLastDay;
+    Gson gson;
+    ArrayList<String> yuyueTimeList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,9 +86,13 @@ public class CourseActivity extends FragmentActivity {
         initHost();
         initView();
         setOnclick();
+        if(startTime!=null){
+            getRecordTime();
+        }
     }
 
     private void initHost() {
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         isTuanke = getIntent().getStringExtra("isTuanke");
         if(isTuanke==null){
             isTuanke = "1";
@@ -77,9 +107,66 @@ public class CourseActivity extends FragmentActivity {
         role = getIntent().getStringExtra("role");
         auth = getIntent().getStringExtra("auth");
 
+        gson = new Gson();
+
     }
 
 
+    private void getRecordTime(){
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        if(role!=null||!"".equals(role)){
+            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+        }else{
+            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        }
+        final Calendar calendar = TimeUtils.dataToCalendar(new Date(Long.valueOf(startTime + "000")));
+
+        monthFirstDay = TimeUtils.getMonthFirstDay(calendar);
+        monthLastDay = TimeUtils.getMonthLastDay(calendar);
+
+        siJiaoYuYueConBean.setCourse_date_gt(monthFirstDay);
+        siJiaoYuYueConBean.setCourse_date_lt(monthLastDay);
+
+        String s = gson.toJson(siJiaoYuYueConBean);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
+                yuyueTimeList = new ArrayList<>();
+                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
+                if(siJiaoRecordBean!=null){
+                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
+                    if(data!=null){
+                        List<SiJiaoRecordBean.Content> content = data.getContent();
+                        if(content!=null){
+                            for(int i=0;i<content.size();i++){
+                                String s1 = TimeUtils.timeStamp2Date(content.get(i).getConfirm_date() + "", "yyyy-MM-dd");
+                                yuyueTimeList.add(s1);
+                            }
+                        }
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+    }
 
 
 

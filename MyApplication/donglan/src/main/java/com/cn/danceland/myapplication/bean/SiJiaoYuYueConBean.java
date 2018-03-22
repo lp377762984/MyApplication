@@ -39,6 +39,24 @@ public class SiJiaoYuYueConBean implements Serializable {
     private Long end_date;
     private Integer group_course_id;
     private String date;
+    private Long course_date_gt;
+    private Long course_date_lt;
+
+    public Long getCourse_date_gt() {
+        return course_date_gt;
+    }
+
+    public void setCourse_date_gt(Long course_date_gt) {
+        this.course_date_gt = course_date_gt;
+    }
+
+    public Long getCourse_date_lt() {
+        return course_date_lt;
+    }
+
+    public void setCourse_date_lt(Long course_date_lt) {
+        this.course_date_lt = course_date_lt;
+    }
 
     public String getDate() {
         return date;

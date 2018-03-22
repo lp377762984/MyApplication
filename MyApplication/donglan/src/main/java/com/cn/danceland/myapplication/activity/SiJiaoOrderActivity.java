@@ -85,7 +85,7 @@ public class SiJiaoOrderActivity extends Activity {
     AlertDialog.Builder alertdialog;
     LoopView loopview,lp_year,lp_month,lp_date;
     View inflate1;
-    int nowyear,month,monthDay,time_length;
+    int nowyear,month,monthDay,days,time_length;
     String toMonth,toYear,endTime;
     int employee_id;
     String employee_name;
@@ -94,6 +94,9 @@ public class SiJiaoOrderActivity extends Activity {
     int price;
     Data info;
     PayBean payBean;
+    Long startMill;
+    Long endMill;
+    int course_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,10 +122,12 @@ public class SiJiaoOrderActivity extends Activity {
         itemContent = (BuySiJiaoBean.Content)getIntent().getSerializableExtra("itemContent");
         if(itemContent!=null){
             course_category_name = itemContent.getCourse_category_name();
+            course_id = itemContent.getId();
             course_category = itemContent.getCourse_category();
             branch_id = itemContent.getBranch_id();
-            time_length = itemContent.getTime_length();
+            days = itemContent.getDays();
             price = itemContent.getPrice();
+            time_length = itemContent.getTime_length();
         }
         inflate1 = LayoutInflater.from(SiJiaoOrderActivity.this).inflate(R.layout.birthdayselect,null);
         lp_year = inflate1.findViewById(R.id.lp_year);
@@ -137,6 +142,7 @@ public class SiJiaoOrderActivity extends Activity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDCourseTypeEmployee, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.e("zzf",s);
                 JiaoLianBean jiaoLianBean = gson.fromJson(s, JiaoLianBean.class);
                 if(jiaoLianBean!=null){
                     JiaoLianList = jiaoLianBean.getData();
@@ -153,7 +159,7 @@ public class SiJiaoOrderActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<>();
-                map.put("courseTypeId",course_category+"");
+                map.put("courseTypeId",course_id+"");
                 return map;
             }
 
@@ -221,6 +227,9 @@ public class SiJiaoOrderActivity extends Activity {
         ed_time = findViewById(R.id.ed_time);
         ed_time.setText(nowyear+"年"+month+"月"+monthDay+"日");
         strTime = nowyear+"-"+month+"-"+monthDay;
+        startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd")*1000;
+        endMill = startMill+days*86400000;
+        endTime = TimeUtils.timeStamp2Date(endMill+"","yyyy-MM-dd");
 
         btn_forme = findViewById(R.id.btn_forme);
         btn_foryou = findViewById(R.id.btn_foryou);
@@ -281,7 +290,7 @@ public class SiJiaoOrderActivity extends Activity {
         if(itemContent!=null){
             goods_name.setText("商品名称："+itemContent.getName());
             goods_type.setText("商品类型："+itemContent.getCourse_category_name());
-            goods_time.setText("有效期："+time_length+"天");
+            goods_time.setText("有效期："+days+"天");
             goods_price.setText("商品单价："+itemContent.getPrice()+"元");
 //            goods_all_price.setText("合计金额："+itemContent.getPrice()+"元");
 //            goods_num.setText("商品数量："+itemContent.getCount()+"节");
@@ -804,9 +813,10 @@ public class SiJiaoOrderActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 ed_time.setText(syear+"年"+smonth+"月"+sdate+"日");
                 strTime = syear+"-"+smonth+"-"+sdate;
-                toYear = Integer.valueOf(syear) + time_length / 12 + "";
-                toMonth = Integer.valueOf(smonth) + time_length % 12 + "";
-                endTime = toYear+"-"+toMonth+"-"+sdate;
+
+                startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd")*1000;
+                endMill = startMill+days*86400000;
+                endTime = TimeUtils.timeStamp2Date(endMill+"","yyyy-MM-dd");
             }
         });
         alertdialog.show();
