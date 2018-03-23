@@ -31,7 +31,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
-import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
@@ -335,16 +335,16 @@ public class CommentListviewAdapter extends BaseAdapter {
      */
     private void sendCommentReply(final String msgId, final String id, final int pos) {
 
-        String Params = Constants.SEND_COMMENT_REPLY + "/" + id + "/" + msgId;
-
-        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+      //  String Params = Constants.SEND_COMMENT_REPLY + "/" + id + "/" + msgId;
+        String Params = Constants.DEL_COMMENT_REPLY ;
+        final StringRequest request = new StringRequest(Request.Method.POST, Params, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("删除成功");
                     data.remove(pos);
@@ -352,7 +352,7 @@ public class CommentListviewAdapter extends BaseAdapter {
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.DEL_COMMENT));
 
                 } else {
-                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("删除失败" );
                 }
 
 
@@ -364,7 +364,14 @@ public class CommentListviewAdapter extends BaseAdapter {
                 LogUtil.i(volleyError.toString());
             }
         }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> hm = new HashMap<String, String>();
+                hm.put("reply_id",id);
+                hm.put("dyn_id",msgId);
+                return hm;
 
+            }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

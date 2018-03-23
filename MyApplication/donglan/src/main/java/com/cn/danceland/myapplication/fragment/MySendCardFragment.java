@@ -14,7 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
+import com.cn.danceland.myapplication.bean.RequestSendCardBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -28,19 +28,19 @@ import java.util.Map;
 import static com.cn.danceland.myapplication.R.id.tv_cardtype;
 
 /**
- * Created by shy on 2018/3/22 09:16
+ * Created by shy on 2018/3/23 10:22
  * Email:644563767@qq.com
  */
 
 
-public class MyCardFragment extends BaseFragment {
+public class MySendCardFragment extends BaseFragment {
     private ListView mListView;
-    private List<RequestMyCardListBean.Data> mCardList = new ArrayList<>();
+    private List<RequestSendCardBean.Data> mCardList = new ArrayList<>();
     private MyListViewAdapter myListViewAdapter;
     Gson gson = new Gson();
     @Override
     public View initViews() {
-        View v=View.inflate(mActivity,R.layout.fragment_my_card,null);
+        View v=View.inflate(mActivity, R.layout.fragment_my_card,null);
 
         mListView = v.findViewById(R.id.listview);
         myListViewAdapter = new MyListViewAdapter();
@@ -48,11 +48,11 @@ public class MyCardFragment extends BaseFragment {
         return  v;
 
     }
-
     @Override
     public void onClick(View view) {
 
     }
+
 
     @Override
     public void initDta() {
@@ -60,18 +60,18 @@ public class MyCardFragment extends BaseFragment {
     }
 
     /**
-     * 查找全部会员卡
+     * 查找全部送出会员卡
      */
     private void findAllCard() {
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_ALL_MY_CARD_LIST, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_ALL_OTHER_CARD_LIST, new Response.Listener<String>() {
 
 
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestMyCardListBean myCardListBean = new RequestMyCardListBean();
-                myCardListBean = gson.fromJson(s, RequestMyCardListBean.class);
+                RequestSendCardBean myCardListBean = new RequestSendCardBean();
+                myCardListBean = gson.fromJson(s, RequestSendCardBean.class);
                 mCardList = myCardListBean.getData();
                 myListViewAdapter.notifyDataSetChanged();
 
@@ -127,6 +127,8 @@ public class MyCardFragment extends BaseFragment {
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
 
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
+                viewHolder.tv_order_name = view.findViewById(R.id.tv_order_name);
+                viewHolder.tv_phone = view.findViewById(R.id.tv_phone);
 
                 view.setTag(viewHolder);
             } else {
@@ -163,8 +165,8 @@ public class MyCardFragment extends BaseFragment {
 
                 viewHolder.tv_time.setText(b[0] + "到期");
             }
-
-
+            viewHolder.tv_phone.setText("好友电话："+mCardList.get(i).getPhone_no());
+            viewHolder.tv_order_name.setText("好友姓名："+mCardList.get(i).getMember_name());
             return view;
         }
 
@@ -173,8 +175,9 @@ public class MyCardFragment extends BaseFragment {
             TextView tv_number;
             TextView tv_time;
             TextView tv_cardtype;
+            TextView   tv_order_name;
+            TextView    tv_phone;
         }
 
     }
-
 }

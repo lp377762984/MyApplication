@@ -1,34 +1,30 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.google.gson.Gson;
+import com.cn.danceland.myapplication.fragment.MyCardFragment;
+import com.cn.danceland.myapplication.fragment.MySendCardFragment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 
-import static com.cn.danceland.myapplication.R.id.tv_cardtype;
+import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
 
 
 /**
@@ -37,74 +33,97 @@ import static com.cn.danceland.myapplication.R.id.tv_cardtype;
  */
 
 
-public class MyCardActivity extends Activity implements View.OnClickListener {
+public class MyCardActivity extends FragmentActivity implements View.OnClickListener {
 
-    private ListView mListView;
-    private List<RequestMyCardListBean.Data> mCardList = new ArrayList<>();
-    private MyListViewAdapter myListViewAdapter;
-    Gson gson = new Gson();
+    private ViewPager mViewPager;
 
-
+    public  String[] mTitleDataList = new String[]{"我的会员卡", "我送出的卡"};
     @Override
-
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_card);
         initView();
-        initData();
     }
 
     private void initView() {
         findViewById(R.id.iv_back).setOnClickListener(this);
-        mListView = findViewById(R.id.listview);
-        myListViewAdapter = new MyListViewAdapter();
-        mListView.setAdapter(myListViewAdapter);
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        mViewPager = findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(myViewPagerAdapter);
+
+        initMagicIndicator1();
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                current_page = position;
+//                if (position == 0) {
+//                    btn_add.setVisibility(View.GONE);
+//                } else {
+//                    btn_add.setVisibility(View.VISIBLE);
+//                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
-
-    private void initData() {
-
-        findAllCard();
-    }
-
-    /**
-     * 查找全部会员卡
-     */
-    private void findAllCard() {
-
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_ALL_MY_CARD_LIST, new Response.Listener<String>() {
-
+    private void initMagicIndicator1() {
+        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
+        CommonNavigator commonNavigator = new CommonNavigator(this);
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
 
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                RequestMyCardListBean myCardListBean = new RequestMyCardListBean();
-                myCardListBean = gson.fromJson(s, RequestMyCardListBean.class);
-                mCardList = myCardListBean.getData();
-                myListViewAdapter.notifyDataSetChanged();
-
-
+            public int getCount() {
+                return mTitleDataList == null ? 0 : mTitleDataList.length;
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
+                colorTransitionPagerTitleView.setSelectedColor(Color.BLACK);
+                colorTransitionPagerTitleView.setText(mTitleDataList[index]);
+                colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mViewPager.setCurrentItem(index);
+                    }
+                });
+                return colorTransitionPagerTitleView;
             }
-        }) {
+
+            //            @Override
+//            public IPagerIndicator getIndicator(Context context) {
+//                LinePagerIndicator indicator = new LinePagerIndicator(context);
+//                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
+//                return indicator;
+//            }
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
+            public IPagerIndicator getIndicator(Context context) {
+                LinePagerIndicator indicator = new LinePagerIndicator(context);
+                //  indicator.setColors(Color.parseColor("#40c4ff"));
+                indicator.setColors(Color.parseColor("#5e6379"));
+                return indicator;
             }
-        };
-        MyApplication.getHttpQueues().add(request);
 
+        });
+        commonNavigator.setAdjustMode(true);
+        magicIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(magicIndicator, mViewPager);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch(v.getId()){
             case R.id.iv_back:
                 finish();
                 break;
@@ -112,84 +131,44 @@ public class MyCardActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+    public class MyViewPagerAdapter extends FragmentPagerAdapter {
 
 
-    class MyListViewAdapter extends BaseAdapter
+        public MyViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-    {
+        @Override
+        public Fragment getItem(int arg0) {
+            Bundle bundle = new Bundle();
+//            bundle.putString("id", id);
+//            bundle.putString("auth",auth);
+            if (arg0 == 0) {
+                MyCardFragment fragment = new MyCardFragment();
+
+                //  fragment.setArguments(bundle);
+                return fragment;
+            } else if (arg0 == 1) {
+                MySendCardFragment fragment = new MySendCardFragment();
+                //   fragment.setArguments(bundle);
+                return fragment;
+            }
+            return null;
+
+        }
 
         @Override
         public int getCount() {
-            return mCardList.size();
+            return TITLES.length;
         }
 
         @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-
-            ViewHolder viewHolder = null;
-            if (view == null) {
-                viewHolder = new ViewHolder();
-                view = View.inflate(MyCardActivity.this, R.layout.listview_item_my_club_card, null);
-                viewHolder.tv_name = view.findViewById(R.id.tv_cardname);
-                viewHolder.tv_number = view.findViewById(R.id.tv_number);
-                viewHolder.tv_time = view.findViewById(R.id.tv_time);
-
-                viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
-
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-
-            if (mCardList.get(i).getCharge_mode() == 1) {//计时卡
-                viewHolder.tv_cardtype.setText("卡类型：计时卡");
-            }
-            if (mCardList.get(i).getCharge_mode() == 2) {//计次卡
-                viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                viewHolder.tv_cardtype.setText("卡类型：计次卡（剩余次数：" + mCardList.get(i).getTotal_count() + "次）");
-            }
-            if (mCardList.get(i).getCharge_mode() == 3) {//储值卡
-                viewHolder.tv_cardtype.setText("卡类型：储值卡");
-            }
-
-
-            viewHolder.tv_name.setText(mCardList.get(i).getType_name());
-
-//            if (!TextUtils.isEmpty(mCardList.get(i).getTotal_count())){
-//                viewHolder.tv_number.setText("次数："+mCardList.get(i).getTotal_count() + "次");
-//                viewHolder.tv_number.setVisibility(View.VISIBLE);
-//            }else {
-//                viewHolder.tv_number.setVisibility(View.GONE);
-//            }
-            if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
-                viewHolder.tv_time.setText("未开卡");
-            } else {
-                viewHolder.tv_time.setText(mCardList.get(i).getEnd_date() + "到期");
-            }
-
-
-            return view;
-        }
-
-        class ViewHolder {
-            TextView tv_name;
-            TextView tv_number;
-            TextView tv_time;
-            TextView tv_cardtype;
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
         }
 
     }
+
 
 
 }

@@ -11,8 +11,8 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    public static final String HOST = " http://192.168.1.115:8003/";//
-    //public static final String HOST = " http://192.168.1.118:8003/";//
+   // public static final String HOST = " http://192.168.1.115:8003/";//
+    public static final String HOST = " http://192.168.1.118:8003/";//
 
     //public static final String HOST = " http://192.168.1.115:8003/";//王丽萍服务器
 
@@ -92,7 +92,7 @@ public class Constants extends EaseConstant {
     public static final String FIND_IMAGE_NEWS_URL = HOST + "appHome/showCarousel";//查找新闻轮播图片
 
     public static final String SEND_COMMENT_REPLY = HOST + "reply/saveReply";//发布评论
-    public static final String DEL_COMMENT_REPLY = HOST + "/reply";//删除发布评论
+    public static final String DEL_COMMENT_REPLY = HOST + "/reply/delete";//删除发布评论
 
     public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
@@ -105,6 +105,8 @@ public class Constants extends EaseConstant {
     public static final String COMMIT_CARD_ORDER = HOST + "appOrder/saveOrder";//提交卡订单
     public static final String FIND_ALL_ORDER = HOST + "appOrder/findAllPage";//查询订单
     public static final String FIND_ALL_MY_CARD_LIST = HOST + "card/list";//查询我的会员卡
+    public static final String FIND_ALL_OTHER_CARD_LIST = HOST + "/card/othersList";//查询我送出的会员卡
+
     public static final String CANSEL_ORDER = HOST + "/appOrder/cancelOrder";//取消订单
 
     public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录

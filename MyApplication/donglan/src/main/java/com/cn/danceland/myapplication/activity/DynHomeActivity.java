@@ -864,10 +864,10 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
      * @param page//页数
      */
     private void findZanUserList_5(final String msgId, final int page) {
-        StrBean strBean=new StrBean();
-        strBean.size=5;
-        strBean.page=0;
-        strBean.msg_id=msgId;
+        StrBean strBean = new StrBean();
+        strBean.size = 5;
+        strBean.page = 0;
+        strBean.msg_id = msgId;
 
         // dialog.show();
         JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
@@ -1247,6 +1247,17 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 
+    class StrBeanZan {
+        public boolean is_praise;
+        public String msg_id;
+
+    }
+
+    class StrBeanGaunZhu {
+        public boolean is_follower;
+        public String user_id;
+
+    }
 
     /**
      * 点赞
@@ -1255,17 +1266,18 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
      * @param isPraise
      */
     private void addZan(final String msgId, final boolean isPraise) {
+        StrBeanZan strBeanZan = new StrBeanZan();
+        strBeanZan.msg_id = msgId;
+        strBeanZan.is_praise = isPraise;
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Response.Listener<String>() {
-
-
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Gson().toJson(strBeanZan), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
 
                 if (requestInfoBean.getSuccess()) {
 
@@ -1302,22 +1314,10 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(final VolleyError volleyError) {
+            public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-
             }
-
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("msgId", msgId);
-                map.put("id", SPUtils.getString(Constants.MY_USERID, null));
-                map.put("isPraise", String.valueOf(isPraise));
-                return map;
-            }
-
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -1328,6 +1328,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 return map;
             }
         };
+
+
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
         // 设置超时时间
@@ -1346,16 +1348,17 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
      * @param b
      */
     private void addGuanzhu(final String id, final boolean b) {
+        StrBeanGaunZhu strBeanGaunZhu = new StrBeanGaunZhu();
+        strBeanGaunZhu.user_id = id;
+        strBeanGaunZhu.is_follower = b;
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
-
-
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBeanGaunZhu), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
 
 
@@ -1368,21 +1371,10 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
+            public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请查看网络连接");
             }
-
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", id);
-                map.put("isFollower", String.valueOf(b));
-                return map;
-            }
-
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -1393,6 +1385,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 return map;
             }
         };
+
+
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
         // 设置超时时间

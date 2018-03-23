@@ -110,6 +110,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
     }
 
     @Subscribe
