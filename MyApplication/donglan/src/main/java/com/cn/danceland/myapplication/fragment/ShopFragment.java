@@ -751,7 +751,7 @@ public class ShopFragment extends BaseFragment {
 
 
     private void  reloadInfo(){
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.HOST + "/person/reloadLoginInfo", new Response.Listener<String>() {
+        StringRequest request=new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
