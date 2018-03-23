@@ -1,21 +1,19 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
 import java.io.IOException;
-
 
 
 /**
@@ -32,9 +30,9 @@ public class SplashActivity extends Activity {
         super.onCreate(arg0);
 
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
-//        TextView versionText = (TextView) findViewById(R.id.tv_version);
-//        versionText.setText("1.0.1");
-        //	versionText.setText(getVersion());
+        TextView versionText = (TextView) findViewById(R.id.tv_version);
+        versionText.setText("1.0.1");
+        	versionText.setText(AppUtils.getVersionName(this));
 
 
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);

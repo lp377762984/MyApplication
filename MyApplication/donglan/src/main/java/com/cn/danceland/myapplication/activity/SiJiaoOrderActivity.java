@@ -89,7 +89,7 @@ public class SiJiaoOrderActivity extends Activity {
     String toMonth,toYear,endTime;
     int employee_id;
     String employee_name;
-    String course_category_name;
+    String course_category_name,course_name;
     Button btn_commit;
     int price;
     Data info;
@@ -124,6 +124,7 @@ public class SiJiaoOrderActivity extends Activity {
             course_category_name = itemContent.getCourse_category_name();
             course_id = itemContent.getId();
             course_category = itemContent.getCourse_category();
+            course_name = itemContent.getName();
             branch_id = itemContent.getBranch_id();
             days = itemContent.getDays();
             price = itemContent.getPrice();
@@ -475,8 +476,8 @@ public class SiJiaoOrderActivity extends Activity {
         sijiaoOrderConfirmBean.setPay_way(zhifu);//1支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
-        extends_params.setCourse_type_id(course_category+"");
-        extends_params.setCourse_type_name(course_category_name);
+        extends_params.setCourse_type_id(course_id+"");
+        extends_params.setCourse_type_name(course_name);
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
         extends_params.setTime_length(time_length);

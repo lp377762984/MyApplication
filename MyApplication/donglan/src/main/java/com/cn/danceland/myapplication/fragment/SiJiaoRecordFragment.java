@@ -128,6 +128,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
 
@@ -189,18 +190,26 @@ public class SiJiaoRecordFragment extends BaseFragment {
             }
 
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
-            String time = TimeUtils.timeStamp2Date(list.get(position).getConfirm_date() + "", null);
-            viewHolder.course_date.setText("预约时间:"+time);
+            String time = TimeUtils.timeStamp2Date(list.get(position).getCourse_date() + "", null);
+            String start_time;
+            if(list.get(position).getStart_time()%60==0){
+                start_time = list.get(position).getStart_time()/60+":00";
+            }else{
+                start_time = list.get(position).getStart_time()/60+":"+list.get(position).getStart_time()%60;
+            }
+
+            String end_time  = list.get(position).getEnd_time()/60+":"+list.get(position).getEnd_time()%60;
+
+
+            viewHolder.course_date.setText("预约时间:"+time.split(" ")[0]+" "+start_time);
             viewHolder.course_type.setText("一对一");
-            viewHolder.course_jiaolian.setText("上课教练:"+list.get(position).getEmployee_name());
-
-            viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDialog(list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
-                }
-
-            });
+            if(list.get(position).getStatus()==2){
+                viewHolder.rl_button_tv.setText("已确认未签到");
+                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#32CD32"));
+                viewHolder.rl_button.setClickable(false);
+            }else{
+                viewHolder.rl_button.setClickable(true);
+            }
             if(list.get(position).getStatus()==3){
                 viewHolder.rl_button_tv.setText("已取消");
                 viewHolder.rl_button.setBackgroundColor(Color.parseColor("#A9A9A9"));
@@ -208,6 +217,64 @@ public class SiJiaoRecordFragment extends BaseFragment {
             }else{
                 viewHolder.rl_button.setClickable(true);
             }
+            if(list.get(position).getStatus()==4){
+                viewHolder.rl_button_tv.setText("已签到");
+                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button.setClickable(false);
+            }else{
+                viewHolder.rl_button.setClickable(true);
+            }
+            if(role!=null&&!"".equals(role)){
+                viewHolder.course_jiaolian.setText("上课会员:"+list.get(position).getMember_name());
+                if(list.get(position).getStatus()==1){
+                    if(list.get(position).getAppointment_type()==2){
+                        viewHolder.rl_button_tv.setText("等待确认");
+                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#00BFFF"));
+                    }else{
+                        viewHolder.rl_button_tv.setText("取消预约");
+                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#FF8C00"));
+                    }
+                }
+            }else{
+                viewHolder.course_jiaolian.setText("上课教练:"+list.get(position).getEmployee_name());
+                if(list.get(position).getStatus()==1){
+                    if(list.get(position).getAppointment_type()==1){
+                        viewHolder.rl_button_tv.setText("等待确认");
+                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#00BFFF"));
+                    }else{
+                        viewHolder.rl_button_tv.setText("取消预约");
+                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#FF8C00"));
+                    }
+                }
+            }
+
+
+            viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(role!=null&&!"".equals(role)){
+                        if(list.get(position).getStatus()==1){
+                            if(list.get(position).getAppointment_type()==1){
+                                showDialog(false,list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                            }else if(list.get(position).getAppointment_type()==2){
+                                showDialog(true,list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                            }
+                        }
+                    }else{
+                        if(list.get(position).getStatus()==1){
+                            if(list.get(position).getAppointment_type()==2){
+                                showDialog(false,list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                            }else if(list.get(position).getAppointment_type()==1){
+                                showDialog(true,list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                            }
+                        }
+                    }
+
+                }
+
+            });
+
+
 
             return convertView;
         }
@@ -218,15 +285,67 @@ public class SiJiaoRecordFragment extends BaseFragment {
         RelativeLayout rl_button;
     }
 
-    private void showDialog(final int id, final RelativeLayout rl, final TextView tv){
+    private void enterYuYue(final int id, final RelativeLayout rl, final TextView tv){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.ENTERCOURSE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.e("zzf",s);
+                if(Integer.valueOf(s)>0){
+                    ToastUtils.showToastShort("确认成功！");
+                    tv.setText("上课中");
+                    rl.setBackgroundColor(Color.parseColor("#32CD32"));
+                    rl.setClickable(false);
+                }else{
+                    ToastUtils.showToastShort("确认失败！请稍后再试");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("courseAppointId",id+"");
+                if(role!=null&&!"".equals(role)){
+                    map.put("confirmType","1");
+                }else{
+                    map.put("confirmType","2");
+                }
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
+    private void showDialog(final boolean enter, final int id, final RelativeLayout rl, final TextView tv){
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
-        dialog.setMessage("确定取消预约吗");
+        if(enter){
+            dialog.setMessage("确定上课吗");
+        }else{
+            dialog.setMessage("确定取消预约吗");
+        }
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cancleYuYue(id,rl,tv);
+                if(enter){
+                    enterYuYue(id,rl,tv);
+                }else{
+                    cancleYuYue(id,rl,tv);
+                }
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
