@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -62,7 +63,8 @@ import static com.xiaomi.smack.packet.h.a.s;
  */
 
 public class SiJiaoDetailActivity extends Activity {
-
+    ArrayList<Integer> arrPosition;
+    ArrayList<Integer> arrStatus;
     ListView list_1,list_2;
     LinearLayout ll_time;
     LoopView loopview;
@@ -92,6 +94,9 @@ public class SiJiaoDetailActivity extends Activity {
     String weekDay;
     String role;
     String auth;
+    long hourMill = 3600000;
+    ArrayList<Long> startMillArr;
+    ArrayList<Integer> requestStatusArr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,14 +106,12 @@ public class SiJiaoDetailActivity extends Activity {
         iniView();
     }
 
+
     private void initHost() {
 
-        status = new ArrayList<Integer>();
-        index = new ArrayList<Integer>();
-        indexF = new ArrayList<Integer>();
-        indexS = new ArrayList<Integer>();
-        yuyueList = new ArrayList<String>();
-        yuyueStartList = new ArrayList<String>();
+        startMillArr = new ArrayList<>();
+        requestStatusArr = new ArrayList<>();
+
         gson = new Gson();
 
         startTimeTv = getIntent().getStringExtra("startTime");
@@ -130,12 +133,8 @@ public class SiJiaoDetailActivity extends Activity {
             @Override
             public void onCalendarChanged(DateTime dateTime) {
                 if(dateTime!=null){
-                    status.clear();
-                    index.clear();
-                    indexF.clear();
-                    indexS.clear();
-                    yuyueList.clear();
-                    yuyueStartList.clear();
+                    arrPosition.clear();
+                    arrStatus.clear();
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
                     startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
@@ -200,12 +199,14 @@ public class SiJiaoDetailActivity extends Activity {
         list_1.setDividerHeight(0);
         list_2 = findViewById(R.id.list_2);
         list_2.setDividerHeight(0);
+        arrPosition = new ArrayList<>();
+        arrStatus = new ArrayList<>();
 
-        myListF = new MyListF(indexF);
+        myListF = new MyListF(arrPosition,arrStatus);
 
-        myListS = new MyListS(indexS);
-        list_1.setAdapter(myListF);
-        list_2.setAdapter(myListS);
+        myListS = new MyListS(arrPosition,arrStatus);
+//        list_1.setAdapter(myListF);
+//        list_2.setAdapter(myListS);
         list_2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -229,17 +230,6 @@ public class SiJiaoDetailActivity extends Activity {
         if(parent!=null){
             parent.removeAllViews();
         }
-
-//        Iterator<String> iterator = timeList.iterator();
-//        while (iterator.hasNext()){
-//            String s = iterator.next();
-//            for(int j=0;j<yuyueList.size();j++){
-//                if(s.equals(yuyueList.get(j))){
-//                    iterator.remove();
-//                }
-//            }
-//        }
-
 
         loopview.setNotLoop();
         loopview.setItems(timeList);
@@ -267,25 +257,25 @@ public class SiJiaoDetailActivity extends Activity {
         alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for(int i=0;i<yuyueList.size();i++){
-                    if(timeList.get(pos).equals(yuyueList.get(i))){
+                for(int i=0;i<arrPosition.size();i++){
+                    if(pos==arrPosition.get(i)){
                         ToastUtils.showToastShort("该时间段已被预约！请重新选择");
                         return;
                     }
+
                 }
 
                 String[] split = timeList.get(pos).split(":");
                 Long start=null,end=null;
-                if(split.length>=2){
-                    if(split[1].equals("00")){
-                        start = Long.valueOf(split[0])*60;
-                    }else{
-                        start = Long.valueOf(Long.valueOf(split[0])*60+30);
+                if(split.length>=2) {
+                    if (split[1].equals("00")) {
+                        start = Long.valueOf(split[0]) * 60;
+                    } else {
+                        start = Long.valueOf(Long.valueOf(split[0]) * 60 + 30);
                     }
 
-                    end = Long.valueOf(start+60);
+                    end = Long.valueOf(start + 60);
                 }
-
                 try {
                     if(startTime!=null&&start!=null&&end!=null){
                         commitYuYue(start,end);
@@ -297,11 +287,6 @@ public class SiJiaoDetailActivity extends Activity {
                     e.printStackTrace();
                 }
 
-//                        myListF = new MyListF(indexF);
-//                        list_1.setAdapter(myListF);
-//                        myListS = new MyListS(indexS);
-//                        list_2.setAdapter(myListS);
-
             }
         });
 
@@ -312,7 +297,11 @@ public class SiJiaoDetailActivity extends Activity {
     private void getData() throws JSONException {
 
         TimeAxisCon timeAxis = new TimeAxisCon();
-        //timeAxis.setEmployee_id(item.getEmployee_id());
+        if(item!=null){
+            timeAxis.setEmployee_id(item.getEmployee_id());
+        }else if(item1!=null){
+            timeAxis.setEmployee_id(item1.getEmployee_id());
+        }
         timeAxis.setWeek(weekDay);
         timeAxis.setCourse_date(Long.valueOf(startTime+"000"));
         String s = gson.toJson(timeAxis);
@@ -322,46 +311,24 @@ public class SiJiaoDetailActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
                 TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
                 List<TimeAxisBean.Data> data = timeAxisBean.getData();
+                SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
+                String myYuYueString = myYuYue.getString(startTime,null);
+
                 if(data!=null){
-                    String time;
-                    String time1,time2,time3;//time为已选时间
                     for(int i=0;i<data.size();i++){
                             if(data.get(i).getStart_time()!=null){
                                 Integer start_time = data.get(i).getStart_time();
-                                if(start_time%60!=0){
-                                    time = start_time/60+":"+":30";
-                                    time1 = start_time/60+1+":00";
-                                    time2 = start_time/60+":00";
-                                }else{
-                                    time = start_time/60+":00";
-                                    time1 = start_time/60+":30";
-                                    time2 = start_time/60-1+":30";
-                                }
-                                yuyueList.add(time);
-                                yuyueList.add(time1);
-                                yuyueList.add(time2);
-                                yuyueStartList.add(time);
+                                setTimeLine(data.get(i).getStatus(),start_time*60000,Long.valueOf(data.get(i).getCourse_date()));
                             }
-                            status.add(data.get(i).getStatus());
                     }
+
+//                    if(myYuYueString!=null){
+//                        String[] split = myYuYueString.split(",");
+//                        setTimeLine(1,Long.valueOf(split[1]),Long.valueOf(startTime+"000"));
+//                    }
+                    list_1.setAdapter(myListF);
+                    list_2.setAdapter(myListS);
                 }
-
-                for(int i = 0;i<timeList.size();i++){
-                    for(int j=0;j<yuyueStartList.size();j++){
-                        if(timeList.get(i).equals(yuyueStartList.get(j))){
-                            yuyuestatus  = i;
-                            if(i%2==0){
-                                indexF.add(i);
-                            }else{
-                                indexS.add(i);
-                            }
-                        }
-                    }
-                }
-
-                myListF.notifyDataSetChanged();
-                myListS.notifyDataSetChanged();
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -383,7 +350,7 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
 
-    private void commitYuYue(Long startM,Long endM) throws JSONException {
+    private void commitYuYue(final Long startM, Long endM) throws JSONException {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         if(role!=null){
@@ -411,22 +378,15 @@ public class SiJiaoDetailActivity extends Activity {
                 if(rootBean!=null){
                     Integer success = Integer.valueOf(rootBean.data);
                     if(success>0){
-                        click = false;
-                        if(pos-1>=0){
-                            yuyueList.add(timeList.get(pos-1));
-                        }
-                        yuyueList.add(timeList.get(pos));
-                        if(pos+1<=timeList.size()-1){
-                            yuyueList.add(timeList.get(pos+1));
-                        }
-                        if(pos%2==0){
-                            indexF.add(pos);
-                            myListF.notifyDataSetChanged();
-                        }else{
-                            indexS.add(pos);
-                            myListS.notifyDataSetChanged();
-                        }
-
+//                        String startDate = startTime;
+//                        SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
+//                        SharedPreferences.Editor edit = myYuYue.edit();
+//                        edit.putString(startDate,"1,"+startM*60000);
+//                        edit.apply();
+//                        setTimeLine(1,startM*60000,Long.valueOf(startDate+"000"));
+//                        list_1.setAdapter(myListF);
+//                        list_2.setAdapter(myListS);
+                        ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("失败！请重新预约！");
                     }
@@ -458,13 +418,13 @@ public class SiJiaoDetailActivity extends Activity {
 
 
     private class MyListF extends BaseAdapter{
+        ArrayList<Integer> arrPosition;
+        ArrayList<Integer> arrStatus;
 
-        RelativeLayout shixian_item;
-        ArrayList<Integer> arrIndex;
 
-
-        MyListF(ArrayList<Integer> arrIndex){
-            this.arrIndex = arrIndex;
+        MyListF(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
+            this.arrPosition = arrPosition;
+            this.arrStatus = arrStatus;
         }
 
         @Override
@@ -496,57 +456,43 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if(pos!=999){//用户选择了预约
-                if(arrIndex.size()>0){
-                    if(position==arrIndex.get(arrIndex.size()-1)/2){
+            for (int i=0;i<arrPosition.size();i++){
+                if(arrPosition.get(i)/2==position){
+                    if(arrStatus.get(i)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==2){
+                        viewHolder.tv_status.setText("已确认未签到");
+                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
+                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==3){
+                        viewHolder.tv_status.setText("已取消");
+                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==4){
+                        viewHolder.tv_status.setText("已签到");
+                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
+
                     }
+                }else{
+                    viewHolder.shixian_item1.setVisibility(View.GONE);
                 }
 
-            }else{//默认时间轴（包括已经预约和预约成功）
-                if(arrIndex.size()>0){
-                    for(int i=0;i<arrIndex.size();i++){
-                        if(arrIndex.size()<=timeList.size()){
-                            if(position==arrIndex.get(i)/2){
-                                if(status!=null){
-                                    if(status.size()>i){
-                                        if(status.get(i)==1){
-                                            viewHolder.tv_status.setText("等待对方确认");
-                                            viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                                            viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-
-                                        }else if(status.get(i)==2){
-                                            viewHolder.tv_status.setText("预约成功");
-                                            viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
-                                            viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                                        }else{
-                                            viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                                        }
-                                    }
-
-                                }
-
-                            }
-                        }
-                    }
-                }
             }
-
-
             return convertView;
         }
     }
 
     private class MyListS extends BaseAdapter{
+        ArrayList<Integer> arrPosition;
+        ArrayList<Integer> arrStatus;
 
-        RelativeLayout xuxian_item;
-        ArrayList<Integer> arrIndex;
 
-
-        MyListS(ArrayList<Integer> arrIndex){
-            this.arrIndex = arrIndex;
+        MyListS(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
+            this.arrPosition = arrPosition;
+            this.arrStatus = arrStatus;
         }
 
         @Override
@@ -578,42 +524,31 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            if(pos!=999){
-                if(arrIndex.size()>0){
-                    if(position==arrIndex.get(arrIndex.size()-1)/2){
+            for (int i=0;i<arrPosition.size();i++){
+                if(arrPosition.get(i)%2==position){
+                    if(arrStatus.get(i)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                        // viewHolder.xuxian_item.setBackgroundColor(Color.parseColor("#61C5E7"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }
-                }
-            }else{
-                if(arrIndex.size()>0){
-                    for(int i=0;i<arrIndex.size();i++){
-                        if(arrIndex.size()<=timeList.size()){
-                            if(position==arrIndex.get(i)/2){
-                                if(status!=null){
-                                    if(status.get(i)==1){
-                                        viewHolder.tv_status.setText("等待对方确认");
-                                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==2){
+                        viewHolder.tv_status.setText("已确认未签到");
+                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
+                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==3){
+                        viewHolder.tv_status.setText("已取消");
+                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
+                    }else if(arrStatus.get(i)==4){
+                        viewHolder.tv_status.setText("已签到");
+                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
 
-                                    }else if(status.get(i)==2){
-                                        viewHolder.tv_status.setText("预约成功");
-                                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
-                                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                                    }else{
-                                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            }
-                        }
                     }
+                }else{
+                    viewHolder.xuxian_item1.setVisibility(View.GONE);
                 }
+
             }
-
-
-
             return convertView;
         }
     }
@@ -622,4 +557,133 @@ public class SiJiaoDetailActivity extends Activity {
         RelativeLayout xuxian_item,xuxian_item1,shixian_item,shixian_item1;
         TextView tv_status;
     }
+
+
+    private void setTimeLine(int status,long startTime,long startDate){
+        ArrayList<Long> longArr = new ArrayList<>();
+        long nine = hourMill*9;
+        long nine_half = hourMill*9+1800000;
+        long ten = hourMill*10;
+        long ten_half = hourMill*10+1800000;
+        long eleven = hourMill*11;
+        long eleven_half = hourMill*11+1800000;
+        long twelve = hourMill*12;
+        long twelve_half = hourMill*12+1800000;
+        long thirteen = hourMill*13;
+        long thirteen_half = hourMill*13+1800000;
+        long fourteen = hourMill*14;
+        long fourteen_half = hourMill*14+1800000;
+        long fifteen = hourMill*15;
+        long fifteen_half = hourMill*15+1800000;
+        long sixteen = hourMill*16;
+        long sixteen_half = hourMill*16+1800000;
+        long seventeen = hourMill*17;
+        long seventeen_half = hourMill*17+1800000;
+        long eighteen = hourMill*18;
+        long eighteen_half = hourMill*18+1800000;
+        long nineteen = hourMill*19;
+        long nineteen_half = hourMill*19+1800000;
+        long twenty = hourMill*20;
+
+        longArr.add(nine);
+        longArr.add(nine_half);
+        longArr.add(ten);
+        longArr.add(ten_half);
+        longArr.add(eleven);
+        longArr.add(eleven_half);
+        longArr.add(twelve);
+        longArr.add(twelve_half);
+        longArr.add(thirteen);
+        longArr.add(thirteen_half);
+        longArr.add(fourteen);
+        longArr.add(fourteen_half);
+        longArr.add(fifteen);
+        longArr.add(fifteen_half);
+        longArr.add(sixteen);
+        longArr.add(sixteen_half);
+        longArr.add(seventeen);
+        longArr.add(seventeen_half);
+        longArr.add(eighteen);
+        longArr.add(eighteen_half);
+        longArr.add(nineteen);
+        longArr.add(nineteen_half);
+        longArr.add(twenty);
+
+        arrAdd(startTime,status,longArr);
+
+    }
+
+    private void arrAdd(long starTime,int status,ArrayList<Long> longArr){
+
+        if(status==1){
+            for(int i=0;i<longArr.size();i++){
+                if(longArr.get(i)==starTime){
+                    if(arrPosition.size()>0){
+                        for(int j=0;j<arrPosition.size();j++){
+                            if(arrPosition.get(j)!=i){
+                                arrPosition.add(i);
+                                arrStatus.add(1);
+                            }
+                        }
+                    }else{
+                        arrPosition.add(i);
+                        arrStatus.add(1);
+                    }
+                }
+            }
+        }else if(status==2){
+            for(int i=0;i<longArr.size();i++){
+                if(longArr.get(i)==starTime){
+                    if(arrPosition.size()>0){
+                        for(int j=0;j<arrPosition.size();j++){
+                            if(arrPosition.get(j)!=i){
+                                arrPosition.add(i);
+                                arrStatus.add(2);
+                            }
+                        }
+                    }else{
+                        arrPosition.add(i);
+                        arrStatus.add(2);
+                    }
+
+                }
+            }
+        }else if(status==3){
+            for(int i=0;i<longArr.size();i++){
+                if(longArr.get(i)==starTime){
+                    if(arrPosition.size()>0){
+                        for(int j=0;j<arrPosition.size();j++){
+                            if(arrPosition.get(j)!=i){
+                                arrPosition.add(i);
+                                arrStatus.add(3);
+                            }
+                        }
+                    }else{
+                        arrPosition.add(i);
+                        arrStatus.add(3);
+                    }
+
+                }
+            }
+        }else if(status==4){
+            for(int i=0;i<longArr.size();i++){
+                if(longArr.get(i)==starTime){
+                    if(arrPosition.size()>0){
+                        for(int j=0;j<arrPosition.size();j++){
+                            if(arrPosition.get(j)!=i){
+                                arrPosition.add(i);
+                                arrStatus.add(4);
+                            }
+                        }
+                    }else{
+                        arrPosition.add(i);
+                        arrStatus.add(4);
+                    }
+
+                }
+            }
+        }
+
+    }
+
 }
