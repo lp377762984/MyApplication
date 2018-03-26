@@ -12,7 +12,6 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
-import com.hyphenate.util.NetUtils;
 
 /**
  * Created by shy on 2018/3/9 11:38
@@ -73,11 +72,11 @@ public class MyConversationListFragment extends EaseConversationListFragment {
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
-        if (NetUtils.hasNetwork(getActivity())){
-            errorText.setText("连接不到聊天服务器");
-        } else {
-            errorText.setText(R.string.the_current_network);
-        }
+//        if (NetUtils.hasNetwork(getActivity())){
+//            errorText.setText("连接不到聊天服务器");
+//        } else {
+//            errorText.setText(R.string.the_current_network);
+//        }
     }
 
 

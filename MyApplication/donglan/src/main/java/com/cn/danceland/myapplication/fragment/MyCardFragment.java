@@ -160,7 +160,9 @@ public class MyCardFragment extends BaseFragment {
 //            }
             if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
                 viewHolder.tv_time.setText("未开卡");
+                viewHolder.btn_commit.setVisibility(View.INVISIBLE);
             } else {
+                viewHolder.btn_commit.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
 
                 String[] b = sb.toString().split(" ");
