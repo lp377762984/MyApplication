@@ -74,7 +74,7 @@ public class MyConversationListFragment extends EaseConversationListFragment {
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
         if (NetUtils.hasNetwork(getActivity())){
-            errorText.setText(R.string.can_not_connect_chat_server_connection);
+            errorText.setText("连接不到聊天服务器");
         } else {
             errorText.setText(R.string.the_current_network);
         }

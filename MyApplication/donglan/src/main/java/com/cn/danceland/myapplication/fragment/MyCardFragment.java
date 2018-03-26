@@ -1,9 +1,11 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.MyQRCodeActivity;
 import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -116,7 +119,7 @@ public class MyCardFragment extends BaseFragment {
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
 
             ViewHolder viewHolder = null;
             if (view == null) {
@@ -127,6 +130,7 @@ public class MyCardFragment extends BaseFragment {
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
 
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
+                viewHolder.btn_commit=view.findViewById(R.id.btn_commit);
 
                 view.setTag(viewHolder);
             } else {
@@ -164,6 +168,13 @@ public class MyCardFragment extends BaseFragment {
                 viewHolder.tv_time.setText(b[0] + "到期");
             }
 
+            viewHolder.btn_commit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    StringBuilder  data =new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(mCardList.get(i).getId());
+                   startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data",data.toString()));
+                }
+            });
 
             return view;
         }
@@ -173,6 +184,7 @@ public class MyCardFragment extends BaseFragment {
             TextView tv_number;
             TextView tv_time;
             TextView tv_cardtype;
+            Button btn_commit;
         }
 
     }

@@ -135,6 +135,12 @@
         <activity
             android:name=".activity.ChatActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.MyQRCodeActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.ScanerCodeActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".activity.MyChatActivity"
             android:screenOrientation="portrait" />

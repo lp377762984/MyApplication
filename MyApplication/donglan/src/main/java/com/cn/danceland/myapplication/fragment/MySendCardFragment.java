@@ -121,7 +121,7 @@ public class MySendCardFragment extends BaseFragment {
             ViewHolder viewHolder = null;
             if (view == null) {
                 viewHolder = new ViewHolder();
-                view = View.inflate(mActivity, R.layout.listview_item_my_club_card, null);
+                view = View.inflate(mActivity, R.layout.listview_item_my_send_club_card, null);
                 viewHolder.tv_name = view.findViewById(R.id.tv_cardname);
                 viewHolder.tv_number = view.findViewById(R.id.tv_number);
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);

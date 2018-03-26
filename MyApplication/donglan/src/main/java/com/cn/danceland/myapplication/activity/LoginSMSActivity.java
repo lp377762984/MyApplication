@@ -32,9 +32,12 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
+import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -248,6 +251,8 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     ToastUtils.showToastShort("登录成功");
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
+                    //登录环信
+                    login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
                     EventBus.getDefault().post(new StringEvent("",1010));
 
                 } else {
@@ -293,6 +298,43 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     * 登录环信账户
+     * @param admin
+     * @param pswd
+     * @param data
+     */
+    private void login_hx(String admin, String pswd , final Data data ){
+
+        EMClient.getInstance().login(admin,pswd,new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                LogUtil.i( "登录聊天服务器成功！");
+
+                //  EaseUserUtils.setUserAvatar();
+//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
+//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
+                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
+                LogUtil.i(data.getPerson().getMember_no());
+                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
+                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
+                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                LogUtil.i( "登录聊天服务器失败！");
+            }
+        });
+    }
 
 
 

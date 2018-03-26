@@ -28,6 +28,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddPotentialActivity;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
+import com.cn.danceland.myapplication.activity.MyChatActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
@@ -40,6 +41,7 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.chat.EMMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -433,7 +435,7 @@ public class RevisitListFragment1 extends BaseFragment {
                 vh.iv_avatar = convertView.findViewById(R.id.iv_avatar);
 
                 vh.iv_callphone = convertView.findViewById(R.id.iv_callphone);
-
+                vh.iv_hx_msg = convertView.findViewById(R.id.iv_hx_msg);
                 vh.tv_name = convertView.findViewById(tv_name);
 
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
@@ -474,7 +476,12 @@ public class RevisitListFragment1 extends BaseFragment {
                     //pos = position;
                 }
             });
-
+            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId",datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
+                }
+            });
             return convertView;
 
         }
@@ -563,6 +570,7 @@ public class RevisitListFragment1 extends BaseFragment {
 
         class ViewHolder {
             public ImageView iv_avatar;
+            public ImageView iv_hx_msg;
             public ImageView iv_callphone;
             public TextView tv_name;
             public ImageView iv_sex;

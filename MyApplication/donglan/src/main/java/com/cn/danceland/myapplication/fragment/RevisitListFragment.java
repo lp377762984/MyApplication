@@ -28,6 +28,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddPotentialActivity;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
+import com.cn.danceland.myapplication.activity.MyChatActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
@@ -40,6 +41,7 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.chat.EMMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -411,6 +413,7 @@ public class RevisitListFragment extends BaseFragment {
                 vh.iv_avatar = convertView.findViewById(R.id.iv_avatar);
 
                 vh.iv_callphone = convertView.findViewById(R.id.iv_callphone);
+                vh.iv_hx_msg = convertView.findViewById(R.id.iv_hx_msg);
 
                 vh.tv_name = convertView.findViewById(tv_name);
 
@@ -419,6 +422,7 @@ public class RevisitListFragment extends BaseFragment {
                 vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
+
 
                 convertView.setTag(vh);
 
@@ -450,6 +454,13 @@ public class RevisitListFragment extends BaseFragment {
                 public void onClick(View view) {
                     showDialog(datalist.get(position).getPhone_no(), position);
                     //pos = position;
+                }
+            });
+
+            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId",datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
                 }
             });
 
@@ -546,6 +557,7 @@ public class RevisitListFragment extends BaseFragment {
             public ImageView iv_sex;
             public TextView tv_lasttime;
             public LinearLayout ll_item;
+            public ImageView      iv_hx_msg;
         }
 
     }

@@ -347,7 +347,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   ToastUtils.showToastShort("点击了关注");
+                //   ToastUtils.showToastShort("点击了关注");
                 if (!data.get(position).isFollower()) {//未关注添加关注
                     int pos = position;
                     try {
@@ -465,7 +465,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 //                LogUtil.i(c[0]);
 //                LogUtil.i(c[1]);
 //                LogUtil.i(sb.toString());
-                if (Float.parseFloat(c[0])!=0&&Float.parseFloat(c[1])!=0){
+                if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
                     if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                         LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
                         linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
@@ -593,7 +593,8 @@ public class MyDynListviewAdater extends BaseAdapter {
 
                 switch (which) {
                     case 0:
-                        ToastUtils.showToastShort("已举报");
+
+                        jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
                         break;
                     case 1:
 
@@ -661,8 +662,59 @@ public class MyDynListviewAdater extends BaseAdapter {
         public String is_praise;
         public String msg_id;
         public String is_follower;
-        public String  user_id;
+        public String user_id;
     }
+
+
+    class JuBaoBean {
+        public String member_id;//评论或动态id
+        public String bereported_id;
+        public String type;//
+    }
+
+    /**
+     * 举报
+     *
+     * @param msgId
+     * @param user_id
+     * @param type
+     */
+    private void jubao(final String msgId, final String user_id, int type) {
+        JuBaoBean juBaoBean=new JuBaoBean();
+        juBaoBean.bereported_id=user_id;
+        juBaoBean.member_id=msgId;
+        juBaoBean.type=type+"";
+        LogUtil.i(new Gson().toJson(juBaoBean));
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()){
+                    ToastUtils.showToastShort("已举报");
+                }else {
+                    ToastUtils.showToastShort("举报失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+
+    }
+
 
     /**
      * 点赞
@@ -673,7 +725,7 @@ public class MyDynListviewAdater extends BaseAdapter {
     private void addZan(final String msgId, final boolean isPraise, final int pos) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.is_praise = isPraise+"";
+        strBean.is_praise = isPraise + "";
         strBean.msg_id = msgId;
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
@@ -740,12 +792,12 @@ public class MyDynListviewAdater extends BaseAdapter {
     private void addGuanzhu(final String id, final boolean b, final int pos) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.is_follower = b+"";
+        strBean.is_follower = b + "";
         strBean.user_id = id;
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
         LogUtil.i(gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,  Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 LogUtil.i(json.toString());
@@ -777,54 +829,6 @@ public class MyDynListviewAdater extends BaseAdapter {
         };
 
 
-//        StringRequest request = new StringRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Response.Listener<String>() {
-//
-//
-//            @Override
-//            public void onResponse(String s) {
-//                LogUtil.i(s);
-//                Gson gson = new Gson();
-//                RequestInfoBean requestInfoBean = new RequestInfoBean();
-//                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-//                if (requestInfoBean.getSuccess()) {
-////                    data.get(pos).setFollower(true);
-////                    notifyDataSetChanged();
-//
-//                    ToastUtils.showToastShort("关注成功");
-//                    EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.ADD_GUANZHU));
-//
-//                } else {
-//                    ToastUtils.showToastShort("关注失败");
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(final VolleyError volleyError) {
-//                LogUtil.i(volleyError.toString());
-//                ToastUtils.showToastShort("请查看网络连接");
-//            }
-//
-//        }
-//        ) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//                map.put("userId", id);
-//                map.put("isFollower", String.valueOf(b));
-//                return map;
-//            }
-//
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-//                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-//                return map;
-//            }
-//        };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
         // 设置超时时间
