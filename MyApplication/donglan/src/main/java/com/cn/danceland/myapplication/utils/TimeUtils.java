@@ -251,6 +251,13 @@ public class TimeUtils {
         return calendar;
     }
 
+    public static String dateToString(Date date) {
+                // 获得SimpleDateFormat类
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+                //打印当前时间
+                return sf.format(date);
+            }
+
     /**
     *
     * 获取月初的毫秒时间戳

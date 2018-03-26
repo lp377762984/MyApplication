@@ -520,7 +520,7 @@ public class ShopFragment extends BaseFragment {
                     case 16://我的租柜
                         startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
-                    case 18://意见反馈
+                    case 9://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 17://推荐好友

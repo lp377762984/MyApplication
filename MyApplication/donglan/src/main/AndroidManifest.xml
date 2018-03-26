@@ -388,7 +388,12 @@
         <activity
             android:name=".activity.PingJiaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.QRCodeActivity" />
+        <activity android:name=".activity.QRCodeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AdviseRecordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AdviseDetailActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
