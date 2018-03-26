@@ -494,8 +494,9 @@ public class ShopFragment extends BaseFragment {
                         }
                         startActivity(intent1);
                         break;
-                    case 20://预约团课
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
+                 
+ 					case 9://意见反馈
+                        startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
@@ -528,8 +529,12 @@ public class ShopFragment extends BaseFragment {
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
-                    case 19://扫码入场
+                  
+ 					                    case 19://扫码入场
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                        break;
+					   case 20://预约团课
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
                         break;
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
