@@ -106,7 +106,7 @@ public class XiaoFeiRecordActivity extends Activity {
 
                         for(int i=0;i<list.size();i++){
                             if(list.get(i).getType()==1){
-                                allchongzhi = allchongzhi+list.get(i).getPrice();
+                                allchongzhi = allchongzhi+list.get(i).getPrice()+list.get(i).getGiving();
                             }else if(list.get(i).getType()==3){
                                 allxiaofei = allxiaofei+list.get(i).getPrice();
                             }
@@ -163,13 +163,18 @@ public class XiaoFeiRecordActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             Byte type = list.get(position).getBus_type();
-            if(list.get(position).getType()==1){
-                viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
+            if(list.get(position).getType()==1){//充钱
+                if(list.get(position).getGiving()!=null){
+                    viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+" + "+list.get(position).getGiving()+"元");
+                }else{
+                    viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
+                }
+
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#ff6600"));
-            }else if(list.get(position).getType()==3){
+            }else if(list.get(position).getType()==3){//消费
                 viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
-            }else if(list.get(position).getType()==2){
+            }else if(list.get(position).getType()==2){//退钱
                 viewHolder.tv_xiaofei.setText("¥ "+list.get(position).getPrice()+"元");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#808080"));
             }
