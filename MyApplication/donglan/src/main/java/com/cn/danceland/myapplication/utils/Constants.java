@@ -7,6 +7,7 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
+   // public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
@@ -50,6 +51,7 @@ public class Constants extends EaseConstant {
     public static final String GETYUANGONGMENUS = HOST + "appMenuFunction/queryEmpFunctions";//获取员工菜单权限
     public static final String GETHUIYUANMENUS = HOST + "appMenuFunction/queryMemFunctions";//获取会员菜单权限
     public static final String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
+    public static final String SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
 
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
@@ -185,6 +187,7 @@ public class Constants extends EaseConstant {
     public static final String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
     public static final String PINGJIA = HOST+"evaluate/insertBatch";//评价接口
     public static final String ENTERCOURSE = HOST+"appCourse/courseAppointConfirm ";//确认私教
+    public static final String SCAN_QRCODE = HOST+"qrcode";//扫码入场
 
 
     //环信相关
@@ -204,5 +207,11 @@ public class Constants extends EaseConstant {
     public static final String EXTRA_CONFERENCE_ID = "confId";
     public static final String EXTRA_CONFERENCE_PASS = "password";
     public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
+
+    public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
+    public static final    int QR_MAPPING_COURSE_ENTER = 11; //私教入场
+    public static final   int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
+
+
 
 }

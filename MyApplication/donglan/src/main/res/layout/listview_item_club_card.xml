@@ -88,7 +88,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:gravity="center"
             android:text="时间：有效期365天"
             android:textColor="#444444"
             android:textSize="16sp" />

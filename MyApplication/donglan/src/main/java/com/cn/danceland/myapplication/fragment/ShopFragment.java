@@ -46,6 +46,7 @@ import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
+import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
@@ -493,8 +494,9 @@ public class ShopFragment extends BaseFragment {
                         }
                         startActivity(intent1);
                         break;
-                    case 20://预约团课
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
+                 
+ 					case 9://意见反馈
+                        startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
@@ -520,11 +522,19 @@ public class ShopFragment extends BaseFragment {
                     case 16://我的租柜
                         startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
-                    case 9://意见反馈
-                        startActivity(new Intent(mActivity, AdviseActivity.class));
-                        break;
+
                     case 17://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
+                        break;
+                    case 18://意见反馈
+                        startActivity(new Intent(mActivity, AdviseActivity.class));
+                        break;
+                  
+ 					                    case 19://扫码入场
+                        startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                        break;
+					   case 20://预约团课
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
                         break;
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));

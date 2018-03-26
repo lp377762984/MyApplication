@@ -578,7 +578,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
                 switch (which) {
                     case 0:
-                        ToastUtils.showToastShort("已举报");
+                        jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
                         break;
                     case 1:
 
@@ -589,6 +589,54 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             }
         });
         listDialog.show();
+    }
+
+
+    class JuBaoBean {
+        public String member_id;//评论或动态id
+        public String bereported_id;
+        public String type;//
+    }
+
+    /**
+     * 举报
+     *
+     * @param msgId
+     * @param user_id
+     * @param type
+     */
+    private void jubao(final String msgId, final String user_id, int type) {
+        JuBaoBean juBaoBean=new JuBaoBean();
+        juBaoBean.bereported_id=user_id;
+        juBaoBean.member_id=msgId;
+        juBaoBean.type=type+"";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()){
+                    ToastUtils.showToastShort("已举报");
+                }else {
+                    ToastUtils.showToastShort("举报失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+
     }
 
     private void showListDialogSelf(final int pos) {

@@ -25,6 +25,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -44,6 +45,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,7 +204,7 @@ public class CommentListviewAdapter extends BaseAdapter {
 
                         break;
                     case 2:
-                        ToastUtils.showToastShort("已举报");
+                        jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2);
                         break;
                     default:
                         break;
@@ -211,6 +213,57 @@ public class CommentListviewAdapter extends BaseAdapter {
         });
         listDialog.show();
     }
+
+
+
+    class JuBaoBean {
+        public String member_id;//评论或动态id
+        public String bereported_id;
+        public String type;//
+    }
+
+    /**
+     * 举报
+     *
+     * @param msgId
+     * @param user_id
+     * @param type
+     */
+    private void jubao(final String msgId, final String user_id, int type) {
+        JuBaoBean juBaoBean=new JuBaoBean();
+        juBaoBean.bereported_id=user_id;
+        juBaoBean.member_id=msgId;
+        juBaoBean.type=type+"";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()){
+                    ToastUtils.showToastShort("已举报");
+                }else {
+                    ToastUtils.showToastShort("举报失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+
+    }
+
+
 
     private void showListDialog_self(final int pos) {
         final String[] items = {"复制内容", "删除评论"};

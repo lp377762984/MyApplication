@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -351,10 +350,15 @@ public class ActivityScanerCode extends ActivityBase {
         RxBeepTool.playBeep(mContext, vibrate);
 
         String result1 = result.getText();
-        Log.v("二维码/条形码 扫描结果", result1);
+     //   Log.v("二维码/条形码 扫描结果", result1);
+        do_result(result.getText());
+  //      Log.v("taginfo", result1);
         if (mScanerListener == null) {
 //            RxToast.success(result1);
-            initDialogResult(result);
+        //    initDialogResult(result);
+            BarcodeFormat type = result.getBarcodeFormat();
+            String realContent = result.getText();
+
         } else {
             mScanerListener.onSuccess("From to Camera", result);
         }
@@ -362,5 +366,8 @@ public class ActivityScanerCode extends ActivityBase {
 
     public Handler getHandler() {
         return handler;
+    }
+    public  void  do_result(String result){
+
     }
 }
