@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
@@ -39,12 +40,13 @@ public class AdviseActivity extends Activity {
     RadioGroup advise_rg;
     private FeedBackRequest request;
     private Gson gson;
-    Integer type=3;
+    Integer type = 2;
     EditText advise_ed;
     Data data;
     RelativeLayout rl_commit;
     ImageView feed_back,img_biaoqing;
     TextView feed_record;
+    RadioButton rb_0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +67,10 @@ public class AdviseActivity extends Activity {
         img_biaoqing = findViewById(R.id.img_biaoqing);
         advise_rg = findViewById(R.id.advise_rg);
         advise_rg.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        rb_0 = findViewById(R.id.rb_0);
+        rb_0.setChecked(true);
+
         advise_ed = findViewById(R.id.advise_ed);
         rl_commit = findViewById(R.id.rl_commit);
         rl_commit.setOnClickListener(new View.OnClickListener() {
