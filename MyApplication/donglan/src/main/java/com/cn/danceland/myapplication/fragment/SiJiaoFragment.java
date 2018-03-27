@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,12 +20,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CourseActivity;
+import com.cn.danceland.myapplication.activity.PingJiaActivity;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianBean;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
+import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -33,11 +36,13 @@ import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,10 +57,21 @@ public class SiJiaoFragment extends BaseFragment {
     ImageView down_img,up_img;
     String role,auth;
     Data data;
+    Gson gson;
+    MyListAdapter childListAdapter;
+    List<JiaoLianCourseBean.Content> jiaolianContent;
+    List<MyCourseBean.Data> myCourseList;
+    List<SiJiaoRecordBean.Content> childContent;
+    MyListView mylist;
+    View view;
+    String startTime;
 
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.sijiao, null);
+        view = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
+        mylist = view.findViewById(R.id.mylist);
+        mylist.setDividerHeight(0);
         ex_lv = inflate.findViewById(R.id.ex_lv);
         ex_lv.setGroupIndicator(null);
         ex_lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -67,6 +83,11 @@ public class SiJiaoFragment extends BaseFragment {
                     down_img.setVisibility(View.VISIBLE);
                     up_img.setVisibility(View.GONE);
                 }else{
+                    if(role!=null){
+                        getChildData(jiaolianContent.get(groupPosition).getId());
+                    }else{
+                        getChildData(myCourseList.get(groupPosition).getId());
+                    }
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
                 }
@@ -74,6 +95,7 @@ public class SiJiaoFragment extends BaseFragment {
             }
         });
 
+        gson = new Gson();
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         try {
@@ -91,15 +113,15 @@ public class SiJiaoFragment extends BaseFragment {
 
     }
 
-    public void getRoles(String role,String auth){
+    public void getRoles(String role,String auth,String startTime){
 
         this.role = role;
         this.auth = auth;
-
+        this.startTime = startTime;
 
     }
-    
     public void refresh() throws JSONException {
+
         //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         MyCourseConBean myCourseConBean = new MyCourseConBean();
@@ -113,7 +135,6 @@ public class SiJiaoFragment extends BaseFragment {
                 myCourseConBean.setEmployee_id(info.getEmployee().getId());
                 url =Constants.FINDEMPCOURSE;
             }
-            final Gson gson = new Gson();
             String s = gson.toJson(myCourseConBean);
             JSONObject jsonObject = new JSONObject(s);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,new Response.Listener<JSONObject>() {
@@ -123,9 +144,10 @@ public class SiJiaoFragment extends BaseFragment {
                     if(role!=null){
                         JiaoLianCourseBean jiaoLianCourseBean = gson.fromJson(jsonObject.toString(), JiaoLianCourseBean.class);
                         if(jiaoLianCourseBean!=null&&jiaoLianCourseBean.getData()!=null){
-                            List<JiaoLianCourseBean.Content> content = jiaoLianCourseBean.getData().getContent();
-                            if(content!=null){
-                                ex_lv.setAdapter(new JiaoLianAdapter(content));
+
+                            jiaolianContent = jiaoLianCourseBean.getData().getContent();
+                            if(jiaolianContent!=null){
+                                ex_lv.setAdapter(new JiaoLianAdapter(jiaolianContent));
                             }
 
                         }
@@ -133,7 +155,8 @@ public class SiJiaoFragment extends BaseFragment {
                     }else{
                         MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
                         if(myCourseBean!=null){
-                            List<MyCourseBean.Data> myCourseList = myCourseBean.getData();
+
+                            myCourseList = myCourseBean.getData();
                             if(myCourseList!=null){
                                 ex_lv.setAdapter(new MyExAdapter(myCourseList));
                             }
@@ -164,17 +187,64 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
 
-    private void getChildData(){
+    private void getChildData(Integer courseid) {
 
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null||!"".equals(role)){
+        if(role!=null){
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         }
 
+        siJiaoYuYueConBean.setCourse_date_lt(System.currentTimeMillis());
+        siJiaoYuYueConBean.setId(courseid);
+        String s = gson.toJson(siJiaoYuYueConBean);
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
+                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
+                if(siJiaoRecordBean!=null){
+                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
+                    if(data!=null){
+                        if(childContent!=null){
+                            childContent.clear();
+                        }
+                        childContent = data.getContent();
+                        if(childContent!=null){
+                            childListAdapter = new MyListAdapter(childContent);
+                            mylist.setAdapter(childListAdapter);
+                            //childListAdapter.notifyDataSetChanged();
+                            //childListAdapter.notifyDataSetChanged();
+                            //lv_tuanke.setAdapter(new RecordAdapter(content));
+                        }else{
+                            ToastUtils.showToastShort("当天无预约记录");
+                        }
+
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
 
 
     }
@@ -290,16 +360,15 @@ public class SiJiaoFragment extends BaseFragment {
             if (convertView==null){
                 viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
-                viewHolder.mylist = convertView.findViewById(R.id.mylist);
-
-
+                //mylist = convertView.findViewById(R.id.mylist);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.mylist.setDividerHeight(0);
-            viewHolder.mylist.setAdapter(new MyListAdapter());
-
+            //mylist.setDividerHeight(0);
+//            if(childContent!=null){
+//                viewHolder.mylist.setAdapter(childListAdapter);
+//            }
 
             return convertView;
         }
@@ -424,16 +493,16 @@ public class SiJiaoFragment extends BaseFragment {
             ViewHolder viewHolder=null;
             if (convertView==null){
                 viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
-                viewHolder.mylist = convertView.findViewById(R.id.mylist);
-
-
+                convertView = view;
+                //mylist = convertView.findViewById(R.id.mylist);
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            viewHolder.mylist.setDividerHeight(0);
-            viewHolder.mylist.setAdapter(new MyListAdapter());
+            //mylist.setDividerHeight(0);
+//            if(childContent!=null){
+//                viewHolder.mylist.setAdapter(childListAdapter);
+//            }
 
 
             return convertView;
@@ -451,10 +520,15 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
     private class MyListAdapter extends BaseAdapter{
+        List<SiJiaoRecordBean.Content> list;
+
+        MyListAdapter(List<SiJiaoRecordBean.Content> list){
+            this.list = list;
+        }
 
         @Override
         public int getCount() {
-            return 3;
+            return list.size();
         }
 
         @Override
@@ -468,13 +542,53 @@ public class SiJiaoFragment extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder1 viewHolder1;
             if(convertView==null){
+                viewHolder1 = new ViewHolder1();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_list_item, null);
+                viewHolder1.tv_time = convertView.findViewById(R.id.tv_time);
+                viewHolder1.tv_status = convertView.findViewById(R.id.tv_status);
+                viewHolder1.tv_pingfen = convertView.findViewById(R.id.tv_pingfen);
+                convertView.setTag(viewHolder1);
+            }else{
+                viewHolder1 = (ViewHolder1)convertView.getTag();
             }
 
+            String time;
+            if(list.get(position).getStart_time()%60==0){
+                time = list.get(position).getStart_time()/60+":00";
+            }else{
+                time = list.get(position).getStart_time()/60+":"+list.get(position).getStart_time()%60;
+            }
+
+            viewHolder1.tv_time.setText("时间："+TimeUtils.timeStamp2Date(list.get(position).getCourse_date()+"","yyyy-MM-dd HH:mm:ss").split(" ")[0]+" "+time);
+            int status = list.get(position).getStatus();
+            viewHolder1.tv_pingfen.setText("无法评分");
+            if(status==1){
+                viewHolder1.tv_status.setText("已过期");
+            }else if(status==2){
+                viewHolder1.tv_status.setText("未签到");
+            }else if(status==3){
+                viewHolder1.tv_status.setText("已取消");
+            }else if(status==4){
+                viewHolder1.tv_status.setText("已签到");
+                viewHolder1.tv_pingfen.setText("去评分");
+            }
+
+            viewHolder1.tv_pingfen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //if(list.get(position).getStatus()==4){
+                        startActivity(new Intent(mActivity, PingJiaActivity.class));
+                    //}
+                }
+            });
 
             return convertView;
         }
+    }
+    class ViewHolder1{
+        TextView tv_time,tv_status,tv_pingfen;
     }
 }

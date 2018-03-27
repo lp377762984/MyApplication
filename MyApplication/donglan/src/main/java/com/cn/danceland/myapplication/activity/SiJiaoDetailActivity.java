@@ -303,7 +303,7 @@ public class SiJiaoDetailActivity extends Activity {
             timeAxis.setEmployee_id(item1.getEmployee_id());
         }
         timeAxis.setWeek(weekDay);
-        timeAxis.setCourse_date(Long.valueOf(startTime+"000"));
+        timeAxis.setCourse_date(Long.valueOf(startTime));
         String s = gson.toJson(timeAxis);
         JSONObject jsonObject = new JSONObject(s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,jsonObject, new Response.Listener<JSONObject>() {
@@ -362,11 +362,11 @@ public class SiJiaoDetailActivity extends Activity {
             siJiaoYuYueConBean.setEmployee_id(item.getEmployee_id());
             siJiaoYuYueConBean.setMember_course_id(item.getId());
         }
-        siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
+        siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
         siJiaoYuYueConBean.setStart_time(startM);
         siJiaoYuYueConBean.setEnd_time(endM);
 
-        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(startTime+"000")));
+        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(startTime)));
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JSONObject jsonObject = new JSONObject(s);

@@ -120,7 +120,7 @@ public class CourseActivity extends FragmentActivity {
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         }
-        final Calendar calendar = TimeUtils.dataToCalendar(new Date(Long.valueOf(startTime + "000")));
+        final Calendar calendar = TimeUtils.dataToCalendar(new Date(Long.valueOf(startTime)));
 
         monthFirstDay = TimeUtils.getMonthFirstDay(calendar);
         monthLastDay = TimeUtils.getMonthLastDay(calendar);
@@ -272,7 +272,7 @@ public class CourseActivity extends FragmentActivity {
                 fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
             }else{
                 siJiaoFragment = new SiJiaoFragment();
-                siJiaoFragment.getRoles(role,auth);
+                siJiaoFragment.getRoles(role,auth,startTime);
                 fragmentTransaction.replace(R.id.rl_nv,siJiaoFragment);
             }
 
