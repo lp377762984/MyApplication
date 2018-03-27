@@ -285,6 +285,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 Map<String, String> map=new HashMap<>();
                 map.put("phone",phone);
                 map.put("validateCode",mEtSms.getText().toString());
+                map.put("terminal", "1");
                 return map;
             }
         };

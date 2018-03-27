@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
+import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -94,16 +95,6 @@ public class HomeFragment extends BaseFragment {
 
             switch (msg.what) {
                 case 1:
-                    //加入头布局
-                    // pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
-
-//                    topNewsAdapter.setData(imagelist);
-//                    topNewsAdapter.notifyDataSetChanged();
-//                    tv_indecater.setText((1) + "/" + imagelist.size());
-//                    tv_image_title.setText(imagelist.get(1).getTitle());
-//                    mHandler.sendMessageDelayed(Message.obtain(),
-//                            TOP_NEWS_CHANGE_TIME);
-
 
                     // 设置数据
                     mMZBanner.setPages(imagelist, new MZHolderCreator<BannerViewHolder>() {
@@ -113,10 +104,11 @@ public class HomeFragment extends BaseFragment {
                         }
                     });
                     mMZBanner.start();
-            // 设置动画时长
-                    natv_number.setDuration(2000);
-            // 设置数字增加范围
-                    natv_number.setNumberString("0", "60");
+
+
+                    break;
+                case 2:
+
 
                     break;
                 default:
@@ -318,9 +310,10 @@ public class HomeFragment extends BaseFragment {
             //  findSelectionDyn_Down(1);
             init();
             mCurrentPage = 1;
-            isEnd=false;
+            isEnd = false;
             findNews(mCurrentPage);
             findImageNews();
+            findPaiming();
             return null;
         }
 
@@ -357,7 +350,7 @@ public class HomeFragment extends BaseFragment {
                 pullToRefresh.onRefreshComplete();
             }
 
-              pullToRefresh.onRefreshComplete();
+            pullToRefresh.onRefreshComplete();
         }
     }
 
@@ -366,6 +359,7 @@ public class HomeFragment extends BaseFragment {
         dialog.show();
         findNews(mCurrentPage);
         findImageNews();
+        findPaiming();
 
     }
 
@@ -589,6 +583,49 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+
+    private void findPaiming() {
+
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_MYRANKING_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequsetMyPaiMingBean myPaiMingBean = new Gson().fromJson(s, RequsetMyPaiMingBean.class);
+
+                if (myPaiMingBean.getSuccess()) {
+
+
+                    // 设置动画时长
+                    natv_number.setDuration(1000);
+                    // 设置数字增加范围
+                    natv_number.setNumberString("0", myPaiMingBean.getData().getBranchScore()+"");
+
+                    Message message = Message.obtain();
+                    message.what = 2;
+                    mHandler2.sendMessage(message);
+                }else {
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
 
     private void findImageNews() {
 

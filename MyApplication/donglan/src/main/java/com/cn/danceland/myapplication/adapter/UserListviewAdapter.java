@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +49,10 @@ public class UserListviewAdapter extends BaseAdapter {
         this.data.addAll(bean);
     }
 
-    public void setData(ArrayList<RequsetUserListBean.Data.Content> bean) {
-
-        this.data = bean;
-    }
+//    public void setData(ArrayList<RequsetUserListBean.Data.Content> bean) {
+//
+//        this.data = bean;
+//    }
 
     public void setData(ArrayList<RequsetUserListBean.Data.Content> bean, int type) {
         this.type = type;
@@ -90,13 +91,24 @@ public class UserListviewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(context)
-                .load(data.get(position).getSelfUrl())
-                .apply(options)
-                .into(viewHolder.iv_avatar);
-       // LogUtil.i(data.get(position).getSelfUrl());
-        viewHolder.tv_nickname.setText(data.get(position).getNickName());
+        LogUtil.i(type+"");
+        if (type==3){
+            Glide.with(context)
+                    .load(data.get(position).getSelf_url())
+                    .apply(options)
+                    .into(viewHolder.iv_avatar);
+            LogUtil.i(data.get(position).getSelf_url());
 
+        }else {
+            Glide.with(context)
+                    .load(data.get(position).getSelf_path())
+                    .apply(options)
+                    .into(viewHolder.iv_avatar);
+            LogUtil.i(data.get(position).getSelf_path());
+
+        }
+
+        viewHolder.tv_nickname.setText(data.get(position).getNickName());
         // LogUtil.i(data.get(position).getNickName());
         if (data.get(position).getGender() == 1) {
             viewHolder.iv_sex.setImageResource(R.drawable.img_sex1);

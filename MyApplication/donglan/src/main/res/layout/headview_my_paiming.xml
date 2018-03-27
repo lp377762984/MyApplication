@@ -42,6 +42,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_nick_name2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -51,6 +52,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_daka_nun2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -90,6 +92,7 @@
 
 
             <TextView
+                android:id="@+id/tv_nick_name1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -99,7 +102,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/tv_daka_nun1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -138,6 +141,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_nick_name3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -147,6 +151,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_daka_nun3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -104,6 +104,7 @@ public class RequsetUserListBean {
             private String error_msg;
             private String self_path;
             private String nick_name;
+            private String self_url;
             private int gender;
             private String praise_user_id;
 
@@ -116,6 +117,54 @@ public class RequsetUserListBean {
 //            private String nickName;
 //            private int gender;
 
+
+            public String getUser_id() {
+                return user_id;
+            }
+
+            public void setUser_id(String user_id) {
+                this.user_id = user_id;
+            }
+
+            public String getSelf_path() {
+                return self_path;
+            }
+
+            public void setSelf_path(String self_path) {
+                this.self_path = self_path;
+            }
+
+            public String getNick_name() {
+                return nick_name;
+            }
+
+            public void setNick_name(String nick_name) {
+                this.nick_name = nick_name;
+            }
+
+            public String getSelf_url() {
+                return self_url;
+            }
+
+            public void setSelf_url(String self_url) {
+                this.self_url = self_url;
+            }
+
+            public String getPraise_user_id() {
+                return praise_user_id;
+            }
+
+            public void setPraise_user_id(String praise_user_id) {
+                this.praise_user_id = praise_user_id;
+            }
+
+            public String getError_msg() {
+                return error_msg;
+            }
+
+            public void setError_msg(String error_msg) {
+                this.error_msg = error_msg;
+            }
 
             public String getId() {
                 return id;

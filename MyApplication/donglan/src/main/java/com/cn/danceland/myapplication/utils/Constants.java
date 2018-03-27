@@ -83,7 +83,7 @@ public class Constants extends EaseConstant {
     public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看关注的人
     public static final String FIND_FANS_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看粉丝
     public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appPraise/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
-    public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appDynMsg/findByMsgId";//查看点赞（全部）
+    public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appPraise/findByMsgIdOrderByIdDesc";//查看点赞（全部）
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
     public static final String UPLOADFILE_URL = HOST + "user/uploadFile";//上传文件
     public static final String UPLOADVEDIO = HOST + "appDynMsg/uploadVedio";//上传视频
@@ -93,6 +93,9 @@ public class Constants extends EaseConstant {
 
     public static final String FIND_NEWS_URL = HOST + "appHome/showNews/";//查找新闻列表
     public static final String FIND_IMAGE_NEWS_URL = HOST + "appHome/showCarousel";//查找新闻轮播图片
+    public static final String FIND_BRANCHRANKING = HOST + "/cardenter/branchRanking";//我的门店的排名
+    public static final String FIND_MYRANKING_URL = HOST + "/cardenter/myRanking";//我的排名
+
 
     public static final String SEND_COMMENT_REPLY = HOST + "reply/saveReply";//发布评论
     public static final String DEL_COMMENT_REPLY = HOST + "/reply/delete";//删除发布评论

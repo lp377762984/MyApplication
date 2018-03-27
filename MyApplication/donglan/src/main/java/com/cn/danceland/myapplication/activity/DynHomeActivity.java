@@ -1132,21 +1132,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     mCurrentPage = 0;
                     findCommentList(msgId, mCurrentPage);
 
-//
-//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
-//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//                    commentinfo.setNickName(userInfo.getNickName());
-//                    commentinfo.setContent(content);
-//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
-//                    commentinfo.setReplyUserId(userInfo.getId());
-//                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
-//                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
-//                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
-//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                    String date = sDateFormat.format(new java.util.Date());
-//                    commentinfo.setTime(date);
-//                    myAdater.addFirst(commentinfo);
-//                    myAdater.notifyDataSetChanged();
                     replypos = -1;
                     et_comment.setText("");
                     et_comment.setHint("写评论");
@@ -1177,73 +1162,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         };
 
 
-        final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-
-                Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    ToastUtils.showToastShort("评论成功");
-                    mCurrentPage = 0;
-                    findCommentList(msgId, mCurrentPage);
-
-//
-//                    RequstCommentInfoBean.Items commentinfo = new RequstCommentInfoBean.Items();
-//                    Data userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//                    commentinfo.setNickName(userInfo.getNickName());
-//                    commentinfo.setContent(content);
-//                    commentinfo.setSelfUrl(userInfo.getSelfAvatarPath());
-//                    commentinfo.setReplyUserId(userInfo.getId());
-//                    commentinfo.setReplyNickName(data.get(replypos).getNickName());
-//                    commentinfo.setReplyUser(data.get(replypos).getReplyUserId());
-//                    commentinfo.setReplySelfUrl(data.get(replypos).getSelfUrl());
-//                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                    String date = sDateFormat.format(new java.util.Date());
-//                    commentinfo.setTime(date);
-//                    myAdater.addFirst(commentinfo);
-//                    myAdater.notifyDataSetChanged();
-                    replypos = -1;
-                    et_comment.setText("");
-                    et_comment.setHint("写评论");
-                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
-                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
-                    slideFromBottomPopup.dismiss();
-                } else {
-                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                dialog.dismiss();
-                LogUtil.i(volleyError.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("mid", msgId);
-                map.put("content", content);
-                map.put("parentId", parentId);
-                map.put("userId", replyUserId);
-                return map;
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-
-        };
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 

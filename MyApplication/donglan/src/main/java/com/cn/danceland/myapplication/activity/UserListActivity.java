@@ -89,6 +89,12 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
 
     }
+//    class StrBean {
+//        public Integer page;
+//        public Integer size;
+//        public String reply_msg_id;
+//        public String msg_id;
+//    }
 
     private void initView() {
         tv_tiltle = findViewById(R.id.tv_tiltle);
@@ -228,7 +234,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                 Gson gson = new Gson();
 
                 UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
-                LogUtil.i(UserListBean.toString());
+             //   LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
@@ -359,9 +365,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             public void onResponse(JSONObject jsonObject) {
                 dialog.dismiss();
                 Gson gson = new Gson();
-
+                LogUtil.i(jsonObject.toString());
                 UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
-                LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
@@ -485,17 +490,17 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
         StrBean strBean = new StrBean();
         strBean.page = page;
-        strBean.reply_msg_id = msgId;
+        strBean.msg_id = msgId;
         strBean.size = 20;
 
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 dialog.dismiss();
                 Gson gson = new Gson();
-
+                LogUtil.i(jsonObject.toString());
                 UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
-                LogUtil.i(UserListBean.toString());
+            //    LogUtil.i(jsonObject.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
@@ -506,7 +511,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                             setEnd();
                         }
 
-                        LogUtil.i(data.toString());
+
                         mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data, type);
                         mListviewAdapter.notifyDataSetChanged();
 
