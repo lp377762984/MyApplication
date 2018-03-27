@@ -88,7 +88,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
         }
 
         if(startTime!=null){
-            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime+"000"));
+            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
         }else{
             siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
         }

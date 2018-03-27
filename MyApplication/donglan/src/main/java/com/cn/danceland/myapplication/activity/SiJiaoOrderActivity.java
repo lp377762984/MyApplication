@@ -228,7 +228,7 @@ public class SiJiaoOrderActivity extends Activity {
         ed_time = findViewById(R.id.ed_time);
         ed_time.setText(nowyear+"年"+month+"月"+monthDay+"日");
         strTime = nowyear+"-"+month+"-"+monthDay;
-        startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd")*1000;
+        startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
         endMill = (long)days*86400000+startMill;
         endTime = TimeUtils.timeStamp2Date(endMill+"","yyyy-MM-dd");
 
@@ -815,7 +815,7 @@ public class SiJiaoOrderActivity extends Activity {
                 ed_time.setText(syear+"年"+smonth+"月"+sdate+"日");
                 strTime = syear+"-"+smonth+"-"+sdate;
 
-                startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd")*1000;
+                startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
                 endMill = (long)days*86400000+startMill;
                 endTime = TimeUtils.timeStamp2Date(endMill+"","yyyy-MM-dd");
             }

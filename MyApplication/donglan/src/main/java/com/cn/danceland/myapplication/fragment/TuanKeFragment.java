@@ -152,7 +152,7 @@ public class TuanKeFragment extends BaseFragment {
         if("小团课".equals(from)){
             siJiaoYuYueConBean.setCourse_type_id(course_type_id);
         }
-        siJiaoYuYueConBean.setStart_date(Long.valueOf(startTime+"000"));
+        siJiaoYuYueConBean.setStart_date(Long.valueOf(startTime));
         //siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime+"000"));
 
         String s = gson.toJson(siJiaoYuYueConBean);

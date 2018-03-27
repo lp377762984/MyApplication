@@ -114,6 +114,7 @@ public class MessageActivity extends FragmentActivity {
 
         showFragment("5");
         SPUtils.setInt("pinglunNum", 0);
+        tablayout.getTabAt(4).select();
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
