@@ -28,13 +28,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TimeAxisBean;
 import com.cn.danceland.myapplication.bean.TimeAxisCon;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -97,6 +100,7 @@ public class SiJiaoDetailActivity extends Activity {
     long hourMill = 3600000;
     ArrayList<Long> startMillArr;
     ArrayList<Integer> requestStatusArr;
+    Data data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +118,7 @@ public class SiJiaoDetailActivity extends Activity {
 
         gson = new Gson();
 
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         startTimeTv = getIntent().getStringExtra("startTime");
         startTime = TimeUtils.date2TimeStamp(startTimeTv+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
         endTimeTv = getIntent().getStringExtra("endTime");
@@ -318,17 +323,13 @@ public class SiJiaoDetailActivity extends Activity {
                     for(int i=0;i<data.size();i++){
                             if(data.get(i).getStart_time()!=null){
                                 Integer start_time = data.get(i).getStart_time();
-                                setTimeLine(data.get(i).getStatus(),start_time*60000,Long.valueOf(data.get(i).getCourse_date()));
+                                setTimeLine(data.get(i).getStatus(),start_time*60000);
                             }
                     }
-
-//                    if(myYuYueString!=null){
-//                        String[] split = myYuYueString.split(",");
-//                        setTimeLine(1,Long.valueOf(split[1]),Long.valueOf(startTime+"000"));
-//                    }
-                    list_1.setAdapter(myListF);
-                    list_2.setAdapter(myListS);
                 }
+                getHistory();
+                list_1.setAdapter(myListF);
+                list_2.setAdapter(myListS);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -343,6 +344,65 @@ public class SiJiaoDetailActivity extends Activity {
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+    }
+
+
+    private void getHistory(){
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        if(role!=null||!"".equals(role)){
+            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+        }else{
+            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        }
+
+        if(startTime!=null){
+            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
+        }else{
+            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
+        }
+        String s = gson.toJson(siJiaoYuYueConBean);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
+                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
+                if(siJiaoRecordBean!=null){
+                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
+                    if(data!=null){
+                        List<SiJiaoRecordBean.Content> content = data.getContent();
+                        if(content!=null){
+                            for(int i=0;i<content.size();i++){
+                                Integer start_time = content.get(i).getStart_time();
+                                setTimeLine(content.get(i).getStatus(),start_time*60000);
+                            }
+                        }else{
+                            ToastUtils.showToastShort("当天无预约记录");
+                        }
+
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
         };
 
         MyApplication.getHttpQueues().add(jsonObjectRequest);
@@ -378,14 +438,10 @@ public class SiJiaoDetailActivity extends Activity {
                 if(rootBean!=null){
                     Integer success = Integer.valueOf(rootBean.data);
                     if(success>0){
-//                        String startDate = startTime;
-//                        SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
-//                        SharedPreferences.Editor edit = myYuYue.edit();
-//                        edit.putString(startDate,"1,"+startM*60000);
-//                        edit.apply();
-//                        setTimeLine(1,startM*60000,Long.valueOf(startDate+"000"));
-//                        list_1.setAdapter(myListF);
-//                        list_2.setAdapter(myListS);
+                        Long startmill = Long.valueOf(startTime)+startM*60000;
+                        setTimeLine(1,startmill);
+                        list_1.setAdapter(myListF);
+                        list_2.setAdapter(myListS);
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("失败！请重新预约！");
@@ -559,7 +615,7 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
 
-    private void setTimeLine(int status,long startTime,long startDate){
+    private void setTimeLine(int status,long startTime){
         ArrayList<Long> longArr = new ArrayList<>();
         long nine = hourMill*9;
         long nine_half = hourMill*9+1800000;
