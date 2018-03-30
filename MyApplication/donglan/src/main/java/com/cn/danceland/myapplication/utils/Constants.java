@@ -12,9 +12,9 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
    // public static final String HOST = " http://192.168.1.115:8003/";//
-  //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    //public static final String HOST = " http://192.168.1.115:8003/";//
-    public static final String HOST = " http://192.168.1.118:8003/";//
+    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+    public static final String HOST = " http://192.168.1.115:8003/";//
+    //public static final String HOST = " http://192.168.1.118:8003/";//
 
     //public static final String HOST = " http://192.168.1.115:8003/";//王丽萍服务器
 
@@ -188,7 +188,8 @@ public class Constants extends EaseConstant {
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
     public static final String FREECOURSELIST = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
     public static final String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
-    public static final String PINGJIA = HOST+"evaluate/insertBatch";//评价接口
+    public static final String PINGJIA = HOST+"evaluate/save";//评价接口
+    public static final String FINDPINGJIA = HOST+"evaluate/findById/";//查询一条评价
     public static final String ENTERCOURSE = HOST+"appCourse/courseAppointConfirm ";//确认私教
     public static final String SCAN_QRCODE = HOST+"qrcode";//扫码入场
 
