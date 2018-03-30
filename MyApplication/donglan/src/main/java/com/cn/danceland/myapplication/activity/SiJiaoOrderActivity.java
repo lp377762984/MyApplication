@@ -75,7 +75,7 @@ public class SiJiaoOrderActivity extends Activity {
     View line7;
     ImageView back_img,iv_phonebook;
     BuySiJiaoBean.Content itemContent;
-    TextView goods_name,goods_type,goods_time,goods_price,tv_jiaolian,ed_time;
+    TextView goods_name,goods_type,goods_time,goods_price,tv_jiaolian,ed_time,tv_pay_price;
     ListPopup listPopup;
     List<JiaoLianBean.Data> JiaoLianList;
     Gson gson;
@@ -97,6 +97,7 @@ public class SiJiaoOrderActivity extends Activity {
     Long startMill;
     Long endMill;
     int course_id;
+    int dingjinprice = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,6 +136,12 @@ public class SiJiaoOrderActivity extends Activity {
         lp_month  = inflate1.findViewById(R.id.lp_month);
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(SiJiaoOrderActivity.this);
+
+        if("1".equals(type)){
+            tv_pay_price.setText("￥"+dingjinprice);
+        }else {
+            tv_pay_price.setText(price);
+        }
 
     }
 
@@ -224,7 +231,7 @@ public class SiJiaoOrderActivity extends Activity {
 
         rl_jiaolian = findViewById(R.id.rl_jiaolian);
 
-
+        tv_pay_price = findViewById(R.id.tv_pay_price);
         ed_time = findViewById(R.id.ed_time);
         ed_time.setText(nowyear+"年"+month+"月"+monthDay+"日");
         strTime = nowyear+"-"+month+"-"+monthDay;
@@ -549,13 +556,13 @@ public class SiJiaoOrderActivity extends Activity {
         }
         commitDepositBean.setPlatform(2);
         commitDepositBean.setPay_way("1");
-        commitDepositBean.setReceive("100");
-        commitDepositBean.setPrice("100");
+        commitDepositBean.setReceive(dingjinprice+"");
+        commitDepositBean.setPrice(dingjinprice+"");
         extends_params.setBus_type("2");
         extends_params.setDeposit_type("2");
         extends_params.setAdmin_emp_id(employee_id+"");
         extends_params.setAdmin_emp_name(employee_name);
-        extends_params.setMoney("100");
+        extends_params.setMoney(dingjinprice+"");
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
 
@@ -605,7 +612,12 @@ public class SiJiaoOrderActivity extends Activity {
         PayBean payBean = new PayBean();
         payBean.id = id;
         payBean.order_no = 12345 + "";
-        payBean.price = price;
+        if("1".equals(type)){
+            payBean.price = dingjinprice;
+        }else{
+            payBean.price = price;
+        }
+
         if("1".equals(forme)){
             payBean.bus_type = 57;
             if("1".equals(type)){

@@ -84,9 +84,9 @@ public class SiJiaoFragment extends BaseFragment {
                     up_img.setVisibility(View.GONE);
                 }else{
                     if(role!=null){
-                        getChildData(jiaolianContent.get(groupPosition).getId());
+                        getChildData(jiaolianContent.get(groupPosition).getId(),jiaolianContent.get(groupPosition).getCourse_category()+"");
                     }else{
-                        getChildData(myCourseList.get(groupPosition).getId());
+                        getChildData(myCourseList.get(groupPosition).getId(),myCourseList.get(groupPosition).getCourse_category()+"");
                     }
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
@@ -187,7 +187,7 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
 
-    private void getChildData(Integer courseid) {
+    private void getChildData(Integer courseid, final String course_category) {
 
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
@@ -214,7 +214,7 @@ public class SiJiaoFragment extends BaseFragment {
                         }
                         childContent = data.getContent();
                         if(childContent!=null){
-                            childListAdapter = new MyListAdapter(childContent);
+                            childListAdapter = new MyListAdapter(childContent,course_category);
                             mylist.setAdapter(childListAdapter);
                             //childListAdapter.notifyDataSetChanged();
                             //childListAdapter.notifyDataSetChanged();
@@ -521,9 +521,11 @@ public class SiJiaoFragment extends BaseFragment {
 
     private class MyListAdapter extends BaseAdapter{
         List<SiJiaoRecordBean.Content> list;
+        String course_category;
 
-        MyListAdapter(List<SiJiaoRecordBean.Content> list){
+        MyListAdapter(List<SiJiaoRecordBean.Content> list,String course_category){
             this.list = list;
+            this.course_category = course_category;
         }
 
         @Override
@@ -573,14 +575,19 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder1.tv_status.setText("已取消");
             }else if(status==4){
                 viewHolder1.tv_status.setText("已签到");
-                viewHolder1.tv_pingfen.setText("去评分");
+                if(list.get(position).getEvaluate_id()>0){
+                    viewHolder1.tv_pingfen.setText("查看评价");
+                }else{
+                    viewHolder1.tv_pingfen.setText("去评分");
+                }
             }
 
             viewHolder1.tv_pingfen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //if(list.get(position).getStatus()==4){
-                        startActivity(new Intent(mActivity, PingJiaActivity.class));
+                        startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item",list.get(position)).
+                                putExtra("course_category",course_category).putExtra("evaluate_id",list.get(position).getEvaluate_id()));
                     //}
                 }
             });

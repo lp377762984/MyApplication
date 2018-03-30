@@ -400,6 +400,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.AdviseDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyBaseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyDetailActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

@@ -66,8 +66,9 @@ import static com.xiaomi.smack.packet.h.a.s;
  */
 
 public class SiJiaoDetailActivity extends Activity {
-    ArrayList<Integer> arrPosition;
-    ArrayList<Integer> arrStatus;
+    ArrayList<Integer> arrPositionF,arrPositionS;
+    ArrayList<Integer> arrStatusF,arrStatusS;
+    HashMap<Integer,Integer> arrPosition,arrStatus;
     ListView list_1,list_2;
     LinearLayout ll_time;
     LoopView loopview;
@@ -204,12 +205,24 @@ public class SiJiaoDetailActivity extends Activity {
         list_1.setDividerHeight(0);
         list_2 = findViewById(R.id.list_2);
         list_2.setDividerHeight(0);
-        arrPosition = new ArrayList<>();
-        arrStatus = new ArrayList<>();
+        arrPosition = new HashMap<>();
+        arrPositionF = new ArrayList<>();
+        arrPositionS = new ArrayList<>();
 
-        myListF = new MyListF(arrPosition,arrStatus);
+        for(int i = 0;i < 23;i++){
+            arrPosition.put(i,0);
+        }
 
-        myListS = new MyListS(arrPosition,arrStatus);
+        arrStatus = new HashMap<>();
+        arrStatusF = new ArrayList<>();
+        arrStatusS = new ArrayList<>();
+        for(int i = 0;i < 23;i++){
+            arrStatus.put(i,0);
+        }
+        myListF = new MyListF(arrPositionF,arrStatusF);
+        myListS = new MyListS(arrPositionS,arrStatusS);
+        list_1.setAdapter(myListF);
+        list_2.setAdapter(myListS);
 //        list_1.setAdapter(myListF);
 //        list_2.setAdapter(myListS);
         list_2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -223,11 +236,7 @@ public class SiJiaoDetailActivity extends Activity {
                 }
             }
         });
-        try {
-            getData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
     }
 
     private void showTime() {
@@ -299,7 +308,7 @@ public class SiJiaoDetailActivity extends Activity {
 
     }
 
-    private void getData() throws JSONException {
+    private void getData(){
 
         TimeAxisCon timeAxis = new TimeAxisCon();
         if(item!=null){
@@ -310,8 +319,7 @@ public class SiJiaoDetailActivity extends Activity {
         timeAxis.setWeek(weekDay);
         timeAxis.setCourse_date(Long.valueOf(startTime));
         String s = gson.toJson(timeAxis);
-        JSONObject jsonObject = new JSONObject(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
@@ -328,8 +336,8 @@ public class SiJiaoDetailActivity extends Activity {
                     }
                 }
                 getHistory();
-                list_1.setAdapter(myListF);
-                list_2.setAdapter(myListS);
+//                list_1.setAdapter(myListF);
+//                list_2.setAdapter(myListS);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -354,7 +362,7 @@ public class SiJiaoDetailActivity extends Activity {
     private void getHistory(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null||!"".equals(role)){
+        if(role!=null){
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
@@ -381,6 +389,37 @@ public class SiJiaoDetailActivity extends Activity {
                                 Integer start_time = content.get(i).getStart_time();
                                 setTimeLine(content.get(i).getStatus(),start_time*60000);
                             }
+                            arrPositionS.clear();
+                            arrStatusS.clear();
+                            arrStatusF.clear();
+                            arrPositionF.clear();
+                            if(arrPosition.size()>0){
+                                for(int j=0;j<arrPosition.size();j++){
+                                    if(arrPosition.get(j)!=0){
+                                        if(j%2==0){
+                                            arrPositionF.add(3);
+                                            arrStatusF.add(arrStatus.get(j));
+                                        }else{
+                                            arrPositionS.add(3);
+                                            arrStatusS.add(arrStatus.get(j));
+                                        }
+                                    }else{
+                                        if(j%2==0){
+                                            arrPositionF.add(0);
+                                            arrStatusF.add(0);
+                                        }else{
+                                            arrPositionS.add(0);
+                                            arrStatusS.add(0);
+                                        }
+                                    }
+                                }
+                            }
+                            myListF.notifyDataSetChanged();
+                            myListS.notifyDataSetChanged();
+//                            arrPositionF.clear();
+//                            arrStatusF.clear();
+//                            arrPositionS.clear();
+//                            arrStatusS.clear();
                         }else{
                             ToastUtils.showToastShort("当天无预约记录");
                         }
@@ -438,10 +477,10 @@ public class SiJiaoDetailActivity extends Activity {
                 if(rootBean!=null){
                     Integer success = Integer.valueOf(rootBean.data);
                     if(success>0){
-                        Long startmill = Long.valueOf(startTime)+startM*60000;
-                        setTimeLine(1,startmill);
-                        list_1.setAdapter(myListF);
-                        list_2.setAdapter(myListS);
+                        for(int i = 0;i < 23;i++){
+                            arrPosition.put(i,0);
+                        }
+                        getHistory();
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("失败！请重新预约！");
@@ -474,13 +513,13 @@ public class SiJiaoDetailActivity extends Activity {
 
 
     private class MyListF extends BaseAdapter{
-        ArrayList<Integer> arrPosition;
-        ArrayList<Integer> arrStatus;
+        ArrayList<Integer> arrPositionF;
+        ArrayList<Integer> arrStatusF;
 
 
         MyListF(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
-            this.arrPosition = arrPosition;
-            this.arrStatus = arrStatus;
+            this.arrPositionF = arrPosition;
+            this.arrStatusF = arrStatus;
         }
 
         @Override
@@ -512,21 +551,22 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            for (int i=0;i<arrPosition.size();i++){
-                if(arrPosition.get(i)/2==position){
-                    if(arrStatus.get(i)==1){
+            //for (int i=0;i<arrPosition.size();i++){
+            if(arrPositionF.size()>0){
+                if(arrPositionF.get(position)!=0){
+                    if(arrStatusF.get(position)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==2){
+                    }else if(arrStatusF.get(position)==2){
                         viewHolder.tv_status.setText("已确认未签到");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==3){
+                    }else if(arrStatusF.get(position)==3){
                         viewHolder.tv_status.setText("已取消");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==4){
+                    }else if(arrStatusF.get(position)==4){
                         viewHolder.tv_status.setText("已签到");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
@@ -535,25 +575,27 @@ public class SiJiaoDetailActivity extends Activity {
                 }else{
                     viewHolder.shixian_item1.setVisibility(View.GONE);
                 }
-
             }
+
+               // break;
+            //}
             return convertView;
         }
     }
 
     private class MyListS extends BaseAdapter{
-        ArrayList<Integer> arrPosition;
-        ArrayList<Integer> arrStatus;
+        ArrayList<Integer> arrPositionS;
+        ArrayList<Integer> arrStatusS;
 
 
         MyListS(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
-            this.arrPosition = arrPosition;
-            this.arrStatus = arrStatus;
+            this.arrPositionS = arrPosition;
+            this.arrStatusS = arrStatus;
         }
 
         @Override
         public int getCount() {
-            return 12;
+            return 11;
         }
 
         @Override
@@ -580,31 +622,39 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            for (int i=0;i<arrPosition.size();i++){
-                if(arrPosition.get(i)%2==position){
-                    if(arrStatus.get(i)==1){
+            //for (int i=0;i<arrPosition.size();i++){
+            if(arrPositionS.size()>0){
+                if(arrPositionS.get(position)!=0){
+                    if(arrStatusS.get(position)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==2){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==2){
                         viewHolder.tv_status.setText("已确认未签到");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==3){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==3){
                         viewHolder.tv_status.setText("已取消");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==4){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==4){
                         viewHolder.tv_status.setText("已签到");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
                     }
                 }else{
                     viewHolder.xuxian_item1.setVisibility(View.GONE);
+                    viewHolder.xuxian_item.setVisibility(View.VISIBLE);
                 }
 
             }
+
+                //break;
+            //}
             return convertView;
         }
     }
@@ -670,75 +720,22 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
     private void arrAdd(long starTime,int status,ArrayList<Long> longArr){
-
-        if(status==1){
             for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(1);
-                            }
+                //if(arrPosition.size()<=longArr.size()){
+                    if(longArr.get(i)==starTime){
+                        arrPosition.put(i,1);
+                        if(status==1){
+                            arrStatus.put(i,1);
+                        }else if(status==2){
+                            arrStatus.put(i,2);
+                        }else if(status==3){
+                            arrStatus.put(i,3);
+                        }else if(status==4){
+                            arrStatus.put(i,4);
                         }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(1);
                     }
-                }
+                //}
             }
-        }else if(status==2){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(2);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(2);
-                    }
-
-                }
-            }
-        }else if(status==3){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(3);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(3);
-                    }
-
-                }
-            }
-        }else if(status==4){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(4);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(4);
-                    }
-
-                }
-            }
-        }
 
     }
 
