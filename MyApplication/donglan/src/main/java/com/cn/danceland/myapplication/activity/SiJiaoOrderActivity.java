@@ -137,12 +137,6 @@ public class SiJiaoOrderActivity extends Activity {
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(SiJiaoOrderActivity.this);
 
-        if("1".equals(type)){
-            tv_pay_price.setText("￥"+dingjinprice);
-        }else {
-            tv_pay_price.setText(price);
-        }
-
     }
 
     private void getJiaoLian(){
@@ -403,6 +397,11 @@ public class SiJiaoOrderActivity extends Activity {
             rl_jiaolian.setVisibility(View.VISIBLE);
         }
 
+        if("1".equals(type)){
+            tv_pay_price.setText("￥"+dingjinprice);
+        }else {
+            tv_pay_price.setText(price+"");
+        }
         getJiaoLian();
     }
 
