@@ -400,7 +400,7 @@ public class SiJiaoOrderActivity extends Activity {
         if("1".equals(type)){
             tv_pay_price.setText("￥"+dingjinprice);
         }else {
-            tv_pay_price.setText(price+"");
+            tv_pay_price.setText("￥"+price);
         }
         getJiaoLian();
     }
