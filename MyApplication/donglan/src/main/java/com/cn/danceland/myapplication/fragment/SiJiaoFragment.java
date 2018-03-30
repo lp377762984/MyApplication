@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CourseActivity;
+import com.cn.danceland.myapplication.activity.CourseDetailActivity;
 import com.cn.danceland.myapplication.activity.PingJiaActivity;
 import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
@@ -438,15 +439,16 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_shengyu = convertView.findViewById(R.id.sijiao_shengyu);
                 viewHolder.sijiao_date = convertView.findViewById(R.id.sijiao_date);
                 viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
+                viewHolder.sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
+                viewHolder.sijiao_detail = convertView.findViewById(R.id.sijiao_detail);
 
                 convertView.setTag(viewHolder);
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            RelativeLayout sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
             final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
             final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
-            sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
+            viewHolder.sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(list.get(groupPosition).getCourse_category()==1){
@@ -484,6 +486,18 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_jiaolian.setVisibility(View.GONE);
             }
 
+            viewHolder.sijiao_detail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(mActivity, CourseDetailActivity.class).
+                            putExtra("item",list.get(groupPosition)).
+                            putExtra("startTime",startTime).
+                            putExtra("endTime",endTime)
+                            .putExtra("role",role)
+                            .putExtra("auth",auth));
+                }
+            });
+
             return convertView;
         }
 
@@ -515,6 +529,7 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
      class ViewHolder{
+        RelativeLayout sijiao_detail,sijiao_yuyue;
         MyListView mylist;
         TextView sijiao_title,sijiao_jiaolian,sijiao_num,sijiao_shengyu,sijiao_date,sijiao_fangshi;
     }

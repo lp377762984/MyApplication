@@ -404,6 +404,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.BodyDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CourseDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SmallTuankeDetailActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
