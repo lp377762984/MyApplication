@@ -15,9 +15,17 @@ public class Data implements Serializable {
     private Member member;
     private List<Roles> roles;
     private String verCode;
-
+    private Branch branch;
     public String getVerCode() {
         return verCode;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 
     public void setVerCode(String verCode) {
@@ -1318,6 +1326,146 @@ public class Data implements Serializable {
         }
         public String getDepartment_name() {
             return department_name;
+        }
+
+    }
+
+    public class Branch implements Serializable{
+
+        private int id;
+        private int parent_id;
+        private String name;
+        private String order_no;
+        private int level;
+        private boolean leaf;
+        private int delete_remark;
+        private String remark;
+        private String creater;
+        private long create_time;
+        private String updater;
+        private String update_time;
+        private String hx_groupid;
+        private String branch_name;
+        private int branch_id;
+        private String children;
+        private String member_no;
+        public void setId(int id) {
+            this.id = id;
+        }
+        public int getId() {
+            return id;
+        }
+
+        public void setParent_id(int parent_id) {
+            this.parent_id = parent_id;
+        }
+        public int getParent_id() {
+            return parent_id;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getName() {
+            return name;
+        }
+
+        public void setOrder_no(String order_no) {
+            this.order_no = order_no;
+        }
+        public String getOrder_no() {
+            return order_no;
+        }
+
+        public void setLevel(int level) {
+            this.level = level;
+        }
+        public int getLevel() {
+            return level;
+        }
+
+        public void setLeaf(boolean leaf) {
+            this.leaf = leaf;
+        }
+        public boolean getLeaf() {
+            return leaf;
+        }
+
+        public void setDelete_remark(int delete_remark) {
+            this.delete_remark = delete_remark;
+        }
+        public int getDelete_remark() {
+            return delete_remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setCreater(String creater) {
+            this.creater = creater;
+        }
+        public String getCreater() {
+            return creater;
+        }
+
+        public void setCreate_time(long create_time) {
+            this.create_time = create_time;
+        }
+        public long getCreate_time() {
+            return create_time;
+        }
+
+        public void setUpdater(String updater) {
+            this.updater = updater;
+        }
+        public String getUpdater() {
+            return updater;
+        }
+
+        public void setUpdate_time(String update_time) {
+            this.update_time = update_time;
+        }
+        public String getUpdate_time() {
+            return update_time;
+        }
+
+        public void setHx_groupid(String hx_groupid) {
+            this.hx_groupid = hx_groupid;
+        }
+        public String getHx_groupid() {
+            return hx_groupid;
+        }
+
+        public void setBranch_name(String branch_name) {
+            this.branch_name = branch_name;
+        }
+        public String getBranch_name() {
+            return branch_name;
+        }
+
+        public void setBranch_id(int branch_id) {
+            this.branch_id = branch_id;
+        }
+        public int getBranch_id() {
+            return branch_id;
+        }
+
+        public void setChildren(String children) {
+            this.children = children;
+        }
+        public String getChildren() {
+            return children;
+        }
+
+        public void setMember_no(String member_no) {
+            this.member_no = member_no;
+        }
+        public String getMember_no() {
+            return member_no;
         }
 
     }

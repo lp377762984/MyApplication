@@ -131,16 +131,21 @@
         <activity
             android:name=".activity.RecommendActivity"
             android:screenOrientation="portrait" />
-
+  <!--      <activity
+            android:name=".activity.MyChatListActivity"
+            android:screenOrientation="portrait" />-->
+        <activity android:name=".activity.MyChatListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name=".activity.ChatActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MyQRCodeActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.ScanerCodeActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activity.MyQRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ScanerCodeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MyChatActivity"
             android:screenOrientation="portrait" />
@@ -394,12 +399,16 @@
         <activity
             android:name=".activity.PingJiaActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.QRCodeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AdviseRecordActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.AdviseDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.QRCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AdviseRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AdviseDetailActivity"
+            android:screenOrientation="portrait" />
+
 
         <receiver
             android:name=".Receiver.MessageReceiver"

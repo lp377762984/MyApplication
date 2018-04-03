@@ -225,7 +225,7 @@ public class PotentialDetailsActivity extends FragmentActivity implements View.O
                 public void onClick(View v) {
 
                     //badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
-                    if (index == 2 && current_page == 2) {
+                    if (index == 2 ) {
                         listPopup.showPopupWindow(v);
                     }
                     mViewPager.setCurrentItem(index);

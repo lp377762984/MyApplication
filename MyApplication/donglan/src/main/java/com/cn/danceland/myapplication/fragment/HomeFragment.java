@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,10 +35,12 @@ import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.activity.PaiMingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -188,7 +191,18 @@ public class HomeFragment extends BaseFragment {
         ll_paiming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(mActivity, PaiMingActivity.class));
+                Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(data.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("您暂时没有排名");
+                    return;
+                }
+                if (TextUtils.equals(data.getMember().getAuth(),"1")){
+                    ToastUtils.showToastShort("您暂时没有排名");
+                    return;
+                }
+
+                startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming",myPaiMingBean.getData().getBranchRanking()).putExtra("cishu",myPaiMingBean.getData().getBranchScore()));
+
             }
         });
         ll_riji.setOnClickListener(new View.OnClickListener() {
@@ -583,14 +597,17 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    private RequsetMyPaiMingBean myPaiMingBean;
 
     private void findPaiming() {
 
         StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_MYRANKING_URL, new Response.Listener<String>() {
+
+
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequsetMyPaiMingBean myPaiMingBean = new Gson().fromJson(s, RequsetMyPaiMingBean.class);
+                myPaiMingBean = new Gson().fromJson(s, RequsetMyPaiMingBean.class);
 
                 if (myPaiMingBean.getSuccess()) {
 

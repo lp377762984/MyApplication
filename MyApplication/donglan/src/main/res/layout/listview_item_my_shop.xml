@@ -7,7 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#fff">
+        android:background="#fff"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/iv_shop_logo"
@@ -43,13 +46,19 @@
                 android:textColor="#999999"
                 android:textSize="16sp" />
         </RelativeLayout>
-        <ImageView
+        <RadioButton
+            android:id="@+id/cb_default"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:layout_height="wrap_content" />
+<!--        <ImageView
             android:id="@+id/cb_default"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/img_cb"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"/>-->
     </LinearLayout>
 
 

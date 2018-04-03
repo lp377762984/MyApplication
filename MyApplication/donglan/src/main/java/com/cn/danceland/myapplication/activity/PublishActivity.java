@@ -447,6 +447,7 @@ public class PublishActivity extends Activity {
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_DYN_MSG, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
                 if ("true".equals(rootBean.success)) {
                     ToastUtils.showToastShort("发布成功！");

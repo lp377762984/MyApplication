@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,7 +15,11 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.AutoLocatedPopup;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -226,7 +231,13 @@ public class DiscoverFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, AddFriendsActivity.class));
                 break;
             case R.id.iv_photo://发布动态
+                Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
+
+                if (TextUtils.isEmpty(data.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
 
 
 //                Intent intent = new Intent(mActivity,  QRCodeActivity.class);

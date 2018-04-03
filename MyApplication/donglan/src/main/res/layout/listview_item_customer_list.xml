@@ -77,14 +77,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:src="@drawable/img_call_phone_grey" />
+        android:src="@drawable/img_sx" />
     <ImageView
         android:id="@+id/iv_callphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:src="@drawable/img_call_phone_grey" />
+        android:src="@drawable/img_call" />
 
 </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
+import com.cn.danceland.myapplication.activity.MyChatListActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
@@ -57,13 +59,17 @@ import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.StoreBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.hyphenate.chat.EMClient;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -92,7 +98,26 @@ public class ShopFragment extends BaseFragment {
     ArrayAdapter arrayAdapter;
     String role;
     List<Data.Roles> roles;
-    HashMap<String,String> roleMap,authMap;
+    HashMap<String, String> roleMap, authMap;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        if (event.getEventCode()==20001){
+            refresh();
+        }
+    }
 
     @Override
     public View initViews() {
@@ -105,7 +130,7 @@ public class ShopFragment extends BaseFragment {
         spinner = v.findViewById(R.id.spinner);
         setMap();
         addRoles();
-        arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
+        arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
         //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -147,63 +172,69 @@ public class ShopFragment extends BaseFragment {
     }
 
 
-    private void setMap(){
+    private void setMap() {
         roleMap = new HashMap<>();
         authMap = new HashMap<>();
-        roleMap.put("会籍顾问","1");
-        roleMap.put("教练","2");
-        roleMap.put("前台","3");
-        roleMap.put("店长","4");
-        roleMap.put("会籍主管","5");
-        roleMap.put("教练主管","6");
-        roleMap.put("前台主管","7");
-        roleMap.put("操教","8");
-        roleMap.put("出纳","9");
-        roleMap.put("收银","10");
-        roleMap.put("兼职教练","11");
+        roleMap.put("会籍顾问", "1");
+        roleMap.put("教练", "2");
+        roleMap.put("前台", "3");
+        roleMap.put("店长", "4");
+        roleMap.put("会籍主管", "5");
+        roleMap.put("教练主管", "6");
+        roleMap.put("前台主管", "7");
+        roleMap.put("操教", "8");
+        roleMap.put("出纳", "9");
+        roleMap.put("收银", "10");
+        roleMap.put("兼职教练", "11");
 
-        authMap.put("潜客","1");
-        authMap.put("会员","2");
+        authMap.put("潜客", "1");
+        authMap.put("会员", "2");
 
     }
 
+    public void refresh() {
+        if (myAdapter!=null){
+            myAdapter.notifyDataSetChanged();
+       //     LogUtil.i("刷新");
+        }
 
+    }
 
     private void addRoles() {
-        if(info!=null){
+        if (info != null) {
             roles = info.getRoles();
-            if(roles!=null&&roles.size()>0){
-                for(int i=0;i<roles.size();i++){
-                    if(roles.get(i).getRole_type()==1){
+            if (roles != null && roles.size() > 0) {
+                for (int i = 0; i < roles.size(); i++) {
+                    if (roles.get(i).getRole_type() == 1) {
                         roleList.add("会籍顾问");
-                    }else if(roles.get(i).getRole_type()==2){
+                    } else if (roles.get(i).getRole_type() == 2) {
                         roleList.add("教练");
-                    }else if(roles.get(i).getRole_type()==3){
+                    } else if (roles.get(i).getRole_type() == 3) {
                         roleList.add("前台");
-                    }else if(roles.get(i).getRole_type()==4){
+                    } else if (roles.get(i).getRole_type() == 4) {
                         roleList.add("店长");
-                    }else if(roles.get(i).getRole_type()==5){
+                    } else if (roles.get(i).getRole_type() == 5) {
                         roleList.add("会籍主管");
-                    }else if(roles.get(i).getRole_type()==6){
+                    } else if (roles.get(i).getRole_type() == 6) {
                         roleList.add("教练主管");
-                    }else if(roles.get(i).getRole_type()==7){
+                    } else if (roles.get(i).getRole_type() == 7) {
                         roleList.add("前台主管");
-                    }else if(roles.get(i).getRole_type()==8){
+                    } else if (roles.get(i).getRole_type() == 8) {
                         roleList.add("操教");
-                    }else if(roles.get(i).getRole_type()==9){
+                    } else if (roles.get(i).getRole_type() == 9) {
                         roleList.add("出纳");
-                    }else if(roles.get(i).getRole_type()==10){
+                    } else if (roles.get(i).getRole_type() == 10) {
                         roleList.add("收银");
-                    }else if(roles.get(i).getRole_type()==11){
+                    } else if (roles.get(i).getRole_type() == 11) {
                         roleList.add("兼职教练");
                     }
                 }
             }
 
-            if(info.getMember()!=null){
-                if("1".equals(info.getMember().getAuth())){
+            if (info.getMember() != null) {
+                if ("1".equals(info.getMember().getAuth())) {
                     roleList.add("潜客");
-                }else if("2".equals(info.getMember().getAuth())){
+                } else if ("2".equals(info.getMember().getAuth())) {
                     roleList.add("会员");
                 }
             }
@@ -260,26 +291,29 @@ public class ShopFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
+    MyAdapter myAdapter;
+
     private void getMenus() {
         final String id;
         String url;
         RolesBean rolesBean = new RolesBean();
-        if(role!=null){
-            if(!"潜客".equals(role)&&!"会员".equals(role)){
+        if (role != null) {
+            if (!"潜客".equals(role) && !"会员".equals(role)) {
                 rolesBean.setRole_type(roleMap.get(role));
                 //id = roleMap.get(role);
                 url = Constants.GETYUANGONGMENUS;
                 String s = gson.toJson(rolesBean);
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        LogUtil.e("zzf",jsonObject.toString());
+                        LogUtil.e("zzf", jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
                             MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
                             data = menusBean.getData();
                             if (data != null) {
                                 LogUtil.i(data.toString());
-                                mGridView.setAdapter(new MyAdapter(data));
+                                myAdapter = new MyAdapter(data);
+                                mGridView.setAdapter(myAdapter);
                             }
                         } else {
                             ToastUtils.showToastShort("请查看网络连接");
@@ -290,9 +324,9 @@ public class ShopFragment extends BaseFragment {
                     public void onErrorResponse(VolleyError volleyError) {
                         ll_top.setVisibility(View.GONE);
                         ToastUtils.showToastShort("请查看网络连接");
-                        LogUtil.e("zzf",volleyError.toString());
+                        LogUtil.e("zzf", volleyError.toString());
                     }
-                }){
+                }) {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         HashMap<String, String> map = new HashMap<String, String>();
@@ -304,19 +338,20 @@ public class ShopFragment extends BaseFragment {
 
                 MyApplication.getHttpQueues().add(jsonObjectRequest);
 
-            }else{
+            } else {
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
-                        LogUtil.e("zzf",s);
+                        LogUtil.e("zzf", s);
                         if (s.contains("true")) {
                             MenusBean menusBean = gson.fromJson(s, MenusBean.class);
                             data = menusBean.getData();
                             if (data != null) {
                                 LogUtil.i(data.toString());
-                                mGridView.setAdapter(new MyAdapter(data));
+                                myAdapter = new MyAdapter(data);
+                                mGridView.setAdapter(myAdapter);
                             }
                         } else {
                             ToastUtils.showToastShort("请查看网络连接");
@@ -327,14 +362,14 @@ public class ShopFragment extends BaseFragment {
                     public void onErrorResponse(VolleyError volleyError) {
                         ll_top.setVisibility(View.GONE);
                         ToastUtils.showToastShort("请查看网络连接");
-                        LogUtil.e("zzf",volleyError.toString());
+                        LogUtil.e("zzf", volleyError.toString());
                     }
                 }) {
 
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String, String> map = new HashMap<>();
-                        map.put("role_type",id);
+                        map.put("role_type", id);
                         return map;
                     }
 
@@ -366,7 +401,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
-                if(storeBean!=null&&storeBean.getData()!=null){
+                if (storeBean != null && storeBean.getData() != null) {
                     itemsList = storeBean.getData().getItems();
                     if (itemsList != null && itemsList.size() > 0) {
                         storelist.setAdapter(new MyStoreAdapter(getActivity(), itemsList));
@@ -486,16 +521,16 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 6://预约私教
                         Intent intent1 = new Intent(mActivity, CourseActivity.class);
-                        intent1.putExtra("isTuanke","1");
-                        if(role!=null&&!role.equals("潜客")&&!role.equals("会员")){
-                            intent1.putExtra("role",role);
-                        }else{
-                            intent1.putExtra("auth",role);
+                        intent1.putExtra("isTuanke", "1");
+                        if (role != null && !role.equals("潜客") && !role.equals("会员")) {
+                            intent1.putExtra("role", role);
+                        } else {
+                            intent1.putExtra("auth", role);
                         }
                         startActivity(intent1);
                         break;
-                 
- 					case 9://意见反馈
+
+                    case 9://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
@@ -523,21 +558,24 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
 
-                    case 17://推荐好友
+                    case 25://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
-                  
- 					                    case 19://扫码入场
+
+                    case 19://扫码入场
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
-					   case 20://预约团课
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
+                    case 20://预约团课
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
                         break;
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
+                        break;
+                    case 29://私信
+                        startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     default:
                         break;
@@ -586,6 +624,7 @@ public class ShopFragment extends BaseFragment {
                 viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
                 viewHolder.img_join = convertView.findViewById(R.id.img_join);
                 viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
+                //iewById(R.id.unread_msg_number);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -692,7 +731,7 @@ public class ShopFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
 
             }
         }) {
@@ -718,7 +757,7 @@ public class ShopFragment extends BaseFragment {
 
     class ViewHolder {
         ImageView store_item_img, img_location, img_phone, img_join;
-        TextView store_address, distance;
+        TextView store_address, distance, unread_msg_number;
         RelativeLayout clickitem;
     }
 
@@ -753,6 +792,18 @@ public class ShopFragment extends BaseFragment {
             view = View.inflate(mActivity, R.layout.gridview_item_shop, null);
             TextView tv_dcs = view.findViewById(R.id.tv_dcs);
             ImageView ibtn = view.findViewById(R.id.ibtn);
+            TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
+            if (menuList.get(i).getId()==29){
+            //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                if (EMClient.getInstance().chatManager().getUnreadMsgsCount()==0){
+                    unread_msg_number.setVisibility(View.GONE);
+                }else {
+                    unread_msg_number.setVisibility(View.VISIBLE);
+                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                }
+            }
+
+
             tv_dcs.setText(menuList.get(i).getName());
             Glide.with(mActivity).load(menuList.get(i).getIcon()).into(ibtn);
             return view;
@@ -760,20 +811,20 @@ public class ShopFragment extends BaseFragment {
     }
 
 
-    private void  reloadInfo(){
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+    private void reloadInfo() {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
-                if (loginInfoBean.getSuccess()){
+                if (loginInfoBean.getSuccess()) {
 
                     DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
                     info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                     setMap();
                     addRoles();
-                    arrayAdapter = new ArrayAdapter<String>(mActivity,R.layout.spinner_style,roleList);
+                    arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
                     //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
                     spinner.setAdapter(arrayAdapter);
                     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -789,7 +840,7 @@ public class ShopFragment extends BaseFragment {
                         }
                     });
                     initData();
-                }else {
+                } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
 
@@ -800,7 +851,7 @@ public class ShopFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -859,7 +910,7 @@ public class ShopFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("phone", info.getPerson().getPhone_no());
-                map.put("password", SPUtils.getString(Constants.MY_PSWD,""));
+                map.put("password", SPUtils.getString(Constants.MY_PSWD, ""));
                 // map.put("romType", "0");
                 return map;
             }

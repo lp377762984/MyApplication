@@ -1,11 +1,17 @@
 package com.cn.danceland.myapplication.activity;
 
 
+import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,10 +25,18 @@ import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LocationService;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
+import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseUI;
 
-import java.util.HashMap;
+import java.util.List;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -67,8 +81,10 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        requestPermissions();//请求权限
         instance = this;
         initView();
+        registerBroadcastReceiver();//注册环信监听
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
         discoverFragment = new DiscoverFragment();
@@ -96,6 +112,21 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
          //   getFragmentManager().findFragmentByTag()
 
+    }
+
+    @TargetApi(23)
+    private void requestPermissions() {
+        PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+            @Override
+            public void onGranted() {
+//				Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDenied(String permission) {
+                //Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initView() {
@@ -168,6 +199,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         super.onStop();
         mLocationClient.unregisterListener(myListener);
         mLocationClient.stop();
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
     public class MyLocationListener extends BDAbstractLocationListener  {
@@ -250,4 +282,108 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterBroadcastReceiver();
+    }
+    //private EaseUI easeUI;
+    EMMessageListener messageListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            // notify new message
+            for (EMMessage message : messages) {
+                //     DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                EaseUI.getInstance().getNotifier().onNewMesg(messages);
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+        }
+
+        @Override
+        public void onMessageRecalled(List<EMMessage> messages) {
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {}
+    };
+
+    private void refreshUIWithMessage() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // refresh unread count
+                //updateUnreadLabel();
+
+                // refresh conversation list
+                if (shopFragment != null) {
+                    shopFragment.refresh();
+                }
+
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
+
+
+
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
+    private void registerBroadcastReceiver() {
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constants.ACTION_CONTACT_CHANAGED);
+        intentFilter.addAction(Constants.ACTION_GROUP_CHANAGED);
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                LogUtil.i("收到广播");
+                //  updateUnreadLabel();
+                //   updateUnreadAddressLable();
+
+                // refresh conversation list
+                if (shopFragment != null) {
+                    shopFragment.refresh();
+                }
+
+//                else if (currentTabIndex == 1) {
+//                    if(contactListFragment != null) {
+//                        contactListFragment.refresh();
+//                    }
+//                }
+//                String action = intent.getAction();
+//                if(action.equals(Constants.ACTION_GROUP_CHANAGED)){
+//                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
+//                        GroupsActivity.instance.onResume();
+//                    }
+//                }
+            }
+        };
+        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private void unregisterBroadcastReceiver(){
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+    }
+
 }

@@ -215,6 +215,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
             viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
+            viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -246,10 +248,11 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
         } else {
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
         }
+
 
         if (data.get(position).isAnimationFlag()) {
             buildAnima(position);
@@ -262,9 +265,10 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             public void onClick(View view) {
                 //点赞
 
-                data.get(position).setAnimationFlag(true);
+
 
                 if (data.get(position).isPraise()) {//已点赞
+
 
                     int pos = position;
                     try {
@@ -275,6 +279,10 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
 
                 } else {//未点赞
+
+                    data.get(position).setAnimationFlag(true);
+                    notifyDataSetChanged();
+
                     int pos = position;
                     try {
                         addZan(data.get(position).getId(), true, pos);
@@ -342,8 +350,9 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
 
             viewHolder.tv_guanzhu.setText("");
-
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
         }
+        viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
 
         viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -565,6 +574,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
         ImageView iv_pic;
+        LinearLayout ll_guanzhu;
     }
 
     private void showListDialog(final int pos) {

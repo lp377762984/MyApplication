@@ -195,13 +195,13 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 @Override
                 public void onClick(View v) {
 
-                    if (index == 0 && current_page == 0) {
+                    if (index == 0 ) {
                         myListPopupViewAdapter.setData(LIST_TYPE);
                         listPopup.showPopupWindow(v);
                     }
 
 
-                    if (index == 2 && current_page == 2) {
+                    if (index == 2 ) {
                         myListPopupViewAdapter.setData(UPCOMING_CONDITION);
                         listPopup.showPopupWindow(v);
                     }

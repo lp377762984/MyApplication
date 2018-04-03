@@ -4,7 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,6 +185,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 //        LogUtil.i("data.size()"+data.size()+"+++++++++++");
@@ -215,6 +217,9 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
             //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
+            viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
+            viewHolder.iv_guanzhu = convertView.findViewById(R.id.iv_guanzhu);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -246,9 +251,9 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
         } else {
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
         }
 
 
@@ -263,9 +268,10 @@ public class MyDynListviewAdater extends BaseAdapter {
             public void onClick(View view) {
                 //点赞
 
-                data.get(position).setAnimationFlag(true);
+
 
                 if (data.get(position).isPraise()) {//已点赞
+
 
                     int pos = position;
                     try {
@@ -276,6 +282,10 @@ public class MyDynListviewAdater extends BaseAdapter {
 
 
                 } else {//未点赞
+
+                    data.get(position).setAnimationFlag(true);
+                    notifyDataSetChanged();
+
                     int pos = position;
                     try {
                         addZan(data.get(position).getId(), true, pos);
@@ -324,30 +334,33 @@ public class MyDynListviewAdater extends BaseAdapter {
         });
 
         if (isMe) {//是否是个人页面
-            viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+            viewHolder.iv_guanzhu.setVisibility(View.INVISIBLE);
         } else {
-            viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
+            viewHolder.ll_guanzhu.setVisibility(View.VISIBLE);
+            viewHolder.iv_guanzhu.setVisibility(View.VISIBLE);
         }
 
 
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
-            viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin1);
+           // viewHolder.tv_guanzhu.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
-            viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
+           // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
         }
 
         if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
 
             viewHolder.tv_guanzhu.setText("");
-
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
         }
 
-        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ll_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //   ToastUtils.showToastShort("点击了关注");
                 if (!data.get(position).isFollower()) {//未关注添加关注
                     int pos = position;
                     try {
@@ -356,10 +369,17 @@ public class MyDynListviewAdater extends BaseAdapter {
                         e.printStackTrace();
                     }
                 }
-
-
             }
         });
+//        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //   ToastUtils.showToastShort("点击了关注");
+//
+//
+//
+//            }
+//        });
 
 
         //  LogUtil.i(data.get(position).getNickName());
@@ -580,6 +600,8 @@ public class MyDynListviewAdater extends BaseAdapter {
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
+        LinearLayout ll_guanzhu;
+        ImageView iv_guanzhu;
     }
 
     private void showListDialog(final int pos) {

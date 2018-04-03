@@ -53,7 +53,7 @@ public class MessageActivity extends FragmentActivity {
     TabItem tab3;
     TabItem tab4;
     private MyConversationListFragment myConversationListFragment;
-    private int currentTabIndex=4;
+    private int currentTabIndex=0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,7 +103,8 @@ public class MessageActivity extends FragmentActivity {
             tablayout.addTab(tablayout.newTab().setText("粉丝"));
         }
         tablayout.addTab(tablayout.newTab().setText("消息"));
-        tablayout.addTab(tablayout.newTab().setText("私信"));
+     //   tablayout.addTab(tablayout.newTab().setText("私信"));
+
 //        if(pinglunNum>0){
 //            new QBadgeView(MessageActivity.this).bindTarget(tab2).setBadgeNumber(pinglunNum).setBadgeGravity(Gravity.RIGHT);
 //        }else if(dianzanNum>0){
@@ -112,9 +113,9 @@ public class MessageActivity extends FragmentActivity {
 //            new QBadgeView(MessageActivity.this).bindTarget(tab4).setBadgeNumber(fansNum).setBadgeGravity(Gravity.RIGHT);
 //        }
 
-        showFragment("5");
+        showFragment("1");
         SPUtils.setInt("pinglunNum", 0);
-        tablayout.getTabAt(4).select();
+        tablayout.getTabAt(0).select();
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -131,9 +132,10 @@ public class MessageActivity extends FragmentActivity {
                 } else if (currentTabIndex == 3) {
                     showFragment("4");
                     //ToastUtils.showToastShort("没有系统消息");
-                } else if (currentTabIndex == 4) {//私信对话列表
-                    showFragment("5");
                 }
+//                else if (currentTabIndex == 4) {//私信对话列表
+//                    showFragment("5");
+//                }
             }
 
             @Override

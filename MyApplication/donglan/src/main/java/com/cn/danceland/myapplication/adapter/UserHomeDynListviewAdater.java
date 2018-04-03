@@ -143,7 +143,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
     private AnimationSet mAnimationSet;
 
-    private void buildAnima(final  int pos) {
+    private void buildAnima(final int pos) {
         ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 2f, 1f, 2f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation.setDuration(500);
@@ -205,9 +205,9 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
-            viewHolder.ll_zan= convertView.findViewById(R.id.ll_zan);
+            viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
-            //  viewHolder.tv_no_data = convertView.findViewById(R.id.tv_no_data);
+             viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
             convertView.setTag(viewHolder);
         } else {
@@ -216,7 +216,6 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         if (data == null) {
             return convertView;
         }
-
 
 
         // LogUtil.i(data.size() + "");
@@ -233,13 +232,13 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         //设置点赞数量
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
-    //    LogUtil.i(data.get(position).isPraise()+"");
+        //    LogUtil.i(data.get(position).isPraise()+"");
         if (data.get(position).isPraise()) {//设置点赞
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin1);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
         } else {
-            viewHolder.iv_zan.setImageResource(R.drawable.img_xin);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
         }
-
+        viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
         if (data.get(position).isAnimationFlag()) {
             buildAnima(position);
             viewHolder.iv_zan.clearAnimation();
@@ -251,7 +250,6 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             public void onClick(View view) {
                 //点赞
 
-                data.get(position).setAnimationFlag(true);
 
                 if (data.get(position).isPraise()) {//已点赞
 
@@ -260,6 +258,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
 
                 } else {//未点赞
+                    data.get(position).setAnimationFlag(true);
+                    notifyDataSetChanged();
                     int pos = position;
                     addZan(data.get(position).getId(), true, pos);
 
@@ -379,27 +379,26 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
-            if (data.get(position).getImgList().size()==1){
+            if (data.get(position).getImgList().size() == 1) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            }
-            else   if (data.get(position).getImgList().size()==4){
+            } else if (data.get(position).getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 viewHolder.gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(context,205f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                int width = DensityUtils.dp2px(context, 205f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            }else {
+            } else {
                 viewHolder.gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(context,310f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f),0,0,0);
+                int width = DensityUtils.dp2px(context, 310f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
@@ -463,6 +462,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
+        LinearLayout    ll_guanzhu;
     }
 
     private void showListDialog(final int pos) {
@@ -476,7 +476,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
                 switch (which) {
                     case 0:
-                        jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+                        jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1);
                         break;
                     case 1:
 
@@ -561,17 +561,17 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
      * @param type
      */
     private void jubao(final String msgId, final String user_id, int type) {
-        JuBaoBean juBaoBean=new JuBaoBean();
-        juBaoBean.bereported_id=user_id;
-        juBaoBean.member_id=msgId;
-        juBaoBean.type=type+"";
+        JuBaoBean juBaoBean = new JuBaoBean();
+        juBaoBean.bereported_id = user_id;
+        juBaoBean.member_id = msgId;
+        juBaoBean.type = type + "";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
-                if (simpleBean.isSuccess()){
+                RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
                     ToastUtils.showToastShort("已举报");
-                }else {
+                } else {
                     ToastUtils.showToastShort("举报失败");
                 }
 
@@ -603,12 +603,12 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
      */
     private void addZan(final String msgId, final boolean isPraise, final int pos) {
 
-        StrBean strBean=new StrBean();
-        strBean.is_praise=isPraise;
-        strBean.msg_id=msgId;
+        StrBean strBean = new StrBean();
+        strBean.is_praise = isPraise;
+        strBean.msg_id = msgId;
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL,new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
 
 
             @Override
@@ -625,13 +625,13 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                         int i = data.get(pos).getPriaseNumber() - 1;
                         data.get(pos).setPriaseNumber(i);
                         ToastUtils.showToastShort("取消点赞成功");
-                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(),EventConstants.DEL_ZAN_USER_HOME));
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(), EventConstants.DEL_ZAN_USER_HOME));
                     } else {
                         data.get(pos).setPraise(true);
                         int i = data.get(pos).getPriaseNumber() + 1;
                         data.get(pos).setPriaseNumber(i);
                         ToastUtils.showToastShort("点赞成功");
-                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(),EventConstants.ADD_ZAN_USER_HOME));
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getId(), EventConstants.ADD_ZAN_USER_HOME));
                     }
 
 
@@ -767,10 +767,10 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("删除成功");
-                   // data.remove(pos);
-                 //   notifyDataSetChanged();
-                    EventBus.getDefault().post(new StringEvent("",EventConstants.DEL_DYN));
-                    EventBus.getDefault().post(new IntEvent(pos,EventConstants.DEL_DYN));
+                    // data.remove(pos);
+                    //   notifyDataSetChanged();
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
+                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
                 } else {
                     ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
                 }

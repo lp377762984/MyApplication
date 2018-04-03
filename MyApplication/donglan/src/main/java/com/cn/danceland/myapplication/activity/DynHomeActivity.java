@@ -377,19 +377,20 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         tv_zan_num.setText(info.getPriaseNumber() + "");
                     }
                     if (info.getPraise()) {//如果点赞
-                        iv_zan.setImageResource(R.drawable.img_xin1);
+                        iv_zan.setImageResource(R.drawable.img_zan1);
                     } else {
-                        iv_zan.setImageResource(R.drawable.img_xin);
+                        iv_zan.setImageResource(R.drawable.img_zan);
                     }
 
                     iv_zan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            iv_zan.clearAnimation();//添加动画
-                            iv_zan.startAnimation(mAnimationSet);
+
                             if (info.getPraise()) {//如果点赞
                                 addZan(info.getId(), false);
                             } else {//未点赞
+                                iv_zan.clearAnimation();//添加动画
+                                iv_zan.startAnimation(mAnimationSet);
                                 addZan(info.getId(), true);
                             }
                         }

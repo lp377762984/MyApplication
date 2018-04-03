@@ -98,7 +98,12 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
             iv_sex.setImageResource(R.drawable.img_sex2);
         }
         tv_phone.setText(info.getPhone_no());
-        tv_name.setText(info.getCname());
+
+        if (TextUtils.isEmpty(info.getNick_name())){
+            tv_name.setText(info.getCname());
+        }else {
+           tv_name.setText(info.getCname()+"("+info.getNick_name()+")");
+        }
         tv_lasttime.setText("最后维护时间：" + info.getLast_time());
         tv_weixin_no.setText(info.getWeichat_no());
         tv_company.setText(info.getCompany());

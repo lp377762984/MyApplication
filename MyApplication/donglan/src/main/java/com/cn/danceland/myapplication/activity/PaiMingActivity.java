@@ -23,8 +23,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetAllPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
@@ -63,7 +65,7 @@ public class PaiMingActivity extends Activity {
     };
 
     private void setHeadView() {
-        if (data.size()>2){
+        if (data.size() > 2) {
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
             Glide.with(this)
@@ -71,21 +73,21 @@ public class PaiMingActivity extends Activity {
                     .apply(options)
                     .into(iv_avatar_top1);
             tv_nick_name1.setText(data.get(0).getNick_name());
-            tv_daka_nun1.setText(data.get(0).getBranchScore()+"次");
+            tv_daka_nun1.setText(data.get(0).getBranchScore() + "次");
 
             Glide.with(this)
                     .load(data.get(1).getSelf_avatar_url())
                     .apply(options)
                     .into(iv_avatar_top2);
             tv_nick_name2.setText(data.get(1).getNick_name());
-            tv_daka_nun2.setText(data.get(1).getBranchScore()+"次");
+            tv_daka_nun2.setText(data.get(1).getBranchScore() + "次");
 
             Glide.with(this)
                     .load(data.get(2).getSelf_avatar_url())
                     .apply(options)
                     .into(iv_avatar_top3);
             tv_nick_name3.setText(data.get(2).getNick_name());
-            tv_daka_nun3.setText(data.get(2).getBranchScore()+"次");
+            tv_daka_nun3.setText(data.get(2).getBranchScore() + "次");
 
 
         }
@@ -115,6 +117,20 @@ public class PaiMingActivity extends Activity {
 
     private void initData() {
         findPaiming();
+        int paiming = getIntent().getIntExtra("paiming",0);
+        int cishu = getIntent().getIntExtra("cishu",0);
+        TextView tv_paiming = findViewById(R.id.tv_paiming);
+        TextView tv_daka_nun = findViewById(R.id.tv_daka_nun);
+        ImageView iv_avatar=findViewById(R.id.iv_avatar);
+        tv_daka_nun.setText(cishu + "次");
+        tv_paiming.setText("NO."+paiming);
+
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        Glide.with(this)
+                .load(data.getPerson().getSelf_avatar_path())
+                .apply(options)
+                .into(iv_avatar);
     }
 
     private void initView() {
@@ -165,12 +181,12 @@ public class PaiMingActivity extends Activity {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                Gson gson=new Gson();
-                RequsetAllPaiMingBean myPaiMingBean = gson.fromJson(s,RequsetAllPaiMingBean.class);
+                Gson gson = new Gson();
+                RequsetAllPaiMingBean myPaiMingBean = gson.fromJson(s, RequsetAllPaiMingBean.class);
 
                 if (myPaiMingBean.getSuccess()) {
-                    data=  myPaiMingBean.getData();
-                    myUserListviewAdapter.setData( data);
+                    data = myPaiMingBean.getData();
+                    myUserListviewAdapter.setData(data);
                     myUserListviewAdapter.notifyDataSetChanged();
                     Message message = Message.obtain();
                     message.what = 1;
@@ -264,8 +280,8 @@ public class PaiMingActivity extends Activity {
                     .load(data.get(i).getSelf_avatar_url())
                     .apply(options)
                     .into(viewHolder.iv_avatar);
-            viewHolder.tv_daka_nun.setText(data.get(i).getBranchScore()+"次");
-            viewHolder.tv_paiming.setText("NO."+data.get(i).getBranchRanking());
+            viewHolder.tv_daka_nun.setText(data.get(i).getBranchScore() + "次");
+            viewHolder.tv_paiming.setText("NO." + data.get(i).getBranchRanking());
             return view;
         }
 
@@ -275,7 +291,7 @@ public class PaiMingActivity extends Activity {
             ImageView iv_sex;//性别
             LinearLayout ll_item;
             TextView tv_daka_nun;
-            TextView     tv_paiming;
+            TextView tv_paiming;
         }
     }
 }

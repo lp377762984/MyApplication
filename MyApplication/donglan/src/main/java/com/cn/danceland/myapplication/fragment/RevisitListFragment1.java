@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
 import com.cn.danceland.myapplication.activity.MyChatActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
+import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -42,6 +43,7 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.domain.EaseUser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -453,7 +455,11 @@ public class RevisitListFragment1 extends BaseFragment {
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
-            vh.tv_name.setText(datalist.get(position).getCname());
+            if (TextUtils.isEmpty(datalist.get(position).getNick_name())){
+                vh.tv_name.setText(datalist.get(position).getCname());
+            }else {
+                vh.tv_name.setText(datalist.get(position).getCname()+"("+datalist.get(position).getNick_name()+")");
+            }
             if (TextUtils.equals(datalist.get(position).getGender(), "1")) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex1);
             }
@@ -479,6 +485,19 @@ public class RevisitListFragment1 extends BaseFragment {
             vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String userName =datalist.get(position).getNick_name();
+                    String userPic = datalist.get(position).getSelf_avatar_path();
+                    LogUtil.i(userName + userPic);
+                    String hxIdFrom = datalist.get(position).getMember_no();
+                    EaseUser easeUser = new EaseUser(hxIdFrom);
+                    easeUser.setAvatar(userPic);
+                    easeUser.setNickname(userName);
+
+                    List<EaseUser> users = new ArrayList<EaseUser>();
+                    users.add(easeUser);
+
+                    DemoHelper.getInstance().updateContactList(users);
+
                     startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId",datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
                 }
             });

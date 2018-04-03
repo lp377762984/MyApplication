@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -71,7 +72,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         lv_myshop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!TextUtils.equals(defaultshopId,data.get(i).getBranch_id())){
+                if (!TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
                     showMYDialog(i);
                 }
 
@@ -95,7 +96,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * 设置手机号
+     * 设置切换为当前门店
      */
     private void showMYDialog(final int pos) {
         AlertDialog.Builder dialog =
@@ -107,7 +108,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
             public void onClick(DialogInterface dialogInterface, int i) {
 
                 changeShop(data.get(pos).getBranch_id());
-              //  LogUtil.i(data.get(pos).getBranch_id());
+                //  LogUtil.i(data.get(pos).getBranch_id());
                 //listViewAdapter.notifyDataSetChanged();
             }
         });
@@ -117,7 +118,35 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
                 listViewAdapter.notifyDataSetChanged();
             }
         });
+
+
         dialog.show();
+    }
+
+    private void showdialog_xz(final int pos) {
+        final String[] items = {"切换门店","退出门店"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+
+                        showMYDialog(pos);
+
+                        break;
+                    case 1:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
     }
 
     private void findJoinSHOP() {
@@ -153,6 +182,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
 
                 HashMap<String, String> hm = new HashMap<String, String>();
                 String token = SPUtils.getString(Constants.MY_TOKEN, "");
+                LogUtil.i(token);
                 hm.put("Authorization", token);
                 return hm;
 
@@ -174,7 +204,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
                 if (shopListInfo.getSuccess()) {
                     defaultshopId = BranchId;
                     userInfo.getPerson().setDefault_branch(defaultshopId);
-                    DataInfoCache.saveOneCache(userInfo,Constants.MY_INFO);
+                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
                     listViewAdapter.notifyDataSetChanged();
 
                 } else {
@@ -235,18 +265,19 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
             ImageView iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
             TextView tv_name = view.findViewById(R.id.tv_name);
             TextView tv_default = view.findViewById(R.id.tv_default);
-            ImageView cb_default = view.findViewById(R.id.cb_default);
+            RadioButton cb_default = view.findViewById(R.id.cb_default);
 
-            Glide.with(MyShopActivity.this).load(data.get(i).getLogo_url()).into(iv_shop_logo);
+            Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(iv_shop_logo);
             tv_name.setText(data.get(i).getBname());
             if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
                 tv_default.setText("当前门店");
-                cb_default.setImageResource(R.drawable.img_cb1);
+                //   cb_default.setImageResource(R.drawable.img_cb1);
+                cb_default.setChecked(true);
             } else {
                 tv_default.setText("");
-                cb_default.setImageResource(R.drawable.img_cb);
+                //    cb_default.setImageResource(R.drawable.img_cb);
+                cb_default.setChecked(false);
             }
-
 
             return view;
         }

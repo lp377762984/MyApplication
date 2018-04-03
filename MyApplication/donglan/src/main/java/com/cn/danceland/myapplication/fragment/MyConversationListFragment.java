@@ -8,10 +8,13 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MyChatActivity;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by shy on 2018/3/9 11:38
@@ -70,6 +73,12 @@ public class MyConversationListFragment extends EaseConversationListFragment {
     }
 
     @Override
+    public void refresh() {
+        super.refresh();
+        EventBus.getDefault().post(new StringEvent("刷新",20001));
+    }
+
+    @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
 //        if (NetUtils.hasNetwork(getActivity())){
@@ -79,7 +88,7 @@ public class MyConversationListFragment extends EaseConversationListFragment {
 //        }
     }
 
-
+//
 //    @Override
 //    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 //        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu);

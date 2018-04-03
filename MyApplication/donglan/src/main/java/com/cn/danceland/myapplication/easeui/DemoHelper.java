@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.ChatActivity;
 import com.cn.danceland.myapplication.activity.MainActivity;
@@ -1258,18 +1257,22 @@ public class DemoHelper {
                     EaseUser easeUser = new EaseUser(hxIdFrom);
                     easeUser.setAvatar(userPic);
                     easeUser.setNick(userName);
+//
+//                    LogUtil.i(DemoHelper.getInstance().getContactList().containsKey(hxIdFrom)+"");
+//                    if (!DemoHelper.getInstance().getContactList().containsKey(hxIdFrom)){
+                        List<EaseUser> users = new ArrayList<EaseUser>();
+                        users.add(easeUser);
+                        // 存入内存
+                //      DemoHelper.getInstance().getContactList();
+                        contactList.put(hxIdFrom, easeUser);
+                        // 存入db
+//                        UserDao dao = new UserDao(MyApplication.getContext());
+//                        dao.saveContactList(users);
 
-                    List<EaseUser> users = new ArrayList<EaseUser>();
-                    users.add(easeUser);
-                    // 存入内存
-                    DemoHelper.getInstance().getContactList();
-                   contactList.put(hxIdFrom, easeUser);
-                    // 存入db
-                    UserDao dao = new UserDao(MyApplication.getContext());
-                    dao.saveContactList(users);
-                    // 存入内存
-                    // 存入db
-                    DemoHelper.getInstance().updateContactList(users);
+                        DemoHelper.getInstance().updateContactList(users);
+               //     }
+
+
 
                     DemoHelper.getInstance().getModel().setContactSynced(true);
 
@@ -1473,6 +1476,14 @@ public class DemoHelper {
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
         for (EaseUser u : contactInfoList) {
+            if (contactList==null){
+                contactList=getContactList();
+                LogUtil.i("contactList IS NULL");
+            }
+            if (u==null){
+                LogUtil.i("EaseUser IS NULL");
+            }
+        //    LogUtil.i(u.getUsername()+u.toString());
             contactList.put(u.getUsername(), u);
         }
         ArrayList<EaseUser> mList = new ArrayList<EaseUser>();

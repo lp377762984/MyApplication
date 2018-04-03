@@ -33,6 +33,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -334,7 +335,12 @@ public class LoginActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("登录成功");
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
-                    login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+
+                    if (DemoHelper.getInstance().isLoggedIn()){
+
+                    }
+                   login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+                //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
 
                     ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
@@ -439,6 +445,8 @@ public class LoginActivity extends Activity implements OnClickListener {
      */
     private void login_hx(String admin, String pswd , final Data data ){
 
+        LogUtil.i(admin+"--"+pswd);
+
                 EMClient.getInstance().login(admin,pswd,new EMCallBack() {//回调
                     @Override
                     public void onSuccess() {
@@ -464,7 +472,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                     @Override
                     public void onError(int code, String message) {
-                        LogUtil.i( "登录聊天服务器失败！");
+                        LogUtil.i( "登录聊天服务器失败！"+code+message);
                     }
                 });
     }

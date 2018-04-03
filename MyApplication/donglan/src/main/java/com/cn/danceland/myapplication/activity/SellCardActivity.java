@@ -207,6 +207,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             }
 
 
+
             return view;
         }
 
