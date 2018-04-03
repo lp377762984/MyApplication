@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,6 +26,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.CommentFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoRecordFragment;
@@ -40,6 +42,9 @@ import com.google.gson.Gson;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +83,7 @@ public class CourseActivity extends FragmentActivity {
     long monthFirstDay,monthLastDay;
     Gson gson;
     ArrayList<String> yuyueTimeList;
+    String from;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +95,9 @@ public class CourseActivity extends FragmentActivity {
         if(startTime!=null){
             getRecordTime();
         }
+
     }
+
 
     private void initHost() {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
@@ -110,6 +118,8 @@ public class CourseActivity extends FragmentActivity {
         gson = new Gson();
 
     }
+
+
 
 
     private void getRecordTime(){
@@ -185,6 +195,8 @@ public class CourseActivity extends FragmentActivity {
                     endTime = (Long.valueOf(startTime)+86399)+"";
                     if("0".equals(isTuanke)||"1".equals(type)){
                         showFragment(type,isTuanke);
+                    }else if("2".equals(type)){
+                        showFragment(type,isTuanke);
                     }
                 }
             }
@@ -203,12 +215,21 @@ public class CourseActivity extends FragmentActivity {
 
     }
 
+
+
     private void initView() {
         course_back = findViewById(R.id.course_back);
         course_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                //List<Fragment> fragments = fragmentManager.getFragments();
+//                if("2".equals(type)){
+//                    type= "1";
+//                    isTuanke = "1";
+//                    showFragment(type,isTuanke);
+//                }else{
+                    finish();
+               // }
             }
         });
 
@@ -265,7 +286,8 @@ public class CourseActivity extends FragmentActivity {
                 tab1.setText("团课");
                 try {
                     tuanKeFragment = new TuanKeFragment();
-                    tuanKeFragment.refresh("免费团课",startTime,endTime,course_type_id,id);
+                    from = "免费团课";
+                    tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -292,7 +314,8 @@ public class CourseActivity extends FragmentActivity {
         }else if("2".equals(type)){
             tuanKeFragment = new TuanKeFragment();
             try {
-                tuanKeFragment.refresh("小团课",startTime,endTime,course_type_id,id);
+                from = "小团课";
+                tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

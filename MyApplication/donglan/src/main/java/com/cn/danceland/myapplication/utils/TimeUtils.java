@@ -288,4 +288,23 @@ public class TimeUtils {
         return calendar.getTimeInMillis();
     }
 
+    /**
+     *
+     * 根据分钟数获取时间字符串24小时制
+     * */
+
+    public static String MinuteToTime(int minute){
+        String time = null;
+        if(minute%60==0){
+            time = minute/60 + ":00";
+        }else {
+            if(minute%60<10){
+                time = minute/60 +":0" + minute%60;
+            }else{
+                time = minute/60 +":" + minute%60;
+            }
+        }
+        return time;
+    }
+
 }

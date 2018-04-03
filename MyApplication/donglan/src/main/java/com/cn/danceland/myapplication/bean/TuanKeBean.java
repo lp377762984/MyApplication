@@ -64,6 +64,16 @@ public class TuanKeBean implements Serializable {
         private String course_img_url_3;
         private int course_category;
         private String room_name;
+        private String employee_avatar_path;
+
+        public String getEmployee_avatar_path() {
+            return employee_avatar_path;
+        }
+
+        public void setEmployee_avatar_path(String employee_avatar_path) {
+            this.employee_avatar_path = employee_avatar_path;
+        }
+
         public void setId(int id) {
             this.id = id;
         }

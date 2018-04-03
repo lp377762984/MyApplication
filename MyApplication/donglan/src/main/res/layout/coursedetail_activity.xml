@@ -10,6 +10,7 @@
         android:background="@color/dl_gery">
 
         <ImageView
+            android:id="@+id/course_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/img_back"
@@ -112,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:text="上课教练"
                     android:layout_centerVertical="true"
+                    android:textSize="16sp"
                     />
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -149,6 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="当前人数（10）"
+                    android:textSize="16sp"
                     />
 
                 <com.cn.danceland.myapplication.utils.NestedExpandaleListView
@@ -269,6 +272,7 @@
                     android:layout_height="wrap_content"
                     android:text="课程介绍"
                     android:layout_marginTop="10dp"
+                    android:textSize="16sp"
                     />
                 <TextView
                     android:id="@+id/tv_content"
