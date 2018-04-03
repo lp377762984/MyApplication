@@ -100,6 +100,7 @@ public class ShopFragment extends BaseFragment {
     String role;
     List<Data.Roles> roles;
     HashMap<String, String> roleMap, authMap;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,10 +113,11 @@ public class ShopFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (event.getEventCode()==20001){
+        if (event.getEventCode() == 20001) {
             refresh();
         }
     }
@@ -194,9 +196,9 @@ public class ShopFragment extends BaseFragment {
     }
 
     public void refresh() {
-        if (myAdapter!=null){
+        if (myAdapter != null) {
             myAdapter.notifyDataSetChanged();
-       //     LogUtil.i("刷新");
+            //     LogUtil.i("刷新");
         }
 
     }
@@ -565,12 +567,12 @@ public class ShopFragment extends BaseFragment {
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
- 					   case 19://扫码入场
-                  
-                   
+                    case 19://扫码入场
+
+
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
-               
+
 
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
@@ -578,7 +580,7 @@ public class ShopFragment extends BaseFragment {
                     case 26://体测分析
                         startActivity(new Intent(mActivity, BodyBaseActivity.class));
                         break;
- case 29://私信
+                    case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     default:
@@ -797,13 +799,13 @@ public class ShopFragment extends BaseFragment {
             TextView tv_dcs = view.findViewById(R.id.tv_dcs);
             ImageView ibtn = view.findViewById(R.id.ibtn);
             TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
-            if (menuList.get(i).getId()==29){
-            //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
-                if (EMClient.getInstance().chatManager().getUnreadMsgsCount()==0){
+            if (menuList.get(i).getId() == 29) {
+                //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                if (EMClient.getInstance().chatManager().getUnreadMsgsCount() == 0) {
                     unread_msg_number.setVisibility(View.GONE);
-                }else {
+                } else {
                     unread_msg_number.setVisibility(View.VISIBLE);
-                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount() + "");
                 }
             }
 
