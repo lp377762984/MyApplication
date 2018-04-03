@@ -571,7 +571,7 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
                
-                        break;
+
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
