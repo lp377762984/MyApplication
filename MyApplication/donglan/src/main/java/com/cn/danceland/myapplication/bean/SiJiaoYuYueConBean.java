@@ -41,6 +41,24 @@ public class SiJiaoYuYueConBean implements Serializable {
     private String date;
     private Long course_date_gt;
     private Long course_date_lt;
+    private Integer page;
+    private Integer size;
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public Long getCourse_date_gt() {
         return course_date_gt;

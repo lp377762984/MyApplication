@@ -407,13 +407,14 @@ public class ShopDetailedActivity extends Activity{
             CircleImageView circle_3 = convertView.findViewById(R.id.circle_3);
             CircleImageView circle_4 = convertView.findViewById(R.id.circle_4);
             CircleImageView circle_5 = convertView.findViewById(R.id.circle_5);
+            CircleImageView circle_6 = convertView.findViewById(R.id.circle_6);
 
             Glide.with(ShopDetailedActivity.this).load("http://news.hainan.net/Editor/img/201602/20160215/big/20160215234302136_2731088.jpg").into(circle_1);
             Glide.with(ShopDetailedActivity.this).load("http://img06.tooopen.com/images/20160807/tooopen_sy_174504721543.jpg").into(circle_2);
             Glide.with(ShopDetailedActivity.this).load("http://file06.16sucai.com/2016/0407/90ed68d09c8777d6336862beca17f317.jpg").into(circle_3);
             Glide.with(ShopDetailedActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_4);
             Glide.with(ShopDetailedActivity.this).load("http://img.mp.itc.cn/upload/20160408/6c46c0a65f32450e9941f9ef84091104_th.jpg").into(circle_5);
-
+            Glide.with(ShopDetailedActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_6);
             return convertView;
         }
 

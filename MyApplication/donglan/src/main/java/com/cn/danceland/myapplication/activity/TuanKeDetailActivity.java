@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
@@ -44,12 +45,12 @@ public class TuanKeDetailActivity extends Activity {
     int groupId;
     Gson gson;
     TextView kecheng_name,kecheng_time,kecheng_place,tv_jieshao,
-    kecheng_room;
+    kecheng_room,course_type,tv_tuanke_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tuankedetail);
+        setContentView(R.layout.smalltuankedetail_activity);
         initHost();
         initView();
     }
@@ -64,7 +65,7 @@ public class TuanKeDetailActivity extends Activity {
     }
 
     private void initView() {
-        tuanke_back = findViewById(R.id.tuanke_back);
+        tuanke_back = findViewById(R.id.small_back);
         tuanke_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,20 +73,24 @@ public class TuanKeDetailActivity extends Activity {
             }
         });
 
-        kecheng_img =  findViewById(R.id.kecheng_img);
-        kecheng_name = findViewById(R.id.kecheng_name);
-        kecheng_time = findViewById(R.id.kecheng_time);
-        kecheng_place = findViewById(R.id.kecheng_place);
-        kecheng_room = findViewById(R.id.kecheng_room);
-        tv_jieshao = findViewById(R.id.tv_jieshao);
+        kecheng_img =  findViewById(R.id.course_img);
+        kecheng_name = findViewById(R.id.course_name);
+        kecheng_time = findViewById(R.id.course_length);
+        kecheng_place = findViewById(R.id.course_place);
+        kecheng_room = findViewById(R.id.course_room);
+        tv_jieshao = findViewById(R.id.tv_content);
+        course_type = findViewById(R.id.course_type);
+        tv_tuanke_title = findViewById(R.id.tv_tuanke_title);
+        tv_tuanke_title.setText("免费团课");
+        course_type.setText("免费团课");
 
 
-        img_1 = findViewById(R.id.img_1);
-        img_2 = findViewById(R.id.img_2);
-        img_3 = findViewById(R.id.img_3);
+        img_1 = findViewById(R.id.pic_01);
+        img_2 = findViewById(R.id.pic_02);
+        img_3 = findViewById(R.id.pic_03);
 
 
-        kecheng_ex = findViewById(R.id.kecheng_ex);
+        kecheng_ex = findViewById(R.id.my_expanda);
         kecheng_ex.setAdapter(new MyAdapter());
         kecheng_ex.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -111,10 +116,13 @@ public class TuanKeDetailActivity extends Activity {
 
     public void initData(TuanKeBean.Data detailData){
 
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).into(kecheng_img);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).into(img_1);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).into(img_2);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).into(img_3);
+        RequestOptions  options =new RequestOptions().placeholder(R.drawable.error_pic);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).apply(options).into(kecheng_img);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).apply(options).into(img_1);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options).into(img_2);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).apply(options).into(img_3);
+
+
         String startTime,endTime;
         if(detailData.getStart_time()%60==0){
             startTime = detailData.getStart_time()/60+":00";
@@ -139,7 +147,7 @@ public class TuanKeDetailActivity extends Activity {
 
     private void getData(final int groupId){
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDGROUP, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FREEGROUPCOURSE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 TuanKeBean tuanKeBean = gson.fromJson(s, TuanKeBean.class);
@@ -223,13 +231,14 @@ public class TuanKeDetailActivity extends Activity {
             CircleImageView circle_3 = convertView.findViewById(R.id.circle_3);
             CircleImageView circle_4 = convertView.findViewById(R.id.circle_4);
             CircleImageView circle_5 = convertView.findViewById(R.id.circle_5);
+            CircleImageView circle_6 = convertView.findViewById(R.id.circle_6);
 
             Glide.with(TuanKeDetailActivity.this).load("http://news.hainan.net/Editor/img/201602/20160215/big/20160215234302136_2731088.jpg").into(circle_1);
             Glide.with(TuanKeDetailActivity.this).load("http://img06.tooopen.com/images/20160807/tooopen_sy_174504721543.jpg").into(circle_2);
             Glide.with(TuanKeDetailActivity.this).load("http://file06.16sucai.com/2016/0407/90ed68d09c8777d6336862beca17f317.jpg").into(circle_3);
             Glide.with(TuanKeDetailActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_4);
             Glide.with(TuanKeDetailActivity.this).load("http://img.mp.itc.cn/upload/20160408/6c46c0a65f32450e9941f9ef84091104_th.jpg").into(circle_5);
-
+            Glide.with(TuanKeDetailActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_6);
             return convertView;
         }
 

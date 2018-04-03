@@ -16,12 +16,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.EvaluateInfoBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.PingJiaCon;
+import com.cn.danceland.myapplication.bean.PingJiaResultBean;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -36,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +58,13 @@ public class PingJiaActivity extends Activity {
     LinearLayout ll_detail,ll_sixin,ll_phone,ll_commmit;
     ScaleRatingBar jiaolian_ratingbar,kecheng_ratingbar,changdi_ratingbar;
     float jiaolianscore,kechengscore,changdiscore;
-    MyCourseBean.Data item;
+    SiJiaoRecordBean.Content item;
     Gson gson;
     ImageView pingjia_back;
     String currentTime;
     EditText my_pingjia;
+    String course_category;
+    int evaluate_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +78,9 @@ public class PingJiaActivity extends Activity {
 
     private void initHost() {
 
-        item = (MyCourseBean.Data)getIntent().getSerializableExtra("item");
+        item = (SiJiaoRecordBean.Content)getIntent().getSerializableExtra("item");
+        course_category = getIntent().getStringExtra("course_category");
+        evaluate_id = getIntent().getIntExtra("evaluate_id", 0);
 
         currentTime = TimeUtils.timeStamp2Date(System.currentTimeMillis() + "", "yyyy-MM-dd HH:mm:ss");
 
@@ -83,7 +91,7 @@ public class PingJiaActivity extends Activity {
 
         img_user  = findViewById(R.id.img_user);
         tv_user = findViewById(R.id.tv_user);
-        tv_role = findViewById(R.id.tv_role);
+        //tv_role = findViewById(R.id.tv_role);
         ll_detail = findViewById(R.id.ll_detail);
         ll_sixin = findViewById(R.id.ll_sixin);
         ll_phone = findViewById(R.id.ll_phone);
@@ -94,10 +102,58 @@ public class PingJiaActivity extends Activity {
         changdi_ratingbar = findViewById(R.id.changdi_ratingbar);
         ll_commmit = findViewById(R.id.ll_commmit);
         pingjia_back = findViewById(R.id.pingjia_back);
-        tv_time.setText(currentTime);
         my_pingjia = findViewById(R.id.my_pingjia);
+        if(evaluate_id!=0){
+            ll_commmit.setVisibility(View.GONE);
+            tv_status.setText("已评价");
+            //查询评价记录
+            getPingJiaData(evaluate_id);
+        }else{
+            tv_time.setText(currentTime);
+            ll_commmit.setVisibility(View.VISIBLE);
+        }
+        tv_user.setText(item.getEmployee_name());
 
         setClick();
+
+    }
+
+    private void getPingJiaData(final int evaluate_id) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.FINDPINGJIA+evaluate_id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                PingJiaResultBean pingJiaResultBean = gson.fromJson(s, PingJiaResultBean.class);
+                if(pingJiaResultBean.getSuccess()){
+                    PingJiaResultBean.Data data = pingJiaResultBean.getData();
+                    my_pingjia.setText(data.getContent());
+                    tv_time.setText(TimeUtils.timeStamp2Date(data.getCreate_date(),"yyyy-MM-dd HH:mm:ss"));
+                    jiaolian_ratingbar.setRating(data.getEmployee_score());
+                    kecheng_ratingbar.setRating(data.getCourse_type_score());
+                    if(data.getRoom_score()!=null){
+                        changdi_ratingbar.setRating(data.getRoom_score());
+                    }
+                }else{
+                    ToastUtils.showToastShort("获取评价结果失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
@@ -125,11 +181,7 @@ public class PingJiaActivity extends Activity {
         ll_commmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    commit();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                commit();
             }
         });
 
@@ -142,36 +194,29 @@ public class PingJiaActivity extends Activity {
 
     }
 
-    private void commit() throws JSONException {
+    private void commit(){
 
         String text = my_pingjia.getText().toString();
 
-        List<PingJiaCon> list = new ArrayList<PingJiaCon>();
-        PingJiaCon jiaolianpingJiaCon = new PingJiaCon();
-        jiaolianpingJiaCon.setBranch_id(item.getBranch_id());
-        jiaolianpingJiaCon.setBus_id(item.getEmployee_id());
-        jiaolianpingJiaCon.setScore(jiaolianscore);
-        jiaolianpingJiaCon.setType("2");
-        jiaolianpingJiaCon.setContent(text);
+        PingJiaCon pingJiaCon = new PingJiaCon();
 
-        PingJiaCon kechengpingJiaCon = new PingJiaCon();
-        kechengpingJiaCon.setBranch_id(item.getBranch_id());
-        kechengpingJiaCon.setBus_id(item.getCourse_type_id());
-        kechengpingJiaCon.setScore(kechengscore);
-        kechengpingJiaCon.setType("1");
-        kechengpingJiaCon.setContent(text);
-
-        list.add(jiaolianpingJiaCon);
-        list.add(kechengpingJiaCon);
-
-        EvaluateInfoBean evaluateInfoBean = new EvaluateInfoBean();
-        evaluateInfoBean.setList(list);
-        String s = gson.toJson(evaluateInfoBean);
-
-        JSONObject jsonObject = new JSONObject(s);
+        pingJiaCon.setBranch_id(item.getBranch_id());
+        pingJiaCon.setCourse_type_id(item.getCourse_type_id());
+        pingJiaCon.setCourse_type_score(kechengscore);
+        pingJiaCon.setEmployee_id(item.getEmployee_id());
+        pingJiaCon.setEmployee_score(jiaolianscore);
+        pingJiaCon.setContent(text);
+        pingJiaCon.setBus_id(item.getId());
+        if("1".equals(course_category)){
+            pingJiaCon.setType("1");
+        }else if("2".equals(course_category)){
+            pingJiaCon.setType("2");
+        }
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.PINGJIA,jsonObject , new Response.Listener<JSONObject>() {
+        String s = gson.toJson(pingJiaCon);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.PINGJIA,s , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject.toString().contains("true")){
@@ -180,7 +225,6 @@ public class PingJiaActivity extends Activity {
                 }else{
                     ToastUtils.showToastShort("评价失败！请检查手机网络");
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override

@@ -16,8 +16,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:id="@+id/tuanke_time"
@@ -82,7 +81,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/tuanke_img"
             android:layout_marginRight="10dp"
-            android:background="#FF8C00">
+            android:background="@drawable/btn_bg_blue">
 
             <TextView
                 android:id="@+id/tv_yuyue"

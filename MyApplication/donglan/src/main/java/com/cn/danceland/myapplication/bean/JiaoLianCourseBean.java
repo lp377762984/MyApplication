@@ -62,6 +62,16 @@ public class JiaoLianCourseBean implements Serializable {
         private Long start_date;
         private int surplus_count;
         private int time_length;
+        private String self_avatar_path;
+
+        public String getSelf_avatar_path() {
+            return self_avatar_path;
+        }
+
+        public void setSelf_avatar_path(String self_avatar_path) {
+            this.self_avatar_path = self_avatar_path;
+        }
+
         public void setBranch_id(int branch_id) {
             this.branch_id = branch_id;
         }

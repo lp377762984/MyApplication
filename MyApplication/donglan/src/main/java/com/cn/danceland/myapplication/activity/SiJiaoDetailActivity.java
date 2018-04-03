@@ -28,13 +28,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.RootBean;
+import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TimeAxisBean;
 import com.cn.danceland.myapplication.bean.TimeAxisCon;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -63,8 +66,9 @@ import static com.xiaomi.smack.packet.h.a.s;
  */
 
 public class SiJiaoDetailActivity extends Activity {
-    ArrayList<Integer> arrPosition;
-    ArrayList<Integer> arrStatus;
+    ArrayList<Integer> arrPositionF,arrPositionS;
+    ArrayList<Integer> arrStatusF,arrStatusS;
+    HashMap<Integer,Integer> arrPosition,arrStatus;
     ListView list_1,list_2;
     LinearLayout ll_time;
     LoopView loopview;
@@ -97,6 +101,7 @@ public class SiJiaoDetailActivity extends Activity {
     long hourMill = 3600000;
     ArrayList<Long> startMillArr;
     ArrayList<Integer> requestStatusArr;
+    Data data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +119,7 @@ public class SiJiaoDetailActivity extends Activity {
 
         gson = new Gson();
 
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         startTimeTv = getIntent().getStringExtra("startTime");
         startTime = TimeUtils.date2TimeStamp(startTimeTv+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
         endTimeTv = getIntent().getStringExtra("endTime");
@@ -199,12 +205,24 @@ public class SiJiaoDetailActivity extends Activity {
         list_1.setDividerHeight(0);
         list_2 = findViewById(R.id.list_2);
         list_2.setDividerHeight(0);
-        arrPosition = new ArrayList<>();
-        arrStatus = new ArrayList<>();
+        arrPosition = new HashMap<>();
+        arrPositionF = new ArrayList<>();
+        arrPositionS = new ArrayList<>();
 
-        myListF = new MyListF(arrPosition,arrStatus);
+        for(int i = 0;i < 23;i++){
+            arrPosition.put(i,0);
+        }
 
-        myListS = new MyListS(arrPosition,arrStatus);
+        arrStatus = new HashMap<>();
+        arrStatusF = new ArrayList<>();
+        arrStatusS = new ArrayList<>();
+        for(int i = 0;i < 23;i++){
+            arrStatus.put(i,0);
+        }
+        myListF = new MyListF(arrPositionF,arrStatusF);
+        myListS = new MyListS(arrPositionS,arrStatusS);
+        list_1.setAdapter(myListF);
+        list_2.setAdapter(myListS);
 //        list_1.setAdapter(myListF);
 //        list_2.setAdapter(myListS);
         list_2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -218,11 +236,7 @@ public class SiJiaoDetailActivity extends Activity {
                 }
             }
         });
-        try {
-            getData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData();
     }
 
     private void showTime() {
@@ -294,7 +308,7 @@ public class SiJiaoDetailActivity extends Activity {
 
     }
 
-    private void getData() throws JSONException {
+    private void getData(){
 
         TimeAxisCon timeAxis = new TimeAxisCon();
         if(item!=null){
@@ -305,8 +319,7 @@ public class SiJiaoDetailActivity extends Activity {
         timeAxis.setWeek(weekDay);
         timeAxis.setCourse_date(Long.valueOf(startTime));
         String s = gson.toJson(timeAxis);
-        JSONObject jsonObject = new JSONObject(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
@@ -318,17 +331,13 @@ public class SiJiaoDetailActivity extends Activity {
                     for(int i=0;i<data.size();i++){
                             if(data.get(i).getStart_time()!=null){
                                 Integer start_time = data.get(i).getStart_time();
-                                setTimeLine(data.get(i).getStatus(),start_time*60000,Long.valueOf(data.get(i).getCourse_date()));
+                                setTimeLine(data.get(i).getStatus(),start_time*60000);
                             }
                     }
-
-//                    if(myYuYueString!=null){
-//                        String[] split = myYuYueString.split(",");
-//                        setTimeLine(1,Long.valueOf(split[1]),Long.valueOf(startTime+"000"));
-//                    }
-                    list_1.setAdapter(myListF);
-                    list_2.setAdapter(myListS);
                 }
+                getHistory();
+//                list_1.setAdapter(myListF);
+//                list_2.setAdapter(myListS);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -343,6 +352,96 @@ public class SiJiaoDetailActivity extends Activity {
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+    }
+
+
+    private void getHistory(){
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        if(role!=null){
+            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+        }else{
+            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        }
+
+        if(startTime!=null){
+            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
+        }else{
+            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
+        }
+        String s = gson.toJson(siJiaoYuYueConBean);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
+                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
+                if(siJiaoRecordBean!=null){
+                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
+                    if(data!=null){
+                        List<SiJiaoRecordBean.Content> content = data.getContent();
+                        if(content!=null){
+                            for(int i=0;i<content.size();i++){
+                                Integer start_time = content.get(i).getStart_time();
+                                setTimeLine(content.get(i).getStatus(),start_time*60000);
+                            }
+                            arrPositionS.clear();
+                            arrStatusS.clear();
+                            arrStatusF.clear();
+                            arrPositionF.clear();
+                            if(arrPosition.size()>0){
+                                for(int j=0;j<arrPosition.size();j++){
+                                    if(arrPosition.get(j)!=0){
+                                        if(j%2==0){
+                                            arrPositionF.add(3);
+                                            arrStatusF.add(arrStatus.get(j));
+                                        }else{
+                                            arrPositionS.add(3);
+                                            arrStatusS.add(arrStatus.get(j));
+                                        }
+                                    }else{
+                                        if(j%2==0){
+                                            arrPositionF.add(0);
+                                            arrStatusF.add(0);
+                                        }else{
+                                            arrPositionS.add(0);
+                                            arrStatusS.add(0);
+                                        }
+                                    }
+                                }
+                            }
+                            myListF.notifyDataSetChanged();
+                            myListS.notifyDataSetChanged();
+//                            arrPositionF.clear();
+//                            arrStatusF.clear();
+//                            arrPositionS.clear();
+//                            arrStatusS.clear();
+                        }else{
+                            ToastUtils.showToastShort("当天无预约记录");
+                        }
+
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
         };
 
         MyApplication.getHttpQueues().add(jsonObjectRequest);
@@ -378,14 +477,10 @@ public class SiJiaoDetailActivity extends Activity {
                 if(rootBean!=null){
                     Integer success = Integer.valueOf(rootBean.data);
                     if(success>0){
-//                        String startDate = startTime;
-//                        SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
-//                        SharedPreferences.Editor edit = myYuYue.edit();
-//                        edit.putString(startDate,"1,"+startM*60000);
-//                        edit.apply();
-//                        setTimeLine(1,startM*60000,Long.valueOf(startDate+"000"));
-//                        list_1.setAdapter(myListF);
-//                        list_2.setAdapter(myListS);
+                        for(int i = 0;i < 23;i++){
+                            arrPosition.put(i,0);
+                        }
+                        getHistory();
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("失败！请重新预约！");
@@ -418,13 +513,13 @@ public class SiJiaoDetailActivity extends Activity {
 
 
     private class MyListF extends BaseAdapter{
-        ArrayList<Integer> arrPosition;
-        ArrayList<Integer> arrStatus;
+        ArrayList<Integer> arrPositionF;
+        ArrayList<Integer> arrStatusF;
 
 
         MyListF(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
-            this.arrPosition = arrPosition;
-            this.arrStatus = arrStatus;
+            this.arrPositionF = arrPosition;
+            this.arrStatusF = arrStatus;
         }
 
         @Override
@@ -456,21 +551,22 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            for (int i=0;i<arrPosition.size();i++){
-                if(arrPosition.get(i)/2==position){
-                    if(arrStatus.get(i)==1){
+            //for (int i=0;i<arrPosition.size();i++){
+            if(arrPositionF.size()>0){
+                if(arrPositionF.get(position)!=0){
+                    if(arrStatusF.get(position)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==2){
+                    }else if(arrStatusF.get(position)==2){
                         viewHolder.tv_status.setText("已确认未签到");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==3){
+                    }else if(arrStatusF.get(position)==3){
                         viewHolder.tv_status.setText("已取消");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==4){
+                    }else if(arrStatusF.get(position)==4){
                         viewHolder.tv_status.setText("已签到");
                         viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.shixian_item1.setVisibility(View.VISIBLE);
@@ -479,25 +575,27 @@ public class SiJiaoDetailActivity extends Activity {
                 }else{
                     viewHolder.shixian_item1.setVisibility(View.GONE);
                 }
-
             }
+
+               // break;
+            //}
             return convertView;
         }
     }
 
     private class MyListS extends BaseAdapter{
-        ArrayList<Integer> arrPosition;
-        ArrayList<Integer> arrStatus;
+        ArrayList<Integer> arrPositionS;
+        ArrayList<Integer> arrStatusS;
 
 
         MyListS(ArrayList<Integer> arrPosition,ArrayList<Integer> arrStatus){
-            this.arrPosition = arrPosition;
-            this.arrStatus = arrStatus;
+            this.arrPositionS = arrPosition;
+            this.arrStatusS = arrStatus;
         }
 
         @Override
         public int getCount() {
-            return 12;
+            return 11;
         }
 
         @Override
@@ -524,31 +622,39 @@ public class SiJiaoDetailActivity extends Activity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            for (int i=0;i<arrPosition.size();i++){
-                if(arrPosition.get(i)%2==position){
-                    if(arrStatus.get(i)==1){
+            //for (int i=0;i<arrPosition.size();i++){
+            if(arrPositionS.size()>0){
+                if(arrPositionS.get(position)!=0){
+                    if(arrStatusS.get(position)==1){
                         viewHolder.tv_status.setText("等待对方确认");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==2){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==2){
                         viewHolder.tv_status.setText("已确认未签到");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==3){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==3){
                         viewHolder.tv_status.setText("已取消");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                    }else if(arrStatus.get(i)==4){
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
+                    }else if(arrStatusS.get(position)==4){
                         viewHolder.tv_status.setText("已签到");
                         viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
                         viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-
+                        viewHolder.xuxian_item.setVisibility(View.GONE);
                     }
                 }else{
                     viewHolder.xuxian_item1.setVisibility(View.GONE);
+                    viewHolder.xuxian_item.setVisibility(View.VISIBLE);
                 }
 
             }
+
+                //break;
+            //}
             return convertView;
         }
     }
@@ -559,7 +665,7 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
 
-    private void setTimeLine(int status,long startTime,long startDate){
+    private void setTimeLine(int status,long startTime){
         ArrayList<Long> longArr = new ArrayList<>();
         long nine = hourMill*9;
         long nine_half = hourMill*9+1800000;
@@ -614,75 +720,22 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
     private void arrAdd(long starTime,int status,ArrayList<Long> longArr){
-
-        if(status==1){
             for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(1);
-                            }
+                //if(arrPosition.size()<=longArr.size()){
+                    if(longArr.get(i)==starTime){
+                        arrPosition.put(i,1);
+                        if(status==1){
+                            arrStatus.put(i,1);
+                        }else if(status==2){
+                            arrStatus.put(i,2);
+                        }else if(status==3){
+                            arrStatus.put(i,3);
+                        }else if(status==4){
+                            arrStatus.put(i,4);
                         }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(1);
                     }
-                }
+                //}
             }
-        }else if(status==2){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(2);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(2);
-                    }
-
-                }
-            }
-        }else if(status==3){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(3);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(3);
-                    }
-
-                }
-            }
-        }else if(status==4){
-            for(int i=0;i<longArr.size();i++){
-                if(longArr.get(i)==starTime){
-                    if(arrPosition.size()>0){
-                        for(int j=0;j<arrPosition.size();j++){
-                            if(arrPosition.get(j)!=i){
-                                arrPosition.add(i);
-                                arrStatus.add(4);
-                            }
-                        }
-                    }else{
-                        arrPosition.add(i);
-                        arrStatus.add(4);
-                    }
-
-                }
-            }
-        }
 
     }
 

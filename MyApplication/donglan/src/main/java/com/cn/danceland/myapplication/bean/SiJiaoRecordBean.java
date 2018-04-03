@@ -1,12 +1,13 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by feng on 2018/3/12.
  */
 
-public class SiJiaoRecordBean {
+public class SiJiaoRecordBean implements Serializable{
 
     private Data data;
     private boolean success;
@@ -32,7 +33,7 @@ public class SiJiaoRecordBean {
         return errorMsg;
     }
 
-    public class Content {
+    public class Content implements Serializable{
 
         private String initiator_name;
         private String confirm_name;
@@ -61,6 +62,16 @@ public class SiJiaoRecordBean {
         private String member_name;
         private String cancel_date;
         private int week;
+        private int evaluate_id;
+
+        public int getEvaluate_id() {
+            return evaluate_id;
+        }
+
+        public void setEvaluate_id(int evaluate_id) {
+            this.evaluate_id = evaluate_id;
+        }
+
         public void setInitiator_name(String initiator_name) {
             this.initiator_name = initiator_name;
         }
@@ -252,7 +263,7 @@ public class SiJiaoRecordBean {
 
     }
 
-    public class Data {
+    public class Data implements Serializable{
 
         private List<Content> content;
         private int number;

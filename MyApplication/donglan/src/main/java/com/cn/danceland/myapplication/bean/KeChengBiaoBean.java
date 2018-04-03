@@ -1,12 +1,13 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by feng on 2018/3/8.
  */
 
-public class KeChengBiaoBean {
+public class KeChengBiaoBean implements Serializable{
     private List<Data> data;
     private String errorMsg;
     private boolean success;
@@ -32,7 +33,7 @@ public class KeChengBiaoBean {
     }
 
 
-    public class Data {
+    public class Data implements Serializable{
 
         private int appoint_count;
         private int branch_id;

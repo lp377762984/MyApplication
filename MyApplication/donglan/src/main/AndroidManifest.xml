@@ -3,7 +3,7 @@
     package="com.cn.danceland.myapplication"
 
     android:versionCode="3"
-    android:versionName="1.08">
+    android:versionName="1.10">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 往SDCard写入数据权限 -->
@@ -408,6 +408,14 @@
         <activity
             android:name=".activity.AdviseDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.BodyBaseActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.CourseDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SmallTuankeDetailActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

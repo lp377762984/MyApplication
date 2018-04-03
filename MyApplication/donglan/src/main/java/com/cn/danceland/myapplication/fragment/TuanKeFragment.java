@@ -2,11 +2,14 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,26 +22,36 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.CourseActivity;
+import com.cn.danceland.myapplication.activity.SmallTuankeDetailActivity;
 import com.cn.danceland.myapplication.activity.TuanKeDetailActivity;
 import com.cn.danceland.myapplication.bean.CourseBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupClassBean;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import freemarker.template.utility.StringUtil;
 
 /**
  * Created by feng on 2018/1/11.
@@ -78,22 +91,38 @@ public class TuanKeFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(xiaoTuanList!=null){
-                    startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()));
+                    if("小团课".equals(from)){
+                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
+                                putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
+                    }else{
+                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()));
+                    }
                 }
             }
         });
 
 
-
         return view;
     }
+
 
     @Override
     public void onClick(View v) {
 
     }
 
-    private void commitYuyue(KeChengBiaoBean.Data data) throws JSONException {
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==222){
+            CourseActivity activity = (CourseActivity) getActivity();
+            activity.showFragment("2","0");
+        }
+
+    }
+
+    private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {
         if(data!=null){
             SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
             siJiaoYuYueConBean.setGroup_course_id(data.getId());
@@ -102,24 +131,23 @@ public class TuanKeFragment extends BaseFragment {
             }
             siJiaoYuYueConBean.setCourse_type_id(data.getCourse_type_id());
             siJiaoYuYueConBean.setCourse_type_name(data.getCourse_type_name());
-            siJiaoYuYueConBean.setDate(yuyueStartTime+"000");
-
+            siJiaoYuYueConBean.setDate(yuyueStartTime);
             String s = gson.toJson(siJiaoYuYueConBean);
-            JSONObject jsonObject = new JSONObject(s);
             String url;
             if("小团课".equals(from)){
                 url = Constants.GROUPAPPOINT;
             }else{
                 url = Constants.FreeCourseApply;
             }
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
-                        yuyue = true;
+                        rl.setBackgroundColor(Color.parseColor("#ADFF2F"));
+                        tv.setText("已预约");
+                        ToastUtils.showToastShort("预约成功！");
                     }else{
-                        yuyue = false;
+                        ToastUtils.showToastShort("预约失败！请重新预约！");
                     }
 
                 }
@@ -170,7 +198,9 @@ public class TuanKeFragment extends BaseFragment {
             public void onResponse(JSONObject jsonObject) {
                 KeChengBiaoBean keChengBiaoBean = gson.fromJson(jsonObject.toString(), KeChengBiaoBean.class);
                 if(keChengBiaoBean!=null){
-
+                    if(xiaoTuanList!=null){
+                        xiaoTuanList.clear();
+                    }
                     xiaoTuanList = keChengBiaoBean.getData();
                     lv_tuanke.setAdapter(new MyAdapter(xiaoTuanList));
                 }
@@ -240,7 +270,7 @@ public class TuanKeFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return xiaoTuanList.size();
+            return xiaoTuanList==null? 0: xiaoTuanList.size();
 
         }
 
@@ -273,18 +303,18 @@ public class TuanKeFragment extends BaseFragment {
             }else{
                 viewHolder  = (ViewHolder) convertView.getTag();
             }
-            String startTime,endTime;
-            if(xiaoTuanList.get(position).getStart_time()%60==0){
-                startTime = xiaoTuanList.get(position).getStart_time()/60+":00";
-            }else{
-                startTime = xiaoTuanList.get(position).getStart_time()/60+":"+xiaoTuanList.get(position).getStart_time()%60;
-            }
 
-            if(xiaoTuanList.get(position).getEnd_time()%60==0){
-                endTime = xiaoTuanList.get(position).getEnd_time()/60+":00";
-            }else{
-                endTime = xiaoTuanList.get(position).getEnd_time()/60+":"+xiaoTuanList.get(position).getEnd_time()%60;
-            }
+            GradientDrawable background = (GradientDrawable)viewHolder.tuanke_yuyue.getBackground();
+            background.setColor(Color.parseColor("#FF8C00"));
+
+            //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#FF8C00"));
+            viewHolder.tv_yuyue.setTextColor(Color.parseColor("#FFFFFF"));
+            viewHolder.tv_yuyue.setText("预约");
+            String startTime,endTime;
+
+            startTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getStart_time()+""));
+
+            endTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getEnd_time()+""));
             viewHolder.tuanke_time.setText(startTime+"-"+endTime);
             viewHolder.tuanke_leibie.setText(xiaoTuanList.get(position).getCourse_type_name());
             viewHolder.tuanke_name.setText(xiaoTuanList.get(position).getEmployee_name());
@@ -299,7 +329,9 @@ public class TuanKeFragment extends BaseFragment {
             }
 
             if(xiaoTuanList.get(position).getMax_count()==xiaoTuanList.get(position).getAppoint_count()){
-                viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.QuXiao);
+                background.setColor(Color.parseColor("#A9A9A9"));
                 viewHolder.tv_yuyue.setText("预约已满");
                 viewHolder.tuanke_yuyue.setClickable(false);
             }else{
@@ -317,30 +349,30 @@ public class TuanKeFragment extends BaseFragment {
 
             if(xiaoTuanList.get(position).getSelf_appoint_count()>0){
                 yuyue = false;//有预约项，无法点击
-                viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
+                //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
+                //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.YiYuYue);
+                background.setColor(Color.parseColor("#FFFFFF"));
+                viewHolder.tv_yuyue.setTextColor(Color.parseColor("#FF8C00"));
                 viewHolder.tv_yuyue.setText("已预约");
             }
 
             viewHolder.tuanke_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        commitYuyue(xiaoTuanList.get(position));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if(yuyue){
-                        viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
-                        viewHolder.tv_yuyue.setText("已预约");
+                    if("小团课".equals(from)){
+                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position))
+                                .putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
-                        ToastUtils.showToastShort("预约失败！请重新预约！");
+                        commitYuyue(xiaoTuanList.get(position),viewHolder.tuanke_yuyue,viewHolder.tv_yuyue);
                     }
-
                 }
             });
 
-
-            Glide.with(mActivity).load(xiaoTuanList.get(position).getCover_img_url()).into(viewHolder.tuanke_img);
+            if(StringUtils.isNullorEmpty(xiaoTuanList.get(position).getCover_img_url())){
+                Glide.with(mActivity).load(R.drawable.sijiao_card).into(viewHolder.tuanke_img);
+            }else{
+                Glide.with(mActivity).load(xiaoTuanList.get(position).getCover_img_url()).into(viewHolder.tuanke_img);
+            }
 
             return convertView;
         }

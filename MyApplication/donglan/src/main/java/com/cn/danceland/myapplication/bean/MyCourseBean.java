@@ -45,6 +45,16 @@ public class MyCourseBean implements Serializable {
         private long start_date;
         private Integer surplus_count;
         private Integer time_length;
+        private String self_avatar_path;
+
+        public String getSelf_avatar_path() {
+            return self_avatar_path;
+        }
+
+        public void setSelf_avatar_path(String self_avatar_path) {
+            this.self_avatar_path = self_avatar_path;
+        }
+
         public void setBranch_id(Integer branch_id) {
             this.branch_id = branch_id;
         }

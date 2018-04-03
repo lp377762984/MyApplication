@@ -73,11 +73,12 @@
             <RelativeLayout
                 android:id="@+id/sijiao_yuyue"
                 android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
+                android:layout_height="25dp"
+                android:layout_below="@+id/sijiao_jiaolian"
+                android:layout_marginTop="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:background="#FF8C00"
+                android:background="@drawable/btn_bg_blue"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -93,15 +94,34 @@
                 android:id="@+id/sijiao_fangshi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/sijiao_date"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
+                android:layout_alignTop="@+id/sijiao_title"
+                android:layout_centerHorizontal="true"
                 android:textSize="12sp"
                 android:textColor="#c0c0c0"
                 android:text="一对一"
                 />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/sijiao_detail"
+            android:layout_width="80dp"
+            android:layout_height="25dp"
+            android:background="@drawable/btn_bg_blue"
+            android:layout_alignBottom="@+id/rl_item"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="详情"
+                android:textSize="14sp"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+
 
         <ImageView
             android:id="@+id/down_img"

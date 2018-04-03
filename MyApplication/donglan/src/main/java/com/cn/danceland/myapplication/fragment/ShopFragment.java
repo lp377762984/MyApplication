@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
+import com.cn.danceland.myapplication.activity.BodyBaseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.ClubDynActivity;
@@ -564,17 +565,20 @@ public class ShopFragment extends BaseFragment {
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
-
-                    case 19://扫码入场
+ 					   case 19://扫码入场
+                  
+                   
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
-                    case 20://预约团课
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
+               
                         break;
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
-                    case 29://私信
+                    case 26://体测分析
+                        startActivity(new Intent(mActivity, BodyBaseActivity.class));
+                        break;
+ case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     default:
