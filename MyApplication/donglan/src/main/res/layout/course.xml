@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="日期"
+            android:textSize="12sp"
             />
 
 
@@ -159,11 +160,11 @@
         android:layout_height="match_parent"
         app:defaultCalendar="Week"
         app:firstDayOfWeek="Sunday"
-        app:isShowLunar="false"
         app:selectCircleColor="@color/dl_gery"
         app:backgroundColor="#f5f5f5"
         app:selectCircleRadius="30"
-        app:calendarHeight="160dp"
+        app:pointColor="@color/color_dl_yellow"
+        app:pointSize="4dp"
         >
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/ns_view"

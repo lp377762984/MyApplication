@@ -63,6 +63,15 @@ public class SiJiaoRecordBean implements Serializable{
         private String cancel_date;
         private int week;
         private int evaluate_id;
+        private String category;
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
 
         public int getEvaluate_id() {
             return evaluate_id;
