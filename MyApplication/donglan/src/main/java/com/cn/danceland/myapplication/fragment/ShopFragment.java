@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +54,7 @@ import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
+import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
@@ -68,6 +70,9 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
+import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,6 +105,9 @@ public class ShopFragment extends BaseFragment {
     String role;
     List<Data.Roles> roles;
     HashMap<String, String> roleMap, authMap;
+    MZBannerView shop_banner;
+    ArrayList<String> drawableArrayList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,10 +120,11 @@ public class ShopFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (event.getEventCode()==20001){
+        if (event.getEventCode() == 20001) {
             refresh();
         }
     }
@@ -129,6 +138,8 @@ public class ShopFragment extends BaseFragment {
 
         roleList = new ArrayList<String>();
         spinner = v.findViewById(R.id.spinner);
+        shop_banner = v.findViewById(R.id.shop_banner);
+
         setMap();
         addRoles();
         arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
@@ -159,7 +170,7 @@ public class ShopFragment extends BaseFragment {
         ll_top.setBackgroundColor(Color.BLACK);
         ll_top.getBackground().setAlpha(88);
         tv_shopname = v.findViewById(R.id.tv_shopname);
-
+        drawableArrayList = new ArrayList<>();
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
         storelist = v.findViewById(R.id.storelist);
         initData();
@@ -167,11 +178,76 @@ public class ShopFragment extends BaseFragment {
         v.findViewById(R.id.ibtn_call).setOnClickListener(this);
         v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
         tv_shopname.setOnClickListener(this);
+
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
         // mGridView.setVisibility(View.VISIBLE);
 
         return v;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        shop_banner.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        shop_banner.start();
+    }
+
+    private void setBannner() {
+
+        shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            @Override
+            public void onPageClick(View view, int i) {
+//                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
+//                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");
+//                intent.putExtra("shopJingdu", itemsList.get(0).getLng() + "");
+//                intent.putExtra("jingdu", jingdu);
+//                intent.putExtra("weidu", weidu);
+//                intent.putExtra("branchID", itemsList.get(0).getBranch_id() + "");
+//                startActivity(intent);
+            }
+        });
+        if(drawableArrayList!=null&&drawableArrayList.size()==0){
+            drawableArrayList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
+        }
+        // 设置数据
+        shop_banner.setPages(drawableArrayList, new MZHolderCreator<BannerViewHolder>() {
+            @Override
+            public BannerViewHolder createViewHolder() {
+                return new BannerViewHolder();
+            }
+        });
+
+        shop_banner.setIndicatorVisible(false);
+        shop_banner.start();
+
+    }
+
+    public static class BannerViewHolder implements MZViewHolder<String> {
+        private ImageView mImageView;
+        @Override
+        public View createView(Context context) {
+            // 返回页面布局
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            mImageView = (ImageView) view.findViewById(R.id.banner_image);
+            return view;
+        }
+
+        @Override
+        public void onBind(Context context, int position, String data) {
+            // 数据绑定
+            Glide.with(context).load(data).into(mImageView);
+            //mImageView.setImageResource(data);
+        }
+    }
 
     private void setMap() {
         roleMap = new HashMap<>();
@@ -188,15 +264,15 @@ public class ShopFragment extends BaseFragment {
         roleMap.put("收银", "10");
         roleMap.put("兼职教练", "11");
 
-        authMap.put("潜客", "1");
+        authMap.put("准会员", "1");
         authMap.put("会员", "2");
 
     }
 
     public void refresh() {
-        if (myAdapter!=null){
+        if (myAdapter != null) {
             myAdapter.notifyDataSetChanged();
-       //     LogUtil.i("刷新");
+            //     LogUtil.i("刷新");
         }
 
     }
@@ -234,7 +310,7 @@ public class ShopFragment extends BaseFragment {
 
             if (info.getMember() != null) {
                 if ("1".equals(info.getMember().getAuth())) {
-                    roleList.add("潜客");
+                    roleList.add("准会员");
                 } else if ("2".equals(info.getMember().getAuth())) {
                     roleList.add("会员");
                 }
@@ -244,8 +320,10 @@ public class ShopFragment extends BaseFragment {
     }
 
     public void initData() {
+        branchId = info.getPerson().getDefault_branch();
         if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
             getMenus();
+            getBanner(info.getPerson().getDefault_branch());
             getShop(info.getPerson().getDefault_branch());
             mGridView.setVisibility(View.VISIBLE);
             storelist.setVisibility(View.GONE);
@@ -257,6 +335,47 @@ public class ShopFragment extends BaseFragment {
             storelist.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    private void getBanner(final String branchId){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
+                if(branchBannerBean!=null){
+                    List<BranchBannerBean.Data> data = branchBannerBean.getData();
+                    if(data!=null){
+                        for(int i = 0;i<data.size();i++){
+                            drawableArrayList.add(data.get(i).getImg_url());
+                        }
+                        setBannner();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("branchId",branchId);
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
 
@@ -299,7 +418,7 @@ public class ShopFragment extends BaseFragment {
         String url;
         RolesBean rolesBean = new RolesBean();
         if (role != null) {
-            if (!"潜客".equals(role) && !"会员".equals(role)) {
+            if (!"准会员".equals(role) && !"会员".equals(role)) {
                 rolesBean.setRole_type(roleMap.get(role));
                 //id = roleMap.get(role);
                 url = Constants.GETYUANGONGMENUS;
@@ -456,6 +575,8 @@ public class ShopFragment extends BaseFragment {
                 intent1.putExtra("weidu", weidu);
                 intent1.putExtra("shopJingdu", shopJingdu);
                 intent1.putExtra("shopWeidu", shopWeidu);
+                intent1.putExtra("branchID",branchId);
+                intent1.putStringArrayListExtra("imgList",drawableArrayList);
                 startActivity(intent1);
                 break;
             default:
@@ -523,7 +644,7 @@ public class ShopFragment extends BaseFragment {
                     case 6://预约私教
                         Intent intent1 = new Intent(mActivity, CourseActivity.class);
                         intent1.putExtra("isTuanke", "1");
-                        if (role != null && !role.equals("潜客") && !role.equals("会员")) {
+                        if (role != null && !role.equals("准会员") && !role.equals("会员")) {
                             intent1.putExtra("role", role);
                         } else {
                             intent1.putExtra("auth", role);
@@ -565,14 +686,14 @@ public class ShopFragment extends BaseFragment {
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
- 					   case 19://扫码入场
-                  
-                   
+                    case 19://扫码入场
+
+
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
 
                     case 20://预约团课
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke","0"));
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
                         break;
 
                     case 21://储值卡
@@ -581,7 +702,7 @@ public class ShopFragment extends BaseFragment {
                     case 26://体测分析
                         startActivity(new Intent(mActivity, BodyBaseActivity.class));
                         break;
- case 29://私信
+                    case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     default:
@@ -800,13 +921,13 @@ public class ShopFragment extends BaseFragment {
             TextView tv_dcs = view.findViewById(R.id.tv_dcs);
             ImageView ibtn = view.findViewById(R.id.ibtn);
             TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
-            if (menuList.get(i).getId()==29){
-            //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
-                if (EMClient.getInstance().chatManager().getUnreadMsgsCount()==0){
+            if (menuList.get(i).getId() == 29) {
+                //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                if (EMClient.getInstance().chatManager().getUnreadMsgsCount() == 0) {
                     unread_msg_number.setVisibility(View.GONE);
-                }else {
+                } else {
                     unread_msg_number.setVisibility(View.VISIBLE);
-                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
+                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount() + "");
                 }
             }
 
@@ -872,115 +993,115 @@ public class ShopFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void login(final String shopID) {
-        String url = Constants.LOGIN_URL;
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                Gson gson = new Gson();
-                RequestLoginInfoBean requestInfoBean = new RequestLoginInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
-                    //成功
-                    String mUserId = requestInfoBean.getData().getPerson().getId();
-                    //  info.setDefault_branch(shopID);
-                    DataInfoCache.saveOneCache(requestInfoBean.getData(), Constants.MY_INFO);
-                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
-                        mGridView.setVisibility(View.VISIBLE);
-                        storelist.setVisibility(View.GONE);
-                        ll_top.setVisibility(View.VISIBLE);
-                        getMenus();
-                        getShop(info.getPerson().getDefault_branch());
-
-                    } else {
-                        ll_top.setVisibility(View.GONE);
-                        mGridView.setVisibility(View.GONE);
-                        storelist.setVisibility(View.VISIBLE);
-                        getListData();
-
-                    }
-                    //查询信息
-                    queryUserInfo(mUserId);
-                } else {
-                    ToastUtils.showToastShort("加入失败！请检查网络！");
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("请求失败，请查看网络连接");
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("phone", info.getPerson().getPhone_no());
-                map.put("password", SPUtils.getString(Constants.MY_PSWD, ""));
-                // map.put("romType", "0");
-                return map;
-            }
-        };
-
-        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("login");
-        // 设置超时时间
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        // 将请求加入全局队列中
-        MyApplication.getHttpQueues().add(request);
-    }
-
-    private void queryUserInfo(String id) {
-
-        String params = id;
-
-        String url = Constants.QUERY_USERINFO_URL + params;
-
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-
-                //      LogUtil.i(requestInfoBean.toString());
-//                ArrayList<Data> mInfoBean = new ArrayList<>();
-//                mInfoBean.add(requestInfoBean.getData());
-//                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
-                //保存个人信息
-                Data data = requestInfoBean.getData();
-                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-
-            }
-
-        }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
-        };
-        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-        request.setTag("queryUserInfo");
-        // 设置超时时间
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        // 将请求加入全局队列中
-        MyApplication.getHttpQueues().add(request);
-
-    }
+//    private void login(final String shopID) {
+//        String url = Constants.LOGIN_URL;
+//        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                Gson gson = new Gson();
+//                RequestLoginInfoBean requestInfoBean = new RequestLoginInfoBean();
+//                requestInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+//                if (requestInfoBean.getSuccess()) {
+//                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
+//                    //成功
+//                    String mUserId = requestInfoBean.getData().getPerson().getId();
+//                    //  info.setDefault_branch(shopID);
+//                    DataInfoCache.saveOneCache(requestInfoBean.getData(), Constants.MY_INFO);
+//                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
+//                        mGridView.setVisibility(View.VISIBLE);
+//                        storelist.setVisibility(View.GONE);
+//                        ll_top.setVisibility(View.VISIBLE);
+//                        getMenus();
+//                        getShop(info.getPerson().getDefault_branch());
+//
+//                    } else {
+//                        ll_top.setVisibility(View.GONE);
+//                        mGridView.setVisibility(View.GONE);
+//                        storelist.setVisibility(View.VISIBLE);
+//                        getListData();
+//
+//                    }
+//                    //查询信息
+//                    queryUserInfo(mUserId);
+//                } else {
+//                    ToastUtils.showToastShort("加入失败！请检查网络！");
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                ToastUtils.showToastShort("请求失败，请查看网络连接");
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//                map.put("phone", info.getPerson().getPhone_no());
+//                map.put("password", SPUtils.getString(Constants.MY_PSWD, ""));
+//                // map.put("romType", "0");
+//                return map;
+//            }
+//        };
+//
+//        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+//        request.setTag("login");
+//        // 设置超时时间
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        // 将请求加入全局队列中
+//        MyApplication.getHttpQueues().add(request);
+//    }
+//
+//    private void queryUserInfo(String id) {
+//
+//        String params = id;
+//
+//        String url = Constants.QUERY_USERINFO_URL + params;
+//
+//        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                LogUtil.i(s);
+//                Gson gson = new Gson();
+//                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+//
+//                //      LogUtil.i(requestInfoBean.toString());
+////                ArrayList<Data> mInfoBean = new ArrayList<>();
+////                mInfoBean.add(requestInfoBean.getData());
+////                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
+//                //保存个人信息
+//                Data data = requestInfoBean.getData();
+//                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+//                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+//                LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(final VolleyError volleyError) {
+//                LogUtil.i(volleyError.toString());
+//
+//            }
+//
+//        }
+//        ) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+//                return map;
+//            }
+//        };
+//        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+//        request.setTag("queryUserInfo");
+//        // 设置超时时间
+//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        // 将请求加入全局队列中
+//        MyApplication.getHttpQueues().add(request);
+//
+//    }
 
 }

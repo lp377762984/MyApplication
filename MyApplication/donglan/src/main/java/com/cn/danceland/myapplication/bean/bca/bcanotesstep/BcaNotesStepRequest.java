@@ -26,7 +26,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 /**
  * @类说明:体测分析注意事项--网络请求层
  * @author:高振中
- * @date:2018-03-29 11:54:48
+ * @date:2018-04-08 13:41:17
  **/
 public class BcaNotesStepRequest {
 
@@ -34,7 +34,13 @@ public class BcaNotesStepRequest {
 	 * @方法说明:新增体测分析注意事项
 	 **/
 	public void save(BcaNotesStep bcaNotesStep, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/save", new Gson().toJson(bcaNotesStep), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(bcaNotesStep));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/save", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -54,7 +60,13 @@ public class BcaNotesStepRequest {
 	 * @方法说明:修改体测分析注意事项
 	 **/
 	public void update(BcaNotesStep bcaNotesStep, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/update", new Gson().toJson(bcaNotesStep), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(bcaNotesStep));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/update", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -94,7 +106,14 @@ public class BcaNotesStepRequest {
 	 * @方法说明:按条件查询体测分析注意事项列表
 	 **/
 	public void queryList(BcaNotesStepCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryList", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			// LogUtil.i(bcaNotesStep.toString());
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -114,7 +133,14 @@ public class BcaNotesStepRequest {
 	 * @方法说明:按条件查询体测分析注意事项分页列表
 	 **/
 	public void queryPage(BcaNotesStepCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryPage", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryPage", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -156,7 +182,14 @@ public class BcaNotesStepRequest {
 	 * @方法说明:按条件查询体测分析注意事项数据个数
 	 **/
 	public void queryCount(BcaNotesStepCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryCount", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			// LogUtil.i(bcaNotesStep.toString());
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryCount", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}

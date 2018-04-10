@@ -98,7 +98,8 @@ public class TuanKeFragment extends BaseFragment {
                         startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
                                 putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
-                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()));
+                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
+                                putExtra("yuyueStartTime",yuyueStartTime));
                     }
                 }
             }

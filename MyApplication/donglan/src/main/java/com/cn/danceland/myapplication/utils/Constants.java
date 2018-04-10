@@ -10,17 +10,17 @@ public class Constants extends EaseConstant {
    //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-   public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-  //  public static final String HOST = " http://192.168.1.115:8003/";//
+   //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   //public static final String HOST = " http://192.168.1.115:8003/";//
 
     //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-   // public static final String HOST = " http://192.168.1.115:8003/";//
+    //public static final String HOST = " http://192.168.1.115:8003/";//
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   // public static final String HOST = " http://192.168.1.123:8003/";//
-    //public static final String HOST = " http://192.168.1.119:8003/";//
+    //public static final String HOST = " http://192.168.1.123:8003/";//
+    public static final String HOST = " http://192.168.1.119:8003/";//
 
 
     // public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
@@ -120,6 +120,7 @@ public class Constants extends EaseConstant {
     public static final String CANSEL_ORDER = HOST + "/appOrder/cancelOrder";//取消订单
 
     public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
+    public static final String BANNER = HOST + "branch/banner";//门店轮播图
 
 
     //参数相关
@@ -184,7 +185,7 @@ public class Constants extends EaseConstant {
     public static final String FINDAVAI = HOST + "appCourse/availableList";//我的私教
     public static final String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
     public static final String QUERYKECHENGBIAO = HOST + "appGroupCourse/queryGroupCourseByData";//小团课课程表
-    public static final String GROUPAPPOINT = HOST + "appGroupCourse/groupAppoint";//小团课课程表
+    public static final String GROUPAPPOINT = HOST + "appGroupCourse/groupAppoint";//预约小团课
     public static final String FINDGROUP = HOST + "appGroupCourse/findById";//单节小团课详情
     public static final String FREEGROUPCOURSE = HOST + "appFreeGroupCourse/findById";//免费团课详情
     public static final String FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
@@ -201,6 +202,7 @@ public class Constants extends EaseConstant {
     public static final String QUERYGROUPCOURSE = HOST+"appGroupCourse/queryBuyCoursePersonInfo";//查询购买此小团课的人
     public static final String FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
     public static final String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
+    public static final String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
 
 
     //环信相关

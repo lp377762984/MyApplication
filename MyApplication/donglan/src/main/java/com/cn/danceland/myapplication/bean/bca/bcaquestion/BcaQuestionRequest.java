@@ -26,7 +26,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 /**
  * @类说明:问题题干--网络请求层
  * @author:高振中
- * @date:2018-03-29 11:54:48
+ * @date:2018-04-08 13:41:17
  **/
 public class BcaQuestionRequest {
 
@@ -34,7 +34,13 @@ public class BcaQuestionRequest {
 	 * @方法说明:新增问题题干
 	 **/
 	public void save(BcaQuestion bcaQuestion, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/save", new Gson().toJson(bcaQuestion), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(bcaQuestion));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/save", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -54,7 +60,13 @@ public class BcaQuestionRequest {
 	 * @方法说明:修改问题题干
 	 **/
 	public void update(BcaQuestion bcaQuestion, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/update", new Gson().toJson(bcaQuestion), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(bcaQuestion));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/update", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -94,7 +106,14 @@ public class BcaQuestionRequest {
 	 * @方法说明:按条件查询问题题干列表
 	 **/
 	public void queryList(BcaQuestionCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryList", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			// LogUtil.i(bcaQuestion.toString());
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -114,7 +133,14 @@ public class BcaQuestionRequest {
 	 * @方法说明:按条件查询问题题干分页列表
 	 **/
 	public void queryPage(BcaQuestionCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryPage", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryPage", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -156,7 +182,14 @@ public class BcaQuestionRequest {
 	 * @方法说明:按条件查询问题题干数据个数
 	 **/
 	public void queryCount(BcaQuestionCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryCount", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		JSONObject json = null;
+		try {
+			json = new JSONObject(new Gson().toJson(cond));
+		} catch (JSONException e) {
+			// LogUtil.i(bcaQuestion.toString());
+			e.printStackTrace();
+		}
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaQuestion/queryCount", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}

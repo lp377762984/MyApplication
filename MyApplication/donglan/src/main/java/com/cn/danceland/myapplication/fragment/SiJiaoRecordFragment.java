@@ -74,13 +74,6 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(background!=null){
-            background.setColor(getResources().getColor(R.color.color_dl_yellow));
-        }
-    }
 
     public void getRoles(String role, String auth){
         this.role = role;
@@ -144,7 +137,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
     private void initData(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null||!"".equals(role)){
+        if(role!=null){
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
@@ -477,5 +470,13 @@ public class SiJiaoRecordFragment extends BaseFragment {
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(background!=null){
+            background.setColor(getResources().getColor(R.color.color_dl_yellow));
+        }
     }
 }
