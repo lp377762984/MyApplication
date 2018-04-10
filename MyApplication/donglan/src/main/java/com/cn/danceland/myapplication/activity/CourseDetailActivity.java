@@ -299,7 +299,7 @@ public class CourseDetailActivity extends Activity {
         siJiaoYuYueConBean.setSize(6);
 
         String s = gson.toJson(siJiaoYuYueConBean);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYGROUPCOURSE,s ,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYBUYCOURSEPERSONINFO,s ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 

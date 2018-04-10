@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
@@ -24,8 +25,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.GroupRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
+import com.cn.danceland.myapplication.bean.TuanKeRecordBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.CommentFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
@@ -84,6 +87,7 @@ public class CourseActivity extends FragmentActivity {
     Gson gson;
     ArrayList<String> yuyueTimeList;
     String from;
+    GradientDrawable background;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,12 +96,18 @@ public class CourseActivity extends FragmentActivity {
         initHost();
         initView();
         setOnclick();
-        if(startTime!=null){
-            getRecordTime();
-        }
+//        if(startTime!=null){
+//            getRecordTime();
+//            setPoint();
+//        }
 
     }
 
+    private void setPoint(){
+
+        nccalendar.setPoint(yuyueTimeList);
+        yuyueTimeList.clear();
+    }
 
     private void initHost() {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
@@ -107,7 +117,7 @@ public class CourseActivity extends FragmentActivity {
         }
         time = new Time();
         time.setToNow();
-
+        yuyueTimeList = new ArrayList<String>();
         nowTime = time.year+"-"+time.month+"-"+time.monthDay+" 00:00:00";
         startTime = TimeUtils.date2TimeStamp(nowTime,"yyyy-MM-dd 00:00:00")+"";
 
@@ -120,12 +130,15 @@ public class CourseActivity extends FragmentActivity {
     }
 
 
+    public void setBackGround(GradientDrawable background){
+        this.background = background;
+    }
 
 
-    private void getRecordTime(){
+    private void getSiJiaoRecordTime(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null||!"".equals(role)){
+        if(role!=null){
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
@@ -138,13 +151,13 @@ public class CourseActivity extends FragmentActivity {
         siJiaoYuYueConBean.setCourse_date_gt(monthFirstDay);
         siJiaoYuYueConBean.setCourse_date_lt(monthLastDay);
 
-        String s = gson.toJson(siJiaoYuYueConBean);
+        final String s = gson.toJson(siJiaoYuYueConBean);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf",jsonObject.toString());
-                yuyueTimeList = new ArrayList<>();
+                //yuyueTimeList.clear();
                 SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
                 if(siJiaoRecordBean!=null){
                     SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
@@ -152,12 +165,14 @@ public class CourseActivity extends FragmentActivity {
                         List<SiJiaoRecordBean.Content> content = data.getContent();
                         if(content!=null){
                             for(int i=0;i<content.size();i++){
-                                String s1 = TimeUtils.timeStamp2Date(content.get(i).getConfirm_date() + "", "yyyy-MM-dd");
+                                String s1 = TimeUtils.timeStamp2Date(content.get(i).getCourse_date() + "", "yyyy-MM-dd");
                                 yuyueTimeList.add(s1);
                             }
+
                         }
                     }
                 }
+                getGroupData(s);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -179,6 +194,46 @@ public class CourseActivity extends FragmentActivity {
     }
 
 
+    private void getGroupData(String s) {
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                //if("2".equals(course_category)){
+                GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
+                if(groupRecordBean!=null){
+                    List<GroupRecordBean.Data> data = groupRecordBean.getData();
+                    if(data!=null){
+                        for(int i = 0;i<data.size();i++){
+                            String s1 = TimeUtils.timeStamp2Date(data.get(i).getDate() + "", "yyyy-MM-dd");
+                            yuyueTimeList.add(s1);
+                        }
+                    }
+                }
+
+                setPoint();
+                //}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+
+    }
 
 
     private void setOnclick() {
@@ -198,6 +253,16 @@ public class CourseActivity extends FragmentActivity {
                     }else if("2".equals(type)){
                         showFragment(type,isTuanke);
                     }
+
+
+                    if("0".equals(isTuanke)){
+                        getTuanKeRecordTime();
+                    }else {
+                        if(startTime!=null){
+                            getSiJiaoRecordTime();
+                        }
+                    }
+
                 }
             }
 
@@ -216,6 +281,57 @@ public class CourseActivity extends FragmentActivity {
     }
 
 
+    private void getTuanKeRecordTime(){
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+        final Calendar calendar = TimeUtils.dataToCalendar(new Date(Long.valueOf(startTime)));
+
+        monthFirstDay = TimeUtils.getMonthFirstDay(calendar);
+        monthLastDay = TimeUtils.getMonthLastDay(calendar);
+
+        siJiaoYuYueConBean.setCourse_date_gt(monthFirstDay);
+        siJiaoYuYueConBean.setCourse_date_lt(monthLastDay);
+
+        String s = gson.toJson(siJiaoYuYueConBean);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
+                TuanKeRecordBean tuanKeRecordBean = gson.fromJson(jsonObject.toString(), TuanKeRecordBean.class);
+                if(tuanKeRecordBean!=null){
+
+                    List<TuanKeRecordBean.Data> data = tuanKeRecordBean.getData();
+                    if(data!=null){
+                        for(int i = 0;i<data.size();i++){
+                            String s1 = TimeUtils.timeStamp2Date(data.get(i).getDate() + "", "yyyy-MM-dd");
+                            yuyueTimeList.add(s1);
+                        }
+                    }
+
+                }
+                setPoint();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("获取记录失败！");
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+
+    }
+
+
 
     private void initView() {
         course_back = findViewById(R.id.course_back);
@@ -228,6 +344,9 @@ public class CourseActivity extends FragmentActivity {
 //                    isTuanke = "1";
 //                    showFragment(type,isTuanke);
 //                }else{
+                if(background!=null){
+                    background.setColor(getResources().getColor(R.color.color_dl_yellow));
+                }
                     finish();
                // }
             }

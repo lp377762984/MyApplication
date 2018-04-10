@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.GroupRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -32,6 +34,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
     Data data;
     Gson gson;
     String startTime,role,auth;
+    GradientDrawable background;
+    List<SiJiaoRecordBean.Content> contentList;
 
     @Override
     public View initViews() {
@@ -54,15 +59,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
         inflate = View.inflate(mActivity, R.layout.tuanke, null);//界面类似，使用团课列表布局
 
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-
+        contentList = new ArrayList<>();
         gson = new Gson();
 
         initView();
-        try {
-            initData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        initData();
+
 
         return inflate;
     }
@@ -72,16 +74,70 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     }
 
-    public void getRoles(String role,String auth){
+
+    public void getRoles(String role, String auth){
         this.role = role;
         this.auth = auth;
 
     }
 
-    private void initData() throws JSONException {
+    private void getGroupData(String s) {
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                //if("2".equals(course_category)){
+                    GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
+                    if(groupRecordBean!=null){
+                        List<GroupRecordBean.Data> data = groupRecordBean.getData();
+                        if(data!=null){
+                            for(int i = 0;i<data.size();i++){
+                                SiJiaoRecordBean.Content content = new SiJiaoRecordBean().new Content();
+                                content.setCourse_type_name(data.get(i).getCourse_type_name());
+                                content.setCourse_date(Long.valueOf(data.get(i).getDate()));
+                                content.setCategory("2");
+                                content.setStatus(Integer.valueOf(data.get(i).getStatus()));
+                                content.setMember_name(data.get(i).getMember_name());
+                                contentList.add(content);
+                            }
+                            if(contentList!=null){
+                                lv_tuanke.setAdapter(new RecordAdapter(contentList));
+                            }else{
+                                ToastUtils.showToastShort("当天无预约记录");
+                            }
+                        }
+                    }
+                //}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+
+        };
+
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+
+
+    }
+
+
+
+
+    private void initData(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null||!"".equals(role)){
+        if(role!=null){
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
         }else{
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
@@ -94,28 +150,22 @@ public class SiJiaoRecordFragment extends BaseFragment {
         }
 
         //siJiaoYuYueConBean.setEmployee_id(32);
-        String s = gson.toJson(siJiaoYuYueConBean);
+        final String s = gson.toJson(siJiaoYuYueConBean);
 
-        JSONObject jsonObject = new JSONObject(s);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, jsonObject,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf",jsonObject.toString());
+                contentList.clear();
                 SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
                 if(siJiaoRecordBean!=null){
                     SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
                     if(data!=null){
-                        List<SiJiaoRecordBean.Content> content = data.getContent();
-                        if(content!=null){
-                            lv_tuanke.setAdapter(new RecordAdapter(content));
-                        }else{
-                            ToastUtils.showToastShort("当天无预约记录");
-                        }
-
+                        contentList = data.getContent();
                     }
                 }
 
+                getGroupData(s);
 
             }
         }, new Response.ErrorListener() {
@@ -189,6 +239,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+            if("2".equals(list.get(position).getCategory())&&role!=null){
+                viewHolder.rl_button.setVisibility(View.GONE);
+            }else{
+                viewHolder.rl_button.setVisibility(View.VISIBLE);
+            }
+
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
             String time = TimeUtils.timeStamp2Date(list.get(position).getCourse_date() + "", null);
             String start_time;
@@ -198,28 +254,37 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 start_time = list.get(position).getStart_time()/60+":"+list.get(position).getStart_time()%60;
             }
 
-            String end_time  = list.get(position).getEnd_time()/60+":"+list.get(position).getEnd_time()%60;
 
+
+            background = (GradientDrawable)viewHolder.rl_button.getBackground();
 
             viewHolder.course_date.setText("预约时间:"+time.split(" ")[0]+" "+start_time);
-            viewHolder.course_type.setText("一对一");
+            if("2".equals(list.get(position).getCategory())){
+                viewHolder.course_type.setText("小团体");
+            }else {
+                viewHolder.course_type.setText("一对一");
+            }
+
             if(list.get(position).getStatus()==2){
                 viewHolder.rl_button_tv.setText("已确认未签到");
-                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#32CD32"));
+                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_yellow));
+                background.setColor(Color.parseColor("#FFFFFF"));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
             }
             if(list.get(position).getStatus()==3){
                 viewHolder.rl_button_tv.setText("已取消");
-                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                background.setColor(Color.parseColor("#A9A9A9"));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
             }
             if(list.get(position).getStatus()==4){
                 viewHolder.rl_button_tv.setText("已签到");
-                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                background.setColor(Color.parseColor("#A9A9A9"));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
@@ -229,10 +294,14 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if(list.get(position).getStatus()==1){
                     if(list.get(position).getAppointment_type()==2){
                         viewHolder.rl_button_tv.setText("等待确认");
-                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#00BFFF"));
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        viewHolder.rl_button_tv.setTextColor(Color.parseColor("#FFFFFF"));
+                        background.setColor(Color.parseColor("#191970"));
                     }else{
                         viewHolder.rl_button_tv.setText("取消预约");
-                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#FF8C00"));
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        viewHolder.rl_button_tv.setTextColor(Color.parseColor("#FFFFFF"));
+                        background.setColor(Color.parseColor("#FF8C00"));
                     }
                 }
             }else{
@@ -240,10 +309,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if(list.get(position).getStatus()==1){
                     if(list.get(position).getAppointment_type()==1){
                         viewHolder.rl_button_tv.setText("等待确认");
-                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#00BFFF"));
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        background.setColor(Color.parseColor("#191970"));
                     }else{
                         viewHolder.rl_button_tv.setText("取消预约");
-                        viewHolder.rl_button.setBackgroundColor(Color.parseColor("#FF8C00"));
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        background.setColor(Color.parseColor("#FF8C00"));
                     }
                 }
             }
@@ -294,7 +365,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if(Integer.valueOf(s)>0){
                     ToastUtils.showToastShort("确认成功！");
                     tv.setText("上课中");
-                    rl.setBackgroundColor(Color.parseColor("#32CD32"));
+                    tv.setTextColor(getResources().getColor(R.color.white));
+                    background.setColor(Color.parseColor("#32CD32"));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("确认失败！请稍后再试");
@@ -368,7 +440,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if(Integer.valueOf(s)>0){
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
-                    rl.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                    tv.setTextColor(getResources().getColor(R.color.white));
+                    background.setColor(Color.parseColor("#A9A9A9"));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("取消失败！请重新操作");
@@ -397,5 +470,13 @@ public class SiJiaoRecordFragment extends BaseFragment {
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(background!=null){
+            background.setColor(getResources().getColor(R.color.color_dl_yellow));
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.cn.danceland.myapplication.bean.BaseCondition;
 /**
  * @类说明:体测分析--查询条件实体
  * @author:高振中
- * @date:2018-03-29 11:54:48
+ * @date:2018-04-08 13:41:17
  **/
 public class BcaAnalysisCond extends BaseCondition  {
 
@@ -18,6 +18,7 @@ public class BcaAnalysisCond extends BaseCondition  {
 	private String frontal_path;// 正面照
 	private String side_path;// 侧面照
 	private String behind_path;// 背后照
+	private Long member_id;// 会员ID
 
 	public Long getId() {
 		return id;
@@ -66,5 +67,11 @@ public class BcaAnalysisCond extends BaseCondition  {
 	}
 	public void setBehind_path(String behind_path) {
 		this.behind_path = behind_path;
+	}
+	public Long getMember_id() {
+		return member_id;
+	}
+	public void setMember_id(Long member_id) {
+		this.member_id = member_id;
 	}
 }

@@ -21,11 +21,14 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
+import com.cn.danceland.myapplication.fragment.ShopListFragment;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -50,6 +53,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private int currentTabIndex;
     private HomeFragment homeFragment;
     private ShopFragment shopFragment;
+    private ShopListFragment shopListFragment;
     private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;
@@ -57,6 +61,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     public LocationService mLocationClient;
     public BDAbstractLocationListener myListener = new MyLocationListener();
     double jingdu,weidu;
+    Data myInfo;
 
 
 //    @Override
@@ -87,6 +92,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         registerBroadcastReceiver();//注册环信监听
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
+
+        shopListFragment = new ShopListFragment();
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
 //        if (savedInstanceState != null) {
@@ -96,7 +103,18 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //            meFragment = (MeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[3]);
 //        }
 
-        fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
+        myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        if(myInfo!=null){
+            if(myInfo.getPerson().getDefault_branch()!=null){
+                fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
+            }else{
+                fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
+            }
+        }else{
+            fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
+        }
+
+
 
 //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
 //                .add(R.id.fragment_container, discoverFragment).hide(discoverFragment).show(homeFragment)
@@ -219,6 +237,50 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
+    public void setShopFragment(ShopFragment shopFragment,ShopListFragment shopListFragment){
+
+        if(shopFragment!=null){
+            fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
+        }else if(shopListFragment!=null){
+            fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==111){
+            fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
+            FragmentTransaction trx =
+                    getSupportFragmentManager().beginTransaction();
+
+            index = 1;
+            currentTabIndex = 1;
+
+            //trx.hide(fragments[currentTabIndex]);
+//            if(fragments[1].equals(shopListFragment)){
+//                trx.remove(fragments[1]);
+//            }
+//            if (!fragments[1].isAdded()) {
+//                trx.remove(fragments[1]);
+//                trx.add(R.id.fragment_container, fragments[1], FRAGMENT_TAG[1]);
+//            }
+            trx.replace(R.id.fragment_container,shopFragment);
+            trx.commit();
+            //判断当前页
+//            if (currentTabIndex != index) {
+//
+//            }else{
+//                if (!fragments[2].isAdded()) {
+//                    trx.add(R.id.fragment_container, fragments[index], FRAGMENT_TAG[index]);
+//                }
+//                trx.show(fragments[2]);
+//            }
+            //mTabs[1].setSelected(false);
+            // set current tab selected
+            mTabs[1].setSelected(true);
+        }
+    }
 
     @Override
     public void onClick(View view) {

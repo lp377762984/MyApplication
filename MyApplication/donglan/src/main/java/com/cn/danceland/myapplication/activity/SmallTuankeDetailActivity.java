@@ -333,13 +333,14 @@ public class SmallTuankeDetailActivity extends Activity {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         if(item!=null){
-            siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
+            siJiaoYuYueConBean.setGroup_course_id(item.getId());
             url = Constants.QUERYGROUPCOURSE;
         }else{
-            siJiaoYuYueConBean.setCourse_type_id(record.getCourse_type_id());
+            siJiaoYuYueConBean.setGroup_course_id(record.getId());
             url = Constants.FINDGROUPCOURSEAPPOINTPERSON;
         }
 
+        siJiaoYuYueConBean.setDate(yuyueStartTime);
 
         siJiaoYuYueConBean.setPage(0);
         siJiaoYuYueConBean.setSize(6);
@@ -401,7 +402,7 @@ public class SmallTuankeDetailActivity extends Activity {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
-
+        siJiaoYuYueConBean.setDate(yuyueStartTime);
         siJiaoYuYueConBean.setPage(0);
         siJiaoYuYueConBean.setSize(100);
 

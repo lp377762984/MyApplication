@@ -1,15 +1,18 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -29,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -39,7 +43,11 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
+import com.zhouwei.mzbanner.holder.MZViewHolder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,12 +66,14 @@ public class ShopDetailedActivity extends Activity{
     ExpandableTextView tv_detail;
     String phoneNo;
     ImageView detail_phone,detail_adress,img_01,img_02,img_kechenganpai;
-    String jingdu,weidu,shopJingdu,shopWeidu,branchID;
+    String jingdu,weidu,shopJingdu,shopWeidu,branchID,myBranchId;
     RelativeLayout s_button;
     Data myInfo;
     ExpandableListView jiaolian_grid,huiji_grid;
     ImageView down_img,up_img;
     List<ShopJiaoLianBean.Data> jiaolianList;
+    ArrayList<String> imgList;
+    MZBannerView shop_banner;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,14 +93,14 @@ public class ShopDetailedActivity extends Activity{
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
-        if(branchID==null){
-            branchID = myInfo.getPerson().getDefault_branch();
-        }
+        imgList = getIntent().getStringArrayListExtra("imgList");
+        myBranchId = myInfo.getPerson().getDefault_branch();
 
     }
 
     private void initView() {
 
+        shop_banner = findViewById(R.id.shop_banner);
         img_kechenganpai = findViewById(R.id.img_kechenganpai);
         jiaolian_grid = findViewById(R.id.jiaolian_grid);
         huiji_grid = findViewById(R.id.huiji_grid);
@@ -130,8 +140,10 @@ public class ShopDetailedActivity extends Activity{
         s_button = findViewById(R.id.s_button);
 
 //        join_button = findViewById(R.id.join_button);
-        if(branchID!=null){
+        if(myBranchId!=null){
             s_button.setVisibility(View.GONE);
+        }else{
+            s_button.setVisibility(View.VISIBLE);
         }
 
         bt_back = findViewById(R.id.bt_back);
@@ -189,21 +201,66 @@ public class ShopDetailedActivity extends Activity{
                 dialog.show();
             }
         });
-
+        setBannner();
         getShopDetail();
         getJiaolian(branchID);
     }
+    private void setBannner() {
 
+        shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            @Override
+            public void onPageClick(View view, int i) {
+//                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
+//                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");
+//                intent.putExtra("shopJingdu", itemsList.get(0).getLng() + "");
+//                intent.putExtra("jingdu", jingdu);
+//                intent.putExtra("weidu", weidu);
+//                intent.putExtra("branchID", itemsList.get(0).getBranch_id() + "");
+//                startActivity(intent);
+            }
+        });
+        if(imgList!=null&&imgList.size()==0){
+            imgList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
+        }
+        // 设置数据
+        shop_banner.setPages(imgList, new MZHolderCreator<BannerViewHolder>() {
+            @Override
+            public BannerViewHolder createViewHolder() {
+                return new BannerViewHolder();
+            }
+        });
+
+        shop_banner.setIndicatorVisible(false);
+        shop_banner.start();
+
+    }
+
+    public static class BannerViewHolder implements MZViewHolder<String> {
+        private ImageView mImageView;
+        @Override
+        public View createView(Context context) {
+            // 返回页面布局
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            mImageView = (ImageView) view.findViewById(R.id.banner_image);
+            return view;
+        }
+
+        @Override
+        public void onBind(Context context, int position, String data) {
+            // 数据绑定
+            Glide.with(context).load(data).into(mImageView);
+            //mImageView.setImageResource(data);
+        }
+    }
 
     private void join(final String shopID){
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if(s.contains("true")){
-                    //join_button.setVisibility(View.GONE);
-                    ToastUtils.showToastShort("加入成功！");
-                    myInfo.getPerson().setDefault_branch(branchID);
-                    DataInfoCache.saveOneCache(myInfo,Constants.MY_INFO);
+                    reloadInfo();
                 }else{
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -211,14 +268,15 @@ public class ShopDetailedActivity extends Activity{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.e("zzf",volleyError.toString());
+                ToastUtils.showToastShort("加入失败！请检查网络！");
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("branchId",shopID);
-                map.put("follow","true");
+                map.put("join","true");
                 return map;
             }
 
@@ -226,12 +284,52 @@ public class ShopDetailedActivity extends Activity{
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
         };
 
         requestQueue.add(stringRequest);
 
+    }
+
+
+    private void reloadInfo() {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                if (loginInfoBean.getSuccess()) {
+                    DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
+                    myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    ToastUtils.showToastShort("加入成功！");
+                    setResult(111);
+                    finish();
+                } else {
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 
 

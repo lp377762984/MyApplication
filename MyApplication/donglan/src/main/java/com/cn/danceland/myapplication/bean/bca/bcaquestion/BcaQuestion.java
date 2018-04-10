@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @类说明:问题题干--实体类
  * @author:高振中
- * @date:2018-03-29 11:54:48
+ * @date:2018-04-08 13:41:17
  **/
 public class BcaQuestion {
 
@@ -19,9 +19,7 @@ public class BcaQuestion {
 	private Byte type;// 问题类型
 	private String test_content;// 测试内容JSON
 	private Long branch_id;// 门店
-	private List<BcaOption> options;// 选项S
-
-	//新增属性
+	private List<BcaOption> options;
 
 	public List<BcaOption> getOptions() {
 		return options;
@@ -30,6 +28,7 @@ public class BcaQuestion {
 	public void setOptions(List<BcaOption> options) {
 		this.options = options;
 	}
+	//新增属性
 
 	public Long getId() {
 		return id;

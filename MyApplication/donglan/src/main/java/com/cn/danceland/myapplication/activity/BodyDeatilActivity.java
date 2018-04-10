@@ -6,30 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
-import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionRequest;
-import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -42,22 +33,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by feng on 2018/3/29.
+ * Created by feng on 2018/4/8.
  */
 
-public class BodyBaseActivity extends Activity {
+public class BodyDeatilActivity extends Activity {
 
+    DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;
-    View hearerView;
+    View footView;
     private BcaQuestionRequest request;
     private Gson gson;
     List<BcaQuestion> list;
     BodyBaseAdapter bodyBaseAdapter;
-    Data myInfo;
-    View footView;
     CustomGridView gv_bodybase;
     BodyBaseGridAdapter bodyBaseGridAdapter;
-    DongLanTitleView rl_bodybase_title;
     Button body_button;
 
     @Override
@@ -67,37 +56,31 @@ public class BodyBaseActivity extends Activity {
         initHost();
         initView();
         queryList();
-
     }
 
     private void initHost() {
+
         request = new BcaQuestionRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
-        myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
     }
+
     private void initView() {
 
+        rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
+        rl_bodybase_title.setTitle("身体详细情况");
         lv_bodybase = findViewById(R.id.lv_bodybase);
-
-        hearerView = View.inflate(BodyBaseActivity.this, R.layout.bodybase_header, null);
-
-        footView = View.inflate(BodyBaseActivity.this, R.layout.commit_button, null);
-
-        lv_bodybase.addHeaderView(hearerView);
+        footView = View.inflate(BodyDeatilActivity.this, R.layout.commit_button, null);
         lv_bodybase.addFooterView(footView);
-
         bodyBaseAdapter = new BodyBaseAdapter();
         lv_bodybase.setAdapter(bodyBaseAdapter);
-
-        rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
-        rl_bodybase_title.setTitle("身体基本情况");
 
         body_button = footView.findViewById(R.id.body_button);
         body_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BodyBaseActivity.this,BodyDeatilActivity.class));
+                startActivity(new Intent(BodyDeatilActivity.this,PhysicalTestActivity.class));
             }
         });
 
@@ -109,7 +92,7 @@ public class BodyBaseActivity extends Activity {
      **/
     public void queryList() {
         BcaQuestionCond cond = new BcaQuestionCond();
-        cond.setType(Byte.valueOf("1"));
+        cond.setType(Byte.valueOf("2"));
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
                 DLResult<List<BcaQuestion>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<BcaQuestion>>>() {
@@ -126,8 +109,7 @@ public class BodyBaseActivity extends Activity {
     }
 
 
-
-    private class BodyBaseAdapter extends BaseAdapter{
+    private class BodyBaseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -146,7 +128,7 @@ public class BodyBaseActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(BodyBaseActivity.this, R.layout.bodybase_item, null);
+            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_item, null);
 
 
             gv_bodybase = view.findViewById(R.id.gv_bodybase);
@@ -201,7 +183,7 @@ public class BodyBaseActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            View view = View.inflate(BodyBaseActivity.this, R.layout.bodybase_grid_item, null);
+            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_grid_item, null);
             CheckBox rb_grid = view.findViewById(R.id.rb_grid);
             rb_grid.setText(options.get(position).getTitle());
 
@@ -210,6 +192,4 @@ public class BodyBaseActivity extends Activity {
         }
 
     }
-
-
 }

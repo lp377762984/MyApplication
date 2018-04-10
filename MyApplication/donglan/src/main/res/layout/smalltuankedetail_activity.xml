@@ -193,7 +193,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="15dp"
-                style="@style/BtnCommitStyle">
+                android:background="@drawable/btn_bg_blue"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                >
                 <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"

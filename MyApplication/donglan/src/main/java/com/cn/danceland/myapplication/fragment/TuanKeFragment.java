@@ -70,17 +70,20 @@ public class TuanKeFragment extends BaseFragment {
     boolean yuyue;
     MyAdapter myAdapter;
     List<KeChengBiaoBean.Data> xiaoTuanList;
+    GradientDrawable background;
+    CourseActivity activity;
 
     @Override
     public View initViews() {
 
         View view = View.inflate(mActivity, R.layout.tuanke, null);
+        activity = (CourseActivity) getActivity();
 
-        try {
-            getData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            getData();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         lv_tuanke = view.findViewById(R.id.lv_tuanke);
 
 //        myAdapter = new MyAdapter(xiaoTuanList);
@@ -95,7 +98,8 @@ public class TuanKeFragment extends BaseFragment {
                         startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
                                 putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
-                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()));
+                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
+                                putExtra("yuyueStartTime",yuyueStartTime));
                     }
                 }
             }
@@ -116,11 +120,11 @@ public class TuanKeFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==222){
-            CourseActivity activity = (CourseActivity) getActivity();
             activity.showFragment("2","0");
         }
 
     }
+
 
     private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {
         if(data!=null){
@@ -143,13 +147,14 @@ public class TuanKeFragment extends BaseFragment {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
-                        rl.setBackgroundColor(Color.parseColor("#ADFF2F"));
+                        background.setColor(Color.parseColor("#FFFFFF"));
+                        tv.setTextColor(Color.parseColor("#FF8C00"));
                         tv.setText("已预约");
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("预约失败！请重新预约！");
                     }
-
+                    activity.setBackGround(background);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -203,6 +208,7 @@ public class TuanKeFragment extends BaseFragment {
                     }
                     xiaoTuanList = keChengBiaoBean.getData();
                     lv_tuanke.setAdapter(new MyAdapter(xiaoTuanList));
+                    activity.setBackGround(background);
                 }
             }
         }, new Response.ErrorListener() {
@@ -222,38 +228,38 @@ public class TuanKeFragment extends BaseFragment {
     }
 
 
-    private void getData() throws JSONException {
-        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        GroupClassBean groupClassBean = new GroupClassBean();
-        groupClassBean.setPageCount(12);
-        groupClassBean.setPage(0);
-        groupClassBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
-        groupClassBean.setCourse_date(System.currentTimeMillis());
-        String s = gson.toJson(groupClassBean);
-        JSONObject jsonObject = new JSONObject(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCLASS, jsonObject,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                CourseBean courseBean = gson.fromJson(jsonObject.toString(), CourseBean.class);
-                List<CourseBean.Content> content = courseBean.getData().getContent();
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-
-        };
-        MyApplication.getHttpQueues().add(jsonObjectRequest);
-    }
+//    private void getData() throws JSONException {
+//        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//        GroupClassBean groupClassBean = new GroupClassBean();
+//        groupClassBean.setPageCount(12);
+//        groupClassBean.setPage(0);
+//        groupClassBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
+//        groupClassBean.setCourse_date(System.currentTimeMillis());
+//        String s = gson.toJson(groupClassBean);
+//        JSONObject jsonObject = new JSONObject(s);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCLASS, jsonObject,new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject jsonObject) {
+//                CourseBean courseBean = gson.fromJson(jsonObject.toString(), CourseBean.class);
+//                List<CourseBean.Content> content = courseBean.getData().getContent();
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//
+//            }
+//        }){
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String,String> map = new HashMap<String,String>();
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+//                return map;
+//            }
+//
+//        };
+//        MyApplication.getHttpQueues().add(jsonObjectRequest);
+//    }
 
 
 
@@ -304,7 +310,8 @@ public class TuanKeFragment extends BaseFragment {
                 viewHolder  = (ViewHolder) convertView.getTag();
             }
 
-            GradientDrawable background = (GradientDrawable)viewHolder.tuanke_yuyue.getBackground();
+
+            background = (GradientDrawable)viewHolder.tuanke_yuyue.getBackground();
             background.setColor(Color.parseColor("#FF8C00"));
 
             //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#FF8C00"));

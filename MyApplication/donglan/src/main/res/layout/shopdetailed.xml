@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/bg_white"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_white">
 
     <RelativeLayout
         android:id="@+id/rl_01"
@@ -23,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="团课详情"
+            android:text="门店详情"
             android:textColor="@color/white"
             android:layout_centerInParent="true"
             />
@@ -47,18 +48,28 @@
 
 
 
-                    <ImageView
-                        android:id="@+id/store_top_bg"
+                    <!--<ImageView-->
+                        <!--android:id="@+id/store_top_bg"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="240dp"-->
+                        <!--android:src="@drawable/img_man"-->
+                        <!--android:scaleType="centerCrop"-->
+                        <!--/>-->
+
+                    <com.zhouwei.mzbanner.MZBannerView
+                        android:id="@+id/shop_banner"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
-                        android:src="@drawable/img_man"
-                        android:scaleType="centerCrop"
+                        android:layout_height="220dp"
+                        app:open_mz_mode="false"
+                        app:canLoop="true"
+                        app:indicatorAlign="center"
+                        app:indicatorPaddingLeft="10dp"
                         />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
-                        android:layout_alignBottom="@+id/store_top_bg"
+                        android:layout_alignBottom="@+id/shop_banner"
                         android:background="#7f808080"
                         >
                         <TextView

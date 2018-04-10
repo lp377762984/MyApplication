@@ -416,6 +416,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.SmallTuankeDetailActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyDeatilActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.PhysicalTestActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

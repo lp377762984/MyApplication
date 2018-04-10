@@ -73,7 +73,7 @@
                 android:id="@+id/rl_button"
                 android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:background="#FF8C00"
+                android:background="@drawable/btn_bg_blue"
                 android:layout_weight="1"
                 android:layout_gravity="right"
                 android:layout_marginRight="15dp"

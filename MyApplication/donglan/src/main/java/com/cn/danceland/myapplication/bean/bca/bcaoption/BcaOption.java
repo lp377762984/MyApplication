@@ -3,7 +3,7 @@ package com.cn.danceland.myapplication.bean.bca.bcaoption;
 /**
  * @类说明:答案选项--实体类
  * @author:高振中
- * @date:2018-03-29 11:54:48
+ * @date:2018-04-08 13:41:17
  **/
 public class BcaOption {
 

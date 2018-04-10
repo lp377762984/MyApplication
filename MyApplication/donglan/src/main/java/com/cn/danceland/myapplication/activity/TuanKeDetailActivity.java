@@ -16,19 +16,26 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CourseMemberBean;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
 
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +53,8 @@ public class TuanKeDetailActivity extends Activity {
     Gson gson;
     TextView kecheng_name,kecheng_time,kecheng_place,tv_jieshao,
     kecheng_room,course_type,tv_tuanke_title;
+    Data data;
+    String yuyueStartTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class TuanKeDetailActivity extends Activity {
         setContentView(R.layout.smalltuankedetail_activity);
         initHost();
         initView();
+        getPeople();
     }
 
     private void initHost() {
@@ -60,6 +70,8 @@ public class TuanKeDetailActivity extends Activity {
         gson = new Gson();
 
         groupId = getIntent().getIntExtra("groupId",999);
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        yuyueStartTime = getIntent().getStringExtra("yuyueStartTime");
 
 
     }
@@ -141,6 +153,42 @@ public class TuanKeDetailActivity extends Activity {
         kecheng_name.setText(detailData.getCourse_type_name());
         tv_jieshao.setText(detailData.getCourse_describe());
 
+
+    }
+
+
+    private void getPeople(){
+
+        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+        siJiaoYuYueConBean.setGroup_course_id(groupId);
+        siJiaoYuYueConBean.setDate(yuyueStartTime);
+        siJiaoYuYueConBean.setPage(0);
+        siJiaoYuYueConBean.setSize(6);
+
+        String s = gson.toJson(siJiaoYuYueConBean);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDFREEGROUPCOURSEAPPLYPERSON,s ,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+
+
+                LogUtil.e("zzf",jsonObject.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf",volleyError.toString());
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
 
     }
 
