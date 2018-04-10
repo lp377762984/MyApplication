@@ -74,6 +74,7 @@ public class RequestMyCardListBean {
         private String able_up;
         private String old_card_id;
         private String deposit;
+        private String  img_url;
 
         @Override
         public String toString() {
@@ -88,7 +89,7 @@ public class RequestMyCardListBean {
                     ", gender='" + gender + '\'' +
                     ", chip_number='" + chip_number + '\'' +
                     ", type_id='" + type_id + '\'' +
-                    ", total_count=" + total_count +
+                    ", total_count='" + total_count + '\'' +
                     ", end_date='" + end_date + '\'' +
                     ", face_value='" + face_value + '\'' +
                     ", charge_mode=" + charge_mode +
@@ -115,7 +116,16 @@ public class RequestMyCardListBean {
                     ", able_up='" + able_up + '\'' +
                     ", old_card_id='" + old_card_id + '\'' +
                     ", deposit='" + deposit + '\'' +
+                    ", img_url='" + img_url + '\'' +
                     '}';
+        }
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
         }
 
         public String getId() {

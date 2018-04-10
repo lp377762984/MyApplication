@@ -15,6 +15,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
+import com.cn.danceland.myapplication.activity.MyShopActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
@@ -73,6 +74,8 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.ll_my_guanzhu).setOnClickListener(this);
         v.findViewById(R.id.ll_my_fans).setOnClickListener(this);
         v.findViewById(R.id.ll_my_data).setOnClickListener(this);
+        v.findViewById(R.id.ll_my_shop).setOnClickListener(this);
+
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
         tv_fans = v.findViewById(R.id.tv_fans);
@@ -255,7 +258,9 @@ public class MeFragment extends BaseFragment {
                 Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);
                 startActivity(intent2);
                 break;
-
+            case R.id.ll_my_shop:
+                startActivity(new Intent(mActivity, MyShopActivity.class));
+                break;
             default:
                 break;
         }

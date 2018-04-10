@@ -121,7 +121,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         et_company.setText(info.getCompany());
         et_address.setText(info.getAddress());
         et_email.setText(info.getMail());
-        tv_guest_aware_way.setText(info.getGuest_aware_way());
+        tv_guest_aware_way.setText(info.getGuest_way());
         if (!TextUtils.isEmpty(info.getFitness_level())) {
             sr_fitness_level.setRating(Integer.parseInt(info.getFitness_level()));
         }
@@ -150,7 +150,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         }
         if (info.getProjectList() != null && info.getProjectList().size() > 0) {
             String s1 = "";
-            for (int j = 0; j < info.getProject_ids().size(); j++) {
+            for (int j = 0; j < info.getProjectList().size(); j++) {
 
                 if (s1 == "") {
                     s1 = info.getProjectList().get(j).getData_value();
@@ -455,15 +455,25 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
-
+    class  StrBean{
+        public  String branch_id;
+        public  String type_code;
+    }
 
     private void findParams(final int codetype) {
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_TYPE_CODE + codetype, new Response.Listener<String>() {
+        StrBean strBean=new StrBean();
+        strBean.type_code=codetype+"";
+        if (codetype!=REGISTER_CHANNEL){//客户来源不分门店
+            Data data=(Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
+            strBean.branch_id=data.getPerson().getDefault_branch();
+        }
+  //      LogUtil.i( gson.toJson(strBean).toString());
+        JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
 
-                ParamInfoBean paramInfoBean = gson.fromJson(s, ParamInfoBean.class);
+                ParamInfoBean paramInfoBean = gson.fromJson(jsonObject.toString(), ParamInfoBean.class);
 
                 if (paramInfoBean.getSuccess()) {
                     mParamInfoList = paramInfoBean.getData();
@@ -477,16 +487,13 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                     }
                 }
 
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                ToastUtils.showToastShort(volleyError.toString());
-
             }
-        }) {
+        }){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
@@ -495,6 +502,28 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 return map;
             }
         };
+//        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE + codetype, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//
+//                ToastUtils.showToastShort(volleyError.toString());
+//
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+//
+//                return map;
+//            }
+//        };
         MyApplication.getHttpQueues().add(request);
 
 

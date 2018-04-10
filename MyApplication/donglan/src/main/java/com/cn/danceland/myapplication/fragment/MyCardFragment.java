@@ -14,6 +14,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MyQRCodeActivity;
@@ -21,6 +23,7 @@ import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -131,7 +134,7 @@ public class MyCardFragment extends BaseFragment {
 
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
                 viewHolder.btn_commit=view.findViewById(R.id.btn_commit);
-
+                viewHolder.iv_card=view.findViewById(R.id.iv_card);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
@@ -177,7 +180,8 @@ public class MyCardFragment extends BaseFragment {
                    startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data",data.toString()));
                 }
             });
-
+            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }
 
@@ -187,6 +191,7 @@ public class MyCardFragment extends BaseFragment {
             TextView tv_time;
             TextView tv_cardtype;
             Button btn_commit;
+            XCRoundRectImageView iv_card;
         }
 
     }

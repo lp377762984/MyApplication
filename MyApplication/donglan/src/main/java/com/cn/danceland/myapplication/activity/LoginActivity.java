@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -49,6 +48,13 @@ import com.hyphenate.chat.EMClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -280,7 +286,20 @@ public class LoginActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
             case R.id.tv_login_others://其他方式登陆
-                Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
+             new Thread(){
+                 @Override
+                 public void run() {
+                     try {
+                         getServerVersion();
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                     }
+
+                 }
+             }.start();
+
+
                 break;
             case R.id.iv_pswd_see://设置密码可见
                 if (isPswdChecked) {
@@ -303,6 +322,42 @@ public class LoginActivity extends Activity implements OnClickListener {
             default:
                 break;
         }
+    }
+
+
+
+    private boolean getServerVersion() {
+        String urlStr = "http://192.168.1.93/test.txt";
+        //long a = System.currentTimeMillis();
+        try {
+            /*
+             * 通过URL取得HttpURLConnection 要网络连接成功，需在AndroidMainfest.xml中进行权限配置
+             * <uses-permission android:name="android.permission.INTERNET" />
+             */
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(60 * 1000);
+            conn.setReadTimeout(60 * 1000);
+            // 取得inputStream，并进行读取
+            InputStream input = conn.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            String line = null;
+            StringBuffer sb = new StringBuffer();
+            while ((line = in.readLine()) != null) {
+                sb.append(line);
+
+            }
+
+            LogUtil.e("zzf",sb.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -336,11 +391,16 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
 
-                    if (DemoHelper.getInstance().isLoggedIn()){
+                    if (DemoHelper.getInstance().isLoggedIn()) {
 
                     }
-                   login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
-                //    login_hx(data.getPerson().getMember_no(),"QWE",data);
+                    if (Constants.HX_DEV_CONFIG) {
+                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+                    } else {
+                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+                    }
+
+                    //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
 
                     ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
@@ -362,7 +422,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                 map.put("terminal", "1");
+                map.put("terminal", "1");
                 return map;
             }
         };
@@ -380,7 +440,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         String params = id;
 
-            String url = Constants.QUERY_USER_DYN_INFO_URL + params;
+        String url = Constants.QUERY_USER_DYN_INFO_URL + params;
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -389,25 +449,21 @@ public class LoginActivity extends Activity implements OnClickListener {
                 Gson gson = new Gson();
                 RequsetUserDynInfoBean requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
-                if (requestInfoBean.getSuccess()){
-                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
-                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
-                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
 
 
-                }else {
+                } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
 
 
 
-                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                setMipushId();
-                finish();
 
 
-               // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
+                // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -439,42 +495,46 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     /**
      * 登录环信账户
+     *
      * @param admin
      * @param pswd
      * @param data
      */
-    private void login_hx(String admin, String pswd , final Data data ){
+    private void login_hx(String admin, String pswd, final Data data) {
 
-        LogUtil.i(admin+"--"+pswd);
+        LogUtil.i(admin + "--" + pswd);
 
-                EMClient.getInstance().login(admin,pswd,new EMCallBack() {//回调
-                    @Override
-                    public void onSuccess() {
-                        EMClient.getInstance().groupManager().loadAllGroups();
-                        EMClient.getInstance().chatManager().loadAllConversations();
-                      LogUtil.i( "登录聊天服务器成功！");
+        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
+            @Override
+            public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                LogUtil.i("登录聊天服务器成功！");
 
-                      //  EaseUserUtils.setUserAvatar();
+                //  EaseUserUtils.setUserAvatar();
 //                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
 //                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
-                        PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
-                        LogUtil.i(data.getPerson().getMember_no());
-                        PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
-                        PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
-                     //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
+                LogUtil.i(data.getPerson().getMember_no());
+                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
+                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
+                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                setMipushId();
+                finish();
+            }
 
-                    }
+            @Override
+            public void onProgress(int progress, String status) {
 
-                    @Override
-                    public void onProgress(int progress, String status) {
+            }
 
-                    }
-
-                    @Override
-                    public void onError(int code, String message) {
-                        LogUtil.i( "登录聊天服务器失败！"+code+message);
-                    }
-                });
+            @Override
+            public void onError(int code, String message) {
+                LogUtil.i("登录聊天服务器失败！" + code + message);
+            }
+        });
     }
 
     /**

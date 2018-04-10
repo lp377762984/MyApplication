@@ -266,7 +266,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 //点赞
 
 
-
                 if (data.get(position).isPraise()) {//已点赞
 
 
@@ -299,15 +298,12 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         });
 
 
-
-
-
         viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //     ToastUtils.showToastShort("评论");
-                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()).putExtra("from",1));
-                EventBus.getDefault().post(new IntEvent(100,8902));
+                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()).putExtra("from", 1));
+                EventBus.getDefault().post(new IntEvent(100, 8902));
             }
         });
         viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
@@ -368,9 +364,9 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
 
         //  LogUtil.i(data.get(position).getNickName());
-     //   if (!TextUtils.isEmpty(data.get(position).getNickName())) {
-            viewHolder.tv_nick_name.setText(data.get(position).getNickName());
-       // }
+        //   if (!TextUtils.isEmpty(data.get(position).getNickName())) {
+        viewHolder.tv_nick_name.setText(data.get(position).getNickName());
+        // }
 
 
         //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
@@ -398,9 +394,9 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-          //      context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from",1));
-                EventBus.getDefault().post(new IntEvent(100,8902));
+                //      context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
+                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from", 1));
+                EventBus.getDefault().post(new IntEvent(100, 8902));
             }
         });
 
@@ -422,8 +418,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                     .load(data.get(position).getVedioImg())
                     .into(viewHolder.jzVideoPlayer.thumbImageView);
             //  viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
-            viewHolder.jzVideoPlayer.positionInList = position ;
-         //   LogUtil.i(position + "");
+            viewHolder.jzVideoPlayer.positionInList = position;
+            //   LogUtil.i(position + "");
 
 //            viewHolder.jzVideoPlayer.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -458,18 +454,18 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 String[] b = sb.toString().split("_");
                 String[] c = b[1].toString().toString().split("X");
 
-                LogUtil.i(b[1].toString());
-
-                LogUtil.i(c[0]);
-                LogUtil.i(c[1]);
-                LogUtil.i(sb.toString());
+//                LogUtil.i(b[1].toString());
+//
+//                LogUtil.i(c[0]);
+//                LogUtil.i(c[1]);
+//                LogUtil.i(sb.toString());
                 if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                    linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                     viewHolder.iv_pic.setLayoutParams(linearParams);
                 } else {
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                    linearParams.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                     viewHolder.iv_pic.setLayoutParams(linearParams);
                 }
 
@@ -492,25 +488,24 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                     }
                 });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(context, 15f),  DensityUtils.dp2px(context, 5f), 0, 0);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
 
-            }
-            else   if (data.get(position).getImgList().size()==4){
+            } else if (data.get(position).getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 viewHolder.gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(context,205f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f), DensityUtils.dp2px(context, 5f),0,0);
+                int width = DensityUtils.dp2px(context, 205f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            }else {
+            } else {
                 viewHolder.gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(context,310f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams =new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins( DensityUtils.dp2px(context,15f), DensityUtils.dp2px(context, 5f),0,0);
+                int width = DensityUtils.dp2px(context, 310f);//此处的宽度需要动态计算
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
@@ -577,6 +572,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         LinearLayout ll_guanzhu;
     }
 
+
     private void showListDialog(final int pos) {
         final String[] items = {"举报"};
         AlertDialog.Builder listDialog =
@@ -588,7 +584,9 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
                 switch (which) {
                     case 0:
-                        jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+
+                        //   jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+                        showJuBaoListDialog(pos);
                         break;
                     case 1:
 
@@ -601,11 +599,30 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         listDialog.show();
     }
 
+    private void showJuBaoListDialog(final int pos) {
+        final String[] items = {"色情、裸露", "不友善行为", "广告、推销", "其他"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1, items[which]);
+
+
+            }
+        });
+        listDialog.show();
+    }
 
     class JuBaoBean {
+
         public String member_id;//评论或动态id
         public String bereported_id;
         public String type;//
+        public String content;
     }
 
     /**
@@ -615,18 +632,19 @@ public class AttentionDynListviewAdater extends BaseAdapter {
      * @param user_id
      * @param type
      */
-    private void jubao(final String msgId, final String user_id, int type) {
-        JuBaoBean juBaoBean=new JuBaoBean();
-        juBaoBean.bereported_id=user_id;
-        juBaoBean.member_id=msgId;
-        juBaoBean.type=type+"";
+    private void jubao(final String msgId, final String user_id, int type, String content) {
+        JuBaoBean juBaoBean = new JuBaoBean();
+        juBaoBean.bereported_id = user_id;
+        juBaoBean.member_id = msgId;
+        juBaoBean.type = type + "";
+        juBaoBean.content = content;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
-                if (simpleBean.isSuccess()){
+                RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
                     ToastUtils.showToastShort("已举报");
-                }else {
+                } else {
                     ToastUtils.showToastShort("举报失败");
                 }
 
@@ -716,10 +734,10 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         StrBean strBean = new StrBean();
         strBean.is_praise = isPraise;
         strBean.msg_id = msgId;
-        Gson gson=new Gson();
-        JSONObject jsonObject=new JSONObject(gson.toJson(strBean).toString());
+        Gson gson = new Gson();
+        JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
         LogUtil.i(gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "appPraise/giveThumbs",jsonObject , new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "appPraise/giveThumbs", jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 LogUtil.i(json.toString());
@@ -779,7 +797,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
     }
 
 
-
     /**
      * 加关注
      *
@@ -788,12 +805,12 @@ public class AttentionDynListviewAdater extends BaseAdapter {
      */
     private void addGuanzhu(final String id, final boolean b, final int pos) {
 
-        StrBean1 strBean1=new StrBean1();
-        strBean1.is_follower=b;
-        strBean1.user_id=id;
+        StrBean1 strBean1 = new StrBean1();
+        strBean1.is_follower = b;
+        strBean1.user_id = id;
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
 
             @Override
@@ -857,23 +874,23 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         String Params = Constants.DEL_DYN_MSG + "/" + msgId;
 
 
-                final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        LogUtil.i(s);
+        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
 
-                        Gson gson = new Gson();
-                        RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
-                        requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
-                        if (requestInfoBean.isSuccess()) {
-                            ToastUtils.showToastShort("删除成功");
-                            // data.remove(pos);
-                            //   notifyDataSetChanged();
-                            EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
-                            EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
-                        } else {
-                            ToastUtils.showToastShort("删除失败");
-                        }
+                Gson gson = new Gson();
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
+                if (requestInfoBean.isSuccess()) {
+                    ToastUtils.showToastShort("删除成功");
+                    // data.remove(pos);
+                    //   notifyDataSetChanged();
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
+                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
+                } else {
+                    ToastUtils.showToastShort("删除失败");
+                }
 //
 //                Gson gson = new Gson();
 //                 requestInfoBean = new RequestInfoBean();

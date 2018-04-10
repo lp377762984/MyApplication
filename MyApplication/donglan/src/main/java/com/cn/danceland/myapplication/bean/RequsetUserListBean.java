@@ -82,21 +82,6 @@ public class RequsetUserListBean {
                 return follower;
             }
 
-            @Override
-            public String toString() {
-                return "Content{" +
-                        "id='" + id + '\'' +
-                        ", follower='" + follower + '\'' +
-                        ", user_id='" + user_id + '\'' +
-                        ", success='" + success + '\'' +
-                        ", error_msg='" + error_msg + '\'' +
-                        ", self_url='" + self_path + '\'' +
-                        ", nick_name='" + nick_name + '\'' +
-                        ", gender=" + gender +
-                        ", praise_user_id='" + praise_user_id + '\'' +
-                        '}';
-            }
-
             private String id;
             private String follower;
             private String user_id;
@@ -107,16 +92,32 @@ public class RequsetUserListBean {
             private String self_url;
             private int gender;
             private String praise_user_id;
+            private boolean is_follower;
 
-//            private int id;
-//            private int follower;
-//            private int userId;
-//            private String success;
-//            private String errorMsg;
-//            private String self_url;
-//            private String nickName;
-//            private int gender;
+            @Override
+            public String toString() {
+                return "Content{" +
+                        "id='" + id + '\'' +
+                        ", follower='" + follower + '\'' +
+                        ", user_id='" + user_id + '\'' +
+                        ", success='" + success + '\'' +
+                        ", error_msg='" + error_msg + '\'' +
+                        ", self_path='" + self_path + '\'' +
+                        ", nick_name='" + nick_name + '\'' +
+                        ", self_url='" + self_url + '\'' +
+                        ", gender=" + gender +
+                        ", praise_user_id='" + praise_user_id + '\'' +
+                        ", is_follower='" + is_follower + '\'' +
+                        '}';
+            }
 
+            public boolean getIs_follower() {
+                return is_follower;
+            }
+
+            public void setIs_follower(boolean is_follower) {
+                this.is_follower = is_follower;
+            }
 
             public String getUser_id() {
                 return user_id;

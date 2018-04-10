@@ -311,6 +311,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
+
+                //环信登录
                 if (loginInfoBean.getSuccess()) {
 
                     SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
@@ -322,11 +324,16 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     }
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                //    ToastUtils.showToastShort("登录成功");
+                    //    ToastUtils.showToastShort("登录成功");
+                    if (Constants.HX_DEV_CONFIG) {//判断是否是开发环境
+                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+                    } else {
+                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+                    }
+
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
-                    //环信登录
-                    login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+
                 } else {
 
                     ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
@@ -364,18 +371,19 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     /**
      * 登录环信账户
+     *
      * @param admin
      * @param pswd
      * @param data
      */
-    private void login_hx(String admin, String pswd , final Data data ){
-
-        EMClient.getInstance().login(admin,pswd,new EMCallBack() {//回调
+    private void login_hx(String admin, String pswd, final Data data) {
+        LogUtil.i(admin + pswd);
+        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
             @Override
             public void onSuccess() {
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
-                LogUtil.i( "登录聊天服务器成功！");
+                LogUtil.i("登录聊天服务器成功！");
 
                 //  EaseUserUtils.setUserAvatar();
 //                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
@@ -385,7 +393,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
                 PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
                 //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
-
+                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                setMipushId();
+                finish();
             }
 
             @Override
@@ -395,7 +406,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onError(int code, String message) {
-                LogUtil.i( "登录聊天服务器失败！");
+                LogUtil.i("登录聊天服务器失败！");
             }
         });
     }
@@ -413,22 +424,18 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 Gson gson = new Gson();
                 RequsetUserDynInfoBean requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
-                if (requestInfoBean.getSuccess()){
-                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
-                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
-                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
 
 
-                }else {
+                } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
 
 
 
-                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
-                setMipushId();
-                finish();
 
 
                 // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
@@ -463,7 +470,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     *
      * 设置mipusid
      */
     private void setMipushId() {
@@ -474,17 +480,17 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 //   LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()){
-                //    LogUtil.i("设置mipush成功");
-                }else {
-             //       LogUtil.i("设置mipush失败");
+                if (requestInfoBean.getSuccess()) {
+                    //    LogUtil.i("设置mipush成功");
+                } else {
+                    //       LogUtil.i("设置mipush失败");
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
-          //      LogUtil.i("设置mipush失败"+volleyError.toString());
+                //      LogUtil.i("设置mipush失败"+volleyError.toString());
 
             }
 
@@ -494,7 +500,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
-                map.put("terminal","1");
+                map.put("terminal", "1");
                 return map;
             }
 

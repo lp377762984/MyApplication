@@ -5,63 +5,65 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:orientation="horizontal">
-    <com.cn.danceland.myapplication.view.XCRoundRectImageView
-        android:id="@+id/iv_card"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/img_club_card" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <com.cn.danceland.myapplication.view.XCRoundRectImageView
+            android:id="@+id/iv_card"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/img_club_card" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="卡种："
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="卡种："
+                    android:textColor="#333333"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_cardname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#333333"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_cardtype"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_cardname"
+                android:layout_marginTop="5dp"
+                android:text="计次卡"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_cardname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="#333333"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/tv_cardtype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_cardname"
-            android:layout_marginTop="5dp"
-            android:text="计次卡"
-            android:textColor="#333333"
-            android:textSize="16sp" />
-
-        <!--     <TextView
+            <!--     <TextView
                  android:id="@+id/tv_more"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
@@ -73,31 +75,31 @@
                  android:textColor="#007aff"
                  android:textSize="12sp" />-->
 
-        <TextView
-            android:id="@+id/tv_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="次数：100次"
-            android:textColor="#444444"
-            android:textSize="16sp"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/tv_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="次数：100次"
+                android:textColor="#444444"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="时间：有效期365天"
-            android:textColor="#444444"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="时间：有效期365天"
+                android:textColor="#444444"
+                android:textSize="16sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-  <!--          <TextView
+                <!--          <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -105,31 +107,30 @@
                 android:textColor="#333"
                 android:textSize="16sp" />
 -->
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="￥1580"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+
             <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
-                android:text="￥1580"
-                android:textColor="#333"
+                android:background="@drawable/btn_bg_selector"
+                android:gravity="center"
+                android:text="立即购买"
+                android:textColor="#fff"
                 android:textSize="16sp" />
+
         </LinearLayout>
-
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/btn_bg_selector"
-            android:gravity="center"
-            android:text="立即购买"
-            android:textColor="#fff"
-            android:textSize="16sp" />
-
     </LinearLayout>
-</LinearLayout>
-
 
 
 </LinearLayout>

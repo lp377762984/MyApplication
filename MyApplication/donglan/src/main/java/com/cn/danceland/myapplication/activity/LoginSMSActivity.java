@@ -252,7 +252,12 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
                     //登录环信
-                    login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+                    if(Constants.HX_DEV_CONFIG){//判断是否是开发环境
+                        login_hx("dev"+data.getPerson().getMember_no(),"dev" +data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+                    }else {
+                        login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
+                    }
+
                     EventBus.getDefault().post(new StringEvent("",1010));
 
                 } else {
@@ -374,7 +379,15 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
 
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+                Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+                if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())){
+                    ToastUtils.showToastShort("您补全您的资料");
+                    startActivity(new Intent(LoginSMSActivity.this,RegisterInfoActivity.class));
+                }else {
+                    startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+                }
+
                 setMipushId();
                 finish();
 

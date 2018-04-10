@@ -196,6 +196,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         public String content;// 工作内容
         public String warn_time;// 提醒时间
         public String auth;
+        public String role_type;
 
 
     }
@@ -249,7 +250,8 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
 
     private void findParams(final String customer_type) {
         RequsetBean requsetBean = new RequsetBean();
-
+        requsetBean.customer_type=customer_type;
+        requsetBean.role_type="1";
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(gson.toJson(requsetBean).toString());

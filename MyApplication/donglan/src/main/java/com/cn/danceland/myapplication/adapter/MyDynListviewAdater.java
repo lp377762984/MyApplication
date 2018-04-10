@@ -586,7 +586,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
         TextView tv_location;//地点
         TextView tv_zan_num;//点赞数量
-        TextView tv_guanzhu;
+
         //  TextView tv_no_data;
         ImageView iv_avatar;
         ImageView iv_zan;//点赞
@@ -602,6 +602,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         LinearLayout ll_zan;
         LinearLayout ll_guanzhu;
         ImageView iv_guanzhu;
+        TextView tv_guanzhu;
     }
 
     private void showListDialog(final int pos) {
@@ -616,7 +617,8 @@ public class MyDynListviewAdater extends BaseAdapter {
                 switch (which) {
                     case 0:
 
-                        jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+                     //   jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+                        showJuBaoListDialog(pos);
                         break;
                     case 1:
 
@@ -629,6 +631,29 @@ public class MyDynListviewAdater extends BaseAdapter {
         listDialog.show();
     }
 
+    private void showJuBaoListDialog(final int pos) {
+        final String[] items = {"色情、裸露","不友善行为","广告、推销","其他"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1,items[which]);
+
+
+            }
+        });
+        listDialog.show();
+    }
+    class JuBaoBean {
+        public String member_id;//评论或动态id
+        public String bereported_id;
+        public String type;//
+        public String  content;
+    }
     private void showListDialogSelf(final int pos) {
         final String[] items = {"删除动态"};
         AlertDialog.Builder listDialog =
@@ -654,6 +679,8 @@ public class MyDynListviewAdater extends BaseAdapter {
         });
         listDialog.show();
     }
+
+
 
     /**
      * 确认对话
@@ -688,11 +715,7 @@ public class MyDynListviewAdater extends BaseAdapter {
     }
 
 
-    class JuBaoBean {
-        public String member_id;//评论或动态id
-        public String bereported_id;
-        public String type;//
-    }
+
 
     /**
      * 举报
@@ -701,11 +724,12 @@ public class MyDynListviewAdater extends BaseAdapter {
      * @param user_id
      * @param type
      */
-    private void jubao(final String msgId, final String user_id, int type) {
+    private void jubao(final String msgId, final String user_id, int type,String content) {
         JuBaoBean juBaoBean=new JuBaoBean();
         juBaoBean.bereported_id=user_id;
         juBaoBean.member_id=msgId;
         juBaoBean.type=type+"";
+        juBaoBean.content=content;
         LogUtil.i(new Gson().toJson(juBaoBean));
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override

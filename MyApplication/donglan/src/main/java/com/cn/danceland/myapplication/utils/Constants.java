@@ -7,28 +7,19 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
-   //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
+   //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-   public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-  //  public static final String HOST = " http://192.168.1.115:8003/";//
-
-    //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
-    //public static final String HOST = "http://47.104.3.118:8003/";//阿里云服务器地址
-    //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
-    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-   // public static final String HOST = " http://192.168.1.115:8003/";//
-    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   // public static final String HOST = " http://192.168.1.123:8003/";//
-    //public static final String HOST = " http://192.168.1.119:8003/";//
+   //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   public static final String HOST = " http://192.168.1.119:8003/";//
 
 
-    // public static final String GET_SMS_URL = HOST + "user/encode/";//获取验证码
+
+    public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
+
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
-    //public static final String REGISTER_URL = HOST + "user/register";//注册用户
 
- //   public static final String LOGIN_URL = HOST + "user/login ";//登录
     public static final String LOGIN_URL = HOST + "person/login ";//登录
     public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
     public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
@@ -38,7 +29,6 @@ public class Constants extends EaseConstant {
     public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
     public static final String LOGIN_BY_PHONE_URL = HOST + "/person/loginNoPwd";//短信登录
 
-    // public static final String LOGIN_BY_PHONE_URL = HOST + "user/findByPhone/";//短信登录
     public static final String LOGOUT_URL = HOST + "/person/logout";//用户退出
     public static final String ZONE = HOST + "/zone";//城市区域
     public static final String MODIFY_ZONE = HOST + "/user/modifyZoneCode";//修改区域
@@ -84,8 +74,8 @@ public class Constants extends EaseConstant {
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
     public static final String FIND_GUANZHU_DT_MSG = HOST + "appDynMsg/findFollowerUserDyn";//关注的动态
-    public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看关注的人
-    public static final String FIND_FANS_USER_LIST_MSG = HOST + "/appUserFollow/findUserFollow";//查看粉丝
+    public static final String FIND_GUANZHU_USER_LIST_MSG = HOST + "/appUserFollow/queryByFollowPage";//查看关注的人
+    public static final String FIND_FANS_USER_LIST_MSG = HOST + "/appUserFollow/queryByUserIdPage";//查看粉丝
     public static final String FIND_ZAN_USER_LIST_MSG_5 = HOST + "/appPraise/findByMsgIdOrderByIdDesc";//查看点赞（前5个）
     public static final String FIND_ZAN_USER_LIST_MSG = HOST + "/appPraise/findByMsgIdOrderByIdDesc";//查看点赞（全部）
     public static final String FIND_PUSH_MSG = HOST + "/appDynMsg/findAllFlowerUserById";//推荐用户
@@ -124,7 +114,10 @@ public class Constants extends EaseConstant {
 
     //参数相关
 
-    public static final String FIND_BY_TYPE_CODE = HOST + "appDict/findByTypeCode/";//查询潜客资料相关参数
+    public static final String FIND_BY_TYPE_CODE = HOST + "/appDict/queryList";//查询潜客资料相关参数
+    public static final String FIND_BY_TYPE_CODE_GET = HOST + "/appDict/findByTypeCode/";//查询潜客资料相关参数
+
+
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
@@ -147,6 +140,7 @@ public class Constants extends EaseConstant {
     public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐
     public static final String INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 
+    public static final String SELL_CARD_PRARMS =  "http://192.168.1.93/test.txt";//买卡参数
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
@@ -220,6 +214,7 @@ public class Constants extends EaseConstant {
     public static final String EXTRA_CONFERENCE_ID = "confId";
     public static final String EXTRA_CONFERENCE_PASS = "password";
     public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
+
 
     public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
     public static final    int QR_MAPPING_COURSE_ENTER = 11; //私教入场

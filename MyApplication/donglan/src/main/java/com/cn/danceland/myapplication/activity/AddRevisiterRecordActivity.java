@@ -179,7 +179,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
     private List<ParamInfoBean.Data> mParamInfoList = new ArrayList<>();
 
     private void findParams(final int codetype) {
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_TYPE_CODE + codetype, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_TYPE_CODE_GET + codetype, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

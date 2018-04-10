@@ -109,7 +109,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_company.setText(info.getCompany());
         tv_address.setText(info.getAddress());
         tv_email.setText(info.getMail());
-        tv_guest_aware_way.setText(info.getGuest_aware_way());
+        tv_guest_aware_way.setText(info.getGuest_way());
         if (!TextUtils.isEmpty(info.getFitness_level())) {
             sr_fitness_level.setRating(Integer.parseInt(info.getFitness_level()));
         }
@@ -138,11 +138,12 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         }
         if (info.getProjectList() != null && info.getProjectList().size() > 0) {
             String s1 = "";
-            for (int j = 0; j < info.getProject_ids().size(); j++) {
-
+            for (int j = 0; j < info.getProjectList().size(); j++) {
+                LogUtil.i(j+"");
                 if (s1 == "") {
                     s1 = info.getProjectList().get(j).getData_value();
                 } else {
+
                     s1 = s1 + "," + info.getProjectList().get(j).getData_value();
                 }
             }
@@ -284,7 +285,8 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 
 
     private void showListDialog() {
-        final String[] items = {"编辑资料", "转让", "放弃维护"};
+        final String[] items = {"编辑资料"};
+        //final String[] items = {"编辑资料", "转让", "放弃维护"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(mActivity);
         //listDialog.setTitle("我是一个列表Dialog");

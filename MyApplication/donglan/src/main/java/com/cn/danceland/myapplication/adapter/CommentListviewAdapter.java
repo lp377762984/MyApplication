@@ -204,7 +204,8 @@ public class CommentListviewAdapter extends BaseAdapter {
 
                         break;
                     case 2:
-                        jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2);
+                       // jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2);
+                        showJuBaoListDialog(pos);
                         break;
                     default:
                         break;
@@ -215,11 +216,31 @@ public class CommentListviewAdapter extends BaseAdapter {
     }
 
 
+    private void showJuBaoListDialog(final int pos) {
+        final String[] items = {"色情、裸露", "不友善行为", "广告、推销", "其他"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(context);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+//                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1,);
+                jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2, items[which]);
+
+
+            }
+        });
+        listDialog.show();
+    }
+
 
     class JuBaoBean {
         public String member_id;//评论或动态id
         public String bereported_id;
         public String type;//
+        public String content;
     }
 
     /**
@@ -229,11 +250,12 @@ public class CommentListviewAdapter extends BaseAdapter {
      * @param user_id
      * @param type
      */
-    private void jubao(final String msgId, final String user_id, int type) {
+    private void jubao(final String msgId, final String user_id, int type,String  content) {
         JuBaoBean juBaoBean=new JuBaoBean();
         juBaoBean.bereported_id=user_id;
         juBaoBean.member_id=msgId;
         juBaoBean.type=type+"";
+        juBaoBean.content=content;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {

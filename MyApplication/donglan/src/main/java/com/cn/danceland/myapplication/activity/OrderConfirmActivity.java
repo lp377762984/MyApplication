@@ -413,7 +413,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-             //   LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
+                //   LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
                 return map;
             }
         };
@@ -704,28 +704,45 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     newOrderInfoBean.setPay_way(pay_way + "");
                     newOrderInfoBean.setPrice(pay_price + "");
                     newOrderInfoBean.setReceive(CardsInfo.getPrice() + "");
+                    //佳楠专用参数
+                    NewOrderInfoBean.Protocol_Params protocol_params=new NewOrderInfoBean.Protocol_Params();
+                    protocol_params.admin_emp=consultantInfo.getBranch_name();
+                    protocol_params.card_category_name=CardsInfo.getCategory_name();
+                    if (CardsInfo.getCharge_mode()==1){
+                        protocol_params.card_charge_mode="包时";
+                        protocol_params.card_total_count="0";
+                    }else {
+                        protocol_params.card_charge_mode="计次";
+                        protocol_params.card_total_count=CardsInfo.getTotal_count();
+                    }
+
+
+                    if (CardsInfo.getTime_unit()==1){
+                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"年";
+                    }else if (CardsInfo.getTime_unit()==2){
+                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"月";
+                    }else if (CardsInfo.getTime_unit()==3){
+                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"天";
+                    }
+                    protocol_params.card_type_name=CardsInfo.getName();
+                    protocol_params.order_price=pay_price+"";
+                    protocol_params.card_remark=CardsInfo.getRemark();
+                    protocol_params.admin_emp=consultantInfo.getCname();
+
                     if (isme) {
+                        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                        protocol_params.member_name=data.getPerson().getCname();
+                        protocol_params.member_phone=data.getPerson().getPhone_no();
                         newOrderInfoBean.setFor_other(0);
                     } else {
                         newOrderInfoBean.setFor_other(1);
+                        protocol_params.member_name=et_grant_name.getText().toString().trim();
+                        protocol_params.member_phone=et_grant_phone.getText().toString().trim();
+
                         extendsParams.setMember_name(et_grant_name.getText().toString().trim());
                         extendsParams.setPhone_no(et_grant_phone.getText().toString().trim());
                     }
 
-
-//                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
-//                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
-//                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
-//                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
-//                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
-                    Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//                    orderInfoBean.setCname(data.getPerson().getCname());
-//                    orderInfoBean.setMember_no(data.getPerson().getMember_no());
-//                    orderInfoBean.setPrice(pay_price + "");
-//                    orderInfoBean.setPay_way(pay_way + "");
-//                    orderInfoBean.setCard_type_id(CardsInfo.getId());
-//                    orderInfoBean.setCard_name(CardsInfo.getName());
-//                    orderInfoBean.setMonth_count(CardsInfo.getMonth_count() + "");
                     if (!TextUtils.isEmpty(depositId)) {
 //                        orderInfoBean.setDeposit_id(depositId);
 //                        orderInfoBean.setDeposit_price(deposit_price + "");
@@ -739,7 +756,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         newOrderInfoBean.setBus_type(32);//给别人买定金
 //                        orderInfoBean.setFor_other(0);
                     } else {
-                        order_bustype=34;
+                        order_bustype = 34;
                         newOrderInfoBean.setBus_type(34);//给别人买定金
 //                        orderInfoBean.setFor_other(1);
 //                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
@@ -756,6 +773,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         break;
                     }
                     newOrderInfoBean.setExtends_params(extendsParams);
+                    newOrderInfoBean.setProtocol_params(protocol_params);
                     Gson gson = new Gson();
                     strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
@@ -770,7 +788,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 if (product_type == 2) {//定金订单
 
-                 //   final OrderInfoBean orderInfoBean = new OrderInfoBean();
+                    //   final OrderInfoBean orderInfoBean = new OrderInfoBean();
                     final NewOrderInfoBean newOrderInfoBean = new NewOrderInfoBean();
                     if (consultantInfo == null) {
                         ToastUtils.showToastLong("请选择会籍顾问");
@@ -790,7 +808,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         newOrderInfoBean.setFor_other(0);
                         newOrderInfoBean.setBus_type(31);
                     } else {
-                        order_bustype=33;
+                        order_bustype = 33;
                         newOrderInfoBean.setBus_type(33);//给别人买定金
                         newOrderInfoBean.setFor_other(1);
                         extendsParams.setMember_name(et_grant_name.getText().toString().trim());
@@ -802,27 +820,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     newOrderInfoBean.setPrice(pay_price + "");
                     newOrderInfoBean.setReceive(pay_price + "");
 
-//
-//                    orderInfoBean.setAdmin_emp_id(consultantInfo.getEmployee_id());
-//                    orderInfoBean.setAdmin_emp_name(consultantInfo.getCname());
-//                    orderInfoBean.setBranch_name(consultantInfo.getBranch_name());
-//                    orderInfoBean.setBranch_id(consultantInfo.getBranch_id());
-//                    orderInfoBean.setAdmin_emp_phone(consultantInfo.getPhone_no());
-//                    Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//                    orderInfoBean.setCname(data.getCname());
-//                    orderInfoBean.setMember_no(data.getMember_no());
-//                    orderInfoBean.setPrice(pay_price + "");
-//                    orderInfoBean.setPay_way(pay_way + "");
-//                    orderInfoBean.setDeposit_type("1");//定金类型
-//                    orderInfoBean.setMonth_count("3");
-//                    if (isme) {
-//                        orderInfoBean.setFor_other(0);
-//                    } else {
-//                        orderInfoBean.setFor_other(1);
-//                        orderInfoBean.setName(et_grant_name.getText().toString().trim());
-//                        orderInfoBean.setPhone_no(et_grant_phone.getText().toString().trim());
-//                    }
-                    //   LogUtil.i(orderInfoBean.toString());
 
                     if (!isme && TextUtils.isEmpty(et_grant_name.getText().toString().trim())) {
                         ToastUtils.showToastLong("请输入好友姓名");
@@ -907,6 +904,15 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         public ExtendsParams extends_params;
         private String deposit_id;//定金id
         private int for_other;//0自己1别人
+        public Protocol_Params protocol_params;
+
+        public Protocol_Params getProtocol_params(Protocol_Params protocol_params) {
+            return this.protocol_params;
+        }
+
+        public void setProtocol_params(Protocol_Params protocol_params) {
+            this.protocol_params = protocol_params;
+        }
 
         @Override
         public String toString() {
@@ -922,6 +928,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     ", extends_params=" + extends_params +
                     ", deposit_id='" + deposit_id + '\'' +
                     ", for_other=" + for_other +
+                    ", protocol_params=" + protocol_params +
                     '}';
         }
 
@@ -1013,6 +1020,38 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             this.extends_params = extends_params;
         }
 
+        static class Protocol_Params {
+
+            public String member_name;
+            public String member_phone;
+            public String admin_emp;//会籍顾问
+            public String card_type_name;
+            public String card_category_name;
+            public String card_charge_mode;
+            public String card_term_of_validity;
+            public String order_remark="";
+            public String card_remark="";
+            public String card_total_count;
+            public String order_price;
+
+            @Override
+            public String toString() {
+                return "Protocol_Params{" +
+                        "member_name='" + member_name + '\'' +
+                        ", member_phone='" + member_phone + '\'' +
+                        ", admin_emp='" + admin_emp + '\'' +
+                        ", card_type_name='" + card_type_name + '\'' +
+                        ", card_category_name='" + card_category_name + '\'' +
+                        ", card_charge_mode='" + card_charge_mode + '\'' +
+                        ", card_term_of_validity='" + card_term_of_validity + '\'' +
+                        ", order_remark='" + order_remark + '\'' +
+                        ", card_total_count='" + card_total_count + '\'' +
+                        ", card_remark='" + card_remark + '\'' +
+                        ", order_price='" + order_price + '\'' +
+                        '}';
+            }
+        }
+
         static class ExtendsParams {
             public String admin_emp_id;
             public String bus_type;
@@ -1042,9 +1081,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 //        private String month_count;// 使用期限月数
 //        private String total_count; //次卡总次数
 
-       //     private String member_name;//好友真实姓名
+            //     private String member_name;//好友真实姓名
             private String phone_no;//好友电话
             private String other_name;//好友真实姓名
+
+
             @Override
             public String toString() {
                 return "ExtendsParams{" +

@@ -57,6 +57,7 @@ public class PotentialInfo implements Serializable {
     public String guest_recom;// 潜客推荐人
     public String member_recom;// 会员推荐人
     public String guest_aware_way;// 潜客了解途径
+    public String    guest_way;
     public String member_aware_way;// 会员了解途径
     public String target;// 健身目标
     public String card_type;// 意向卡型
@@ -84,12 +85,17 @@ public class PotentialInfo implements Serializable {
     public String address;// 详细住址
     public String company;// 单位
 
-//    public List<String> chonicList;
-//    public List<String> projectList;
-//    public List<String> targetList;
     private List<ChonicList> chonicList;
     private List<ProjectList> projectList;
     private List<TargetList> targetList;
+
+    public String getGuest_way() {
+        return guest_way;
+    }
+
+    public void setGuest_way(String guest_way) {
+        this.guest_way = guest_way;
+    }
 
     @Override
     public String toString() {

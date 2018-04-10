@@ -142,6 +142,12 @@ public class PaiMingActivity extends Activity {
         pullToRefresh.setAdapter(myUserListviewAdapter);
 
         pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private void init() {

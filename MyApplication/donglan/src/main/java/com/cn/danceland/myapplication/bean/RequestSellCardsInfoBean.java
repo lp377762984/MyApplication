@@ -83,6 +83,15 @@ public class RequestSellCardsInfoBean implements Serializable {
         private int delete_remark;
         private String branch_name;
         private String  img_url;
+        private String     remark;
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
 
         @Override
         public String toString() {

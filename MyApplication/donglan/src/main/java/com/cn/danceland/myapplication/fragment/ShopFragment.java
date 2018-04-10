@@ -573,6 +573,9 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
 
+                    case 20://预约团课
+                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
+                        break;
 
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));

@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,35 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -86,25 +107,29 @@ public class UserListviewAdapter extends BaseAdapter {
             viewHolder.tv_nickname = view.findViewById(R.id.tv_nickname);
             viewHolder.iv_sex = view.findViewById(R.id.iv_sex);
             viewHolder.ll_item = view.findViewById(R.id.ll_item);
+            viewHolder.ll_guanzhu = view.findViewById(R.id.ll_guanzhu);
+            viewHolder.iv_guanzhu = view.findViewById(R.id.iv_guanzhu);
+            viewHolder.tv_guanzhu = view.findViewById(R.id.tv_guanzhu);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        LogUtil.i(type+"");
-        if (type==3){
+        //    LogUtil.i(type+"");
+        if (type == 3) {//如果是点赞
             Glide.with(context)
                     .load(data.get(position).getSelf_url())
                     .apply(options)
                     .into(viewHolder.iv_avatar);
             LogUtil.i(data.get(position).getSelf_url());
+            viewHolder.ll_guanzhu.setVisibility(View.GONE);
 
-        }else {
+        } else {
             Glide.with(context)
                     .load(data.get(position).getSelf_path())
                     .apply(options)
                     .into(viewHolder.iv_avatar);
-            LogUtil.i(data.get(position).getSelf_path());
+            //      LogUtil.i(data.get(position).getSelf_path());
 
         }
 
@@ -120,13 +145,14 @@ public class UserListviewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-               // LogUtil.i("TYPE+"+type);
+                // LogUtil.i("TYPE+"+type);
                 switch (type) {
                     case 1://查看关注
                         context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));
                         break;
                     case 2://查看粉丝
                         context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getFollower()));
+
                         break;
                     case 3://查看点赞
                         context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
@@ -136,9 +162,38 @@ public class UserListviewAdapter extends BaseAdapter {
                 }
 
 
-
                 // context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
 
+            }
+        });
+
+        if (data.get(position).getIs_follower()) {
+            viewHolder.tv_guanzhu.setText("已关注");
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin1);
+            // viewHolder.tv_guanzhu.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+        } else {
+            viewHolder.tv_guanzhu.setText("+关注");
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
+            // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
+        }
+
+        if (TextUtils.equals(data.get(position).getUser_id(), SPUtils.getString(Constants.MY_USERID, null))) {
+
+            viewHolder.tv_guanzhu.setText("");
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+        }
+
+        viewHolder.ll_guanzhu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!data.get(position).getIs_follower()) {//未关注添加关注
+                    int pos = position;
+                    try {
+                        addGuanzhu(data.get(position).getUser_id(), true, pos);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -146,10 +201,79 @@ public class UserListviewAdapter extends BaseAdapter {
         return view;
     }
 
+    class StrBean {
+        public String is_praise;
+        public String msg_id;
+        public String is_follower;
+        public String user_id;
+    }
+
+
+    /**
+     * 加关注
+     *
+     * @param id
+     * @param b
+     */
+    private void addGuanzhu(final String id, final boolean b, final int pos) throws JSONException {
+
+        StrBean strBean = new StrBean();
+        strBean.is_follower = b + "";
+        strBean.user_id = id;
+        Gson gson = new Gson();
+        JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
+        LogUtil.i(gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject json) {
+                LogUtil.i(json.toString());
+                Gson gson = new Gson();
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(json.toString(), RequsetSimpleBean.class);
+
+                if (requestInfoBean.isSuccess()) {
+
+                    ToastUtils.showToastShort("关注成功");
+                    EventBus.getDefault().post(new StringEvent(data.get(pos).getUser_id(), EventConstants.ADD_GUANZHU));
+                    data.get(pos).setIs_follower(true);
+                    notifyDataSetChanged();
+
+                } else {
+                    ToastUtils.showToastShort("关注失败");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ToastUtils.showToastShort("请检查手机网络！");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("addGuanzhu");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
     class ViewHolder {
         TextView tv_nickname;//昵称
         ImageView iv_avatar;//头像
         ImageView iv_sex;//性别
         LinearLayout ll_item;
+        LinearLayout ll_guanzhu;
+        ImageView iv_guanzhu;
+        TextView tv_guanzhu;
     }
 }
