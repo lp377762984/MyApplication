@@ -4,6 +4,7 @@ package com.cn.danceland.myapplication.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -259,6 +261,11 @@ public class MeFragment extends BaseFragment {
                 startActivity(intent2);
                 break;
             case R.id.ll_my_shop:
+                LogUtil.i(mInfo.getPerson().getDefault_branch());
+                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("请先加入一个门店");
+                    return;
+                }
                 startActivity(new Intent(mActivity, MyShopActivity.class));
                 break;
             default:

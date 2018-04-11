@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -25,7 +24,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
@@ -59,12 +57,12 @@ public class ShopListFragment extends BaseFragment {
     List<StoreBean.Items> itemsList;
     Gson gson;
     Data info;
-    TextView tv_shopname,tv_shopAddress;
-    ImageButton ibtn_gps,ibtn_call;
+    TextView tv_shopname, tv_shopAddress;
+    ImageButton ibtn_gps, ibtn_call;
 
     @Override
     public View initViews() {
-        View inflate = View.inflate(mActivity,R.layout.shoplist_fragment, null);
+        View inflate = View.inflate(mActivity, R.layout.shoplist_fragment, null);
         headView = LayoutInflater.from(mActivity).inflate(R.layout.shoplist_fragment_head, null);
         shop_banner = headView.findViewById(R.id.shop_banner);
         tv_shopname = headView.findViewById(R.id.tv_shopname);
@@ -84,12 +82,16 @@ public class ShopListFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        String getlocationString = ((HomeActivity) activity).getlocationString();
-        if (getlocationString != null) {
-            jingdu = getlocationString.split(",")[0];
-            weidu = getlocationString.split(",")[1];
-        }
+//        String getlocationString = ((HomeActivity) activity).getlocationString();
+//        if (getlocationString != null) {
+//            jingdu = getlocationString.split(",")[0];
+//            weidu = getlocationString.split(",")[1];
+//        }
+        jingdu = getArguments().getString("jingdu");
+        weidu = getArguments().getString("weidu");
+       // LogUtil.i(jingdu + weidu);
     }
+
     private void initData() {
         getListData();
     }
@@ -112,7 +114,7 @@ public class ShopListFragment extends BaseFragment {
                     if (itemsList != null && itemsList.size() > 0) {
                         tv_shopname.setText(itemsList.get(0).getBname());
                         tv_shopAddress.setText(itemsList.get(0).getAddress());
-                        getBanner(itemsList.get(0).getBranch_id()+"");
+                        getBanner(itemsList.get(0).getBranch_id() + "");
 
                         ibtn_gps.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -134,9 +136,9 @@ public class ShopListFragment extends BaseFragment {
                         });
 
 
-                        if(itemsList.size()>1){
+                        if (itemsList.size() > 1) {
                             List<StoreBean.Items> itemsList1 = new ArrayList<>();
-                            for(int i = 1;i<itemsList.size();i++){
+                            for (int i = 1; i < itemsList.size(); i++) {
                                 itemsList1.add(itemsList.get(i));
                             }
                             lv_shoplist.setAdapter(new MyStoreAdapter(getActivity(), itemsList1));
@@ -163,17 +165,17 @@ public class ShopListFragment extends BaseFragment {
     }
 
 
-    private void getBanner(final String branchId){
+    private void getBanner(final String branchId) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
-                if(branchBannerBean!=null){
+                if (branchBannerBean != null) {
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
-                    if(data!=null){
-                        for(int i = 0;i<data.size();i++){
+                    if (data != null) {
+                        for (int i = 0; i < data.size(); i++) {
                             drawableArrayList.add(data.get(i).getImg_url());
                         }
                         setBannner();
@@ -183,14 +185,14 @@ public class ShopListFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("branchId",branchId);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branchId", branchId);
                 return map;
             }
 
@@ -318,7 +320,7 @@ public class ShopListFragment extends BaseFragment {
                         intent.putExtra("jingdu", jingdu);
                         intent.putExtra("weidu", weidu);
                         intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
-                        intent.putStringArrayListExtra("imgList",drawableArrayList);
+                        intent.putStringArrayListExtra("imgList", drawableArrayList);
                         startActivityForResult(intent, 111);
                     }
                 }
@@ -383,11 +385,11 @@ public class ShopListFragment extends BaseFragment {
                 intent.putExtra("jingdu", jingdu);
                 intent.putExtra("weidu", weidu);
                 intent.putExtra("branchID", itemsList.get(0).getBranch_id() + "");
-                intent.putStringArrayListExtra("imgList",drawableArrayList);
-                startActivityForResult(intent,111);
+                intent.putStringArrayListExtra("imgList", drawableArrayList);
+                startActivityForResult(intent, 111);
             }
         });
-        if(drawableArrayList!=null&&drawableArrayList.size()==0){
+        if (drawableArrayList != null && drawableArrayList.size() == 0) {
             drawableArrayList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
         }
         // 设置数据
@@ -417,10 +419,11 @@ public class ShopListFragment extends BaseFragment {
 
     public static class BannerViewHolder implements MZViewHolder<String> {
         private ImageView mImageView;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
