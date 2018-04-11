@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="34dp"
             android:layout_gravity="bottom"
+            android:background="#7f808080"
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
@@ -101,13 +102,13 @@
             android:layout_height="wrap_content"
             android:numColumns="4">
         </GridView>
-        <ListView
-            android:id="@+id/storelist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
-        </ListView>
+        <!--<ListView-->
+            <!--android:id="@+id/storelist"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"-->
+            <!--&gt;-->
+        <!--</ListView>-->
     </RelativeLayout>
 
 </LinearLayout>
