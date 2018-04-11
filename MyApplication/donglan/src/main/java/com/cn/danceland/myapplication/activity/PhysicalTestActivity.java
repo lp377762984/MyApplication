@@ -9,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.PhysicalTestBean;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionRequest;
@@ -51,6 +54,7 @@ public class PhysicalTestActivity extends Activity {
     ArrayList<View> viewList;
     View inflate;
     TextView tv_zhubiaoti;
+    List<PhysicalTestBean> datalist;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +67,16 @@ public class PhysicalTestActivity extends Activity {
 
     private void initViewPager() {
 
+        if(list!=null){
+            datalist.clear();
+            for(int i = 0;i<list.size();i++){
+                String test_content = list.get(i).getTest_content();
+                PhysicalTestBean physicalTestBean = gson.fromJson(test_content, PhysicalTestBean.class);
+                datalist.add(physicalTestBean);
+            }
+        }
 
-        vp_physical.setAdapter(new PhysicalPagerAdapter(viewList));
+        vp_physical.setAdapter(new PhysicalPagerAdapter(viewList,datalist));
 
     }
 
@@ -72,6 +84,7 @@ public class PhysicalTestActivity extends Activity {
         request = new BcaQuestionRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
+        datalist = new ArrayList<>();
     }
 
     private void initView() {
@@ -120,9 +133,10 @@ public class PhysicalTestActivity extends Activity {
 
     private class PhysicalPagerAdapter extends PagerAdapter{
         ArrayList<View> viewList;
-        PhysicalPagerAdapter(ArrayList<View> viewList){
+        List<PhysicalTestBean> datalist;
+        PhysicalPagerAdapter(ArrayList<View> viewList,List<PhysicalTestBean> datalist){
             this.viewList = viewList;
-
+            this.datalist = datalist;
         }
 
         @Override
@@ -145,6 +159,51 @@ public class PhysicalTestActivity extends Activity {
                 parent.removeAllViews();
             }
             container.addView(v);
+            PhysicalTestBean physicalTestBean = datalist.get(position);
+
+            ImageView img_01 = v.findViewById(R.id.img_01);
+            Glide.with(PhysicalTestActivity.this).load(physicalTestBean.getMain_pic_url()).into(img_01);
+
+            TextView  tv_zhubiaoti = v.findViewById(R.id.tv_zhubiaoti);
+            tv_zhubiaoti.setText(physicalTestBean.getMain_title());
+
+            TextView tv_fubiaoti = v.findViewById(R.id.tv_fubiaoti);
+            tv_fubiaoti.setText(physicalTestBean.getSecond_title());
+
+            TextView tv_buzhou = v.findViewById(R.id.tv_buzhou);
+            ImageView img_02 = v.findViewById(R.id.img_02);
+            ImageView img_03 = v.findViewById(R.id.img_03);
+            ImageView img_04 = v.findViewById(R.id.img_04);
+            ImageView[] arrImg = {img_02,img_03,img_04};
+            TextView tv_buzhou_01 = v.findViewById(R.id.tv_buzhou_01);
+            TextView tv_buzhou_02 = v.findViewById(R.id.tv_buzhou_02);
+            TextView tv_buzhou_03 = v.findViewById(R.id.tv_buzhou_03);
+            TextView[] arrText = {tv_buzhou_01,tv_buzhou_02,tv_buzhou_03};
+            List<PhysicalTestBean.Action_detail> action_detail = physicalTestBean.getAction_detail();
+            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder1 = new StringBuilder();
+            if(action_detail!=null){
+                for(int j = 0;j<action_detail.size();j++){
+                    stringBuilder.append((j+1)+"."+action_detail.get(j).getNote()+"\n");
+                    Glide.with(PhysicalTestActivity.this).load(action_detail.get(j).getPic_url()).into(arrImg[j]);
+                    arrText[j].setText(action_detail.get(j).getNote());
+                }
+                tv_buzhou.setText(stringBuilder.toString());
+            }
+
+            TextView tv_zhuyi = v.findViewById(R.id.tv_zhuyi);
+            List<String> attention = physicalTestBean.getAttention();
+            if(attention!=null){
+                for(int n = 0 ;n<attention.size();n++){
+                    stringBuilder1.append((n+1)+"."+attention.get(n)+"\n");
+
+                }
+                tv_zhuyi.setText(stringBuilder1.toString());
+            }
+
+
+
+
             Button bt_next= v.findViewById(R.id.bt_next);
             bt_next.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,4 +223,5 @@ public class PhysicalTestActivity extends Activity {
         }
 
     }
+
 }
