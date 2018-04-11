@@ -140,6 +140,35 @@ public class ShopFragment extends BaseFragment {
 
         setMap();
         addRoles();
+        setSpinner();
+
+        gson = new Gson();
+        mGridView = v.findViewById(R.id.gridview);
+
+        ibtn_call = v.findViewById(R.id.ibtn_call);
+        ibtn_gps = v.findViewById(R.id.ibtn_gps);
+
+        ll_top = v.findViewById(R.id.ll_top);
+        tv_shopname = v.findViewById(R.id.tv_shopname);
+        drawableArrayList = new ArrayList<>();
+        mGridView.setOnItemClickListener(new MyOnItemClickListener());
+        //storelist = v.findViewById(R.id.storelist);
+        initData();
+
+        v.findViewById(R.id.ibtn_call).setOnClickListener(this);
+        v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
+        tv_shopname.setOnClickListener(this);
+
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
+//        drawableArrayList.add(R.drawable.img_man);
+        // mGridView.setVisibility(View.VISIBLE);
+
+        return v;
+    }
+
+    private void setSpinner(){
+
         arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
         //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -156,33 +185,6 @@ public class ShopFragment extends BaseFragment {
             }
         });
 
-
-        gson = new Gson();
-        mGridView = v.findViewById(R.id.gridview);
-
-        ibtn_call = v.findViewById(R.id.ibtn_call);
-        ibtn_gps = v.findViewById(R.id.ibtn_gps);
-
-        ll_top = v.findViewById(R.id.ll_top);
-
-        ll_top.setBackgroundColor(Color.BLACK);
-        ll_top.getBackground().setAlpha(88);
-        tv_shopname = v.findViewById(R.id.tv_shopname);
-        drawableArrayList = new ArrayList<>();
-        mGridView.setOnItemClickListener(new MyOnItemClickListener());
-        storelist = v.findViewById(R.id.storelist);
-        initData();
-
-        v.findViewById(R.id.ibtn_call).setOnClickListener(this);
-        v.findViewById(R.id.ibtn_gps).setOnClickListener(this);
-        tv_shopname.setOnClickListener(this);
-
-//        drawableArrayList.add(R.drawable.img_man);
-//        drawableArrayList.add(R.drawable.img_man);
-//        drawableArrayList.add(R.drawable.img_man);
-        // mGridView.setVisibility(View.VISIBLE);
-
-        return v;
     }
 
     @Override
@@ -278,7 +280,6 @@ public class ShopFragment extends BaseFragment {
     private void addRoles() {
         if (info != null) {
             roles = info.getRoles();
-            LogUtil.i(roles.toString());
             if (roles != null && roles.size() > 0) {
                 for (int i = 0; i < roles.size(); i++) {
                     if (roles.get(i).getRole_type() == 1) {
@@ -324,16 +325,16 @@ public class ShopFragment extends BaseFragment {
             getMenus();
             getBanner(info.getPerson().getDefault_branch());
             getShop(info.getPerson().getDefault_branch());
-            mGridView.setVisibility(View.VISIBLE);
-            storelist.setVisibility(View.GONE);
-            ll_top.setVisibility(View.VISIBLE);
-        } else {
-            getListData();
-            ll_top.setVisibility(View.GONE);
-            mGridView.setVisibility(View.GONE);
-            storelist.setVisibility(View.VISIBLE);
-
+//            mGridView.setVisibility(View.VISIBLE);
+//            storelist.setVisibility(View.GONE);
         }
+//        else {
+//            getListData();
+//            //ll_top.setVisibility(View.GONE);
+//            mGridView.setVisibility(View.GONE);
+//            storelist.setVisibility(View.VISIBLE);
+//
+//        }
     }
 
     private void getBanner(final String branchId){
@@ -441,7 +442,6 @@ public class ShopFragment extends BaseFragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        ll_top.setVisibility(View.GONE);
                         ToastUtils.showToastShort("请查看网络连接");
                         LogUtil.e("zzf", volleyError.toString());
                     }
@@ -479,7 +479,6 @@ public class ShopFragment extends BaseFragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        ll_top.setVisibility(View.GONE);
                         ToastUtils.showToastShort("请查看网络连接");
                         LogUtil.e("zzf", volleyError.toString());
                     }
@@ -515,41 +514,45 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    public void getListData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/0/" + weidu + "/" + jingdu, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                StoreBean storeBean = gson.fromJson(s, StoreBean.class);
-                if (storeBean != null && storeBean.getData() != null) {
-                    itemsList = storeBean.getData().getItems();
-                    if (itemsList != null && itemsList.size() > 0) {
-                        storelist.setAdapter(new MyStoreAdapter(getActivity(), itemsList));
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf", volleyError.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
-        MyApplication.getHttpQueues().add(stringRequest);
-
-    }
+//    public void getListData() {
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/0/" + weidu + "/" + jingdu, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                StoreBean storeBean = gson.fromJson(s, StoreBean.class);
+//                if (storeBean != null && storeBean.getData() != null) {
+//                    itemsList = storeBean.getData().getItems();
+//                    if (itemsList != null && itemsList.size() > 0) {
+//                        storelist.setAdapter(new MyStoreAdapter(getActivity(), itemsList));
+//                    }
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                LogUtil.e("zzf", volleyError.toString());
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+//                return map;
+//            }
+//        };
+//
+//        MyApplication.getHttpQueues().add(stringRequest);
+//
+//    }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
             info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-            initData();
+            roleList.clear();
+            setMap();
+            addRoles();
+            setSpinner();
+            //initData();
         }
     }
 
@@ -712,127 +715,127 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    public class MyStoreAdapter extends BaseAdapter {
-        Context mContext;
-        List<StoreBean.Items> itemsArrayList;
-
-        MyStoreAdapter(Context context, List<StoreBean.Items> list) {
-            mContext = context;
-            itemsArrayList = list;
-        }
-
-        @Override
-        public int getCount() {
-            return itemsArrayList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder = null;
-            StoreBean.Items items;
-
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-                convertView = View.inflate(mActivity, R.layout.store_item, null);
-                viewHolder.store_item_img = convertView.findViewById(R.id.store_item_img);
-                viewHolder.store_address = convertView.findViewById(R.id.store_address);
-                viewHolder.distance = convertView.findViewById(R.id.distance);
-                viewHolder.img_location = convertView.findViewById(R.id.img_location);
-                viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
-                viewHolder.img_join = convertView.findViewById(R.id.img_join);
-                viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
-                //iewById(R.id.unread_msg_number);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-
-            if (itemsArrayList != null) {
-                items = itemsArrayList.get(position);
-                viewHolder.store_address.setText(items.getBname());
-                viewHolder.distance.setText(items.getAddress());
-                Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
-                //PhoneNo = items.getTelphone_no();
-//                shopJingdu = items.getLat()+"";
-//                shopWeidu = items.getLng()+"";
-//                branchId = items.getBranch_id()+"";
-            }
-            viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemsArrayList != null) {
-                        showDialog(itemsArrayList.get(position).getTelphone_no());
-                    }
-                }
-            });
-            viewHolder.img_location.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemsArrayList != null) {
-                        Intent intent = new Intent(getActivity(), MapActivity.class);
-                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
-                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
-                        intent.putExtra("jingdu", jingdu);
-                        intent.putExtra("weidu", weidu);
-                        startActivity(intent);
-                    }
-                }
-            });
-            viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder dialog =
-                            new AlertDialog.Builder(mActivity);
-                    dialog.setTitle("提示");
-                    dialog.setMessage("是否加入此门店");
-                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (itemsArrayList != null) {
-                                join(itemsArrayList.get(position).getBranch_id() + "");
-                            }
-
-                        }
-                    });
-                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                    dialog.show();
-                }
-            });
-            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemsArrayList != null) {
-                        Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
-                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
-                        intent.putExtra("jingdu", jingdu);
-                        intent.putExtra("weidu", weidu);
-                        intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
-                        startActivityForResult(intent, 111);
-                    }
-                }
-            });
-
-            return convertView;
-        }
-    }
+//    public class MyStoreAdapter extends BaseAdapter {
+//        Context mContext;
+//        List<StoreBean.Items> itemsArrayList;
+//
+//        MyStoreAdapter(Context context, List<StoreBean.Items> list) {
+//            mContext = context;
+//            itemsArrayList = list;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return itemsArrayList.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return null;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return 0;
+//        }
+//
+//        @Override
+//        public View getView(final int position, View convertView, ViewGroup parent) {
+//            ViewHolder viewHolder = null;
+//            StoreBean.Items items;
+//
+//            if (convertView == null) {
+//                viewHolder = new ViewHolder();
+//                convertView = View.inflate(mActivity, R.layout.store_item, null);
+//                viewHolder.store_item_img = convertView.findViewById(R.id.store_item_img);
+//                viewHolder.store_address = convertView.findViewById(R.id.store_address);
+//                viewHolder.distance = convertView.findViewById(R.id.distance);
+//                viewHolder.img_location = convertView.findViewById(R.id.img_location);
+//                viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
+//                viewHolder.img_join = convertView.findViewById(R.id.img_join);
+//                viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
+//                //iewById(R.id.unread_msg_number);
+//                convertView.setTag(viewHolder);
+//            } else {
+//                viewHolder = (ViewHolder) convertView.getTag();
+//            }
+//
+//
+//            if (itemsArrayList != null) {
+//                items = itemsArrayList.get(position);
+//                viewHolder.store_address.setText(items.getBname());
+//                viewHolder.distance.setText(items.getAddress());
+//                Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
+//                //PhoneNo = items.getTelphone_no();
+////                shopJingdu = items.getLat()+"";
+////                shopWeidu = items.getLng()+"";
+////                branchId = items.getBranch_id()+"";
+//            }
+//            viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (itemsArrayList != null) {
+//                        showDialog(itemsArrayList.get(position).getTelphone_no());
+//                    }
+//                }
+//            });
+//            viewHolder.img_location.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (itemsArrayList != null) {
+//                        Intent intent = new Intent(getActivity(), MapActivity.class);
+//                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
+//                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
+//                        intent.putExtra("jingdu", jingdu);
+//                        intent.putExtra("weidu", weidu);
+//                        startActivity(intent);
+//                    }
+//                }
+//            });
+//            viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    AlertDialog.Builder dialog =
+//                            new AlertDialog.Builder(mActivity);
+//                    dialog.setTitle("提示");
+//                    dialog.setMessage("是否加入此门店");
+//                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            if (itemsArrayList != null) {
+//                                join(itemsArrayList.get(position).getBranch_id() + "");
+//                            }
+//
+//                        }
+//                    });
+//                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                        }
+//                    });
+//                    dialog.show();
+//                }
+//            });
+//            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (itemsArrayList != null) {
+//                        Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+//                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
+//                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
+//                        intent.putExtra("jingdu", jingdu);
+//                        intent.putExtra("weidu", weidu);
+//                        intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
+//                        startActivityForResult(intent, 111);
+//                    }
+//                }
+//            });
+//
+//            return convertView;
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -951,21 +954,7 @@ public class ShopFragment extends BaseFragment {
                     info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                     setMap();
                     addRoles();
-                    arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
-                    //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                    spinner.setAdapter(arrayAdapter);
-                    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            role = roleList.get(position);
-                            initData();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
+                    setSpinner();
                     initData();
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
