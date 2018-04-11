@@ -26,7 +26,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -57,7 +56,6 @@ import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
-import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
@@ -280,6 +278,7 @@ public class ShopFragment extends BaseFragment {
     private void addRoles() {
         if (info != null) {
             roles = info.getRoles();
+            LogUtil.i(roles.toString());
             if (roles != null && roles.size() > 0) {
                 for (int i = 0; i < roles.size(); i++) {
                     if (roles.get(i).getRole_type() == 1) {

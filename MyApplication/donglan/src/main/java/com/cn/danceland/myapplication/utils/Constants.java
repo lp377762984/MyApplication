@@ -53,8 +53,8 @@ public class Constants extends EaseConstant {
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
 
-    public static final String FIND_JOIN_SHOP_URL = HOST + "/user/findJoinBranchs";//查找已经加入门店
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone";//搜索好友
+    public static final String FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
     public static final String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach ";//查找教练
 

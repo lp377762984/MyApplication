@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -24,6 +24,8 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.MyJionShopList;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequestShopListInfo;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -37,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cn.danceland.myapplication.R.id.tv_shoplist;
+
 /**
  * Created by shy on 2017/12/13 10:15
  * Email:644563767@qq.com
@@ -48,7 +52,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
     //   @BindView(R.id.lv_myshop)  ListView lv_myshop;
 
     private MyListViewAdapter listViewAdapter;
-    private List<RequestShopListInfo.Data> data = new ArrayList<>();
+    private List<MyJionShopList.Data> data = new ArrayList<>();
     private ListView lv_myshop;
     private String defaultshopId;
     private Data userInfo;
@@ -65,6 +69,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         defaultshopId = userInfo.getPerson().getDefault_branch();
         findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(tv_shoplist).setOnClickListener(this);
         lv_myshop = findViewById(R.id.lv_myshop);
         listViewAdapter = new MyListViewAdapter();
         lv_myshop.setAdapter(listViewAdapter);
@@ -89,6 +94,9 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.tv_shoplist:
+                startActivity(new Intent(MyShopActivity.this,ShopListActivity.class));
                 break;
             default:
                 break;
@@ -149,14 +157,58 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         listDialog.show();
     }
 
+
+    private void reloadInfo() {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                if (loginInfoBean.getSuccess()) {
+                    DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
+                    userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    defaultshopId=userInfo.getPerson().getDefault_branch();
+                //    ToastUtils.showToastShort("加入成功！");
+//                    setResult(111);
+                //    finish();
+                    listViewAdapter.notifyDataSetChanged();
+                 //   lv_myshop.setAdapter(listViewAdapter);
+                 //   lv_myshop.setAdapter(new MyListViewAdapter());
+                } else {
+                    ToastUtils.showToastShort("加入失败！请检查网络！");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
+
     private void findJoinSHOP() {
         StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_JOIN_SHOP_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
-                RequestShopListInfo shopListInfo = new RequestShopListInfo();
-                shopListInfo = gson.fromJson(s, RequestShopListInfo.class);
+                MyJionShopList shopListInfo = new MyJionShopList();
+                shopListInfo = gson.fromJson(s, MyJionShopList.class);
                 if (shopListInfo.getSuccess()) {
                     if (shopListInfo.getData().size() > 0) {
                         data = shopListInfo.getData();
@@ -202,10 +254,11 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
                 RequestShopListInfo shopListInfo = new RequestShopListInfo();
                 shopListInfo = gson.fromJson(s, RequestShopListInfo.class);
                 if (shopListInfo.getSuccess()) {
-                    defaultshopId = BranchId;
-                    userInfo.getPerson().setDefault_branch(defaultshopId);
-                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
-                    listViewAdapter.notifyDataSetChanged();
+//                    defaultshopId = BranchId;
+//                    userInfo.getPerson().setDefault_branch(defaultshopId);
+//                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
+                    reloadInfo();
+
 
                 } else {
                     ToastUtils.showToastShort(shopListInfo.getErrorMsg());
@@ -264,20 +317,71 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
 
             ImageView iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
             TextView tv_name = view.findViewById(R.id.tv_name);
-            TextView tv_default = view.findViewById(R.id.tv_default);
-            RadioButton cb_default = view.findViewById(R.id.cb_default);
+            TextView tv_time = view.findViewById(R.id.tv_time);
+            TextView tv_role = view.findViewById(R.id.tv_role);
+            ImageView iv_default = view.findViewById(R.id.iv_default);
 
             Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(iv_shop_logo);
-            tv_name.setText(data.get(i).getBname());
+            tv_name.setText(data.get(i).getName());
             if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
-                tv_default.setText("当前门店");
+            //    tv_default.setText("当前门店");
                 //   cb_default.setImageResource(R.drawable.img_cb1);
-                cb_default.setChecked(true);
+                iv_default.setImageResource(R.drawable.img_current_shop);
             } else {
-                tv_default.setText("");
-                //    cb_default.setImageResource(R.drawable.img_cb);
-                cb_default.setChecked(false);
+
+                  iv_default.setImageResource(R.drawable.img_change_shop);
+
             }
+            String[] b = data.get(i).getCreate_time().toString().split(" ");
+            tv_time.setText("加入时间："+b[0]);
+            if (data.get(i).getAuths().size()==1){
+                String s="我的角色：";
+                if (TextUtils.equals(data.get(i).getAuths().get(0),"1")){
+                    s=s+"准会员";
+                }
+                if (TextUtils.equals(data.get(i).getAuths().get(0),"2")){
+                    s=s+"会员";
+                }
+                if (TextUtils.equals(data.get(i).getAuths().get(0),"3")){
+                    s=s+"员工";
+                }
+                tv_role.setText(s);
+            }
+            if (data.get(i).getAuths().size()==2){
+                String s="我的角色：";
+                for (int j=0;j<data.get(i).getAuths().size();j++){
+//                    LogUtil.i(j+"");
+//                    LogUtil.i(data.get(i).getAuths().get(j));
+                    if (TextUtils.equals(data.get(i).getAuths().get(j),"1")){
+                        if (j==0){
+                            s=s+"准会员";
+                        }else {
+                            s=s+"/准会员";
+                        }
+
+                    }
+                    if (TextUtils.equals(data.get(i).getAuths().get(j),"2")){
+
+                        if (j==0){
+                            s=s+"会员";
+                        }else {
+                            s=s+"/会员";
+                        }
+                    }
+                    if (TextUtils.equals(data.get(i).getAuths().get(j),"3")){
+
+                        if (j==0){
+                            s=s+"员工";
+                        }else {
+                            s=s+"/员工";
+                        }
+                    }
+
+
+                }
+                tv_role.setText(s);
+            }
+
 
             return view;
         }
