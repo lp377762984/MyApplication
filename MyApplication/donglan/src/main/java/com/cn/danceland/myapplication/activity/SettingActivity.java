@@ -203,7 +203,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 dismissWindow();
                 break;
             case R.id.ll_my_shop:
-                startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
+                LogUtil.i(mInfo.getPerson().getDefault_branch());
+                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("请先加入一个门店");
+                    return;
+                }
+              //  startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
                 break;
             default:
                 break;

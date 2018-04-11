@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
@@ -60,7 +61,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
     public LocationService mLocationClient;
     public BDAbstractLocationListener myListener = new MyLocationListener();
-    double jingdu,weidu;
+    double jingdu, weidu;
     Data myInfo;
 
 
@@ -94,6 +95,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         shopFragment = new ShopFragment();
 
         shopListFragment = new ShopListFragment();
+
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
 //        if (savedInstanceState != null) {
@@ -104,16 +106,15 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //        }
 
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        if(myInfo!=null){
-            if(myInfo.getPerson().getDefault_branch()!=null){
+        if (myInfo != null) {
+            if (myInfo.getPerson().getDefault_branch() != null) {
                 fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
-            }else{
+            } else {
                 fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
             }
-        }else{
+        } else {
             fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
         }
-
 
 
 //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, homeFragment)
@@ -128,7 +129,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .show(homeFragment)
                     .commit();
         }
-         //   getFragmentManager().findFragmentByTag()
+        //   getFragmentManager().findFragmentByTag()
 
     }
 
@@ -163,36 +164,36 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
         SharedPreferences bus_type = getSharedPreferences("bus_type", MODE_PRIVATE);
         SharedPreferences.Editor edit = bus_type.edit();
-        edit.putString(11+"","PC买定金");
-        edit.putString(13+"","PC退定金");
-        edit.putString(14+"","PC储值卡充值");
-        edit.putString(15+"","PC储值卡退钱");
-        edit.putString(16+"","App储值卡充值");
-        edit.putString(31+"","App买定金");
-        edit.putString(32+"","App买卡");
-        edit.putString(33+"","App为他人买定金");
-        edit.putString(34+"","App为他人买卡");
-        edit.putString(21+"","开卡");
-        edit.putString(22+"","卡升级");
-        edit.putString(23+"","续卡");
-        edit.putString(24+"","补卡");
-        edit.putString(25+"","转卡");
-        edit.putString(26+"","退卡");
-        edit.putString(27+"","停卡");
-        edit.putString(28+"","延期");
-        edit.putString(29+"","挂失");
-        edit.putString(41+"","租柜");
-        edit.putString(42+"","续柜");
-        edit.putString(43+"","退柜");
-        edit.putString(44+"","转柜");
-        edit.putString(45+"","换柜");
-        edit.putString(51+"","购买私教");
-        edit.putString(52+"","私教转会员");
-        edit.putString(53+"","私教转教练");
-        edit.putString(54+"","购买小团课");
-        edit.putString(55+"","小团课转会员");
-        edit.putString(56+"","App购买私教");
-        edit.putString(57+"","为他人购买私教");
+        edit.putString(11 + "", "PC买定金");
+        edit.putString(13 + "", "PC退定金");
+        edit.putString(14 + "", "PC储值卡充值");
+        edit.putString(15 + "", "PC储值卡退钱");
+        edit.putString(16 + "", "App储值卡充值");
+        edit.putString(31 + "", "App买定金");
+        edit.putString(32 + "", "App买卡");
+        edit.putString(33 + "", "App为他人买定金");
+        edit.putString(34 + "", "App为他人买卡");
+        edit.putString(21 + "", "开卡");
+        edit.putString(22 + "", "卡升级");
+        edit.putString(23 + "", "续卡");
+        edit.putString(24 + "", "补卡");
+        edit.putString(25 + "", "转卡");
+        edit.putString(26 + "", "退卡");
+        edit.putString(27 + "", "停卡");
+        edit.putString(28 + "", "延期");
+        edit.putString(29 + "", "挂失");
+        edit.putString(41 + "", "租柜");
+        edit.putString(42 + "", "续柜");
+        edit.putString(43 + "", "退柜");
+        edit.putString(44 + "", "转柜");
+        edit.putString(45 + "", "换柜");
+        edit.putString(51 + "", "购买私教");
+        edit.putString(52 + "", "私教转会员");
+        edit.putString(53 + "", "私教转教练");
+        edit.putString(54 + "", "购买小团课");
+        edit.putString(55 + "", "小团课转会员");
+        edit.putString(56 + "", "App购买私教");
+        edit.putString(57 + "", "为他人购买私教");
 
         edit.apply();
 
@@ -201,15 +202,16 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     protected void onStart() {
-           super.onStart();
+        super.onStart();
         mLocationClient = MyApplication.getInstance().locationClient;
         mLocationClient.registerListener(myListener);
 
         mLocationClient.start();
 
     }
-    public String getlocationString(){
-        return jingdu+","+weidu;
+
+    public String getlocationString() {
+        return jingdu + "," + weidu;
     }
 
     @Override
@@ -220,28 +222,35 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
-    public class MyLocationListener extends BDAbstractLocationListener  {
+    public class MyLocationListener extends BDAbstractLocationListener {
         @Override
-        public void onReceiveLocation(BDLocation location){
+        public void onReceiveLocation(BDLocation location) {
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
             //LogUtil.e("zzf",location.getLocType()+"");
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
-
-            }else{
+                SPUtils.setString("jingdu",jingdu+"");
+                SPUtils.setString("weidu",weidu+"");
+                if (shopListFragment != null) {
+                    Bundle bundle=new Bundle();
+                    bundle.putString("jingdu",jingdu+"");
+                    bundle.putString("weidu",weidu+"");
+                    shopListFragment.setArguments(bundle);
+                }
+            } else {
                 ToastUtils.showToastShort("定位失败!");
             }
         }
 
     }
 
-    public void setShopFragment(ShopFragment shopFragment,ShopListFragment shopListFragment){
+    public void setShopFragment(ShopFragment shopFragment, ShopListFragment shopListFragment) {
 
-        if(shopFragment!=null){
+        if (shopFragment != null) {
             fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
-        }else if(shopListFragment!=null){
+        } else if (shopListFragment != null) {
             fragments = new Fragment[]{homeFragment, shopListFragment, discoverFragment, meFragment};
         }
     }
@@ -249,7 +258,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==111){
+        if (resultCode == 111) {
             fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
             FragmentTransaction trx =
                     getSupportFragmentManager().beginTransaction();
@@ -265,7 +274,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                trx.remove(fragments[1]);
 //                trx.add(R.id.fragment_container, fragments[1], FRAGMENT_TAG[1]);
 //            }
-            trx.replace(R.id.fragment_container,shopFragment);
+            trx.replace(R.id.fragment_container, shopFragment);
             trx.commit();
             //判断当前页
 //            if (currentTabIndex != index) {
@@ -350,6 +359,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         super.onDestroy();
         unregisterBroadcastReceiver();
     }
+
     //private EaseUI easeUI;
     EMMessageListener messageListener = new EMMessageListener() {
 
@@ -382,7 +392,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
 
         @Override
-        public void onMessageChanged(EMMessage message, Object change) {}
+        public void onMessageChanged(EMMessage message, Object change) {
+        }
     };
 
     private void refreshUIWithMessage() {
@@ -407,9 +418,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
+
     private void registerBroadcastReceiver() {
         broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -444,7 +455,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    private void unregisterBroadcastReceiver(){
+    private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
