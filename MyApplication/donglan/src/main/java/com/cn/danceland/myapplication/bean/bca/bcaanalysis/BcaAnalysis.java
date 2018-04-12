@@ -1,4 +1,5 @@
 package com.cn.danceland.myapplication.bean.bca.bcaanalysis;
+import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 
 import java.util.Date;
@@ -22,7 +23,25 @@ public class BcaAnalysis {
 	private String behind_path;// 背后照
 	private Long member_id;// 会员ID
 
-	private List<BcaResult> result;
+	private List<BcaResult> result;// 保存结果的
+	private List<BcaQuestion> qList;// 问题列表
+	private String content;//综合评价
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public List<BcaQuestion> getqList() {
+		return qList;
+	}
+
+	public void setqList(List<BcaQuestion> qList) {
+		this.qList = qList;
+	}
 
 	public List<BcaResult> getResult() {
 		return result;
