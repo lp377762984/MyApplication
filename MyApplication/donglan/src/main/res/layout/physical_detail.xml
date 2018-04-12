@@ -174,16 +174,19 @@
                 android:orientation="horizontal"
                 >
                 <RadioButton
+                    android:id="@+id/rb_result_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="较差"/>
                 <RadioButton
+                    android:id="@+id/rb_result_02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="一般"/>
                 <RadioButton
+                    android:id="@+id/rb_result_03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

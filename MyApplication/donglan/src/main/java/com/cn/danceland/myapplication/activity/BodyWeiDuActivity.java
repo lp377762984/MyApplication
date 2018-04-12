@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -38,10 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by feng on 2018/4/8.
+ * Created by feng on 2018/4/12.
  */
 
-public class BodyDeatilActivity extends Activity {
+public class BodyWeiDuActivity extends Activity {
 
     DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;
@@ -80,9 +79,9 @@ public class BodyDeatilActivity extends Activity {
     private void initView() {
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
-        rl_bodybase_title.setTitle("身体详细情况");
+        rl_bodybase_title.setTitle("身体围度");
         lv_bodybase = findViewById(R.id.lv_bodybase);
-        footView = View.inflate(BodyDeatilActivity.this, R.layout.commit_button, null);
+        footView = View.inflate(BodyWeiDuActivity.this, R.layout.commit_button, null);
 
         bodyBaseAdapter = new BodyBaseAdapter();
         lv_bodybase.setAdapter(bodyBaseAdapter);
@@ -101,19 +100,18 @@ public class BodyDeatilActivity extends Activity {
                     resultList.add(bcaResult);
                 }
                 deleteEqualsItem();
-                startActivity(new Intent(BodyDeatilActivity.this,PhysicalTestActivity.class).putExtra("resultList",(Serializable) resultList));
+                startActivity(new Intent(BodyWeiDuActivity.this,BodyTiXingActivity.class).putExtra("resultList",(Serializable) resultList));
             }
         });
 
     }
-
 
     /**
      * @方法说明:按条件查询问题题干列表
      **/
     public void queryList() {
         BcaQuestionCond cond = new BcaQuestionCond();
-        cond.setType(Byte.valueOf("2"));
+        cond.setType(Byte.valueOf("4"));
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
                 DLResult<List<BcaQuestion>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<BcaQuestion>>>() {
@@ -130,8 +128,7 @@ public class BodyDeatilActivity extends Activity {
         });
     }
 
-
-    private class BodyBaseAdapter extends BaseAdapter{
+    private class BodyBaseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -150,7 +147,7 @@ public class BodyDeatilActivity extends Activity {
 
         @Override
         public View getView(final int pos, View convertView, ViewGroup parent) {
-            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_item, null);
+            View view = View.inflate(BodyWeiDuActivity.this, R.layout.bodybase_item, null);
             LinearLayout ll_ed_parent = view.findViewById(R.id.ll_ed_parent);
 
 
@@ -176,7 +173,7 @@ public class BodyDeatilActivity extends Activity {
                 }
             }
             for(int n  = 0;n<editList.size();n++){
-                final EditText editText = new EditText(BodyDeatilActivity.this);
+                final EditText editText = new EditText(BodyWeiDuActivity.this);
                 editText.setBackgroundResource(R.drawable.rect_body);
                 editText.setHint(editList.get(n));
                 editText.setHintTextColor(Color.parseColor("#dcdcdc"));
@@ -260,7 +257,7 @@ public class BodyDeatilActivity extends Activity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_grid_item, null);
+            View view = View.inflate(BodyWeiDuActivity.this, R.layout.bodybase_grid_item, null);
             final CheckBox rb_grid = view.findViewById(R.id.rb_grid);
             rb_grid.setText(options.get(position).getTitle());
             rb_grid.setOnClickListener(new View.OnClickListener() {

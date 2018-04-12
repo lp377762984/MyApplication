@@ -1,11 +1,13 @@
 package com.cn.danceland.myapplication.bean.bca.bcaresult;
 
+import java.io.Serializable;
+
 /**
  * @类说明:结果项--实体类
  * @author:高振中
  * @date:2018-03-29 11:54:48
  **/
-public class BcaResult {
+public class BcaResult implements Serializable{
 
 	//原始属性
 	private Long id;// 主键
@@ -52,5 +54,31 @@ public class BcaResult {
 	}
 	public void setBranch_id(Long branch_id) {
 		this.branch_id = branch_id;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		BcaResult bcaResult = (BcaResult) o;
+
+		if (id != null ? !id.equals(bcaResult.id) : bcaResult.id != null) return false;
+		if (a_id != null ? !a_id.equals(bcaResult.a_id) : bcaResult.a_id != null) return false;
+		if (question_id != null ? !question_id.equals(bcaResult.question_id) : bcaResult.question_id != null)
+			return false;
+		if (opt_id != null ? !opt_id.equals(bcaResult.opt_id) : bcaResult.opt_id != null)
+			return false;
+		return branch_id != null ? branch_id.equals(bcaResult.branch_id) : bcaResult.branch_id == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id != null ? id.hashCode() : 0;
+		result = 31 * result + (a_id != null ? a_id.hashCode() : 0);
+		result = 31 * result + (question_id != null ? question_id.hashCode() : 0);
+		result = 31 * result + (opt_id != null ? opt_id.hashCode() : 0);
+		result = 31 * result + (branch_id != null ? branch_id.hashCode() : 0);
+		return result;
 	}
 }

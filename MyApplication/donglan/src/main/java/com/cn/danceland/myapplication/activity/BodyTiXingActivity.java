@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +18,8 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
+import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisRequest;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
@@ -38,10 +39,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by feng on 2018/4/8.
+ * Created by feng on 2018/4/12.
  */
 
-public class BodyDeatilActivity extends Activity {
+public class BodyTiXingActivity extends Activity {
+
 
     DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;
@@ -80,9 +82,9 @@ public class BodyDeatilActivity extends Activity {
     private void initView() {
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
-        rl_bodybase_title.setTitle("身体详细情况");
+        rl_bodybase_title.setTitle("体型体态分析");
         lv_bodybase = findViewById(R.id.lv_bodybase);
-        footView = View.inflate(BodyDeatilActivity.this, R.layout.commit_button, null);
+        footView = View.inflate(BodyTiXingActivity.this, R.layout.commit_button, null);
 
         bodyBaseAdapter = new BodyBaseAdapter();
         lv_bodybase.setAdapter(bodyBaseAdapter);
@@ -101,7 +103,7 @@ public class BodyDeatilActivity extends Activity {
                     resultList.add(bcaResult);
                 }
                 deleteEqualsItem();
-                startActivity(new Intent(BodyDeatilActivity.this,PhysicalTestActivity.class).putExtra("resultList",(Serializable) resultList));
+                startActivity(new Intent(BodyTiXingActivity.this,BodyZongHeActivity.class).putExtra("resultList",(Serializable) resultList));
             }
         });
 
@@ -113,7 +115,7 @@ public class BodyDeatilActivity extends Activity {
      **/
     public void queryList() {
         BcaQuestionCond cond = new BcaQuestionCond();
-        cond.setType(Byte.valueOf("2"));
+        cond.setType(Byte.valueOf("5"));
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
                 DLResult<List<BcaQuestion>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<BcaQuestion>>>() {
@@ -130,8 +132,7 @@ public class BodyDeatilActivity extends Activity {
         });
     }
 
-
-    private class BodyBaseAdapter extends BaseAdapter{
+    private class BodyBaseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -150,7 +151,7 @@ public class BodyDeatilActivity extends Activity {
 
         @Override
         public View getView(final int pos, View convertView, ViewGroup parent) {
-            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_item, null);
+            View view = View.inflate(BodyTiXingActivity.this, R.layout.bodybase_item, null);
             LinearLayout ll_ed_parent = view.findViewById(R.id.ll_ed_parent);
 
 
@@ -176,7 +177,7 @@ public class BodyDeatilActivity extends Activity {
                 }
             }
             for(int n  = 0;n<editList.size();n++){
-                final EditText editText = new EditText(BodyDeatilActivity.this);
+                final EditText editText = new EditText(BodyTiXingActivity.this);
                 editText.setBackgroundResource(R.drawable.rect_body);
                 editText.setHint(editList.get(n));
                 editText.setHintTextColor(Color.parseColor("#dcdcdc"));
@@ -260,7 +261,7 @@ public class BodyDeatilActivity extends Activity {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            View view = View.inflate(BodyDeatilActivity.this, R.layout.bodybase_grid_item, null);
+            View view = View.inflate(BodyTiXingActivity.this, R.layout.bodybase_grid_item, null);
             final CheckBox rb_grid = view.findViewById(R.id.rb_grid);
             rb_grid.setText(options.get(position).getTitle());
             rb_grid.setOnClickListener(new View.OnClickListener() {

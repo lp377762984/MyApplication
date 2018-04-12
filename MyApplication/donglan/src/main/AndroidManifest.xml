@@ -411,7 +411,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BodyBaseActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".activity.BodyDetailActivity"
             android:screenOrientation="portrait" />
@@ -427,6 +428,12 @@
         <activity
             android:name=".activity.PhysicalTestActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.BodyWeiDuActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyTiXingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BodyZongHeActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

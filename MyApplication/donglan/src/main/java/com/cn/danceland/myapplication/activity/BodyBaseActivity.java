@@ -2,8 +2,11 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -12,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,9 +31,11 @@ import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionRequest;
+import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -38,7 +44,10 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -59,6 +68,9 @@ public class BodyBaseActivity extends Activity {
     BodyBaseGridAdapter bodyBaseGridAdapter;
     DongLanTitleView rl_bodybase_title;
     Button body_button;
+    List<BcaResult> resultList;
+    EditText editText;
+    Long que_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +83,8 @@ public class BodyBaseActivity extends Activity {
     }
 
     private void initHost() {
+
+        resultList = new ArrayList<>();
         request = new BcaQuestionRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
@@ -85,10 +99,10 @@ public class BodyBaseActivity extends Activity {
         footView = View.inflate(BodyBaseActivity.this, R.layout.commit_button, null);
 
         lv_bodybase.addHeaderView(hearerView);
-        lv_bodybase.addFooterView(footView);
 
         bodyBaseAdapter = new BodyBaseAdapter();
         lv_bodybase.setAdapter(bodyBaseAdapter);
+
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
         rl_bodybase_title.setTitle("身体基本情况");
@@ -97,9 +111,21 @@ public class BodyBaseActivity extends Activity {
         body_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BodyBaseActivity.this,BodyDeatilActivity.class));
+
+                if(editText!=null){
+                    BcaResult bcaResult = new BcaResult();
+                    bcaResult.setQuestion_id(que_id);
+                    bcaResult.setContent(editText.getText().toString());
+                    bcaResult.setOpt_id((Long)editText.getTag());
+                    resultList.add(bcaResult);
+                }
+                deleteEqualsItem();
+                LogUtil.e("zzf",resultList.toString());
+
+                startActivity(new Intent(BodyBaseActivity.this,BodyDeatilActivity.class).putExtra("resultList",(Serializable) resultList));
             }
         });
+
 
     }
 
@@ -118,6 +144,7 @@ public class BodyBaseActivity extends Activity {
                 if (result.isSuccess()) {
                     list = result.getData();
                     bodyBaseAdapter.notifyDataSetChanged();
+                    lv_bodybase.addFooterView(footView);
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }
@@ -126,6 +153,10 @@ public class BodyBaseActivity extends Activity {
     }
 
 
+    private void setEditText(EditText editText,Long id){
+        this.editText = editText;
+        this.que_id = id;
+    }
 
     private class BodyBaseAdapter extends BaseAdapter{
 
@@ -145,28 +176,78 @@ public class BodyBaseActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int pos, View convertView, ViewGroup parent) {
             View view = View.inflate(BodyBaseActivity.this, R.layout.bodybase_item, null);
+            LinearLayout ll_ed_parent = view.findViewById(R.id.ll_ed_parent);
 
 
             gv_bodybase = view.findViewById(R.id.gv_bodybase);
 
             TextView tv_tigan = view.findViewById(R.id.tv_tigan);
-            tv_tigan.setText(list.get(position).getOrder_no()+". "+list.get(position).getCentent());
+            tv_tigan.setText(list.get(pos).getOrder_no()+". "+list.get(pos).getCentent());
 
-            final ArrayList<Integer> select = new ArrayList<>();
-            bodyBaseGridAdapter = new BodyBaseGridAdapter(list.get(position).getOptions(),position);
+            List<BcaOption> options = list.get(pos).getOptions();
+            List<BcaOption> options1 = new ArrayList<>();
+            List<String> editList = new ArrayList<>();
+            ArrayList<Long> options2 = new ArrayList<>();
+            if(options!=null){
+                for(int i = 0;i<options.size();i++){
+                    String type = options.get(i).getType().toString();
+                    if("1".equals(type)){
+                        options1.add(options.get(i));
+                    }
+                    if("2".equals(type)){
+                        editList.add(options.get(i).getTitle());
+                        options2.add(options.get(i).getId());
+                    }
+                }
+            }
+            for(int n  = 0;n<editList.size();n++){
+                final EditText editText = new EditText(BodyBaseActivity.this);
+                editText.setBackgroundResource(R.drawable.rect_body);
+                editText.setHint(editList.get(n));
+                editText.setHintTextColor(Color.parseColor("#dcdcdc"));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                lp.setMargins(0,15,0,0);
+                editText.setLayoutParams(lp);
+                editText.setMaxLines(1);
+                editText.setTag(options2.get(n));
+                editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if(!hasFocus){
+                            BcaResult bcaResult = new BcaResult();
+                            bcaResult.setQuestion_id(list.get(pos).getId());
+                            bcaResult.setContent(editText.getText().toString());
+                            bcaResult.setOpt_id((Long)editText.getTag());
+                            resultList.add(bcaResult);
+                            //deleteEqualsItem();
+                        }else{
+                            setEditText(editText,list.get(pos).getId());
+                        }
+                    }
+                });
+                ll_ed_parent.addView(editText);
+            }
+
+
+            bodyBaseGridAdapter = new BodyBaseGridAdapter(options1,list.get(pos).getId());
             gv_bodybase.setAdapter(bodyBaseGridAdapter);
 
-            gv_bodybase.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    select.clear();
-                    select.add(position);
-                    bodyBaseGridAdapter.notifyDataSetChanged();
-                }
-            });
             return view;
+        }
+    }
+
+    private void deleteEqualsItem(){
+        for(int i = 0;i<resultList.size();i++){
+            for(int j = i+1;j<resultList.size();j++){
+                if(resultList.get(i).equals(resultList.get(j))){
+                    resultList.remove(i);
+                    i--;
+                    break;
+                }
+            }
         }
     }
 
@@ -174,13 +255,13 @@ public class BodyBaseActivity extends Activity {
     private class BodyBaseGridAdapter extends BaseAdapter{
 
 
-        Integer itemPositon;
+        Long que_id;
 
         List<BcaOption> options;
 
-        BodyBaseGridAdapter(List<BcaOption> options,Integer itemPositon){
+        BodyBaseGridAdapter(List<BcaOption> options,Long que_id){
             this.options = options;
-            this.itemPositon = itemPositon;
+            this.que_id = que_id;
         }
 
         @Override
@@ -199,11 +280,30 @@ public class BodyBaseActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             View view = View.inflate(BodyBaseActivity.this, R.layout.bodybase_grid_item, null);
-            CheckBox rb_grid = view.findViewById(R.id.rb_grid);
+            final CheckBox rb_grid = view.findViewById(R.id.rb_grid);
             rb_grid.setText(options.get(position).getTitle());
+            rb_grid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(rb_grid.isChecked()){
+                        BcaResult bcaResult = new BcaResult();
+                        bcaResult.setOpt_id(Long.valueOf(position+""));
+                        bcaResult.setQuestion_id(Long.valueOf(que_id+""));
+                        resultList.add(bcaResult);
+                        //deleteEqualsItem();
+                    }else{
+                        for(BcaResult bcaResult:resultList){
+                            if(bcaResult.getOpt_id()==Long.valueOf(position+"")&&bcaResult.getQuestion_id()==Long.valueOf(que_id+"")){
+                                resultList.remove(bcaResult);
+                            }
+                        }
+
+                    }
+                }
+            });
 
 
             return view;

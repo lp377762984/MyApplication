@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -20,6 +22,7 @@ import com.cn.danceland.myapplication.bean.PhysicalTestBean;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionRequest;
+import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -34,6 +37,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -54,7 +58,9 @@ public class PhysicalTestActivity extends Activity {
     ArrayList<View> viewList;
     View inflate;
     TextView tv_zhubiaoti;
-    List<PhysicalTestBean> datalist;
+    Long select;
+    List<BcaResult> resultList;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,15 +74,9 @@ public class PhysicalTestActivity extends Activity {
     private void initViewPager() {
 
         if(list!=null){
-            datalist.clear();
-            for(int i = 0;i<list.size();i++){
-                String test_content = list.get(i).getTest_content();
-                PhysicalTestBean physicalTestBean = gson.fromJson(test_content, PhysicalTestBean.class);
-                datalist.add(physicalTestBean);
-            }
-        }
 
-        vp_physical.setAdapter(new PhysicalPagerAdapter(viewList,datalist));
+            vp_physical.setAdapter(new PhysicalPagerAdapter(viewList,list));
+        }
 
     }
 
@@ -84,7 +84,11 @@ public class PhysicalTestActivity extends Activity {
         request = new BcaQuestionRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
-        datalist = new ArrayList<>();
+
+        resultList = (List<BcaResult>)getIntent().getSerializableExtra("resultList");
+        if(resultList==null){
+            resultList = new ArrayList<>();
+        }
     }
 
     private void initView() {
@@ -133,10 +137,10 @@ public class PhysicalTestActivity extends Activity {
 
     private class PhysicalPagerAdapter extends PagerAdapter{
         ArrayList<View> viewList;
-        List<PhysicalTestBean> datalist;
-        PhysicalPagerAdapter(ArrayList<View> viewList,List<PhysicalTestBean> datalist){
+        List<BcaQuestion>  list;
+        PhysicalPagerAdapter(ArrayList<View> viewList,List<BcaQuestion>  datalist){
             this.viewList = viewList;
-            this.datalist = datalist;
+            list = datalist;
         }
 
         @Override
@@ -154,12 +158,13 @@ public class PhysicalTestActivity extends Activity {
             // TODO Auto-generated method stub
             View v=viewList.get(position);
             ViewGroup parent = (ViewGroup) v.getParent();
-            //Log.i("ViewPaperAdapter", parent.toString());
             if (parent != null) {
                 parent.removeAllViews();
             }
+
             container.addView(v);
-            PhysicalTestBean physicalTestBean = datalist.get(position);
+            String test_content = list.get(position).getTest_content();
+            PhysicalTestBean physicalTestBean = gson.fromJson(test_content, PhysicalTestBean.class);
 
             ImageView img_01 = v.findViewById(R.id.img_01);
             Glide.with(PhysicalTestActivity.this).load(physicalTestBean.getMain_pic_url()).into(img_01);
@@ -201,6 +206,30 @@ public class PhysicalTestActivity extends Activity {
                 tv_zhuyi.setText(stringBuilder1.toString());
             }
 
+            RadioGroup rg_result = v.findViewById(R.id.rg_result);
+            rg_result.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (group.getCheckedRadioButtonId()){
+                        case R.id.rb_result_01:
+                            if (list.get(position).getOptions()!=null&&list.get(position).getOptions().size()==3){
+                                select = list.get(position).getOptions().get(0).getId();
+                            }
+
+                            break;
+                        case R.id.rb_result_02:
+                            if (list.get(position).getOptions()!=null&&list.get(position).getOptions().size()==3){
+                                select = list.get(position).getOptions().get(1).getId();
+                            }
+                            break;
+                        case R.id.rb_result_03:
+                            if (list.get(position).getOptions()!=null&&list.get(position).getOptions().size()==3){
+                                select = list.get(position).getOptions().get(2).getId();
+                            }
+                            break;
+                    }
+                }
+            });
 
 
 
@@ -208,10 +237,21 @@ public class PhysicalTestActivity extends Activity {
             bt_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(position<viewList.size()-1){
-                        vp_physical.setCurrentItem(position+1);
+                    if(select != null){
+                        BcaResult bcaResult = new BcaResult();
+                        bcaResult.setQuestion_id(list.get(position).getId());
+                        bcaResult.setOpt_id(select);
+                        resultList.add(bcaResult);
+                        if(position<viewList.size()-1){
+                            vp_physical.setCurrentItem(position+1);
+                        }else{
+                            startActivity(new Intent(PhysicalTestActivity.this,BodyWeiDuActivity.class).putExtra("resultList",(Serializable) resultList));
+                        }
+                    }else{
+                        ToastUtils.showToastShort("请选择后提交！");
                     }
 
+                    select = null;
                 }
             });
 
