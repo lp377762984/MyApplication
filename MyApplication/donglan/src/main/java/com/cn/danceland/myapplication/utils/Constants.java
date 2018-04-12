@@ -14,7 +14,7 @@ public class Constants extends EaseConstant {
    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
    //public static final String HOST = " http://192.168.1.115:8003/";//
 
-    public static final String HOST = " http://192.168.1.119:8003/";//
+    public static final String HOST = " http://192.168.1.115:8003/";//
 
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
@@ -162,7 +162,7 @@ public class Constants extends EaseConstant {
 
     public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
-    public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数
+    public static final String FIND_PARAM_KEY =HOST + "/appParam/findParamKey";//查询参数
     public static final String REAYTEST = HOST + "appBca/bcaTestUpdateMemberAndPerson";//提交用户信息
     public static final String GETEQUIPMENT = HOST + "appBca/findPageBranchBca";//获取门店体测仪列表
     public static final String CONNECTEQU = HOST + "appBca/connectTester";//连接设备

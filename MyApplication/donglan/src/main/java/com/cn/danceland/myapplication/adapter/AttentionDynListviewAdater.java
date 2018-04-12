@@ -459,15 +459,18 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 //                LogUtil.i(c[0]);
 //                LogUtil.i(c[1]);
 //                LogUtil.i(sb.toString());
-                if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                    viewHolder.iv_pic.setLayoutParams(linearParams);
-                } else {
-                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                    viewHolder.iv_pic.setLayoutParams(linearParams);
+                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
+                    if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                        viewHolder.iv_pic.setLayoutParams(linearParams);
+                    } else {
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                        linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                        viewHolder.iv_pic.setLayoutParams(linearParams);
+                    }
                 }
+
 
                 Glide.with(context)
                         .load(sb.toString())

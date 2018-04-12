@@ -115,7 +115,7 @@ public class UserListviewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        //    LogUtil.i(type+"");
+        LogUtil.i(type + "");
         if (type == 3) {//如果是点赞
             Glide.with(context)
                     .load(data.get(position).getSelf_url())
@@ -130,6 +130,7 @@ public class UserListviewAdapter extends BaseAdapter {
                     .apply(options)
                     .into(viewHolder.iv_avatar);
             //      LogUtil.i(data.get(position).getSelf_path());
+            viewHolder.ll_guanzhu.setVisibility(View.VISIBLE);
 
         }
 
@@ -176,12 +177,21 @@ public class UserListviewAdapter extends BaseAdapter {
             viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
             // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
         }
+        if (type == 2) {
+            if (TextUtils.equals(data.get(position).getFollower(), SPUtils.getString(Constants.MY_USERID, null))) {
 
-        if (TextUtils.equals(data.get(position).getUser_id(), SPUtils.getString(Constants.MY_USERID, null))) {
-
-            viewHolder.tv_guanzhu.setText("");
-            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+                viewHolder.tv_guanzhu.setText("");
+                viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+            }
         }
+        if (type == 1) {
+            if (TextUtils.equals(data.get(position).getUser_id(), SPUtils.getString(Constants.MY_USERID, null))) {
+
+                viewHolder.tv_guanzhu.setText("");
+                viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+            }
+        }
+
 
         viewHolder.ll_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,7 +199,14 @@ public class UserListviewAdapter extends BaseAdapter {
                 if (!data.get(position).getIs_follower()) {//未关注添加关注
                     int pos = position;
                     try {
-                        addGuanzhu(data.get(position).getUser_id(), true, pos);
+                        if (type==1){
+                            addGuanzhu(data.get(position).getUser_id(), true, pos);
+                        }
+                        if (type==2){
+                            addGuanzhu(data.get(position).getFollower(), true, pos);
+                        }
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

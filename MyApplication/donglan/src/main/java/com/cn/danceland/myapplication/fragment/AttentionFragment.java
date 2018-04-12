@@ -680,6 +680,7 @@ public class AttentionFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("userId", SPUtils.getString(Constants.MY_USERID, ""));//用户id
+
                 map.put("page", page + "");//页数
                 return map;
             }

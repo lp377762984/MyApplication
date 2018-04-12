@@ -98,6 +98,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     public static int ORDER_BUS_TYPE_DEPOSIT_APP = 31;// app买定金
     public static int ORDER_BUS_TYPE_CARD_OPEN_APP = 32;// APP卖卡,业务系统取卡
     private int order_bustype = 0;
+    private TextView tv_useful_life;
+    private TextView tv_price;
+    private TextView tv_product_type;
+    private TextView tv_total_price;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +113,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     private void initData() {
         findConsultant(CardsInfo.getBranch_id());
+        find_deposit_days();
+        find_deposit_price();
     }
 
     private void initView() {
@@ -137,10 +143,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         TextView tv_name = findViewById(R.id.tv_product_name);
         // TextView tv_number = findViewById(R.id.tv_number);
-        TextView tv_useful_life = findViewById(R.id.tv_useful_life);
-        TextView tv_price = findViewById(R.id.tv_price);
-        TextView tv_product_type = findViewById(R.id.tv_product_type);
-        TextView tv_total_price = findViewById(R.id.tv_total_price);
+        tv_useful_life = findViewById(R.id.tv_useful_life);
+        tv_price = findViewById(R.id.tv_price);
+        tv_product_type = findViewById(R.id.tv_product_type);
+        tv_total_price = findViewById(R.id.tv_total_price);
         tv_dingjin = findViewById(R.id.tv_dingjin);
         tv_explain = findViewById(R.id.tv_explain);
         findViewById(R.id.ll_counselor).setOnClickListener(this);
@@ -302,11 +308,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             ll_03.setVisibility(View.GONE);
             tv_name.setText("预付定金");
             tv_product_type.setText("会籍卡定金");
-            tv_useful_life.setText("1个月");
-            tv_price.setText(PriceUtils.formatPrice2String(100.00f));
-            tv_total_price.setText(PriceUtils.formatPrice2String(100.00f * number));
-            tv_pay_price.setText(PriceUtils.formatPrice2String(100.00f * number));
-            total_price = PriceUtils.formatPrice2float(100.00f * number);
+            tv_useful_life.setText(deposit_days+"天");
+            tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
+            tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price* number));
+            tv_pay_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
+            total_price = PriceUtils.formatPrice2float(deposit_price* number);
             pay_price = total_price;
         }
 
@@ -314,6 +320,86 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     Gson gson = new Gson();
 
+    class DepositPrarmsBean {
+        public String param_key;
+
+    }
+
+    private String deposit_days;
+
+    /**
+     * 查询定金有效期
+     */
+    private void find_deposit_days() {
+        DepositPrarmsBean prarmsBean = new DepositPrarmsBean();
+        prarmsBean.param_key = "deposit_days";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestSimpleBean requsetSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+                if (requsetSimpleBean.getSuccess()) {
+                    deposit_days = requsetSimpleBean.getData();
+                    tv_useful_life.setText(deposit_days+"天");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                //         LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
+    /**
+     * 查询定金金额
+     */
+    private void find_deposit_price() {
+        DepositPrarmsBean prarmsBean = new DepositPrarmsBean();
+        prarmsBean.param_key = "deposit_price";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RequestSimpleBean requsetSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+                if (requsetSimpleBean.getSuccess()) {
+                    deposit_price = Float.parseFloat(requsetSimpleBean.getData());
+                    tv_useful_life.setText(deposit_days+"天");
+                    tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
+                    tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price* number));
+                    tv_pay_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
+                    total_price = PriceUtils.formatPrice2float(deposit_price* number);
+                    pay_price = total_price;
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                //         LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
 
     /**
      * 提交卡订单
@@ -705,39 +791,39 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     newOrderInfoBean.setPrice(pay_price + "");
                     newOrderInfoBean.setReceive(CardsInfo.getPrice() + "");
                     //佳楠专用参数
-                    NewOrderInfoBean.Protocol_Params protocol_params=new NewOrderInfoBean.Protocol_Params();
-                    protocol_params.admin_emp=consultantInfo.getBranch_name();
-                    protocol_params.card_category_name=CardsInfo.getCategory_name();
-                    if (CardsInfo.getCharge_mode()==1){
-                        protocol_params.card_charge_mode="包时";
-                        protocol_params.card_total_count="0";
-                    }else {
-                        protocol_params.card_charge_mode="计次";
-                        protocol_params.card_total_count=CardsInfo.getTotal_count();
+                    NewOrderInfoBean.Protocol_Params protocol_params = new NewOrderInfoBean.Protocol_Params();
+                    protocol_params.admin_emp = consultantInfo.getBranch_name();
+                    protocol_params.card_category_name = CardsInfo.getCategory_name();
+                    if (CardsInfo.getCharge_mode() == 1) {
+                        protocol_params.card_charge_mode = "包时";
+                        protocol_params.card_total_count = "0";
+                    } else {
+                        protocol_params.card_charge_mode = "计次";
+                        protocol_params.card_total_count = CardsInfo.getTotal_count();
                     }
 
 
-                    if (CardsInfo.getTime_unit()==1){
-                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"年";
-                    }else if (CardsInfo.getTime_unit()==2){
-                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"月";
-                    }else if (CardsInfo.getTime_unit()==3){
-                        protocol_params.card_term_of_validity=CardsInfo.getTime_value()+"天";
+                    if (CardsInfo.getTime_unit() == 1) {
+                        protocol_params.card_term_of_validity = CardsInfo.getTime_value() + "年";
+                    } else if (CardsInfo.getTime_unit() == 2) {
+                        protocol_params.card_term_of_validity = CardsInfo.getTime_value() + "月";
+                    } else if (CardsInfo.getTime_unit() == 3) {
+                        protocol_params.card_term_of_validity = CardsInfo.getTime_value() + "天";
                     }
-                    protocol_params.card_type_name=CardsInfo.getName();
-                    protocol_params.order_price=pay_price+"";
-                    protocol_params.card_remark=CardsInfo.getRemark();
-                    protocol_params.admin_emp=consultantInfo.getCname();
+                    protocol_params.card_type_name = CardsInfo.getName();
+                    protocol_params.order_price = pay_price + "";
+                    protocol_params.card_remark = CardsInfo.getRemark();
+                    protocol_params.admin_emp = consultantInfo.getCname();
 
                     if (isme) {
-                        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                        protocol_params.member_name=data.getPerson().getCname();
-                        protocol_params.member_phone=data.getPerson().getPhone_no();
+                        Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                        protocol_params.member_name = data.getPerson().getCname();
+                        protocol_params.member_phone = data.getPerson().getPhone_no();
                         newOrderInfoBean.setFor_other(0);
                     } else {
                         newOrderInfoBean.setFor_other(1);
-                        protocol_params.member_name=et_grant_name.getText().toString().trim();
-                        protocol_params.member_phone=et_grant_phone.getText().toString().trim();
+                        protocol_params.member_name = et_grant_name.getText().toString().trim();
+                        protocol_params.member_phone = et_grant_phone.getText().toString().trim();
 
                         extendsParams.setMember_name(et_grant_name.getText().toString().trim());
                         extendsParams.setPhone_no(et_grant_phone.getText().toString().trim());
@@ -1029,8 +1115,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public String card_category_name;
             public String card_charge_mode;
             public String card_term_of_validity;
-            public String order_remark="";
-            public String card_remark="";
+            public String order_remark = "";
+            public String card_remark = "";
             public String card_total_count;
             public String order_price;
 

@@ -411,6 +411,7 @@ public class SelectionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             isEnd=false;
+            mCurrentPage=1;
             findSelectionDyn_Down(0);
             init();
             return null;
@@ -609,7 +610,9 @@ public class SelectionFragment extends BaseFragment {
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
-                    LogUtil.i(requsetDynInfoBean.getData().toString());
+                    myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
+                    myDynListviewAdater.notifyDataSetChanged();
+                    LogUtil.i(data.size()+"");
                     if (data.size() >= 0&&data.size()<10) {
                         isEnd = true;
                         ToastUtils.showToastShort("到底啦");
@@ -621,9 +624,9 @@ public class SelectionFragment extends BaseFragment {
                         endLabels.setLoadingDrawable(null);
 
                     } else {
-                        myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
+
                    //     LogUtil.i(data.toString());
-                        myDynListviewAdater.notifyDataSetChanged();
+
                         mCurrentPage = mCurrentPage + 1;
                     }
                 } else {

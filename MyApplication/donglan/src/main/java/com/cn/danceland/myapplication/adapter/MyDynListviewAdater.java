@@ -269,7 +269,6 @@ public class MyDynListviewAdater extends BaseAdapter {
                 //点赞
 
 
-
                 if (data.get(position).isPraise()) {//已点赞
 
 
@@ -345,11 +344,11 @@ public class MyDynListviewAdater extends BaseAdapter {
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
             viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin1);
-           // viewHolder.tv_guanzhu.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+            // viewHolder.tv_guanzhu.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
             viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
-           // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
+            // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
         }
 
         if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
@@ -478,22 +477,24 @@ public class MyDynListviewAdater extends BaseAdapter {
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
                 sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
                 String[] b = sb.toString().split("_");
-                String[] c = b[1].toString().toString().split("X");
+                String[] c = b[1].toString().split("X");
 
 //                LogUtil.i(b[2].toString());
 //
 //                LogUtil.i(c[0]);
 //                LogUtil.i(c[1]);
 //                LogUtil.i(sb.toString());
-                if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
-                    if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                        linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                        viewHolder.iv_pic.setLayoutParams(linearParams);
-                    } else {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                        linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                        viewHolder.iv_pic.setLayoutParams(linearParams);
+                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
+                    if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
+                        if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                            viewHolder.iv_pic.setLayoutParams(linearParams);
+                        } else {
+                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                            viewHolder.iv_pic.setLayoutParams(linearParams);
+                        }
                     }
                 }
 
@@ -617,7 +618,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 switch (which) {
                     case 0:
 
-                     //   jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
+                        //   jubao(data.get(pos).getId(),data.get(pos).getAuthor(),1);
                         showJuBaoListDialog(pos);
                         break;
                     case 1:
@@ -632,7 +633,7 @@ public class MyDynListviewAdater extends BaseAdapter {
     }
 
     private void showJuBaoListDialog(final int pos) {
-        final String[] items = {"色情、裸露","不友善行为","广告、推销","其他"};
+        final String[] items = {"色情、裸露", "不友善行为", "广告、推销", "其他"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(context);
         //listDialog.setTitle("我是一个列表Dialog");
@@ -641,19 +642,21 @@ public class MyDynListviewAdater extends BaseAdapter {
             public void onClick(DialogInterface dialog, int which) {
 
 
-                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1,items[which]);
+                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1, items[which]);
 
 
             }
         });
         listDialog.show();
     }
+
     class JuBaoBean {
         public String member_id;//评论或动态id
         public String bereported_id;
         public String type;//
-        public String  content;
+        public String content;
     }
+
     private void showListDialogSelf(final int pos) {
         final String[] items = {"删除动态"};
         AlertDialog.Builder listDialog =
@@ -679,7 +682,6 @@ public class MyDynListviewAdater extends BaseAdapter {
         });
         listDialog.show();
     }
-
 
 
     /**
@@ -715,8 +717,6 @@ public class MyDynListviewAdater extends BaseAdapter {
     }
 
 
-
-
     /**
      * 举报
      *
@@ -724,21 +724,21 @@ public class MyDynListviewAdater extends BaseAdapter {
      * @param user_id
      * @param type
      */
-    private void jubao(final String msgId, final String user_id, int type,String content) {
-        JuBaoBean juBaoBean=new JuBaoBean();
-        juBaoBean.bereported_id=user_id;
-        juBaoBean.member_id=msgId;
-        juBaoBean.type=type+"";
-        juBaoBean.content=content;
+    private void jubao(final String msgId, final String user_id, int type, String content) {
+        JuBaoBean juBaoBean = new JuBaoBean();
+        juBaoBean.bereported_id = user_id;
+        juBaoBean.member_id = msgId;
+        juBaoBean.type = type + "";
+        juBaoBean.content = content;
         LogUtil.i(new Gson().toJson(juBaoBean));
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
-                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
-                if (simpleBean.isSuccess()){
+                RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
                     ToastUtils.showToastShort("已举报");
-                }else {
+                } else {
                     ToastUtils.showToastShort("举报失败");
                 }
 

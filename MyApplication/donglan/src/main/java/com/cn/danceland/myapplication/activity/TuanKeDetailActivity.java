@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
@@ -33,7 +32,6 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
-
 
 import org.json.JSONObject;
 
@@ -128,7 +126,7 @@ public class TuanKeDetailActivity extends Activity {
 
     public void initData(TuanKeBean.Data detailData){
 
-        RequestOptions  options =new RequestOptions().placeholder(R.drawable.error_pic);
+        RequestOptions  options =new RequestOptions().placeholder(R.drawable.piping);
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).apply(options).into(kecheng_img);
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).apply(options).into(img_1);
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options).into(img_2);
