@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.Receiver;
 
+import android.app.Notification;
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -45,7 +46,7 @@ public class MessageReceiver extends PushMessageReceiver {
         Time time = new Time();
         time.setToNow();
         if(message!=null){
-            LogUtil.e("zzf",message.getContent());
+            LogUtil.i(message.getContent());
 
             Map<String, String> extra = message.getExtra();
             String type = extra.get("type");

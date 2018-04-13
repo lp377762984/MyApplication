@@ -14,7 +14,10 @@ public class Constants extends EaseConstant {
    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
    //public static final String HOST = " http://192.168.1.115:8003/";//
 
-    public static final String HOST = " http://192.168.1.123:8003/";//
+    //public static final String HOST = " http://192.168.1.115:8003/";//
+    public static final String HOST = " http://192.168.1.118:8003/";//
+
+  //  public static final String HOST = " http://192.168.1.123:8003/";//
 
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
@@ -56,8 +59,7 @@ public class Constants extends EaseConstant {
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone";//搜索好友
     public static final String FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
-    public static final String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach";//查找教练
-    public static final String FIND_PING_FEN = HOST + "evaluate/findEmployeeAverage";//查找教练
+    public static final String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach ";//查找教练
 
     public static final String FIND_CLUBDYNAMIC_URL = HOST + "/clubDynamic/queryPage";//会所动态
 

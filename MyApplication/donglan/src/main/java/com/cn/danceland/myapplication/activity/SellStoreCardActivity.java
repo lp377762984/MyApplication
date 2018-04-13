@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -43,14 +46,16 @@ import java.util.Map;
 
 public class SellStoreCardActivity extends Activity{
     StoreType cardid;
-    TextView storecardbill_name,storecardbill_price,storecardbill_zengsong
-            ,storecardbill_status;
-    RelativeLayout rl_button;
+    LinearLayout ll_zhifu;
     private StoreTypeRequest request;
     private Gson gson;
     private SimpleDateFormat sdf;
     Data info;
     StoreType storeType;
+    CheckBox btn_weixin,btn_zhifubao,cb_shuoming;
+    TextView storecard_tv,tv_price;
+    DongLanTitleView storecard_title;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +75,19 @@ public class SellStoreCardActivity extends Activity{
     }
 
     private void initView() {
-        storecardbill_name = findViewById(R.id.storecardbill_name);
-        storecardbill_price = findViewById(R.id.storecardbill_price);
-        storecardbill_zengsong = findViewById(R.id.storecardbill_zengsong);
-        storecardbill_status = findViewById(R.id.storecardbill_status);
-        rl_button = findViewById(R.id.rl_button);
-        rl_button.setOnClickListener(new View.OnClickListener() {
+
+        storecard_title = findViewById(R.id.store_title);
+        storecard_title.setTitle("充值");
+        btn_weixin = findViewById(R.id.btn_weixin);
+        btn_zhifubao = findViewById(R.id.btn_zhifubao);
+        storecard_tv = findViewById(R.id.storecard_tv);
+        tv_price = findViewById(R.id.tv_price);
+        cb_shuoming = findViewById(R.id.cb_shuoming);
+
+        btn_zhifubao.setChecked(true);
+
+        ll_zhifu = findViewById(R.id.ll_zhifu);
+        ll_zhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -102,10 +114,9 @@ public class SellStoreCardActivity extends Activity{
                     LogUtil.e("zzf",res);
 
                     storeType = result.getData();
-                    storecardbill_name.setText(storeType.getName());
-                    storecardbill_price.setText(storeType.getFace()+"");
-                    storecardbill_zengsong.setText(storeType.getGiving()+"");
-                    storecardbill_status.setText(storeType.getEnable().toString());
+                    tv_price.setText("待支付：￥"+storeType.getFace()+"元");
+                    storecard_tv.setText(storeType.getRemark());
+
                 } else {
                     ToastUtils.showToastShort("请检查手机网络！");
                 }

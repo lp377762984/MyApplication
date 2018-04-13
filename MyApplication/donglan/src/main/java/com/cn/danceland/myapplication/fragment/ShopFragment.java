@@ -654,6 +654,17 @@ public class ShopFragment extends BaseFragment {
                         startActivity(intent1);
                         break;
 
+                    case 33://预约会员
+                        Intent intent2 = new Intent(mActivity, CourseActivity.class);
+                        intent2.putExtra("isTuanke", "1");
+                        if (role != null && !role.equals("准会员") && !role.equals("会员")) {
+                            intent2.putExtra("role", role);
+                        } else {
+                            intent2.putExtra("auth", role);
+                        }
+                        startActivity(intent2);
+                        break;
+
                     case 9://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;

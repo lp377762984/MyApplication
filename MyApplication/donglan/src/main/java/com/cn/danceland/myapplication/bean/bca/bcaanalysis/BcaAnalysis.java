@@ -27,6 +27,34 @@ public class BcaAnalysis {
 	private List<BcaQuestion> qList;// 问题列表
 	private String content;//综合评价
 
+	private String frontal_url;
+	private String side_url;
+	private String behind_url;
+
+	public String getFrontal_url() {
+		return frontal_url;
+	}
+
+	public void setFrontal_url(String frontal_url) {
+		this.frontal_url = frontal_url;
+	}
+
+	public String getSide_url() {
+		return side_url;
+	}
+
+	public void setSide_url(String side_url) {
+		this.side_url = side_url;
+	}
+
+	public String getBehind_url() {
+		return behind_url;
+	}
+
+	public void setBehind_url(String behind_url) {
+		this.behind_url = behind_url;
+	}
+
 	public String getContent() {
 		return content;
 	}
