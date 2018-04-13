@@ -7,17 +7,15 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
-   //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+    //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
- //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   //public static final String HOST = " http://192.168.1.115:8003/";//
-
+    //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.115:8003/";//
-    public static final String HOST = " http://192.168.1.118:8003/";//
 
-  //  public static final String HOST = " http://192.168.1.123:8003/";//
+
+    public static final String HOST = " http://192.168.1.123:8003/";//
 
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
@@ -56,6 +54,8 @@ public class Constants extends EaseConstant {
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
 
+    //体测上传图片
+    public static final String BCAUPLOAD = HOST + "bcaAnalysis/uploadFile";//体测上传图片
     public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone";//搜索好友
     public static final String FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
@@ -127,7 +127,7 @@ public class Constants extends EaseConstant {
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
-    public static final String COMMIT_CHUZHIKA  = HOST+"appOrder/storeConsume";//储值卡消费回调
+    public static final String COMMIT_CHUZHIKA = HOST + "appOrder/storeConsume";//储值卡消费回调
 
     //潜客相关
     public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
@@ -146,11 +146,11 @@ public class Constants extends EaseConstant {
     public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐
     public static final String INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 
-    public static final String SELL_CARD_PRARMS =  "http://192.168.1.93/test.txt";//买卡参数
+    public static final String SELL_CARD_PRARMS = "http://192.168.1.93/test.txt";//买卡参数
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
-   public static final String MY_MEMBER_ID = "my_member_id";//我的member_ID
+    public static final String MY_MEMBER_ID = "my_member_id";//我的member_ID
 
     public static final String MY_DYN = "my_nyn";//我的动态数
     public static final String MY_FANS = "my_fans";//我的粉丝数
@@ -194,11 +194,11 @@ public class Constants extends EaseConstant {
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
     public static final String FREECOURSELIST = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
     public static final String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
-    public static final String PINGJIA = HOST+"evaluate/save";//评价接口
-    public static final String FINDPINGJIA = HOST+"evaluate/findById/";//查询一条评价
-    public static final String ENTERCOURSE = HOST+"appCourse/courseAppointConfirm ";//确认私教
-    public static final String SCAN_QRCODE = HOST+"qrcode";//扫码入场
-    public static final String QUERYGROUPCOURSE = HOST+"appGroupCourse/queryBuyCoursePersonInfo";//查询购买此小团课的人
+    public static final String PINGJIA = HOST + "evaluate/save";//评价接口
+    public static final String FINDPINGJIA = HOST + "evaluate/findById/";//查询一条评价
+    public static final String ENTERCOURSE = HOST + "appCourse/courseAppointConfirm ";//确认私教
+    public static final String SCAN_QRCODE = HOST + "qrcode";//扫码入场
+    public static final String QUERYGROUPCOURSE = HOST + "appGroupCourse/queryBuyCoursePersonInfo";//查询购买此小团课的人
     public static final String FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
     public static final String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
     public static final String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
@@ -224,9 +224,8 @@ public class Constants extends EaseConstant {
 
 
     public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
-    public static final    int QR_MAPPING_COURSE_ENTER = 11; //私教入场
-    public static final   int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
-
+    public static final int QR_MAPPING_COURSE_ENTER = 11; //私教入场
+    public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
 
 
 }
