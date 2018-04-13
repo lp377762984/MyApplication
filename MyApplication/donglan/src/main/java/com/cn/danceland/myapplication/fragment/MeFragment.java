@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.EmpUserHomeActivty;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
@@ -77,6 +78,7 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.ll_my_fans).setOnClickListener(this);
         v.findViewById(R.id.ll_my_data).setOnClickListener(this);
         v.findViewById(R.id.ll_my_shop).setOnClickListener(this);
+        v.findViewById(R.id.iv_top_bg).setOnClickListener(this);
 
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
@@ -267,6 +269,10 @@ public class MeFragment extends BaseFragment {
                     return;
                 }
                 startActivity(new Intent(mActivity, MyShopActivity.class));
+                break;
+            case R.id.iv_top_bg:
+
+                startActivity(new Intent(mActivity, EmpUserHomeActivty.class));
                 break;
             default:
                 break;

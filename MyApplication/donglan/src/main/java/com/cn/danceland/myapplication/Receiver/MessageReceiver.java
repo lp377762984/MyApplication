@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.Receiver;
 
-import android.app.Notification;
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -20,7 +19,6 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -112,7 +110,7 @@ public class MessageReceiver extends PushMessageReceiver {
             }
         }
 
-        //   LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
+           LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
 
 
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);

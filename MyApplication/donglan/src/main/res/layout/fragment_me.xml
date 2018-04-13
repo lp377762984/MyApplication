@@ -102,7 +102,7 @@
                         android:layout_marginTop="10dp"
                         android:text="0"
                         android:textStyle="bold"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/color_dl_yellow"
                         android:textSize="15dp" />
 
 
@@ -131,9 +131,9 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:text="0"
-                        android:textStyle="bold"
-                        android:textColor="@color/color_content_text"
-                        android:textSize="15dp" />
+                        android:textColor="@color/color_dl_yellow"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -162,7 +162,7 @@
                         android:layout_marginTop="10dp"
                         android:text="0"
                         android:textStyle="bold"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/color_dl_yellow"
                         android:textSize="15dp" />
 
 

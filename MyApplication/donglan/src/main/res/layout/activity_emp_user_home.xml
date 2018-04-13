@@ -32,7 +32,7 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <com.cn.danceland.myapplication.view.HeadZoomScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -60,9 +60,9 @@
                     android:id="@+id/tv_nick_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/iv_avatar"
+                    android:layout_below="@+id/iv_avatar"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="9dp"
                     android:text="sssss"
                     android:textColor="#999999"
                     android:textSize="14sp" />
@@ -119,7 +119,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="10dp"
                             android:text="0"
-                            android:textColor="@color/color_content_text"
+                            android:textColor="@color/color_dl_yellow"
                             android:textSize="15dp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -147,7 +147,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:text="0"
-                            android:textColor="@color/color_content_text"
+                            android:textColor="@color/color_dl_yellow"
                             android:textSize="15dp"
                             android:textStyle="bold" />
 
@@ -178,7 +178,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:text="0"
-                            android:textColor="@color/color_content_text"
+                            android:textColor="@color/color_dl_yellow"
                             android:textSize="15dp"
                             android:textStyle="bold" />
 
@@ -266,16 +266,30 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:background="#fff"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="资质认证："
+                android:textColor="#000"
+                android:textSize="14sp" />
+
             <com.cn.danceland.myapplication.utils.MyListView
                 android:id="@+id/lv_zzrz"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginTop="5dp"
                 android:background="#fff"
                 android:orientation="horizontal">
 
@@ -292,7 +306,7 @@
                 <com.willy.ratingbar.ScaleRatingBar
 
                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/sr_fitness_level"
+                    android:id="@+id/sr_pingfen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -307,16 +321,61 @@
                     app:srb_starHeight="20dp"
                     app:srb_starWidth="20dp"
                     app:srb_stepSize="1"></com.willy.ratingbar.ScaleRatingBar>
+<TextView
+    android:id="@+id/tv_pingfen"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#000"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="10dp"
+    android:textSize="15sp"
+    android:text="0"/>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="#fff"
+                    android:gravity="center_vertical"
+                    android:text="会员评价："
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="#fff"
+                    android:gravity="center_vertical"
+                    android:text="更多评价"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <com.cn.danceland.myapplication.utils.MyListView
                 android:id="@+id/lv_hypf"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 
         </LinearLayout>
 
-    </com.cn.danceland.myapplication.view.HeadZoomScrollView>
+    </ScrollView>
+
+
 </LinearLayout>
