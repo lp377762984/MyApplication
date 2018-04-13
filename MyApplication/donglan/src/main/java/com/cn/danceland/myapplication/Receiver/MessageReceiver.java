@@ -47,7 +47,7 @@ public class MessageReceiver extends PushMessageReceiver {
         Time time = new Time();
         time.setToNow();
         if(message!=null){
-            LogUtil.e("zzf",message.getContent());
+            LogUtil.i(message.getContent());
 
             Map<String, String> extra = message.getExtra();
             String type = extra.get("type");
@@ -112,7 +112,7 @@ public class MessageReceiver extends PushMessageReceiver {
             }
         }
 
-        //   LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
+        LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
 
 
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);

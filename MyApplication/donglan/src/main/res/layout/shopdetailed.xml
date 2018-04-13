@@ -246,16 +246,25 @@
                     android:scaleType="centerCrop"
                     />
 
+                <View
+                    android:id="@+id/v_04"
+                    android:layout_width="3dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_below="@+id/img_kechenganpai"
+                    android:background="@color/color_dl_yellow"/>
 
                 <TextView
                     android:id="@+id/rl_jiaolian"
+                    android:layout_toRightOf="@+id/v_04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="教练团队"
                     android:textColor="#333333"
                     android:textSize="15sp"
                     android:layout_below="@+id/img_kechenganpai"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
                 <com.cn.danceland.myapplication.utils.NestedExpandaleListView
@@ -267,15 +276,27 @@
                     >
                 </com.cn.danceland.myapplication.utils.NestedExpandaleListView>
 
+
+                <View
+                    android:id="@+id/v_05"
+                    android:layout_width="3dp"
+                    android:layout_height="20dp"
+                    android:layout_alignLeft="@+id/v_04"
+                    android:layout_alignStart="@+id/v_04"
+                    android:layout_alignTop="@+id/rl_huiji"
+                    android:background="@color/color_dl_yellow" />
+
+
                 <TextView
                     android:id="@+id/rl_huiji"
+                    android:layout_toRightOf="@+id/v_05"
                     android:text="会籍团队"
                     android:textColor="#333333"
                     android:textSize="15sp"
                     android:layout_below="@+id/jiaolian_grid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"/>
 
 
@@ -288,15 +309,27 @@
 
                 </com.cn.danceland.myapplication.utils.NestedExpandaleListView>
 
+
+                <View
+                    android:id="@+id/v_06"
+                    android:layout_width="3dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_below="@+id/huiji_grid"
+                    android:background="@color/color_dl_yellow"/>
+
+
                 <TextView
                     android:id="@+id/rl_shopImage"
+                    android:layout_toRightOf="@+id/v_06"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:text="门店照片"
                     android:textColor="#333333"
                     android:layout_below="@+id/huiji_grid"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     />
                 <LinearLayout
