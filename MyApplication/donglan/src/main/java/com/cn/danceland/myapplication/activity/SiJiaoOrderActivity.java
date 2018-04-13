@@ -277,8 +277,10 @@ public class SiJiaoOrderActivity extends Activity {
                         if("1".equals(forme)){
                             if (tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()||ed_name.getText().toString().isEmpty()||ed_phone.getText().toString().isEmpty()){
                                 ToastUtils.showToastShort("请补全订单信息！");
+                            }else{
+                                commit_deposit();
                             }
-                        }else{
+                        }else if("0".equals(forme)){
                             commit_deposit();
                         }
                     }
@@ -320,12 +322,16 @@ public class SiJiaoOrderActivity extends Activity {
             public void onClick(View v) {
                 btn_forme.setChecked(true);
                 btn_foryou.setChecked(false);
-                rl_kaikeshijian.setVisibility(View.VISIBLE);
+                if("1".equals(type)){
+                    rl_kaikeshijian.setVisibility(View.GONE);
+                }else{
+                    rl_kaikeshijian.setVisibility(View.VISIBLE);
+                }
                 line7.setVisibility(View.GONE);
                 rl_phone.setVisibility(View.GONE);
                 rl_name.setVisibility(View.GONE);
                 if("1".equals(type)){
-                    rl_jiaolian.setVisibility(View.GONE);
+                    rl_jiaolian.setVisibility(View.VISIBLE);
                 }
                 forme = "0";
             }

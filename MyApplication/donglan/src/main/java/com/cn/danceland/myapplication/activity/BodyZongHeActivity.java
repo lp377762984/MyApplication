@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
@@ -67,6 +71,7 @@ public class BodyZongHeActivity extends Activity {
     List<BcaResult> resultList;
     EditText et_content;
     Button btn_commit;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -78,7 +83,6 @@ public class BodyZongHeActivity extends Activity {
     }
 
     private void initHost() {
-
 
         resultList = (List<BcaResult>)getIntent().getSerializableExtra("resultList");
         if(resultList==null){
@@ -113,6 +117,7 @@ public class BodyZongHeActivity extends Activity {
         rl_01.setOnClickListener(onClickListener);
         rl_02.setOnClickListener(onClickListener);
         rl_03.setOnClickListener(onClickListener);
+        btn_commit.setOnClickListener(onClickListener);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -132,7 +137,7 @@ public class BodyZongHeActivity extends Activity {
                     takePhoto();
                     break;
                 case R.id.btn_commit:
-                    if(numMap.size()<3){
+                    if(numMap.size()!=3){
                         ToastUtils.showToastShort("请拍照完成后提交！");
                     }else{
                         save();
@@ -150,18 +155,21 @@ public class BodyZongHeActivity extends Activity {
     public void save() {
         BcaAnalysis bcaAnalysis = new BcaAnalysis();
         BcaAnalysisRequest request = new BcaAnalysisRequest();
-        // TODO 准备数据
         bcaAnalysis.setMember_id((long)4);
+        bcaAnalysis.setMember_no(10000008+"");
         bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
         bcaAnalysis.setSide_path(numMap.get(2));//侧面照
         bcaAnalysis.setBehind_path(numMap.get(3));//背面照
         bcaAnalysis.setResult(resultList);
+        if(et_content.getText()!=null){
+            bcaAnalysis.setContent(et_content.getText().toString());
+        }
         request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
                 DLResult<Integer> result = gson.fromJson(json.toString(), new TypeToken<DLResult<Integer>>() {
                 }.getType());
                 if (result.isSuccess()) {
-                    LogUtil.e("zzf",json.toString());
+                    ToastUtils.showToastShort("提交成功！");
                 } else {
                     ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
                 }
@@ -208,36 +216,43 @@ public class BodyZongHeActivity extends Activity {
             if(requestCode==1){
                 MultipartRequestParams params = new MultipartRequestParams();
                 if(cameraPath!=null){
+
+                    if("1".equals(num)){
+                        rl_01.setVisibility(View.GONE);
+                        img_01.setVisibility(View.VISIBLE);
+                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_01);
+                    }else if("2".equals(num)){
+                        rl_02.setVisibility(View.GONE);
+                        img_02.setVisibility(View.VISIBLE);
+                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_02);
+                    }else if("3".equals(num)){
+                        rl_03.setVisibility(View.GONE);
+                        img_03.setVisibility(View.VISIBLE);
+                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_03);
+                    }
+
+                    //上传图片
                     File file = new File(cameraPath);
                     params.put("file", file);
 
-                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADFILE_URL, new Response.Listener<String>() {
+                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String s) {
                             HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                             if (headImageBean != null && headImageBean.getData() != null) {
-
                                 String imgPath = headImageBean.getData().getImgPath();
                                 String imgUrl = headImageBean.getData().getImgUrl();
                                 if("1".equals(num)){
-                                    rl_01.setVisibility(View.GONE);
-                                    img_01.setVisibility(View.VISIBLE);
-                                    Glide.with(BodyZongHeActivity.this).load(imgUrl).into(img_01);
                                     numMap.put(1,imgPath);
                                 }else if("2".equals(num)){
-                                    rl_02.setVisibility(View.GONE);
-                                    img_02.setVisibility(View.VISIBLE);
-                                    Glide.with(BodyZongHeActivity.this).load(imgUrl).into(img_02);
                                     numMap.put(2,imgPath);
                                 }else if("3".equals(num)){
-                                    rl_03.setVisibility(View.GONE);
-                                    img_03.setVisibility(View.VISIBLE);
-                                    Glide.with(BodyZongHeActivity.this).load(imgUrl).into(img_03);
                                     numMap.put(3,imgPath);
                                 }
-
-
+                                ToastUtils.showToastShort("上传图片成功！");
+                            }else{
+                                ToastUtils.showToastShort("上传图片失败！请重新拍照！");
                             }
                         }
                     }, new Response.ErrorListener() {
