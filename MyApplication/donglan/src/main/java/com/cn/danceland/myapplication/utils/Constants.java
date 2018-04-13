@@ -123,7 +123,7 @@ public class Constants extends EaseConstant {
     public static final String FIND_BY_TYPE_CODE = HOST + "/appDict/queryList";//查询潜客资料相关参数
     public static final String FIND_BY_TYPE_CODE_GET = HOST + "/appDict/findByTypeCode/";//查询潜客资料相关参数
 
-
+    public static final String FIND_PING_FEN = HOST + "evaluate/findEmployeeAverage";//查找教练
 
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
