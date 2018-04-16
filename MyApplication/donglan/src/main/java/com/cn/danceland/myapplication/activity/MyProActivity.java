@@ -775,13 +775,6 @@ public class MyProActivity extends Activity {
                         }
                     }
                 });
-        normalDialog.setNegativeButton("关闭",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
         // 显示
         normalDialog.show();
 
