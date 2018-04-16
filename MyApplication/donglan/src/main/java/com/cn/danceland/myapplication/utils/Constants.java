@@ -7,15 +7,15 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
-    public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+    //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.115:8003/";//
-   // public static final String HOST = " http://192.168.1.123:8003/";//
+    public static final String HOST = " http://192.168.1.119:8003/";//
 
-    public static final boolean HX_DEV_CONFIG = false;//是否是开发模式
+    public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
 
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
@@ -39,6 +39,8 @@ public class Constants extends EaseConstant {
     public static final String MODIFY_HEIGHT = HOST + "user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST + "user/modifyWeight";//修改身高
     public static final String MODIFY_IDENTIFY = HOST + "user/modifyIdentityCard";//修改身份证
+    public static final String MODIFY_HOBBY = HOST + "user/modifyHobby";//修改喜好
+    public static final String MODIFY_SIGN = HOST + "user/modifySign";//修改个性签名
     public static final String BRANCH = HOST + "branch";//获取门店列表
     public static final String JOINBRANCH = HOST + "branch/join";//加入或者取消门店
     public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
