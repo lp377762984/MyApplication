@@ -45,7 +45,7 @@
         android:layout_below="@+id/publish_title"
         android:hint="晒改变，晒心得，晒运动"
         android:textColorHint="#999999"
-        android:maxLength="1000"
+        android:maxLength="1500"
         />
 
     <!--<RelativeLayout-->
