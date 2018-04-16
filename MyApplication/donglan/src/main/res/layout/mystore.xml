@@ -21,7 +21,8 @@
             android:id="@+id/card_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#c0c0c0"
+            android:src="@drawable/sijiao_card"
+            android:scaleType="centerCrop"
             />
 
         <TextView

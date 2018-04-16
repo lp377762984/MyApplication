@@ -437,6 +437,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.BodyZongHeActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MySijiaoActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

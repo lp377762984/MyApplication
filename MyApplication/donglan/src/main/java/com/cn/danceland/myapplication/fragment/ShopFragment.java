@@ -41,12 +41,14 @@ import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.ClubDynActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
+import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.MyChatListActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
+import com.cn.danceland.myapplication.activity.MySijiaoActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
@@ -653,18 +655,6 @@ public class ShopFragment extends BaseFragment {
                         }
                         startActivity(intent1);
                         break;
-
-                    case 33://预约会员
-                        Intent intent2 = new Intent(mActivity, CourseActivity.class);
-                        intent2.putExtra("isTuanke", "1");
-                        if (role != null && !role.equals("准会员") && !role.equals("会员")) {
-                            intent2.putExtra("role", role);
-                        } else {
-                            intent2.putExtra("auth", role);
-                        }
-                        startActivity(intent2);
-                        break;
-
                     case 9://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
@@ -717,6 +707,24 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
+                        break;
+                    case 31://我的私教
+                        startActivity(new Intent(mActivity, MySijiaoActivity.class));
+                        break;
+                    case 33://预约会员
+                        Intent intent2 = new Intent(mActivity, CourseActivity.class);
+                        intent2.putExtra("isTuanke", "1");
+                        if (role != null && !role.equals("准会员") && !role.equals("会员")) {
+                            intent2.putExtra("role", role);
+                        } else {
+                            intent2.putExtra("auth", role);
+                        }
+                        startActivity(intent2);
+                        break;
+                    case 34://我的体测
+
+                        startActivity(new Intent(mActivity, FitnessTestActivity.class));
+
                         break;
                     default:
                         break;

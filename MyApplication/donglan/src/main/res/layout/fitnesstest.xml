@@ -137,6 +137,7 @@
                 android:id="@+id/rl_age"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                android:visibility="gone"
                 android:background="@color/white"
                 >
                 <TextView

@@ -27,6 +27,7 @@ import com.cn.danceland.myapplication.bean.FitnessTestBean;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -193,6 +194,7 @@ public class FitnessTestActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<String,String>();
                 map.put("memberNo",member_no);
+                LogUtil.i(member_no);
                 return map;
             }
 
