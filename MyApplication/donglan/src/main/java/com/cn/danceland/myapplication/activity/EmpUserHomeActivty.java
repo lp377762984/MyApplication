@@ -147,6 +147,50 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         tv_dyn.setText(userInfo.getDyn_no() + "");
     }
 
+    class MyZzrzAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return pingjia_data.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder viewHolder = null;
+            if (view == null) {
+                viewHolder = new ViewHolder();
+                view = View.inflate(EmpUserHomeActivty.this, R.layout.listview_item_zzrz, null);
+                viewHolder.tv_org_name = view.findViewById(R.id.tv_org_name);
+                viewHolder.tv_date = view.findViewById(R.id.tv_date);
+                viewHolder.tv_end_time = view.findViewById(R.id.tv_end_time);
+                viewHolder.iv_pic = view.findViewById(R.id.iv_pic);
+
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
+            }
+
+            return view;
+        }
+
+        class ViewHolder {
+            TextView tv_org_name;
+            TextView tv_date;
+            TextView tv_end_time;
+            ImageView iv_pic;
+        }
+
+    }
 
     class MyPingJiaAdapter extends BaseAdapter {
 
