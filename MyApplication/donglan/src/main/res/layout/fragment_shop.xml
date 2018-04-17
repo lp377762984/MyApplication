@@ -54,17 +54,43 @@
                 android:background="@drawable/img_call_phone" />
         </LinearLayout>
 
-        <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#FF8C00"
-        android:popupBackground="#FF8C00"
-        >
+        <RelativeLayout
+            android:id="@+id/rl_role"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
 
-        </Spinner>
+            >
+            <TextView
+                android:id="@+id/tv_role"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/color_dl_yellow"
+                android:layout_centerVertical="true"
+                />
+            <ImageView
+                android:id="@+id/down_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/arow_down_yellow"
+                android:layout_alignParentRight="true"
+                />
+            <ImageView
+                android:id="@+id/up_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/arow_up_yellow"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+
 
 
     </FrameLayout>

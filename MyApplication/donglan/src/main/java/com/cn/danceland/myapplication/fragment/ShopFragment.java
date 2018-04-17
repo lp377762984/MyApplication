@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -97,9 +98,8 @@ public class ShopFragment extends BaseFragment {
     ImageButton ibtn_call, ibtn_gps;
     List<MenusBean.Data> data;
     LinearLayout ll_top;
-    TextView tv_shopname;
+    TextView tv_shopname,tv_role;
     View v;
-    Spinner spinner;
     ArrayList<String> roleList;
     ArrayAdapter arrayAdapter;
     String role;
@@ -107,6 +107,9 @@ public class ShopFragment extends BaseFragment {
     HashMap<String, String> roleMap, authMap;
     MZBannerView shop_banner;
     ArrayList<String> drawableArrayList;
+    PopupWindow popupWindow;
+    RelativeLayout rl_role;
+    ImageView down_img,up_img;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,12 +140,36 @@ public class ShopFragment extends BaseFragment {
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         roleList = new ArrayList<String>();
-        spinner = v.findViewById(R.id.spinner);
         shop_banner = v.findViewById(R.id.shop_banner);
+        tv_role = v.findViewById(R.id.tv_role);
+
+        rl_role = v.findViewById(R.id.rl_role);
+        down_img = v.findViewById(R.id.down_img);
+        up_img = v.findViewById(R.id.up_img);
+
 
         setMap();
         addRoles();
-        setSpinner();
+        setPop();
+        rl_role.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(popupWindow.isShowing()){
+                    dismissPop();
+                    up_img.setVisibility(View.GONE);
+                    down_img.setVisibility(View.VISIBLE);
+                }else{
+                    showPop();
+                    up_img.setVisibility(View.VISIBLE);
+                    down_img.setVisibility(View.GONE);
+                }
+            }
+        });
+        //setSpinner();
+        if(roleList!=null&&roleList.size()>0){
+            tv_role.setText(roleList.get(0));
+            role = roleList.get(0);
+        }
 
         gson = new Gson();
         mGridView = v.findViewById(R.id.gridview);
@@ -169,24 +196,63 @@ public class ShopFragment extends BaseFragment {
         return v;
     }
 
-    private void setSpinner(){
+    private void setPop(){
 
-        arrayAdapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_style, roleList);
-        //arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        View inflate = LayoutInflater.from(mActivity).inflate(R.layout.shop_pop, null);
+
+        popupWindow = new PopupWindow(inflate);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        ListView pop_lv = inflate.findViewById(R.id.pop_lv);
+        pop_lv.setAdapter(new PopAdapter());
+        pop_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 role = roleList.get(position);
+                tv_role.setText(role);
                 initData();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                dismissPop();
+                up_img.setVisibility(View.GONE);
+                down_img.setVisibility(View.VISIBLE);
             }
         });
 
+
+    }
+    private void showPop(){
+        popupWindow.showAsDropDown(tv_role);
+    }
+    private  void dismissPop(){
+        popupWindow.dismiss();
+    }
+
+
+    private class PopAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return roleList ==null? 0:roleList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View inflate = LayoutInflater.from(mActivity).inflate(R.layout.shop_pop_item, null);
+            TextView tv_item = inflate.findViewById(R.id.tv_item);
+            tv_item.setText(roleList.get(position));
+
+            return inflate;
+        }
     }
 
     @Override
@@ -327,16 +393,7 @@ public class ShopFragment extends BaseFragment {
             getMenus();
             getBanner(info.getPerson().getDefault_branch());
             getShop(info.getPerson().getDefault_branch());
-//            mGridView.setVisibility(View.VISIBLE);
-//            storelist.setVisibility(View.GONE);
         }
-//        else {
-//            getListData();
-//            //ll_top.setVisibility(View.GONE);
-//            mGridView.setVisibility(View.GONE);
-//            storelist.setVisibility(View.VISIBLE);
-//
-//        }
     }
 
     private void getBanner(final String branchId){
@@ -551,10 +608,18 @@ public class ShopFragment extends BaseFragment {
         if (!hidden) {
             info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             roleList.clear();
+            role = SPUtils.getString("role", "");
+            tv_role.setText(role);
             setMap();
             addRoles();
-            setSpinner();
+            setPop();
+            //setSpinner();
             //initData();
+        }else{
+            SPUtils.setString("role",role);
+            dismissPop();
+            up_img.setVisibility(View.GONE);
+            down_img.setVisibility(View.VISIBLE);
         }
     }
 
@@ -973,7 +1038,8 @@ public class ShopFragment extends BaseFragment {
                     info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                     setMap();
                     addRoles();
-                    setSpinner();
+                    setPop();
+                    //setSpinner();
                     initData();
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
@@ -1000,115 +1066,5 @@ public class ShopFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(request);
     }
 
-//    private void login(final String shopID) {
-//        String url = Constants.LOGIN_URL;
-//        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String s) {
-//                Gson gson = new Gson();
-//                RequestLoginInfoBean requestInfoBean = new RequestLoginInfoBean();
-//                requestInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
-//                if (requestInfoBean.getSuccess()) {
-//                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + requestInfoBean.getData().getToken());
-//                    //成功
-//                    String mUserId = requestInfoBean.getData().getPerson().getId();
-//                    //  info.setDefault_branch(shopID);
-//                    DataInfoCache.saveOneCache(requestInfoBean.getData(), Constants.MY_INFO);
-//                    if (info.getPerson().getDefault_branch() != null && !info.getPerson().getDefault_branch().equals("")) {
-//                        mGridView.setVisibility(View.VISIBLE);
-//                        storelist.setVisibility(View.GONE);
-//                        ll_top.setVisibility(View.VISIBLE);
-//                        getMenus();
-//                        getShop(info.getPerson().getDefault_branch());
-//
-//                    } else {
-//                        ll_top.setVisibility(View.GONE);
-//                        mGridView.setVisibility(View.GONE);
-//                        storelist.setVisibility(View.VISIBLE);
-//                        getListData();
-//
-//                    }
-//                    //查询信息
-//                    queryUserInfo(mUserId);
-//                } else {
-//                    ToastUtils.showToastShort("加入失败！请检查网络！");
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                ToastUtils.showToastShort("请求失败，请查看网络连接");
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//                map.put("phone", info.getPerson().getPhone_no());
-//                map.put("password", SPUtils.getString(Constants.MY_PSWD, ""));
-//                // map.put("romType", "0");
-//                return map;
-//            }
-//        };
-//
-//        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-//        request.setTag("login");
-//        // 设置超时时间
-//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        // 将请求加入全局队列中
-//        MyApplication.getHttpQueues().add(request);
-//    }
-//
-//    private void queryUserInfo(String id) {
-//
-//        String params = id;
-//
-//        String url = Constants.QUERY_USERINFO_URL + params;
-//
-//        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String s) {
-//                LogUtil.i(s);
-//                Gson gson = new Gson();
-//                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-//
-//                //      LogUtil.i(requestInfoBean.toString());
-////                ArrayList<Data> mInfoBean = new ArrayList<>();
-////                mInfoBean.add(requestInfoBean.getData());
-////                DataInfoCache.saveListCache(mInfoBean, Constants.MY_INFO);
-//                //保存个人信息
-//                Data data = requestInfoBean.getData();
-//                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-//                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-//                LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(final VolleyError volleyError) {
-//                LogUtil.i(volleyError.toString());
-//
-//            }
-//
-//        }
-//        ) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-//                return map;
-//            }
-//        };
-//        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-//        request.setTag("queryUserInfo");
-//        // 设置超时时间
-//        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        // 将请求加入全局队列中
-//        MyApplication.getHttpQueues().add(request);
-//
-//    }
 
 }
