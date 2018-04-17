@@ -2,23 +2,19 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.fragment.MyStoreFragment;
-import com.cn.danceland.myapplication.fragment.SellStoreCardFragment;
+import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -32,71 +28,54 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by feng on 2018/3/14.
+ * Created by feng on 2018/4/16.
  */
 
-public class StoreCardActivity extends FragmentActivity {
+public class MySijiaoActivity extends FragmentActivity {
 
-    TabLayout tl;
-    //MagicIndicator magic_indicator;
+    DongLanTitleView activity_mysijiao_title;
+    MagicIndicator magicIndicator;
     ViewPager view_pager;
-    ArrayList<String> mTitleDataList;
-    FragmentManager supportFragmentManager;
     ArrayList<Fragment> fragmentArrayList;
-    ImageView storecard_back;
+    List<String> mTitleDataList;
+    FragmentManager supportFragmentManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.storecard);
+        setContentView(R.layout.activity_mysijiao);
         initHost();
-
         initView();
-
     }
 
     private void initHost() {
 
 
         supportFragmentManager = getSupportFragmentManager();
-
         fragmentArrayList = new ArrayList<>();
-        fragmentArrayList.add(new MyStoreFragment());
-        fragmentArrayList.add(new SellStoreCardFragment());
+        fragmentArrayList.add(new SiJiaoFragment());
 
-
-    }
-
-    public void showFragment(int i){
-
-        view_pager.setCurrentItem(i);
     }
 
     private void initView() {
+        activity_mysijiao_title = findViewById(R.id.activity_mysijiao_title);
+        activity_mysijiao_title.setTitle("我的私教");
 
+        magicIndicator = findViewById(R.id.magic_indicator);
 
-
-        mTitleDataList = new ArrayList<>();
-        mTitleDataList.add("我的储值");
-        mTitleDataList.add("我要充值");
-
-        //magic_indicator = findViewById(R.id.magic_indicator);
         view_pager = findViewById(R.id.view_pager);
-
         view_pager.setAdapter(new myFragmentPagerAdapter(supportFragmentManager,fragmentArrayList));
-        storecard_back = findViewById(R.id.storecard_back);
-        storecard_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
+        initIndicator();
 
+    }
 
-        MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
+    private void initIndicator() {
+        mTitleDataList = new ArrayList<>();
+        mTitleDataList.add("我的私教");
+        mTitleDataList.add("送出的私教");
+
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setAdjustMode(true);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
@@ -132,8 +111,8 @@ public class StoreCardActivity extends FragmentActivity {
         magicIndicator.setNavigator(commonNavigator);
 
         ViewPagerHelper.bind(magicIndicator,view_pager);
-    }
 
+    }
 
     public class myFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -159,5 +138,4 @@ public class StoreCardActivity extends FragmentActivity {
 
 
     }
-
 }

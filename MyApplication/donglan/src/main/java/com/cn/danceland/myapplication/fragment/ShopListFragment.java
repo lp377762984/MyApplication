@@ -135,14 +135,13 @@ public class ShopListFragment extends BaseFragment {
                             }
                         });
 
-
+                        List<StoreBean.Items> itemsList1 = new ArrayList<>();
                         if (itemsList.size() > 1) {
-                            List<StoreBean.Items> itemsList1 = new ArrayList<>();
                             for (int i = 1; i < itemsList.size(); i++) {
                                 itemsList1.add(itemsList.get(i));
                             }
-                            lv_shoplist.setAdapter(new MyStoreAdapter(getActivity(), itemsList1));
                         }
+                        lv_shoplist.setAdapter(new MyStoreAdapter(getActivity(), itemsList1));
                     }
                 }
             }
@@ -173,6 +172,7 @@ public class ShopListFragment extends BaseFragment {
 
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
                 if (branchBannerBean != null) {
+                    drawableArrayList.clear();
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
@@ -284,32 +284,6 @@ public class ShopListFragment extends BaseFragment {
                     }
                 }
             });
-//            viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    AlertDialog.Builder dialog =
-//                            new AlertDialog.Builder(mActivity);
-//                    dialog.setTitle("提示");
-//                    dialog.setMessage("是否加入此门店");
-//                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            if (itemsArrayList != null) {
-//                                join(itemsArrayList.get(position).getBranch_id() + "");
-//                            }
-//
-//                        }
-//                    });
-//                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                        }
-//                    });
-//                    dialog.show();
-//                }
-//            });
             viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

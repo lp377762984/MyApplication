@@ -96,7 +96,7 @@ public class MyProActivity extends Activity {
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity;
+    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity,hobby,rl_jianjie;
     TextView text_name, text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
     View contentView;
     PopupWindow mPopWindow;
@@ -113,7 +113,7 @@ public class MyProActivity extends Activity {
     View inflate;
     AlertDialog.Builder alertdialog;
     LoopView loopview;
-    TextView tv_start,over_time;
+    TextView tv_start,over_time,tv_hobby,tv_sign;
 
     private Handler handler = new Handler() {
         @Override
@@ -166,8 +166,10 @@ public class MyProActivity extends Activity {
 
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
-        if (infoData.getPerson().getSelf_avatar_path() != null && !infoData.getPerson().getSelf_avatar_path().equals("")) {
+        if (infoData.getPerson().getSelf_avatar_path() != null && !infoData.getPerson().getSelf_avatar_path().equals("")&&!infoData.getPerson().getSelf_avatar_path().contains("null")) {
             Glide.with(MyProActivity.this).load(infoData.getPerson().getSelf_avatar_path()).into(circleImageView);
+        }else{
+            Glide.with(MyProActivity.this).load(R.drawable.img_my_avatar).into(circleImageView);
         }
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
@@ -185,6 +187,8 @@ public class MyProActivity extends Activity {
         tv_zone = findViewById(R.id.tv_zone);
         tv_phone = findViewById(R.id.tv_phone);
         tv_identity = findViewById(R.id.tv_identity);
+        tv_hobby = findViewById(R.id.tv_hobby);
+        tv_sign = findViewById(R.id.tv_sign);
         if (!TextUtils.isEmpty(infoData.getPerson().getPhone_no())) {
             tv_phone.setText(infoData.getPerson().getPhone_no());
         }
@@ -199,12 +203,25 @@ public class MyProActivity extends Activity {
             tv_weight.setText(infoData.getPerson().getWeight() + " kg");
         }
 
+        if(infoData.getPerson().getHobby()!=null){
+            tv_hobby.setText(infoData.getPerson().getHobby());
+        }
+
+        if(infoData.getPerson().getSign()!=null){
+            tv_sign.setText(infoData.getPerson().getSign());
+        }
+
 
         if ("1".equals(infoData.getPerson().getGender())) {
             text_sex.setText("男");
         } else {
             text_sex.setText("女");
         }
+
+        hobby = findViewById(R.id.hobby);
+        rl_jianjie = findViewById(R.id.rl_jianjie);
+
+
         text_name.setText(infoData.getPerson().getNick_name());
 
         headView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.head_image_popwindow, null);
@@ -239,6 +256,7 @@ public class MyProActivity extends Activity {
     public void setClick() {
         headimage.setOnClickListener(onClickListener);
         name.setOnClickListener(onClickListener);
+        hobby.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
         cancel.setOnClickListener(onClickListener);
         photo_album.setOnClickListener(onClickListener);
@@ -253,6 +271,7 @@ public class MyProActivity extends Activity {
         over_action.setOnClickListener(onClickListener);
         rl_phone.setOnClickListener(onClickListener);
         identity.setOnClickListener(onClickListener);
+
     }
 
     public void dismissWindow() {
@@ -296,6 +315,10 @@ public class MyProActivity extends Activity {
                     showWH(x);
                     //selecttitle.setText("选择体重");
                     break;
+                case R.id.hobby:
+                    showHobby();
+                    break;
+
 //                case R.id.over:
 //                    if (x == 0) {
 //                        infoData.setHeight(strHeight);
@@ -353,6 +376,14 @@ public class MyProActivity extends Activity {
                     }
                     break;
                 case R.id.back:
+                    if(tv_sign.getText()!=null){
+                        String s = tv_sign.getText().toString();
+                        if(!s.equals(infoData.getPerson().getSign())){
+                            commitSelf(Constants.MODIFY_SIGN,"sign",s);
+                            infoData.getPerson().setSign(s);
+                            DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                        }
+                    }
                     Intent intent = new Intent();
                     intent.putExtra("selfAvatarPath", selfAvatarPath);
                     setResult(99, intent);
@@ -676,6 +707,31 @@ public class MyProActivity extends Activity {
         //cancel1.setVisibility(View.GONE);
     }
 
+
+    private void showHobby(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MyProActivity.this);
+        View dialogView = LayoutInflater.from(MyProActivity.this)
+                .inflate(R.layout.edit_name, null);
+        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+        dialogTitleName.setText("我的喜好");
+        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        builder.setView(dialogView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(ed.getText()!=null){
+                    tv_hobby.setText(ed.getText().toString());
+                    commitSelf(Constants.MODIFY_HOBBY,"hobby",ed.getText().toString());
+                    infoData.getPerson().setHobby(ed.getText().toString());
+                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+
     public void showName(final int i) {
         //i==0是编辑昵称i==1表示身份证
         AlertDialog.Builder normalDialog =
@@ -717,13 +773,6 @@ public class MyProActivity extends Activity {
                             infoData.getPerson().setIdentity_card(iden);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
-                    }
-                });
-        normalDialog.setNegativeButton("关闭",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
         // 显示
