@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetUserListBeanZan;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
                     context.startActivity(new Intent(context, UserListActivity.class).putExtra("msgId", msgId).putExtra("type", 3));
 
                 } else {
-                    context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", datas.get(position).getPraiseUserId()));
+                    context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", datas.get(position).getPraiseUserId()));
                 }
 
             }

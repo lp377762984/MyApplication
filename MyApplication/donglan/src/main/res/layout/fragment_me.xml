@@ -21,7 +21,6 @@
                 android:layout_height="240dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_man" />
 
@@ -71,7 +70,7 @@
                 android:layout_height="60dp"
 
 
-                android:background="@drawable/bg_white"
+                android:background="@drawable/img_bg_juxing"
                 android:orientation="horizontal"
                 android:layout_alignBottom="@+id/line11"
                 android:layout_centerHorizontal="true">

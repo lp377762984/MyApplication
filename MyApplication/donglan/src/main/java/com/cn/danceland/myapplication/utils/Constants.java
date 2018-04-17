@@ -7,15 +7,15 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
-    public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+  //  public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.115:8003/";//
-   // public static final String HOST = " http://192.168.1.123:8003/";//
+  public static final String HOST = " http://192.168.1.123:8003/";//
 
-    public static final boolean HX_DEV_CONFIG = false;//是否是开发模式
+    public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
 
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
@@ -162,7 +162,7 @@ public class Constants extends EaseConstant {
 
     public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
-    public static final String FIND_PARAM_KEY = "appParam/findParamKey";//查询参数
+    public static final String FIND_PARAM_KEY = HOST+"appParam/findParamKey";//查询参数
     public static final String REAYTEST = HOST + "appBca/bcaTestUpdateMemberAndPerson";//提交用户信息
     public static final String GETEQUIPMENT = HOST + "appBca/findPageBranchBca";//获取门店体测仪列表
     public static final String CONNECTEQU = HOST + "appBca/connectTester";//连接设备

@@ -257,7 +257,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:text="为好友购买"
+                    android:text="为他人购买"
                     android:button="@null"
                     android:gravity="center"
                     android:textColor="#333333" />
@@ -338,7 +338,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="赠予好友姓名："
+                        android:text="赠予他人姓名："
                         android:textColor="#333333" />
 
                     <EditText
@@ -349,7 +349,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:background="@null"
-                        android:hint="请输入好友姓名"
+                        android:hint="请输入他人姓名"
                         android:textColor="#333333"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -373,7 +373,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="赠予好友电话："
+                        android:text="赠予他人电话："
                         android:textColor="#333333" />
 
                     <EditText
@@ -383,7 +383,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:hint="请输入好友电话"
+                        android:hint="请输入他人电话"
                         android:inputType="phone"
                         android:textSize="14sp" />
 

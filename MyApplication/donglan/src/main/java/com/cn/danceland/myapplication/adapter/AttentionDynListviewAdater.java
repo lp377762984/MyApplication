@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
@@ -53,6 +54,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -82,12 +84,13 @@ public class AttentionDynListviewAdater extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context context;
     boolean isMe = false;
-
+    private final SparseBooleanArray mCollapsedStatus;
     public AttentionDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
         this.data = data;
         this.context = context;
+        mCollapsedStatus = new SparseBooleanArray();
     }
 
 
@@ -216,7 +219,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
             viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
             viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
-
+            viewHolder.expandableTextView = (ExpandableTextView) convertView.findViewById(R.id.expand_text_view);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -372,11 +375,14 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
         viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
 
+
         if (TextUtils.isEmpty(data.get(position).getContent())) {
-            viewHolder.tv_content.setVisibility(View.GONE);
+            //   viewHolder.tv_content.setVisibility(View.GONE);
+            viewHolder.expandableTextView.setVisibility(View.GONE);
         } else {//内容不为空赋值
-            viewHolder.tv_content.setText(data.get(position).getContent());
-            viewHolder.tv_content.setVisibility(View.VISIBLE);
+            viewHolder.expandableTextView.setText(data.get(position).getContent(), mCollapsedStatus, position);
+            //  viewHolder.tv_content.setText(data.get(position).getContent());
+            viewHolder.expandableTextView.setVisibility(View.VISIBLE);
         }
         if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
             viewHolder.ll_location.setVisibility(View.GONE);
@@ -395,7 +401,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //      context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from", 1));
+                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getAuthor()).putExtra("from", 1));
                 EventBus.getDefault().post(new IntEvent(100, 8902));
             }
         });
@@ -573,6 +579,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         LinearLayout ll_zan;
         ImageView iv_pic;
         LinearLayout ll_guanzhu;
+        ExpandableTextView expandableTextView;
     }
 
 

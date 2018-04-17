@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -149,14 +149,14 @@ public class UserListviewAdapter extends BaseAdapter {
                 // LogUtil.i("TYPE+"+type);
                 switch (type) {
                     case 1://查看关注
-                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getUserId()));
+                        context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getUserId()));
                         break;
                     case 2://查看粉丝
-                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getFollower()));
+                        context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getFollower()));
 
                         break;
                     case 3://查看点赞
-                        context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
+                        context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
                         break;
                     default:
                         break;

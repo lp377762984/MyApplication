@@ -20,11 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestPingFenBean;
 import com.cn.danceland.myapplication.bean.RequestPingJiaBean;
+import com.cn.danceland.myapplication.bean.RequestZzrzLIstBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -62,14 +65,19 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
     private TextView tv_nick_name;
 
     private TextView tv_dyn;
-    private TextView tv_guanzhu, tv_message;
+    private TextView tv_gauzhu_num, tv_message, tv_guanzhu;
     private TextView tv_fans;
     private ScaleRatingBar sr_pingfen;//评分
     private float pingfen;
     private MyListView lv_hypf;
     private MyListView lv_zzrz;
     MyPingJiaAdapter myPingJiaAdapter = new MyPingJiaAdapter();
+    MyZzrzAdapter myZzrzAdapter = new MyZzrzAdapter();
     private TextView tv_pingfen;
+    private ImageView iv_guanzhu;
+    private TextView tv_honor;
+    private TextView tv_sign;
+    private TextView tv_goodat;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,17 +91,21 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         queryUserInfo("34");
         queryPingfen("7", "5");
         queryPingJia("7", "5");
+        queryZzrz("9");
     }
 
     private List<RequestPingJiaBean.Data.Content> pingjia_data = new ArrayList<>();
+    private List<RequestZzrzLIstBean.Data> zzrz_data = new ArrayList<>();
 
     private void initView() {
         findViewById(ll_my_dyn).setOnClickListener(this);
         findViewById(ll_my_guanzhu).setOnClickListener(this);
         findViewById(ll_my_fans).setOnClickListener(this);
+        findViewById(R.id.ll_guanzhu).setOnClickListener(this);
+        findViewById(R.id.ll_sixin).setOnClickListener(this);
         sr_pingfen = findViewById(R.id.sr_pingfen);
         tv_dyn = findViewById(R.id.tv_dyn);
-        tv_guanzhu = findViewById(R.id.tv_gauzhu_num);
+        tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         iv_avatar = findViewById(R.id.iv_avatar);
@@ -101,7 +113,14 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         lv_hypf = findViewById(R.id.lv_hypf);
         lv_zzrz = findViewById(R.id.lv_zzrz);
         lv_hypf.setAdapter(myPingJiaAdapter);
+        lv_zzrz.setAdapter(myZzrzAdapter);
         tv_pingfen = findViewById(R.id.tv_pingfen);
+        tv_guanzhu = findViewById(R.id.tv_guanzhu);
+        iv_guanzhu = findViewById(R.id.iv_guanzhu);
+        tv_honor = findViewById(R.id.tv_honor);
+        tv_sign = findViewById(R.id.tv_sign);
+        tv_goodat = findViewById(R.id.tv_goodat);
+
     }
 
     @Override
@@ -114,6 +133,10 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
             case ll_my_fans:
                 break;
             case value:
+                break;
+            case R.id.ll_guanzhu:
+                break;
+            case R.id.ll_sixin:
                 break;
             default:
                 break;
@@ -128,7 +151,7 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
             switch (msg.what) {      //判断标志位
                 case 1:
                     sr_pingfen.setRating(pingfen);
-                    tv_pingfen.setText(pingfen+"");
+                    tv_pingfen.setText(pingfen + "");
                     break;
                 case 2:
                     setData();
@@ -141,56 +164,35 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
     };
 
     private void setData() {
-        tv_guanzhu.setText(userInfo.getFollow_no() + "");
+        tv_gauzhu_num.setText(userInfo.getFollow_no() + "");
 
         tv_fans.setText(userInfo.getFanse_no() + "");
         tv_dyn.setText(userInfo.getDyn_no() + "");
+        tv_nick_name.setText(userInfo.getPerson().getNick_name());
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        Glide.with(EmpUserHomeActivty.this)
+                .load(userInfo.getPerson().getSelf_avatar_path())
+                .apply(options)
+                .into(iv_avatar);
+        if (userInfo.getIs_follow()){
+            tv_guanzhu.setText("已关注");
+            iv_guanzhu.setImageResource(R.drawable.img_xin1);
+        }else {
+            tv_guanzhu.setText("+关注");
+            iv_guanzhu.setImageResource(R.drawable.img_xin);
+        }
+
+        if (!TextUtils.isEmpty(userInfo.getPerson().getSign())){
+            tv_sign.setText(userInfo.getPerson().getSign());
+        }
+        if (!TextUtils.isEmpty(userInfo.getPerson().getHobby())){
+            tv_honor.setText(userInfo.getPerson().getHobby());
+        }
+        if (!TextUtils.isEmpty(userInfo.getPerson().getGood_at())){
+            tv_goodat.setText(userInfo.getPerson().getGood_at());
+        }
     }
 
-    class MyZzrzAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return pingjia_data.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return i;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            ViewHolder viewHolder = null;
-            if (view == null) {
-                viewHolder = new ViewHolder();
-                view = View.inflate(EmpUserHomeActivty.this, R.layout.listview_item_zzrz, null);
-                viewHolder.tv_org_name = view.findViewById(R.id.tv_org_name);
-                viewHolder.tv_date = view.findViewById(R.id.tv_date);
-                viewHolder.tv_end_time = view.findViewById(R.id.tv_end_time);
-                viewHolder.iv_pic = view.findViewById(R.id.iv_pic);
-
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-            return view;
-        }
-
-        class ViewHolder {
-            TextView tv_org_name;
-            TextView tv_date;
-            TextView tv_end_time;
-            ImageView iv_pic;
-        }
-
-    }
 
     class MyPingJiaAdapter extends BaseAdapter {
 
@@ -251,6 +253,62 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
 
     }
 
+    class MyZzrzAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return zzrz_data.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder viewHolder = null;
+            if (view == null) {
+                viewHolder = new ViewHolder();
+                view = View.inflate(EmpUserHomeActivty.this, R.layout.listview_item_zzrz, null);
+                viewHolder.tv_date = view.findViewById(R.id.tv_date);
+                viewHolder.tv_org_name = view.findViewById(R.id.tv_org_name);
+                viewHolder.tv_end_time = view.findViewById(R.id.tv_end_time);
+                viewHolder.iv_pic = view.findViewById(R.id.iv_pic);
+                viewHolder.tv_name = view.findViewById(R.id.tv_name);
+
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) view.getTag();
+            }
+//            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(EmpUserHomeActivty.this)
+                    .load(zzrz_data.get(i).getImg_url())
+
+                    .into(viewHolder.iv_pic);
+            viewHolder.tv_org_name.setText("发证机构：" + zzrz_data.get(i).getAward_dept());
+            viewHolder.tv_name.setText("证件名称：" + zzrz_data.get(i).getName());
+            viewHolder.tv_date.setText("发证日期：" + zzrz_data.get(i).getGain_date());
+            viewHolder.tv_end_time.setText("截止日期：" + zzrz_data.get(i).getIndate());
+            return view;
+        }
+
+        class ViewHolder {
+            TextView tv_org_name;
+            ImageView iv_pic;
+            TextView tv_date;
+            TextView tv_end_time;
+            TextView tv_name;
+        }
+
+    }
+
+
     private RequsetUserDynInfoBean.Data userInfo;
     Gson gson = new Gson();
 
@@ -259,6 +317,41 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         public String employee_id;
         public String page;
         public String size;
+        private String person_id;
+
+    }
+
+
+    private void queryZzrz(String person_id) {
+        PingjiaBean pingjiaBean = new PingjiaBean();
+        pingjiaBean.person_id = person_id;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "/attestation/queryList", gson.toJson(pingjiaBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestZzrzLIstBean zzrzLIstBean = gson.fromJson(jsonObject.toString(), RequestZzrzLIstBean.class);
+                if (zzrzLIstBean.getSuccess()) {
+                    zzrz_data = zzrzLIstBean.getData();
+                    myZzrzAdapter.notifyDataSetChanged();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
     }
 
     private void queryPingJia(String employee_id, String branch_id) {

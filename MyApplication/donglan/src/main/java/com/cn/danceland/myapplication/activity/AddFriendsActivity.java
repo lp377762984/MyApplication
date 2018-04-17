@@ -188,7 +188,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                     startActivity(intent);
                     //finish();
                 }else{
-                    startActivity(new Intent(AddFriendsActivity.this,UserHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
+                    startActivity(new Intent(AddFriendsActivity.this,UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
                 }
                 break;
             default:

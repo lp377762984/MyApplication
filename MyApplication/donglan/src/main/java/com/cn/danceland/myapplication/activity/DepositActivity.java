@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -64,9 +65,15 @@ public class DepositActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
+
         Gson gson = new Gson();
         Requsetbean requsetbean = new Requsetbean();
-        requsetbean.bus_type = "1";
+        if (TextUtils.isEmpty(getIntent().getStringExtra("bus_type"))){
+            requsetbean.bus_type = "1";
+        }else {
+            requsetbean.bus_type=getIntent().getStringExtra("bus_type");
+        }
+
         requsetbean.status="1";
         String strBean = gson.toJson(requsetbean);
 

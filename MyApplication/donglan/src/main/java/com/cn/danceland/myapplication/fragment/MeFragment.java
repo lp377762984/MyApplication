@@ -21,6 +21,7 @@ import com.cn.danceland.myapplication.activity.MyShopActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -256,7 +257,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, UserListActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("type", 2));
                 break;
             case R.id.iv_avatar://头像
-                startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
+                startActivity(new Intent(mActivity, UserSelfHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
             case R.id.ll_my_data://数据中心
                 Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);

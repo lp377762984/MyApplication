@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public class DynHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynHeadv
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id",datas.get(position).getPerson().getId()));
+                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id",datas.get(position).getPerson().getId()));
             }
         });
         //m默认头像

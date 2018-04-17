@@ -31,7 +31,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -145,13 +145,13 @@ public class CommentListviewAdapter extends BaseAdapter {
         viewHolder.tv_nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
+                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
             }
         });
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
+                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
             }
         });
 
@@ -353,7 +353,7 @@ public class CommentListviewAdapter extends BaseAdapter {
 //                Toast.makeText(context, "Click Success",
 //                        Toast.LENGTH_SHORT).show();
 
-                context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(pos).getReplyUser()));
+                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(pos).getReplyUser()));
             }
         };
         StringBuffer sb = new StringBuffer();

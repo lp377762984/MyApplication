@@ -113,8 +113,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     private void initData() {
         findConsultant(CardsInfo.getBranch_id());
-        find_deposit_days();
-        find_deposit_price();
+        if (product_type==2){
+            find_deposit_days();
+            find_deposit_price();
+        }
+
     }
 
     private void initView() {
@@ -372,8 +375,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 RequestSimpleBean requsetSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
+
+                    LogUtil.i(requsetSimpleBean.getData());
                     deposit_price = Float.parseFloat(requsetSimpleBean.getData());
                     tv_useful_life.setText(deposit_days+"天");
                     tv_price.setText(PriceUtils.formatPrice2String(deposit_price));

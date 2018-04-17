@@ -136,6 +136,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.EmpUserHomeActivty"
             android:screenOrientation="portrait"
+        />
+        <activity android:name=".activity.UserSelfHomeActivity"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".activity.MyChatListActivity"

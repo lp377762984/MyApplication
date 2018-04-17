@@ -90,6 +90,8 @@ public class UserHomeActivity extends Activity {
     private ImageView iv_sex;
 
     private int from;//来着那个页面
+    private TextView tv_dyn;
+    private ImageView iv_guanzhu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -176,7 +178,7 @@ public class UserHomeActivity extends Activity {
         }
 
 
-        tv_guanzhu_num.setText("关注 " + data.getFollow_no());
+        tv_guanzhu_num.setText("" + data.getFollow_no());
         tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//查看关注
@@ -184,7 +186,7 @@ public class UserHomeActivity extends Activity {
 
             }
         });
-        tv_fans.setText("粉丝 " + data.getFanse_no());
+        tv_fans.setText("" + data.getFanse_no());
         tv_fans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//查看粉丝
@@ -193,16 +195,19 @@ public class UserHomeActivity extends Activity {
             }
         });
 
-
+        tv_dyn.setText("" + data.getDyn_no());
         if (data.getIs_follow()) {
             if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), data.getPerson().getId())) {
                 tv_add_gz.setVisibility(View.INVISIBLE);
+
             } else {
-                tv_add_gz.setText("取消关注");
+                tv_add_gz.setText("已关注");
+                iv_guanzhu.setImageResource(R.drawable.img_xin1);
             }
 
         } else {
             tv_add_gz.setText("+关注");
+            iv_guanzhu.setImageResource(R.drawable.img_xin);
         }
         tv_add_gz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,6 +235,7 @@ public class UserHomeActivity extends Activity {
                     startActivity(new Intent(UserHomeActivity.this, MyProActivity.class));
                 }
             });
+            findViewById(R.id.ll_01).setVisibility(View.GONE);
             tv_add_gz.setVisibility(View.GONE);
         }
 
@@ -389,12 +395,13 @@ public class UserHomeActivity extends Activity {
                 break;
             case EventConstants.ADD_GUANZHU:
 
-                tv_add_gz.setText("取消关注");
+                tv_add_gz.setText("已关注");
                 requestInfoBean.getData().setIs_follow(true);
-
+                iv_guanzhu.setImageResource(R.drawable.img_xin1);
                 break;
             case EventConstants.DEL_GUANZHU:
                 tv_add_gz.setText("+关注");
+                iv_guanzhu.setImageResource(R.drawable.img_xin);
                 requestInfoBean.getData().setIs_follow(false);
                 break;
             case EventConstants.ADD_ZAN:
@@ -592,6 +599,9 @@ public class UserHomeActivity extends Activity {
         tv_head_nickname = headview.findViewById(tv_nickname);
         tv_no_data = headview.findViewById(R.id.tv_no_data);
         tv_fans = headview.findViewById(R.id.tv_fans);
+        tv_dyn = headview.findViewById(R.id.tv_dyn);
+        iv_guanzhu = headview.findViewById(R.id.iv_guanzhu);
+
         tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         tv_add_gz = headview.findViewById(R.id.tv_add_gz);
         ll_edit = headview.findViewById(R.id.ll_edit);

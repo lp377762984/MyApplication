@@ -496,7 +496,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DynHomeActivity.this, UserHomeActivity.class).putExtra("id", oneDynInfo.getAuthor()));
+                startActivity(new Intent(DynHomeActivity.this, UserSelfHomeActivity.class).putExtra("id", oneDynInfo.getAuthor()));
             }
         });
 
