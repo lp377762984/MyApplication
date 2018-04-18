@@ -153,4 +153,5 @@ dependencies {
     //banner
     compile project(':easeui')
     compile project(':RxTools-library')
+
 }

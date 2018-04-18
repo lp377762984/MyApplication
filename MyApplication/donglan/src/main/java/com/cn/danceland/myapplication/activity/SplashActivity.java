@@ -11,6 +11,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class SplashActivity extends Activity {
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
         TextView versionText = (TextView) findViewById(R.id.tv_version);
         versionText.setText("1.0.1");
-        	versionText.setText(AppUtils.getVersionName(this));
+        versionText.setText(AppUtils.getVersionName(this));
 
 
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
@@ -46,14 +47,13 @@ public class SplashActivity extends Activity {
 
         new Thread(new Runnable() {
             public void run() {
-                if (!SPUtils.getBoolean("iscopy",false)){
+                if (!SPUtils.getBoolean("iscopy", false)) {
                     copyDb();
                 }
                 //判断是否登录
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
 
                     long start = System.currentTimeMillis();
-
 
 
 //                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
@@ -70,16 +70,26 @@ public class SplashActivity extends Activity {
                         }
                     }
                     //已经登录，进入主界面
-                 
-                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                    if (DataInfoCache.loadOneCache(Constants.MY_INFO) == null) {
+                        SPUtils.setString(Constants.ISLOGINED, null);
 
-                    finish();
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        finish();
+
+                    } else {
+                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                        finish();
+                    }
+
+
                 } else {
+
+
                     try {
                         Thread.sleep(sleepTime);
                     } catch (InterruptedException e) {
                     }
-            
+
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     finish();
                 }
@@ -88,15 +98,15 @@ public class SplashActivity extends Activity {
 
     }
 
-    public void copyDb(){
+    public void copyDb() {
 
         try {
-            boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this,R.raw.donglan,"/data/data/com.cn.danceland.myapplication/databases/","donglan.db",false);
+            boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this, R.raw.donglan, "/data/data/com.cn.danceland.myapplication/databases/", "donglan.db", false);
 
-            if (bl){
-                SPUtils.setBoolean("iscopy",bl);
+            if (bl) {
+                SPUtils.setBoolean("iscopy", bl);
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

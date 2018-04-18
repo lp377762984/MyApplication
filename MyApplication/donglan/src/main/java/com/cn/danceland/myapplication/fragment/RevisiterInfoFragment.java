@@ -83,6 +83,19 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 
     private ImageView iv_callphone;
     private ImageView iv_send_msg;
+    private TextView tv_nationality;
+    private TextView tv_remark1;
+    private TextView tv_certificate_type;
+    private TextView tv_emergency_name;
+    private TextView tv_certificate_no;
+    private TextView tv_emergency_phone;
+    private TextView tv_birthday;
+    private TextView tv_height;
+    private TextView tv_weight;
+    private TextView tv_branch_name;
+    private TextView tv_teach_name;
+    private TextView tv_admin_name;
+    private TextView tv_guest_recom;
 
     public void setview() {
         if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
@@ -99,10 +112,10 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         }
         tv_phone.setText(info.getPhone_no());
 
-        if (TextUtils.isEmpty(info.getNick_name())){
+        if (TextUtils.isEmpty(info.getNick_name())) {
             tv_name.setText(info.getCname());
-        }else {
-           tv_name.setText(info.getCname()+"("+info.getNick_name()+")");
+        } else {
+            tv_name.setText(info.getCname() + "(" + info.getNick_name() + ")");
         }
         tv_lasttime.setText("最后维护时间：" + info.getLast_time());
         tv_weixin_no.setText(info.getWeichat_no());
@@ -139,7 +152,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         if (info.getProjectList() != null && info.getProjectList().size() > 0) {
             String s1 = "";
             for (int j = 0; j < info.getProjectList().size(); j++) {
-                LogUtil.i(j+"");
+                LogUtil.i(j + "");
                 if (s1 == "") {
                     s1 = info.getProjectList().get(j).getData_value();
                 } else {
@@ -173,6 +186,23 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
                 doSendSMSTo(info.getPhone_no(), "");
             }
         });
+
+
+        tv_nationality.setText(info.getNationality());
+        tv_certificate_type.setText(info.getCertificate_type());
+        tv_certificate_no.setText(info.getIdentity_card());
+        tv_emergency_name.setText(info.getEmergency_name());
+        tv_emergency_phone.setText(info.getEmergency_name());
+        tv_birthday.setText(info.birthday);
+        tv_height .setText(info.getHeight());
+        tv_weight .setText(info.getWeight());
+
+        tv_branch_name .setText(info.getBranch_name());
+        tv_teach_name .setText(info.getTeach_name());
+        tv_admin_name.setText(info.getAdmin_name());
+        tv_guest_recom .setText(info.getGuest_recom());
+
+
     }
 
     /**
@@ -211,6 +241,21 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_like = v.findViewById(R.id.tv_like);
         tv_medical_history = v.findViewById(R.id.tv_medical_history);
         tv_remark = v.findViewById(R.id.tv_remark);
+        tv_nationality = v.findViewById(R.id.tv_nationality);
+        tv_certificate_type = v.findViewById(R.id.tv_certificate_type);
+        tv_certificate_no = v.findViewById(R.id.tv_certificate_no);
+        tv_emergency_name = v.findViewById(R.id.tv_emergency_name);
+        tv_emergency_phone = v.findViewById(R.id.tv_emergency_phone);
+        tv_birthday = v.findViewById(R.id.tv_birthday);
+        tv_height = v.findViewById(R.id.tv_height);
+        tv_weight = v.findViewById(R.id.tv_weight);
+
+        tv_branch_name = v.findViewById(R.id.tv_branch_name);
+        tv_teach_name = v.findViewById(R.id.tv_teach_name);
+        tv_admin_name = v.findViewById(R.id.tv_admin_name);
+        tv_guest_recom = v.findViewById(R.id.tv_guest_recom);
+
+
         v.findViewById(R.id.iv_more).setOnClickListener(this);
         return v;
     }
@@ -227,12 +272,12 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     @Override
     public void onEventMainThread(IntEvent event) {
 
-        switch(event.getEventCode()){
-        case 211://刷新页面
-            find_by_id_potential(id);
-        break;
-        default:
-        break;
+        switch (event.getEventCode()) {
+            case 211://刷新页面
+                find_by_id_potential(id);
+                break;
+            default:
+                break;
         }
     }
 
@@ -329,9 +374,9 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-             call(phoneNo);
+                call(phoneNo);
 
-               // call("13436907535");
+                // call("13436907535");
                 showDialogRrcord();
 
             }
@@ -371,11 +416,11 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
                 LogUtil.i(s);
                 potentialInfoBean = new RequsetPotentialInfoBean();
                 potentialInfoBean = gson.fromJson(s, RequsetPotentialInfoBean.class);
-            //    LogUtil.i(potentialInfoBean.toString());
+                //    LogUtil.i(potentialInfoBean.toString());
                 if (potentialInfoBean.getSuccess()) {
-                //    LogUtil.i(potentialInfoBean.getData().toString());
+                    //    LogUtil.i(potentialInfoBean.getData().toString());
                     info = potentialInfoBean.getData();
-                 //   LogUtil.i(info.toString());
+                    //   LogUtil.i(info.toString());
                     Message message = Message.obtain();
                     message.what = 1;
                     handler.sendMessage(message);

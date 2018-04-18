@@ -88,7 +88,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     private Button btn_commit;
     private CheckBox cb_alipay;
     private CheckBox cb_wechat;
-    private int pay_way = 1;
+    private int pay_way = 2;//2支付宝，3微信，5储值卡
     private TextView tv_dingjin;
     private String depositId;
     private float deposit_price;
@@ -171,10 +171,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     cb_wechat.setChecked(false);
-                    pay_way = 1;
+                    pay_way = 2;
                 } else {
                     cb_wechat.setChecked(true);
-                    pay_way = 2;
+                    pay_way = 3;
                 }
             }
         });
@@ -183,10 +183,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     cb_alipay.setChecked(false);
-                    pay_way = 2;
+                    pay_way = 3;
                 } else {
                     cb_alipay.setChecked(true);
-                    pay_way = 1;
+                    pay_way = 2;
                 }
             }
         });
@@ -541,11 +541,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         unpaidOrder = orderId;
-                        if (pay_way == 1) {
+                        if (pay_way == 2) {
                             //支付宝
                             alipay(orderId);
                         }
-                        if (pay_way == 2) {
+                        if (pay_way == 3) {
                             //微信
                             wechatPay(orderId);
                         }

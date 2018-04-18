@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.format.Time;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,14 +32,18 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ParamInfoBean;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
+import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -85,10 +91,24 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
     private List<RequestSellCardsInfoBean.Data> mParamCradList = new ArrayList<>();
     private ListPopup listPopup;
     private int codeType = 0;
+
     private ListPopupMultiSelect listPopupMultiSelect;
     private ListCardPopup listCardPopup;
+
     private PotentialInfo potentialInfo = new PotentialInfo();
     private Gson gson = new Gson();
+    private int jiaolian_type = 0;
+    private TextView tv_certificate_type;
+    private ListJiaoLianPopup listJiaoLianPopup;
+    private EditText et_certificate_no,et_nationality;
+    private EditText et_emergency_name;
+    private EditText et_emergency_phone;
+    private TextView tv_birthday;
+    private EditText et_height;
+    private EditText et_weight;
+    private TextView tv_admin_name;
+    private TextView tv_teach_name;
+    private Data data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,9 +119,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
 
     private void initView() {
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         listPopup = new ListPopup(this);
         listPopupMultiSelect = new ListPopupMultiSelect(this);
         listCardPopup = new ListCardPopup(this);
+        listJiaoLianPopup = new ListJiaoLianPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
         et_phone = findViewById(R.id.et_phone);
         et_name = findViewById(R.id.et_name);
@@ -112,7 +134,6 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         et_company = findViewById(R.id.et_company);
         et_address = findViewById(R.id.et_address);
         et_email = findViewById(R.id.et_email);
-
 
         tv_guest_aware_way = findViewById(R.id.tv_guest_aware_way);
         tv_guest_aware_way.setOnClickListener(this);
@@ -149,7 +170,29 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         tv_medical_history.setOnClickListener(this);
         et_remark = findViewById(R.id.et_remark);
         findViewById(R.id.btn_commit).setOnClickListener(this);
+        tv_certificate_type = findViewById(R.id.et_certificate_type);
+        tv_certificate_type.setOnClickListener(this);
+        et_certificate_no = findViewById(R.id.et_certificate_no);
+        et_emergency_name = findViewById(R.id.et_emergency_name);
+        et_emergency_phone = findViewById(R.id.et_emergency_phone);
+        tv_birthday = findViewById(R.id.tv_birthday);
+        tv_birthday.setOnClickListener(this);
+        et_height = findViewById(R.id.et_height);
+        et_weight = findViewById(R.id.et_weight);
+        tv_teach_name = findViewById(R.id.tv_teach_name);
+        tv_teach_name.setOnClickListener(this);
+        tv_admin_name = findViewById(R.id.tv_admin_name);
+        tv_admin_name.setOnClickListener(this);
+        et_nationality= findViewById(R.id.et_nationality);
 
+        inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect,null);
+        lp_year = inflate1.findViewById(R.id.lp_year);
+        lp_month  = inflate1.findViewById(R.id.lp_month);
+        lp_date = inflate1.findViewById(R.id.lp_date);
+        alertdialog = new AlertDialog.Builder(this);
+        Time time = new Time();
+        time.setToNow();
+        year = time.year;
     }
 
 
@@ -159,6 +202,22 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.tv_teach_name://选择潜客教练
+                jiaolian_type = 1;
+                findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                break;
+            case R.id.tv_admin_name://选择潜客会籍
+                jiaolian_type = 2;
+                findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                break;
+            case R.id.et_certificate_type://证件类型
+                showCertificate_type();
+                break;
+            case R.id.tv_birthday://选择生日
+                showDate();
+                break;
+
+
             case R.id.tv_sex://选择性别
                 showListDialog();
                 break;
@@ -203,8 +262,15 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 potentialInfo.setMail(et_email.getText().toString());
                 potentialInfo.setRemark(et_remark.getText().toString());
                 potentialInfo.setWeichat_no(et_weixin_no.getText().toString());
-                Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
                 potentialInfo.setDefault_branch(data.getPerson().getDefault_branch());
+
+                potentialInfo.setIdentity_card(et_certificate_no.getText().toString().trim());
+                potentialInfo.setEmergency_name(et_emergency_name.getText().toString().trim());
+                potentialInfo.setEmergency_phone(et_emergency_phone.getText().toString().trim());
+                potentialInfo.setHeight(et_height.getText().toString().trim());
+                potentialInfo.setWeight(et_weight.getText().toString().trim());
+                potentialInfo.setNationality(et_nationality.getText().toString().trim());
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());
                 try {
@@ -246,6 +312,129 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         listDialog.show();
     }
 
+    View inflate, inflate1;
+    LoopView loopview, lp_year, lp_month, lp_date;
+    int year;
+    String syear, smonth, sdate;//性别:1、男，2、女，3、未知，4、保密
+    int daysByYearMonth;
+    AlertDialog.Builder alertdialog;
+
+    private void showDate() {
+
+        ViewGroup parent = (ViewGroup) inflate1.getParent();
+        if (parent != null) {
+            parent.removeAllViews();
+        }
+
+        final ArrayList<String> yearList = new ArrayList<String>();
+        final ArrayList<String> monthList = new ArrayList<String>();
+        final ArrayList<String> dateList = new ArrayList<String>();
+        int n = 1950;
+        int len = year - n;
+        for (int i = 0; i <= len; i++) {
+            yearList.add((n + i) + "");
+        }
+        for (int j = 0; j < 12; j++) {
+            monthList.add((1 + j) + "");
+        }
+        lp_year.setNotLoop();
+        lp_date.setNotLoop();
+        lp_month.setNotLoop();
+        lp_year.setItems(yearList);
+        lp_month.setItems(monthList);
+
+        lp_year.setInitPosition(yearList.size() - 20);
+        syear = yearList.get(yearList.size() - 20);
+        lp_month.setInitPosition(0);
+        smonth = monthList.get(0);
+        sdate = "1";
+        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+        dateList.clear();
+        for (int z = 1; z <= daysByYearMonth; z++) {
+            dateList.add(z + "");
+        }
+        lp_date.setItems(dateList);
+
+        //设置字体大小
+        lp_year.setTextSize(16);
+        lp_month.setTextSize(16);
+        lp_date.setTextSize(16);
+
+        lp_year.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                syear = yearList.get(index);
+                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+                dateList.clear();
+                for (int z = 1; z <= daysByYearMonth; z++) {
+                    dateList.add(z + "");
+                }
+                lp_date.setItems(dateList);
+            }
+        });
+
+        lp_month.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                smonth = monthList.get(index);
+                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+                dateList.clear();
+                for (int z = 1; z <= daysByYearMonth; z++) {
+                    dateList.add(z + "");
+                }
+                lp_date.setItems(dateList);
+            }
+        });
+
+        lp_date.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                sdate = dateList.get(index);
+            }
+        });
+
+        alertdialog.setTitle("选择出生年月");
+        alertdialog.setView(inflate1);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                tv_birthday.setText(syear + "年" + smonth + "月" + sdate + "日");
+                potentialInfo.setBirthday(syear + "-" + smonth + "-" + sdate);
+            }
+        });
+        alertdialog.show();
+
+    }
+
+    private void showCertificate_type() {
+        final String[] items = {"身份证", "军官证", "驾驶证"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        potentialInfo.setCertificate_type(items[0]);
+                        tv_certificate_type.setText(items[0]);
+                        break;
+                    case 1:
+                        potentialInfo.setCertificate_type(items[1]);
+                        tv_certificate_type.setText(items[1]);
+                        break;
+                    case 2:
+                        potentialInfo.setCertificate_type(items[2]);
+                        tv_certificate_type.setText(items[2]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
 
     private void showInputDialog() {
     /*@setView 装入一个EditView
@@ -368,18 +557,29 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
     }
 
+    class StrBean {
+        public String branch_id;
+        public String type_code;
+    }
+
 
     private void findParams(final int codetype) {
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_TYPE_CODE + codetype, new Response.Listener<String>() {
+        StrBean strBean = new StrBean();
+        strBean.type_code = codetype + "";
+        if (codetype != REGISTER_CHANNEL) {//客户来源不分门店
+            Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            strBean.branch_id = data.getPerson().getDefault_branch();
+        }
+        //      LogUtil.i( gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
 
-                ParamInfoBean paramInfoBean = gson.fromJson(s, ParamInfoBean.class);
+                ParamInfoBean paramInfoBean = gson.fromJson(jsonObject.toString(), ParamInfoBean.class);
 
-                if (paramInfoBean.getSuccess()){
+                if (paramInfoBean.getSuccess()) {
                     mParamInfoList = paramInfoBean.getData();
-
 
 
                     if (codetype == REGISTER_CHANNEL) {
@@ -390,13 +590,10 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     }
                 }
 
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
 
             }
         }) {
@@ -408,12 +605,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 return map;
             }
         };
+
         MyApplication.getHttpQueues().add(request);
 
 
     }
-
-    // private MyPopupListAdapter myPopupListAdapter = new MyPopupListAdapter(this);
 
 
     class ListPopup extends BasePopupWindow {
@@ -491,11 +687,10 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 vh.mTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
                         switch (codeType) {
                             case 1:
                                 tv_guest_aware_way.setText(mParamInfoList.get(position).getData_value());
-                                potentialInfo.setGuest_aware_way(mParamInfoList.get(position).getData_key()+"");
+                                potentialInfo.setGuest_aware_way(mParamInfoList.get(position).getData_key() + "");
                                 break;
                             default:
                                 break;
@@ -518,6 +713,173 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
     }
 
 
+    private List<RequestConsultantInfoBean.Data> consultantInfo = new ArrayList<>();
+
+    class ListJiaoLianPopup extends BasePopupWindow {
+
+
+        Context context;
+
+        public ListJiaoLianPopup(Context context) {
+            super(context);
+            ListView popup_list = (ListView) findViewById(R.id.popup_list);
+            MyPopupListAdapter myPopupListAdapter = new MyPopupListAdapter(context);
+            popup_list.setAdapter(myPopupListAdapter);
+            this.context = context;
+        }
+
+        @Override
+        protected Animation initShowAnimation() {
+            return null;
+        }
+
+        @Override
+        public View getClickToDismissView() {
+            return getPopupWindowView();
+        }
+
+        @Override
+        public View onCreatePopupView() {
+
+            //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
+            return createPopupById(R.layout.popup_list_potential);
+
+        }
+
+        @Override
+        public View initAnimaView() {
+            return null;
+        }
+
+        class MyPopupListAdapter extends BaseAdapter {
+            private Context context;
+
+            public MyPopupListAdapter(Context context) {
+                this.context = context;
+            }
+
+            @Override
+            public int getCount() {
+                return consultantInfo.size();
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return i;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return i;
+            }
+
+            @Override
+            public View getView(final int position, View convertView, ViewGroup viewGroup) {
+                //     LogUtil.i("asdasdjalsdllasjdlk");
+                ViewHolder vh = null;
+                if (convertView == null) {
+                    vh = new ViewHolder();
+                    convertView = View.inflate(context, R.layout.listview_item_list_consultant, null);
+                    vh.mTextView = (TextView) convertView.findViewById(R.id.item_tx);
+                    convertView.setTag(vh);
+                } else {
+                    vh = (ViewHolder) convertView.getTag();
+                }
+                vh.mTextView.setText(consultantInfo.get(position).getCname());
+
+                vh.mTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        switch (jiaolian_type) {
+                            case 1://选择教练
+                                tv_teach_name.setText(consultantInfo.get(position).getCname());
+                                potentialInfo.setTeach_name(consultantInfo.get(position).getCname());
+                                potentialInfo.setTeach_emp_id(consultantInfo.get(position).getId()+"");
+                                break;
+                            case 2://选择会籍
+                                tv_admin_name.setText(consultantInfo.get(position).getCname());
+                                potentialInfo.setAdmin_name(consultantInfo.get(position).getCname());
+                                potentialInfo.setAdmin_emp_id(consultantInfo.get(position).getId()+"");
+                                break;
+                            default:
+                                break;
+                        }
+
+                        dismiss();
+                    }
+                });
+
+                return convertView;
+
+            }
+
+
+            class ViewHolder {
+                public TextView mTextView;
+            }
+        }
+    }
+
+    /**
+     * 查找会籍顾问或教练
+     */
+    private void findConsultant(final String branchId, int jiaolian_type) {
+        String url;
+        if (jiaolian_type == 1) {//教练
+            url = Constants.FIND_JIAOLIAN_URL;
+        } else {
+            url = Constants.FIND_CONSULTANT_URL;
+        }
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
+                if (requestConsultantInfoBean.getSuccess()) {
+                    consultantInfo = requestConsultantInfoBean.getData();
+                    //  LogUtil.i(consultantListInfo.toString());
+                    listJiaoLianPopup.showPopupWindow();
+
+                } else {
+                    ToastUtils.showToastShort(requestConsultantInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort(volleyError.toString());
+            }
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("branch_id", branchId);
+
+                return map;
+
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
 
     class ListCardPopup extends BasePopupWindow {
 
