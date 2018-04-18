@@ -75,7 +75,7 @@ public class SiJiaoOrderActivity extends Activity {
     View line7;
     ImageView back_img,iv_phonebook;
     BuySiJiaoBean.Content itemContent;
-    TextView goods_name,goods_type,goods_time,goods_price,tv_jiaolian,ed_time,tv_pay_price;
+    TextView goods_name,goods_type,goods_time,goods_price,tv_jiaolian,ed_time,tv_pay_price,tv_dingjin;
     ListPopup listPopup;
     List<JiaoLianBean.Data> JiaoLianList;
     Gson gson;
@@ -98,6 +98,8 @@ public class SiJiaoOrderActivity extends Activity {
     Long endMill;
     int course_id;
     int dingjinprice = 100;
+    String deposit_id;
+    float deposit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -218,6 +220,11 @@ public class SiJiaoOrderActivity extends Activity {
                 }
             }
 
+        }else if(resultCode == 11){
+            deposit = data.getFloatExtra("dingjin",0);
+            deposit_id = data.getStringExtra("id");
+            tv_dingjin.setText("- "+deposit+"元");
+            tv_pay_price.setText("￥"+(price-deposit));
         }
     }
 
@@ -254,6 +261,16 @@ public class SiJiaoOrderActivity extends Activity {
         tv_jiaolian = findViewById(R.id.tv_jiaolian);
         btn_commit = findViewById(R.id.btn_commit);
         ll_dingjin = findViewById(R.id.ll_dingjin);
+        tv_dingjin = findViewById(R.id.tv_dingjin);
+
+        ll_dingjin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(SiJiaoOrderActivity.this,DepositActivity.class).putExtra("bus_type","2"),22);
+            }
+        });
+
+
         btn_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,6 +333,12 @@ public class SiJiaoOrderActivity extends Activity {
             }
         });
 
+//        if(course_category == 2){
+//            rl_jiaolian.setClickable(false);
+//            tv_jiaolian.setText(itemContent.getEmployees());
+//        }else{
+//            rl_jiaolian.setClickable(true);
+//        }
 
         btn_forme.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -360,7 +383,7 @@ public class SiJiaoOrderActivity extends Activity {
                 btn_zhifubao.setChecked(true);
                 btn_weixin.setChecked(false);
                 btn_chuzhika.setChecked(false);
-                zhifu = "1";
+                zhifu = "2";
             }
         });
 
@@ -370,7 +393,7 @@ public class SiJiaoOrderActivity extends Activity {
                 btn_zhifubao.setChecked(false);
                 btn_weixin.setChecked(true);
                 btn_chuzhika.setChecked(false);
-                zhifu = "2";
+                zhifu = "3";
             }
         });
         btn_chuzhika.setOnClickListener(new View.OnClickListener() {
@@ -487,13 +510,14 @@ public class SiJiaoOrderActivity extends Activity {
         }
         sijiaoOrderConfirmBean.setPay_way(zhifu);//1支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
+        sijiaoOrderConfirmBean.setDeposit_id(deposit_id);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         extends_params.setCourse_type_id(course_id+"");
         extends_params.setCourse_type_name(course_name);
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
         extends_params.setTime_length(time_length);
-        sijiaoOrderConfirmBean.setReceive((price)+"");
+        sijiaoOrderConfirmBean.setReceive((price-deposit)+"");
         sijiaoOrderConfirmBean.setPrice(price+"");
         if("1".equals(forme)){
             extends_params.setOther_name(ed_name.getText().toString());

@@ -14,16 +14,34 @@
             android:layout_marginLeft="15dp"
             android:src="@drawable/cabinet"
             />
-        <TextView
-            android:id="@+id/cabinet_num"
-            android:layout_toRightOf="@+id/img_guizi"
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:text="柜号：123"
-            android:textSize="16sp"
-            />
+            android:layout_toRightOf="@+id/img_guizi"
+            android:layout_centerVertical="true">
+            <TextView
+                android:id="@+id/cabinet_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="柜号：123"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                />
+            <TextView
+                android:id="@+id/tv_locker_zone"
+                android:layout_below="@+id/cabinet_num"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="区域"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
 
         <RelativeLayout
             android:layout_width="wrap_content"

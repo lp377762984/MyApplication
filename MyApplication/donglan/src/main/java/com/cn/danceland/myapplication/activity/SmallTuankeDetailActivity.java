@@ -335,37 +335,40 @@ public class SmallTuankeDetailActivity extends Activity {
         if(item!=null){
             siJiaoYuYueConBean.setGroup_course_id(item.getId());
             url = Constants.QUERYGROUPCOURSE;
+            siJiaoYuYueConBean.setPage(0);
+            siJiaoYuYueConBean.setSize(6);
         }else{
             siJiaoYuYueConBean.setGroup_course_id(record.getId());
             url = Constants.FINDGROUPCOURSEAPPOINTPERSON;
+            siJiaoYuYueConBean.setDate(yuyueStartTime);
         }
-
-        siJiaoYuYueConBean.setDate(yuyueStartTime);
-
-        siJiaoYuYueConBean.setPage(0);
-        siJiaoYuYueConBean.setSize(6);
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,s ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                if(item!=null){
+                    courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
+                    if(courseMemberBean!=null){
+                        CourseMemberBean.Data data = courseMemberBean.getData();
+                        if(data!=null){
+                            if(data.getTotalElements()>6){
+                                getTotlePeple();
+                            }else if(data.getTotalElements()<1){
+                                my_expanda.setVisibility(View.GONE);
+                            }
+                            if(item!=null){
+                                course_renshu.setText("购买会员("+data.getTotalElements()+")");
+                            }else{
+                                course_renshu.setText("上课会员("+data.getTotalElements()+")");
+                            }
 
-                courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
-                if(courseMemberBean!=null){
-                    if(courseMemberBean.getTotalElements()>6){
-                        getTotlePeple();
-                    }else if(courseMemberBean.getTotalElements()<1){
-                        my_expanda.setVisibility(View.GONE);
+                            headList = data.getContent();
+
+                            my_expanda.setAdapter(myAdapter);
+                        }
+
                     }
-                    if(item!=null){
-                        course_renshu.setText("购买会员("+courseMemberBean.getTotalElements()+")");
-                    }else{
-                        course_renshu.setText("上课会员("+courseMemberBean.getTotalElements()+")");
-                    }
-
-                    headList = courseMemberBean.getContent();
-
-                    my_expanda.setAdapter(myAdapter);
                 }else{
                     my_expanda.setVisibility(View.GONE);
                     if(item!=null){
@@ -412,7 +415,10 @@ public class SmallTuankeDetailActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
 
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
-                childList = courseMemberBean.getContent();
+                if(courseMemberBean!=null&&courseMemberBean.getData()!=null){
+                    childList = courseMemberBean.getData().getContent();
+                }
+
                 LogUtil.e("zzf",jsonObject.toString());
 
             }

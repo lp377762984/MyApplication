@@ -260,7 +260,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:text="为好友购买"
+                    android:text="为他人购买"
                     android:button="@null"
                     android:gravity="center"
                     android:textColor="#333333" />

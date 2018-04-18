@@ -20,8 +20,10 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
+import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
+import com.cn.danceland.myapplication.bean.YuYueResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -362,7 +364,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf",s);
-                if(Integer.valueOf(s)>0){
+                YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
+                if(yuYueResultBean!=null && yuYueResultBean.getData()>0){
                     ToastUtils.showToastShort("确认成功！");
                     tv.setText("上课中");
                     tv.setTextColor(getResources().getColor(R.color.white));
@@ -437,7 +440,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf",s);
-                if(Integer.valueOf(s)>0){
+                YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
+                if(yuYueResultBean!=null && yuYueResultBean.getData()>0){
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
                     tv.setTextColor(getResources().getColor(R.color.white));

@@ -13,6 +13,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.fragment.ForOtherSiJiaoFragment;
+import com.cn.danceland.myapplication.fragment.MySiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
@@ -54,7 +56,8 @@ public class MySijiaoActivity extends FragmentActivity {
 
         supportFragmentManager = getSupportFragmentManager();
         fragmentArrayList = new ArrayList<>();
-        fragmentArrayList.add(new SiJiaoFragment());
+        fragmentArrayList.add(new MySiJiaoFragment());
+        fragmentArrayList.add(new ForOtherSiJiaoFragment());
 
     }
 

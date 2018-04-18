@@ -305,14 +305,18 @@ public class CourseDetailActivity extends Activity {
 
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
                 if(courseMemberBean!=null){
-                    if(courseMemberBean.getTotalElements()>6){
-                        getTotlePeple();
-                    }else if(courseMemberBean.getTotalElements()<1){
-                        my_expanda.setVisibility(View.GONE);
+                    CourseMemberBean.Data data = courseMemberBean.getData();
+                    if(data!=null){
+                        if(data.getTotalElements()>6){
+                            getTotlePeple();
+                        }else if(data.getTotalElements()<1){
+                            my_expanda.setVisibility(View.GONE);
+                        }
+                        course_renshu.setText("购买会员("+data.getTotalElements()+")");
+                        headList = data.getContent();
+                        my_expanda.setAdapter(myAdapter);
                     }
-                    course_renshu.setText("购买会员("+courseMemberBean.getTotalElements()+")");
-                    headList = courseMemberBean.getContent();
-                    my_expanda.setAdapter(myAdapter);
+
                 }else{
                     my_expanda.setVisibility(View.GONE);
                     course_renshu.setText("购买会员(0)");
@@ -353,7 +357,9 @@ public class CourseDetailActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
 
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
-                childList = courseMemberBean.getContent();
+                if(courseMemberBean!=null&&courseMemberBean.getData()!=null){
+                    childList = courseMemberBean.getData().getContent();
+                }
                 LogUtil.e("zzf",jsonObject.toString());
 
             }
