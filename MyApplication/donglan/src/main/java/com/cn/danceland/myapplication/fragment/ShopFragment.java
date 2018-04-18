@@ -614,7 +614,7 @@ public class ShopFragment extends BaseFragment {
             addRoles();
             setPop();
             //setSpinner();
-            //initData();
+            initData();
         }else{
             SPUtils.setString("role",role);
             dismissPop();
