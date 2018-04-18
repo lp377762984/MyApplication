@@ -123,14 +123,14 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
             TextView tv_category = inflate.findViewById(R.id.tv_category);
 
             tv_sijiaoName.setText(dataList.get(position).getCourse_type_name());
-            tv_jiaolian_name.setText("上课教练:"+dataList.get(position).getEmployee_name());
-            tv_goumai_num.setText("购买节数:"+dataList.get(position).getCount());
-            tv_shengyu_num.setText("剩余节数:"+dataList.get(position).getSurplus_count());
-            tv_huiyuan_name.setText("会员:"+dataList.get(position).getMember_name());
+            tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name());
+            tv_goumai_num.setText("购买节数: "+dataList.get(position).getCount());
+            tv_shengyu_num.setText("剩余节数: "+dataList.get(position).getSurplus_count());
+            tv_huiyuan_name.setText("会员: "+dataList.get(position).getMember_name());
 
             String start_date = TimeUtils.timeStamp2Date(dataList.get(position).getStart_date(), "yyyy-MM-dd");
             String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date(), "yyyy-MM-dd");
-            tv_youxiaoqi.setText("有效期:"+dataList.get(position).getTime_length()+"天");
+            tv_youxiaoqi.setText("有效期: "+dataList.get(position).getTime_length()+"天");
             if(dataList.get(position).getCourse_category()==1){
                 tv_category.setText("一对一");
             }else if(dataList.get(position).getCourse_category()==2){

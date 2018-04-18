@@ -120,6 +120,7 @@ public class RegisterInfoActivity extends Activity{
         syear = yearList.get(yearList.size()-20);
         lp_month.setInitPosition(0);
         smonth = monthList.get(0);
+        sdate = "1";
 
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
