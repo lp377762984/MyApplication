@@ -442,6 +442,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.MySijiaoActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.EditProActivity"
+            android:screenOrientation="portrait"/>
 
 
         <receiver

@@ -271,6 +271,7 @@ public class MyProActivity extends Activity {
         over_action.setOnClickListener(onClickListener);
         rl_phone.setOnClickListener(onClickListener);
         identity.setOnClickListener(onClickListener);
+        rl_jianjie.setOnClickListener(onClickListener);
 
     }
 
@@ -298,6 +299,9 @@ public class MyProActivity extends Activity {
                     showPop();
                 }
                 break;
+                case R.id.rl_jianjie:
+                    startActivityForResult(new Intent(MyProActivity.this,EditProActivity.class),13);
+                    break;
                 case R.id.lo_cancel_action:
                     dismissWindow();
                     break;
@@ -376,14 +380,6 @@ public class MyProActivity extends Activity {
                     }
                     break;
                 case R.id.back:
-                    if(tv_sign.getText()!=null){
-                        String s = tv_sign.getText().toString();
-                        if(!s.equals(infoData.getPerson().getSign())){
-                            commitSelf(Constants.MODIFY_SIGN,"sign",s);
-                            infoData.getPerson().setSign(s);
-                            DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-                        }
-                    }
                     Intent intent = new Intent();
                     intent.putExtra("selfAvatarPath", selfAvatarPath);
                     setResult(99, intent);
@@ -868,6 +864,7 @@ public class MyProActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             MultipartRequestParams params = new MultipartRequestParams();
 
+
             if (requestCode == CAMERA_REQUEST_CODE) {
                 try {
                     startPhotoZoom(uri);
@@ -948,6 +945,9 @@ public class MyProActivity extends Activity {
                 MyApplication.getHttpQueues().add(request);
             }
 
+        }else if(resultCode == 13){
+            String sign = data.getStringExtra("sign");
+            tv_sign.setText(sign);
         }
 
     }
