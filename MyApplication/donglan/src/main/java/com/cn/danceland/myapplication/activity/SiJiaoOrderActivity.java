@@ -383,7 +383,7 @@ public class SiJiaoOrderActivity extends Activity {
                 btn_zhifubao.setChecked(true);
                 btn_weixin.setChecked(false);
                 btn_chuzhika.setChecked(false);
-                zhifu = "1";
+                zhifu = "2";
             }
         });
 
@@ -393,7 +393,7 @@ public class SiJiaoOrderActivity extends Activity {
                 btn_zhifubao.setChecked(false);
                 btn_weixin.setChecked(true);
                 btn_chuzhika.setChecked(false);
-                zhifu = "2";
+                zhifu = "3";
             }
         });
         btn_chuzhika.setOnClickListener(new View.OnClickListener() {

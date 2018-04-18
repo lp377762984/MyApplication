@@ -11,8 +11,8 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    public static final String HOST = " http://192.168.1.115:8003/";//
+    public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+    //public static final String HOST = " http://192.168.1.115:8003/";//
     //public static final String HOST = " http://192.168.1.119:8003/";//
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
@@ -201,6 +201,7 @@ public class Constants extends EaseConstant {
     public static final String FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
     public static final String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
     public static final String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
+  public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
 
 
     //环信相关

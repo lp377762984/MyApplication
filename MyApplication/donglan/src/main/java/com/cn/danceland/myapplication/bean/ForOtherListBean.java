@@ -1,17 +1,19 @@
 package com.cn.danceland.myapplication.bean;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by feng on 2018/4/2.
+ * Created by feng on 2018/4/18.
  */
 
-public class CourseMemberBean implements Serializable {
-
+public class ForOtherListBean implements Parcelable {
 
     private int code;
-    private Data data;
+    private List<Data> data;
     private String errorMsg;
     private boolean success;
     public void setCode(int code) {
@@ -21,10 +23,10 @@ public class CourseMemberBean implements Serializable {
         return code;
     }
 
-    public void setData(Data data) {
+    public void setData(List<Data> data) {
         this.data = data;
     }
-    public Data getData() {
+    public List<Data> getData() {
         return data;
     }
 
@@ -42,67 +44,45 @@ public class CourseMemberBean implements Serializable {
         return success;
     }
 
-    public class Data {
 
-        private List<Content> content;
-        private boolean last;
-        private int number;
-        private int numberOfElements;
-        private int size;
-        private int totalElements;
-        private int totalPages;
-        public void setContent(List<Content> content) {
-            this.content = content;
-        }
-        public List<Content> getContent() {
-            return content;
-        }
-
-        public void setLast(boolean last) {
-            this.last = last;
-        }
-        public boolean getLast() {
-            return last;
-        }
-
-        public void setNumber(int number) {
-            this.number = number;
-        }
-        public int getNumber() {
-            return number;
-        }
-
-        public void setNumberOfElements(int numberOfElements) {
-            this.numberOfElements = numberOfElements;
-        }
-        public int getNumberOfElements() {
-            return numberOfElements;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
-        public int getSize() {
-            return size;
-        }
-
-        public void setTotalElements(int totalElements) {
-            this.totalElements = totalElements;
-        }
-        public int getTotalElements() {
-            return totalElements;
-        }
-
-        public void setTotalPages(int totalPages) {
-            this.totalPages = totalPages;
-        }
-        public int getTotalPages() {
-            return totalPages;
-        }
-
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public class Content {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.code);
+        dest.writeList(this.data);
+        dest.writeString(this.errorMsg);
+        dest.writeByte(this.success ? (byte) 1 : (byte) 0);
+    }
+
+    public ForOtherListBean() {
+    }
+
+    protected ForOtherListBean(Parcel in) {
+        this.code = in.readInt();
+        this.data = new ArrayList<Data>();
+        in.readList(this.data, Data.class.getClassLoader());
+        this.errorMsg = in.readString();
+        this.success = in.readByte() != 0;
+    }
+
+    public static final Parcelable.Creator<ForOtherListBean> CREATOR = new Parcelable.Creator<ForOtherListBean>() {
+        @Override
+        public ForOtherListBean createFromParcel(Parcel source) {
+            return new ForOtherListBean(source);
+        }
+
+        @Override
+        public ForOtherListBean[] newArray(int size) {
+            return new ForOtherListBean[size];
+        }
+    };
+
+
+    public  static  class Data implements Parcelable {
 
         private int branch_id;
         private int count;
@@ -280,5 +260,76 @@ public class CourseMemberBean implements Serializable {
             return time_length;
         }
 
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.branch_id);
+            dest.writeInt(this.count);
+            dest.writeInt(this.course_category);
+            dest.writeInt(this.course_type_id);
+            dest.writeString(this.course_type_name);
+            dest.writeString(this.delete_remark);
+            dest.writeString(this.employee_avatar_path);
+            dest.writeInt(this.employee_id);
+            dest.writeString(this.employee_name);
+            dest.writeString(this.end_date);
+            dest.writeInt(this.id);
+            dest.writeInt(this.member_id);
+            dest.writeString(this.member_name);
+            dest.writeString(this.member_no);
+            dest.writeString(this.nick_name);
+            dest.writeInt(this.person_id);
+            dest.writeInt(this.price);
+            dest.writeInt(this.real_price);
+            dest.writeString(this.self_avatar_path);
+            dest.writeString(this.start_date);
+            dest.writeInt(this.surplus_count);
+            dest.writeInt(this.time_length);
+        }
+
+        public Data() {
+        }
+
+        protected Data(Parcel in) {
+            this.branch_id = in.readInt();
+            this.count = in.readInt();
+            this.course_category = in.readInt();
+            this.course_type_id = in.readInt();
+            this.course_type_name = in.readString();
+            this.delete_remark = in.readString();
+            this.employee_avatar_path = in.readString();
+            this.employee_id = in.readInt();
+            this.employee_name = in.readString();
+            this.end_date = in.readString();
+            this.id = in.readInt();
+            this.member_id = in.readInt();
+            this.member_name = in.readString();
+            this.member_no = in.readString();
+            this.nick_name = in.readString();
+            this.person_id = in.readInt();
+            this.price = in.readInt();
+            this.real_price = in.readInt();
+            this.self_avatar_path = in.readString();
+            this.start_date = in.readString();
+            this.surplus_count = in.readInt();
+            this.time_length = in.readInt();
+        }
+
+        public static final Creator<Data> CREATOR = new Creator<Data>() {
+            @Override
+            public Data createFromParcel(Parcel source) {
+                return new Data(source);
+            }
+
+            @Override
+            public Data[] newArray(int size) {
+                return new Data[size];
+            }
+        };
     }
 }

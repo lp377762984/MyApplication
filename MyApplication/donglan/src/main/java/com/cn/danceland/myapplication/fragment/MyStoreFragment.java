@@ -113,7 +113,11 @@ public class MyStoreFragment extends BaseFragment {
                     StoreAccount data = result.getData();
                     Glide.with(mActivity).load(data.getImg_url()).into(card_img);
                     address_name.setText(data.getAddress_name());
-                    card_jine.setText("￥"+data.getRemain());
+                    if(data.getRemain() == null || data.getRemain().equals("")){
+                        card_jine.setText("￥ 0");
+                    }else{
+                        card_jine.setText("￥ "+(data.getRemain()+data.getGiving()));
+                    }
 
                 }else{
                     card_jine.setText("￥ 0");

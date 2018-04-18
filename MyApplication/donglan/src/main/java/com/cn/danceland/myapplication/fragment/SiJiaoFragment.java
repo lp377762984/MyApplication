@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -181,7 +182,9 @@ public class SiJiaoFragment extends BaseFragment {
                     return map;
                 }
             };
-
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2000,
+                    2,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
             MyApplication.getHttpQueues().add(jsonObjectRequest);
         }

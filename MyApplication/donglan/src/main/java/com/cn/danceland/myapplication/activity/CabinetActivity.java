@@ -130,12 +130,14 @@ public class CabinetActivity extends Activity {
             TextView cabinet_num = inflate.findViewById(R.id.cabinet_num);
             TextView starttime = inflate.findViewById(R.id.starttime);
             TextView overtime = inflate.findViewById(R.id.overtime);
+            TextView tv_locker_zone = inflate.findViewById(R.id.tv_locker_zone);
 
             cabinet_num.setText("柜号："+list.get(position).getLocker_no());
 
             starttime.setText("开始日期："+TimeUtils.millToDate(list.get(position).getStart_date()));
 
             overtime.setText("结束日期："+TimeUtils.millToDate(list.get(position).getEnd_date()));
+            tv_locker_zone.setText(list.get(position).getLocker_zone_name());
 
 
             return inflate;

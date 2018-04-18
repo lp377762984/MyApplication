@@ -206,6 +206,7 @@ public class SellStoreCardActivity extends Activity{
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
+                    finish();
                 } else {
                     ToastUtils.showToastShort("支付失败");
                 }
