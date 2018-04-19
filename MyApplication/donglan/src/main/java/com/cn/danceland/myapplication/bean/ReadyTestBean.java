@@ -10,20 +10,20 @@ public class ReadyTestBean {
 
         private String address;
         private String avatar_path;
-        private int aware_way;
+        private Integer aware_way;
         private String birthday;
         private String certificate_type;
         private String cname;
         private String company;
-        private int default_branch;
-        private int department_id;
+        private Integer default_branch;
+        private Integer department_id;
         private String emergency_name;
         private String emergency_phone;
-        private int fitness_level;
-        private int follow_level;
-        private int gender;
-        private float height;
-        private int id;
+        private Integer fitness_level;
+        private Integer follow_level;
+        private Integer gender;
+        private Float height;
+        private Integer id;
         private String identity_card;
         private String login_name;
         private String mail;
@@ -33,16 +33,16 @@ public class ReadyTestBean {
         private String nick_name;
         private String password;
         private String phone_no;
-        private int platform;
+        private Integer platform;
         private Date reg_date;
         private String reg_id;
         private String remark;
         private String self_avatar_path;
-        private int sys_role;
-        private int terminal;
+        private Integer sys_role;
+        private Integer terminal;
         private String weichat_no;
-        private int weight;
-        private int zone_code;
+        private Integer weight;
+        private Integer zone_code;
         public void setAddress(String address) {
             this.address = address;
         }

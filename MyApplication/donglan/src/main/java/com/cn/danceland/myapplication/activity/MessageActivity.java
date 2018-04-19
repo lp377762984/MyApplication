@@ -67,10 +67,10 @@ public class MessageActivity extends FragmentActivity {
         im_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pinglunNum = SPUtils.getInt("pinglunNum", 0);
-                dianzanNum = SPUtils.getInt("dianzanNum", 0);
-                fansNum = SPUtils.getInt("fansNum", 0);
-                EventBus.getDefault().post(new StringEvent(pinglunNum + dianzanNum + fansNum + "", 101));
+                SPUtils.setInt("pinglunNum", 0);
+                SPUtils.setInt("dianzanNum", 0);
+                SPUtils.setInt("fansNum", 0);
+                EventBus.getDefault().post(new StringEvent(0 + "", 101));
                 finish();
             }
         });
@@ -88,7 +88,7 @@ public class MessageActivity extends FragmentActivity {
 //        tab3 = findViewById(R.id.tab3);
 //        tab4 = findViewById(R.id.tab4);
         if (pinglunNum + dianzanNum + fansNum> 0) {
-            tablayout.addTab(tablayout.newTab().setText("通知" + "(" + pinglunNum + ")"));
+            tablayout.addTab(tablayout.newTab().setText("通知" + "(" + (pinglunNum + dianzanNum + fansNum) + ")"));
         } else {
             tablayout.addTab(tablayout.newTab().setText("通知"));
         }
@@ -114,7 +114,7 @@ public class MessageActivity extends FragmentActivity {
 //        }
 
         showFragment("1");
-        SPUtils.setInt("pinglunNum", 0);
+        //SPUtils.setInt("pinglunNum", 0);
         tablayout.getTabAt(0).select();
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -124,7 +124,7 @@ public class MessageActivity extends FragmentActivity {
                     SPUtils.setInt("pinglunNum", 0);
                     SPUtils.setInt("dianzanNum", 0);
                     SPUtils.setInt("fansNum", 0);
-                    showFragment("3");//评论
+                    showFragment("1");//评论
                 }
 //                else if (currentTabIndex == 1) {
 //                    SPUtils.setInt("dianzanNum", 0);
