@@ -87,22 +87,22 @@ public class MessageActivity extends FragmentActivity {
 //        tab2 = findViewById(R.id.tab2);
 //        tab3 = findViewById(R.id.tab3);
 //        tab4 = findViewById(R.id.tab4);
-        if (pinglunNum > 0) {
-            tablayout.addTab(tablayout.newTab().setText("评论" + "(" + pinglunNum + ")"));
+        if (pinglunNum + dianzanNum + fansNum> 0) {
+            tablayout.addTab(tablayout.newTab().setText("通知" + "(" + pinglunNum + ")"));
         } else {
-            tablayout.addTab(tablayout.newTab().setText("评论"));
+            tablayout.addTab(tablayout.newTab().setText("通知"));
         }
-        if (dianzanNum > 0) {
-            tablayout.addTab(tablayout.newTab().setText("点赞" + "(" + dianzanNum + ")"));
-        } else {
-            tablayout.addTab(tablayout.newTab().setText("点赞"));
-        }
-        if (fansNum > 0) {
-            tablayout.addTab(tablayout.newTab().setText("粉丝" + "(" + fansNum + ")"));
-        } else {
-            tablayout.addTab(tablayout.newTab().setText("粉丝"));
-        }
-        tablayout.addTab(tablayout.newTab().setText("消息"));
+//        if (dianzanNum > 0) {
+//            tablayout.addTab(tablayout.newTab().setText("点赞" + "(" + dianzanNum + ")"));
+//        } else {
+//            tablayout.addTab(tablayout.newTab().setText("点赞"));
+//        }
+//        if (fansNum > 0) {
+//            tablayout.addTab(tablayout.newTab().setText("粉丝" + "(" + fansNum + ")"));
+//        } else {
+//            tablayout.addTab(tablayout.newTab().setText("粉丝"));
+//        }
+        tablayout.addTab(tablayout.newTab().setText("系统消息"));
      //   tablayout.addTab(tablayout.newTab().setText("私信"));
 
 //        if(pinglunNum>0){
@@ -122,14 +122,18 @@ public class MessageActivity extends FragmentActivity {
                 currentTabIndex = tab.getPosition();
                 if (currentTabIndex == 0) {
                     SPUtils.setInt("pinglunNum", 0);
-                    showFragment("3");//评论
-                } else if (currentTabIndex == 1) {
                     SPUtils.setInt("dianzanNum", 0);
-                    showFragment("1");//点赞
-                } else if (currentTabIndex == 2) {
                     SPUtils.setInt("fansNum", 0);
-                    showFragment("2");//关注
-                } else if (currentTabIndex == 3) {
+                    showFragment("3");//评论
+                }
+//                else if (currentTabIndex == 1) {
+//                    SPUtils.setInt("dianzanNum", 0);
+//                    showFragment("1");//点赞
+//                } else if (currentTabIndex == 2) {
+//                    SPUtils.setInt("fansNum", 0);
+//                    showFragment("2");//关注
+//                }
+                else if (currentTabIndex == 1) {
                     showFragment("4");
                     //ToastUtils.showToastShort("没有系统消息");
                 }

@@ -100,26 +100,35 @@ public class MessageReceiver extends PushMessageReceiver {
         String command = message.getCommand();
 
         List<String> arguments = message.getCommandArguments();
-        String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
-        if (!TextUtils.isEmpty(cmdArg1)) {
-            if (!TextUtils.equals(cmdArg1, SPUtils.getString(Constants.MY_MIPUSH_ID, ""))) {
-                SPUtils.setString(Constants.MY_MIPUSH_ID, cmdArg1);
+        //String cmdArg1 = ((arguments != null && arguments.size() > 0) ? arguments.get(0) : null);
 
-                //     LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
+        if (MiPushClient.COMMAND_REGISTER.equals(command)) {
+            if (message.getResultCode() == ErrorCode.SUCCESS) {
+                String mRegID = arguments.get(0);
+                SPUtils.setString(Constants.MY_MIPUSH_ID, mRegID);
 
-
+                LogUtil.i("RAGID=" + SPUtils.getString(Constants.MY_MIPUSH_ID, ""));
             }
         }
 
-           LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
+//        if (!TextUtils.isEmpty(cmdArg1)) {
+//            if (!TextUtils.equals(cmdArg1, SPUtils.getString(Constants.MY_MIPUSH_ID, ""))) {
+//
+//
+//
+//            }
+//        }
+
+           //LogUtil.i("RAGID="+SPUtils.getString(Constants.MY_MIPUSH_ID,""));
 
 
         String cmdArg2 = ((arguments != null && arguments.size() > 1) ? arguments.get(1) : null);
-        if (MiPushClient.COMMAND_REGISTER.equals(command)) {
-            if (message.getResultCode() == ErrorCode.SUCCESS) {
-            } else {
-            }
-        } else if (MiPushClient.COMMAND_SET_ALIAS.equals(command)) {
+//        if (MiPushClient.COMMAND_REGISTER.equals(command)) {
+//            if (message.getResultCode() == ErrorCode.SUCCESS) {
+//            } else {
+//            }
+//        } else
+            if (MiPushClient.COMMAND_SET_ALIAS.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
             } else {
             }

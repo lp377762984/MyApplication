@@ -41,7 +41,7 @@ public class CommentFragment extends BaseFragment {
         type = arguments.getString("type", null);
         //3表示的是评论类型的推送消息
         messageList = new ArrayList<MiMessage>();
-        messageList = dbData.getMessageList(type);
+        messageList = dbData.getMessageList();
         if(messageList!=null&&messageList.size()>0){
             tv_no.setVisibility(View.GONE);
             lv_message.setAdapter(new MessageAdapter(messageList,mActivity));
