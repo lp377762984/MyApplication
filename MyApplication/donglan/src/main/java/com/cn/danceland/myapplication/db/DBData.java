@@ -178,5 +178,13 @@ public class DBData {
         }
         miMessageDao.insert(d);
     }
+    //删除记录
+
+    public void deleteMessageD(){
+        if(miMessageDao==null){
+            miMessageDao = MyApplication.getInstance().getMessageDaoSession().getMiMessageDao();
+        }
+        miMessageDao.deleteAll();
+    }
 
 }
