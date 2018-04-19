@@ -46,6 +46,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -139,8 +140,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     .commit();
         }
         //   getFragmentManager().findFragmentByTag()
-
-        if (SPUtils.getBoolean(Constants.UPDATE_MIPUSH_CONFIG,false)){
+        LogUtil.i(MiPushClient.getRegId(this));
+        if (SPUtils.getBoolean(Constants.UPDATE_MIPUSH_CONFIG, false)) {
             setMipushId();
         }
     }
@@ -243,12 +244,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
-                SPUtils.setString("jingdu",jingdu+"");
-                SPUtils.setString("weidu",weidu+"");
+                SPUtils.setString("jingdu", jingdu + "");
+                SPUtils.setString("weidu", weidu + "");
                 if (shopListFragment != null) {
-                    Bundle bundle=new Bundle();
-                    bundle.putString("jingdu",jingdu+"");
-                    bundle.putString("weidu",weidu+"");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("jingdu", jingdu + "");
+                    bundle.putString("weidu", weidu + "");
                     shopListFragment.setArguments(bundle);
                 }
             } else {
@@ -286,7 +287,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                trx.remove(fragments[1]);
 //                trx.add(R.id.fragment_container, fragments[1], FRAGMENT_TAG[1]);
 //            }
-          //  trx.replace(R.id.fragment_container, shopFragment);
+            //  trx.replace(R.id.fragment_container, shopFragment);
             trx.hide(shopListFragment);
             trx.add(R.id.fragment_container, shopFragment);
             trx.commit();
@@ -472,6 +473,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
+
     /**
      * 设置mipusid
      */
@@ -484,7 +486,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
-                    SPUtils.setBoolean(Constants.UPDATE_MIPUSH_CONFIG,false);
+                    SPUtils.setBoolean(Constants.UPDATE_MIPUSH_CONFIG, false);
 
                     LogUtil.i("设置mipush成功");
                 } else {
@@ -518,5 +520,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 return map;
             }
         };
-            MyApplication.getHttpQueues().add(request);
-}}
+        MyApplication.getHttpQueues().add(request);
+    }
+}
