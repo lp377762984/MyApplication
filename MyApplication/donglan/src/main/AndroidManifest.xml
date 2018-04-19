@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.cn.danceland.myapplication"
 
     android:versionCode="3"
@@ -445,9 +446,9 @@
         <activity android:name=".activity.EditProActivity"
             android:screenOrientation="portrait"/>
 
-
         <receiver
             android:name=".Receiver.MessageReceiver"
+            tools:ignore="ExportedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
@@ -459,6 +460,7 @@
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
         </receiver>
+
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"
@@ -474,6 +476,7 @@
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
+            tools:ignore="ExportedReceiver"
             android:exported="true" />
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"

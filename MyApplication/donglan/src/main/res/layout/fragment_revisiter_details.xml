@@ -485,7 +485,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="身高："
+                    android:text="身高（cm）："
                     android:textColor="#333333" />
 
                 <TextView
@@ -515,7 +515,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="体重："
+                    android:text="体重（kg）："
                     android:textColor="#333333" />
 
                 <TextView

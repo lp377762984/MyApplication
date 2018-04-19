@@ -13,7 +13,7 @@ public class Constants extends EaseConstant {
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.115:8003/";//
-    //public static final String HOST = " http://192.168.1.118:8003/";//
+    //public static final String HOST = " http://192.168.1.119:8003/";//
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式
 
@@ -74,6 +74,7 @@ public class Constants extends EaseConstant {
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
     public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
+    public static final String UPDATE_MIPUSH_CONFIG =  "update_mipush_config";//更新mipush
 
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态

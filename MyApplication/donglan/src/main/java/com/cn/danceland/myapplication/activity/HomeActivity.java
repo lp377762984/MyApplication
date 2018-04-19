@@ -17,11 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
@@ -35,12 +41,15 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
+import com.google.gson.Gson;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseUI;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -131,6 +140,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
         //   getFragmentManager().findFragmentByTag()
 
+        if (SPUtils.getBoolean(Constants.UPDATE_MIPUSH_CONFIG,false)){
+            setMipushId();
+        }
     }
 
     @TargetApi(23)
@@ -274,7 +286,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                trx.remove(fragments[1]);
 //                trx.add(R.id.fragment_container, fragments[1], FRAGMENT_TAG[1]);
 //            }
-            trx.replace(R.id.fragment_container, shopFragment);
+          //  trx.replace(R.id.fragment_container, shopFragment);
+            trx.hide(shopListFragment);
+            trx.add(R.id.fragment_container, shopFragment);
             trx.commit();
             //判断当前页
 //            if (currentTabIndex != index) {
@@ -458,5 +472,51 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
+    /**
+     * 设置mipusid
+     */
+    private void setMipushId() {
 
-}
+        StringRequest request = new StringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //   LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setBoolean(Constants.UPDATE_MIPUSH_CONFIG,false);
+
+                    LogUtil.i("设置mipush成功");
+                } else {
+                    LogUtil.i("设置mipush失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i("设置mipush失败" + volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
+                map.put("terminal", "1");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+
+                return map;
+            }
+        };
+            MyApplication.getHttpQueues().add(request);
+}}
