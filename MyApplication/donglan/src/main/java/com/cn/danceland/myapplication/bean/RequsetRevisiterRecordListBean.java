@@ -129,6 +129,7 @@ public class RequsetRevisiterRecordListBean {
             private int length;
             private String type;
             private String content;
+            private String result;
             private int auth;
 
             @Override
@@ -145,8 +146,17 @@ public class RequsetRevisiterRecordListBean {
                         ", length=" + length +
                         ", type='" + type + '\'' +
                         ", content='" + content + '\'' +
+                        ", result='" + result + '\'' +
                         ", auth=" + auth +
                         '}';
+            }
+
+            public String getResult() {
+                return result;
+            }
+
+            public void setResult(String result) {
+                this.result = result;
             }
 
             public String getId() {

@@ -794,8 +794,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setCharge_mode(CardsInfo.getCharge_mode() + "");
                     extendsParams.setType_name(CardsInfo.getName());
                     newOrderInfoBean.setPay_way(pay_way + "");
-                    newOrderInfoBean.setPrice(pay_price + "");
-                    newOrderInfoBean.setReceive(CardsInfo.getPrice() + "");
+                    newOrderInfoBean.setReceive(pay_price + "");
+                    newOrderInfoBean.setPrice(CardsInfo.getPrice() + "");
                     //佳楠专用参数
                     NewOrderInfoBean.Protocol_Params protocol_params = new NewOrderInfoBean.Protocol_Params();
                     protocol_params.admin_emp = consultantInfo.getBranch_name();

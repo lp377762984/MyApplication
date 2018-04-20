@@ -60,6 +60,8 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
     private RequsetBean requsetBean = new RequsetBean();
     private String time;
     PotentialInfo info;
+    private TextView tv_content;
+    int codetype = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,17 +74,19 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
         Bundle bundle = getIntent().getExtras();
         time = bundle.getString("time");
         info = (PotentialInfo) bundle.getSerializable("info");
-        requsetBean.member_id =  bundle.getString("id");
+        requsetBean.member_id = bundle.getString("id");
         requsetBean.length = time;
         requsetBean.auth = bundle.getString("auth");
-        requsetBean.member_name=bundle.getString("member_name");
-        requsetBean.member_no=bundle.getString("member_no");
+        requsetBean.member_name = bundle.getString("member_name");
+        requsetBean.member_no = bundle.getString("member_no");
         listPopup = new ListPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(R.id.btn_commit).setOnClickListener(this);
         tv_type = findViewById(R.id.tv_type);
         tv_type.setOnClickListener(this);
         et_content = findViewById(R.id.et_content);
+        tv_content = findViewById(R.id.tv_content);
+        tv_content.setOnClickListener(this);
     }
 
     @Override
@@ -100,7 +104,12 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                     ToastUtils.showToastShort("请选择回访方式");
                     return;
                 }
-                requsetBean.content = et_content.getText().toString().trim();
+
+                if (et_content.getText().toString().length()>200){
+                    ToastUtils.showToastShort("输入文字数量:"+et_content.getText().toString().length()+"，超过上限");
+                    return;
+                }
+                requsetBean.result = et_content.getText().toString();
                 Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 requsetBean.branch_id = data.getPerson().getDefault_branch();
 
@@ -113,7 +122,13 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 }
                 break;
             case R.id.tv_type://选择回访方式
-                findParams(9);
+
+                codetype = 9;
+                findParams(codetype);
+                break;
+            case R.id.tv_content://选择回访内容
+                codetype = 17;
+                findContentParams(codetype);
                 break;
             default:
                 break;
@@ -129,6 +144,55 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
         public String length;
         public String auth;
         public String member_no;
+        public String result;//回访结果
+    }
+
+    class StrBean {
+        public String branch_id;
+        public String type_code;
+    }
+
+
+    private void findContentParams(final int codetype) {
+        StrBean strBean = new StrBean();
+        strBean.type_code = codetype + "";
+        Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        strBean.branch_id = data.getPerson().getDefault_branch();
+        //      LogUtil.i( gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+
+                ParamInfoBean paramInfoBean = gson.fromJson(jsonObject.toString(), ParamInfoBean.class);
+
+                if (paramInfoBean.getSuccess()) {
+
+                    mParamInfoList = paramInfoBean.getData();
+
+                    listPopup.showPopupWindow();
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+
+                return map;
+            }
+        };
+
+        MyApplication.getHttpQueues().add(request);
+
+
     }
 
     /**
@@ -149,7 +213,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
                 if (requestOrderBean.isSuccess()) {
                     ToastUtils.showToastShort("回访记录添加成功");
-                    EventBus.getDefault().post(new IntEvent(0,210));//通知刷新回记录页面
+                    EventBus.getDefault().post(new IntEvent(0, 210));//通知刷新回记录页面
                     finish();
                 } else {
                     ToastUtils.showToastShort("回访记录添加失败");
@@ -289,10 +353,16 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 vh.mTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (codetype == 9) {
+                            tv_type.setText(mParamInfoList.get(position).getData_value());
 
-                        tv_type.setText(mParamInfoList.get(position).getData_value());
+                            requsetBean.type = mParamInfoList.get(position).getData_value();
+                        }
+                        if (codetype==17){
+                            tv_content.setText(mParamInfoList.get(position).getData_value());
+                            requsetBean.content=mParamInfoList.get(position).getData_value();
+                        }
 
-                        requsetBean.type = mParamInfoList.get(position).getData_value();
                         listPopup.dismiss();
                     }
                 });

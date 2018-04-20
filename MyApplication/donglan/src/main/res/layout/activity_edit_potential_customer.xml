@@ -285,6 +285,7 @@
                     android:hint="请输入国籍"
                     android:textColorHint="#999999" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -432,17 +433,16 @@
                     android:textColor="#333333" />
 
 
-
                 <TextView
                     android:id="@+id/tv_birthday"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="未选择"
 
-                    android:text="未选择" />
+                    android:textColor="#333" />
             </LinearLayout>
 
             <View
@@ -472,8 +472,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入身高"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -505,8 +505,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入体重"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -515,6 +515,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/line_bg" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -522,64 +523,75 @@
                 android:background="@color/line_bg" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="潜客教练："
-                    android:textColor="#333333" />
+                android:id="@+id/ll_admin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_teach_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="未选择"
-                    android:textColor="#333" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#fff"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="潜客教练："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_teach_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="未选择"
+                        android:textColor="#333" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/line_bg" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+
+                    android:layout_height="40dp"
+                    android:background="#fff"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:text="潜客会籍："
+                        android:textColor="#333333" />
+
+                    <TextView
+                        android:id="@+id/tv_admin_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="未选择"
+
+                        android:textColor="#333" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/line_bg" />
+
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-            <LinearLayout
-                android:layout_width="match_parent"
-
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="潜客会籍："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_admin_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="未选择"
-
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
 
             <LinearLayout
                 android:layout_width="match_parent"

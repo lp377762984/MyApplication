@@ -105,7 +105,7 @@ public class RevisitListFragment extends BaseFragment {
             case 162://最近维护
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
-                StrBean.Order order=new StrBean.Order();
+                StrBean.Order order = new StrBean.Order();
                 order.setLast_time("desc");//最近维护
                 strBean.setOrder(order);
                 try {
@@ -118,7 +118,7 @@ public class RevisitListFragment extends BaseFragment {
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order1=new StrBean.Order();
+                StrBean.Order order1 = new StrBean.Order();
                 order1.setLast_time("asc");
                 strBean.setOrder(order1);
                 try {
@@ -131,7 +131,7 @@ public class RevisitListFragment extends BaseFragment {
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order2=new StrBean.Order();
+                StrBean.Order order2 = new StrBean.Order();
                 order2.setLast_time("desc");
                 order2.setFitness_level("desc");
                 strBean.setOrder(order2);
@@ -146,7 +146,7 @@ public class RevisitListFragment extends BaseFragment {
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order3=new StrBean.Order();
+                StrBean.Order order3 = new StrBean.Order();
                 order3.setLast_time("desc");//最近维护
                 order3.setFollow_level("desc");
                 strBean.setOrder(order3);
@@ -168,8 +168,8 @@ public class RevisitListFragment extends BaseFragment {
     public View initViews() {
         auth = getArguments().getString("auth");
         View v = View.inflate(mActivity, R.layout.fragment_revist_list, null);
-        Button btn_add=v.findViewById(R.id.btn_add);
-        if (TextUtils.equals(auth,"2")){//如果是会员隐藏添加按钮
+        Button btn_add = v.findViewById(R.id.btn_add);
+        if (TextUtils.equals(auth, "2")) {//如果是会员隐藏添加按钮
             btn_add.setVisibility(View.GONE);
         }
         v.findViewById(R.id.btn_add).setOnClickListener(this);
@@ -215,7 +215,7 @@ public class RevisitListFragment extends BaseFragment {
         strBean = new StrBean(auth);
         mCurrentPage = 1;
         strBean.setPage(mCurrentPage - 1 + "");
-        StrBean.Order order=new StrBean.Order();
+        StrBean.Order order = new StrBean.Order();
         order.setLast_time("desc");//最近维护
         strBean.setOrder(order);
 
@@ -435,10 +435,10 @@ public class RevisitListFragment extends BaseFragment {
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
-            if (TextUtils.isEmpty(datalist.get(position).getNick_name())){
+            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
                 vh.tv_name.setText(datalist.get(position).getCname());
-            }else {
-                vh.tv_name.setText(datalist.get(position).getCname()+"("+datalist.get(position).getNick_name()+")");
+            } else {
+                vh.tv_name.setText(datalist.get(position).getCname() + "(" + datalist.get(position).getNick_name() + ")");
             }
 
             if (TextUtils.equals(datalist.get(position).getGender(), "1")) {
@@ -453,7 +453,7 @@ public class RevisitListFragment extends BaseFragment {
                 public void onClick(View view) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("info", datalist.get(position));
-                    startActivity(new Intent(mActivity, PotentialDetailsActivity.class).putExtra("id", datalist.get(position).getId()).putExtra("auth",auth).putExtras(bundle));
+                    startActivity(new Intent(mActivity, PotentialDetailsActivity.class).putExtra("id", datalist.get(position).getId()).putExtra("auth", auth).putExtras(bundle));
                 }
             });
             vh.iv_callphone.setOnClickListener(new View.OnClickListener() {
@@ -467,25 +467,25 @@ public class RevisitListFragment extends BaseFragment {
             vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String userName =datalist.get(position).getNick_name();
+                    String userName = datalist.get(position).getNick_name();
                     String userPic = datalist.get(position).getSelf_avatar_path();
 
                     String hxIdFrom = datalist.get(position).getMember_no();
-                    LogUtil.i(userName + userPic+hxIdFrom);
+                    LogUtil.i(userName + userPic + hxIdFrom);
                     EaseUser easeUser = new EaseUser(hxIdFrom);
                     easeUser.setAvatar(userPic);
                     easeUser.setNick(userName);
 
                     List<EaseUser> users = new ArrayList<EaseUser>();
                     users.add(easeUser);
-                    if (easeUser!=null){
+                    if (easeUser != null) {
                         DemoHelper.getInstance().updateContactList(users);
-                    }else {
-                       LogUtil.i("USER IS NULL");
+                    } else {
+                        LogUtil.i("USER IS NULL");
 
                     }
 
-                    startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId",datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
+                    startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
                 }
             });
 
@@ -582,7 +582,7 @@ public class RevisitListFragment extends BaseFragment {
             public ImageView iv_sex;
             public TextView tv_lasttime;
             public LinearLayout ll_item;
-            public ImageView      iv_hx_msg;
+            public ImageView iv_hx_msg;
         }
 
     }
@@ -606,7 +606,7 @@ public class RevisitListFragment extends BaseFragment {
      */
     public void find_potential_list(final String s) throws JSONException {
 
-
+        LogUtil.i(s.toString());
         JSONObject jsonObject = new JSONObject(s.toString());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_POTENTIAL_LIST, jsonObject, new Response.Listener<JSONObject>() {

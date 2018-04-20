@@ -115,7 +115,11 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                     ToastUtils.showToastShort("请选择待办类型");
                     return;
                 }
-                requsetBean.content = et_content.getText().toString().trim();
+                if (et_content.getText().toString().length()>200){
+                    ToastUtils.showToastShort("输入文字数量:"+et_content.getText().toString().length()+"，超过上限");
+                    return;
+                }
+                requsetBean.content = et_content.getText().toString();
                 if (!TextUtils.equals(tv_date.getText().toString(), "请选择日期") && !TextUtils.equals(tv_time.getText().toString(), "请选择时间")) {
                     requsetBean.warn_time = tv_date.getText().toString() + " " + tv_time.getText().toString();
 

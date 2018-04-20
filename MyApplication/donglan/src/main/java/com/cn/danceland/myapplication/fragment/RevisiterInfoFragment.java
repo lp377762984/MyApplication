@@ -12,6 +12,7 @@ import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -96,6 +97,10 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private TextView tv_teach_name;
     private TextView tv_admin_name;
     private TextView tv_guest_recom;
+    private TextView tv_final_teach_name;
+    private TextView tv_final_admin_name;
+    private LinearLayout ll_final_admin;
+    private LinearLayout ll_admin;
 
     public void setview() {
         if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
@@ -194,13 +199,20 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_emergency_name.setText(info.getEmergency_name());
         tv_emergency_phone.setText(info.getEmergency_name());
         tv_birthday.setText(info.birthday);
-        tv_height .setText(info.getHeight());
-        tv_weight .setText(info.getWeight());
+        tv_height.setText(info.getHeight());
+        tv_weight.setText(info.getWeight());
 
-        tv_branch_name .setText(info.getBranch_name());
-        tv_teach_name .setText(info.getTeach_name());
+        tv_branch_name.setText(info.getBranch_name());
+        tv_teach_name.setText(info.getTeach_name());
         tv_admin_name.setText(info.getAdmin_name());
-        tv_guest_recom .setText(info.getGuest_recom());
+        tv_guest_recom.setText(info.getGuest_recom());
+
+        tv_final_admin_name.setText(info.getFinal_admin_name());
+        tv_final_teach_name.setText(info.getFinal_teach_name());
+        if (TextUtils.equals(info.getAuth(), "2")) {
+        ll_final_admin.setVisibility(View.VISIBLE);
+            ll_admin.setVisibility(View.GONE);
+        }
 
 
     }
@@ -255,6 +267,10 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_admin_name = v.findViewById(R.id.tv_admin_name);
         tv_guest_recom = v.findViewById(R.id.tv_guest_recom);
 
+        tv_final_teach_name = v.findViewById(R.id.tv_final_teach_name);
+        tv_final_admin_name = v.findViewById(R.id.tv_final_admin_name);
+        ll_final_admin = v.findViewById(R.id.ll_final_admin);
+        ll_admin = v.findViewById(R.id.ll_admin);
 
         v.findViewById(R.id.iv_more).setOnClickListener(this);
         return v;

@@ -203,7 +203,7 @@ public class DemoHelper {
          */
      //   options.setFCMNumber("921300338324");
         //you need apply & set your own id if you want to use Mi push notification
-        options.setMipushConfig("2882303761517681383", "5681768120383");
+     //   options.setMipushConfig("2882303761517681383", "5681768120383");
 
         //set custom servers, commonly used in private deployment
         if (demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
