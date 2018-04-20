@@ -171,8 +171,8 @@ public class RevisitListFragment1 extends BaseFragment {
     public View initViews() {
         auth = getArguments().getString("auth");
         View v = View.inflate(mActivity, R.layout.fragment_revist_list, null);
-        Button btn_add=v.findViewById(R.id.btn_add);
-        if (TextUtils.equals(auth,"2")){//如果是会员隐藏添加按钮
+        Button btn_add = v.findViewById(R.id.btn_add);
+        if (TextUtils.equals(auth, "2")) {//如果是会员隐藏添加按钮
             btn_add.setVisibility(View.GONE);
         }
         v.findViewById(R.id.btn_add).setOnClickListener(this);
@@ -215,14 +215,14 @@ public class RevisitListFragment1 extends BaseFragment {
 
     @Override
     public void initDta() {
-       // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.MONTH, -1);//减一个月
         Date m = c.getTime();
         String date = format.format(m);
-       // LogUtil.i("过去一个月："+date);
+        // LogUtil.i("过去一个月："+date);
 
         strBean = new StrBean(auth);
         mCurrentPage = 1;
@@ -455,10 +455,10 @@ public class RevisitListFragment1 extends BaseFragment {
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
-            if (TextUtils.isEmpty(datalist.get(position).getNick_name())){
+            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
                 vh.tv_name.setText(datalist.get(position).getCname());
-            }else {
-                vh.tv_name.setText(datalist.get(position).getCname()+"("+datalist.get(position).getNick_name()+")");
+            } else {
+                vh.tv_name.setText(datalist.get(position).getCname() + "(" + datalist.get(position).getNick_name() + ")");
             }
             if (TextUtils.equals(datalist.get(position).getGender(), "1")) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex1);
@@ -485,20 +485,32 @@ public class RevisitListFragment1 extends BaseFragment {
             vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String userName =datalist.get(position).getNick_name();
+                    String userName = datalist.get(position).getNick_name();
                     String userPic = datalist.get(position).getSelf_avatar_path();
-                    LogUtil.i(userName + userPic);
-                    String hxIdFrom = datalist.get(position).getMember_no();
+                    String hxIdFrom;
+                    if (Constants.HX_DEV_CONFIG) {
+                        hxIdFrom = "dev" + datalist.get(position).getMember_no();
+                    } else {
+                        hxIdFrom = datalist.get(position).getMember_no();
+                    }
+
+                    LogUtil.i(userName + userPic + hxIdFrom);
                     EaseUser easeUser = new EaseUser(hxIdFrom);
                     easeUser.setAvatar(userPic);
-                    easeUser.setNickname(userName);
+                    easeUser.setNick(userName);
 
                     List<EaseUser> users = new ArrayList<EaseUser>();
                     users.add(easeUser);
+                    if (easeUser != null) {
+                        DemoHelper.getInstance().updateContactList(users);
+                    } else {
+                        LogUtil.i("USER IS NULL");
 
-                    DemoHelper.getInstance().updateContactList(users);
+                    }
 
-                    startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId",datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
+                    startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+
+
                 }
             });
             return convertView;

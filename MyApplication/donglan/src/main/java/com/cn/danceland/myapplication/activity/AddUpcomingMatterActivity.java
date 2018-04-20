@@ -33,6 +33,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,6 +121,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                     return;
                 }
                 requsetBean.content = et_content.getText().toString();
+
                 if (!TextUtils.equals(tv_date.getText().toString(), "请选择日期") && !TextUtils.equals(tv_time.getText().toString(), "请选择时间")) {
                     requsetBean.warn_time = tv_date.getText().toString() + " " + tv_time.getText().toString();
 
@@ -136,16 +138,34 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                 findParams(customer_type);
                 break;
             case R.id.tv_time:
-                show_select_time_dialog();
+
+              //  show_select_time_dialog();
+
                 break;
             case R.id.tv_date:
-                show_select_date_dialog();
+                showDate();
+             //   show_select_date_dialog();
                 break;
             default:
                 break;
         }
     }
 
+
+    private void showDate(){
+
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this,"请选择生日");
+        customDatePicker.showWindow();
+        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+            @Override
+            public void onClick() {
+                String dateString = customDatePicker.getTimeString();
+                tv_date.setText(dateString);
+                requsetBean.warn_time=dateString;
+            }
+        });
+
+    }
     private void show_select_time_dialog() {
         TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override

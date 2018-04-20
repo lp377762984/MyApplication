@@ -3,7 +3,10 @@ package com.cn.danceland.myapplication;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Process;
+import android.os.StrictMode;
+import android.support.annotation.RequiresApi;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -55,6 +58,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -80,6 +84,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
      //   EMClient.getInstance().setDebugMode(true);
 
         DemoHelper.getInstance().init(applicationContext);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
     }
 
 

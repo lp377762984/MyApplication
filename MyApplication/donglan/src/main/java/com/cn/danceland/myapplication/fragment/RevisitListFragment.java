@@ -469,8 +469,13 @@ public class RevisitListFragment extends BaseFragment {
                 public void onClick(View view) {
                     String userName = datalist.get(position).getNick_name();
                     String userPic = datalist.get(position).getSelf_avatar_path();
+                    String hxIdFrom ;
+                    if (Constants.HX_DEV_CONFIG) {
+                        hxIdFrom = "dev"+datalist.get(position).getMember_no();
+                    }else {
+                        hxIdFrom = datalist.get(position).getMember_no();
+                    }
 
-                    String hxIdFrom = datalist.get(position).getMember_no();
                     LogUtil.i(userName + userPic + hxIdFrom);
                     EaseUser easeUser = new EaseUser(hxIdFrom);
                     easeUser.setAvatar(userPic);
@@ -485,8 +490,10 @@ public class RevisitListFragment extends BaseFragment {
 
                     }
 
-                    startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", datalist.get(position).getMember_no()).putExtra("chatType", EMMessage.ChatType.Chat));
-                }
+                        startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+
+
+                               }
             });
 
             return convertView;
