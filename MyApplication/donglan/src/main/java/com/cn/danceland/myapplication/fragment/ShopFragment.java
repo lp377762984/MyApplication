@@ -788,10 +788,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 34://我的体测
 
-                        //startActivity(new Intent(mActivity, FitnessTestActivity.class));
-                        Intent intent5 = new Intent(mActivity, AddFriendsActivity.class);
-                        intent5.putExtra("from", "体测");
-                        startActivity(intent5);
+                        startActivity(new Intent(mActivity, FitnessTestActivity.class));
 
                         break;
                     default:
