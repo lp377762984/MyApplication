@@ -204,6 +204,10 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         et_height.setText(info.getHeight());
         et_weight.setText(info.getWeight());
 
+        if (TextUtils.equals(info.getAuth(),"2")){
+            findViewById(R.id. ll_admin).setVisibility(View.GONE    );
+        }
+
     }
 
 
@@ -275,6 +279,8 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         tv_admin_name = findViewById(R.id.tv_admin_name);
         tv_admin_name.setOnClickListener(this);
         et_nationality= findViewById(R.id.et_nationality);
+
+
 
         inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect,null);
         lp_year = inflate1.findViewById(R.id.lp_year);

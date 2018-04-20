@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -91,7 +93,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
     private void initData() {
         getDate();
-       // LogUtil.i(CardsInfo.getBranch_id());
+        // LogUtil.i(CardsInfo.getBranch_id());
         findConsultant(CardsInfo.getBranch_id());
     }
 
@@ -183,6 +185,32 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 }
             }
         });
+
+
+        RadioGroup radioGroup = findViewById(R.id.rg_who);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                switch (i) {
+
+                    case R.id.rbtn_me:
+
+                        isme = true;
+
+
+                        break;
+                    case R.id.rbtn_other:
+                        isme = false;
+
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+
+
         cb_dingjin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -451,8 +479,12 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 //                    }
 //                    bundle.putString("startDate", startDate);
 //                }
+                if (isme) {
+                    bundle.putInt("product_type", 1);
+                }else {
+                    bundle.putInt("product_type", 2);
+                }
 
-                bundle.putInt("product_type", 1);
                 startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
                 finish();
                 break;

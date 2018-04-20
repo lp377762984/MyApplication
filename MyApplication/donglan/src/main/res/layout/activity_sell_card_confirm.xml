@@ -41,8 +41,8 @@
         android:orientation="horizontal">
 
         <com.cn.danceland.myapplication.view.XCRoundRectImageView
-            android:layout_width="220dp"
             android:id="@+id/iv_card"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
@@ -128,13 +128,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-       <!--         <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="售价:"
-                    android:textColor="#333"
-                    android:textSize="16sp" />-->
+                <!--         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginTop="5dp"
+                             android:text="售价:"
+                             android:textColor="#333"
+                             android:textSize="16sp" />-->
 
                 <TextView
                     android:id="@+id/tv_price"
@@ -156,9 +156,9 @@
                 android:background="@drawable/text_sms_bg"
                 android:gravity="center"
                 android:text="立即购买"
-                android:visibility="gone"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </LinearLayout>
@@ -259,14 +259,44 @@
 
         </android.support.v7.widget.CardView>-->
 
-   <!-- <RadioGroup
+    <!-- <RadioGroup
+         android:id="@+id/rg_who"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="30dp"
+         android:layout_marginRight="30dp"
+         android:gravity="center"
+         android:visibility=""
+         android:orientation="horizontal">
+
+         <RadioButton
+             android:id="@+id/rbtn_me"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_weight="1"
+             android:checked="true"
+             android:text="为自己购卡"
+             android:textColor="#333333" />
+
+         <RadioButton
+             android:id="@+id/rbtn_other"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:layout_weight="1"
+             android:text="为好友购卡"
+             android:textColor="#333333" />
+     </RadioGroup>-->
+
+    <RadioGroup
         android:id="@+id/rg_who"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+
+        android:background="#fff"
         android:gravity="center"
-        android:visibility=""
         android:orientation="horizontal">
 
         <RadioButton
@@ -274,9 +304,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_radiobtn"
+            android:button="@null"
             android:checked="true"
-            android:text="为自己购卡"
+            android:gravity="center"
+            android:text="购卡"
             android:textColor="#333333" />
 
         <RadioButton
@@ -284,35 +318,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="为好友购卡"
+            android:background="@drawable/bg_radiobtn"
+            android:button="@null"
+            android:gravity="center"
+            android:text="购买定金"
             android:textColor="#333333" />
-    </RadioGroup>-->
+    </RadioGroup>
 
 
     <CheckBox
-        android:visibility="gone"
         android:id="@+id/cb_forother"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:text="为好友购卡"
         android:textColor="#333333"
-        android:text="为好友购卡" />
+        android:visibility="gone" />
 
     <CheckBox
-        android:visibility="gone"
         android:id="@+id/cb_dingjin"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:text="预付定金"
         android:textColor="#333333"
-        android:text="预付定金" />
+        android:visibility="gone" />
 
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_select_counselor"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -324,10 +362,10 @@
         android:gravity="center_vertical"
         android:paddingLeft="20dp"
         android:text="*请选择您的会籍顾问"
-        android:textColor="#666666" />
+        android:textColor="#666666"
+        android:visibility="gone" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_select_date"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -338,9 +376,10 @@
         android:background="@drawable/edit_bg_phone"
         android:gravity="center_vertical"
         android:paddingLeft="20dp"
-
         android:text="*请选开卡日期"
-        android:textColor="#666666" />
+
+        android:textColor="#666666"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/et_name"
@@ -386,20 +425,52 @@
             android:src="@drawable/img_phonebook" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_commit"
-        style="@style/BtnCommitStyle"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="30dp"
-        android:text="购买" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="会员须知"
+        android:textColor="#333"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/color_dl_yellow" />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:textSize="12sp"
+    android:textColor="#333"
+    android:text="都倒了柔顺剂的房价松动甲方收到及佛山的简欧风景酸豆角覅就啥都放假设计的覅酒叟飞机搜低筋粉哦司机的佛经山东披肩发哦是甲方哦is京东方就搜到就佛经山东金佛技术的哦积分东山街道佛个酒叟丢件 "
+    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <Button
+            android:id="@+id/btn_commit"
+            style="@style/BtnCommitStyle"
+
+            android:layout_gravity="bottom"
+            android:layout_marginTop="30dp"
+            android:text="购买" />
+    </LinearLayout>
+
 
     <Button
-
         android:id="@+id/btn_dj_commit"
         style="@style/BtnCommitStyle"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp"
-        android:text="预付定金" />
+        android:text="预付定金"
+        android:visibility="gone" />
 
 
 </LinearLayout>
