@@ -2,10 +2,15 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.text.format.Time;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,13 +30,19 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ReadyTestBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +65,10 @@ public class ReadyTestActivity extends Activity {
     ReadyTestBean readyTestBean;
     private Calendar c = null;
     String memberId,member_no;
+    View inflate;
+    LoopView loopview;
+    AlertDialog.Builder alertdialog;
+    TextView tv_start,over_time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +80,12 @@ public class ReadyTestActivity extends Activity {
     }
 
     private void initView() {
+
+        tv_start = inflate.findViewById(R.id.tv_start);
+        tv_start.setVisibility(View.GONE);
+        loopview = inflate.findViewById(R.id.loopview);
+        over_time = inflate.findViewById(R.id.over_time);
+        over_time.setVisibility(View.GONE);
 
         rl_connect = findViewById(R.id.rl_connect);
         circleimage = findViewById(R.id.circleimage);
@@ -109,57 +130,113 @@ public class ReadyTestActivity extends Activity {
         rl_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    if(gender==1||gender==2){
-                        commit();
-                    }else{
-                        ToastUtils.showToastShort("请选择性别！");
-                    }
-                }catch (JSONException e){
-                    e.printStackTrace();
-                }
-                if(gender==1||gender==2){
-                    startActivity(new Intent(ReadyTestActivity.this,EquipmentActivity.class).putExtra("memberId",memberId).putExtra("member_no",member_no));
-                    //finish();
-                }
+                commit();
             }
         });
 
         ed_birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c = Calendar.getInstance();
-                new DatePickerDialog(ReadyTestActivity.this,new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
-                        //et.setText("您选择了：" + year + "年" + (month+1) + "月" + dayOfMonth + "日");
-                        ed_birthday.setText(year+"-"+(month+1)+"-"+dayOfMonth);
-                    }
-                }, c.get(Calendar.YEAR), // 传入年份
-                        c.get(Calendar.MONTH), // 传入月份
-                        c.get(Calendar.DAY_OF_MONTH) // 传入天数
-                ).show();
+                showDate();
+            }
+        });
+
+        ed_height.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWH();
             }
         });
     }
 
-    private void commit() throws JSONException {
-        readyTestBean.setCname(ed_name.getText().toString());
-        readyTestBean.setGender(gender);
-        readyTestBean.setBirthday(ed_birthday.getText().toString());
-        readyTestBean.setId(Integer.valueOf(id));
-        readyTestBean.setHeight(Float.valueOf(ed_height.getText().toString()));
-        final String strbean = gson.toJson(readyTestBean);
-        JSONObject jsonObject = new JSONObject(strbean);
+    private void showDate(){
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.REAYTEST, jsonObject, new Response.Listener<JSONObject>() {
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this,"请选择生日");
+        customDatePicker.showWindow();
+        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+            @Override
+            public void onClick() {
+                String dateString = customDatePicker.getDateString();
+                ed_birthday.setText(dateString);
+            }
+        });
+
+    }
+
+    private void showWH(){
+        int n;
+        final ArrayList<String> arrayList = new ArrayList<String>();
+        ViewGroup parent = (ViewGroup)inflate.getParent();
+        if(parent!=null){
+            parent.removeAllViews();
+        }
+
+        for(int i = 0;i<71;i++){
+            n = 150+i;
+            arrayList.add(n+"");
+        }
+
+        loopview.setNotLoop();
+        loopview.setItems(arrayList);
+        //设置初始位置
+        loopview.setInitPosition(0);
+        loopview.setTextSize(18);
+        loopview.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                ed_height.setText(arrayList.get(index));
+            }
+        });
+        alertdialog.setTitle("选择身高");
+
+        alertdialog.setView(inflate);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        alertdialog.show();
+    }
+
+    private void commit(){
+        if(ed_name.getText().toString().isEmpty()){
+            ToastUtils.showToastShort("请填写姓名");
+            return;
+        }else {
+            readyTestBean.setCname(ed_name.getText().toString());
+        }
+        if(ed_birthday.getText().toString().isEmpty()){
+            ToastUtils.showToastShort("请选择生日");
+            return;
+        }else{
+            readyTestBean.setBirthday(ed_birthday.getText().toString());
+        }
+
+        if(ed_height.getText().toString().isEmpty()){
+            ToastUtils.showToastShort("请选择身高");
+            return;
+        }else{
+            readyTestBean.setHeight(Float.valueOf(ed_height.getText().toString()));
+        }
+
+        readyTestBean.setGender(gender);
+
+        readyTestBean.setId(Integer.valueOf(id));
+
+        String strbean = gson.toJson(readyTestBean);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.REAYTEST, strbean, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-
+                if(jsonObject.toString().contains("true")){
+                    startActivity(new Intent(ReadyTestActivity.this,EquipmentActivity.class).putExtra("memberId",memberId).putExtra("member_no",member_no));
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.i(volleyError.toString());
             }
         }){
             @Override
@@ -173,7 +250,8 @@ public class ReadyTestActivity extends Activity {
     }
 
     private void initHost() {
-
+        inflate = LayoutInflater.from(this).inflate(R.layout.timeselect, null);
+        alertdialog = new AlertDialog.Builder(this);
         readyTestBean = new ReadyTestBean();
         id = getIntent().getStringExtra("id");
 
@@ -181,12 +259,12 @@ public class ReadyTestActivity extends Activity {
         member_no = getIntent().getStringExtra("member_no");
 
         gson = new Gson();
-
+        gender = 1;
     }
 
     private void initData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USERINFO_URL+id, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + id, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);

@@ -445,6 +445,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.EditProActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AnalysisResultActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

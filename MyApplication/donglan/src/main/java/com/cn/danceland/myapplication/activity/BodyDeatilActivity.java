@@ -121,8 +121,11 @@ public class BodyDeatilActivity extends Activity {
                 list.clear();
                 if (result.isSuccess()) {
                     list = result.getData();
-                    bodyBaseAdapter.notifyDataSetChanged();
-                    lv_bodybase.addFooterView(footView);
+                    if(list != null && list.size()>0){
+                        bodyBaseAdapter.notifyDataSetChanged();
+                        lv_bodybase.addFooterView(footView);
+                    }
+
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }

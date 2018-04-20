@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,10 +24,17 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
@@ -36,6 +44,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -49,6 +58,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by feng on 2018/3/29.
@@ -71,6 +83,9 @@ public class BodyBaseActivity extends Activity {
     List<BcaResult> resultList;
     EditText editText;
     Long que_id;
+    String personId,memberId,member_no;
+    CircleImageView circle_image;
+    TextView tv_nick_name,tv_male_age,tv_phone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +104,54 @@ public class BodyBaseActivity extends Activity {
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        personId = getIntent().getStringExtra("id");
+        memberId = getIntent().getStringExtra("memberId");
+        member_no = getIntent().getStringExtra("member_no");
+
     }
+
+
+    private void initHeaderData() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + personId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if(requestInfoBean!=null){
+                    Data data = requestInfoBean.getData();
+                    if(data!=null){
+                        Glide.with(BodyBaseActivity.this).load(data.getPerson().getSelf_avatar_path()).into(circle_image);
+                        tv_nick_name.setText(data.getPerson().getNick_name());
+                        if(data.getPerson().getBirthday()!=null){
+                            Time time = new Time();
+                            time.setToNow();
+                            int age = time.year - Integer.valueOf(data.getPerson().getBirthday().split("-")[0]);
+                            tv_male_age.setText(age+" 岁");
+                        }
+                        tv_phone.setText(data.getPerson().getPhone_no());
+                    }
+                    //initDatas(data);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请检查手机网络！");
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
+
+
     private void initView() {
 
         lv_bodybase = findViewById(R.id.lv_bodybase);
@@ -102,6 +164,12 @@ public class BodyBaseActivity extends Activity {
 
         bodyBaseAdapter = new BodyBaseAdapter();
         lv_bodybase.setAdapter(bodyBaseAdapter);
+
+        circle_image = hearerView.findViewById(R.id.circle_image);
+        tv_nick_name = hearerView.findViewById(R.id.tv_nick_name);
+        tv_male_age = hearerView.findViewById(R.id.tv_male_age);
+        tv_phone = hearerView.findViewById(R.id.tv_phone);
+
 
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
@@ -126,7 +194,7 @@ public class BodyBaseActivity extends Activity {
             }
         });
 
-
+        initHeaderData();
     }
 
 
