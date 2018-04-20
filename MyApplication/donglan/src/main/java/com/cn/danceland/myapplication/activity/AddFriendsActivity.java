@@ -181,11 +181,20 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.ll_result:
                 if("体测".equals(from)){
-                    Intent intent = new Intent(AddFriendsActivity.this,ReadyTestActivity.class);
-                    intent.putExtra("id",personId+"");
-                    intent.putExtra("memberId",memberId+"");
-                    intent.putExtra("member_no",member_no);
-                    startActivity(intent);
+                    if("true".equals(getIntent().getStringExtra("isAnalysis"))){
+                        Intent intent = new Intent(AddFriendsActivity.this, BodyBaseActivity.class);
+                        intent.putExtra("id",personId+"");
+                        intent.putExtra("memberId",memberId+"");
+                        intent.putExtra("member_no",member_no);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(AddFriendsActivity.this,ReadyTestActivity.class);
+                        intent.putExtra("id",personId+"");
+                        intent.putExtra("memberId",memberId+"");
+                        intent.putExtra("member_no",member_no);
+                        startActivity(intent);
+                    }
+
                     //finish();
                 }else{
                     startActivity(new Intent(AddFriendsActivity.this,UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));

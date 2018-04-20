@@ -22,6 +22,7 @@ import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
+import com.cn.danceland.myapplication.activity.XiaoFeiRecordActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -80,6 +81,7 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.ll_my_data).setOnClickListener(this);
         v.findViewById(R.id.ll_my_shop).setOnClickListener(this);
         v.findViewById(R.id.iv_top_bg).setOnClickListener(this);
+        v.findViewById(R.id.ll_my_xiaofei).setOnClickListener(this);
 
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
@@ -274,6 +276,9 @@ public class MeFragment extends BaseFragment {
             case R.id.iv_top_bg:
 
                 startActivity(new Intent(mActivity, EmpUserHomeActivty.class));
+                break;
+            case R.id.ll_my_xiaofei:
+                startActivity(new Intent(mActivity, XiaoFeiRecordActivity.class));
                 break;
             default:
                 break;

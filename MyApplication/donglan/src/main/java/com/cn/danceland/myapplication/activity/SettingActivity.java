@@ -172,7 +172,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             case R.id.tv_quit://退出
 
                 logOut();
-
+                DBData dbData = new DBData();
+                dbData.deleteMessageD();
                 break;
             case R.id.ll_setting://设置会员
                 showInputDialog();

@@ -768,7 +768,7 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
                     case 26://体测分析
-                        startActivity(new Intent(mActivity, BodyBaseActivity.class));
+                        startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
                         break;
                     case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
@@ -788,7 +788,10 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 34://我的体测
 
-                        startActivity(new Intent(mActivity, FitnessTestActivity.class));
+                        //startActivity(new Intent(mActivity, FitnessTestActivity.class));
+                        Intent intent5 = new Intent(mActivity, AddFriendsActivity.class);
+                        intent5.putExtra("from", "体测");
+                        startActivity(intent5);
 
                         break;
                     default:

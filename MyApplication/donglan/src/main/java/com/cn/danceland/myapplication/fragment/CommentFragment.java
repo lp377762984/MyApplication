@@ -43,8 +43,13 @@ public class CommentFragment extends BaseFragment {
         messageList = new ArrayList<MiMessage>();
         messageList = dbData.getMessageList();
         if(messageList!=null&&messageList.size()>0){
-            tv_no.setVisibility(View.GONE);
-            lv_message.setAdapter(new MessageAdapter(messageList,mActivity));
+            if("4".equals(type)){
+                tv_no.setVisibility(View.VISIBLE);
+                lv_message.setVisibility(View.GONE);
+            }else{
+                tv_no.setVisibility(View.GONE);
+                lv_message.setAdapter(new MessageAdapter(messageList,mActivity));
+            }
         }else{
             tv_no.setVisibility(View.VISIBLE);
             lv_message.setVisibility(View.GONE);
