@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -37,17 +38,18 @@
         android:layout_height="match_parent"
         android:background="@color/color_bg_mianlayout">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/ll_03"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/ll_my_shop"
@@ -92,8 +94,7 @@
 
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
 
                 <LinearLayout
@@ -300,8 +301,8 @@
             </LinearLayout>
 
             <TextView
-                style="@style/BtnCommitStyle"
                 android:id="@+id/tv_quit"
+                style="@style/BtnCommitStyle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_below="@id/ll_02"
@@ -312,7 +313,7 @@
 
                 android:textSize="18sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </com.cn.danceland.myapplication.view.ReboundScrollView>
 
 

@@ -34,12 +34,16 @@
             android:textSize="16sp" />
 
         <TextView
+
             android:id="@+id/tv_tiltle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"
+            android:maxLines="1"
+            android:maxWidth="180dp"
+            android:ellipsize="end"
             android:textColor="@color/color_white"
             android:textSize="18sp" />
     </RelativeLayout>
