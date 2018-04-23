@@ -92,6 +92,8 @@ public class UserHomeActivity extends Activity {
     private int from;//来着那个页面
     private TextView tv_dyn;
     private ImageView iv_guanzhu;
+    private LinearLayout ll_my_guanzhu;
+    private LinearLayout ll_my_fans;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,21 +181,33 @@ public class UserHomeActivity extends Activity {
 
 
         tv_guanzhu_num.setText("" + data.getFollow_no());
-        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
+        ll_my_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//查看关注
+            public void onClick(View view) {
                 startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
-
             }
         });
+//        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {//查看关注
+//                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
+//
+//            }
+//        });
         tv_fans.setText("" + data.getFanse_no());
-        tv_fans.setOnClickListener(new View.OnClickListener() {
+        ll_my_fans.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {//查看粉丝
+            public void onClick(View view) {
                 startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
-
             }
         });
+//        tv_fans.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {//查看粉丝
+//                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
+//
+//            }
+//        });
 
         tv_dyn.setText("" + data.getDyn_no());
         if (data.getIs_follow()) {
@@ -604,6 +618,10 @@ public class UserHomeActivity extends Activity {
 
         tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         tv_add_gz = headview.findViewById(R.id.tv_add_gz);
+        ll_edit = headview.findViewById(R.id.ll_edit);
+        ll_my_guanzhu = headview.findViewById(R.id.ll_my_guanzhu);
+        ll_my_fans = headview.findViewById(R.id.ll_my_fans);
+
         ll_edit = headview.findViewById(R.id.ll_edit);
         iv_sex = headview.findViewById(R.id.iv_sex);
         headview.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {

@@ -64,6 +64,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private ImageView iv_avatar;
     private String userId;
     private boolean isdyn;
+    private ImageView iv_sex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         iv_avatar = findViewById(R.id.iv_avatar);
+        iv_sex = findViewById(R.id.iv_sex);
         iv_avatar.setOnClickListener(this);
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
         iv_guanzhu = findViewById(R.id.iv_guanzhu);
@@ -146,6 +148,14 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 
         if (!TextUtils.isEmpty(userInfo.getPerson().getHobby())){
             tv_hobby.setText(userInfo.getPerson().getHobby());
+        }
+
+        if (TextUtils.equals(userInfo.getPerson().getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        } else if (TextUtils.equals(userInfo.getPerson().getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        } else {
+            iv_sex.setVisibility(View.INVISIBLE);
         }
     }
 

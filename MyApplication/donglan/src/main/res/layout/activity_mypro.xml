@@ -68,13 +68,14 @@
             android:text="昵称"
             android:textSize="15sp"
             />
-        <TextView
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
+
             android:text="小猴子"
             android:textSize="13sp"
             android:textColor="@color/color_dl_yellow"

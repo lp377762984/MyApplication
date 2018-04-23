@@ -30,13 +30,14 @@
 
 
 
-    <EditText
+    <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
         android:layout_below="@+id/dia_title"
         style="@style/EtStyle"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
         android:id="@+id/edit_name"
+        android:inputType="textPersonName"
         android:maxLength="16"
         android:background="@null"
         />

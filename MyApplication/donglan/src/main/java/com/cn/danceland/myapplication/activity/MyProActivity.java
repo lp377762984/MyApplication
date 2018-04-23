@@ -69,6 +69,8 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 /**
  * Created by feng on 2017/10/10.
@@ -97,7 +99,8 @@ public class MyProActivity extends Activity {
     RequestQueue queue;
     File cutfile;
     RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity,hobby,rl_jianjie;
-    TextView text_name, text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
+    TextView  text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
+    EmojiconTextView text_name;
     View contentView;
     PopupWindow mPopWindow;
     ListView list_height;
@@ -730,7 +733,7 @@ public class MyProActivity extends Activity {
 
     public void showName(final int i) {
         //i==0是编辑昵称i==1表示身份证
-        AlertDialog.Builder normalDialog =
+        final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(MyProActivity.this);
         View dialogView = LayoutInflater.from(MyProActivity.this)
                 .inflate(R.layout.edit_name, null);
@@ -745,7 +748,7 @@ public class MyProActivity extends Activity {
             dialogTitleIden.setVisibility(View.VISIBLE);
         }
         //normalDialog.setTitle("编辑昵称");
-        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        final EmojiconEditText ed = dialogView.findViewById(R.id.edit_name);
         if (i==1){
             ed.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
@@ -755,6 +758,11 @@ public class MyProActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (i == 0) {
+                            if (TextUtils.isEmpty(ed.getText().toString())){
+                                    ToastUtils.showToastShort("请输入昵称");
+
+                                return;
+                            }
                             nickName = ed.getText().toString();
                             text_name.setText(nickName);
                             commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
