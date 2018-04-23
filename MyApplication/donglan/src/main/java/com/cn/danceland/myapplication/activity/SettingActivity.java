@@ -261,6 +261,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String s = ed.getText().toString();
+                        if(s.isEmpty()){
+                            return;
+                        }
                         if (i == 0) {
                             tv_weixin.setText(s);
                             commitSelf(Constants.MODIFY_NAME, "weichat_no", s);
