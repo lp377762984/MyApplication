@@ -81,6 +81,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
+                    android:imeOptions="actionSend"
                     android:background="@drawable/edit_search_bg"
                     android:hint="写评论"
                     android:maxLines="5"

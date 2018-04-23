@@ -24,6 +24,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -251,6 +252,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         buildAnima();
         emojiButton = findViewById(R.id.emoji_btn);
         et_comment = findViewById(R.id.et_comment);
+        et_comment.setImeOptions(EditorInfo.IME_ACTION_SEND);
         LinearLayout ll_comment = findViewById(R.id.ll_comment);
         emojIcon = new EmojIconActions(this, ll_comment, et_comment, emojiButton);
         emojIcon.ShowEmojIcon();
@@ -276,6 +278,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         emojIcon.addEmojiconEditTextList(et_comment);
         //  et_comment.setImeOptions();
         // android:imeOptions="actionDone"
+
 
         findViewById(R.id.tv_comment).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,7 +338,13 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.tv_send:
                 //  LogUtil.i(et_comment.getText().toString());
+
                 if (!TextUtils.isEmpty(et_comment.getText().toString())) {
+
+                    if (et_comment.getText().toString().length()>1000){
+                        ToastUtils.showToastShort("输入字数不能超过1000字");
+                        return;
+                    }
                     if (replypos < 0) {
                         sendCommentReply(msgId, et_comment.getText().toString());
                     } else {
