@@ -161,7 +161,8 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
             public void onClick() {
                 String dateString = customDatePicker.getTimeString();
                 tv_date.setText(dateString);
-                requsetBean.warn_time=dateString;
+
+                requsetBean.warn_time=dateString.replace("年","-").replace("月","-").replace("日"," ").replace("时",":").replace("分",":00");
             }
         });
 

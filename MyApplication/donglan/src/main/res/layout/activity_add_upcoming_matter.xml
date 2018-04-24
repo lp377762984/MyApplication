@@ -85,7 +85,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="请选择日期"
+            android:text="请选择日期和时间"
             android:textColor="#333" />
         <TextView
             android:id="@+id/tv_time"
@@ -95,6 +95,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="请选择时间"
+            android:visibility="gone"
             android:textColor="#333" />
     </LinearLayout>
 

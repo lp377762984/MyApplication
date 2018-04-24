@@ -48,13 +48,14 @@
                 <ImageView
                     android:id="@+id/iv_top_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="202dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
 
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
+                    android:id="@+id/ll_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                    android:layout_centerHorizontal="true"
@@ -62,7 +63,7 @@
                     android:layout_below="@+id/iv_avatar"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
                         android:id="@+id/tv_nick_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -94,7 +95,7 @@
                     android:id="@+id/ll_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_nick_name"
+                    android:layout_below="@+id/ll_nickname"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
@@ -120,7 +121,7 @@
                     android:id="@id/ll_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_nick_name"
+                    android:layout_below="@+id/ll_nickname"
                     android:layout_centerHorizontal="true"
                     android:orientation="horizontal">
 
@@ -202,6 +203,7 @@
                     android:id="@+id/ll_01"
                     android:layout_width="325dp"
                     android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
                     android:layout_alignBottom="@+id/line11"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/img_bg_juxing"

@@ -228,7 +228,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
         strBean.page = pageCount - 1 + "";
         strBean.member_id = id;
         String s = gson.toJson(strBean);
-
+        LogUtil.i(s);
         JSONObject jsonObject = new JSONObject(s.toString());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_VISIT_RECORD, jsonObject, new Response.Listener<JSONObject>() {
@@ -281,7 +281,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
+           //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };

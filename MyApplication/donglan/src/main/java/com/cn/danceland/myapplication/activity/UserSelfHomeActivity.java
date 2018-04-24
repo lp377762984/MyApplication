@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
+
 
 /**
  * Created by shy on 2018/4/16 17:58
@@ -60,7 +62,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private float pingfen;
     private ImageView iv_guanzhu;
     private TextView tv_hobby;
-    private TextView tv_nick_name;
+    private EmojiconTextView tv_nick_name;
     private ImageView iv_avatar;
     private String userId;
     private boolean isdyn;
