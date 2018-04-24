@@ -21,6 +21,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -59,6 +61,7 @@ public class ShopListFragment extends BaseFragment {
     Data info;
     TextView tv_shopname, tv_shopAddress;
     ImageButton ibtn_gps, ibtn_call;
+    LatLng startLng;
 
     @Override
     public View initViews() {
@@ -90,6 +93,7 @@ public class ShopListFragment extends BaseFragment {
         jingdu = getArguments().getString("jingdu");
         weidu = getArguments().getString("weidu");
        // LogUtil.i(jingdu + weidu);
+        startLng = new LatLng(Double.valueOf(weidu),Double.valueOf(jingdu));
     }
 
     private void initData() {
@@ -113,7 +117,18 @@ public class ShopListFragment extends BaseFragment {
                     itemsList = storeBean.getData().getItems();
                     if (itemsList != null && itemsList.size() > 0) {
                         tv_shopname.setText(itemsList.get(0).getBname());
-                        tv_shopAddress.setText(itemsList.get(0).getAddress());
+                        LatLng latLng = new LatLng(itemsList.get(0).getLat(),itemsList.get(0).getLng());
+                        double distance = DistanceUtil.getDistance(startLng, latLng);
+                        Double aDouble = new Double(distance);
+                        int i1 = aDouble.intValue();
+                        if(i1>=1000){
+                            int v = i1 / 1000;
+                            int v1 = (i1 - 1000) / 100;
+                            tv_shopAddress.setText("距我 "+v+"."+v1+" km");
+                        }else{
+                            tv_shopAddress.setText("距我 "+i1+" m");
+                        }
+                        //tv_shopAddress.setText(itemsList.get(0).getAddress());
                         getBanner(itemsList.get(0).getBranch_id() + "");
 
                         ibtn_gps.setOnClickListener(new View.OnClickListener() {
@@ -255,8 +270,22 @@ public class ShopListFragment extends BaseFragment {
 
             if (itemsArrayList != null) {
                 items = itemsArrayList.get(position);
+                double lat = items.getLat();
+                double lng = items.getLng();
+                LatLng latLng = new LatLng(lat, lng);
+                double distance = DistanceUtil.getDistance(startLng, latLng);
+                Double aDouble = new Double(distance);
+                int i1 = aDouble.intValue();
+                if(i1>=1000){
+                    int v = i1 / 1000;
+                    int v1 = (i1 - 1000) / 100;
+                    viewHolder.distance.setText("距我 "+v+"."+v1+" km");
+                }else{
+                    viewHolder.distance.setText("距我 "+i1+" m");
+                }
+
                 viewHolder.store_address.setText(items.getBname());
-                viewHolder.distance.setText(items.getAddress());
+
                 Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
                 //PhoneNo = items.getTelphone_no();
 //                shopJingdu = items.getLat()+"";

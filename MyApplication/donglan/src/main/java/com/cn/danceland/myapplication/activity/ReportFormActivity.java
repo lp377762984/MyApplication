@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
@@ -28,7 +29,6 @@ public class ReportFormActivity extends Activity {
     }
 
     private void initHost() {
-
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
@@ -36,7 +36,7 @@ public class ReportFormActivity extends Activity {
                 customDatePicker.getTimeString();
             }
         });
-        customDatePicker.showWindow();
 
+        customDatePicker.showWindow();
     }
 }

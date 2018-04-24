@@ -263,13 +263,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                         String s = ed.getText().toString();
                         if (i == 0) {
                             tv_weixin.setText(s);
-                            commitSelf(Constants.MODIFY_NAME, "weichat_no", s);
+                            commitSelf(Constants.MODIFY_WEIXIN, "weichat_no", s);
                             mInfo.getPerson().setWeichat_no(s);
                             DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                         } else {
                             if(s.matches(emailFormat)){
                                 tv_email.setText(s);
-                                commitSelf(Constants.MODIFY_IDENTIFY, "mail", s);
+                                commitSelf(Constants.MODIFY_MAIL, "mail", s);
                                 mInfo.getPerson().setMail(s);
                                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                             }else{

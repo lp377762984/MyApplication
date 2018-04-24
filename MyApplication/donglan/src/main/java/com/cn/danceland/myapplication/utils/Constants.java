@@ -37,6 +37,8 @@ public class Constants extends EaseConstant {
     public static final String MODIFYY_IMAGE = HOST + "user/modifySelfAvatar";//修改头像
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String MODIFY_GENDER = HOST + "user/modifyGender";//修改性别
+ public static final String MODIFY_WEIXIN = HOST + "user/modifyWeichatNo";//修改微信
+ public static final String MODIFY_MAIL = HOST + "user/modifyMail";//修改邮箱
     public static final String MODIFY_HEIGHT = HOST + "user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST + "user/modifyWeight";//修改身高
     public static final String MODIFY_IDENTIFY = HOST + "user/modifyIdentityCard";//修改身份证

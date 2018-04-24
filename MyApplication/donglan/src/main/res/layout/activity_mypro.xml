@@ -81,16 +81,6 @@
             android:textColor="@color/color_dl_yellow"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="121dp"
-            android:text="地区"
-            android:textSize="15sp" />
-
     </RelativeLayout>
 
     <RelativeLayout
