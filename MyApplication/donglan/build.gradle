@@ -153,5 +153,5 @@ dependencies {
     //banner
     compile project(':easeui')
     compile project(':RxTools-library')
-
+    compile files('libs/alipaySdk-20180403.jar')
 }

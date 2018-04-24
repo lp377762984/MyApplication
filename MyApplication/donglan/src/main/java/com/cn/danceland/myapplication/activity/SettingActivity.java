@@ -2,33 +2,25 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -37,6 +29,7 @@ import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataCleanManager;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -49,6 +42,7 @@ import com.hyphenate.chat.EMClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +56,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     //ListView list_province, list_city;
     //LocationAdapter proAdapter, cityAdapter;
     private TextView tv_number;
-    private TextView tv_phone,tv_weixin,tv_email;
+    private TextView tv_phone, tv_weixin, tv_email;
     private Data mInfo;
 
 
@@ -76,6 +70,21 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     ArrayList<String> proList;
     static String emailFormat = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
 
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 0x01:
+                   // dialog.dismiss();
+                    tv_cache.setText("0.0KB");
+                    Toast.makeText(SettingActivity.this, "已清除缓存！", Toast.LENGTH_SHORT).show();
+                    break;
+                case 0x02:
+                   // dialog.dismiss();
+                    break;
+            }
+        };
+    };
+    private TextView tv_cache;
 
     @Override
 
@@ -114,10 +123,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         zoneCode = mInfo.getPerson().getZone_code();
         zoneArr = new ArrayList<Donglan>();
         if (zoneCode != null && !"".equals(zoneCode)) {
-            if(zoneCode.contains(".0")){
+            if (zoneCode.contains(".0")) {
                 zoneArr = dbData.queryCityValue(zoneCode);
-            }else{
-                zoneArr = dbData.queryCityValue(zoneCode+".0");
+            } else {
+                zoneArr = dbData.queryCityValue(zoneCode + ".0");
             }
         }
     }
@@ -140,7 +149,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_weixin = findViewById(R.id.tv_weixin);
         tv_email = findViewById(R.id.tv_email);
 
-        if(mInfo.getPerson()!=null){
+        if (mInfo.getPerson() != null) {
             tv_weixin.setText(mInfo.getPerson().getWeichat_no());
             tv_email.setText(mInfo.getPerson().getMail());
         }
@@ -160,10 +169,20 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         //设置会员号
         if (!TextUtils.isEmpty(mInfo.getPerson().getMember_no())) {
-            tv_number.setText(mInfo.getPerson().getNick_name());
+            tv_number.setText(mInfo.getPerson().getMember_no());
         } else {
             tv_number.setText("未设置");
         }
+        tv_cache = (TextView) findViewById(R.id.tv_cache);
+        //获得应用内部缓存(/data/data/com.example.androidclearcache/cache)
+        File file = new File(this.getCacheDir().getPath());
+        LogUtil.i(this.getCacheDir().getPath());
+        try {
+            tv_cache.setText(DataCleanManager.getAllCacheSize());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -179,7 +198,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 dbData.deleteMessageD();
                 break;
             case R.id.ll_setting://设置会员
-                showInputDialog();
+                //   showInputDialog();
 
                 break;
             case R.id.ll_setting_phone://设置手机号
@@ -214,16 +233,17 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 showAboutUs();
                 break;
             case R.id.ll_clear://清除缓存
-                Toast.makeText(this, "已清除缓存！", Toast.LENGTH_SHORT).show();
+
                 showClearDialog();
+
                 break;
             case R.id.ll_my_shop:
                 LogUtil.i(mInfo.getPerson().getDefault_branch());
-                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){
+                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                     ToastUtils.showToastShort("请先加入一个门店");
                     return;
                 }
-              //  startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
+                //  startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
                 break;
             case R.id.ll_setting_weixin:
                 showName(0);
@@ -267,12 +287,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             mInfo.getPerson().setWeichat_no(s);
                             DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                         } else {
-                            if(s.matches(emailFormat)){
+                            if (s.matches(emailFormat)) {
                                 tv_email.setText(s);
                                 commitSelf(Constants.MODIFY_IDENTIFY, "mail", s);
                                 mInfo.getPerson().setMail(s);
                                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
-                            }else{
+                            } else {
                                 ToastUtils.showToastShort("请输入合法邮箱地址");
                             }
                         }
@@ -356,8 +376,25 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         AlertDialog.Builder dialog =
                 new AlertDialog.Builder(this);
         dialog.setTitle("提示");
-        dialog.setMessage("清除缓存成功");
+        dialog.setMessage("是否清除全部缓存");
         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Message msg=Message.obtain();
+                try {
+                    //清理内部缓存
+                    DataCleanManager.cleanInternalCache(getApplicationContext());
+                    DataCleanManager.cleanExternalCache(getApplicationContext());
+                   // LogUtil.i(getApplicationContext().getCacheDir().getPath());
+                    msg.what = 0x01;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = 0x02;
+                }
+                handler.sendMessageDelayed(msg, 1000);
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -472,7 +509,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private  void  logouthx(){
+    private void logouthx() {
         EMClient.getInstance().logout(true, new EMCallBack() {
 
             @Override
@@ -497,7 +534,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             public void onError(int code, String message) {
                 // TODO Auto-generated method stub
                 //失败
-               LogUtil.i("环信退出登录失败");
+                LogUtil.i("环信退出登录失败");
             }
         });
 

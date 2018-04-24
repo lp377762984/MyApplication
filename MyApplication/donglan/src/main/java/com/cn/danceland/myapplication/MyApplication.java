@@ -53,7 +53,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private HttpProxyCacheServer newProxy() {
 
         return new HttpProxyCacheServer.Builder(this)
-                .maxCacheSize(1024 * 1024 * 200)       // 200M for cache
+                .maxCacheSize(1024 * 1024 * 500)       // 200M for cache
                 .build();
 
     }

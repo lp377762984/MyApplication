@@ -49,7 +49,7 @@ public class RequstRecommendBean {
 
     public class Data {
 
-        private int id;
+        private String id;
         private int branch_id;
         private int member_id;
         private String member_no;
@@ -83,11 +83,11 @@ public class RequstRecommendBean {
                     '}';
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 

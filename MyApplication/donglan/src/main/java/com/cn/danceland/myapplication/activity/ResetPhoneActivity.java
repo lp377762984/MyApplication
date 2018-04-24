@@ -139,11 +139,11 @@ public class ResetPhoneActivity extends Activity implements View.OnClickListener
                     return;
                 }
 
-                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
-
-                    ToastUtils.showToastShort("验证码有误，请重新输入");
-                    return;
-                }
+//                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
+//
+//                    ToastUtils.showToastShort("验证码有误，请重新输入");
+//                    return;
+//                }
 
 
                 resetPhone();//重置手机号
@@ -244,6 +244,8 @@ public class ResetPhoneActivity extends Activity implements View.OnClickListener
                 Map<String, String> map = new HashMap<String, String>();
                 //   map.put("id", SPUtils.getString(Constants.MY_USERID, ""));
                 map.put("phone", mEtPhone.getText().toString().trim());
+                map.put("validateCode", mEtSms.getText().toString().trim());
+
                 return map;
             }
 
