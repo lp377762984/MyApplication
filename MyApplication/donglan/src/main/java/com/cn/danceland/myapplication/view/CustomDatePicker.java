@@ -84,11 +84,21 @@ public class CustomDatePicker extends AlertDialog{
         lp_year.setItems(yearList);
         lp_month.setItems(monthList);
 
-        lp_year.setInitPosition(yearList.size()-20);
-        syear = yearList.get(yearList.size()-20);
-        lp_month.setInitPosition(0);
-        smonth = monthList.get(0);
-        sdate = "1";
+        syear = year + "";
+        smonth = (time.month+1) + "";
+        sdate = time.monthDay+"";
+
+        for(int i=0;i<yearList.size();i++){
+            if(syear.equals(yearList.get(i))){
+                lp_year.setInitPosition(i);
+            }
+        }
+
+        for(int i=0;i<monthList.size();i++){
+            if(smonth.equals(monthList.get(i))){
+                lp_month.setInitPosition(i);
+            }
+        }
 
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
@@ -96,6 +106,13 @@ public class CustomDatePicker extends AlertDialog{
             dateList.add(z+"");
         }
         lp_date.setItems(dateList);
+
+        for(int i = 0;i<dateList.size();i++){
+            if(sdate.equals(dateList.get(i))){
+                lp_date.setInitPosition(i);
+            }
+        }
+
 
         //设置字体大小
         lp_year.setTextSize(16);
@@ -146,8 +163,19 @@ public class CustomDatePicker extends AlertDialog{
         }
         lp_hour.setItems(hourList);
         lp_minute.setItems(minuteList);
-        lp_hour.setInitPosition(12);
-        lp_minute.setInitPosition(30);
+        shour = time.hour+"";
+        for(int i=0;i<hourList.size();i++){
+            if(shour.equals(hourList.get(i))){
+                lp_hour.setInitPosition(i);
+            }
+        }
+        sminute = time.minute+"";
+        for(int i=0;i<minuteList.size();i++){
+            if(sminute.equals(minuteList.get(i))){
+                lp_minute.setInitPosition(i);
+            }
+        }
+
         lp_hour.setTextSize(18);
         lp_minute.setTextSize(18);
         lp_hour.setItemsVisibleCount(7);
@@ -156,7 +184,6 @@ public class CustomDatePicker extends AlertDialog{
         lp_month.setItemsVisibleCount(7);
         lp_date.setItemsVisibleCount(7);
 
-        shour = hourList.get(12);
         sminute = minuteList.get(30);
 
         lp_hour.setListener(new OnItemSelectedListener() {

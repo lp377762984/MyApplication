@@ -108,7 +108,7 @@
             android:id="@+id/about_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="123456@qq.com"
+            android:text="@string/office_mail"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
@@ -145,7 +145,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15555555555"
+            android:text="@string/office_phone"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
