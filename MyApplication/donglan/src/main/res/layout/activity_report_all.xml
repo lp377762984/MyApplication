@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/report_all_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.cn.danceland.myapplication.view.DongLanTitleView>
+
+
+    <ScrollView
+        android:layout_below="@+id/report_all_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/ll_01"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/color_dl_yellow"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="销售统计"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/all_report_ll_01"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/ll_01"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_dl_yellow"
+                    android:layout_weight="1"
+                    android:text="业务报表"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="今日"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="本月"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="总计"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <com.cn.danceland.myapplication.utils.MyListView
+                android:id="@+id/mv_01"
+                android:layout_below="@+id/all_report_ll_01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.cn.danceland.myapplication.utils.MyListView>
+
+
+
+            <LinearLayout
+                android:id="@+id/ll_02"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@+id/mv_01"
+                android:background="@color/color_dl_yellow"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="会籍部业务"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/all_report_ll_02"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/ll_02"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_dl_yellow"
+                    android:layout_weight="1"
+                    android:text="业务报表"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="今日"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="本月"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="总计"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <com.cn.danceland.myapplication.utils.MyListView
+                android:id="@+id/mv_02"
+                android:layout_below="@+id/all_report_ll_02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.cn.danceland.myapplication.utils.MyListView>
+
+
+            <LinearLayout
+                android:id="@+id/ll_03"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@+id/mv_02"
+                android:background="@color/color_dl_yellow"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="教练部业务"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/all_report_ll_03"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/ll_03"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_dl_yellow"
+                    android:layout_weight="1"
+                    android:text="业务报表"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="今日"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="本月"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="总计"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <com.cn.danceland.myapplication.utils.MyListView
+                android:id="@+id/mv_03"
+                android:layout_below="@+id/all_report_ll_03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.cn.danceland.myapplication.utils.MyListView>
+
+
+            <LinearLayout
+                android:id="@+id/ll_04"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_below="@+id/mv_03"
+                android:background="@color/color_dl_yellow"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="服务部业务"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/all_report_ll_04"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_below="@+id/ll_04"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_dl_yellow"
+                    android:layout_weight="1"
+                    android:text="业务报表"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="今日"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="本月"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/color_dl_yellow"
+                    android:text="总计"
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+            <com.cn.danceland.myapplication.utils.MyListView
+                android:id="@+id/mv_04"
+                android:layout_below="@+id/all_report_ll_04"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </com.cn.danceland.myapplication.utils.MyListView>
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

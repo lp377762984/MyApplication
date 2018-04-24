@@ -449,6 +449,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ReportFormActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AllReportActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
