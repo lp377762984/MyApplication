@@ -309,7 +309,6 @@ public class SiJiaoOrderActivity extends Activity {
         btn_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
                     if("0".equals(type)){
                         if("0".equals(forme)){
                             if(tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()){
@@ -336,10 +335,6 @@ public class SiJiaoOrderActivity extends Activity {
                             commit_deposit();
                         }
                     }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -534,7 +529,7 @@ public class SiJiaoOrderActivity extends Activity {
 
     }
 
-    private void confirmOrder() throws JSONException {
+    private void confirmOrder() {
 
         SijiaoOrderConfirmBean sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
@@ -565,10 +560,9 @@ public class SiJiaoOrderActivity extends Activity {
         sijiaoOrderConfirmBean.setExtends_params(extends_params);
 
         String s = gson.toJson(sijiaoOrderConfirmBean);
-        JSONObject jsonObject = new JSONObject(s);
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
@@ -609,7 +603,7 @@ public class SiJiaoOrderActivity extends Activity {
      *
      * @throws JSONException
      */
-    public void commit_deposit() throws JSONException {
+    public void commit_deposit() {
         CommitDepositBean commitDepositBean = new CommitDepositBean();
         CommitDepositBean.Extends_params extends_params = commitDepositBean.new Extends_params();
         commitDepositBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
@@ -630,9 +624,8 @@ public class SiJiaoOrderActivity extends Activity {
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
 
-        JSONObject jsonObject = new JSONObject(s);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
