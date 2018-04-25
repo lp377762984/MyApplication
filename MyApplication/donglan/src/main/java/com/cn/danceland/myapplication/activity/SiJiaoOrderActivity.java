@@ -36,11 +36,15 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
 import com.cn.danceland.myapplication.bean.CommitDepositBean;
+import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianBean;
 import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
+import com.cn.danceland.myapplication.bean.explain.Explain;
+import com.cn.danceland.myapplication.bean.explain.ExplainCond;
+import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -48,6 +52,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
@@ -100,6 +106,7 @@ public class SiJiaoOrderActivity extends Activity {
     int dingjinprice = 100;
     String deposit_id;
     float deposit;
+    TextView tv_explain;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,6 +114,34 @@ public class SiJiaoOrderActivity extends Activity {
         setContentView(R.layout.sijiaoorder);
         initHost();
         initView();
+        queryList();
+    }
+
+    /**
+     * @方法说明:按条件查询说明须知列表
+     **/
+    public void queryList() {
+        ExplainRequest request = new ExplainRequest();
+        final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        ExplainCond cond = new ExplainCond();
+        cond.setBranch_id(Long.valueOf(info.getPerson().getDefault_branch()));
+        cond.setType(Byte.valueOf("5"));// 1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
+
+        request.queryList(cond, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject json) {
+                DLResult<List<Explain>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<Explain>>>() {
+                }.getType());
+                if (result.isSuccess()) {
+                    List<Explain> list = result.getData();
+                    if(list!=null&&list.size()>0){
+                        tv_explain.setText(list.get(0).getContent());
+                    }
+                } else {
+                    ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
+                }
+            }
+        });
     }
 
     private void initHost() {
@@ -231,7 +266,7 @@ public class SiJiaoOrderActivity extends Activity {
     private void initView() {
 
         rl_jiaolian = findViewById(R.id.rl_jiaolian);
-
+        tv_explain = findViewById(R.id.tv_explain);
         tv_pay_price = findViewById(R.id.tv_pay_price);
         ed_time = findViewById(R.id.ed_time);
         ed_time.setText(nowyear+"年"+month+"月"+monthDay+"日");
