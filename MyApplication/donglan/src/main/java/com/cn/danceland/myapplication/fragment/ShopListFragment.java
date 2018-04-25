@@ -117,8 +117,7 @@ public class ShopListFragment extends BaseFragment {
                     itemsList = storeBean.getData().getItems();
                     if (itemsList != null && itemsList.size() > 0) {
                         tv_shopname.setText(itemsList.get(0).getBname());
-                        //LatLng latLng = new LatLng(itemsList.get(0).getLat(),itemsList.get(0).getLng());
-                        LatLng latLng = new LatLng(39.880836,116.322056);
+                        LatLng latLng = new LatLng(itemsList.get(0).getLat(),itemsList.get(0).getLng());
                         double distance = DistanceUtil.getDistance(startLng, latLng);
                         Double aDouble = new Double(distance);
                         int i1 = aDouble.intValue();
