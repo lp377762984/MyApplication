@@ -53,11 +53,10 @@ dependencies {
     //微信登录，支付，分享包
     provided 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.4.0'
     //支付宝 支付包
-    provided files('libs/alipaySdk-20170309.jar')
     //压缩与加密
     provided files('libs/zip4j_1.3.2.jar')
     //Zxing核心包
     provided files('libs/zxing_core_3.0.1.jar')
-
     provided 'com.android.support:support-annotations:26.0.0-alpha1'
+    compile files('libs/alipaySdk-20180403.jar')
 }
