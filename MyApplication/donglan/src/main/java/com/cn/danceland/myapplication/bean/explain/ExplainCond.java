@@ -11,7 +11,7 @@ public class ExplainCond extends BaseCondition {
 
 	//把不用条件清理掉
 	private Long id;// 主键id
-	private Byte type;// 类型
+	private Byte type;// 类型1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
 	private Long branch_id;// 门店id
 	private String content;// 内容
 
