@@ -1,5 +1,5 @@
-
 package com.cn.danceland.myapplication.bean.explain;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +25,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 
 /**
  * @类说明:说明须知--网络请求层
- * @author:
- * @date:2018-04-25 10:59:56
+ * @author:高振中
+ * @date:2018-04-25 11:23:07
  **/
 public class ExplainRequest {
 
@@ -34,13 +34,7 @@ public class ExplainRequest {
 	 * @方法说明:新增说明须知
 	 **/
 	public void save(Explain explain, Listener<JSONObject> listener) {
-		JSONObject json = null;
-		try {
-			json = new JSONObject(new Gson().toJson(explain));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/save", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/save", new Gson().toJson(explain), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -60,13 +54,7 @@ public class ExplainRequest {
 	 * @方法说明:修改说明须知
 	 **/
 	public void update(Explain explain, Listener<JSONObject> listener) {
-		JSONObject json = null;
-		try {
-			json = new JSONObject(new Gson().toJson(explain));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/update", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/update", new Gson().toJson(explain), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -106,14 +94,7 @@ public class ExplainRequest {
 	 * @方法说明:按条件查询说明须知列表
 	 **/
 	public void queryList(ExplainCond cond, Listener<JSONObject> listener) {
-		JSONObject json = null;
-		try {
-			json = new JSONObject(new Gson().toJson(cond));
-		} catch (JSONException e) {
-			// LogUtil.i(explain.toString());
-			e.printStackTrace();
-		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryList", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryList", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -133,14 +114,7 @@ public class ExplainRequest {
 	 * @方法说明:按条件查询说明须知分页列表
 	 **/
 	public void queryPage(ExplainCond cond, Listener<JSONObject> listener) {
-
-		JSONObject json = null;
-		try {
-			json = new JSONObject(new Gson().toJson(cond));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryPage", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryPage", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -182,14 +156,7 @@ public class ExplainRequest {
 	 * @方法说明:按条件查询说明须知数据个数
 	 **/
 	public void queryCount(ExplainCond cond, Listener<JSONObject> listener) {
-		JSONObject json = null;
-		try {
-			json = new JSONObject(new Gson().toJson(cond));
-		} catch (JSONException e) {
-			// LogUtil.i(explain.toString());
-			e.printStackTrace();
-		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryCount", json, listener, new Response.ErrorListener() {
+		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "explain/queryCount", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
