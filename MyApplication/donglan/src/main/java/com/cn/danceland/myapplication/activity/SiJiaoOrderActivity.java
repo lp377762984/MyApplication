@@ -301,7 +301,7 @@ public class SiJiaoOrderActivity extends Activity {
         ll_dingjin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(SiJiaoOrderActivity.this,DepositActivity.class).putExtra("bus_type","2"),22);
+                startActivityForResult(new Intent(SiJiaoOrderActivity.this,DepositActivity.class).putExtra("bus_type","3"),22);
             }
         });
 
@@ -616,8 +616,8 @@ public class SiJiaoOrderActivity extends Activity {
         commitDepositBean.setPay_way("1");
         commitDepositBean.setReceive(dingjinprice+"");
         commitDepositBean.setPrice(dingjinprice+"");
-        extends_params.setBus_type("2");
-        extends_params.setDeposit_type("2");
+        extends_params.setBus_type("3");
+        extends_params.setDeposit_type("3");
         extends_params.setAdmin_emp_id(employee_id+"");
         extends_params.setAdmin_emp_name(employee_name);
         extends_params.setMoney(dingjinprice+"");
@@ -672,7 +672,11 @@ public class SiJiaoOrderActivity extends Activity {
         if("1".equals(type)){
             payBean.price = dingjinprice;
         }else{
-            payBean.price = price;
+            if(deposit_id!=null){
+                payBean.price = price - deposit;
+            }else{
+                payBean.price = price;
+            }
         }
 
         if("1".equals(forme)){
@@ -775,17 +779,16 @@ public class SiJiaoOrderActivity extends Activity {
                 vh = (ViewHolder) convertView.getTag();
             }
 
-            employee_id = dataList.get(position).getEmployee_id();
-            employee_name = dataList.get(position).getEmployee_name();
+//            employee_id = dataList.get(position).getEmployee_id();
+//            employee_name = dataList.get(position).getEmployee_name();
             vh.mTextView.setText(dataList.get(position).getEmployee_name());
 
             vh.mTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    JiaoLianBean.Data data = dataList.get(position);
-
-                    tv_jiaolian.setText(data.getEmployee_name());
+                    employee_id = dataList.get(position).getEmployee_id();
+                    employee_name = dataList.get(position).getEmployee_name();
+                    tv_jiaolian.setText(employee_name);
                     listPopup.dismiss();
                 }
             });
