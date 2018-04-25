@@ -47,15 +47,6 @@ public class AboutUsActivity extends Activity {
                     finish();
                     break;
                 case R.id.about_verson://切换服务器
-//                    if (TextUtils.equals("http://192.168.1.94:8003/", Constants.HOST)){
-//                        Constants.HOST="http://47.104.3.118:8003/";
-//                        ToastUtils.showToastLong("已切换至正式版");
-//                      //  about_verson.setText("正式版:"+ AppUtils.getVersionName(AboutUsActivity.this));
-//                    }else if (TextUtils.equals("http://47.104.3.118:8003/", Constants.HOST)){
-//                        Constants.HOST="http://192.168.1.94:8003/";
-//                        ToastUtils.showToastLong("已切换至测试版");
-//                       // about_verson.setText("测试版:"+ AppUtils.getVersionName(AboutUsActivity.this));
-//                    }
 
                     break;
                 case R.id.about_logo:
@@ -67,13 +58,8 @@ public class AboutUsActivity extends Activity {
                     mHits[mHits.length - 1] = SystemClock.uptimeMillis();//记录一个时间
                     if (SystemClock.uptimeMillis() - mHits[0] <= 1000) {//一秒内连续点击。
                         mHits = null;	//这里说明一下，我们在进来以后需要还原状态，否则如果点击过快，第六次，第七次 都会不断进来触发该效果。重新开始计数即可
-//                        if (mShow) {
-//                            mShow = false;
-//                        } else {
-//                            mShow = true;
-                            ToastUtils.showToastShort("女友叫谢北北");
-                        //}
-                        //这里一般会把mShow存储到sp中。
+                        ToastUtils.showToastShort("女友叫谢北北");
+
                     }
 
                     break;
