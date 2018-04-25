@@ -55,6 +55,7 @@ import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -208,6 +209,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             viewHolder.tv_zan_num = convertView.findViewById(R.id.tv_zan_num);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.iv_zan = convertView.findViewById(iv_zan);
+            viewHolder.rx_zan = convertView.findViewById(R.id.rx_zan);
+            viewHolder.rx_guanzhu = convertView.findViewById(R.id.rx_guanzhu);
             viewHolder.iv_comment = convertView.findViewById(iv_comment);
             viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
@@ -251,19 +254,21 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
-            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+          //  viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+            viewHolder.rx_zan.setChecked(true);
         } else {
-            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+         //   viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+            viewHolder.rx_zan.setChecked(false);
         }
 
+//
+//        if (data.get(position).isAnimationFlag()) {
+//            buildAnima(position);
+//            viewHolder.iv_zan.clearAnimation();
+//            viewHolder.iv_zan.setAnimation(mAnimationSet);
+//        }
 
-        if (data.get(position).isAnimationFlag()) {
-            buildAnima(position);
-            viewHolder.iv_zan.clearAnimation();
-            viewHolder.iv_zan.setAnimation(mAnimationSet);
-        }
-
-        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
+        viewHolder.rx_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //点赞
@@ -333,17 +338,23 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
         if (isMe) {//是否是个人页面
             viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
+            viewHolder.ll_guanzhu.setVisibility(View.VISIBLE);
         }
 
 
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
             viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
+            viewHolder.rx_guanzhu.setChecked(true);
+            viewHolder.rx_guanzhu.setClickable(false);
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
             viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
+            viewHolder.rx_guanzhu.setChecked(false);
+            viewHolder.rx_guanzhu.setClickable(true);
         }
 
         if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
@@ -353,7 +364,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         }
         viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
 
-        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+        viewHolder.rx_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!data.get(position).isFollower()) {//未关注添加关注
@@ -580,6 +591,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         ImageView iv_pic;
         LinearLayout ll_guanzhu;
         ExpandableTextView expandableTextView;
+        RxShineButton rx_zan;
+        RxShineButton rx_guanzhu;
     }
 
 

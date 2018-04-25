@@ -35,6 +35,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -47,6 +48,9 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,7 +86,7 @@ public class UserHomeActivity extends Activity {
     private TextView tv_head_nickname;
     private TextView tv_no_data;
     private TextView tv_add_gz;
-
+    RxShineButton rx_guangzhu;
     private RequsetUserDynInfoBean.Data userInfo;
     private TextView tv_fans;
     private TextView tv_guanzhu_num;
@@ -94,6 +98,7 @@ public class UserHomeActivity extends Activity {
     private ImageView iv_guanzhu;
     private LinearLayout ll_my_guanzhu;
     private LinearLayout ll_my_fans;
+    private LinearLayout ll_sixin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -208,6 +213,38 @@ public class UserHomeActivity extends Activity {
 //
 //            }
 //        });
+        ll_sixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String userName = userInfo.getPerson().getNick_name();
+                String userPic = userInfo.getPerson().getSelf_avatar_path();
+                String hxIdFrom;
+                if (Constants.HX_DEV_CONFIG) {
+                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
+                } else {
+                    hxIdFrom = userInfo.getPerson().getMember_no();
+                }
+
+                LogUtil.i(userName + userPic + hxIdFrom);
+                EaseUser easeUser = new EaseUser(hxIdFrom);
+                easeUser.setAvatar(userPic);
+                easeUser.setNick(userName);
+
+                List<EaseUser> users = new ArrayList<EaseUser>();
+                users.add(easeUser);
+                if (easeUser != null) {
+                    DemoHelper.getInstance().updateContactList(users);
+                } else {
+                    LogUtil.i("USER IS NULL");
+
+                }
+
+                startActivity(new Intent(UserHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+
+            }
+        });
+
 
         tv_dyn.setText("" + data.getDyn_no());
         if (data.getIs_follow()) {
@@ -217,13 +254,16 @@ public class UserHomeActivity extends Activity {
             } else {
                 tv_add_gz.setText("已关注");
                 iv_guanzhu.setImageResource(R.drawable.img_xin1);
+                rx_guangzhu.setChecked(true);
             }
 
         } else {
             tv_add_gz.setText("+关注");
             iv_guanzhu.setImageResource(R.drawable.img_xin);
+            rx_guangzhu.setChecked(false);
         }
-        tv_add_gz.setOnClickListener(new View.OnClickListener() {
+
+        rx_guangzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -412,11 +452,13 @@ public class UserHomeActivity extends Activity {
                 tv_add_gz.setText("已关注");
                 requestInfoBean.getData().setIs_follow(true);
                 iv_guanzhu.setImageResource(R.drawable.img_xin1);
+                rx_guangzhu.setChecked(true);
                 break;
             case EventConstants.DEL_GUANZHU:
                 tv_add_gz.setText("+关注");
                 iv_guanzhu.setImageResource(R.drawable.img_xin);
                 requestInfoBean.getData().setIs_follow(false);
+                rx_guangzhu.setChecked(false);
                 break;
             case EventConstants.ADD_ZAN:
 
@@ -615,12 +657,14 @@ public class UserHomeActivity extends Activity {
         tv_fans = headview.findViewById(R.id.tv_fans);
         tv_dyn = headview.findViewById(R.id.tv_dyn);
         iv_guanzhu = headview.findViewById(R.id.iv_guanzhu);
+        rx_guangzhu = headview.findViewById(R.id.rx_guangzhu);
 
         tv_guanzhu_num = headview.findViewById(R.id.tv_guanzhu_num);
         tv_add_gz = headview.findViewById(R.id.tv_add_gz);
         ll_edit = headview.findViewById(R.id.ll_edit);
         ll_my_guanzhu = headview.findViewById(R.id.ll_my_guanzhu);
         ll_my_fans = headview.findViewById(R.id.ll_my_fans);
+        ll_sixin = headview.findViewById(R.id.ll_sixin);
 
         ll_edit = headview.findViewById(R.id.ll_edit);
         iv_sex = headview.findViewById(R.id.iv_sex);

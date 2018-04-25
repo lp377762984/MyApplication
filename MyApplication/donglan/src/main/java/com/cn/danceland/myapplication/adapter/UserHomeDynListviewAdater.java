@@ -30,6 +30,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -51,6 +53,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -80,6 +83,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
     private Context context;
     boolean isMe = false;
     private final SparseBooleanArray mCollapsedStatus;
+
     public UserHomeDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
@@ -200,7 +204,9 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.tv_location = convertView.findViewById(R.id.tv_location);
             viewHolder.ll_location = convertView.findViewById(R.id.ll_location);
             viewHolder.tv_content = convertView.findViewById(R.id.tv_content);
+            viewHolder.rx_zan = convertView.findViewById(R.id.rx_zan);
             viewHolder.tv_zan_num = convertView.findViewById(R.id.tv_zan_num);
+            viewHolder.rx_guanzhu = convertView.findViewById(R.id.rx_guanzhu);
             viewHolder.iv_avatar = convertView.findViewById(R.id.iv_avatar);
             viewHolder.iv_zan = convertView.findViewById(iv_zan);
             viewHolder.iv_comment = convertView.findViewById(iv_comment);
@@ -210,8 +216,9 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
             viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
-             viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
+            viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
+            viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
             viewHolder.expandableTextView = (ExpandableTextView) convertView.findViewById(R.id.expand_text_view);
             convertView.setTag(viewHolder);
         } else {
@@ -238,18 +245,20 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
         //    LogUtil.i(data.get(position).isPraise()+"");
         if (data.get(position).isPraise()) {//设置点赞
-            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+            //  viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+            viewHolder.rx_zan.setChecked(true);
         } else {
-            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+            //   viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+            viewHolder.rx_zan.setChecked(false);
         }
         viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
-        if (data.get(position).isAnimationFlag()) {
-            buildAnima(position);
-            viewHolder.iv_zan.clearAnimation();
-            viewHolder.iv_zan.setAnimation(mAnimationSet);
-        }
+//        if (data.get(position).isAnimationFlag()) {
+//            buildAnima(position);
+//            viewHolder.iv_zan.clearAnimation();
+//            viewHolder.iv_zan.setAnimation(mAnimationSet);
+//        }
 
-        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
+        viewHolder.rx_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //点赞
@@ -315,10 +324,15 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
             viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
+            viewHolder.rx_guanzhu.setChecked(true);
+            viewHolder.rx_guanzhu.setClickable(false);
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
+            viewHolder.tv_guanzhu.setTextColor(Color.parseColor("#ff6600"));
+            viewHolder.rx_guanzhu.setChecked(true);
+            viewHolder.rx_guanzhu.setClickable(false);
         }
-        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+        viewHolder.rx_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!data.get(position).isFollower()) {//未关注添加关注
@@ -384,32 +398,93 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.jzVideoPlayer.setVisibility(View.GONE);
         }
 
+
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
+            viewHolder.gridView.setVisibility(View.VISIBLE);
+//            if (data.get(position).getImgList().size() == 1) {
+//                viewHolder.gridView.setVisibility(View.GONE);
+//            }
+
             if (data.get(position).getImgList().size() == 1) {
+                viewHolder.gridView.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                RequestOptions options1 = new RequestOptions()
+                        //  .placeholder(R.drawable.img_loading)//加载占位图
+                        .error(R.drawable.img_loadfail)//
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .priority(Priority.HIGH);
+
+                viewHolder.iv_pic.setVisibility(View.VISIBLE);
+                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
+                String[] b = sb.toString().split("_");
+                String[] c = b[1].toString().split("X");
+
+//                LogUtil.i(b[2].toString());
+//
+//                LogUtil.i(c[0]);
+//                LogUtil.i(c[1]);
+//                LogUtil.i(sb.toString());
+
+                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
+                    if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
+                        if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                            viewHolder.iv_pic.setLayoutParams(linearParams);
+                        } else {
+                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                            viewHolder.iv_pic.setLayoutParams(linearParams);
+                        }
+                    }
+                }
+
+
+                Glide.with(context)
+                        .load(sb.toString())
+                        // .apply(options1)
+                        .into(viewHolder.iv_pic);
+                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(false)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(context, config);
+                    }
+                });
+                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+//
+
 
             } else if (data.get(position).getImgList().size() == 4) {
+                viewHolder.iv_pic.setVisibility(View.GONE);
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 viewHolder.gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(context, 205f);//此处的宽度需要动态计算
+                int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             } else {
+                viewHolder.iv_pic.setVisibility(View.GONE);
                 viewHolder.gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(context, 310f);//此处的宽度需要动态计算
+                int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), 0, 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
-            viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
             /**
              * 图片列表点击事件
@@ -440,10 +515,9 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
-//            viewHolder.iv_pic.setVisibility(View.GONE);
+            viewHolder.iv_pic.setVisibility(View.GONE);
 
         }
-
 
         return convertView;
 
@@ -469,10 +543,12 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
-        LinearLayout    ll_guanzhu;
+        LinearLayout ll_guanzhu;
+        RxShineButton rx_zan;
+        RxShineButton rx_guanzhu;
         ExpandableTextView expandableTextView;
+        ImageView iv_pic;
     }
-
 
 
     private void showListDialogSelf(final int pos) {

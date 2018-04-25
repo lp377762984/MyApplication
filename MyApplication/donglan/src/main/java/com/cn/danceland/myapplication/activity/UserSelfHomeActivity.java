@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -46,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
+
+import static com.cn.danceland.myapplication.R.id.iv_guanzhu;
 
 
 /**
@@ -60,14 +63,14 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private TextView tv_gauzhu_num, tv_message, tv_guanzhu;
     private TextView tv_fans;
     private float pingfen;
-    private ImageView iv_guanzhu;
+  //  private AnimButton iv_guanzhu;
     private TextView tv_hobby;
     private EmojiconTextView tv_nick_name;
     private ImageView iv_avatar;
     private String userId;
     private boolean isdyn;
     private ImageView iv_sex;
-
+    RxShineButton rx_guangzhu;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,18 +92,20 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         findViewById(R.id.ll_my_fans).setOnClickListener(this);
         findViewById(R.id.ll_guanzhu).setOnClickListener(this);
         findViewById(R.id.ll_sixin).setOnClickListener(this);
-        findViewById(R.id.ll_sixin).setOnClickListener(this);
         findViewById(R.id.ll_edit).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
+        rx_guangzhu = findViewById(R.id.rx_guangzhu);
+        rx_guangzhu.setOnClickListener(this);
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         iv_avatar = findViewById(R.id.iv_avatar);
         iv_sex = findViewById(R.id.iv_sex);
         iv_avatar.setOnClickListener(this);
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
-        iv_guanzhu = findViewById(R.id.iv_guanzhu);
+      //  iv_guanzhu = findViewById(R.id.iv_guanzhu);
+     //   iv_guanzhu.setOnClickListener(this);
         tv_hobby = findViewById(R.id.tv_hobby);
         if (TextUtils.equals(userId,SPUtils.getString(Constants.MY_USERID,""))){
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
@@ -141,10 +146,12 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 .into(iv_avatar);
         if (userInfo.getIs_follow()){
             tv_guanzhu.setText("已关注");
-            iv_guanzhu.setImageResource(R.drawable.img_xin1);
+           // iv_guanzhu.setImageResource(R.drawable.img_xin1);
+            rx_guangzhu.setChecked(true);
         }else {
             tv_guanzhu.setText("+关注");
-            iv_guanzhu.setImageResource(R.drawable.img_xin);
+         //   iv_guanzhu.setImageResource(R.drawable.img_xin);
+            rx_guangzhu.setChecked(false);
         }
 
 
@@ -159,6 +166,8 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         } else {
             iv_sex.setVisibility(View.INVISIBLE);
         }
+
+
     }
 
 
@@ -180,14 +189,29 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
             case R.id.iv_avatar://头像
                 startActivity(new Intent(UserSelfHomeActivity.this,AvatarActivity.class).putExtra("url",userInfo.getPerson().getSelf_avatar_path()));
                 break;
-            case R.id.ll_guanzhu:
+//            case R.id.ll_guanzhu:
+//                if (userInfo.getIs_follow()){
+//                    addGuanzhu(userId,false);
+//                }else {
+//                    addGuanzhu(userId,true);
+//                }
+//
+//                break;
+            case iv_guanzhu:
                 if (userInfo.getIs_follow()){
                     addGuanzhu(userId,false);
                 }else {
                     addGuanzhu(userId,true);
                 }
-
                 break;
+            case R.id.rx_guangzhu:
+                if (userInfo.getIs_follow()){
+                    addGuanzhu(userId,false);
+                }else {
+                    addGuanzhu(userId,true);
+                }
+                break;
+
             case R.id.ll_edit:
                 startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
                 break;

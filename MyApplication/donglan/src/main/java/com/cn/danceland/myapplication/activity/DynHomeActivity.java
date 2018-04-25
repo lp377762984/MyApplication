@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +49,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
 import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
+import com.cn.danceland.myapplication.bean.RequestCommitCommentBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserListBeanZan;
@@ -65,6 +65,7 @@ import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ScreenUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
@@ -72,6 +73,7 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -133,7 +135,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private EmojiconEditText et_popup_comment;
     private TextView tv_popup_title;
     private ImageView iv_pic;
-
+    RxShineButton rx_zan;
+    RxShineButton rx_guanzhu;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -249,6 +252,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         tv_send.setOnClickListener(this);
         tv_zan_num = findViewById(R.id.tv_zan_num);
         iv_zan = findViewById(R.id.iv_zan);
+        rx_zan = findViewById(R.id.rx_zan);
         buildAnima();
         emojiButton = findViewById(R.id.emoji_btn);
         et_comment = findViewById(R.id.et_comment);
@@ -261,7 +265,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             public void onKeyboardOpen() {
                 Log.e("Keyboard", "open");
                 tv_zan_num.setVisibility(View.GONE);
-                iv_zan.setVisibility(View.GONE);
+             //   iv_zan.setVisibility(View.GONE);
+                rx_zan.setVisibility(View.GONE);
                 emojiButton.setVisibility(View.VISIBLE);
                 //     tv_send.setVisibility(View.VISIBLE);
             }
@@ -270,7 +275,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             public void onKeyboardClose() {
                 Log.e("Keyboard", "close");
                 tv_zan_num.setVisibility(View.VISIBLE);
-                iv_zan.setVisibility(View.VISIBLE);
+            //    iv_zan.setVisibility(View.VISIBLE);
+                rx_zan.setVisibility(View.VISIBLE);
                 emojiButton.setVisibility(View.GONE);
                 //   tv_send.setVisibility(View.GONE);
             }
@@ -386,20 +392,24 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         tv_zan_num.setText(info.getPriaseNumber() + "");
                     }
                     if (info.getPraise()) {//如果点赞
-                        iv_zan.setImageResource(R.drawable.img_zan1);
+                  //      iv_zan.setImageResource(R.drawable.img_zan1);
+                        rx_zan.setChecked(true);
                     } else {
-                        iv_zan.setImageResource(R.drawable.img_zan);
+                      //  iv_zan.setImageResource(R.drawable.img_zan);
+                        rx_zan.setChecked(false);
                     }
 
-                    iv_zan.setOnClickListener(new View.OnClickListener() {
+
+
+                    rx_zan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                             if (info.getPraise()) {//如果点赞
                                 addZan(info.getId(), false);
                             } else {//未点赞
-                                iv_zan.clearAnimation();//添加动画
-                                iv_zan.startAnimation(mAnimationSet);
+                             //   iv_zan.clearAnimation();//添加动画
+                             //   iv_zan.startAnimation(mAnimationSet);
                                 addZan(info.getId(), true);
                             }
                         }
@@ -452,9 +462,10 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
         if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
             tv_guanzhu.setVisibility(View.INVISIBLE);
+            rx_guanzhu.setVisibility(View.INVISIBLE);
         } else {
-            tv_guanzhu.setVisibility(View.VISIBLE);
-            tv_guanzhu.setOnClickListener(new View.OnClickListener() {
+            rx_guanzhu.setVisibility(View.VISIBLE);
+            rx_guanzhu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //      ToastUtils.showToastShort("点击了关注");
@@ -470,9 +481,13 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
         if (oneDynInfo.isFollower()) {
             tv_guanzhu.setText("已关注");
-            tv_guanzhu.setTextColor(Color.GRAY);
+          //  tv_guanzhu.setTextColor(Color.GRAY);
+            rx_guanzhu.setChecked(true);
+            rx_guanzhu.setClickable(false);
         } else {
             tv_guanzhu.setText("+关注");
+            rx_guanzhu.setChecked(false);
+            rx_guanzhu.setClickable(true);
         }
 
 
@@ -553,12 +568,12 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
 
                     if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f), DensityUtils.dp2px(this, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                        linearParams.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,30f))* Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
                         iv_pic.setLayoutParams(linearParams);
                     } else {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(this, 200f));
-                        linearParams.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,30f))* Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
                         iv_pic.setLayoutParams(linearParams);
                     }
                 }
@@ -591,14 +606,14 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             } else if (oneDynInfo.getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(DynHomeActivity.this, 205f);//此处的宽度需要动态计算
+                int width = DensityUtils.dp2px(DynHomeActivity.this, 195f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             } else {
                 gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(DynHomeActivity.this, 310f);//此处的宽度需要动态计算
+                int width = DensityUtils.dp2px(DynHomeActivity.this, 290f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
@@ -648,6 +663,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         iv_avatar = headview.findViewById(R.id.iv_avatar);
         gridView = headview.findViewById(R.id.gridview);
         jzVideoPlayer = headview.findViewById(R.id.videoplayer);
+        rx_guanzhu = headview.findViewById(R.id.rx_guanzhu);
 
         rl_more = headview.findViewById(R.id.rl_more);
         iv_pic = headview.findViewById(R.id.iv_pic);
@@ -748,66 +764,6 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         };
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                dialog.dismiss();
-                pullToRefresh.onRefreshComplete();
-                Gson gson = new Gson();
-                commentInfoBean = gson.fromJson(s, RequstCommentInfoBean.class);
-                LogUtil.i(commentInfoBean.toString());
-                if (commentInfoBean.getSuccess()) {
-
-                    if (commentInfoBean.getData().getItems() != null) {
-                        data = commentInfoBean.getData().getItems();
-
-                        if (mCurrentPage == 0) {
-                            myAdater.setData(data);
-                        } else {
-                            myAdater.addLastList(data);
-                        }
-
-
-                        myAdater.notifyDataSetChanged();
-                    }
-                    if (commentInfoBean.getData().isLast()) {
-                        setEnd();
-                    }
-
-
-                    mCurrentPage = mCurrentPage + 1;//下次从第二页请求
-                } else {
-                    ToastUtils.showToastShort(commentInfoBean.getErrorMsg());
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("查看网络连接");
-                dialog.dismiss();
-                pullToRefresh.onRefreshComplete();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("msgId", msgId);//用户id
-                map.put("page", page + "");//页数
-                return map;
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-
-        };
         MyApplication.getHttpQueues().add(jsonRequest);
 
     }
@@ -1025,22 +981,41 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 LogUtil.i(jsonObject.toString());
 
                 Gson gson = new Gson();
-                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
-                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
-                if (requestInfoBean.getSuccess()) {
+                RequestCommitCommentBean requestCommitCommentBean=gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
+                if (requestCommitCommentBean.isSuccess()){
+
                     ToastUtils.showToastShort("评论成功");
                     mCurrentPage = 0;
-                    findCommentList(msgId, mCurrentPage);
-
-
+                  //  findCommentList(msgId, mCurrentPage);
+                    myAdater.addFirst(requestCommitCommentBean.getData());
+                    myAdater.notifyDataSetChanged();
                     et_comment.setText("");
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
 
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     slideFromBottomPopup.dismiss();
-                } else {
+
+                }else {
                     ToastUtils.showToastShort("评论失败");
                 }
+
+
+//                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+//                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+//                if (requestInfoBean.getSuccess()) {
+//                    ToastUtils.showToastShort("评论成功");
+//                    mCurrentPage = 0;
+//                    findCommentList(msgId, mCurrentPage);
+//
+//
+//                    et_comment.setText("");
+//                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
+//
+//                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
+//                    slideFromBottomPopup.dismiss();
+//                } else {
+//                    ToastUtils.showToastShort("评论失败");
+//                }
 
 
             }
@@ -1062,57 +1037,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         };
 
 
-        final StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-
-                Gson gson = new Gson();
-                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
-                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    ToastUtils.showToastShort("评论成功");
-                    mCurrentPage = 0;
-                    findCommentList(msgId, mCurrentPage);
-
-
-                    et_comment.setText("");
-                    EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
-
-                    KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
-                    slideFromBottomPopup.dismiss();
-                } else {
-                    ToastUtils.showToastShort("评论失败");
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                dialog.dismiss();
-                LogUtil.i(volleyError.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("mid", msgId);
-                map.put("content", content);
-                //     map.put("parentId",parentId);//页数
-                return map;
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-
-        };
+//
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 
@@ -1140,13 +1065,12 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 LogUtil.i(jsonObject.toString());
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
+                RequestCommitCommentBean requestCommitCommentBean=gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
+                if (requestCommitCommentBean.isSuccess()) {
                     ToastUtils.showToastShort("评论成功");
                     mCurrentPage = 0;
-                    findCommentList(msgId, mCurrentPage);
-
+                    myAdater.addFirst(requestCommitCommentBean.getData());
+                    myAdater.notifyDataSetChanged();
                     replypos = -1;
                     et_comment.setText("");
                     et_comment.setHint("写评论");
@@ -1154,7 +1078,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
                     slideFromBottomPopup.dismiss();
                 } else {
-                    ToastUtils.showToastShort("评论失败：" + requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("评论失败：" + requestCommitCommentBean.getErrorMsg());
                 }
 
 
