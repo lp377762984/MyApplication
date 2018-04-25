@@ -123,7 +123,7 @@ public class ShopListFragment extends BaseFragment {
                         int i1 = aDouble.intValue();
                         if(i1>=1000){
                             int v = i1 / 1000;
-                            int v1 = (i1 - 1000) / 100;
+                            int v1 = (i1 - v*1000) / 100;
                             tv_shopAddress.setText("距我 "+v+"."+v1+" km");
                         }else{
                             tv_shopAddress.setText("距我 "+i1+" m");
@@ -278,7 +278,7 @@ public class ShopListFragment extends BaseFragment {
                 int i1 = aDouble.intValue();
                 if(i1>=1000){
                     int v = i1 / 1000;
-                    int v1 = (i1 - 1000) / 100;
+                    int v1 = (i1 - v*1000) / 100;
                     viewHolder.distance.setText("距我 "+v+"."+v1+" km");
                 }else{
                     viewHolder.distance.setText("距我 "+i1+" m");
