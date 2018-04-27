@@ -101,6 +101,7 @@ public class UpLoadUtils {
         outStream.flush();
         // 得到响应码
         int res = conn.getResponseCode();
+        LogUtil.i(res+"");
         InputStream in = conn.getInputStream();
         StringBuilder sb2 = new StringBuilder();
         if (res == 200) {

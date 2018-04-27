@@ -400,7 +400,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     }
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                    ToastUtils.showToastShort("登录成功");
+
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
 
@@ -416,7 +416,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
 
-                    ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("用户名");
                 }
 
 
@@ -523,6 +523,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
                 LogUtil.i("登录聊天服务器成功！");
+                ToastUtils.showToastShort("登录成功");
 
                 //  EaseUserUtils.setUserAvatar();
 //                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
