@@ -11,7 +11,7 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   public static final String HOST = "http://192.168.1.117:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.119:8003/";//
    //public static final String HOST = " http://192.168.1.117:8003/";//
 
@@ -19,6 +19,7 @@ public class Constants extends EaseConstant {
 
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
+    public static final String REGISTER_AGREEMENT_URL = "http://img.dljsgw.com/protocol/app_register_protocol.html";//注册用户协议
 
 
     public static final String LOGIN_URL = HOST + "person/login ";//登录

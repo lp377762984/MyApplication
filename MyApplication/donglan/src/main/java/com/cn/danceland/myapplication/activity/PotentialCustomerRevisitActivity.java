@@ -78,7 +78,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     public String[] TITLES = new String[]{"最近维护", "本月未维护", "未处理待办事项"};
     public  String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
-    public String[] LIST_TYPE1 = new String[]{"待办", "已办", "全部"};
+
     private int untreated_num = 0;
     private ListPopup listPopup;
     private Gson gson = new Gson();
@@ -183,7 +183,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         }
 
         @Override
-        public IPagerTitleView getTitleView(Context context, final int index) {
+        public IPagerTitleView getTitleView(final Context context, final int index) {
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             simplePagerTitleView = new ColorTransitionPagerTitleView(context);
@@ -196,12 +196,16 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 public void onClick(View v) {
 
                     if (index == 0 ) {
+
+                        listPopup=new ListPopup(PotentialCustomerRevisitActivity.this);
                         myListPopupViewAdapter.setData(LIST_TYPE);
                         listPopup.showPopupWindow(v);
                     }
 
 
                     if (index == 2 ) {
+
+                        listPopup=new ListPopup(PotentialCustomerRevisitActivity.this);
                         myListPopupViewAdapter.setData(UPCOMING_CONDITION);
                         listPopup.showPopupWindow(v);
                     }

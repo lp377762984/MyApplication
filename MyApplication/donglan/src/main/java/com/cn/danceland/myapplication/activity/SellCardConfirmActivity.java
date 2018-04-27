@@ -34,9 +34,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
+import com.cn.danceland.myapplication.bean.explain.Explain;
+import com.cn.danceland.myapplication.bean.explain.ExplainCond;
+import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -44,6 +50,10 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +90,8 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private String startDate;
     private Button btn_commit;
     private Button btn_dj_commit;
+    private Data info;
+    private TextView tv_shuoming;
 
 
     @Override
@@ -95,6 +107,8 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         getDate();
         // LogUtil.i(CardsInfo.getBranch_id());
         findConsultant(CardsInfo.getBranch_id());
+        queryList();
+
     }
 
     //获取当前日期
@@ -110,7 +124,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private void initView() {
         Bundle bundle = this.getIntent().getExtras();
         CardsInfo = (RequestSellCardsInfoBean.Data) bundle.getSerializable("cardinfo");
-
+        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         myPopupListAdapter = new MyPopupListAdapter(this);
         //listPopup = new ListPopup(this);
         TextView tv_name = findViewById(R.id.tv_cardname);
@@ -118,6 +132,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         TextView tv_time = findViewById(R.id.tv_time);
         TextView tv_price = findViewById(R.id.tv_price);
         TextView tv_cardtype = findViewById(R.id.tv_cardtype);
+        tv_shuoming = findViewById(R.id.tv_shuoming);
         XCRoundRectImageView iv_card = findViewById(R.id.iv_card);
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
         Glide.with(SellCardConfirmActivity.this).load(CardsInfo.getImg_url()).apply(options).into(iv_card);
@@ -301,16 +316,32 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
     }
 
-//    private void showListDialog() {
-//        AlertDialog.Builder dialog =
-//                new AlertDialog.Builder(this);
-//        dialog.setTitle("请选择会籍顾问");
-//        //  dialog.setView()
-//
-//        dialog.show();
-//
-//    }
+    /**
+     * @方法说明:按条件查询说明须知列表
+     **/
+    public void queryList() {
+        ExplainRequest request = new ExplainRequest();
+        final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
+        ExplainCond cond = new ExplainCond();
+        cond.setBranch_id(Long.valueOf(info.getPerson().getDefault_branch()));
+        cond.setType(Byte.valueOf("1"));// 1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
+
+        request.queryList(cond, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject json) {
+                DLResult<List<Explain>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<Explain>>>() {
+                }.getType());
+                if (result.isSuccess()) {
+                    List<Explain> list = result.getData();
+                    if(list!=null&&list.size()>0){
+                        tv_shuoming.setText(list.get(0).getContent());
+                    }
+                } else {
+                    ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
+                }
+            }
+        });
+    }
 
     class ListPopup extends BasePopupWindow {
 

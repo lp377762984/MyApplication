@@ -79,19 +79,19 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 ////        }
 
 
-       // EaseUI.getInstance().init(applicationContext, null);
+        // EaseUI.getInstance().init(applicationContext, null);
 //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
-     //   EMClient.getInstance().setDebugMode(true);
+        //   EMClient.getInstance().setDebugMode(true);
 
         DemoHelper.getInstance().init(applicationContext);
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        builder.detectFileUriExposure();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
     }
-
-
-
 
 
     public static RequestQueue getHttpQueues() {

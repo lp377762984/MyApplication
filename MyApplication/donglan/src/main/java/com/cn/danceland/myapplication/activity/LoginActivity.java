@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -87,6 +88,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
         }
     };
+    private CheckBox cb_agreement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +130,14 @@ public class LoginActivity extends Activity implements OnClickListener {
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
         findViewById(R.id.tv_login_others).setOnClickListener(this);
+
         findViewById(R.id.logo).setOnClickListener(this);
         iv_pswd_see = findViewById(R.id.iv_pswd_see);
         iv_pswd_see.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
         mEtPsw = findViewById(R.id.et_password);
+        cb_agreement = findViewById(R.id.cb_agreement);
+        findViewById(R.id.tv_agreemnet).setOnClickListener(this);
 
     }
 
@@ -276,6 +281,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                     return;
                 }
 
+                if (!cb_agreement.isChecked()){
+                    ToastUtils.showToastShort("请阅读用户协议，并勾选");
+                    return;
+                }
                 dialog.show();
                 login();
                 LogUtil.i(MD5Utils.encode(mEtPsw.getText().toString().trim()));
@@ -299,6 +308,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                  }
              }.start();
 
+
+                break;
+            case R.id.tv_agreemnet:
+                startActivity(new Intent(LoginActivity.this, NewsDetailsActivity.class).putExtra("url", Constants.REGISTER_AGREEMENT_URL).putExtra("title", "用户协议"));
 
                 break;
             case R.id.iv_pswd_see://设置密码可见

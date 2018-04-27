@@ -32,8 +32,8 @@ public class SplashActivity extends Activity {
 
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
         TextView versionText = (TextView) findViewById(R.id.tv_version);
-        versionText.setText("1.0.1");
-        versionText.setText(AppUtils.getVersionName(this));
+
+        versionText.setText("版本号："+AppUtils.getVersionName(this));
 
 
         AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);

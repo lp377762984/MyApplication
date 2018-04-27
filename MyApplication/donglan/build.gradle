@@ -37,7 +37,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
-        versionName "1.09"
+        versionName "1.12"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         multiDexEnabled true
@@ -135,7 +135,7 @@ dependencies {
     compile 'com.github.piasy:GlideImageLoader:1.4.5'
     // progress pie indicator
     compile 'com.github.piasy:ProgressPieIndicator:1.4.5'
-    compile 'com.github.razerdp:BasePopup:1.8.7'
+    compile 'com.github.razerdp:BasePopup:1.9.4'
     compile 'com.github.hani-momanii:SuperNova-Emoji:1.1'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.jakewharton:butterknife:8.8.1'

@@ -854,11 +854,12 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 if (paramInfoBean.getSuccess()) {
                     mParamInfoList = paramInfoBean.getData();
 
-
                     if (codetype == REGISTER_CHANNEL) {
+                        listPopup=new ListPopup(EditPotentialActivity.this);
                         listPopup.showPopupWindow();
                     }
                     if (codetype == LIKE || codetype == TARGET || codetype == MEDICAL) {
+                        listPopupMultiSelect=new ListPopupMultiSelect(EditPotentialActivity.this);
                         listPopupMultiSelect.showPopupWindow();
                     }
                 }

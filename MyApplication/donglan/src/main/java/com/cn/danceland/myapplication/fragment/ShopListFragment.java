@@ -90,6 +90,8 @@ public class ShopListFragment extends BaseFragment {
 //            jingdu = getlocationString.split(",")[0];
 //            weidu = getlocationString.split(",")[1];
 //        }
+        jingdu="0";
+        weidu="0";
         jingdu = getArguments().getString("jingdu");
         weidu = getArguments().getString("weidu");
        // LogUtil.i(jingdu + weidu);

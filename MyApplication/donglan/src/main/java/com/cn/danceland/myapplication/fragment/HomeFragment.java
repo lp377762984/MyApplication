@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment {
     private List<RequestImageNewsDataBean.Data> imagelist = new ArrayList<>();
     private NewsListviewAdapter newsListviewAdapter;
     private ViewPager mViewPager;
-    private int mCurrentPage = 1;//起始请求页
+    private int mCurrentPage = 0;//起始请求页
     private int mCurrentIamgenews = 1;//轮播开始页
     private static final int TOP_NEWS_CHANGE_TIME = 4000;// 顶部新闻切换事件
     private Handler mHandler = new Handler() {
@@ -323,7 +323,7 @@ public class HomeFragment extends BaseFragment {
         protected Void doInBackground(Void... voids) {
             //  findSelectionDyn_Down(1);
             init();
-            mCurrentPage = 1;
+            mCurrentPage = 0;
             isEnd = false;
             findNews(mCurrentPage);
             findImageNews();
@@ -545,7 +545,7 @@ public class HomeFragment extends BaseFragment {
 
 
                     //    LogUtil.i(data.toString());
-                    if (mCurrentPage == 1) {
+                    if (mCurrentPage == 0) {
                         newsListviewAdapter.setData(data);
 
                         newsListviewAdapter.notifyDataSetChanged();

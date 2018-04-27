@@ -36,11 +36,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
+import com.cn.danceland.myapplication.bean.explain.Explain;
+import com.cn.danceland.myapplication.bean.explain.ExplainCond;
+import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -48,6 +52,8 @@ import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -117,7 +123,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             find_deposit_days();
             find_deposit_price();
         }
-
+        queryList(CardsInfo.getBranch_id());
     }
 
     private void initView() {
@@ -205,12 +211,12 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         if (product_type == 1) {
                             //     startDate=bundle.getString("startDate",null);
                             //     tv_start_date.setText(startDate);
-                            tv_explain.setText(R.string.explain_for_card);
+                         //   tv_explain.setText(R.string.explain_for_card);
                         }
 
                         if (product_type == 2) {//是定金
                             //  ll_01.setVisibility(View.GONE);
-                            tv_explain.setText(R.string.explain_for_dingjin);
+                        //    tv_explain.setText(R.string.explain_for_dingjin);
 
 
                         }
@@ -222,11 +228,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         ll_02.setVisibility(View.VISIBLE);
                         //  ll_01.setVisibility(View.GONE);
                         if (product_type == 1) {
-                            tv_explain.setText(R.string.explain_for_card_for_other);
+                        //    tv_explain.setText(R.string.explain_for_card_for_other);
                         }
 
                         if (product_type == 2) {//是定金
-                            tv_explain.setText(R.string.explain_for_dingjin_for_other);
+                       //     tv_explain.setText(R.string.explain_for_dingjin_for_other);
                         }
 
 
@@ -243,23 +249,23 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             ll_02.setVisibility(View.GONE);
             if (product_type == 1) {
 
-                tv_explain.setText(R.string.explain_for_card);
+             //   tv_explain.setText(R.string.explain_for_card);
             }
 
             if (product_type == 2) {//是定金
                 //  ll_01.setVisibility(View.GONE);
-                tv_explain.setText(R.string.explain_for_dingjin);
+         //       tv_explain.setText(R.string.explain_for_dingjin);
             }
         } else
 
         {//给其他人买
 
             if (product_type == 1) {
-                tv_explain.setText(R.string.explain_for_card_for_other);
+             //   tv_explain.setText(R.string.explain_for_card_for_other);
             }
 
             if (product_type == 2) {//是定金
-                tv_explain.setText(R.string.explain_for_dingjin_for_other);
+             //   tv_explain.setText(R.string.explain_for_dingjin_for_other);
             }
         }
 
@@ -405,6 +411,33 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             }
         };
         MyApplication.getHttpQueues().add(request);
+    }
+
+    /**
+     * @方法说明:按条件查询说明须知列表
+     **/
+    public void queryList( String branch_id) {
+        ExplainRequest request = new ExplainRequest();
+        final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+
+        ExplainCond cond = new ExplainCond();
+        cond.setBranch_id(Long.valueOf(branch_id));
+        cond.setType(Byte.valueOf("1"));// 1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
+
+        request.queryList(cond, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject json) {
+                DLResult<List<Explain>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<Explain>>>() {
+                }.getType());
+                if (result.isSuccess()) {
+                    List<Explain> list = result.getData();
+                    if(list!=null&&list.size()>0){
+                        tv_explain.setText(list.get(0).getContent());
+                    }
+                } else {
+                    ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
+                }
+            }
+        });
     }
 
     /**

@@ -1,9 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -16,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -88,7 +85,6 @@ import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import razerdp.basepopup.BasePopupWindow;
 
 
 /**
@@ -131,7 +127,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private boolean init;
     private int replypos = -1;
     private RelativeLayout rl_more;
-    SlideFromBottomPopup slideFromBottomPopup;
+   // SlideFromBottomPopup slideFromBottomPopup;
     private EmojiconEditText et_popup_comment;
     private TextView tv_popup_title;
     private ImageView iv_pic;
@@ -246,7 +242,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
         msgId = getIntent().getStringExtra("msgId");
         userId = getIntent().getStringExtra("userId");
-        slideFromBottomPopup = new SlideFromBottomPopup(this);
+      //  slideFromBottomPopup = new SlideFromBottomPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
         tv_send = findViewById(R.id.tv_send);
         tv_send.setOnClickListener(this);
@@ -993,7 +989,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
 
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
-                    slideFromBottomPopup.dismiss();
+                //    slideFromBottomPopup.dismiss();
 
                 }else {
                     ToastUtils.showToastShort("评论失败");
@@ -1076,7 +1072,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                     et_comment.setHint("写评论");
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
-                    slideFromBottomPopup.dismiss();
+                  //  slideFromBottomPopup.dismiss();
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestCommitCommentBean.getErrorMsg());
                 }
@@ -1333,85 +1329,85 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     EmojIconActions emojIcon;
     private View popupView;
 
-    public class SlideFromBottomPopup extends BasePopupWindow implements View.OnClickListener {
-
-
-        private Context context;
-
-        public SlideFromBottomPopup(Activity context) {
-            super(context);
-            this.context = context;
-            bindEvent();
-        }
-
-        @Override
-        protected Animation initShowAnimation() {
-            return getTranslateAnimation(250 * 2, 0, 300);
-        }
-
-        @Override
-        public View getClickToDismissView() {
-            return popupView.findViewById(R.id.click_to_dismiss);
-        }
-
-        @Override
-        public View onCreatePopupView() {
-            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_slide_from_bottom, null);
-            return popupView;
-        }
-
-        @Override
-        public View initAnimaView() {
-            return popupView.findViewById(R.id.popup_anima);
-        }
-
-        private void bindEvent() {
-            if (popupView != null) {
-                popupView.findViewById(R.id.tv_popup_send).setOnClickListener(this);
-                popupView.findViewById(R.id.tv_cancel).setOnClickListener(this);
-                tv_popup_title = popupView.findViewById(R.id.tv_popup_title);
-                et_popup_comment = popupView.findViewById(R.id.et_popup_comment);
-                emojiButton = popupView.findViewById(R.id.emoji_btn);
-                Message message = Message.obtain();
-                message.what = 2;
-                handler.sendMessage(message);
-
-            }
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.tv_popup_send:
-
-                    //  LogUtil.i(et_comment.getText().toString());
-                    if (!TextUtils.isEmpty(et_popup_comment.getText().toString())) {
-                        if (replypos < 0) {
-                            sendCommentReply(msgId, et_popup_comment.getText().toString());
-                        } else {
-                            sendCommentReply(msgId, et_popup_comment.getText().toString(), data.get(replypos).getId(), data.get(replypos).getReplyUserId());
-                        }
-                    } else {
-                        ToastUtils.showToastShort("请输入");
-                    }
-
-
-                    break;
-                case R.id.tv_cancel:
-                    et_popup_comment.setText("");
-                    et_popup_comment.setHint("写评论");
-                    dismiss();
-                    break;
-//                case R.id.tx_3:
+//    public class SlideFromBottomPopup extends BasePopupWindow implements View.OnClickListener {
+//
+//
+//        private Context context;
+//
+//        public SlideFromBottomPopup(Activity context) {
+//            super(context);
+//            this.context = context;
+//            bindEvent();
+//        }
+//
+//        @Override
+//        protected Animation initShowAnimation() {
+//            return getTranslateAnimation(250 * 2, 0, 300);
+//        }
+//
+//        @Override
+//        public View getClickToDismissView() {
+//            return popupView.findViewById(R.id.click_to_dismiss);
+//        }
+//
+//        @Override
+//        public View onCreatePopupView() {
+//            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_slide_from_bottom, null);
+//            return popupView;
+//        }
+//
+//        @Override
+//        public View initAnimaView() {
+//            return popupView.findViewById(R.id.popup_anima);
+//        }
+//
+//        private void bindEvent() {
+//            if (popupView != null) {
+//                popupView.findViewById(R.id.tv_popup_send).setOnClickListener(this);
+//                popupView.findViewById(R.id.tv_cancel).setOnClickListener(this);
+//                tv_popup_title = popupView.findViewById(R.id.tv_popup_title);
+//                et_popup_comment = popupView.findViewById(R.id.et_popup_comment);
+//                emojiButton = popupView.findViewById(R.id.emoji_btn);
+//                Message message = Message.obtain();
+//                message.what = 2;
+//                handler.sendMessage(message);
+//
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()) {
+//                case R.id.tv_popup_send:
+//
+//                    //  LogUtil.i(et_comment.getText().toString());
+//                    if (!TextUtils.isEmpty(et_popup_comment.getText().toString())) {
+//                        if (replypos < 0) {
+//                            sendCommentReply(msgId, et_popup_comment.getText().toString());
+//                        } else {
+//                            sendCommentReply(msgId, et_popup_comment.getText().toString(), data.get(replypos).getId(), data.get(replypos).getReplyUserId());
+//                        }
+//                    } else {
+//                        ToastUtils.showToastShort("请输入");
+//                    }
+//
 //
 //                    break;
-                default:
-                    break;
-            }
-
-        }
-    }
+//                case R.id.tv_cancel:
+//                    et_popup_comment.setText("");
+//                    et_popup_comment.setHint("写评论");
+//                    dismiss();
+//                    break;
+////                case R.id.tx_3:
+////
+////                    break;
+//                default:
+//                    break;
+//            }
+//
+//        }
+//    }
 
 
     /**

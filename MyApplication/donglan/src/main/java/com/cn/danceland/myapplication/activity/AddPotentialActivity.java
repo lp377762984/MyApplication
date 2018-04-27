@@ -273,6 +273,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 potentialInfo.setNationality(et_nationality.getText().toString().trim());
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());
+
+                if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())){
+                    ToastUtils.showToastShort("必须添加潜客会籍");
+                    return;
+                }
                 try {
                     add_potential(gson.toJson(potentialInfo).toString());
                 } catch (JSONException e) {
@@ -583,9 +588,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
 
                     if (codetype == REGISTER_CHANNEL) {
+                        listPopup=new ListPopup(AddPotentialActivity.this);
                         listPopup.showPopupWindow();
                     }
                     if (codetype == LIKE || codetype == TARGET || codetype == MEDICAL) {
+                        listPopupMultiSelect=new ListPopupMultiSelect(AddPotentialActivity.this);
                         listPopupMultiSelect.showPopupWindow();
                     }
                 }
@@ -832,7 +839,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             url = Constants.FIND_CONSULTANT_URL;
         }
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 
 
             @Override
@@ -841,8 +848,10 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 Gson gson = new Gson();
                 RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
                 if (requestConsultantInfoBean.getSuccess()) {
+                    listJiaoLianPopup=new ListJiaoLianPopup(AddPotentialActivity.this);
                     consultantInfo = requestConsultantInfoBean.getData();
                     //  LogUtil.i(consultantListInfo.toString());
+
                     listJiaoLianPopup.showPopupWindow();
 
                 } else {

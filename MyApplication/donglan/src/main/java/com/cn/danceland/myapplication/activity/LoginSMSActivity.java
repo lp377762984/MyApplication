@@ -79,7 +79,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activit_login_sms);
+        setContentView(R.layout.activity_login_sms);
         initView();
     }
 

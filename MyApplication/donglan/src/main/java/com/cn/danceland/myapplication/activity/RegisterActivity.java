@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -76,11 +77,12 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     };
     private EditText mEtPhone;
     ProgressDialog dialog;
+    private CheckBox cb_agreement;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activit_register);
+        setContentView(R.layout.activity_register);
         initView();
 
 
@@ -116,12 +118,18 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.iv_back).setOnClickListener(this);
         mEtPsw = findViewById(R.id.et_password);
         mEtConfirmPsd = findViewById(R.id.et_confirm_password);
+        cb_agreement = findViewById(R.id.cb_agreement);
+        findViewById(R.id.tv_agreemnet).setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tv_agreemnet:
+                startActivity(new Intent(RegisterActivity.this, NewsDetailsActivity.class).putExtra("url", Constants.REGISTER_AGREEMENT_URL).putExtra("title", "用户协议"));
+
+                break;
             case R.id.tv_getsms:
                 //判断电话号码是否为空
                 if (TextUtils.isEmpty(mEtPhone.getText().toString())) {
@@ -179,7 +187,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(RegisterActivity.this, "密码输入不一致，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (!cb_agreement.isChecked()){
+                    ToastUtils.showToastShort("请阅读用户协议，并勾选");
+                    return;
+                }
                 userRegister();//注册账户
 
                 break;

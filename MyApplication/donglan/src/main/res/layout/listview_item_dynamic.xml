@@ -139,6 +139,8 @@
                 android:id="@+id/expand_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                expandableTextView:collapseDrawable="@drawable/img_shouqi"
+                expandableTextView:expandDrawable="@drawable/img_zhankai"
                 expandableTextView:animDuration="200"
                 expandableTextView:maxCollapsedLines="7">
 
@@ -158,8 +160,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|bottom"
+                    android:layout_marginLeft="15dp"
                     android:background="@android:color/transparent"
-                    android:padding="15dp" />
+                    />
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <cn.jzvd.JZVideoPlayerStandard
