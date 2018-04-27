@@ -193,11 +193,11 @@ public class HomeFragment extends BaseFragment {
             public void onClick(View view) {
                 Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 if (TextUtils.isEmpty(data.getPerson().getDefault_branch())){
-                    ToastUtils.showToastShort("您暂时没有排名");
+                    ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
                 if (TextUtils.equals(data.getMember().getAuth(),"1")){
-                    ToastUtils.showToastShort("您暂时没有排名");
+                    ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
 

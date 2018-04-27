@@ -266,6 +266,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(intent2);
                 break;
             case R.id.ll_my_shop:
+                mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 LogUtil.i(mInfo.getPerson().getDefault_branch());
                 if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){
                     ToastUtils.showToastShort("请先加入一个门店");
