@@ -238,6 +238,11 @@ public class CustomDatePicker extends AlertDialog{
         return dateString;
     }
 
+    public String getDateStringF(){
+        dateString = syear+"-"+smonth+"-"+sdate;
+        return dateString;
+    }
+
 
     public String getTimeString(){
         timeString = syear+"年"+smonth+"月"+sdate+"日"+shour+"时"+sminute+"分";

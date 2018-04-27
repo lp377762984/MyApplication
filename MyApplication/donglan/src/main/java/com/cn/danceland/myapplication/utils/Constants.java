@@ -11,10 +11,10 @@ public class Constants extends EaseConstant {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    //public static final String HOST = " http://192.168.1.119:8003/";//
+   //public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+    public static final String HOST = " http://192.168.1.119:8003/";//
    //public static final String HOST = " http://192.168.1.117:8003/";//
-
+   //public static final String HOST = " http://192.168.1.118:8003/";//
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
@@ -54,6 +54,12 @@ public class Constants extends EaseConstant {
 
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
+
+    //报表相关
+    public static final String BUSSTATISTICSREPORT = HOST + "statistics/busStatisticsReport";//业务报表
+    public static final String SCORESTATISTICSREPORT = HOST + "statistics/scoreStatisticsReport";//业绩报表
+    public static final String SAVEREPORT = HOST + "/dailySummary/save";//新增报表
+    public static final String FINDREPORT = HOST + "/dailySummary/findByEmployeeId";//查询报表
 
 
     //体测上传图片

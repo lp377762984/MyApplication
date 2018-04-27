@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
 /**
@@ -18,7 +19,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 public class AboutUsActivity extends Activity {
 
     ImageView about_back,about_logo;
-    private TextView about_verson;
+    TextView about_verson;
     long [] mHits = null;
 
     @Override
@@ -32,6 +33,9 @@ public class AboutUsActivity extends Activity {
     private void initView() {
         about_back = findViewById(R.id.about_back);
         about_logo = findViewById(R.id.about_logo);
+        about_verson = findViewById(R.id.about_verson);
+        about_verson.setText("版本号  "+ AppUtils.getVersionName(this));
+
         about_logo.setOnClickListener(onClickListener);
         about_back.setOnClickListener(onClickListener);
         about_verson = findViewById(R.id.about_verson);

@@ -52,6 +52,7 @@ import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
+import com.cn.danceland.myapplication.activity.ReportFormActivity;
 import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
@@ -767,11 +768,20 @@ public class ShopFragment extends BaseFragment {
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
+                    case 23://会籍报表
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
+                        break;
+                    case 24://全店报表
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
+                        break;
                     case 26://体测分析
                         startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
                         break;
                     case 29://私信
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
+                        break;
+                    case 30://教练报表
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
                         break;
                     case 31://我的私教
                         startActivity(new Intent(mActivity, MySijiaoActivity.class));

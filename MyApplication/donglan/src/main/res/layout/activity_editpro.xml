@@ -17,10 +17,11 @@
         android:minLines="8"
         android:background="@null"
         android:gravity="top"
+        android:maxLength="100"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:hint="开始填写简介"
+        android:hint="开始填写内容"
         android:textColorHint="#c0c0c0"
         />
 
