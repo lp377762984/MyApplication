@@ -238,14 +238,22 @@ public class FitnessTestActivity extends Activity {
         tv_xishu.setText(data.getEdema());
         test_score.setText(data.getScore());
         test_time.setText("测试日期 "+data.getDate());
-        setLine("体重",data.getWeight());
-        setLine("肌肉",data.getMuscle());
-        setLine("体脂百分比",data.getPbf());
-        setLine("骨质",data.getBone());
-        setLine("总水分",data.getWater());
-        setLine("骨骼肌",data.getSmm());
-        setLine("体质指数",data.getBmi());
-        setLine("腰臀比",data.getWhr());
+        if(weight==null){
+            weight = data.getWeight();
+        }
+        if(height==null){
+            height = data.getHeight();
+        }
+        if(weight!=null || height!=null){
+            setLine("体重",data.getWeight());
+            setLine("肌肉",data.getMuscle());
+            setLine("体脂百分比",data.getPbf());
+            setLine("骨质",data.getBone());
+            setLine("总水分",data.getWater());
+            setLine("骨骼肌",data.getSmm());
+            setLine("体质指数",data.getBmi());
+            setLine("腰臀比",data.getWhr());
+        }
 
         test_classify.setText(tiXing(Float.valueOf(data.getBmi()),Float.valueOf(data.getPbf()),xingbie));
 

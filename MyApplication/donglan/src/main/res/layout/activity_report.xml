@@ -17,12 +17,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <RelativeLayout
+                android:id="@+id/rl_date"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <RelativeLayout
+                    android:id="@+id/btn_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp">
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        />
+                    <ImageView
+                        android:layout_toRightOf="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arow_down_yellow"
+                        />
+
+                </RelativeLayout>
+
+
+                <Button
+                    android:id="@+id/btn_all"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    style="@style/BtnCommitStyle"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:text="查看全部"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    />
+
+            </RelativeLayout>
+            
+            
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/report_rv"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_below="@+id/rl_date"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginTop="6dp"
-                android:layout_marginLeft="10dp"
                 >
             </android.support.v7.widget.RecyclerView>
 
@@ -87,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="6dp"
+                android:divider="@null"
                 android:layout_below="@+id/report_ll_01">
 
 
@@ -154,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="6dp"
+                android:divider="@null"
                 android:layout_below="@+id/report_ll_02">
 
 
@@ -236,10 +279,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_meet"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -257,10 +303,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_clean"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -278,10 +327,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_item_placement"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -299,10 +351,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_body_build"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -320,10 +375,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_sport_device"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -341,10 +399,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_group_course"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -362,10 +423,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_course"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -383,10 +447,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_power"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -404,10 +471,13 @@
                         android:gravity="center"
                         />
                     <TextView
+                        android:id="@+id/tv_door"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -425,10 +495,13 @@
                         android:gravity="center_horizontal"
                         />
                     <TextView
+                        android:id="@+id/tv_remark"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         />
                 </LinearLayout>
 
@@ -438,10 +511,12 @@
 
 
             <Button
+                android:id="@+id/btn_commit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/BtnCommitStyle"
                 android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
                 android:layout_below="@+id/report_ll_04"/>
 
 

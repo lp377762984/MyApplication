@@ -56,6 +56,12 @@ public class Constants extends EaseConstant {
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
+    //报表相关
+    public static final String BUSSTATISTICSREPORT = HOST + "statistics/busStatisticsReport";//业务报表
+    public static final String SCORESTATISTICSREPORT = HOST + "statistics/scoreStatisticsReport";//业绩报表
+    public static final String SAVEREPORT = HOST + "/dailySummary/save";//新增报表
+    public static final String FINDREPORT = HOST + "/dailySummary/findByEmployeeId";//查询报表
+
 
     //体测上传图片
     public static final String BCAUPLOAD = HOST + "bcaAnalysis/uploadFile";//体测上传图片
