@@ -10,9 +10,32 @@
 
     </com.cn.danceland.myapplication.view.DongLanTitleView>
 
+    <RelativeLayout
+        android:id="@+id/btn_date"
+        android:layout_below="@+id/report_all_title"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp">
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:layout_toRightOf="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/arow_down_yellow"
+            />
+
+    </RelativeLayout>
 
     <ScrollView
-        android:layout_below="@+id/report_all_title"
+        android:layout_below="@+id/btn_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -41,8 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+
                 android:layout_below="@+id/ll_01"
                 >
 
@@ -93,7 +115,8 @@
                 android:id="@+id/mv_01"
                 android:layout_below="@+id/all_report_ll_01"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:divider="@null">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 
@@ -105,6 +128,7 @@
                 android:layout_height="45dp"
                 android:layout_below="@+id/mv_01"
                 android:background="@color/color_dl_yellow"
+                android:layout_marginTop="5dp"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,8 +146,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_below="@+id/ll_02"
                 >
 
@@ -174,7 +196,8 @@
                 android:id="@+id/mv_02"
                 android:layout_below="@+id/all_report_ll_02"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:divider="@null">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 
@@ -185,6 +208,7 @@
                 android:layout_height="45dp"
                 android:layout_below="@+id/mv_02"
                 android:background="@color/color_dl_yellow"
+                android:layout_marginTop="5dp"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -202,8 +226,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_below="@+id/ll_03"
                 >
 
@@ -254,7 +276,8 @@
                 android:id="@+id/mv_03"
                 android:layout_below="@+id/all_report_ll_03"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:divider="@null">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 
@@ -265,6 +288,7 @@
                 android:layout_height="45dp"
                 android:layout_below="@+id/mv_03"
                 android:background="@color/color_dl_yellow"
+                android:layout_marginTop="5dp"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
@@ -282,8 +306,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_below="@+id/ll_04"
                 >
 
@@ -334,7 +356,9 @@
                 android:id="@+id/mv_04"
                 android:layout_below="@+id/all_report_ll_04"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:divider="@null">
 
             </com.cn.danceland.myapplication.utils.MyListView>
 

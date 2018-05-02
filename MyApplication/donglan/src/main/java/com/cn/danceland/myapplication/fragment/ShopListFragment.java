@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -62,6 +63,7 @@ public class ShopListFragment extends BaseFragment {
     TextView tv_shopname, tv_shopAddress;
     ImageButton ibtn_gps, ibtn_call;
     LatLng startLng;
+    List<StoreBean.Items> itemsList1;
 
     @Override
     public View initViews() {
@@ -73,10 +75,24 @@ public class ShopListFragment extends BaseFragment {
         ibtn_gps = headView.findViewById(R.id.ibtn_gps);
         ibtn_call = headView.findViewById(R.id.ibtn_call);
         drawableArrayList = new ArrayList<>();
+        itemsList1 = new ArrayList<>();
 
         gson = new Gson();
         lv_shoplist = inflate.findViewById(R.id.lv_shoplist);
         lv_shoplist.addHeaderView(headView);
+        lv_shoplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+                intent.putExtra("shopWeidu", itemsList1.get(position).getLat() + "");
+                intent.putExtra("shopJingdu", itemsList1.get(position).getLng() + "");
+                intent.putExtra("jingdu", jingdu);
+                intent.putExtra("weidu", weidu);
+                intent.putExtra("branchID", itemsList1.get(position).getBranch_id() + "");
+                intent.putStringArrayListExtra("imgList", drawableArrayList);
+                startActivityForResult(intent, 111);
+            }
+        });
         initData();
 
         return inflate;
@@ -152,7 +168,8 @@ public class ShopListFragment extends BaseFragment {
                             }
                         });
 
-                        List<StoreBean.Items> itemsList1 = new ArrayList<>();
+
+                        itemsList1 = new ArrayList<>();
                         if (itemsList.size() > 1) {
                             for (int i = 1; i < itemsList.size(); i++) {
                                 itemsList1.add(itemsList.get(i));
@@ -312,21 +329,6 @@ public class ShopListFragment extends BaseFragment {
                         intent.putExtra("jingdu", jingdu);
                         intent.putExtra("weidu", weidu);
                         startActivity(intent);
-                    }
-                }
-            });
-            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemsArrayList != null) {
-                        Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
-                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
-                        intent.putExtra("jingdu", jingdu);
-                        intent.putExtra("weidu", weidu);
-                        intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
-                        intent.putStringArrayListExtra("imgList", drawableArrayList);
-                        startActivityForResult(intent, 111);
                     }
                 }
             });

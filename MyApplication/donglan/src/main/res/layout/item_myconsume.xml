@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <com.cn.danceland.myapplication.view.XCRoundRectImageView
+        android:id="@+id/xc_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/alipay_logo"/>
+
+    <TextView
+        android:id="@+id/tv_type"
+        android:layout_toRightOf="@+id/xc_img"
+        android:layout_alignTop="@+id/xc_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="一对一私教"
+        />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/xc_img"
+        android:layout_alignBottom="@+id/xc_img"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:text="20节减脂私教"
+        />
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_alignTop="@+id/xc_img"
+        android:text="金额：2000元"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/tv_price"
+        android:layout_alignTop="@+id/xc_img"
+        android:layout_marginRight="5dp"
+        android:background="@color/color_dl_yellow"
+        android:textColor="@color/white"
+        android:text="App端"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        />
+
+<TextView
+    android:id="@+id/tv_status"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignBottom="@+id/xc_img"
+    android:layout_alignParentRight="true"
+    android:layout_marginRight="15dp"
+    android:textColor="@color/color_dl_yellow"
+    android:textSize="14sp"
+    android:text="未支付"
+    />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:layout_alignBottom="@+id/xc_img"
+        android:layout_marginRight="5dp"
+        android:text="时间"
+        android:layout_toLeftOf="@+id/tv_status"/>
+</RelativeLayout>

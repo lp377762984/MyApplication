@@ -16,13 +16,13 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.EmpUserHomeActivty;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
+import com.cn.danceland.myapplication.activity.MyConsumeActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.MyShopActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
-import com.cn.danceland.myapplication.activity.XiaoFeiRecordActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -279,7 +279,7 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, EmpUserHomeActivty.class));
                 break;
             case R.id.ll_my_xiaofei:
-                startActivity(new Intent(mActivity, XiaoFeiRecordActivity.class));
+                startActivity(new Intent(mActivity, MyConsumeActivity.class));
                 break;
             default:
                 break;

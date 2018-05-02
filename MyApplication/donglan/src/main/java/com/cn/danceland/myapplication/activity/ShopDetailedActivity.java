@@ -94,8 +94,46 @@ public class ShopDetailedActivity extends Activity{
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
         imgList = getIntent().getStringArrayListExtra("imgList");
-        myBranchId = myInfo.getPerson().getDefault_branch();
+        //myBranchId = myInfo.getPerson().getDefault_branch();
+        isJoinBranch(branchID);
 
+    }
+
+    private void isJoinBranch(final String branchId) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+            LogUtil.i(s);
+                if(s.contains("1")){
+                    s_button.setVisibility(View.GONE);
+                }else{
+                    s_button.setVisibility(View.VISIBLE);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branchId",branchId);
+
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void initView() {
@@ -140,11 +178,6 @@ public class ShopDetailedActivity extends Activity{
         s_button = findViewById(R.id.s_button);
 
 //        join_button = findViewById(R.id.join_button);
-        if(myBranchId!=null){
-            s_button.setVisibility(View.GONE);
-        }else{
-            s_button.setVisibility(View.VISIBLE);
-        }
 
         bt_back = findViewById(R.id.bt_back);
         bt_back.setOnClickListener(new View.OnClickListener() {

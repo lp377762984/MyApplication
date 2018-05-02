@@ -37,6 +37,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
+import com.cn.danceland.myapplication.activity.AllReportActivity;
 import com.cn.danceland.myapplication.activity.BodyBaseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
@@ -769,10 +770,10 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
                     case 23://会籍报表
-                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","1"));
                         break;
                     case 24://全店报表
-                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
+                        startActivity(new Intent(mActivity, AllReportActivity.class).putExtra("role_type",role).putExtra("target_role_type","4"));
                         break;
                     case 26://体测分析
                         startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
@@ -781,7 +782,7 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     case 30://教练报表
-                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role));
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","2"));
                         break;
                     case 31://我的私教
                         startActivity(new Intent(mActivity, MySijiaoActivity.class));

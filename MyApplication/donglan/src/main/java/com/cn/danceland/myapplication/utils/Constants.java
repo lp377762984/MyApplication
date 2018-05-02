@@ -10,8 +10,8 @@ public class Constants extends EaseConstant {
    // public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-    //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   public static final String HOST = "http://192.168.1.117:8003/";//佳楠
+      public static final String HOST = " http://192.168.1.123:8003/";//佳楠
+   //public static final String HOST = "http://192.168.1.117:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.119:8003/";//
    //public static final String HOST = " http://192.168.1.117:8003/";//
 
@@ -52,6 +52,7 @@ public class Constants extends EaseConstant {
     public static final String GETHUIYUANMENUS = HOST + "appMenuFunction/queryMemFunctions";//获取会员菜单权限
     public static final String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
     public static final String SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
+    public static final String ISJOINBRANCH = HOST + "/branch/iSJoinBranch";//判断是否加入该门店
 
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
