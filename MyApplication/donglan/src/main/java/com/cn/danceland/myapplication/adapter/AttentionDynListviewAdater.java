@@ -520,13 +520,14 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-
+                viewHolder.iv_pic.setVisibility(View.GONE);
             } else {
                 viewHolder.gridView.setNumColumns(3);
                 int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                viewHolder.iv_pic.setVisibility(View.GONE);
             }
 
             viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));

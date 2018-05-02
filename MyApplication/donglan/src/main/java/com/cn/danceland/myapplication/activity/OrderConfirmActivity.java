@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -28,6 +30,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -39,7 +42,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
-import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
+import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
@@ -54,6 +57,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.vondear.rxtools.module.alipay.PayResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,9 +112,55 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     private TextView tv_price;
     private TextView tv_product_type;
     private TextView tv_total_price;
+    public static  final  int SDK_PAY_FLAG = 0x1001;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    LogUtil.i(payResult.toString());
+                    switch (payResult.getResultStatus()) {
+                        case "9000":
+                            ToastUtils.showToastShort("支付成功");
+
+                            finish();
+                            break;
+                        case "8000":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        case "4000":
+                            ToastUtils.showToastShort("订单支付失败");
+                            break;
+                        case "5000":
+                            ToastUtils.showToastShort("重复请求");
+                            break;
+                        case "6001":
+                            ToastUtils.showToastShort("已取消支付");
+                            break;
+                        case "6002":
+                            ToastUtils.showToastShort("网络连接出错");
+                            break;
+                        case "6004":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        default:
+                            ToastUtils.showToastShort("支付失败");
+                            break;
+                    }
+
+
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+    //    EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_comfirm);
         initView();
@@ -119,7 +169,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     private void initData() {
         findConsultant(CardsInfo.getBranch_id());
-        if (product_type==2){
+        if (product_type == 2) {
             find_deposit_days();
             find_deposit_price();
         }
@@ -211,12 +261,12 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         if (product_type == 1) {
                             //     startDate=bundle.getString("startDate",null);
                             //     tv_start_date.setText(startDate);
-                         //   tv_explain.setText(R.string.explain_for_card);
+                            //   tv_explain.setText(R.string.explain_for_card);
                         }
 
                         if (product_type == 2) {//是定金
                             //  ll_01.setVisibility(View.GONE);
-                        //    tv_explain.setText(R.string.explain_for_dingjin);
+                            //    tv_explain.setText(R.string.explain_for_dingjin);
 
 
                         }
@@ -228,11 +278,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         ll_02.setVisibility(View.VISIBLE);
                         //  ll_01.setVisibility(View.GONE);
                         if (product_type == 1) {
-                        //    tv_explain.setText(R.string.explain_for_card_for_other);
+                            //    tv_explain.setText(R.string.explain_for_card_for_other);
                         }
 
                         if (product_type == 2) {//是定金
-                       //     tv_explain.setText(R.string.explain_for_dingjin_for_other);
+                            //     tv_explain.setText(R.string.explain_for_dingjin_for_other);
                         }
 
 
@@ -249,23 +299,23 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             ll_02.setVisibility(View.GONE);
             if (product_type == 1) {
 
-             //   tv_explain.setText(R.string.explain_for_card);
+                //   tv_explain.setText(R.string.explain_for_card);
             }
 
             if (product_type == 2) {//是定金
                 //  ll_01.setVisibility(View.GONE);
-         //       tv_explain.setText(R.string.explain_for_dingjin);
+                //       tv_explain.setText(R.string.explain_for_dingjin);
             }
         } else
 
         {//给其他人买
 
             if (product_type == 1) {
-             //   tv_explain.setText(R.string.explain_for_card_for_other);
+                //   tv_explain.setText(R.string.explain_for_card_for_other);
             }
 
             if (product_type == 2) {//是定金
-             //   tv_explain.setText(R.string.explain_for_dingjin_for_other);
+                //   tv_explain.setText(R.string.explain_for_dingjin_for_other);
             }
         }
 
@@ -317,11 +367,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             ll_03.setVisibility(View.GONE);
             tv_name.setText("预付定金");
             tv_product_type.setText("会籍卡定金");
-            tv_useful_life.setText(deposit_days+"天");
+            tv_useful_life.setText(deposit_days + "天");
             tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
-            tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price* number));
+            tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
             tv_pay_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
-            total_price = PriceUtils.formatPrice2float(deposit_price* number);
+            total_price = PriceUtils.formatPrice2float(deposit_price * number);
             pay_price = total_price;
         }
 
@@ -350,7 +400,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 RequestSimpleBean requsetSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
                     deposit_days = requsetSimpleBean.getData();
-                    tv_useful_life.setText(deposit_days+"天");
+                    tv_useful_life.setText(deposit_days + "天");
                 }
 
             }
@@ -387,11 +437,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                     LogUtil.i(requsetSimpleBean.getData());
                     deposit_price = Float.parseFloat(requsetSimpleBean.getData());
-                    tv_useful_life.setText(deposit_days+"天");
+                    tv_useful_life.setText(deposit_days + "天");
                     tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
-                    tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price* number));
+                    tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
                     tv_pay_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
-                    total_price = PriceUtils.formatPrice2float(deposit_price* number);
+                    total_price = PriceUtils.formatPrice2float(deposit_price * number);
                     pay_price = total_price;
                 }
 
@@ -416,7 +466,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     /**
      * @方法说明:按条件查询说明须知列表
      **/
-    public void queryList( String branch_id) {
+    public void queryList(String branch_id) {
         ExplainRequest request = new ExplainRequest();
         final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
@@ -430,7 +480,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 }.getType());
                 if (result.isSuccess()) {
                     List<Explain> list = result.getData();
-                    if(list!=null&&list.size()>0){
+                    if (list != null && list.size() > 0) {
                         tv_explain.setText(list.get(0).getContent());
                     }
                 } else {
@@ -454,14 +504,18 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
-                RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
+
+             //   RequestOrderPayInfoBean RequestOrderPayInfoBean
+                RequestOrderPayInfoBean requestOrderInfoBean = new RequestOrderPayInfoBean();
                 Gson gson = new Gson();
-                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderInfoBean.class);
+                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
-                    showPayDialog(pay_way, requestOrderInfoBean.getData().getId());
+                    if (requestOrderInfoBean.getData().getPayWay()==2){
+                        showPayDialog(pay_way, requestOrderInfoBean.getData().getAlipayOrderInfo());
+                    }
 
 
                 } else {
@@ -503,15 +557,18 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
-                RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
+                RequestOrderPayInfoBean requestOrderInfoBean = new RequestOrderPayInfoBean();
                 Gson gson = new Gson();
-                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderInfoBean.class);
+                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
                     ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
 
-                    showPayDialog(pay_way, requestOrderInfoBean.getData().getId());
+                    if (requestOrderInfoBean.getData().getPayWay()==2){
+                        showPayDialog(pay_way, requestOrderInfoBean.getData().getAlipayOrderInfo());
+                    }
+
 
 //                    if (pay_way == 1) {//支付宝
 //                        alipay(requestOrderInfoBean.getData().getId());
@@ -576,7 +633,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         unpaidOrder = orderId;
                         if (pay_way == 2) {
                             //支付宝
-                            alipay(orderId);
+                         //   alipay(orderId);
+                            alipayTest(orderId);
                         }
                         if (pay_way == 3) {
                             //微信
@@ -645,10 +703,31 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 return map;
             }
         };
-        //   MyApplication.getHttpQueues().add(stringRequest);
+          MyApplication.getHttpQueues().add(stringRequest);
 
     }
 
+
+    private void alipayTest(String info) {
+        final String orderInfo = info;   // 订单信息
+
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(OrderConfirmActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo, true);
+
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
 
     /**
      * 支付宝支付
