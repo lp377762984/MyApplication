@@ -329,6 +329,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
+                LogUtil.i(json.toString());
                 DLResult<List<Explain>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<Explain>>>() {
                 }.getType());
                 if (result.isSuccess()) {
