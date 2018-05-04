@@ -615,7 +615,7 @@
             android:id="@+id/btn_commit2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginRight="10dp"
+
             android:layout_weight="1"
             android:background="@drawable/btn_square_bg_selector"
             android:text="重新支付"
