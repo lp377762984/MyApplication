@@ -68,6 +68,7 @@ public class ReportFormActivity extends Activity {
     Button btn_all;
     String str_meet,str_clean,str_item_placement,str_body_build,str_sport_device,str_group_course,str_course,str_power,str_door,str_remark;
     Data myInfo;
+    String target_role_type;//要查询什么报表
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class ReportFormActivity extends Activity {
     }
 
     //业务报表
-    private void initBusData(final String date, final String current_role_type, final String target_role_type, final String employee_id) {
+    private void initBusData(final String date, final String current_role_type, final String employee_id) {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BUSSTATISTICSREPORT, new Response.Listener<String>() {
@@ -104,7 +105,7 @@ public class ReportFormActivity extends Activity {
                 HashMap<String,String> map = new HashMap<>();
                 map.put("date",date);
                 map.put("current_role_type",current_role_type);
-                map.put("target_role_type",target_role_type);
+                //map.put("target_role_type",target_role_type);
                 if(employee_id!=null){
                     map.put("employee_id",employee_id);
                 }
@@ -193,8 +194,8 @@ public class ReportFormActivity extends Activity {
                 if(PreclickText!=null){
                     PreclickText.setTextColor(Color.parseColor("#808080"));
                 }
-                initBusData(selectDate,role,role,emp_id);
-                initScoreData(selectDate,role,role,emp_id);
+                initBusData(selectDate,role,emp_id);
+                initScoreData(selectDate,role,target_role_type,emp_id);
                 initReportData(selectDate,emp_id);
             }
         });
@@ -244,8 +245,8 @@ public class ReportFormActivity extends Activity {
             report_title.setTitle("教练报表");
         }
 
-        initBusData(selectDate,role,role,emp_id);
-        initScoreData(selectDate,role,role,emp_id);
+        initBusData(selectDate,role,emp_id);
+        initScoreData(selectDate,role,target_role_type,emp_id);
         initReportData(selectDate,emp_id);
 
         tv_meet = findViewById(R.id.tv_meet);
@@ -497,8 +498,8 @@ public class ReportFormActivity extends Activity {
             public void onClick() {
                 selectDate = customDatePicker.getDateStringF();
                 tv_date.setText(selectDate);
-                initBusData(selectDate,role,role,emp_id);
-                initScoreData(selectDate,role,role,emp_id);
+                initBusData(selectDate,role,emp_id);
+                initScoreData(selectDate,role,target_role_type,emp_id);
                 initReportData(selectDate,emp_id);
 
             }
@@ -524,6 +525,7 @@ public class ReportFormActivity extends Activity {
     private void initHost() {
         gson = new Gson();
         role_type = getIntent().getStringExtra("role_type");
+        target_role_type = getIntent().getStringExtra("target_role_type");
         Time time = new Time();
         time.setToNow();
 
@@ -604,8 +606,8 @@ public class ReportFormActivity extends Activity {
                     PreclickText = holder.tv_name;
                     holder.tv_name.setTextColor(Color.parseColor("#ff6600"));
                     emp_id = data.get(position).getEmployee_id() + "";
-                    initBusData(selectDate,role,role,emp_id);
-                    initScoreData(selectDate,role,role,emp_id);
+                    initBusData(selectDate,role,emp_id);
+                    initScoreData(selectDate,role,target_role_type,emp_id);
                     initReportData(selectDate,emp_id);
                 }
             });

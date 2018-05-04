@@ -159,7 +159,7 @@ public class ShowCameraActivity extends Activity {
 
     public File saveBitmapFile(Bitmap bitmap) {
         File file=new File(Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/"+System.currentTimeMillis()+".png");//将要保存图片的路径
+                + "/donglan/camera/"+System.currentTimeMillis()+".jpg");//将要保存图片的路径
         File dir = new File(Environment.getExternalStorageDirectory().getPath()
                 + "/donglan/camera/");
         if(!dir.exists()){
@@ -168,7 +168,7 @@ public class ShowCameraActivity extends Activity {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
             bos.close();
 

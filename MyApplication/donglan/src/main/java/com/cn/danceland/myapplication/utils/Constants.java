@@ -52,6 +52,7 @@ public class Constants extends EaseConstant {
     public static final String GETHUIYUANMENUS = HOST + "appMenuFunction/queryMemFunctions";//获取会员菜单权限
     public static final String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
     public static final String SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
+    public static final String ISJOINBRANCH = HOST + "/branch/iSJoinBranch";//判断是否加入该门店
 
 
     public static final String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
