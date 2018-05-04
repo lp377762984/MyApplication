@@ -80,19 +80,19 @@ public class ShopListFragment extends BaseFragment {
         gson = new Gson();
         lv_shoplist = inflate.findViewById(R.id.lv_shoplist);
         lv_shoplist.addHeaderView(headView);
-        lv_shoplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-                intent.putExtra("shopWeidu", itemsList1.get(position).getLat() + "");
-                intent.putExtra("shopJingdu", itemsList1.get(position).getLng() + "");
-                intent.putExtra("jingdu", jingdu);
-                intent.putExtra("weidu", weidu);
-                intent.putExtra("branchID", itemsList1.get(position).getBranch_id() + "");
-                intent.putStringArrayListExtra("imgList", drawableArrayList);
-                startActivityForResult(intent, 111);
-            }
-        });
+//        lv_shoplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+//                intent.putExtra("shopWeidu", itemsList1.get(position).getLat() + "");
+//                intent.putExtra("shopJingdu", itemsList1.get(position).getLng() + "");
+//                intent.putExtra("jingdu", jingdu);
+//                intent.putExtra("weidu", weidu);
+//                intent.putExtra("branchID", itemsList1.get(position).getBranch_id() + "");
+//                intent.putStringArrayListExtra("imgList", drawableArrayList);
+//                startActivityForResult(intent, 111);
+//            }
+//        });
         initData();
 
         return inflate;
@@ -305,7 +305,7 @@ public class ShopListFragment extends BaseFragment {
 
                 viewHolder.store_address.setText(items.getBname());
 
-                Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
+                Glide.with(getActivity()).load(items.getLogo_url()).into(viewHolder.store_item_img);
                 //PhoneNo = items.getTelphone_no();
 //                shopJingdu = items.getLat()+"";
 //                shopWeidu = items.getLng()+"";
@@ -330,6 +330,20 @@ public class ShopListFragment extends BaseFragment {
                         intent.putExtra("weidu", weidu);
                         startActivity(intent);
                     }
+                }
+            });
+
+            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
+                    intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
+                    intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
+                    intent.putExtra("jingdu", jingdu);
+                    intent.putExtra("weidu", weidu);
+                    intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
+                    intent.putStringArrayListExtra("imgList", drawableArrayList);
+                    startActivityForResult(intent, 111);
                 }
             });
 

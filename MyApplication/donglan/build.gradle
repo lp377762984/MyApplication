@@ -153,4 +153,5 @@ dependencies {
     //banner
     compile project(':easeui')
     compile project(':RxTools-library')
+    compile 'me.shaohui.advancedluban:library:1.3.5'
 }

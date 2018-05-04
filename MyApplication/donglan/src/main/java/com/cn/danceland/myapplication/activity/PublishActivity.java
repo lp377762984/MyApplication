@@ -71,6 +71,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.shaohui.advancedluban.Luban;
+import me.shaohui.advancedluban.OnCompressListener;
+import me.shaohui.advancedluban.OnMultiCompressListener;
+
 /**
  * Created by feng on 2017/10/23.
  * 发布动态
@@ -227,7 +231,7 @@ public class PublishActivity extends Activity {
         }
 
     }
-
+    long length;
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -248,35 +252,19 @@ public class PublishActivity extends Activity {
                     if ("0".equals(isPhoto)) {
                         if (arrayList != null && arrayList.size() > 0) {
                             MultipartRequestParams params = new MultipartRequestParams();
-                            arrayFileMap = new HashMap<String, File>();
-                            File[] files = new File[arrayList.size()];
-                            for (int i = 0; i < arrayList.size(); i++) {
-                                File file = new File(arrayList.get(i));
-                                arrayFileMap.put(i + "", file);
-                            }
+
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try {
-                                        String s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
-                                        UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
-                                        List<UpImagesBean.Data> beanList = upImagesBean.getData();
-
-                                        arrImgUrl = new ArrayList<String>();
-                                        arrImgPath = new ArrayList<String>();
-                                        if (beanList != null && beanList.size() > 0) {
-                                            for (int k = 0; k < beanList.size(); k++) {
-                                                arrImgUrl.add(beanList.get(k).getImgUrl());
-                                                arrImgPath.add(beanList.get(k).getImgPath());
-                                            }
+                                    //try {
+                                        arrayFileMap = new HashMap<>();
+                                        ArrayList<File> files = new ArrayList<>();
+                                        for (int i = 0; i < arrayList.size(); i++) {
+                                            File file = new File(arrayList.get(i));
+                                            files.add(file);
                                         }
+                                        compressImg(files);//压缩图片
 
-                                        Message message = new Message();
-                                        message.what = 2;
-                                        handler.sendMessage(message);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                             }).start();
                             finish();
@@ -477,6 +465,69 @@ public class PublishActivity extends Activity {
 
     }
 
+    //压缩图片
+    private void compressImg(List<File> files){
+        Luban.compress(this,files)
+                .setMaxSize(500)                // limit the final image size（unit：Kb）
+//                .setMaxHeight(1920)             // limit image height
+//                .setMaxWidth(1080)              // limit image width
+                .putGear(Luban.CUSTOM_GEAR)     // use CUSTOM GEAR compression mode
+                .launch(new OnMultiCompressListener() {
+                    @Override
+                    public void onStart() {
+                        LogUtil.i("开始压缩");
+                    }
+
+                    @Override
+                    public void onSuccess(List<File> fileList) {
+                        int size = fileList.size();
+                        for(int i=0;i<size;i++){
+                            arrayFileMap.put(i + "", fileList.get(i));
+                        }
+
+                        for(int j = 0;j<arrayFileMap.size();j++){
+                            LogUtil.i(arrayFileMap.get(j+"").length()+"");
+                        }
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String s = null;
+                                try {
+                                    s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                                List<UpImagesBean.Data> beanList = upImagesBean.getData();
+
+                                arrImgUrl = new ArrayList<String>();
+                                arrImgPath = new ArrayList<String>();
+                                if (beanList != null && beanList.size() > 0) {
+                                    for (int k = 0; k < beanList.size(); k++) {
+                                        arrImgUrl.add(beanList.get(k).getImgUrl());
+                                        arrImgPath.add(beanList.get(k).getImgPath());
+                                    }
+                                }
+
+                                Message message = new Message();
+                                message.what = 2;
+                                handler.sendMessage(message);
+                            }
+                        }).start();
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        LogUtil.i("压缩失败" + throwable.toString());
+                    }
+                });
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -489,6 +540,7 @@ public class PublishActivity extends Activity {
                     for (int i = 0; i < uris.size(); i++) {
                         arrayList.add(PictureUtil.getRealPath(getApplicationContext(), uris.get(i)));
                     }
+
                     SPUtils.setInt("imgN", arrayList.size() + SPUtils.getInt("imgN", 0));
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
