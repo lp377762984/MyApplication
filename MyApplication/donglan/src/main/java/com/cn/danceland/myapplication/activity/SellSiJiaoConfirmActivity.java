@@ -124,8 +124,10 @@ public class SellSiJiaoConfirmActivity extends Activity {
             public void onClick(View v) {
                 if(state==0){
                     startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","0").putExtra("itemContent",itemContent));
+                    finish();
                 }else if(state==1){
                     startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","1").putExtra("itemContent",itemContent));
+                    finish();
                 }
 
             }

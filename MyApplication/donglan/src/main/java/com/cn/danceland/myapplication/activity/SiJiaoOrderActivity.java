@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +28,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.EnvUtils;
+import com.alipay.sdk.app.PayTask;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -40,11 +44,14 @@ import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianBean;
 import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
+import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
+import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -54,9 +61,15 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.vondear.rxtools.module.alipay.PayResult;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +85,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 public class SiJiaoOrderActivity extends Activity {
+    private String unpaidOrder;
     private static final int PICK_CONTACT = 0;
     String type;
     EditText ed_phone,ed_name;
@@ -107,14 +121,85 @@ public class SiJiaoOrderActivity extends Activity {
     String deposit_id;
     float deposit;
     TextView tv_explain;
+    public static final int SDK_PAY_FLAG = 0x1001;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    LogUtil.i(payResult.toString());
+                    switch (payResult.getResultStatus()) {
+                        case "9000":
+                            ToastUtils.showToastShort("支付成功");
+                            finish();
+                            break;
+                        case "8000":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        case "4000":
+                            ToastUtils.showToastShort("订单支付失败");
+                            //btn_repay.setVisibility(View.VISIBLE);
+
+                            break;
+                        case "5000":
+                            ToastUtils.showToastShort("重复请求");
+                            break;
+                        case "6001":
+                            ToastUtils.showToastShort("已取消支付");
+                            //btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                        case "6002":
+                            ToastUtils.showToastShort("网络连接出错");
+                            //btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                        case "6004":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        default:
+                            ToastUtils.showToastShort("支付失败");
+                            //btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
+
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sijiaoorder);
+        EventBus.getDefault().register(this);
         initHost();
         initView();
         queryList();
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        if (event.getEventCode()==40001){
+            ToastUtils.showToastShort("支付成功");
+            finish();
+        }
+        if (event.getEventCode()==40002){
+            ToastUtils.showToastShort("支付失败");
+            //btn_repay.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -173,7 +258,7 @@ public class SiJiaoOrderActivity extends Activity {
         lp_month  = inflate1.findViewById(R.id.lp_month);
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(SiJiaoOrderActivity.this);
-
+        initWechat();
     }
 
     private void getJiaoLian(){
@@ -538,7 +623,7 @@ public class SiJiaoOrderActivity extends Activity {
         }else if("0".equals(forme)){
             sijiaoOrderConfirmBean.setBus_type(56);
         }
-        sijiaoOrderConfirmBean.setPay_way(zhifu);//1支付宝
+        sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝,3微信
         sijiaoOrderConfirmBean.setPlatform(2);
         sijiaoOrderConfirmBean.setDeposit_id(deposit_id);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
@@ -547,8 +632,11 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
         extends_params.setTime_length(time_length);
+        extends_params.setProduct_type("私教");
+        extends_params.setProduct_name(course_name);
         sijiaoOrderConfirmBean.setReceive((price-deposit)+"");
         sijiaoOrderConfirmBean.setPrice(price+"");
+
         if("1".equals(forme)){
             extends_params.setOther_name(ed_name.getText().toString());
             extends_params.setPhone_no(ed_phone.getText().toString());
@@ -565,12 +653,22 @@ public class SiJiaoOrderActivity extends Activity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
+                //RequestOrderPayInfoBean requestOrderInfoBean = new RequestOrderPayInfoBean();
                 Gson gson = new Gson();
-                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderInfoBean.class);
+                RequestOrderPayInfoBean requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
-                    alipay(requestOrderInfoBean.getData().getId());
+                    if(requestOrderInfoBean.getData()!=null){
+                        if(requestOrderInfoBean.getData().getPayWay() == 2){
+                            alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                        }
+                        if(requestOrderInfoBean.getData().getPayWay() == 3){
+                            wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                        }
+                        if(requestOrderInfoBean.getData().getPayWay() == 5){
+                            //chuzhika(requestOrderInfoBean.getData().get);
+                        }
+                    }
                     btn_commit.setVisibility(View.GONE);
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
@@ -613,7 +711,7 @@ public class SiJiaoOrderActivity extends Activity {
             commitDepositBean.setBus_type(33);
         }
         commitDepositBean.setPlatform(2);
-        commitDepositBean.setPay_way("1");
+        commitDepositBean.setPay_way(zhifu);
         commitDepositBean.setReceive(dingjinprice+"");
         commitDepositBean.setPrice(dingjinprice+"");
         extends_params.setBus_type("3");
@@ -621,6 +719,8 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setAdmin_emp_id(employee_id+"");
         extends_params.setAdmin_emp_name(employee_name);
         extends_params.setMoney(dingjinprice+"");
+        extends_params.setProduct_type("定金");
+        extends_params.setProduct_name("私教定金");
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
 
@@ -629,13 +729,23 @@ public class SiJiaoOrderActivity extends Activity {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
-                RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
+                //RequestOrderPayInfoBean requestOrderInfoBean = new RequestOrderPayInfoBean();
                 Gson gson = new Gson();
-                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderInfoBean.class);
+                RequestOrderPayInfoBean requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
                     btn_commit.setVisibility(View.GONE);
-                    alipay(requestOrderInfoBean.getData().getId());
+                    if(requestOrderInfoBean.getData()!=null){
+                        if(requestOrderInfoBean.getData().getPayWay() == 2){
+                            alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                        }
+                        if(requestOrderInfoBean.getData().getPayWay() == 3){
+                            wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                        }
+                        if(requestOrderInfoBean.getData().getPayWay() == 5){
+                            //chuzhika(requestOrderInfoBean.getData().get);
+                        }
+                    }
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
                 }
@@ -660,12 +770,78 @@ public class SiJiaoOrderActivity extends Activity {
 
     }
 
+    /**
+     * 微信支付
+     */
+    private IWXAPI api;
+
+
+    /**
+     * 初始化微信支付api
+     */
+    private void initWechat() {
+        api = WXAPIFactory.createWXAPI(this, "wx530b17b3c2de2e0d", true);
+        api.registerApp("wx530b17b3c2de2e0d");
+    }
+
+    /****
+     * 微信支付
+     * @param orderInfo 订单信息
+     */
+    private void wxPay(String orderInfo) {
+        unpaidOrder = orderInfo;
+        orderInfo = orderInfo.replaceAll("package", "packageValue");
+        WeiXinBean wxOrderBean = new Gson().fromJson(orderInfo.toString(), WeiXinBean.class);
+        LogUtil.i(wxOrderBean.toString());
+        sendPayRequest(wxOrderBean);
+
+    }
+
+
+    /**
+     * 调用微信支付
+     */
+    public void sendPayRequest(WeiXinBean weiXinBean) {
+
+        PayReq req = new PayReq();
+        req.appId = weiXinBean.getAppid();
+        req.partnerId = weiXinBean.getPartnerid();
+        //预支付订单
+        req.prepayId = weiXinBean.getPrepayid();
+        req.nonceStr = weiXinBean.getNoncestr();
+        req.timeStamp = weiXinBean.getTimestamp() + "";
+        req.packageValue = weiXinBean.getPackageValue();
+        req.sign = weiXinBean.getSign();
+
+        api.sendReq(req);
+    }
+
+
 
 
     /**
      * 支付宝支付
      */
-    private void alipay(String id) {
+    private void alipay(final String orderInfo) {
+
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(SiJiaoOrderActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo, true);
+
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+    private void chuzhika(String id) {
         PayBean payBean = new PayBean();
         payBean.id = id;
         payBean.order_no = 12345 + "";

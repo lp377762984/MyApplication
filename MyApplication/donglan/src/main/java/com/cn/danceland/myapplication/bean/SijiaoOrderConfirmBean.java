@@ -95,6 +95,24 @@ public class SijiaoOrderConfirmBean implements Serializable{
         private String end_date;
         private Integer time_length;
         private String store_type_id;
+        private String product_type;
+        private String product_name;
+
+        public String getProduct_type() {
+            return product_type;
+        }
+
+        public void setProduct_type(String product_type) {
+            this.product_type = product_type;
+        }
+
+        public String getProduct_name() {
+            return product_name;
+        }
+
+        public void setProduct_name(String product_name) {
+            this.product_name = product_name;
+        }
 
         public String getStore_type_id() {
             return store_type_id;

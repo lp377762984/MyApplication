@@ -79,6 +79,25 @@ public class CommitDepositBean implements Serializable {
         private String bus_type;
         private String deposit_type;
         private String money;
+        private String product_type;
+        private String product_name;
+
+        public String getProduct_type() {
+            return product_type;
+        }
+
+        public void setProduct_type(String product_type) {
+            this.product_type = product_type;
+        }
+
+        public String getProduct_name() {
+            return product_name;
+        }
+
+        public void setProduct_name(String product_name) {
+            this.product_name = product_name;
+        }
+
         public void setAdmin_emp_id(String admin_emp_id) {
             this.admin_emp_id = admin_emp_id;
         }

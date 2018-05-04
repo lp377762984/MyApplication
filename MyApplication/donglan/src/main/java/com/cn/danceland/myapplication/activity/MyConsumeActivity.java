@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -56,6 +58,7 @@ public class MyConsumeActivity extends Activity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("加载中...");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         initData();
     }
@@ -70,7 +73,7 @@ public class MyConsumeActivity extends Activity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 LogUtil.i(jsonObject.toString());
 
             }
