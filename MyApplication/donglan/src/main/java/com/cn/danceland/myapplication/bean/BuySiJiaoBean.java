@@ -103,7 +103,7 @@ public class BuySiJiaoBean implements Serializable {
         private int time_length;
         private String img_path;
         private int id;
-        private int price;
+        private Float price;
         private int days;
         private int course_category;
         private String name;
@@ -168,10 +168,10 @@ public class BuySiJiaoBean implements Serializable {
             return id;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(Float price) {
             this.price = price;
         }
-        public int getPrice() {
+        public Float getPrice() {
             return price;
         }
 

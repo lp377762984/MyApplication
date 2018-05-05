@@ -549,10 +549,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                   //  ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
                     if (requestOrderInfoBean.getData().getPayWay() == 2) {//支付宝支付
-                        alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                        alipay(requestOrderInfoBean.getData().getPay_params());
                     }
                     if (requestOrderInfoBean.getData().getPayWay() == 3) {//微信支付
-                        wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                        wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
 
                 } else {
@@ -603,12 +603,12 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     btn_commit.setVisibility(View.GONE);
 
                     if (requestOrderInfoBean.getData().getPayWay() == 2) {//支付宝支付
-                        alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                        alipay(requestOrderInfoBean.getData().getPay_params());
                     }
 
                     if (requestOrderInfoBean.getData().getPayWay() == 3) {//微信支付
 
-                        wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                        wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
 
 
@@ -832,8 +832,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setType_id(CardsInfo.getId());
                     extendsParams.setCharge_mode(CardsInfo.getCharge_mode() + "");
                     extendsParams.setType_name(CardsInfo.getName());
-                    extendsParams.setProduct_type("会员卡");
-                    extendsParams.setProduct_name(CardsInfo.getName());
+                    newOrderInfoBean.setProduct_type(CardsInfo.getCategory_name());
+                    newOrderInfoBean.setProduct_name(CardsInfo.getName());
 
                     newOrderInfoBean.setPay_way(pay_way + "");
                     newOrderInfoBean.setReceive(pay_price + "");
@@ -936,8 +936,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setMoney(pay_price + "");
                     extendsParams.setAdmin_emp_name(consultantInfo.getCname());
                     extendsParams.setDeposit_type("1");//定金类型
-                    extendsParams.setProduct_type("定金");
-                    extendsParams.setProduct_name("卡定金");
+                    newOrderInfoBean.setProduct_type("卡定金");
+                    //newOrderInfoBean.setProduct_name("卡定金");
 
                     if (isme) {
                         newOrderInfoBean.setFor_other(0);
@@ -1043,6 +1043,23 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         private String deposit_id;//定金id
         private int for_other;//0自己1别人
         public Protocol_Params protocol_params;
+        public String product_type;//产品类型名称
+        public String product_name;//产品名称
+        public String getProduct_type() {
+            return product_type;
+        }
+
+        public void setProduct_type(String product_type) {
+            this.product_type = product_type;
+        }
+
+        public String getProduct_name() {
+            return product_name;
+        }
+
+        public void setProduct_name(String product_name) {
+            this.product_name = product_name;
+        }
 
         public Protocol_Params getProtocol_params(Protocol_Params protocol_params) {
             return this.protocol_params;
@@ -1210,8 +1227,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public String type_name;//卡名称
 
             public String admin_emp_name;
-            public String product_type;//产品类型名称
-            public String product_name;//产品名称
+
 
 
             //        private String card_type_id;//卡id
@@ -1247,29 +1263,12 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         ", branch_name='" + branch_name + '\'' +
                         ", type_name='" + type_name + '\'' +
                         ", admin_emp_name='" + admin_emp_name + '\'' +
-                        ", product_type='" + product_type + '\'' +
-                        ", product_name='" + product_name + '\'' +
                         ", deposit_type='" + deposit_type + '\'' +
                         ", phone_no='" + phone_no + '\'' +
                         ", other_name='" + other_name + '\'' +
                         '}';
             }
 
-            public String getProduct_type() {
-                return product_type;
-            }
-
-            public void setProduct_type(String product_type) {
-                this.product_type = product_type;
-            }
-
-            public String getProduct_name() {
-                return product_name;
-            }
-
-            public void setProduct_name(String product_name) {
-                this.product_name = product_name;
-            }
 
             public String getOther_name() {
                 return other_name;

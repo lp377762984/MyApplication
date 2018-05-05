@@ -682,7 +682,7 @@
             android:background="@drawable/btn_bg_selector"
             android:text="提交订单"
             android:textSize="12sp"
-            android:textColor="#fff" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_commit1"
@@ -695,13 +695,15 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@+id/btn_commit2"
+            android:id="@+id/btn_repay"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/btn_bg_selector"
             android:text="重新支付"
-            android:textColor="#fff"
+            android:textSize="12sp"
+            android:textColor="@color/white"
             android:visibility="gone" />
     </LinearLayout>
 

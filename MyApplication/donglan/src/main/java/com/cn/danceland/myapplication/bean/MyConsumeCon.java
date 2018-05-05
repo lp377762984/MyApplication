@@ -6,38 +6,38 @@ package com.cn.danceland.myapplication.bean;
 
 public class MyConsumeCon {
 
-    private int branch_id;
+    private Integer branch_id;
     private String busTypes;
-    private int bus_id;
+    private Integer bus_id;
     private String bus_type;
     private Condition condition;
     private String extends_info;
     private String for_other;
     private String gender;
-    private int id;
-    private int member_id;
+    private Integer id;
+    private Integer member_id;
     private String member_name;
     private String member_no;
-    private int money;
+    private String money;
     private String notBusType1;
     private String notBusType2;
     private String not_pay_way;
-    private int opt_no;
+    private String opt_no;
     private Order order;
     private String order_no;
     private String order_time;
-    private int page;
+    private Integer page;
     private String pay_way;
-    private int person_id;
+    private Integer person_id;
     private String phone_no;
     private String platform;
     private String platforms;
-    private int price;
-    private int protocol_id;
+    private String price;
+    private Integer protocol_id;
     private String protocol_info;
-    private int protocol_template_id;
-    private int root_opt_no;
-    private int size;
+    private Integer protocol_template_id;
+    private String root_opt_no;
+    private Integer size;
     private String status;
     public void setBranch_id(int branch_id) {
         this.branch_id = branch_id;
@@ -123,10 +123,10 @@ public class MyConsumeCon {
         return member_no;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(String money) {
         this.money = money;
     }
-    public int getMoney() {
+    public String getMoney() {
         return money;
     }
 
@@ -151,10 +151,10 @@ public class MyConsumeCon {
         return not_pay_way;
     }
 
-    public void setOpt_no(int opt_no) {
+    public void setOpt_no(String opt_no) {
         this.opt_no = opt_no;
     }
-    public int getOpt_no() {
+    public String getOpt_no() {
         return opt_no;
     }
 
@@ -221,10 +221,10 @@ public class MyConsumeCon {
         return platforms;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
@@ -249,10 +249,10 @@ public class MyConsumeCon {
         return protocol_template_id;
     }
 
-    public void setRoot_opt_no(int root_opt_no) {
+    public void setRoot_opt_no(String root_opt_no) {
         this.root_opt_no = root_opt_no;
     }
-    public int getRoot_opt_no() {
+    public String getRoot_opt_no() {
         return root_opt_no;
     }
 

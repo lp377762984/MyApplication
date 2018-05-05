@@ -211,13 +211,34 @@
             android:layout_height="match_parent"
             android:background="@color/color_dl_yellow"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            >
             <TextView
                 android:id="@+id/tv_zhifu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:text="去支付"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_repay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_dl_yellow"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/tv_repay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="重新支付"
                 android:textSize="18sp"
                 />
 

@@ -110,8 +110,8 @@ public class SiJiaoOrderActivity extends Activity {
     int employee_id;
     String employee_name;
     String course_category_name,course_name;
-    Button btn_commit;
-    int price;
+    Button btn_commit,btn_repay;
+    Float price;
     Data info;
     PayBean payBean;
     Long startMill;
@@ -139,7 +139,7 @@ public class SiJiaoOrderActivity extends Activity {
                             break;
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
-                            //btn_repay.setVisibility(View.VISIBLE);
+                            btn_repay.setVisibility(View.VISIBLE);
 
                             break;
                         case "5000":
@@ -147,18 +147,18 @@ public class SiJiaoOrderActivity extends Activity {
                             break;
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
-                            //btn_repay.setVisibility(View.VISIBLE);
+                            btn_repay.setVisibility(View.VISIBLE);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
-                            //btn_repay.setVisibility(View.VISIBLE);
+                            btn_repay.setVisibility(View.VISIBLE);
                             break;
                         case "6004":
                             ToastUtils.showToastShort("正在处理中");
                             break;
                         default:
                             ToastUtils.showToastShort("支付失败");
-                            //btn_repay.setVisibility(View.VISIBLE);
+                            btn_repay.setVisibility(View.VISIBLE);
                             break;
                     }
 
@@ -191,7 +191,7 @@ public class SiJiaoOrderActivity extends Activity {
         }
         if (event.getEventCode()==40002){
             ToastUtils.showToastShort("支付失败");
-            //btn_repay.setVisibility(View.VISIBLE);
+            btn_repay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -382,6 +382,18 @@ public class SiJiaoOrderActivity extends Activity {
         btn_commit = findViewById(R.id.btn_commit);
         ll_dingjin = findViewById(R.id.ll_dingjin);
         tv_dingjin = findViewById(R.id.tv_dingjin);
+        btn_repay = findViewById(R.id.btn_repay);
+
+        btn_repay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("2".equals(zhifu)){
+                    alipay(unpaidOrder);
+                }else if("3".equals(zhifu)){
+                    wxPay(unpaidOrder);
+                }
+            }
+        });
 
         ll_dingjin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -632,8 +644,8 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setEmployee_id(employee_id+"");
         extends_params.setEmployee_name(employee_name);
         extends_params.setTime_length(time_length);
-        extends_params.setProduct_type("私教");
-        extends_params.setProduct_name(course_name);
+        sijiaoOrderConfirmBean.setProduct_type(course_category_name);
+        sijiaoOrderConfirmBean.setProduct_name(course_name);
         sijiaoOrderConfirmBean.setReceive((price-deposit)+"");
         sijiaoOrderConfirmBean.setPrice(price+"");
 
@@ -660,13 +672,13 @@ public class SiJiaoOrderActivity extends Activity {
                 if (requestOrderInfoBean.getSuccess()) {
                     if(requestOrderInfoBean.getData()!=null){
                         if(requestOrderInfoBean.getData().getPayWay() == 2){
-                            alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                            alipay(requestOrderInfoBean.getData().getPay_params());
                         }
                         if(requestOrderInfoBean.getData().getPayWay() == 3){
-                            wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                            wxPay(requestOrderInfoBean.getData().getPay_params());
                         }
                         if(requestOrderInfoBean.getData().getPayWay() == 5){
-                            //chuzhika(requestOrderInfoBean.getData().get);
+                            chuzhika(requestOrderInfoBean.getData().getPay_params());
                         }
                     }
                     btn_commit.setVisibility(View.GONE);
@@ -714,13 +726,13 @@ public class SiJiaoOrderActivity extends Activity {
         commitDepositBean.setPay_way(zhifu);
         commitDepositBean.setReceive(dingjinprice+"");
         commitDepositBean.setPrice(dingjinprice+"");
+        commitDepositBean.setProduct_type("私教定金");
         extends_params.setBus_type("3");
         extends_params.setDeposit_type("3");
         extends_params.setAdmin_emp_id(employee_id+"");
         extends_params.setAdmin_emp_name(employee_name);
         extends_params.setMoney(dingjinprice+"");
-        extends_params.setProduct_type("定金");
-        extends_params.setProduct_name("私教定金");
+        //extends_params.setProduct_name("私教定金");
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
 
@@ -737,10 +749,10 @@ public class SiJiaoOrderActivity extends Activity {
                     btn_commit.setVisibility(View.GONE);
                     if(requestOrderInfoBean.getData()!=null){
                         if(requestOrderInfoBean.getData().getPayWay() == 2){
-                            alipay(requestOrderInfoBean.getData().getAlipayOrderInfo());
+                            alipay(requestOrderInfoBean.getData().getPay_params());
                         }
                         if(requestOrderInfoBean.getData().getPayWay() == 3){
-                            wxPay(requestOrderInfoBean.getData().getWxpayOrderInfo());
+                            wxPay(requestOrderInfoBean.getData().getPay_params());
                         }
                         if(requestOrderInfoBean.getData().getPayWay() == 5){
                             //chuzhika(requestOrderInfoBean.getData().get);
@@ -824,6 +836,7 @@ public class SiJiaoOrderActivity extends Activity {
      */
     private void alipay(final String orderInfo) {
 
+        unpaidOrder = orderInfo;
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -844,48 +857,48 @@ public class SiJiaoOrderActivity extends Activity {
     private void chuzhika(String id) {
         PayBean payBean = new PayBean();
         payBean.id = id;
-        payBean.order_no = 12345 + "";
-        if("1".equals(type)){
-            payBean.price = dingjinprice;
-        }else{
-            if(deposit_id!=null){
-                payBean.price = price - deposit;
-            }else{
-                payBean.price = price;
-            }
-        }
-
-        if("1".equals(forme)){
-            payBean.bus_type = 57;
-            if("1".equals(type)){
-                payBean.bus_type = 33;
-            }
-        }else{
-            payBean.bus_type = 56;
-            if("1".equals(type)){
-                payBean.bus_type = 31;
-            }
-        }
+//        payBean.order_no = 12345 + "";
+//        if("1".equals(type)){
+//            payBean.price = dingjinprice;
+//        }else{
+//            if(deposit_id!=null){
+//                payBean.price = price - deposit;
+//            }else{
+//                payBean.price = price;
+//            }
+//        }
+//
+//        if("1".equals(forme)){
+//            payBean.bus_type = 57;
+//            if("1".equals(type)){
+//                payBean.bus_type = 33;
+//            }
+//        }else{
+//            payBean.bus_type = 56;
+//            if("1".equals(type)){
+//                payBean.bus_type = 31;
+//            }
+//        }
 
         String str = gson.toJson(payBean);
 
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(str);
-            LogUtil.i(jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject jsonObject = null;
+//        try {
+//            jsonObject = new JSONObject(str);
+//            LogUtil.i(jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        String url;
-        if("5".equals(zhifu)){
-            url = Constants.COMMIT_CHUZHIKA;
+        //String url;
+        //if("5".equals(zhifu)){
+            //url = Constants.COMMIT_CHUZHIKA;
 
-        }else{
-            url = Constants.COMMIT_ALIPAY;
-        }
+//        }else{
+//            url = Constants.COMMIT_ALIPAY;
+//        }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
