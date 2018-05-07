@@ -199,10 +199,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     }
 
     private void initData() {
-      //  findConsultant(CardsInfo.getBranch_id());
+        findConsultant(CardsInfo.getBranch_id());
         if (product_type == 2) {
-        find_deposit_days();
-         find_deposit_price();
+     //   find_deposit_days();
+         //find_deposit_price();
             tv_useful_life.setText(bundle.getString("deposit_days","30") + "天");
             deposit_price = Float.parseFloat(bundle.getString("deposit_price","00"));
 //            tv_useful_life.setText(deposit_days + "天");
@@ -945,8 +945,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setMoney(pay_price + "");
                     extendsParams.setAdmin_emp_name(consultantInfo.getCname());
                     extendsParams.setDeposit_type("1");//定金类型
-                    newOrderInfoBean.setProduct_type("卡定金");
-                    //newOrderInfoBean.setProduct_name("卡定金");
+                    newOrderInfoBean.setProduct_type("会籍卡定金");
+              //      newOrderInfoBean.setProduct_name("会籍卡定金");
 
                     if (isme) {
                         newOrderInfoBean.setFor_other(0);
