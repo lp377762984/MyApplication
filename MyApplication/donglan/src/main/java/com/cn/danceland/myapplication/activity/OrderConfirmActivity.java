@@ -167,8 +167,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         }
     };
-
-
+    private Bundle bundle;
 
 
     @Override
@@ -200,17 +199,27 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     }
 
     private void initData() {
-        findConsultant(CardsInfo.getBranch_id());
+      //  findConsultant(CardsInfo.getBranch_id());
         if (product_type == 2) {
-            find_deposit_days();
-            find_deposit_price();
+        find_deposit_days();
+         find_deposit_price();
+            tv_useful_life.setText(bundle.getString("deposit_days","30") + "天");
+            deposit_price = Float.parseFloat(bundle.getString("deposit_price","00"));
+//            tv_useful_life.setText(deposit_days + "天");
+            tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
+            tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
+            tv_pay_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
+            total_price = PriceUtils.formatPrice2float(deposit_price * number);
+            pay_price = total_price;
         }
         queryList(CardsInfo.getBranch_id());
+
+
     }
 
     private void initView() {
         initWechat();
-        Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
         CardsInfo = (RequestSellCardsInfoBean.Data) bundle.getSerializable("cardinfo");
         //  consultantInfo = (RequestConsultantInfoBean.Data) bundle.getSerializable("consultantInfo");
         isme = bundle.getBoolean("isme", true);
@@ -1580,11 +1589,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 Map<String, String> map = new HashMap<String, String>();
-
                 map.put("branch_id", branchId);
-
                 return map;
 
             }

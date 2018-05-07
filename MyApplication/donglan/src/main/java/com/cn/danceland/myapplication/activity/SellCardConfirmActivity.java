@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,7 +11,10 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -29,6 +33,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -37,6 +42,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
+import com.cn.danceland.myapplication.bean.RequestParamsBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
@@ -92,6 +98,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
     private Button btn_dj_commit;
     private Data info;
     private TextView tv_shuoming;
+    private RequestParamsBean requestParamsBean;
 
 
     @Override
@@ -108,7 +115,17 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         // LogUtil.i(CardsInfo.getBranch_id());
         findConsultant(CardsInfo.getBranch_id());
         queryList();
-
+        StrBean strBean = new StrBean();
+        List<String> params = new ArrayList<>();
+        params.add("deposit_days");
+        params.add("deposit_card_min");
+        params.add("deposit_card_max");
+        params.add("deposit_course_min");
+        params.add("deposit_course_max");
+        params.add("deposit_locker_min");
+        params.add("deposit_locker_max");
+        strBean.setParam_keys(params);
+        findParams(strBean);
     }
 
     //获取当前日期
@@ -316,6 +333,46 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         }
     }
 
+    public class StrBean {
+
+        private List<String> param_keys;
+
+        public void setParam_keys(List<String> param_keys) {
+            this.param_keys = param_keys;
+        }
+
+        public List<String> getParam_keys() {
+            return param_keys;
+        }
+    }
+
+    public void findParams(StrBean strBean) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                requestParamsBean = new Gson().fromJson(jsonObject.toString(), RequestParamsBean.class);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
     /**
      * @方法说明:按条件查询说明须知列表
      **/
@@ -334,7 +391,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 }.getType());
                 if (result.isSuccess()) {
                     List<Explain> list = result.getData();
-                    if(list!=null&&list.size()>0){
+                    if (list != null && list.size() > 0) {
                         tv_shuoming.setText(list.get(0).getContent());
                     }
                 } else {
@@ -511,47 +568,26 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 //                    }
 //                    bundle.putString("startDate", startDate);
 //                }
+                LogUtil.i("提交");
                 if (isme) {
                     bundle.putInt("product_type", 1);
-                }else {
-                    bundle.putInt("product_type", 2);
+
+                    startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
+                    finish();
+                } else {
+                  //  bundle.putInt("product_type", 2);
+                    if (requestParamsBean != null) {
+                        showPirce(requestParamsBean.getData().getDeposit_card_min(), requestParamsBean.getData().getDeposit_card_max());
+                    }
                 }
 
-                startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle));
-                finish();
+
                 break;
             case R.id.btn_dj_commit://支付定金
 
-                Bundle bundle1 = new Bundle();
-                bundle1.putSerializable("cardinfo", CardsInfo);
-//            //    bundle1.putSerializable("consultantInfo", consultantInfo);
-//                bundle1.putBoolean("isme", isme);
-////                if (consultantInfo==null){
-////                    ToastUtils.showToastLong("请选择会籍顾问");
-////                    return;
-////                }
-//                if (!isme){
-//                    if (TextUtils.isEmpty(et_name.getText().toString().trim())){
-//
-//                        ToastUtils.showToastLong("名字不能为空");
-//                        return;
-//                    }
-//                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())){
-//
-//                        ToastUtils.showToastLong("电话不能为空");
-//                        return;
-//                    }
-//
-//                    bundle1.putString("name",et_name.getText().toString().trim());
-//                    bundle1.putString("phone",et_phone.getText().toString().trim());
-//                }else {
-//
-//                }
-
-
-                bundle1.putInt("product_type", 2);
-                startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle1));
-                finish();
+                if (requestParamsBean != null) {
+                    showPirce(requestParamsBean.getData().getDeposit_card_min(), requestParamsBean.getData().getDeposit_card_max());
+                }
 
                 break;
             case value:
@@ -560,6 +596,49 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
                 break;
         }
     }
+
+    private void showPirce(final String min, final String max) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.edit_name, null);
+        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+        dialogTitleName.setText("预付定金金额");
+        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        ed.setHint("请输入定金额：最小" + min + "元" + "，最大" + max+ "元");
+        ed.setInputType(InputType.TYPE_CLASS_PHONE);
+//        ed.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                Log.e("输入完点击确认执行该方法", "输入结束");
+//                return false;
+//            }
+//        });
+        builder.setView(dialogView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!TextUtils.isEmpty(ed.getText().toString()) ) {
+                    if (Float.parseFloat(ed.getText().toString()) >=Float.parseFloat(min) && Float.parseFloat(ed.getText().toString()) <= Float.parseFloat(max)) {
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable("cardinfo", CardsInfo);
+                        bundle1.putInt("product_type", 2);
+                        bundle1.putString("deposit_days",requestParamsBean.getData().getDeposit_days());
+                        bundle1.putString("deposit_price",ed.getText().toString());
+                        startActivity(new Intent(SellCardConfirmActivity.this, OrderConfirmActivity.class).putExtras(bundle1));
+                        finish();
+                    } else {
+                        ToastUtils.showToastShort("输入金额不在有效范围，请重新输入");
+
+
+                    }
+                }
+            }
+        });
+        builder.show();
+
+    }
+
 
     /**
      * 查找会籍顾问
