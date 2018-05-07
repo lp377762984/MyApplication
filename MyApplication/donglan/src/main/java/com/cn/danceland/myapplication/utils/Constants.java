@@ -7,13 +7,13 @@ public class Constants extends EaseConstant {
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
 
-   // public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+    //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   //public static final String HOST = "http://192.168.1.117:8003/";//佳楠
+   public static final String HOST = "http://192.168.1.117:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
-   public static final String HOST = " http://192.168.1.117:8003/";//
+   //public static final String HOST = " http://192.168.1.123:8003/";//
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
@@ -127,6 +127,7 @@ public class Constants extends EaseConstant {
 
     public static final String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
     public static final String BANNER = HOST + "branch/banner";//门店轮播图
+    public static final String MYCONSUME = HOST + "/appOrder/queryMyOrder";//我的消费
 
 
     //参数相关

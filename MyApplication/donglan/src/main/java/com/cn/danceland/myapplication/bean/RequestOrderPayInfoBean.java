@@ -38,24 +38,15 @@ public class RequestOrderPayInfoBean {
 
     public class Data {
 
-        private String alipayOrderInfo;
-        private String wxpayOrderInfo;
+        private String pay_params;
         private int payWay;//
 
-        public String getAlipayOrderInfo() {
-            return alipayOrderInfo;
+        public String getPay_params() {
+            return pay_params;
         }
 
-        public void setAlipayOrderInfo(String alipayOrderInfo) {
-            this.alipayOrderInfo = alipayOrderInfo;
-        }
-
-        public String getWxpayOrderInfo() {
-            return wxpayOrderInfo;
-        }
-
-        public void setWxpayOrderInfo(String wxpayOrderInfo) {
-            this.wxpayOrderInfo = wxpayOrderInfo;
+        public void setPay_params(String pay_params) {
+            this.pay_params = pay_params;
         }
 
         public int getPayWay() {
@@ -69,11 +60,9 @@ public class RequestOrderPayInfoBean {
         @Override
         public String toString() {
             return "Data{" +
-                    "alipayOrderInfo='" + alipayOrderInfo + '\'' +
-                    ", wxpayOrderInfo='" + wxpayOrderInfo + '\'' +
+                    "pay_params='" + pay_params + '\'' +
                     ", payWay=" + payWay +
                     '}';
-
         }
     }
 }

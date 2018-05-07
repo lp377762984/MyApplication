@@ -41,7 +41,7 @@ public class MyCourseBean implements Serializable {
         private Integer member_id;
         private String member_name;
         private String member_no;
-        private Integer price;
+        private Double price;
         private long start_date;
         private Integer surplus_count;
         private Integer time_length;
@@ -139,10 +139,10 @@ public class MyCourseBean implements Serializable {
             return member_no;
         }
 
-        public void setPrice(Integer price) {
+        public void setPrice(Double price) {
             this.price = price;
         }
-        public Integer getPrice() {
+        public Double getPrice() {
             return price;
         }
 

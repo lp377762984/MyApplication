@@ -2,6 +2,8 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CheckBox;
@@ -9,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.EnvUtils;
+import com.alipay.sdk.app.PayTask;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,13 +23,16 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
+import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
+import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.bean.store.storetype.StoreType;
 import com.cn.danceland.myapplication.bean.store.storetype.StoreTypeRequest;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -35,7 +42,13 @@ import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.vondear.rxtools.module.alipay.PayResult;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,8 +62,9 @@ import java.util.Map;
  */
 
 public class SellStoreCardActivity extends Activity{
+    private String unpaidOrder;
     StoreType cardid;
-    LinearLayout ll_zhifu;
+    LinearLayout ll_zhifu,btn_repay;
     private StoreTypeRequest request;
     private Gson gson;
     private SimpleDateFormat sdf;
@@ -59,15 +73,112 @@ public class SellStoreCardActivity extends Activity{
     CheckBox btn_weixin,btn_zhifubao,cb_shuoming;
     TextView storecard_tv,tv_price;
     DongLanTitleView storecard_title;
+    String zhifu;
+    public static final int SDK_PAY_FLAG = 0x1001;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    LogUtil.i(payResult.toString());
+                    switch (payResult.getResultStatus()) {
+                        case "9000":
+                            ToastUtils.showToastShort("支付成功");
+                            finish();
+                            break;
+                        case "8000":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        case "4000":
+                            ToastUtils.showToastShort("订单支付失败");
+                            btn_repay.setVisibility(View.VISIBLE);
+
+                            break;
+                        case "5000":
+                            ToastUtils.showToastShort("重复请求");
+                            break;
+                        case "6001":
+                            ToastUtils.showToastShort("已取消支付");
+                            btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                        case "6002":
+                            ToastUtils.showToastShort("网络连接出错");
+                            btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                        case "6004":
+                            ToastUtils.showToastShort("正在处理中");
+                            break;
+                        default:
+                            ToastUtils.showToastShort("支付失败");
+                            btn_repay.setVisibility(View.VISIBLE);
+                            break;
+                    }
+
+
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.storecardbill);
         initHost();
         initView();
         queryList();
 
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        if (event.getEventCode()==40001){
+            ToastUtils.showToastShort("支付成功");
+            finish();
+        }
+        if (event.getEventCode()==40002){
+            ToastUtils.showToastShort("支付失败");
+            btn_repay.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 支付宝支付
+     */
+    private void alipay(final String orderInfo) {
+
+        unpaidOrder = orderInfo;
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(SellStoreCardActivity.this);
+                Map<String, String> result = alipay.payV2(orderInfo, true);
+
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
     }
 
     /**
@@ -103,6 +214,7 @@ public class SellStoreCardActivity extends Activity{
         sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         cardid = (StoreType)getIntent().getSerializableExtra("item");
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        initWechat();
     }
 
     private void initView() {
@@ -114,18 +226,51 @@ public class SellStoreCardActivity extends Activity{
         storecard_tv = findViewById(R.id.storecard_tv);
         tv_price = findViewById(R.id.tv_price);
         cb_shuoming = findViewById(R.id.cb_shuoming);
+        btn_repay = findViewById(R.id.btn_repay);
 
         btn_zhifubao.setChecked(true);
+        zhifu = "2";
+
+        btn_zhifubao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_zhifubao.setChecked(true);
+                btn_weixin.setChecked(false);
+                zhifu = "2";
+            }
+        });
+
+        btn_weixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_zhifubao.setChecked(false);
+                btn_weixin.setChecked(true);
+                zhifu = "3";
+            }
+        });
+
+        btn_repay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("2".equals(zhifu)){
+                    alipay(unpaidOrder);
+                }else if("3".equals(zhifu)){
+                    wxPay(unpaidOrder);
+                }
+            }
+        });
 
         ll_zhifu = findViewById(R.id.ll_zhifu);
         ll_zhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
+                if(cb_shuoming.isChecked()){
                     confirmOrder(storeType.getFace()+"");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }else {
+                    ToastUtils.showToastShort("请阅读购买说明，并同意");
                 }
+
+
             }
         });
         findById();
@@ -155,11 +300,11 @@ public class SellStoreCardActivity extends Activity{
 
     }
 
-    private void confirmOrder(String price) throws JSONException {
+    private void confirmOrder(String price) {
 
         SijiaoOrderConfirmBean sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
-        sijiaoOrderConfirmBean.setPay_way("1");//1支付宝
+        sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝
         sijiaoOrderConfirmBean.setPlatform(2);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         sijiaoOrderConfirmBean.setBus_type(16);
@@ -168,20 +313,27 @@ public class SellStoreCardActivity extends Activity{
         extends_params.setGiving(cardid.getGiving()+"");
         sijiaoOrderConfirmBean.setReceive(price);
         sijiaoOrderConfirmBean.setPrice(price);
+        sijiaoOrderConfirmBean.setProduct_type("储值卡充值");
         sijiaoOrderConfirmBean.setExtends_params(extends_params);
         String s = gson.toJson(sijiaoOrderConfirmBean);
-        JSONObject jsonObject = new JSONObject(s);
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                RequestOrderInfoBean requestOrderInfoBean = new RequestOrderInfoBean();
                 Gson gson = new Gson();
-                requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderInfoBean.class);
+                RequestOrderPayInfoBean requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
-                    alipay(requestOrderInfoBean.getData().getId());
+                    ll_zhifu.setVisibility(View.GONE);
+                    if(requestOrderInfoBean.getData()!=null){
+                        if(requestOrderInfoBean.getData().getPayWay() == 2){
+                            alipay(requestOrderInfoBean.getData().getPay_params());
+                        }
+                        if(requestOrderInfoBean.getData().getPayWay() == 3){
+                            wxPay(requestOrderInfoBean.getData().getPay_params());
+                        }
+                    }
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
                 }
@@ -209,58 +361,104 @@ public class SellStoreCardActivity extends Activity{
 
 
     /**
-     * 支付宝支付
+     * 微信支付
      */
-    private void alipay(String id) {
-        PayBean payBean = new PayBean();
-        payBean.id = id;
-        payBean.order_no = 12345 + "";
-        payBean.price = cardid.getFace();
-        payBean.bus_type = 16;
-        payBean.member_id = info.getMember().getId();
-
-        String str = gson.toJson(payBean);
-
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(str);
-            LogUtil.i(jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                LogUtil.i(jsonObject.toString());
-                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
-                if (requestSimpleBean.getSuccess()) {
-                    ToastUtils.showToastShort("支付成功");
-                    finish();
-                } else {
-                    ToastUtils.showToastShort("支付失败");
-                }
+    private IWXAPI api;
 
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
+    /**
+     * 初始化微信支付api
+     */
+    private void initWechat() {
+        api = WXAPIFactory.createWXAPI(this, "wx530b17b3c2de2e0d", true);
+        api.registerApp("wx530b17b3c2de2e0d");
+    }
 
-                ToastUtils.showToastShort(volleyError.toString());
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-        MyApplication.getHttpQueues().add(stringRequest);
+    /****
+     * 微信支付
+     * @param orderInfo 订单信息
+     */
+    private void wxPay(String orderInfo) {
+        unpaidOrder = orderInfo;
+        orderInfo = orderInfo.replaceAll("package", "packageValue");
+        WeiXinBean wxOrderBean = new Gson().fromJson(orderInfo.toString(), WeiXinBean.class);
+        LogUtil.i(wxOrderBean.toString());
+        sendPayRequest(wxOrderBean);
 
     }
+
+
+    /**
+     * 调用微信支付
+     */
+    public void sendPayRequest(WeiXinBean weiXinBean) {
+
+        PayReq req = new PayReq();
+        req.appId = weiXinBean.getAppid();
+        req.partnerId = weiXinBean.getPartnerid();
+        //预支付订单
+        req.prepayId = weiXinBean.getPrepayid();
+        req.nonceStr = weiXinBean.getNoncestr();
+        req.timeStamp = weiXinBean.getTimestamp() + "";
+        req.packageValue = weiXinBean.getPackageValue();
+        req.sign = weiXinBean.getSign();
+
+        api.sendReq(req);
+    }
+
+//    /**
+//     * 支付宝支付
+//     */
+//    private void alipay(String id) {
+//        PayBean payBean = new PayBean();
+//        payBean.id = id;
+//        payBean.order_no = 12345 + "";
+//        payBean.price = cardid.getFace();
+//        payBean.bus_type = 16;
+//        payBean.member_id = info.getMember().getId();
+//
+//        String str = gson.toJson(payBean);
+//
+//        JSONObject jsonObject = null;
+//        try {
+//            jsonObject = new JSONObject(str);
+//            LogUtil.i(jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject jsonObject) {
+//                LogUtil.i(jsonObject.toString());
+//                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+//                if (requestSimpleBean.getSuccess()) {
+//                    ToastUtils.showToastShort("支付成功");
+//                    finish();
+//                } else {
+//                    ToastUtils.showToastShort("支付失败");
+//                }
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//
+//                ToastUtils.showToastShort(volleyError.toString());
+//
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+//                return map;
+//            }
+//        };
+//        MyApplication.getHttpQueues().add(stringRequest);
+//
+//    }
 
     class PayBean {
         public String id;
