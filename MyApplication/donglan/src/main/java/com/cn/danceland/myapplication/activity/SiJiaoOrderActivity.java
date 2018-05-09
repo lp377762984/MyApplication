@@ -116,10 +116,10 @@ public class SiJiaoOrderActivity extends Activity {
     Long startMill;
     Long endMill;
     int course_id;
-    int dingjinprice = 100;
     String deposit_id;
     float deposit;
     TextView tv_explain;
+    String deposit_days,deposit_course_price;
     public static final int SDK_PAY_FLAG = 0x1001;
     private Handler mHandler = new Handler() {
         @Override
@@ -252,6 +252,9 @@ public class SiJiaoOrderActivity extends Activity {
             price = itemContent.getPrice();
             time_length = itemContent.getTime_length();
         }
+
+        deposit_days = getIntent().getStringExtra("deposit_days");
+        deposit_course_price = getIntent().getStringExtra("deposit_course_price");
         inflate1 = LayoutInflater.from(SiJiaoOrderActivity.this).inflate(R.layout.birthdayselect,null);
         lp_year = inflate1.findViewById(R.id.lp_year);
         lp_month  = inflate1.findViewById(R.id.lp_month);
@@ -428,17 +431,29 @@ public class SiJiaoOrderActivity extends Activity {
                                 commit_deposit();
                             }
                         }else if("0".equals(forme)){
-                            commit_deposit();
+                            if (tv_jiaolian.getText().toString().equals("请选择您的教练")||tv_jiaolian.getText().toString().isEmpty()){
+                                ToastUtils.showToastShort("请补全订单信息！");
+                            }else{
+                                commit_deposit();
+                            }
                         }
                     }
             }
         });
 
         if(itemContent!=null){
-            goods_name.setText("商品名称："+itemContent.getName());
-            goods_type.setText("商品类型："+itemContent.getCourse_category_name());
-            goods_time.setText("有效期："+days+"天");
-            goods_price.setText("商品单价："+itemContent.getPrice()+"元");
+            if("0".equals(type)){
+                goods_name.setText("商品名称："+itemContent.getName());
+                goods_type.setText("商品类型："+itemContent.getCourse_category_name());
+                goods_time.setText("有效期："+days+"天");
+                goods_price.setText("商品单价："+itemContent.getPrice()+"元");
+            }else if("1".equals(type)){
+                goods_name.setText("商品名称：私教定金");
+                goods_type.setText("商品类型：定金");
+                goods_time.setText("有效期："+deposit_days+"天");
+                goods_price.setText("商品单价："+deposit_course_price+"元");
+            }
+
 //            goods_all_price.setText("合计金额："+itemContent.getPrice()+"元");
 //            goods_num.setText("商品数量："+itemContent.getCount()+"节");
         }
@@ -502,6 +517,8 @@ public class SiJiaoOrderActivity extends Activity {
                 forme = "1";
             }
         });
+        btn_zhifubao.setChecked(true);
+        zhifu = "2";
 
         btn_zhifubao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -553,7 +570,7 @@ public class SiJiaoOrderActivity extends Activity {
         }
 
         if("1".equals(type)){
-            tv_pay_price.setText("￥"+dingjinprice);
+            tv_pay_price.setText("￥"+deposit_course_price);
         }else {
             tv_pay_price.setText("￥"+price);
         }
@@ -723,14 +740,14 @@ public class SiJiaoOrderActivity extends Activity {
         }
         commitDepositBean.setPlatform(2);
         commitDepositBean.setPay_way(zhifu);
-        commitDepositBean.setReceive(dingjinprice+"");
-        commitDepositBean.setPrice(dingjinprice+"");
+        commitDepositBean.setReceive(deposit_course_price+"");
+        commitDepositBean.setPrice(deposit_course_price+"");
         commitDepositBean.setProduct_type("私教定金");
         extends_params.setBus_type("3");
         extends_params.setDeposit_type("3");
         extends_params.setAdmin_emp_id(employee_id+"");
         extends_params.setAdmin_emp_name(employee_name);
-        extends_params.setMoney(dingjinprice+"");
+        extends_params.setMoney(deposit_course_price+"");
         //extends_params.setProduct_name("私教定金");
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
@@ -754,7 +771,7 @@ public class SiJiaoOrderActivity extends Activity {
                             wxPay(requestOrderInfoBean.getData().getPay_params());
                         }
                         if(requestOrderInfoBean.getData().getPayWay() == 5){
-                            //chuzhika(requestOrderInfoBean.getData().get);
+                            chuzhika(requestOrderInfoBean.getData().getPay_params());
                         }
                     }
                 } else {
@@ -856,46 +873,8 @@ public class SiJiaoOrderActivity extends Activity {
     private void chuzhika(String id) {
         PayBean payBean = new PayBean();
         payBean.id = id;
-//        payBean.order_no = 12345 + "";
-//        if("1".equals(type)){
-//            payBean.price = dingjinprice;
-//        }else{
-//            if(deposit_id!=null){
-//                payBean.price = price - deposit;
-//            }else{
-//                payBean.price = price;
-//            }
-//        }
-//
-//        if("1".equals(forme)){
-//            payBean.bus_type = 57;
-//            if("1".equals(type)){
-//                payBean.bus_type = 33;
-//            }
-//        }else{
-//            payBean.bus_type = 56;
-//            if("1".equals(type)){
-//                payBean.bus_type = 31;
-//            }
-//        }
-
         String str = gson.toJson(payBean);
 
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = new JSONObject(str);
-//            LogUtil.i(jsonObject.toString());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-        //String url;
-        //if("5".equals(zhifu)){
-            //url = Constants.COMMIT_CHUZHIKA;
-
-//        }else{
-//            url = Constants.COMMIT_ALIPAY;
-//        }
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override

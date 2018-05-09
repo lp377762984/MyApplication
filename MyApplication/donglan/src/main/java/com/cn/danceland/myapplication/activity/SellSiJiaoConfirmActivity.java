@@ -1,26 +1,40 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestParamsBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,7 +43,10 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by feng on 2018/1/15.
@@ -46,6 +63,8 @@ public class SellSiJiaoConfirmActivity extends Activity {
     ExplainRequest request;
     Data info;
     TextView tv_shuoming;
+    Float deposit_course_min,deposit_course_max;
+    String deposit_days;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +78,68 @@ public class SellSiJiaoConfirmActivity extends Activity {
         itemContent = getIntent().getSerializableExtra("itemContent");
         initView();
         queryList();
+        findParams();
     }
+
+
+    public class StrBean {
+
+        private List<String> param_keys;
+
+        public void setParam_keys(List<String> param_keys) {
+            this.param_keys = param_keys;
+        }
+
+        public List<String> getParam_keys() {
+            return param_keys;
+        }
+    }
+
+    public void findParams() {
+
+        StrBean strBean = new StrBean();
+        List<String> params = new ArrayList<>();
+        params.add("deposit_days");
+        params.add("deposit_card_min");
+        params.add("deposit_card_max");
+        params.add("deposit_course_min");
+        params.add("deposit_course_max");
+        params.add("deposit_locker_min");
+        params.add("deposit_locker_max");
+        strBean.setParam_keys(params);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestParamsBean.Data data = new Gson().fromJson(jsonObject.toString(), RequestParamsBean.class).getData();
+                if(data!=null){
+                    deposit_course_min = Float.valueOf(data.getDeposit_course_min());
+                    deposit_course_max = Float.valueOf(data.getDeposit_course_max());
+                    deposit_days = data.getDeposit_days();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
+
 
     /**
      * @方法说明:按条件查询说明须知列表
@@ -126,12 +206,48 @@ public class SellSiJiaoConfirmActivity extends Activity {
                     startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","0").putExtra("itemContent",itemContent));
                     finish();
                 }else if(state==1){
-                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","1").putExtra("itemContent",itemContent));
-                    finish();
+                    showPirce(deposit_course_min,deposit_course_max);
                 }
 
             }
         });
+
+    }
+
+    private void showPirce(final Float min, final Float max) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.edit_name, null);
+        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+        dialogTitleName.setText("预付定金金额");
+        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        ed.setHint("请输入定金额：最小" + min + "元" + "，最大" + max+ "元");
+        ed.setInputType(InputType.TYPE_CLASS_PHONE);
+//        ed.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                Log.e("输入完点击确认执行该方法", "输入结束");
+//                return false;
+//            }
+//        });
+        builder.setView(dialogView);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!TextUtils.isEmpty(ed.getText().toString()) ) {
+                    if (Float.parseFloat(ed.getText().toString()) >=min && Float.parseFloat(ed.getText().toString()) <= max) {
+                        startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","1").putExtra("itemContent",itemContent).putExtra("deposit_days",deposit_days).putExtra("deposit_course_price",ed.getText().toString()));
+                        finish();
+                    } else {
+                        ToastUtils.showToastShort("输入金额不在有效范围，请重新输入");
+
+
+                    }
+                }
+            }
+        });
+        builder.show();
 
     }
 }
