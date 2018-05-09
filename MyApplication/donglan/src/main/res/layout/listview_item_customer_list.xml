@@ -77,6 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
+        android:visibility="gone"
         android:src="@drawable/img_sx" />
     <ImageView
         android:id="@+id/iv_callphone"

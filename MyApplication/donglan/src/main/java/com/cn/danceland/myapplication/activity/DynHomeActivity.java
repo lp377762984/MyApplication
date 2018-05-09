@@ -577,7 +577,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
 
                 Glide.with(this)
-                        .load(sb.toString())
+                    //    .load(sb.toString())
+                        .load(oneDynInfo.getImgList().get(0))
                         // .apply(options1)
                         .into(iv_pic);
                 iv_pic.setOnClickListener(new View.OnClickListener() {

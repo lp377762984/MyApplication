@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.EnvUtils;
@@ -22,9 +21,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
-import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
 import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
@@ -49,7 +46,6 @@ import com.vondear.rxtools.module.alipay.PayResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -305,7 +301,7 @@ public class SellStoreCardActivity extends Activity{
         SijiaoOrderConfirmBean sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝
-        sijiaoOrderConfirmBean.setPlatform(2);
+        sijiaoOrderConfirmBean.setPlatform(1);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         sijiaoOrderConfirmBean.setBus_type(16);
         extends_params.setStore_type_id(cardid.getId()+"");

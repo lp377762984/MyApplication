@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -38,7 +36,6 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
 import com.cn.danceland.myapplication.activity.AdviseActivity;
 import com.cn.danceland.myapplication.activity.AllReportActivity;
-import com.cn.danceland.myapplication.activity.BodyBaseActivity;
 import com.cn.danceland.myapplication.activity.BuySiJiaoActivity;
 import com.cn.danceland.myapplication.activity.CabinetActivity;
 import com.cn.danceland.myapplication.activity.ClubDynActivity;
@@ -47,7 +44,6 @@ import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
-import com.cn.danceland.myapplication.activity.MyChatListActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
@@ -72,7 +68,6 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMClient;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -779,7 +774,7 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
                         break;
                     case 29://私信
-                        startActivity(new Intent(mActivity, MyChatListActivity.class));
+                   //     startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;
                     case 30://教练报表
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","2"));
@@ -1020,12 +1015,12 @@ public class ShopFragment extends BaseFragment {
             TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
             if (menuList.get(i).getId() == 29) {
                 //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
-                if (EMClient.getInstance().chatManager().getUnreadMsgsCount() == 0) {
-                    unread_msg_number.setVisibility(View.GONE);
-                } else {
-                    unread_msg_number.setVisibility(View.VISIBLE);
-                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount() + "");
-                }
+//                if (EMClient.getInstance().chatManager().getUnreadMsgsCount() == 0) {
+//                    unread_msg_number.setVisibility(View.GONE);
+//                } else {
+//                    unread_msg_number.setVisibility(View.VISIBLE);
+//                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount() + "");
+//                }
             }
 
 

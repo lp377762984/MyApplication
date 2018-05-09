@@ -25,7 +25,6 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
-import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -34,16 +33,12 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
@@ -216,31 +211,31 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
                 break;
             case R.id.ll_sixin:
-
-                String userName = userInfo.getPerson().getNick_name();
-                String userPic = userInfo.getPerson().getSelf_avatar_path();
-                String hxIdFrom;
-                if (Constants.HX_DEV_CONFIG) {
-                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
-                } else {
-                    hxIdFrom = userInfo.getPerson().getMember_no();
-                }
-
-                LogUtil.i(userName + userPic + hxIdFrom);
-                EaseUser easeUser = new EaseUser(hxIdFrom);
-                easeUser.setAvatar(userPic);
-                easeUser.setNick(userName);
-
-                List<EaseUser> users = new ArrayList<EaseUser>();
-                users.add(easeUser);
-                if (easeUser != null) {
-                    DemoHelper.getInstance().updateContactList(users);
-                } else {
-                    LogUtil.i("USER IS NULL");
-
-                }
-
-                    startActivity(new Intent(UserSelfHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+//
+//                String userName = userInfo.getPerson().getNick_name();
+//                String userPic = userInfo.getPerson().getSelf_avatar_path();
+//                String hxIdFrom;
+//                if (Constants.HX_DEV_CONFIG) {
+//                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
+//                } else {
+//                    hxIdFrom = userInfo.getPerson().getMember_no();
+//                }
+//
+//                LogUtil.i(userName + userPic + hxIdFrom);
+//                EaseUser easeUser = new EaseUser(hxIdFrom);
+//                easeUser.setAvatar(userPic);
+//                easeUser.setNick(userName);
+//
+//                List<EaseUser> users = new ArrayList<EaseUser>();
+//                users.add(easeUser);
+//                if (easeUser != null) {
+//                    DemoHelper.getInstance().updateContactList(users);
+//                } else {
+//                    LogUtil.i("USER IS NULL");
+//
+//                }
+//
+//                    startActivity(new Intent(UserSelfHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
 
 
                 break;

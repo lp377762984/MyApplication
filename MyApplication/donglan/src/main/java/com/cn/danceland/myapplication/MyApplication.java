@@ -14,7 +14,6 @@ import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
-import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -83,7 +82,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         //   EMClient.getInstance().setDebugMode(true);
 
-        DemoHelper.getInstance().init(applicationContext);
+        //DemoHelper.getInstance().init(applicationContext);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

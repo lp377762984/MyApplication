@@ -83,8 +83,8 @@ public class ImageDetailFragment2 extends Fragment {
         BigImageViewer.prefetch(Uri.parse(mImageUrl));
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
 
-      //  bigImageView.showImage(Uri.parse(mImageUrl));
-        bigImageView.showImage(Uri.parse(sb.toString()),Uri.parse(mImageUrl));
+        bigImageView.showImage(Uri.parse(mImageUrl));
+      //  bigImageView.showImage(Uri.parse(sb.toString()),Uri.parse(mImageUrl));
         bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE);
         bigImageView.setImageSaveCallback(new ImageSaveCallback() {
             @Override

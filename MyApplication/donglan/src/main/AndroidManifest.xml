@@ -105,6 +105,7 @@
             android:name="EASEMOB_APPKEY"
             android:value="1103171109178312#donglan" />
         <!-- 声明SDK所需的service SDK核心功能-->
+<!--
         <service
             android:name="com.hyphenate.chat.EMChatService"
             android:exported="true" />
@@ -112,18 +113,19 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <!-- 声明SDK所需的receiver -->
+        &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <data android:scheme="package" />
             </intent-filter>
-            <!-- 可选filter -->
+            &lt;!&ndash; 可选filter &ndash;&gt;
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+-->
 
 
         <!--微信支付-->
@@ -177,54 +179,49 @@
         <activity
             android:name=".activity.UserSelfHomeActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MyChatListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity
+        <!--      <activity
             android:name=".activity.ChatActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" />-->
         <activity
             android:name=".activity.MyQRCodeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ScanerCodeActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MyChatActivity"
-            android:screenOrientation="portrait" />
+        <!--
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <!-- Ding msg send activity -->
+        &lt;!&ndash; Ding msg send activity &ndash;&gt;
         <activity
             android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <!-- Ding ack user list activity -->
+        &lt;!&ndash; Ding ack user list activity &ndash;&gt;
         <activity
             android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <!-- 显示下载大图页面 -->
+        &lt;!&ndash; 显示下载大图页面 &ndash;&gt;
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <!-- 下载文件 -->
+        &lt;!&ndash; 下载文件 &ndash;&gt;
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <!-- 地图 -->
+        &lt;!&ndash; 地图 &ndash;&gt;
         <activity
             android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
+-->
 
         <activity
             android:name=".activity.PaiMingActivity"

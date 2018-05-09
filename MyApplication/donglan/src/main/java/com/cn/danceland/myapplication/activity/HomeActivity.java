@@ -42,14 +42,9 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
 import com.google.gson.Gson;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseUI;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
@@ -232,7 +227,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         super.onStop();
         mLocationClient.unregisterListener(myListener);
         mLocationClient.stop();
-        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+     //   EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
     public class MyLocationListener extends BDAbstractLocationListener {
@@ -375,41 +370,41 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         unregisterBroadcastReceiver();
     }
 
-    //private EaseUI easeUI;
-    EMMessageListener messageListener = new EMMessageListener() {
-
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            // notify new message
-            for (EMMessage message : messages) {
-                //     DemoHelper.getInstance().getNotifier().onNewMsg(message);
-                EaseUI.getInstance().getNotifier().onNewMesg(messages);
-            }
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onMessageRead(List<EMMessage> messages) {
-        }
-
-        @Override
-        public void onMessageDelivered(List<EMMessage> message) {
-        }
-
-        @Override
-        public void onMessageRecalled(List<EMMessage> messages) {
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {
-        }
-    };
+//    //private EaseUI easeUI;
+//    EMMessageListener messageListener = new EMMessageListener() {
+//
+//        @Override
+//        public void onMessageReceived(List<EMMessage> messages) {
+//            // notify new message
+//            for (EMMessage message : messages) {
+//                //     DemoHelper.getInstance().getNotifier().onNewMsg(message);
+//                EaseUI.getInstance().getNotifier().onNewMesg(messages);
+//            }
+//            refreshUIWithMessage();
+//        }
+//
+//        @Override
+//        public void onCmdMessageReceived(List<EMMessage> messages) {
+//            refreshUIWithMessage();
+//        }
+//
+//        @Override
+//        public void onMessageRead(List<EMMessage> messages) {
+//        }
+//
+//        @Override
+//        public void onMessageDelivered(List<EMMessage> message) {
+//        }
+//
+//        @Override
+//        public void onMessageRecalled(List<EMMessage> messages) {
+//            refreshUIWithMessage();
+//        }
+//
+//        @Override
+//        public void onMessageChanged(EMMessage message, Object change) {
+//        }
+//    };
 
     private void refreshUIWithMessage() {
         runOnUiThread(new Runnable() {
@@ -429,7 +424,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+        //EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
 

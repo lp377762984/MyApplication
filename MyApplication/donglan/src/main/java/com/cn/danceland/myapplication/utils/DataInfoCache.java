@@ -30,7 +30,7 @@ public class DataInfoCache {
 
     public static String QzInfo = "Qz_List_Info";
     public static String CyInfo = "Cy_List_Info";
-    private static String DataCache = "Data_Cache_File";
+    private static String DATA_CACHE = "Data_Cache_File";
 
     /**
      * 保存 一组 数据
@@ -79,11 +79,11 @@ public class DataInfoCache {
         }
 
         public void saveGlobal(Context ctx, ArrayList<T> data, String name) {
-            save(ctx, data, name, DataCache);
+            save(ctx, data, name, DATA_CACHE);
         }
 
         public void saveGlobalone(Context ctx, Object data, String name) {
-            save_one(ctx, data, name, DataCache);
+            save_one(ctx, data, name, DATA_CACHE);
         }
 
         private void save_one(Context ctx, Object data, String name, String folder) {
@@ -147,11 +147,11 @@ public class DataInfoCache {
         }
 
         public ArrayList<T> loadGlobal(Context ctx, String name) {
-            return load(ctx, name, DataCache);
+            return load(ctx, name, DATA_CACHE);
         }
 
         public Object loadGlobal_one(Context ctx, String name) {
-            return load_one(ctx, name, DataCache);
+            return load_one(ctx, name, DATA_CACHE);
         }
 
         private Object load_one(Context ctx, String name, String folder) {

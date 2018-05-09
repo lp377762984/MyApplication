@@ -43,7 +43,6 @@ import com.cn.danceland.myapplication.bean.CommitDepositBean;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianBean;
-import com.cn.danceland.myapplication.bean.RequestOrderInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
@@ -636,7 +635,7 @@ public class SiJiaoOrderActivity extends Activity {
             sijiaoOrderConfirmBean.setBus_type(56);
         }
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝,3微信
-        sijiaoOrderConfirmBean.setPlatform(2);
+        sijiaoOrderConfirmBean.setPlatform(1);//1是安卓
         sijiaoOrderConfirmBean.setDeposit_id(deposit_id);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         extends_params.setCourse_type_id(course_id+"");

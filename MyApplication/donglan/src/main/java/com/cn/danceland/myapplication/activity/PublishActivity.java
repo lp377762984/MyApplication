@@ -71,9 +71,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.shaohui.advancedluban.Luban;
-import me.shaohui.advancedluban.OnCompressListener;
-import me.shaohui.advancedluban.OnMultiCompressListener;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 /**
  * Created by feng on 2017/10/23.
@@ -231,6 +230,7 @@ public class PublishActivity extends Activity {
         }
 
     }
+
     long length;
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -257,13 +257,13 @@ public class PublishActivity extends Activity {
                                 @Override
                                 public void run() {
                                     //try {
-                                        arrayFileMap = new HashMap<>();
-                                        ArrayList<File> files = new ArrayList<>();
-                                        for (int i = 0; i < arrayList.size(); i++) {
-                                            File file = new File(arrayList.get(i));
-                                            files.add(file);
-                                        }
-                                        compressImg(files);//压缩图片
+                                    arrayFileMap = new HashMap<>();
+                                    ArrayList<File> files = new ArrayList<>();
+                                    for (int i = 0; i < arrayList.size(); i++) {
+                                        File file = new File(arrayList.get(i));
+                                        files.add(file);
+                                    }
+                                    compressImg(files);//压缩图片
 
                                 }
                             }).start();
@@ -465,67 +465,151 @@ public class PublishActivity extends Activity {
 
     }
 
+    int maptag = 0;
+
     //压缩图片
-    private void compressImg(List<File> files){
-        Luban.compress(this,files)
-                .setMaxSize(500)                // limit the final image size（unit：Kb）
-//                .setMaxHeight(1920)             // limit image height
-//                .setMaxWidth(1080)              // limit image width
-                .putGear(Luban.CUSTOM_GEAR)     // use CUSTOM GEAR compression mode
-                .launch(new OnMultiCompressListener() {
+    private void compressImg(final List<File> files) {
+        List<String> paths = new ArrayList<>();
+        for (int i = 0; i < files.size(); i++) {
+//            try {
+//                LogUtil.i("压缩前大小" + SDCardUtils.formatFileSize(files.get(i)));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            paths.add(files.get(i).getAbsolutePath());
+        }
+        Luban.with(this)
+                .load(paths)                                   // 传人要压缩的图片列表
+                .ignoreBy(100)                                  // 忽略不压缩图片的大小
+                //   .setTargetDir(Environment.getExternalStorageDirectory().getAbsolutePath())                        // 设置压缩后文件存储位置
+                .setCompressListener(new OnCompressListener() { //设置回调
                     @Override
                     public void onStart() {
-                        LogUtil.i("开始压缩");
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        //      LogUtil.i("压缩开始前调用");
                     }
 
                     @Override
-                    public void onSuccess(List<File> fileList) {
-                        int size = fileList.size();
-                        for(int i=0;i<size;i++){
-                            arrayFileMap.put(i + "", fileList.get(i));
-                        }
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        //         LogUtil.i(file.getAbsolutePath());
+                        arrayFileMap.put(maptag + "", file);
+                        maptag++;
+//                        try {
+//                            LogUtil.i("压缩后大小" + SDCardUtils.formatFileSize(file));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
 
-                        for(int j = 0;j<arrayFileMap.size();j++){
-                            LogUtil.i(arrayFileMap.get(j+"").length()+"");
-                        }
-
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                String s = null;
-                                try {
-                                    s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
-                                List<UpImagesBean.Data> beanList = upImagesBean.getData();
-
-                                arrImgUrl = new ArrayList<String>();
-                                arrImgPath = new ArrayList<String>();
-                                if (beanList != null && beanList.size() > 0) {
-                                    for (int k = 0; k < beanList.size(); k++) {
-                                        arrImgUrl.add(beanList.get(k).getImgUrl());
-                                        arrImgPath.add(beanList.get(k).getImgPath());
+                        if (files.size() == maptag) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String s = null;
+                                    try {
+                                        s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                }
+                                    UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                                    if (upImagesBean.getSuccess()) {
+                                        List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
-                                Message message = new Message();
-                                message.what = 2;
-                                handler.sendMessage(message);
-                            }
-                        }).start();
+                                        arrImgUrl = new ArrayList<String>();
+                                        arrImgPath = new ArrayList<String>();
+                                        if (beanList != null && beanList.size() > 0) {
+                                            for (int k = 0; k < beanList.size(); k++) {
+                                                arrImgUrl.add(beanList.get(k).getImgUrl());
+                                                arrImgPath.add(beanList.get(k).getImgPath());
+                                            }
+                                        }
+
+                                        Message message = new Message();
+                                        message.what = 2;
+                                        handler.sendMessage(message);
+                                        maptag = 0;
+                                    } else {
+                                        LogUtil.i("图片上传失败");
+                                    }
+
+                                }
+                            }).start();
+                        }
 
 
                     }
 
                     @Override
-                    public void onError(Throwable throwable) {
-                        LogUtil.i("压缩失败" + throwable.toString());
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                        LogUtil.i("压缩过程出现问题时调用" + e.toString());
                     }
-                });
-    }
+                }).launch();    //启动压缩
 
+
+//        Luban.compress(this,files)
+//                .setMaxSize(500)                // limit the final image size（unit：Kb）
+////                .setMaxHeight(1920)             // limit image height
+////                .setMaxWidth(1080)              // limit image width
+//                .putGear(Luban.CUSTOM_GEAR)     // use CUSTOM GEAR compression mode
+//                .launch(new OnMultiCompressListener() {
+//                    @Override
+//                    public void onStart() {
+//                        LogUtil.i("开始压缩");
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<File> fileList) {
+//                        int size = fileList.size();
+//                        for(int i=0;i<size;i++){
+//                            arrayFileMap.put(i + "", fileList.get(i));
+//                            try {
+//                                LogUtil.i("压缩后大小" + SDCardUtils.formatFileSize(fileList.get(i)));
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        for(int j = 0;j<arrayFileMap.size();j++){
+//                            LogUtil.i(arrayFileMap.get(j+"").length()+"");
+//                        }
+//
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                String s = null;
+//                                try {
+//                                    s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+//                                List<UpImagesBean.Data> beanList = upImagesBean.getData();
+//
+//                                arrImgUrl = new ArrayList<String>();
+//                                arrImgPath = new ArrayList<String>();
+//                                if (beanList != null && beanList.size() > 0) {
+//                                    for (int k = 0; k < beanList.size(); k++) {
+//                                        arrImgUrl.add(beanList.get(k).getImgUrl());
+//                                        arrImgPath.add(beanList.get(k).getImgPath());
+//                                    }
+//                                }
+//
+//                                Message message = new Message();
+//                                message.what = 2;
+//                                handler.sendMessage(message);
+//                            }
+//                        }).start();
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//                        LogUtil.i("压缩失败" + throwable.toString());
+//                    }
+//                });
+    }
 
 
     @Override

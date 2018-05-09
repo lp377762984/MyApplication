@@ -28,10 +28,8 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddPotentialActivity;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
-import com.cn.danceland.myapplication.activity.MyChatActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
-import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -42,8 +40,6 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.domain.EaseUser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -464,37 +460,37 @@ public class RevisitListFragment extends BaseFragment {
                 }
             });
 
-            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String userName = datalist.get(position).getNick_name();
-                    String userPic = datalist.get(position).getSelf_avatar_path();
-                    String hxIdFrom ;
-                    if (Constants.HX_DEV_CONFIG) {
-                        hxIdFrom = "dev"+datalist.get(position).getMember_no();
-                    }else {
-                        hxIdFrom = datalist.get(position).getMember_no();
-                    }
-
-                    LogUtil.i(userName + userPic + hxIdFrom);
-                    EaseUser easeUser = new EaseUser(hxIdFrom);
-                    easeUser.setAvatar(userPic);
-                    easeUser.setNick(userName);
-
-                    List<EaseUser> users = new ArrayList<EaseUser>();
-                    users.add(easeUser);
-                    if (easeUser != null) {
-                        DemoHelper.getInstance().updateContactList(users);
-                    } else {
-                        LogUtil.i("USER IS NULL");
-
-                    }
-
-                        startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
-
-
-                               }
-            });
+//            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    String userName = datalist.get(position).getNick_name();
+//                    String userPic = datalist.get(position).getSelf_avatar_path();
+//                    String hxIdFrom ;
+//                    if (Constants.HX_DEV_CONFIG) {
+//                        hxIdFrom = "dev"+datalist.get(position).getMember_no();
+//                    }else {
+//                        hxIdFrom = datalist.get(position).getMember_no();
+//                    }
+//
+//                    LogUtil.i(userName + userPic + hxIdFrom);
+//                    EaseUser easeUser = new EaseUser(hxIdFrom);
+//                    easeUser.setAvatar(userPic);
+//                    easeUser.setNick(userName);
+//
+//                    List<EaseUser> users = new ArrayList<EaseUser>();
+//                    users.add(easeUser);
+//                    if (easeUser != null) {
+//                        DemoHelper.getInstance().updateContactList(users);
+//                    } else {
+//                        LogUtil.i("USER IS NULL");
+//
+//                    }
+//
+//                        startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+//
+//
+//                               }
+//            });
 
             return convertView;
 

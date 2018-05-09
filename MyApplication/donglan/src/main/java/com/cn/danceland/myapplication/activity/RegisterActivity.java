@@ -34,12 +34,9 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -288,7 +285,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                map.put("romType", "1");
+                map.put("platform", "1");
                 map.put("validateCode", mEtSms.getText().toString());
 
                 LogUtil.i(map.toString());
@@ -336,11 +333,11 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
                     //    ToastUtils.showToastShort("登录成功");
-                    if (Constants.HX_DEV_CONFIG) {//判断是否是开发环境
-                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-                    } else {
-                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-                    }
+//                    if (Constants.HX_DEV_CONFIG) {//判断是否是开发环境
+//                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+//                    } else {
+//                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+//                    }
 
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
@@ -380,47 +377,47 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    /**
-     * 登录环信账户
-     *
-     * @param admin
-     * @param pswd
-     * @param data
-     */
-    private void login_hx(String admin, String pswd, final Data data) {
-        LogUtil.i(admin + pswd);
-        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
-            @Override
-            public void onSuccess() {
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                LogUtil.i("登录聊天服务器成功！");
-
-                //  EaseUserUtils.setUserAvatar();
-//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
-//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
-                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
-                LogUtil.i(data.getPerson().getMember_no());
-                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
-                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
-                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
-                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
-                setMipushId();
-                finish();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.i("登录聊天服务器失败！");
-            }
-        });
-    }
+//    /**
+//     * 登录环信账户
+//     *
+//     * @param admin
+//     * @param pswd
+//     * @param data
+//     */
+//    private void login_hx(String admin, String pswd, final Data data) {
+//        LogUtil.i(admin + pswd);
+//        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
+//            @Override
+//            public void onSuccess() {
+//                EMClient.getInstance().groupManager().loadAllGroups();
+//                EMClient.getInstance().chatManager().loadAllConversations();
+//                LogUtil.i("登录聊天服务器成功！");
+//
+//                //  EaseUserUtils.setUserAvatar();
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
+//                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
+//                LogUtil.i(data.getPerson().getMember_no());
+//                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
+//                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
+//                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+//                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+//                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+//                setMipushId();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//
+//            }
+//
+//            @Override
+//            public void onError(int code, String message) {
+//                LogUtil.i("登录聊天服务器失败！");
+//            }
+//        });
+//    }
 
     private void queryUserInfo(String id) {
 
@@ -439,7 +436,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
-
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                    setMipushId();
+                    finish();
 
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());

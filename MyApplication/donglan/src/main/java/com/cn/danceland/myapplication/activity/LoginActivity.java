@@ -33,18 +33,14 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
-import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
-import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,6 +54,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+//import com.hyphenate.EMCallBack;
+//import com.hyphenate.chat.EMClient;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -404,14 +403,25 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
 
-                    if (DemoHelper.getInstance().isLoggedIn()) {
+//                    if (DemoHelper.getInstance().isLoggedIn()) {
+//
+//                    }
+//                    if (Constants.HX_DEV_CONFIG) {
+//                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+//                    } else {
+//                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
+//                    }
 
-                    }
-                    if (Constants.HX_DEV_CONFIG) {
-                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-                    } else {
-                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-                    }
+//
+//                    PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
+//                    LogUtil.i(data.getPerson().getMember_no());
+//                    PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
+//                    PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
+                    //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    setMipushId();
+                    finish();
                   ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
@@ -505,51 +515,43 @@ public class LoginActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
-
-    /**
-     * 登录环信账户
-     *
-     * @param admin
-     * @param pswd
-     * @param data
-     */
-    private void login_hx(String admin, String pswd, final Data data) {
-
-        LogUtil.i(admin + "--" + pswd);
-
-        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
-            @Override
-            public void onSuccess() {
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                LogUtil.i("登录聊天服务器成功！");
-            //    ToastUtils.showToastShort("登录成功");
-//                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                //  EaseUserUtils.setUserAvatar();
-//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
-//                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
-                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
-                LogUtil.i(data.getPerson().getMember_no());
-                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
-                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
-                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
-                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                setMipushId();
-                finish();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                LogUtil.i("登录聊天服务器失败！" + code + message);
-            }
-        });
-    }
+//
+//    /**
+//     * 登录环信账户
+//     *
+//     * @param admin
+//     * @param pswd
+//     * @param data
+//     */
+//    private void login_hx(String admin, String pswd, final Data data) {
+//
+//        LogUtil.i(admin + "--" + pswd);
+//
+//        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
+//            @Override
+//            public void onSuccess() {
+//                EMClient.getInstance().groupManager().loadAllGroups();
+//                EMClient.getInstance().chatManager().loadAllConversations();
+//                LogUtil.i("登录聊天服务器成功！");
+//            //    ToastUtils.showToastShort("登录成功");
+////                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+//                //  EaseUserUtils.setUserAvatar();
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
+////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
+//
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//
+//            }
+//
+//            @Override
+//            public void onError(int code, String message) {
+//                LogUtil.i("登录聊天服务器失败！" + code + message);
+//            }
+//        });
+//    }
 
     /**
      * 设置mipusid

@@ -21,19 +21,11 @@ import android.widget.RelativeLayout;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.CommentFragment;
-import com.cn.danceland.myapplication.fragment.MyConversationListFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.EaseUI;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.List;
 
 /**
  * Created by feng on 2017/12/11.
@@ -53,7 +45,6 @@ public class MessageActivity extends FragmentActivity {
     TabItem tab2;
     TabItem tab3;
     TabItem tab4;
-    private MyConversationListFragment myConversationListFragment;
     private int currentTabIndex=0;
 
     @Override
@@ -162,7 +153,7 @@ public class MessageActivity extends FragmentActivity {
     public void showFragment(String str) {
         fragmentManager = getSupportFragmentManager();
         commentFragment = new CommentFragment();
-        myConversationListFragment = new MyConversationListFragment();
+
 
 
         Bundle bundle = new Bundle();
@@ -172,11 +163,11 @@ public class MessageActivity extends FragmentActivity {
 
         if (TextUtils.equals(str, "5")) {
             LogUtil.i("显示对话列表");
-            fragmentTransaction
-                    .replace(R.id.message_fragment, myConversationListFragment)
-//                    .add(R.id.message_fragment, myConversationListFragment)
-//                    .show(myConversationListFragment)
-                    .commit();
+    //        fragmentTransaction
+//                    .replace(R.id.message_fragment, myConversationListFragment)
+////                    .add(R.id.message_fragment, myConversationListFragment)
+////                    .show(myConversationListFragment)
+//                    .commit();
         } else {
             fragmentTransaction.replace(R.id.message_fragment, commentFragment);
             fragmentTransaction.commit();
@@ -192,66 +183,17 @@ public class MessageActivity extends FragmentActivity {
         super.onDestroy();
         unregisterBroadcastReceiver();
     }
-    //private EaseUI easeUI;
-    EMMessageListener messageListener = new EMMessageListener() {
 
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            // notify new message
-            for (EMMessage message : messages) {
-           //     DemoHelper.getInstance().getNotifier().onNewMsg(message);
-                EaseUI.getInstance().getNotifier().onNewMesg(messages);
-            }
-            refreshUIWithMessage();
-        }
 
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onMessageRead(List<EMMessage> messages) {
-        }
-
-        @Override
-        public void onMessageDelivered(List<EMMessage> message) {
-        }
-
-        @Override
-        public void onMessageRecalled(List<EMMessage> messages) {
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {}
-    };
-
-    private void refreshUIWithMessage() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                // refresh unread count
-                //updateUnreadLabel();
-                if (currentTabIndex == 4) {
-                    // refresh conversation list
-                    if (myConversationListFragment != null) {
-                        myConversationListFragment.refresh();
-                    }
-                }
-            }
-        });
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
 
     }
 
@@ -271,8 +213,6 @@ public class MessageActivity extends FragmentActivity {
              //   updateUnreadAddressLable();
                 if (currentTabIndex == 4) {
                     // refresh conversation list
-                    if (myConversationListFragment != null) {
-                        myConversationListFragment.refresh();
                     }
                 }
 //                else if (currentTabIndex == 1) {
@@ -286,9 +226,7 @@ public class MessageActivity extends FragmentActivity {
 //                        GroupsActivity.instance.onResume();
 //                    }
 //                }
-            }
         };
-        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void unregisterBroadcastReceiver(){

@@ -36,8 +36,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomLocationPicker;
 import com.google.gson.Gson;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -465,7 +464,15 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //                    //退出主页面
 //                    HomeActivity.instance.finish();
 //                    finish();
-                    logouthx();
+                 //   logouthx();
+
+                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+
+                    SPUtils.setBoolean(Constants.ISLOGINED, false);
+                    //退出主页面
+                    HomeActivity.instance.finish();
+                    finish();
+
                 } else {
                     //失败
                     ToastUtils.showToastShort("退出登录失败");
@@ -509,37 +516,37 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void logouthx() {
-        EMClient.getInstance().logout(true, new EMCallBack() {
+//    private void logouthx() {
+//        EMClient.getInstance().logout(true, new EMCallBack() {
+//
+//            @Override
+//            public void onSuccess() {
+//                // TODO Auto-generated method stub
+//                //成功
+//                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+//
+//                SPUtils.setBoolean(Constants.ISLOGINED, false);
+//                //退出主页面
+//                HomeActivity.instance.finish();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onProgress(int progress, String status) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//
+//            @Override
+//            public void onError(int code, String message) {
+//                // TODO Auto-generated method stub
+//                //失败
+//                LogUtil.i("环信退出登录失败");
+//            }
+//        });
 
-            @Override
-            public void onSuccess() {
-                // TODO Auto-generated method stub
-                //成功
-                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
-
-                SPUtils.setBoolean(Constants.ISLOGINED, false);
-                //退出主页面
-                HomeActivity.instance.finish();
-                finish();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                // TODO Auto-generated method stub
-                //失败
-                LogUtil.i("环信退出登录失败");
-            }
-        });
 
 
-    }
 
 
 }

@@ -179,7 +179,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-          EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
+        if (Constants.HX_DEV_CONFIG){
+            EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
+        }
+
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_order_comfirm);
@@ -1047,7 +1050,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         public String pay_way;// 支付方式
         public String price;// 支付金额
         public String receive;
-        public int platform = 2;
+        public int platform = 1;
         public ExtendsParams extends_params;
         private String deposit_id;//定金id
         private int for_other;//0自己1别人

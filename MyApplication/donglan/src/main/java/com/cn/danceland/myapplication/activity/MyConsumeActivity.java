@@ -369,10 +369,12 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                 viewHolder.tv_name.setText("");
             }
 
-            if("1".equals(contentItem.getPlatform())){
+            if("3".equals(contentItem.getPlatform())){
                 viewHolder.tv_platform.setText("PC端");
-            }else{
+            }else if( "1".equals(contentItem.getPlatform())|| "2".equals(contentItem.getPlatform())){
                 viewHolder.tv_platform.setText("App端");
+            }else if ("4".equals(contentItem.getPlatform())){
+                viewHolder.tv_platform.setText("微信公众号");
             }
 
             viewHolder.tv_price.setText("金额: " + contentItem.getReceive()+"元");

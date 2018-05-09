@@ -35,7 +35,6 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
-import com.cn.danceland.myapplication.easeui.DemoHelper;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -48,8 +47,6 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -213,37 +210,37 @@ public class UserHomeActivity extends Activity {
 //
 //            }
 //        });
-        ll_sixin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String userName = userInfo.getPerson().getNick_name();
-                String userPic = userInfo.getPerson().getSelf_avatar_path();
-                String hxIdFrom;
-                if (Constants.HX_DEV_CONFIG) {
-                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
-                } else {
-                    hxIdFrom = userInfo.getPerson().getMember_no();
-                }
-
-                LogUtil.i(userName + userPic + hxIdFrom);
-                EaseUser easeUser = new EaseUser(hxIdFrom);
-                easeUser.setAvatar(userPic);
-                easeUser.setNick(userName);
-
-                List<EaseUser> users = new ArrayList<EaseUser>();
-                users.add(easeUser);
-                if (easeUser != null) {
-                    DemoHelper.getInstance().updateContactList(users);
-                } else {
-                    LogUtil.i("USER IS NULL");
-
-                }
-
-                startActivity(new Intent(UserHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
-
-            }
-        });
+//        ll_sixin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                String userName = userInfo.getPerson().getNick_name();
+//                String userPic = userInfo.getPerson().getSelf_avatar_path();
+//                String hxIdFrom;
+//                if (Constants.HX_DEV_CONFIG) {
+//                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
+//                } else {
+//                    hxIdFrom = userInfo.getPerson().getMember_no();
+//                }
+//
+//                LogUtil.i(userName + userPic + hxIdFrom);
+//                EaseUser easeUser = new EaseUser(hxIdFrom);
+//                easeUser.setAvatar(userPic);
+//                easeUser.setNick(userName);
+//
+//                List<EaseUser> users = new ArrayList<EaseUser>();
+//                users.add(easeUser);
+//                if (easeUser != null) {
+//                    DemoHelper.getInstance().updateContactList(users);
+//                } else {
+//                    LogUtil.i("USER IS NULL");
+//
+//                }
+//
+//                startActivity(new Intent(UserHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
+//
+//            }
+//        });
 
 
         tv_dyn.setText("" + data.getDyn_no());
