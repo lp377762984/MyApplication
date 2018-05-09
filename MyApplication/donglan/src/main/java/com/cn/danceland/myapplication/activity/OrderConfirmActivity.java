@@ -168,6 +168,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         }
     };
     private Bundle bundle;
+    private CheckBox cb_chuzhjika;
 
 
     @Override
@@ -265,6 +266,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         tv_pay_price = findViewById(R.id.tv_pay_price);
         cb_alipay = findViewById(R.id.cb_alipay);
         cb_wechat = findViewById(R.id.cb_wechat);
+        cb_chuzhjika = findViewById(R.id.cb_chuzhjika);
         cb_alipay.setChecked(true);//默认支付宝支付
 
         cb_alipay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -273,10 +275,13 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 if (b) {
                     cb_wechat.setChecked(false);
                     pay_way = 2;
-                } else {
-                    cb_wechat.setChecked(true);
-                    pay_way = 3;
+                    cb_chuzhjika.setChecked(false);
                 }
+//                else {
+//                    cb_wechat.setChecked(true);
+//
+//                   // pay_way = 3;
+//                }
             }
         });
         cb_wechat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -284,14 +289,30 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     cb_alipay.setChecked(false);
+
                     pay_way = 3;
-                } else {
-                    cb_alipay.setChecked(true);
-                    pay_way = 2;
-                }
+                    cb_chuzhjika.setChecked(false);
+               }
+// else {
+//                    cb_alipay.setChecked(true);
+//                    pay_way = 2;
+//                }
             }
         });
-
+        cb_chuzhjika.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    cb_alipay.setChecked(false);
+                    cb_wechat.setChecked(false);
+                    pay_way = 5;
+                }
+//                else {
+//                    cb_alipay.setChecked(true);
+//                    pay_way = 2;
+//                }
+            }
+        });
         RadioGroup radioGroup = findViewById(R.id.rg_who);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -566,7 +587,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     if (requestOrderInfoBean.getData().getPayWay() == 3) {//微信支付
                         wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
-
+                    if(requestOrderInfoBean.getData().getPayWay() == 5){
+                        chuzhika(requestOrderInfoBean.getData().getPay_params());
+                    }
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
                 }
@@ -623,6 +646,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
 
+                    if(requestOrderInfoBean.getData().getPayWay() == 5){
+                        chuzhika(requestOrderInfoBean.getData().getPay_params());
+                    }
+
 
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
@@ -656,7 +683,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
      * 支付宝支付
      */
     private void alipay(final String orderInfo) {
-
+        unpaidOrder = orderInfo;
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -718,9 +745,50 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         api.sendReq(req);
     }
+    class PayBean {
+        public String id;
+    }
+    /**
+     * 储值卡支付
+     * @param id
+     */
+    private void chuzhika(String id) {
+       PayBean payBean = new PayBean();
+        payBean.id = id;
+        String str = gson.toJson(payBean);
 
 
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
+                if (requestSimpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("支付成功");
+                } else {
+                    ToastUtils.showToastShort("支付失败");
+                }
 
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -802,7 +870,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.iv_back:
                 //   wxPay();
-                // finish();
+                 finish();
                 //sendPayRequest();
                 break;
 
