@@ -113,7 +113,7 @@ public class MessageReceiver extends PushMessageReceiver {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                ToastUtils.showToastShort("角色信息拉取失败！请检查网络！");
             }
         }) {
             @Override
