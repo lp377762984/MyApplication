@@ -43,8 +43,6 @@ import java.util.Map;
 
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
-import static com.cn.danceland.myapplication.R.id.iv_guanzhu;
-
 
 /**
  * Created by shy on 2018/4/16 17:58
@@ -58,7 +56,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private TextView tv_gauzhu_num, tv_message, tv_guanzhu;
     private TextView tv_fans;
     private float pingfen;
-  //  private AnimButton iv_guanzhu;
+    //  private AnimButton iv_guanzhu;
     private TextView tv_hobby;
     private EmojiconTextView tv_nick_name;
     private ImageView iv_avatar;
@@ -66,6 +64,8 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private boolean isdyn;
     private ImageView iv_sex;
     RxShineButton rx_guangzhu;
+    private ImageView iv_guanzhu;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,17 +92,20 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
         rx_guangzhu = findViewById(R.id.rx_guangzhu);
+        iv_guanzhu = findViewById(R.id.iv_guanzhu);
+        iv_guanzhu.setOnClickListener(this);
         rx_guangzhu.setOnClickListener(this);
+
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         iv_avatar = findViewById(R.id.iv_avatar);
         iv_sex = findViewById(R.id.iv_sex);
         iv_avatar.setOnClickListener(this);
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
-      //  iv_guanzhu = findViewById(R.id.iv_guanzhu);
-     //   iv_guanzhu.setOnClickListener(this);
+        //  iv_guanzhu = findViewById(R.id.iv_guanzhu);
+        //   iv_guanzhu.setOnClickListener(this);
         tv_hobby = findViewById(R.id.tv_hobby);
-        if (TextUtils.equals(userId,SPUtils.getString(Constants.MY_USERID,""))){
+        if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_edit).setVisibility(View.VISIBLE);
         }
@@ -139,18 +142,18 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 .load(userInfo.getPerson().getSelf_avatar_path())
                 .apply(options)
                 .into(iv_avatar);
-        if (userInfo.getIs_follow()){
+        if (userInfo.getIs_follow()) {
             tv_guanzhu.setText("已关注");
-           // iv_guanzhu.setImageResource(R.drawable.img_xin1);
+            iv_guanzhu.setImageResource(R.drawable.img_xin1);
             rx_guangzhu.setChecked(true);
-        }else {
+        } else {
             tv_guanzhu.setText("+关注");
-         //   iv_guanzhu.setImageResource(R.drawable.img_xin);
+              iv_guanzhu.setImageResource(R.drawable.img_xin);
             rx_guangzhu.setChecked(false);
         }
 
 
-        if (!TextUtils.isEmpty(userInfo.getPerson().getHobby())){
+        if (!TextUtils.isEmpty(userInfo.getPerson().getHobby())) {
             tv_hobby.setText(userInfo.getPerson().getHobby());
         }
 
@@ -182,7 +185,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
                 break;
             case R.id.iv_avatar://头像
-                startActivity(new Intent(UserSelfHomeActivity.this,AvatarActivity.class).putExtra("url",userInfo.getPerson().getSelf_avatar_path()));
+                startActivity(new Intent(UserSelfHomeActivity.this, AvatarActivity.class).putExtra("url", userInfo.getPerson().getSelf_avatar_path()));
                 break;
 //            case R.id.ll_guanzhu:
 //                if (userInfo.getIs_follow()){
@@ -192,18 +195,18 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 //                }
 //
 //                break;
-            case iv_guanzhu:
-                if (userInfo.getIs_follow()){
-                    addGuanzhu(userId,false);
-                }else {
-                    addGuanzhu(userId,true);
+            case  R.id.iv_guanzhu:
+                if (userInfo.getIs_follow()) {
+                    addGuanzhu(userId, false);
+                } else {
+                    addGuanzhu(userId, true);
                 }
                 break;
             case R.id.rx_guangzhu:
-                if (userInfo.getIs_follow()){
-                    addGuanzhu(userId,false);
-                }else {
-                    addGuanzhu(userId,true);
+                if (userInfo.getIs_follow()) {
+                    addGuanzhu(userId, false);
+                } else {
+                    addGuanzhu(userId, true);
                 }
                 break;
 
@@ -326,7 +329,6 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     }
 
 
-
     /**
      * 加关注
      *
@@ -335,12 +337,12 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
      */
     private void addGuanzhu(final String id, final boolean b) {
 
-        StrBean1 strBean1=new StrBean1();
-        strBean1.is_follower=b;
-        strBean1.user_id=id;
+        StrBean1 strBean1 = new StrBean1();
+        strBean1.is_follower = b;
+        strBean1.user_id = id;
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
 
             @Override

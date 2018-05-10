@@ -1,14 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 android {
-//    splits {
-//        abi {
-//            enable true
-//            reset()
-//            include 'x86', 'armeabi-v7a', 'x86_64'
-//            universalApk true
-//        }
-//    }
+
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
@@ -27,8 +20,8 @@ android {
 
         }
     }
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     greendao {
         schemaVersion 1
     }

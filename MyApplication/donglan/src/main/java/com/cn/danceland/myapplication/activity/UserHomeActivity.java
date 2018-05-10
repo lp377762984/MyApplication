@@ -260,7 +260,7 @@ public class UserHomeActivity extends Activity {
             rx_guangzhu.setChecked(false);
         }
 
-        rx_guangzhu.setOnClickListener(new View.OnClickListener() {
+        iv_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

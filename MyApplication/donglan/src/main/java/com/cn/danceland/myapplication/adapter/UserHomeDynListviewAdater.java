@@ -245,10 +245,10 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
         //    LogUtil.i(data.get(position).isPraise()+"");
         if (data.get(position).isPraise()) {//设置点赞
-            //  viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+             viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
             viewHolder.rx_zan.setChecked(true);
         } else {
-            //   viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+              viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
             viewHolder.rx_zan.setChecked(false);
         }
         viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
@@ -258,7 +258,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //            viewHolder.iv_zan.setAnimation(mAnimationSet);
 //        }
 
-        viewHolder.rx_zan.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //点赞
@@ -418,7 +418,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
                 viewHolder.iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
-                sb.insert(data.get(position).getImgList().get(0).length() - 4, "_400X400");
+                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".")+ 1);
+                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length()-1, "_400X400");
                 String[] b = sb.toString().split("_");
                 String[] c = b[1].toString().split("X");
 

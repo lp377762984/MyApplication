@@ -136,6 +136,7 @@
                     app:siShape="@raw/like"
                     app:small_shine_color="#CC9999"
                     android:layout_gravity="center"
+                    android:visibility="gone"
                     app:small_shine_offset_angle="20"/>
 
                 <ImageView
@@ -143,7 +144,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
-                    android:visibility="gone"
+
+
                     android:src="@drawable/img_xin" />
 
                 <TextView

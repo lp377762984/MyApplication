@@ -167,7 +167,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 ParamInfoBean paramInfoBean = gson.fromJson(jsonObject.toString(), ParamInfoBean.class);
 
                 if (paramInfoBean.getSuccess()) {
-
+                    listPopup=new ListPopup(AddRevisiterRecordActivity.this);
                     mParamInfoList = paramInfoBean.getData();
 
                     listPopup.showPopupWindow();
@@ -249,6 +249,9 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 LogUtil.i(s);
                 ParamInfoBean paramInfoBean = gson.fromJson(s, ParamInfoBean.class);
                 if (paramInfoBean.getSuccess()) {
+
+                    listPopup=new ListPopup(AddRevisiterRecordActivity.this);
+
                     mParamInfoList = paramInfoBean.getData();
 
                     listPopup.showPopupWindow();

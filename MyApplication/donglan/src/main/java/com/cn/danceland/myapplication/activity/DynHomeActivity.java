@@ -86,6 +86,8 @@ import cn.jzvd.JZVideoPlayerStandard;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 
+import static com.cn.danceland.myapplication.R.id.ll_zan;
+
 
 /**
  * Created by shy on 2017/11/17 17:32
@@ -261,8 +263,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             public void onKeyboardOpen() {
                 Log.e("Keyboard", "open");
                 tv_zan_num.setVisibility(View.GONE);
-             //   iv_zan.setVisibility(View.GONE);
-                rx_zan.setVisibility(View.GONE);
+              iv_zan.setVisibility(View.GONE);
+             //   rx_zan.setVisibility(View.GONE);
                 emojiButton.setVisibility(View.VISIBLE);
                 //     tv_send.setVisibility(View.VISIBLE);
             }
@@ -271,8 +273,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             public void onKeyboardClose() {
                 Log.e("Keyboard", "close");
                 tv_zan_num.setVisibility(View.VISIBLE);
-            //    iv_zan.setVisibility(View.VISIBLE);
-                rx_zan.setVisibility(View.VISIBLE);
+               iv_zan.setVisibility(View.VISIBLE);
+            //    rx_zan.setVisibility(View.VISIBLE);
                 emojiButton.setVisibility(View.GONE);
                 //   tv_send.setVisibility(View.GONE);
             }
@@ -388,16 +390,16 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         tv_zan_num.setText(info.getPriaseNumber() + "");
                     }
                     if (info.getPraise()) {//如果点赞
-                  //      iv_zan.setImageResource(R.drawable.img_zan1);
+                     iv_zan.setImageResource(R.drawable.img_zan1);
                         rx_zan.setChecked(true);
                     } else {
-                      //  iv_zan.setImageResource(R.drawable.img_zan);
+                       iv_zan.setImageResource(R.drawable.img_zan);
                         rx_zan.setChecked(false);
                     }
 
 
 
-                    rx_zan.setOnClickListener(new View.OnClickListener() {
+                    iv_zan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
@@ -551,7 +553,9 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                         .priority(Priority.HIGH);
                 iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(oneDynInfo.getImgList().get(0));
-                sb.insert(oneDynInfo.getImgList().get(0).length() - 4, "_400X400");
+
+                String houzhui =oneDynInfo.getImgList().get(0).substring(oneDynInfo.getImgList().get(0).lastIndexOf(".")+ 1);
+                sb.insert(oneDynInfo.getImgList().get(0).length() - houzhui.length()-1, "_400X400");
 //                String[] b = sb.toString().split("_");
 //                String[] c = b[2].toString().toString().split("X");
                 String[] b = sb.toString().split("_");

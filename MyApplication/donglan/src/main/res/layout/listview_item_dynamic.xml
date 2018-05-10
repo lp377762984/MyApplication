@@ -79,15 +79,16 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
-                    android:visibility="gone"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/img_xin" />
+                    android:src="@drawable/img_xin"
+                    />
+
                 <com.vondear.rxtools.view.likeview.RxShineButton
                     android:id="@+id/rx_guanzhu"
                     android:layout_width="20dp"
-                    android:layout_marginTop="10dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:src="@android:color/darker_gray"
                     app:allow_random_color="false"
                     app:big_shine_color="@color/color_dl_yellow"
@@ -95,6 +96,7 @@
                     app:btn_fill_color="@color/color_dl_yellow"
                     app:click_animation_duration="200"
                     app:enable_flashing="false"
+                    android:visibility="gone"
                     app:shine_animation_duration="1500"
                     app:shine_count="15"
                     app:shine_distance_multiple="1.5"
@@ -102,12 +104,13 @@
                     app:siShape="@raw/heart"
                     app:small_shine_color="#CC9999"
                     app:small_shine_offset_angle="20" />
+
                 <TextView
                     android:id="@+id/tv_guanzhu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="已关注"
                     android:layout_gravity="center_horizontal"
+                    android:text="已关注"
                     android:textColor="@color/color_dl_yellow"
                     android:textSize="14sp" />
 
@@ -139,9 +142,9 @@
                 android:id="@+id/expand_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                expandableTextView:animDuration="200"
                 expandableTextView:collapseDrawable="@drawable/img_shouqi"
                 expandableTextView:expandDrawable="@drawable/img_zhankai"
-                expandableTextView:animDuration="200"
                 expandableTextView:maxCollapsedLines="7">
 
                 <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
@@ -161,8 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|bottom"
                     android:layout_marginLeft="15dp"
-                    android:background="@android:color/transparent"
-                    />
+                    android:background="@android:color/transparent" />
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <cn.jzvd.JZVideoPlayerStandard
@@ -253,8 +255,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="15dp"
-                        android:src="@drawable/img_xin"
-                        android:visibility="gone" />
+                        android:src="@drawable/img_xin" />
 
                     <com.vondear.rxtools.view.likeview.RxShineButton
                         android:id="@+id/rx_zan"
@@ -263,6 +264,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="15dp"
                         android:src="@android:color/darker_gray"
+                        android:visibility="gone"
                         app:allow_random_color="false"
                         app:big_shine_color="@color/color_dl_yellow"
                         app:btn_color="@android:color/darker_gray"
