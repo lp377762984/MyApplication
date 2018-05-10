@@ -64,8 +64,9 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
     Gson gson;
     List<MyConSumeBean.Content> content;
     public static final int SDK_PAY_FLAG = 0x1001;
-    int page = 0;
+    int page = 0,totalPages;
     ConsumeAdapter consumeAdapter;
+
 
     private Handler mHandler = new Handler() {
         @Override
@@ -273,9 +274,9 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
         api.sendReq(req);
     }
 
-    private void initData(int page) {
+    private void initData(final int nowpage) {
         MyConsumeCon myConsumeCon = new MyConsumeCon();
-        myConsumeCon.setPage(page);
+        myConsumeCon.setPage(nowpage);
         myConsumeCon.setSize(15);
         String s = gson.toJson(myConsumeCon);
 
@@ -286,9 +287,11 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                 LogUtil.i(jsonObject.toString());
                 MyConSumeBean myConSumeBean = gson.fromJson(jsonObject.toString(), MyConSumeBean.class);
                 if(myConSumeBean!=null && myConSumeBean.getData()!=null&&myConSumeBean.getData().getContent()!=null){
+                    totalPages = myConSumeBean.getData().getTotalPages();
                     content.addAll(myConSumeBean.getData().getContent());
                     if(content!=null){
                         consumeAdapter.notifyDataSetChanged();
+                        page++;
                     }
                 }
 
@@ -331,8 +334,8 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
     }
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE){
-            initData(++page);
+        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages){
+            initData(page);
         }
     }
 

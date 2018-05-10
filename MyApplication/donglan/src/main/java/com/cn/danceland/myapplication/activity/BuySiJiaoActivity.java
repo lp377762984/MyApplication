@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ import java.util.Map;
  * Created by feng on 2018/1/15.
  */
 
-public class BuySiJiaoActivity extends Activity {
+public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollListener{
     ListView lv_sijiaocard;
     ImageView buy_img;
     Gson gson;
@@ -50,6 +52,7 @@ public class BuySiJiaoActivity extends Activity {
     List<BuySiJiaoBean.Content> content;
 
     Data info;
+    MyAdapter myAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,23 +69,41 @@ public class BuySiJiaoActivity extends Activity {
 
     }
 
-    private void getData() throws JSONException {
-        findSiJiaoBean.setPage(0);
+    private int lastVisibleItem;//最后一个可见的item
+    private int totalItemCount;//总的item
+    int page,totalPages;
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        this.lastVisibleItem = firstVisibleItem + visibleItemCount;
+        this.totalItemCount = totalItemCount;
+    }
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages){
+            getData(page);
+        }
+    }
+
+    private void getData(int nowPage) {
+        findSiJiaoBean.setPage(nowPage);
         findSiJiaoBean.setSize(15);
         findSiJiaoBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         String s = gson.toJson(findSiJiaoBean);
-        JSONObject jsonObject = new JSONObject(s);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COURSETYPELIST,jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COURSETYPELIST,s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject!=null){
                     LogUtil.e("zzf",jsonObject.toString());
                     String string = jsonObject.toString();
                     BuySiJiaoBean buySiJiaoBean = gson.fromJson(string, BuySiJiaoBean.class);
-                    content = buySiJiaoBean.getData().getContent();
-                    if(content!=null){
-                        lv_sijiaocard.setAdapter(new MyAdapter(content));
+                    if(buySiJiaoBean!=null){
+                        totalPages = buySiJiaoBean.getData().getTotalPages();
+                        content.addAll(buySiJiaoBean.getData().getContent());
+                        if(content!=null){
+                            myAdapter.notifyDataSetChanged();
+                            page++;
+                        }
                     }
                 }
             }
@@ -108,8 +129,13 @@ public class BuySiJiaoActivity extends Activity {
 
     private void intiView() {
 
+        content = new ArrayList<>();
 
         lv_sijiaocard = findViewById(R.id.lv_sijiaocard);
+        lv_sijiaocard.setOnScrollListener(this);
+
+        myAdapter = new MyAdapter(content);
+        lv_sijiaocard.setAdapter(myAdapter);
 
         lv_sijiaocard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,11 +156,8 @@ public class BuySiJiaoActivity extends Activity {
             }
         });
 
-        try {
-            getData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        getData(page);
+
 
     }
 

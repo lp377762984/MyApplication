@@ -5,13 +5,23 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.Time;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.MiMessage;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -20,6 +30,7 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,12 +62,14 @@ public class MessageReceiver extends PushMessageReceiver {
             Map<String, String> extra = message.getExtra();
             String type = extra.get("type");
             miMessage.setType(type);
-            if(type.equals("1")){
+            if(("1".equals(type))){
                 SPUtils.setInt("dianzanNum",dianzanNum+1);
-            }else if(type.equals("2")){
+            }else if("2".equals(type)){
                 SPUtils.setInt("fansNum",fansNum+1);
-            }else if(type.equals("3")){
+            }else if("3".equals(type)){
                 SPUtils.setInt("pinglunNum",pinglunNum+1);
+            }else if("4".equals(type)){
+                reloadInfo();
             }
             String personId = extra.get("personId");
             miMessage.setPersonId(personId);
@@ -81,6 +94,40 @@ public class MessageReceiver extends PushMessageReceiver {
         }
     }
 
+    private void reloadInfo() {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                if (loginInfoBean.getSuccess()) {
+                    DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
+                    ToastUtils.showToastShort("您的角色信息已发生变化！");
+                } else {
+                    ToastUtils.showToastShort("角色信息拉取失败！请检查网络！");
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
 
     @Override
     public void onNotificationMessageArrived(Context context, MiPushMessage miPushMessage) {
