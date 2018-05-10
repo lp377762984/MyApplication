@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -160,10 +163,15 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if("1".equals(content.get(position).getStatus())){
-                    if("2".equals(content.get(position).getPay_way())){
-                        alipay(content.get(position).getPay_params());
-                    }else if("3".equals(content.get(position).getPay_way())){
-                        wxPay(content.get(position).getPay_params());
+//                    if("2".equals(content.get(position).getPay_way())){
+//                        alipay(content.get(position).getPay_params());
+//                    }else if("3".equals(content.get(position).getPay_way())){
+//                        wxPay(content.get(position).getPay_params());
+//                    }
+                    showWindow(position);
+                }else{
+                    if(content.get(position).getRoot_opt_no()!=null){
+                        startActivity(new Intent(MyConsumeActivity.this,MyConsumeAboutActivity.class).putExtra("root_opt_no",content.get(position).getRoot_opt_no()));
                     }
                 }
             }
@@ -171,6 +179,32 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
 
 
         initData(page);
+    }
+
+    private void showWindow(final int position){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("是否继续支付");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if("2".equals(content.get(position).getPay_way())){
+                    alipay(content.get(position).getPay_params());
+                }else if("3".equals(content.get(position).getPay_way())){
+                    wxPay(content.get(position).getPay_params());
+                }
+            }
+        });
+
+//        builder.setNegativeButton("查看相关订单", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startActivity(new Intent(MyConsumeActivity.this,MyConsumeAboutActivity.class).putExtra("root_opt_no",content.get(position).getRoot_opt_no()));
+//            }
+//        });
+
+        builder.show();
+
     }
 
     //even事件处理

@@ -139,7 +139,8 @@ public class SiJiaoOrderActivity extends Activity {
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
-
+                            btn_weixin.setClickable(false);
+                            btn_chuzhika.setClickable(false);
                             break;
                         case "5000":
                             ToastUtils.showToastShort("重复请求");
@@ -147,10 +148,14 @@ public class SiJiaoOrderActivity extends Activity {
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
                             btn_repay.setVisibility(View.VISIBLE);
+                            btn_weixin.setClickable(false);
+                            btn_chuzhika.setClickable(false);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
                             btn_repay.setVisibility(View.VISIBLE);
+                            btn_weixin.setClickable(false);
+                            btn_chuzhika.setClickable(false);
                             break;
                         case "6004":
                             ToastUtils.showToastShort("正在处理中");
@@ -158,6 +163,8 @@ public class SiJiaoOrderActivity extends Activity {
                         default:
                             ToastUtils.showToastShort("支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
+                            btn_weixin.setClickable(false);
+                            btn_chuzhika.setClickable(false);
                             break;
                     }
 
@@ -191,6 +198,8 @@ public class SiJiaoOrderActivity extends Activity {
         if (event.getEventCode()==40002){
             ToastUtils.showToastShort("支付失败");
             btn_repay.setVisibility(View.VISIBLE);
+            btn_zhifubao.setClickable(false);
+            btn_chuzhika.setClickable(false);
         }
     }
 

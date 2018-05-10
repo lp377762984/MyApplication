@@ -497,6 +497,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.MyConsumeActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MyConsumeAboutActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

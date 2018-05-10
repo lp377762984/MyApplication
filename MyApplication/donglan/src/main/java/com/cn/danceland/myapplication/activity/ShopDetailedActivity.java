@@ -392,7 +392,14 @@ public class ShopDetailedActivity extends Activity{
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
                 if(shopJiaoLianBean!=null){
                     List<ShopJiaoLianBean.Data> huijiList = shopJiaoLianBean.getData();
-                    huiji_grid.setAdapter(new MyAdapter(huijiList));
+                    ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
+                    if(huijiList!=null&&huijiList.size()>6){
+                        for(int i=6;i<huijiList.size();i++){
+                            objects.add(huijiList.get(i));
+                        }
+
+                    }
+                    huiji_grid.setAdapter(new MyAdapter(huijiList,objects));
                 }
             }
         }, new Response.ErrorListener() {
@@ -434,7 +441,14 @@ public class ShopDetailedActivity extends Activity{
                 if(shopJiaoLianBean!=null){
 
                     List<ShopJiaoLianBean.Data> jiaolianList = shopJiaoLianBean.getData();
-                    jiaolian_grid.setAdapter(new MyAdapter(jiaolianList));
+                    ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
+                    if(jiaolianList!=null&&jiaolianList.size()>6){
+                        for(int i=6;i<jiaolianList.size();i++){
+                            objects.add(jiaolianList.get(i));
+                        }
+
+                    }
+                    jiaolian_grid.setAdapter(new MyAdapter(jiaolianList,objects));
                 }
             }
         }, new Response.ErrorListener() {
@@ -539,9 +553,11 @@ public class ShopDetailedActivity extends Activity{
     private class MyAdapter extends BaseExpandableListAdapter {
 
         List<ShopJiaoLianBean.Data> jiaolianList;
+        List<ShopJiaoLianBean.Data> childList;
 
-        MyAdapter(List<ShopJiaoLianBean.Data> jiaolianList){
+        MyAdapter(List<ShopJiaoLianBean.Data> jiaolianList,List<ShopJiaoLianBean.Data> childList){
             this.jiaolianList = jiaolianList;
+            this.childList = childList;
         }
 
         @Override
@@ -551,7 +567,11 @@ public class ShopDetailedActivity extends Activity{
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            return 1;
+            if(jiaolianList.size()>6){
+                return 1;
+            }else {
+                return 0;
+            }
         }
 
         @Override
@@ -586,22 +606,9 @@ public class ShopDetailedActivity extends Activity{
                 convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_parent,null);
             }
 
-//            if(jiaolianList!=null){
-//                if(jiaolianList.size()<=5){
-//                    for(int i=0;i<jiaolianList.size();i++){
-//
-//
-//                    }
-//                }
-//            }
             CircleImageView[] circleImageViews = {convertView.findViewById(R.id.circle_1),convertView.findViewById(R.id.circle_2),convertView.findViewById(R.id.circle_3)
             ,convertView.findViewById(R.id.circle_4),convertView.findViewById(R.id.circle_5),convertView.findViewById(R.id.circle_6)};
-//            CircleImageView circle_1 = convertView.findViewById(R.id.circle_1);
-//            CircleImageView circle_2 = convertView.findViewById(R.id.circle_2);
-//            CircleImageView circle_3 = convertView.findViewById(R.id.circle_3);
-//            CircleImageView circle_4 = convertView.findViewById(R.id.circle_4);
-//            CircleImageView circle_5 = convertView.findViewById(R.id.circle_5);
-//            CircleImageView circle_6 = convertView.findViewById(R.id.circle_6);
+
             if(jiaolianList.size()<=6){
                 for(int i=0;i<jiaolianList.size();i++){
                     circleImageViews[i].setVisibility(View.VISIBLE);
@@ -623,14 +630,6 @@ public class ShopDetailedActivity extends Activity{
                 }
             }
 
-
-
-//            Glide.with(ShopDetailedActivity.this).load("http://news.hainan.net/Editor/img/201602/20160215/big/20160215234302136_2731088.jpg").into(circle_1);
-//            Glide.with(ShopDetailedActivity.this).load("http://img06.tooopen.com/images/20160807/tooopen_sy_174504721543.jpg").into(circle_2);
-//            Glide.with(ShopDetailedActivity.this).load("http://file06.16sucai.com/2016/0407/90ed68d09c8777d6336862beca17f317.jpg").into(circle_3);
-//            Glide.with(ShopDetailedActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_4);
-//            Glide.with(ShopDetailedActivity.this).load("http://img.mp.itc.cn/upload/20160408/6c46c0a65f32450e9941f9ef84091104_th.jpg").into(circle_5);
-//            Glide.with(ShopDetailedActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_6);
             return convertView;
         }
 
@@ -641,13 +640,7 @@ public class ShopDetailedActivity extends Activity{
                 convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child,null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
-            List<ShopJiaoLianBean.Data> gridViewList = new ArrayList<>();
-            if(jiaolianList.size()>6){
-                for(int i = 6;i<jiaolianList.size();i++){
-                    gridViewList.add(jiaolianList.get(i));
-                }
-            }
-            grid_view.setAdapter(new MyGridAdapter(gridViewList));
+            grid_view.setAdapter(new MyGridAdapter(childList));
 
             return convertView;
         }
@@ -686,7 +679,11 @@ public class ShopDetailedActivity extends Activity{
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_grid_item, null);
             CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            Glide.with(ShopDetailedActivity.this).load(gridViewList.get(position).getSelf_avatar_path()).into(circle_item);
+            if("".equals(gridViewList.get(position).getSelf_avatar_path())||gridViewList.get(position).getSelf_avatar_path()==null){
+                Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
+            }else{
+                Glide.with(ShopDetailedActivity.this).load(gridViewList.get(position).getSelf_avatar_path()).into(circle_item);
+            }
 
             return inflate;
         }
