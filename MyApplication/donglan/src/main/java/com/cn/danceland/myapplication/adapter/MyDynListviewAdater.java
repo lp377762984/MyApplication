@@ -344,10 +344,10 @@ public class MyDynListviewAdater extends BaseAdapter {
 
         if (isMe) {//是否是个人页面
             viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
-            viewHolder.rx_guanzhu.setVisibility(View.INVISIBLE);
+        //    viewHolder.rx_guanzhu.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.ll_guanzhu.setVisibility(View.VISIBLE);
-            viewHolder.rx_guanzhu.setVisibility(View.VISIBLE);
+       //     viewHolder.rx_guanzhu.setVisibility(View.VISIBLE);
         }
 
 
