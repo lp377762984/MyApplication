@@ -1,26 +1,28 @@
 package com.cn.danceland.myapplication.utils;
 
 
+import com.cn.danceland.myapplication.MyApplication;
+
 public class Constants  {
 
     public static String getVersion(){
-        return "1.2.3.3";
+        return AppUtils.getVersionName(MyApplication.getContext());
     }
     public static String getPlatform(){
         return "1";
     }
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-    //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+   public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    public static final String HOST = "http://192.168.1.117:8003/";//老高
+   // public static final String HOST = "http://192.168.1.117:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
    //public static final String HOST = " http://192.168.1.123:8003/";//
     //public static final String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean HX_DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户

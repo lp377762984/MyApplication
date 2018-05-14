@@ -179,7 +179,9 @@ public class SiJiaoOrderActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
+        if (Constants.HX_DEV_CONFIG){
+            EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sijiaoorder);
         EventBus.getDefault().register(this);
