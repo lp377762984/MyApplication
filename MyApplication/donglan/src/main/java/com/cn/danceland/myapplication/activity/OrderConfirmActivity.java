@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -1521,13 +1520,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         startActivityForResult(intent, PICK_CONTACT);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        OrderConfirmActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-        //MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
 
-    }
 
     class ListPopup extends BasePopupWindow {
 

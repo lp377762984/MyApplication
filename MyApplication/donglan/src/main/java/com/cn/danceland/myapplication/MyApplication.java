@@ -4,9 +4,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Process;
 import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
+import android.support.multidex.MultiDex;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -16,6 +18,13 @@ import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMOfflinePushListener;
+import com.tencent.imsdk.TIMOfflinePushNotification;
+import com.tencent.imsdk.TIMSdkConfig;
+import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.List;
@@ -90,8 +99,14 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
+
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     public static RequestQueue getHttpQueues() {
         return requestQueue;
@@ -151,23 +166,23 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         }
         return false;
     }
-//    public static class DemoHandler extends Handler {
-//
-//        private Context context;
-//
-//        public DemoHandler(Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            String s = (String) msg.obj;
-////            if (sMainActivity != null) {
-////                sMainActivity.refreshLogInfo();
-////            }
-//            if (!TextUtils.isEmpty(s)) {
-//
-//            }
-//        }
-//    }
+
+    private void initTXIM() {
+        if (MsfSdkUtils.isMainProcess(this)) {
+            TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
+                @Override
+                public void handleNotification(TIMOfflinePushNotification timOfflinePushNotification) {
+                    if (timOfflinePushNotification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify) {
+                        //消息被设置为需要需要提醒
+                        timOfflinePushNotification.doNotify(getApplicationContext(), R.mipmap.app_launcher);
+                        //注册推送服务
+                    }
+                }
+            });
+        }
+        TIMSdkConfig config = new TIMSdkConfig(1400090939).enableCrashReport(false).enableLogPrint(true)
+                .setLogLevel(TIMLogLevel.DEBUG)
+                .setLogPath(Environment.getExternalStorageDirectory().getPath()+"/dldebug_log");
+        boolean b=TIMManager.getInstance().init(this,config);
+    }
 }
