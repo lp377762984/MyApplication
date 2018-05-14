@@ -389,10 +389,10 @@ public class SiJiaoDetailActivity extends Activity {
                                 Integer start_time = content.get(i).getStart_time();
                                 setTimeLine(content.get(i).getStatus(),start_time*60000);
                             }
-                            arrPositionS.clear();
-                            arrStatusS.clear();
-                            arrStatusF.clear();
-                            arrPositionF.clear();
+//                            arrPositionS.clear();
+//                            arrStatusS.clear();
+//                            arrStatusF.clear();
+//                            arrPositionF.clear();
                             if(arrPosition.size()>0){
                                 for(int j=0;j<arrPosition.size();j++){
                                     if(arrPosition.get(j)!=0){

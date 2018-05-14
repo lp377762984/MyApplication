@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -106,10 +107,14 @@ public class ShopListFragment extends BaseFragment {
 //            jingdu = getlocationString.split(",")[0];
 //            weidu = getlocationString.split(",")[1];
 //        }
-        jingdu="0";
-        weidu="0";
+
         jingdu = getArguments().getString("jingdu");
         weidu = getArguments().getString("weidu");
+        if(jingdu==null || weidu==null){
+            jingdu="0";
+            weidu="0";
+            ToastUtils.showToastShort("定位失败，获取门店列表失败");
+        }
        // LogUtil.i(jingdu + weidu);
         startLng = new LatLng(Double.valueOf(weidu),Double.valueOf(jingdu));
     }

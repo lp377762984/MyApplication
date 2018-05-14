@@ -1,9 +1,11 @@
 package com.cn.danceland.myapplication;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
 import android.os.StrictMode;
@@ -52,6 +54,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private static HomeActivity sMainActivity = null;
 
     private HttpProxyCacheServer proxy;
+    private static Activity currentActivity;
 
     public static HttpProxyCacheServer getProxy(Context context) {
         MyApplication app = (MyApplication) context.getApplicationContext();
@@ -99,13 +102,54 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
+        @Override
+        protected void attachBaseContext(Context base) {
+            super.attachBaseContext(base);
+            MultiDex.install(this);
+        }
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+
+
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                currentActivity = activity;
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
 
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
+    public static Activity getCurrentActivity(){
+        return currentActivity;
     }
 
     public static RequestQueue getHttpQueues() {
