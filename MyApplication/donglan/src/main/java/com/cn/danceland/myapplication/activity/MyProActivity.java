@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -1001,6 +1002,9 @@ public class MyProActivity extends Activity {
             intent.putExtra("return-data", false);
             if (imageUri != null) {
                 intent.setDataAndType(imageUri, "image/*");
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
             }
             if (outputUri != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
