@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
 import android.os.StrictMode;
@@ -107,6 +106,8 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             super.attachBaseContext(base);
             MultiDex.install(this);
         }
+
+
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
 
