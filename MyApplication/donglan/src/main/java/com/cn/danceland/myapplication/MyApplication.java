@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Process;
 import android.os.StrictMode;
@@ -101,11 +102,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
-        @Override
-        protected void attachBaseContext(Context base) {
-            super.attachBaseContext(base);
-            MultiDex.install(this);
-        }
+
 
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -148,7 +145,11 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         });
 
     }
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     public static Activity getCurrentActivity(){
         return currentActivity;
     }
