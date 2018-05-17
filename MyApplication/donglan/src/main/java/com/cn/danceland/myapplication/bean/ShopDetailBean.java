@@ -1,5 +1,7 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.util.List;
+
 /**
  * Created by feng on 2017/12/6.
  */
@@ -45,6 +47,7 @@ public class ShopDetailBean {
         private int zone_code;
         private int follows;
         private String logo_url;
+        private List<String> photo_url;
         public void setBranch_id(int branch_id) {
             this.branch_id = branch_id;
         }
@@ -136,6 +139,13 @@ public class ShopDetailBean {
             return logo_url;
         }
 
+        public List<String> getPhoto_url() {
+            return photo_url;
+        }
+
+        public void setPhoto_url(List<String> photo_url) {
+            this.photo_url = photo_url;
+        }
     }
 
 }

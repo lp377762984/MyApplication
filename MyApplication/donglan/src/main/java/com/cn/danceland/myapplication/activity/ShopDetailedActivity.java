@@ -491,6 +491,17 @@ public class ShopDetailedActivity extends Activity{
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
                 ShopDetailBean.Data data = shopDetailBean.getData();
                 if (data!=null){
+                    List<String> photo_url = data.getPhoto_url();
+                    if(photo_url!=null){
+                        if(photo_url.size() == 1){
+                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
+                        }
+                        if(photo_url.size() == 2){
+                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
+                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(1)).into(img_02);
+                        }
+                    }
+
                     store_name.setText(data.getBname());
                     tv_adress.setText(data.getAddress());
                     tv_detail.setText(data.getDescription());
