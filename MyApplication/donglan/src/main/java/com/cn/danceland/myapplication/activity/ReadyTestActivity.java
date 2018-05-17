@@ -156,7 +156,7 @@ public class ReadyTestActivity extends Activity {
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getDateString();
+                String dateString = customDatePicker.getDateStringF();
                 ed_birthday.setText(dateString);
             }
         });

@@ -149,7 +149,7 @@ public class EquipmentActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String,String> map = new HashMap<String,String>();
-                map.put("page","1");
+                map.put("page","0");
                 map.put("branch_id",info.getPerson().getDefault_branch());
 
                 return map;
