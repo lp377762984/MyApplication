@@ -42,6 +42,7 @@ import com.cn.danceland.myapplication.activity.ClubDynActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
+import com.cn.danceland.myapplication.activity.LoginNumberActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
@@ -718,7 +719,8 @@ public class ShopFragment extends BaseFragment {
                         startActivity(intent1);
                         break;
                     case 9://意见反馈
-                        startActivity(new Intent(mActivity, AdviseActivity.class));
+                        startActivity(new Intent(mActivity, LoginNumberActivity.class));
+                        //startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));

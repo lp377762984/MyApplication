@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/loginnumer_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.cn.danceland.myapplication.view.DongLanTitleView>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PC端登录验证码"
+        android:layout_below="@+id/loginnumer_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:textSize="18sp"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_dl_yellow"
+        />
+
+    <TextView
+        android:id="@+id/tv_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_number"
+        android:layout_centerHorizontal="true"
+        android:text="登录网址 http://md.dljsgw.com"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp" />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请在60s内登录PC客户端，过期失效"
+        android:layout_below="@+id/tv_url"
+        android:layout_centerHorizontal="true"
+        android:textSize="12sp"
+        android:textColor="#c0c0c0"
+        android:layout_marginTop="15dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_update"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        style="@style/BtnCommitStyle"
+        android:layout_alignParentBottom="true"
+        android:text="点击刷新"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        />
+
+</RelativeLayout>
