@@ -719,8 +719,8 @@ public class ShopFragment extends BaseFragment {
                         startActivity(intent1);
                         break;
                     case 9://意见反馈
-                        startActivity(new Intent(mActivity, LoginNumberActivity.class));
-                        //startActivity(new Intent(mActivity, AdviseActivity.class));
+                        //startActivity(new Intent(mActivity, LoginNumberActivity.class));
+                        startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
