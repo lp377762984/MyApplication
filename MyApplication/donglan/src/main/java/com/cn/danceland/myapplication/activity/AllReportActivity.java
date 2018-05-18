@@ -79,6 +79,23 @@ public class AllReportActivity extends Activity {
 
     }
 
+    private String getCurrentroleType(String role) {
+        HashMap<String,String> roleMap = new HashMap<>();
+        roleMap.put("会籍顾问", "1");
+        roleMap.put("教练", "2");
+        roleMap.put("前台", "3");
+        roleMap.put("店长", "4");
+        roleMap.put("会籍主管", "5");
+        roleMap.put("教练主管", "6");
+        roleMap.put("前台主管", "7");
+        roleMap.put("操教", "8");
+        roleMap.put("出纳", "9");
+        roleMap.put("收银", "10");
+        roleMap.put("兼职教练", "11");
+
+        return roleMap.get(role);
+    }
+
     private void showDate() {
 
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
@@ -106,7 +123,8 @@ public class AllReportActivity extends Activity {
         nowDate = time.year +"-"+(time.month+1)+"-"+time.monthDay;
         selectDate = nowDate;
         gson = new Gson();
-        role = getIntent().getStringExtra("role_type");
+        String role_type = getIntent().getStringExtra("role_type");
+        role = getCurrentroleType(role_type);
         target_role_type = getIntent().getStringExtra("target_role_type");
 
 
