@@ -53,11 +53,8 @@ public class TuanKeRecordFragment extends BaseFragment {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         initView();
-        try {
-            initData();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        initData();
+
 
         return view;
     }
@@ -67,14 +64,13 @@ public class TuanKeRecordFragment extends BaseFragment {
 
     }
 
-    private void initData() throws JSONException {
+    private void initData() {
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         siJiaoYuYueConBean.setDate(startTime);
 
         String s = gson.toJson(siJiaoYuYueConBean);
-        JSONObject jsonObject = new JSONObject(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, jsonObject,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf",jsonObject.toString());
@@ -166,7 +162,7 @@ public class TuanKeRecordFragment extends BaseFragment {
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
             String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date() + "", null);
             viewHolder.course_date.setText("预约时间:"+time);
-            viewHolder.course_type.setText("一对一");
+            viewHolder.course_type.setText("免费团课");
             viewHolder.course_jiaolian.setText("");
 
             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +174,7 @@ public class TuanKeRecordFragment extends BaseFragment {
             });
             if(list.get(position).getStatus()==2){
                 viewHolder.rl_button_tv.setText("已取消");
-                viewHolder.rl_button.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
@@ -224,7 +220,7 @@ public class TuanKeRecordFragment extends BaseFragment {
                 if(s.contains("1")){
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
-                    rl.setBackgroundColor(Color.parseColor("#A9A9A9"));
+                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("取消失败！请重新操作");
