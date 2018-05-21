@@ -67,7 +67,7 @@ public class TuanKeRecordFragment extends BaseFragment {
     private void initData() {
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
-        siJiaoYuYueConBean.setDate(startTime);
+        //siJiaoYuYueConBean.setDate(startTime);
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {

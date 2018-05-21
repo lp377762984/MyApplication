@@ -70,7 +70,6 @@ public class TuanKeFragment extends BaseFragment {
     boolean yuyue;
     MyAdapter myAdapter;
     List<KeChengBiaoBean.Data> xiaoTuanList;
-    GradientDrawable background;
     CourseActivity activity;
 
     @Override
@@ -147,14 +146,13 @@ public class TuanKeFragment extends BaseFragment {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
-                        background.setColor(Color.parseColor("#FFFFFF"));
+                        rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                         tv.setTextColor(Color.parseColor("#FF8C00"));
                         tv.setText("已预约");
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("预约失败！请重新预约！");
                     }
-                    activity.setBackGround(background);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -208,7 +206,6 @@ public class TuanKeFragment extends BaseFragment {
                     }
                     xiaoTuanList = keChengBiaoBean.getData();
                     lv_tuanke.setAdapter(new MyAdapter(xiaoTuanList));
-                    activity.setBackGround(background);
                 }
             }
         }, new Response.ErrorListener() {

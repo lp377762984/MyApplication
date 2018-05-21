@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -72,7 +73,8 @@ public class CourseActivity extends FragmentActivity {
     ImageView course_back;
     NCalendar nccalendar;
     TextView tv_date;
-    RelativeLayout rl_nv;
+    RelativeLayout rl_nv,rl_tuanke_record,date;
+    LinearLayout week;
     TabLayout.Tab tab1,tab2;
     TabLayout tablayout;
     SiJiaoFragment siJiaoFragment;
@@ -334,6 +336,7 @@ public class CourseActivity extends FragmentActivity {
 
 
     private void initView() {
+        rl_tuanke_record = findViewById(R.id.rl_tuanke_record);
         course_back = findViewById(R.id.course_back);
         course_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,6 +357,8 @@ public class CourseActivity extends FragmentActivity {
 
         nccalendar = findViewById(R.id.nccalendar);
         tv_date = findViewById(R.id.tv_date);
+        date = findViewById(R.id.date);
+        week = findViewById(R.id.week);
         tablayout = findViewById(R.id.tablayout);
         tab1 = tablayout.getTabAt(0);
         tab2 = tablayout.getTabAt(1);
@@ -402,6 +407,10 @@ public class CourseActivity extends FragmentActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if("0".equals(type)){
             if("0".equals(isTuanke)){
+                date.setVisibility(View.VISIBLE);
+                week.setVisibility(View.VISIBLE);
+                nccalendar.setVisibility(View.VISIBLE);
+                rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
                 try {
                     tuanKeFragment = new TuanKeFragment();
@@ -420,9 +429,13 @@ public class CourseActivity extends FragmentActivity {
         }else if("1".equals(type)){
 
             if("0".equals(isTuanke)){
+                date.setVisibility(View.GONE);
+                week.setVisibility(View.GONE);
+                nccalendar.setVisibility(View.GONE);
+                rl_tuanke_record.setVisibility(View.VISIBLE);
                 tuanKeRecordFragment = new TuanKeRecordFragment();
                 tuanKeRecordFragment.getStartTime(startTime);
-                fragmentTransaction.replace(R.id.rl_nv,tuanKeRecordFragment);
+                fragmentTransaction.replace(R.id.rl_tuanke_record,tuanKeRecordFragment);
             }else{
                 siJiaoRecordFragment = new SiJiaoRecordFragment();
                 siJiaoRecordFragment.getStartTime(startTime);
