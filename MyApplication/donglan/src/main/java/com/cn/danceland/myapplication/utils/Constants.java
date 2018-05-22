@@ -17,9 +17,9 @@ public class Constants  {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-   // public static final String HOST = "http://192.168.1.117:8003/";//老高
+    public static final String HOST = "http://192.168.1.123:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
-   public static final String HOST = " http://192.168.1.123:8003/";//
+  // public static final String HOST = " http://192.168.1.123:8003/";//
     //public static final String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -247,5 +247,7 @@ public class Constants  {
     public static final int QR_MAPPING_COURSE_ENTER = 11; //私教入场
     public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
 
-
+    public final static String EXTRA_SEND_DATA_TO_BLE = "EXTRA_SEND_DATA_TO_BLE";
+    public final static String ADDRESS = "address";
+    public final static String NAME = "name";
 }

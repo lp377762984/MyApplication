@@ -191,17 +191,20 @@ public class HomeFragment extends BaseFragment {
         ll_paiming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                if (TextUtils.isEmpty(data.getPerson().getDefault_branch())){
+                Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(data.getPerson().getDefault_branch())) {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
-                if (TextUtils.equals(data.getMember().getAuth(),"1")){
+                if (TextUtils.equals(data.getMember().getAuth(), "1")) {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
-
-                startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming",myPaiMingBean.getData().getBranchRanking()).putExtra("cishu",myPaiMingBean.getData().getBranchScore()));
+                if (myPaiMingBean ==null) {
+                    ToastUtils.showToastShort("您还没有参加健身运动");
+                    return;
+                }
+                startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
 
             }
         });
@@ -615,12 +618,12 @@ public class HomeFragment extends BaseFragment {
                     // 设置动画时长
                     natv_number.setDuration(1000);
                     // 设置数字增加范围
-                    natv_number.setNumberString("0", myPaiMingBean.getData().getBranchScore()+"");
+                    natv_number.setNumberString("0", myPaiMingBean.getData().getBranchScore() + "");
 
                     Message message = Message.obtain();
                     message.what = 2;
                     mHandler2.sendMessage(message);
-                }else {
+                } else {
 
                 }
 

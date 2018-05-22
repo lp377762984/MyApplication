@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.fragment;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -142,7 +141,7 @@ public class RecommendedFragment extends BaseFragment {
             ImageView iv_sex = view.findViewById(R.id.iv_sex);
 
             tv_name.setText(dataList.get(i).getName());
-            tv_phone.setText(dataList.get(i).getPhone_no());
+            tv_phone.setText(dataList.get(i).getMember_name());
             tv_time.setText(TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy-MM-dd")));
             if (dataList.get(i).getGender() == 1) {
 
@@ -151,21 +150,22 @@ public class RecommendedFragment extends BaseFragment {
 
                 iv_sex.setImageResource(R.drawable.img_sex2);
             }
-//            if (dataList.get(i).getStatus()==0){
-//                tv_status.setText("推荐中");
-//            }else  if (dataList.get(i).getStatus()==1){
-//                tv_status.setText("推荐成功");
-//            }else  if (dataList.get(i).getStatus()==2){
-//                tv_status.setText("推荐失败");
-//            }
+            if (dataList.get(i).getStatus()==0){
+                tv_status.setVisibility(View.VISIBLE);
+            }else  if (dataList.get(i).getStatus()==1){
+                tv_status.setVisibility(View.INVISIBLE);
+            }else  if (dataList.get(i).getStatus()==2){
+
+            }
+
 final Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             tv_status.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    if (TextUtils.equals(data.getMember().getAuth(),"1")){
-                        return;
-                    }
+//                    if (TextUtils.equals(data.getMember().getAuth(),"1")){
+//                        return;
+//                    }
                     introduce_confirm(dataList.get(i).getId());
                 }
             });

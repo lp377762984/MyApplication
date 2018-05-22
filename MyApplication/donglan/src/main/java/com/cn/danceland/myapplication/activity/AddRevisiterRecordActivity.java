@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -243,11 +242,15 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
     private List<ParamInfoBean.Data> mParamInfoList = new ArrayList<>();
 
     private void findParams(final int codetype) {
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_TYPE_CODE_GET + codetype, new Response.Listener<String>() {
+        StrBean strBean = new StrBean();
+        strBean.type_code = codetype + "";
+        strBean.branch_id = "0";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE ,gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                ParamInfoBean paramInfoBean = gson.fromJson(s, ParamInfoBean.class);
+            public void onResponse(JSONObject s) {
+                LogUtil.i(s.toString());
+                ParamInfoBean paramInfoBean = gson.fromJson(s.toString(), ParamInfoBean.class);
                 if (paramInfoBean.getSuccess()) {
 
                     listPopup=new ListPopup(AddRevisiterRecordActivity.this);

@@ -1,8 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,7 +27,6 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
@@ -154,7 +149,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
 
     private void showDate(){
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this,"请选择生日");
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this,"请选择日期");
         customDatePicker.showWindow();
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
@@ -167,16 +162,16 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         });
 
     }
-    private void show_select_time_dialog() {
-        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                //   LogUtil.i(i+"点"+i1+"分");
-                tv_time.setText(i + ":" + i1);
-            }
-        }, 0, 0, false);
-        dialog.show();
-    }
+//    private void show_select_time_dialog() {
+//        TimePickerDialog dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+//            @Override
+//            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+//                //   LogUtil.i(i+"点"+i1+"分");
+//                tv_time.setText(i + ":" + i1);
+//            }
+//        }, 0, 0, false);
+//        dialog.show();
+//    }
 
     private Calendar cal;
     private int year, month, day;
@@ -190,25 +185,25 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = cal.get(Calendar.DAY_OF_MONTH);
     }
-
-    private void show_select_date_dialog() {
-
-        DatePickerDialog dialog = new DatePickerDialog(this, 0, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year1, int month2, int day3) {
-                tv_date.setText(year1 + "-" + (month2 + 1) + "-" + day3);
-                String startDate = tv_date.getText().toString();
-                if (!TimeUtils.isDateOneBigger(year + "-" + (month + 1) + "-" + day, tv_date.getText().toString())) {
-
-                } else {
-                    tv_date.setText("请选择日期");
-                    ToastUtils.showToastShort("不能选择今天以前的日期");
-                }
-
-            }
-        }, year, month, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
-        dialog.show();
-    }
+//
+//    private void show_select_date_dialog() {
+//
+//        DatePickerDialog dialog = new DatePickerDialog(this, 0, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker datePicker, int year1, int month2, int day3) {
+//                tv_date.setText(year1 + "-" + (month2 + 1) + "-" + day3);
+//                String startDate = tv_date.getText().toString();
+//                if (!TimeUtils.isDateOneBigger(year + "-" + (month + 1) + "-" + day, tv_date.getText().toString())) {
+//
+//                } else {
+//                    tv_date.setText("请选择日期");
+//                    ToastUtils.showToastShort("不能选择今天以前的日期");
+//                }
+//
+//            }
+//        }, year, month, day);//后边三个参数为显示dialog时默认的日期，月份从0开始，0-11对应1-12个月
+//        dialog.show();
+//    }
 
     class RequsetBean {
 

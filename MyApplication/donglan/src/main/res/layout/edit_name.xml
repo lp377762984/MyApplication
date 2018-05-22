@@ -32,7 +32,7 @@
 
 
 
-    <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+    <com.cn.danceland.myapplication.view.ContainsEmojiEditText
         android:layout_below="@+id/dia_title"
         style="@style/EtStyle"
         android:layout_marginLeft="20dp"
