@@ -50,15 +50,14 @@
         android:id="@+id/ll_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/logo"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="19dp"
         android:background="@drawable/edit_bg_phone"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        android:layout_below="@+id/logo"
+        android:layout_alignLeft="@+id/miman"
+        android:layout_alignStart="@+id/miman">
 
         <ImageView
             android:layout_width="15dp"
@@ -83,7 +82,7 @@
             style="@style/EtStyle"
             android:hint="请输入您的手机号"
 
-            android:inputType="phone" />
+            android:inputType="text" />
     </LinearLayout>
 
 

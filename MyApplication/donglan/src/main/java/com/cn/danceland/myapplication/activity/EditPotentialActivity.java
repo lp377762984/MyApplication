@@ -43,6 +43,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
@@ -75,15 +76,15 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
     public static final int TARGET = 8;//健身目的
     public static final int LIKE = 7;//喜欢项目
     public static final int MEDICAL = 11;//病史
-    private EditText et_remark;//备注
+    private ContainsEmojiEditText et_remark;//备注
     private TextView tv_medical_history;//慢性病史
-    private EditText et_phone;//电话
+    private ContainsEmojiEditText et_phone;//电话
     private EditText et_name;//名字
     private TextView tv_sex;//性别
-    private EditText et_weixin_no;//微信号
-    private EditText et_company;//单位
-    private EditText et_address;//地址
-    private EditText et_email;//邮箱
+    private ContainsEmojiEditText et_weixin_no;//微信号
+    private ContainsEmojiEditText et_company;//单位
+    private ContainsEmojiEditText et_address;//地址
+    private ContainsEmojiEditText et_email;//邮箱
     private TextView tv_guest_aware_way;//客户来源
     private ScaleRatingBar sr_fitness_level;//健身指数
     private ScaleRatingBar sr_follow_level;//关注程度
@@ -101,12 +102,12 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
     private int jiaolian_type = 0;
     private TextView tv_certificate_type;
     private ListJiaoLianPopup listJiaoLianPopup;
-    private EditText et_certificate_no,et_nationality;
-    private EditText et_emergency_name;
-    private EditText et_emergency_phone;
+    private ContainsEmojiEditText et_certificate_no,et_nationality;
+    private ContainsEmojiEditText et_emergency_name;
+    private ContainsEmojiEditText et_emergency_phone;
     private TextView tv_birthday;
-    private EditText et_height;
-    private EditText et_weight;
+    private ContainsEmojiEditText et_height;
+    private ContainsEmojiEditText et_weight;
     private TextView tv_admin_name;
     private TextView tv_teach_name;
     private Data data;
@@ -842,6 +843,8 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         if (codetype!=REGISTER_CHANNEL){//客户来源不分门店
             Data data=(Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
             strBean.branch_id=data.getPerson().getDefault_branch();
+        }else {
+            strBean.branch_id ="0";
         }
   //      LogUtil.i( gson.toJson(strBean).toString());
         JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {

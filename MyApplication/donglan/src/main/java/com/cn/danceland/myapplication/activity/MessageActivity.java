@@ -222,7 +222,7 @@ public class MessageActivity extends FragmentActivity {
 //                }
 //                String action = intent.getAction();
 //                if(action.equals(Constants.ACTION_GROUP_CHANAGED)){
-//                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
+//                    if (EaseCommonUtils.getTopActivity(ShouHuanMainActivity.this).equals(GroupsActivity.class.getName())) {
 //                        GroupsActivity.instance.onResume();
 //                    }
 //                }

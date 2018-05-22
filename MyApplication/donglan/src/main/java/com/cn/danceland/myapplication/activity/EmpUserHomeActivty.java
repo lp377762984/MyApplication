@@ -79,6 +79,7 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
     private TextView tv_sign;
     private TextView tv_goodat;
 
+    private String person_id,employee_id,branch_id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,10 +89,10 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
     }
 
     private void initData() {
-        queryUserInfo("34");
-        queryPingfen("7", "5");
-        queryPingJia("7", "5");
-        queryZzrz("9");
+        queryUserInfo(person_id);
+        queryPingfen(employee_id, branch_id);
+        queryPingJia(employee_id, employee_id);
+        queryZzrz(person_id);
     }
 
     private List<RequestPingJiaBean.Data.Content> pingjia_data = new ArrayList<>();
@@ -103,6 +104,10 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         findViewById(ll_my_fans).setOnClickListener(this);
         findViewById(R.id.ll_guanzhu).setOnClickListener(this);
         findViewById(R.id.ll_sixin).setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        person_id=getIntent().getStringExtra("person_id");
+        employee_id=getIntent().getStringExtra("employee_id");
+        branch_id=getIntent().getStringExtra("branch_id");
         sr_pingfen = findViewById(R.id.sr_pingfen);
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
@@ -137,6 +142,9 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
             case R.id.ll_guanzhu:
                 break;
             case R.id.ll_sixin:
+                break;
+            case  R.id.iv_back:
+                finish();
                 break;
             default:
                 break;

@@ -15,6 +15,19 @@ public class WeiXinBean {
     private String prepayid;
     private String sign;
 
+    @Override
+    public String toString() {
+        return "WeiXinBean{" +
+                "appid='" + appid + '\'' +
+                ", partnerid='" + partnerid + '\'' +
+                ", packageValue='" + packageValue + '\'' +
+                ", noncestr='" + noncestr + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", prepayid='" + prepayid + '\'' +
+                ", sign='" + sign + '\'' +
+                '}';
+    }
+
     public void setAppid(String appid) {
         this.appid = appid;
     }

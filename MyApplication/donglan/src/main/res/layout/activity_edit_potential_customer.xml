@@ -57,7 +57,7 @@
                     android:text="手机号："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_phone"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                     android:text="姓名："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_name"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -153,7 +153,7 @@
                     android:text="微信号："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_weixin_no"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -184,7 +184,7 @@
                     android:text="单位："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_company"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -214,7 +214,7 @@
                     android:text="地址："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_address"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -245,7 +245,7 @@
                     android:text="邮箱："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_email"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -275,7 +275,7 @@
                     android:text="国籍："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_nationality"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -338,13 +338,15 @@
                     android:textColor="#333333" />
 
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_certificate_no"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+
+                    android:inputType="number"
                     android:hint="请输入证件号码"
                     android:textColorHint="#999999" />
             </LinearLayout>
@@ -369,7 +371,7 @@
                     android:textColor="#333333" />
 
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_emergency_name"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -401,13 +403,14 @@
                     android:textColor="#333333" />
 
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_emergency_phone"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:inputType="number"
                     android:hint="请输入紧急电话"
                     android:textColorHint="#999999" />
 
@@ -462,10 +465,11 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:text="身高（cm）："
+
                     android:textColor="#333333" />
 
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_height"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -473,6 +477,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入身高"
+
                     android:inputType="number"
                     android:textColorHint="#999999" />
 
@@ -498,7 +503,7 @@
                     android:textColor="#333333" />
 
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_weight"
                     style="@style/EtStyle"
                     android:layout_width="wrap_content"
@@ -847,7 +852,7 @@
                     android:text="备注："
                     android:textColor="#333333" />
 
-                <EditText
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
                     android:id="@+id/et_remark"
                     style="@style/EtStyle"
                     android:layout_width="match_parent"

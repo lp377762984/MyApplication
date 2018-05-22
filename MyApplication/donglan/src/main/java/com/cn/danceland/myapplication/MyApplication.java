@@ -2,15 +2,19 @@ package com.cn.danceland.myapplication;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.IBinder;
 import android.os.Process;
 import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -18,14 +22,14 @@ import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
+import com.cn.danceland.myapplication.im.utils.Foreground;
+import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
-import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushListener;
 import com.tencent.imsdk.TIMOfflinePushNotification;
-import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
@@ -56,6 +60,11 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private HttpProxyCacheServer proxy;
     private static Activity currentActivity;
 
+    public static BluetoothLeService mBluetoothLeService;//蓝牙连接服务
+    public static boolean mBluetoothConnected = false;
+    public static boolean isBluetoothConnecting = false;
+
+
     public static HttpProxyCacheServer getProxy(Context context) {
         MyApplication app = (MyApplication) context.getApplicationContext();
         return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
@@ -64,7 +73,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private HttpProxyCacheServer newProxy() {
 
         return new HttpProxyCacheServer.Builder(this)
-                .maxCacheSize(1024 * 1024 * 500)       // 200M for cache
+                .maxCacheSize(1024 * 1024 *1024)       // 1G for cache
                 .build();
 
     }
@@ -73,7 +82,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Foreground.init(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         locationClient = new LocationService(getApplicationContext());
         SDKInitializer.initialize(this);
@@ -102,8 +111,8 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
-
-
+   //    initTXIM();
+        bindBleService();
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
 
@@ -144,12 +153,14 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         });
 
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
-    public static Activity getCurrentActivity(){
+
+    public static Activity getCurrentActivity() {
         return currentActivity;
     }
 
@@ -212,6 +223,34 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         return false;
     }
 
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.e("zgy", "Unable to initialize Bluetooth");
+
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+//            mBluetoothLeService.connect(mDeviceAddress);
+            Log.d("zgy", "onServiceConnected");
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
+    private void bindBleService() {
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+
+
     private void initTXIM() {
         if (MsfSdkUtils.isMainProcess(this)) {
             TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
@@ -225,9 +264,9 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
                 }
             });
         }
-        TIMSdkConfig config = new TIMSdkConfig(1400090939).enableCrashReport(false).enableLogPrint(true)
-                .setLogLevel(TIMLogLevel.DEBUG)
-                .setLogPath(Environment.getExternalStorageDirectory().getPath()+"/dldebug_log");
-        boolean b=TIMManager.getInstance().init(this,config);
+//        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+//                .setLogLevel(TIMLogLevel.DEBUG)
+//                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
+//        boolean b = TIMManager.getInstance().init(this, config);
     }
 }

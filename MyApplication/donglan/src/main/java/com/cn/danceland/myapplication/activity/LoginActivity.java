@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +67,6 @@ public class LoginActivity extends Activity implements OnClickListener {
     private EditText mEtPsw;
     private boolean isPswdChecked = false;
     private ImageView iv_pswd_see;
-
     ProgressDialog dialog;
     public static final String PERMISSION_RECORD_AUDIO = Manifest.permission.RECORD_AUDIO;
     public static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
@@ -88,6 +89,8 @@ public class LoginActivity extends Activity implements OnClickListener {
         }
     };
     private CheckBox cb_agreement;
+    private TLSService tlsService;
+    private Button btn_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +132,7 @@ public class LoginActivity extends Activity implements OnClickListener {
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
         findViewById(R.id.tv_login_others).setOnClickListener(this);
-
+        btn_login = findViewById(R.id.btn_login);
         findViewById(R.id.logo).setOnClickListener(this);
         iv_pswd_see = findViewById(R.id.iv_pswd_see);
         iv_pswd_see.setOnClickListener(this);
@@ -137,6 +140,10 @@ public class LoginActivity extends Activity implements OnClickListener {
         mEtPsw = findViewById(R.id.et_password);
         cb_agreement = findViewById(R.id.cb_agreement);
         findViewById(R.id.tv_agreemnet).setOnClickListener(this);
+        //腾讯云im
+        //tlsService = TLSService.getInstance();
+        //tlsService.initAccountLoginService(this,mEtPhone,mEtPsw,btn_login);
+
 
     }
 
@@ -280,7 +287,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     return;
                 }
 
-                if (!cb_agreement.isChecked()){
+                if (!cb_agreement.isChecked()) {
                     ToastUtils.showToastShort("请阅读用户协议，并勾选");
                     return;
                 }
@@ -295,17 +302,17 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
             case R.id.tv_login_others://其他方式登陆
                 //  Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
-             new Thread(){
-                 @Override
-                 public void run() {
-                     try {
-                         getServerVersion();
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                     }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            getServerVersion();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                 }
-             }.start();
+                    }
+                }.start();
 
 
                 break;
@@ -329,13 +336,13 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 break;
             case R.id.logo:
+                // tlsService.initAccountLoginService();
 
                 break;
             default:
                 break;
         }
     }
-
 
 
     private boolean getServerVersion() {
@@ -360,7 +367,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
             }
 
-            LogUtil.e("zzf",sb.toString());
+            LogUtil.e("zzf", sb.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return false;
@@ -422,7 +429,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     setMipushId();
                     finish();
-                  ToastUtils.showToastShort("登录成功");
+                    ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
 
@@ -481,9 +488,6 @@ public class LoginActivity extends Activity implements OnClickListener {
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
-
-
-
 
 
                 // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());

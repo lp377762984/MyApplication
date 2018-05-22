@@ -26,6 +26,7 @@ import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.shouhuan.activity.ShouHuanMainActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -82,6 +83,7 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.ll_my_shop).setOnClickListener(this);
         v.findViewById(R.id.iv_top_bg).setOnClickListener(this);
         v.findViewById(R.id.ll_my_xiaofei).setOnClickListener(this);
+        v.findViewById(R.id.ll_my_shouhuan).setOnClickListener(this);
 
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
@@ -276,10 +278,13 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.iv_top_bg:
 
-                startActivity(new Intent(mActivity, EmpUserHomeActivty.class));
+              startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
                 break;
             case R.id.ll_my_xiaofei:
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));
+                break;
+            case R.id.ll_my_shouhuan://我的手环
+                startActivity(new Intent(mActivity, ShouHuanMainActivity.class));
                 break;
             default:
                 break;
