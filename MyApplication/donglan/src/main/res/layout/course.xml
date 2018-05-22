@@ -64,6 +64,15 @@
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/rl_tuanke_record"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_tablayout"
+        android:visibility="gone">
+
+    </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/date"

@@ -69,6 +69,7 @@ public class ReportFormActivity extends Activity {
     String str_meet,str_clean,str_item_placement,str_body_build,str_sport_device,str_group_course,str_course,str_power,str_door,str_remark;
     Data myInfo;
     String target_role_type;//要查询什么报表
+    String branch_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -531,6 +532,9 @@ public class ReportFormActivity extends Activity {
 
 
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        if(myInfo!=null && myInfo.getMember()!=null){
+            branch_id = myInfo.getMember().getDefault_branch();
+        }
 
         nowDate = time.year +"-"+(time.month+1)+"-"+time.monthDay;
         selectDate = nowDate;
@@ -560,7 +564,7 @@ public class ReportFormActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<>();
-                map.put("branch_id","2");
+                map.put("branch_id",branch_id);
                 return map;
             }
 

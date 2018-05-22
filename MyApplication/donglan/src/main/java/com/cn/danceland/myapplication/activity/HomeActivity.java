@@ -4,14 +4,17 @@ package com.cn.danceland.myapplication.activity;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CheckUpdateBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
@@ -35,6 +39,7 @@ import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.HttpUtils;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -96,6 +101,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         instance = this;
         initView();
         registerBroadcastReceiver();//注册环信监听
+        checkUpdate();
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
 
@@ -139,6 +145,71 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         if (SPUtils.getBoolean(Constants.UPDATE_MIPUSH_CONFIG, false)) {
             setMipushId();
         }
+    }
+
+
+    private void checkUpdate() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.CHECKUPDATE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+
+                LogUtil.i(s);
+                CheckUpdateBean checkUpdateBean = new Gson().fromJson(s, CheckUpdateBean.class);
+                if(checkUpdateBean!=null && checkUpdateBean.getData()!=null){
+                    String status = checkUpdateBean.getData().getStatus();
+                    if("2".equals(status) && checkUpdateBean.getData().getUrl()!=null){
+                        showDialog(checkUpdateBean.getData().getUrl());
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("version",Constants.getVersion());
+                map.put("platform",Constants.getPlatform());
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    private void showDialog(final String url){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getCurrentActivity());
+        builder.setMessage("发现新版本，是否需要升级");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Uri uri;
+                if(HttpUtils.IsUrl(url)){
+                    uri = Uri.parse(url);
+                }else{
+                    uri = Uri.parse("https://www.baidu.com/");
+                }
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        builder.show();
     }
 
     @TargetApi(23)

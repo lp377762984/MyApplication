@@ -70,7 +70,6 @@ public class TuanKeFragment extends BaseFragment {
     boolean yuyue;
     MyAdapter myAdapter;
     List<KeChengBiaoBean.Data> xiaoTuanList;
-    GradientDrawable background;
     CourseActivity activity;
 
     @Override
@@ -147,14 +146,13 @@ public class TuanKeFragment extends BaseFragment {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
-                        background.setColor(Color.parseColor("#FFFFFF"));
+                        rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                         tv.setTextColor(Color.parseColor("#FF8C00"));
                         tv.setText("已预约");
                         ToastUtils.showToastShort("预约成功！");
                     }else{
                         ToastUtils.showToastShort("预约失败！请重新预约！");
                     }
-                    activity.setBackGround(background);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -208,7 +206,6 @@ public class TuanKeFragment extends BaseFragment {
                     }
                     xiaoTuanList = keChengBiaoBean.getData();
                     lv_tuanke.setAdapter(new MyAdapter(xiaoTuanList));
-                    activity.setBackGround(background);
                 }
             }
         }, new Response.ErrorListener() {
@@ -226,42 +223,6 @@ public class TuanKeFragment extends BaseFragment {
         };
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
-
-
-//    private void getData() throws JSONException {
-//        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//        GroupClassBean groupClassBean = new GroupClassBean();
-//        groupClassBean.setPageCount(12);
-//        groupClassBean.setPage(0);
-//        groupClassBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
-//        groupClassBean.setCourse_date(System.currentTimeMillis());
-//        String s = gson.toJson(groupClassBean);
-//        JSONObject jsonObject = new JSONObject(s);
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCLASS, jsonObject,new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                CourseBean courseBean = gson.fromJson(jsonObject.toString(), CourseBean.class);
-//                List<CourseBean.Content> content = courseBean.getData().getContent();
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//
-//            }
-//        }){
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String,String> map = new HashMap<String,String>();
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-//                return map;
-//            }
-//
-//        };
-//        MyApplication.getHttpQueues().add(jsonObjectRequest);
-//    }
-
-
 
 
     private class MyAdapter extends BaseAdapter{
@@ -311,11 +272,11 @@ public class TuanKeFragment extends BaseFragment {
             }
 
 
-            background = (GradientDrawable)viewHolder.tuanke_yuyue.getBackground();
-            background.setColor(Color.parseColor("#FF8C00"));
+//            background = (GradientDrawable)viewHolder.tuanke_yuyue.getBackground();
+//            viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
 
             //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#FF8C00"));
-            viewHolder.tv_yuyue.setTextColor(Color.parseColor("#FFFFFF"));
+            viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.white));
             viewHolder.tv_yuyue.setText("预约");
             String startTime,endTime;
 
@@ -338,7 +299,7 @@ public class TuanKeFragment extends BaseFragment {
             if(xiaoTuanList.get(position).getMax_count()==xiaoTuanList.get(position).getAppoint_count()){
                 //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#A9A9A9"));
                 //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.QuXiao);
-                background.setColor(Color.parseColor("#A9A9A9"));
+                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                 viewHolder.tv_yuyue.setText("预约已满");
                 viewHolder.tuanke_yuyue.setClickable(false);
             }else{
@@ -358,8 +319,8 @@ public class TuanKeFragment extends BaseFragment {
                 yuyue = false;//有预约项，无法点击
                 //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
                 //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.YiYuYue);
-                background.setColor(Color.parseColor("#FFFFFF"));
-                viewHolder.tv_yuyue.setTextColor(Color.parseColor("#FF8C00"));
+                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
+                viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_dl_yellow));
                 viewHolder.tv_yuyue.setText("已预约");
             }
 

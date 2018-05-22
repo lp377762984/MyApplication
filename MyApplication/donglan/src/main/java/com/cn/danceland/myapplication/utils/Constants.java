@@ -4,12 +4,13 @@ package com.cn.danceland.myapplication.utils;
 import com.cn.danceland.myapplication.MyApplication;
 
 public class Constants  {
+    public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
 
     public static String getVersion(){
         return AppUtils.getVersionName(MyApplication.getContext());
     }
     public static String getPlatform(){
-        return "1";
+        return PLATFORM;
     }
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
@@ -24,6 +25,7 @@ public class Constants  {
 
     public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
+    public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
     public static final String GET_SMS_URL = HOST + "person/encode/";//获取验证码
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
     public static final String REGISTER_AGREEMENT_URL = "http://img.dljsgw.com/protocol/app_register_protocol.html";//注册用户协议
@@ -222,6 +224,7 @@ public class Constants  {
     public static final String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
     public static final String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
   public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
+    public static final String QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
 
 
     //环信相关

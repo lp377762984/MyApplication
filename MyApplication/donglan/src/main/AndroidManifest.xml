@@ -91,7 +91,7 @@
     &lt;!&ndash;bugly end&ndash;&gt;-->
 
 
-    <meta-data android:name="com.tencent.rdm.uuid" android:value="83b3186d-0ef4-40e4-83ca-ced776b1ee1e" />
+
     <!--腾讯im相关-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -611,6 +611,8 @@
         <service android:name=".shouhuan.service.BluetoothLeService" android:enabled="true"/>
 
 
+        <activity android:name=".activity.LoginNumberActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

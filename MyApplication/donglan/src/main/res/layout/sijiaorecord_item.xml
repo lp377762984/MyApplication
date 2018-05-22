@@ -43,6 +43,7 @@
                 android:text="一对一"
                 android:textSize="12sp"
                 android:layout_weight="1"
+                android:gravity="bottom"
                 />
 
 
