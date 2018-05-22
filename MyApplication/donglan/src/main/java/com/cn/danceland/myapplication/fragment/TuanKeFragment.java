@@ -97,8 +97,8 @@ public class TuanKeFragment extends BaseFragment {
                         startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
                                 putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
-                        startActivity(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
-                                putExtra("yuyueStartTime",yuyueStartTime));
+                        startActivityForResult(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
+                                putExtra("yuyueStartTime",yuyueStartTime).putExtra("item",xiaoTuanList.get(position)),223);
                     }
                 }
             }
@@ -120,6 +120,8 @@ public class TuanKeFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==222){
             activity.showFragment("2","0");
+        }else if(resultCode==223){
+            activity.showFragment("0","0");
         }
 
     }
@@ -174,7 +176,7 @@ public class TuanKeFragment extends BaseFragment {
 
 
 
-    public void refresh(String from,String startTime,String endTime,int course_type_id,int member_course_id) throws JSONException {
+    public void refresh(String from,String startTime,String endTime,int course_type_id,int member_course_id){
         this.member_course_id = member_course_id;
         this.from = from;
         yuyueStartTime = startTime;
@@ -188,7 +190,6 @@ public class TuanKeFragment extends BaseFragment {
 
         String s = gson.toJson(siJiaoYuYueConBean);
 
-        JSONObject jsonObject = new JSONObject(s);
         String url;
         if("小团课".equals(from)){
             url = Constants.QUERYKECHENGBIAO;
@@ -196,7 +197,7 @@ public class TuanKeFragment extends BaseFragment {
             url = Constants.FreeCourse;
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,jsonObject ,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,s ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 KeChengBiaoBean keChengBiaoBean = gson.fromJson(jsonObject.toString(), KeChengBiaoBean.class);

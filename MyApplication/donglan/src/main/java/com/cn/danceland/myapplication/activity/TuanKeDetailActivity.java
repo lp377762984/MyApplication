@@ -1,6 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -22,7 +25,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
+import com.cn.danceland.myapplication.bean.CourseFindPerson;
+import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -31,11 +38,15 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,10 +60,15 @@ public class TuanKeDetailActivity extends Activity {
     NestedExpandaleListView kecheng_ex;
     int groupId;
     Gson gson;
-    TextView kecheng_name,kecheng_time,kecheng_place,tv_jieshao,
-    kecheng_room,course_type,tv_tuanke_title;
+    TextView kecheng_name,kecheng_time,kecheng_place,tv_jieshao,course_renshu,tv_status,course_jiaolian_huiyuan_name,tv_kecheng_fenshu,
+    kecheng_room,course_type,tv_tuanke_title,tv_jiaolian_fenshu,tv_changdi_fenshu;
     Data data;
     String yuyueStartTime;
+    MyAdapter myAdapter;
+    KeChengBiaoBean.Data item;
+    CircleImageView course_jiaolian_huiyuan_circle;
+    List<CourseFindPerson.DataBean> headList,childList;
+    RelativeLayout rl_button_yuyue;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,10 +87,35 @@ public class TuanKeDetailActivity extends Activity {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         yuyueStartTime = getIntent().getStringExtra("yuyueStartTime");
 
+        item = (KeChengBiaoBean.Data)getIntent().getSerializableExtra("item");
+        headList = new ArrayList<>();
+        childList = new ArrayList<>();
 
     }
 
     private void initView() {
+        course_renshu = findViewById(R.id.course_renshu);
+        rl_button_yuyue = findViewById(R.id.rl_button_yuyue);
+        tv_status = findViewById(R.id.tv_status);
+        rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commitYuyue(item,rl_button_yuyue,tv_status);
+            }
+        });
+        course_jiaolian_huiyuan_name = findViewById(R.id.course_jiaolian_huiyuan_name);
+        course_jiaolian_huiyuan_circle = findViewById(R.id.course_jiaolian_huiyuan_circle);
+        if(item!=null){
+            if(item.getSelf_appoint_count()>0){
+                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                tv_status.setText("已预约");
+                rl_button_yuyue.setClickable(false);
+            }
+            course_jiaolian_huiyuan_name.setText(item.getEmployee_name());
+
+        }
+
+
         tuanke_back = findViewById(R.id.small_back);
         tuanke_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +123,9 @@ public class TuanKeDetailActivity extends Activity {
                 finish();
             }
         });
+        tv_kecheng_fenshu = findViewById(R.id.tv_kecheng_fenshu);
+        tv_jiaolian_fenshu = findViewById(R.id.tv_jiaolian_fenshu);
+        tv_changdi_fenshu = findViewById(R.id.tv_changdi_fenshu);
 
         kecheng_img =  findViewById(R.id.course_img);
         kecheng_name = findViewById(R.id.course_name);
@@ -101,7 +145,7 @@ public class TuanKeDetailActivity extends Activity {
 
 
         kecheng_ex = findViewById(R.id.my_expanda);
-        kecheng_ex.setAdapter(new MyAdapter());
+        kecheng_ex.setGroupIndicator(null);
         kecheng_ex.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -121,6 +165,48 @@ public class TuanKeDetailActivity extends Activity {
         });
         if(groupId!=999){
             getData(groupId);
+        }
+        queryAverage();
+    }
+
+    private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {
+        if(data!=null){
+            SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+            siJiaoYuYueConBean.setGroup_course_id(data.getId());
+            siJiaoYuYueConBean.setCourse_type_id(data.getCourse_type_id());
+            siJiaoYuYueConBean.setCourse_type_name(data.getCourse_type_name());
+            siJiaoYuYueConBean.setDate(yuyueStartTime);
+            String s = gson.toJson(siJiaoYuYueConBean);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FreeCourseApply, s,new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    if(jsonObject.toString().contains("true")){
+                        rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                        tv.setTextColor(getResources().getColor(R.color.white));
+                        tv.setText("已预约");
+                        rl_button_yuyue.setClickable(false);
+                        ToastUtils.showToastShort("预约成功！");
+                        setResult(223);
+                        finish();
+                    }else{
+                        ToastUtils.showToastShort("预约失败！请重新预约！");
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    ToastUtils.showToastShort("预约失败！请重新预约！");
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                    return map;
+                }
+            };
+
+            MyApplication.getHttpQueues().add(jsonObjectRequest);
         }
     }
 
@@ -154,20 +240,106 @@ public class TuanKeDetailActivity extends Activity {
 
     }
 
+    private void queryAverage(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERYAVERAGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                CourseEvaluateBean courseEvaluateBean = gson.fromJson(s, CourseEvaluateBean.class);
+                if(courseEvaluateBean!=null && courseEvaluateBean.getData()!=null){
+                    CourseEvaluateBean.Data data = courseEvaluateBean.getData();
+                    if(data.getCourse_type_score()!=null){
+                        tv_kecheng_fenshu.setText(data.getCourse_type_score());
+                    }else{
+                        tv_kecheng_fenshu.setText("暂无评分");
+                    }
+                    if(data.getEmployee_score()!=null){
+                        tv_jiaolian_fenshu.setText(data.getEmployee_score());
+                    }else{
+                        tv_jiaolian_fenshu.setText("暂无评分");
+                    }
+                    if(data.getRoom_score()!=null){
+                        tv_changdi_fenshu.setText(data.getRoom_score());
+                    }else {
+                        tv_changdi_fenshu.setText("暂无评分");
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError!=null){
+                    LogUtil.i(volleyError.toString());
+                }else {
+                    LogUtil.i("获取评分失败");
+                }
+            }
+        }){
 
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                HashMap<String, String> map = new HashMap<>();
+                if(item!=null){
+                    map.put("employeeId",item.getEmployee_id()+"");
+                    map.put("courseTypeId",item.getCourse_type_id()+"");
+//                    if(item.get!=null){
+//                        map.put("roomId",room_id);
+//                    }
+                    map.put("branchId",item.getBranch_id()+"");
+                }
+
+
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    CourseFindPerson courseMemberBean;
     private void getPeople(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setGroup_course_id(groupId);
         siJiaoYuYueConBean.setDate(yuyueStartTime);
-        siJiaoYuYueConBean.setPage(0);
-        siJiaoYuYueConBean.setSize(6);
+//        siJiaoYuYueConBean.setPage(0);
+//        siJiaoYuYueConBean.setSize(6);
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDFREEGROUPCOURSEAPPLYPERSON,s ,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                    courseMemberBean = gson.fromJson(jsonObject.toString(), CourseFindPerson.class);
+                    if(courseMemberBean!=null){
+                        List<CourseFindPerson.DataBean> totalList = courseMemberBean.getData();
+                        if(totalList !=null){
+                            if(totalList.size()>6){
+                                for(int i = 0;i<6;i++){
+                                    headList.add(totalList.get(i));
+                                }
+                            }else if(totalList.size()<1){
+                                kecheng_ex.setVisibility(View.GONE);
+                            }else if(totalList.size()<6 && totalList.size()>0){
+                                headList.addAll(totalList);
+                                kecheng_ex.setVisibility(View.VISIBLE);
+                            }
+                            course_renshu.setText("上课会员("+ totalList.size()+")");
+                            kecheng_ex.setAdapter(new MyAdapter());
+                        }
 
+                    }else {
+                        kecheng_ex.setVisibility(View.GONE);
+                        course_renshu.setText("上课会员(0)");
+                    }
 
                 LogUtil.e("zzf",jsonObject.toString());
 
@@ -279,12 +451,18 @@ public class TuanKeDetailActivity extends Activity {
             CircleImageView circle_5 = convertView.findViewById(R.id.circle_5);
             CircleImageView circle_6 = convertView.findViewById(R.id.circle_6);
 
-            Glide.with(TuanKeDetailActivity.this).load("http://news.hainan.net/Editor/img/201602/20160215/big/20160215234302136_2731088.jpg").into(circle_1);
-            Glide.with(TuanKeDetailActivity.this).load("http://img06.tooopen.com/images/20160807/tooopen_sy_174504721543.jpg").into(circle_2);
-            Glide.with(TuanKeDetailActivity.this).load("http://file06.16sucai.com/2016/0407/90ed68d09c8777d6336862beca17f317.jpg").into(circle_3);
-            Glide.with(TuanKeDetailActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_4);
-            Glide.with(TuanKeDetailActivity.this).load("http://img.mp.itc.cn/upload/20160408/6c46c0a65f32450e9941f9ef84091104_th.jpg").into(circle_5);
-            Glide.with(TuanKeDetailActivity.this).load("http://img1.juimg.com/160622/330831-1606220TG086.jpg").into(circle_6);
+            CircleImageView[] imgArr = {circle_1,circle_2,circle_3,circle_4,circle_5,circle_6};
+
+            if(headList!=null&&headList.size()>0){
+                for(int i = 0;i<headList.size();i++){
+                    imgArr[i].setVisibility(View.VISIBLE);
+                    if(headList.get(i).getSelf_avatar_path()==null||headList.get(i).getSelf_avatar_path().equals("")){
+                        Glide.with(TuanKeDetailActivity.this).load(R.drawable.img_my_avatar).into(imgArr[i]);
+                    }else{
+                        Glide.with(TuanKeDetailActivity.this).load(headList.get(i).getSelf_avatar_path()).into(imgArr[i]);
+                    }
+                }
+            }
             return convertView;
         }
 
@@ -295,7 +473,10 @@ public class TuanKeDetailActivity extends Activity {
                 convertView = LayoutInflater.from(TuanKeDetailActivity.this).inflate(R.layout.kecheng_child,null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
-            grid_view.setAdapter(new MyGridAdapter());
+            if(childList!=null && childList.size()!=0){
+                grid_view.setAdapter(new MyGridAdapter());
+            }
+
 
             return convertView;
         }
@@ -311,7 +492,7 @@ public class TuanKeDetailActivity extends Activity {
 
         @Override
         public int getCount() {
-            return 10;
+            return childList==null? 0:childList.size();
         }
 
         @Override
@@ -328,7 +509,14 @@ public class TuanKeDetailActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(TuanKeDetailActivity.this).inflate(R.layout.kecheng_grid_item, null);
             CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            Glide.with(TuanKeDetailActivity.this).load("http://pic1.win4000.com/wallpaper/d/58997071ac2b1.jpg").into(circle_item);
+            if(childList!=null){
+                if(childList.get(position).getSelf_avatar_path()==null||childList.get(position).getSelf_avatar_path().equals("")){
+                    Glide.with(TuanKeDetailActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
+                }else{
+                    Glide.with(TuanKeDetailActivity.this).load(childList.get(position).getSelf_avatar_path()).into(circle_item);
+                }
+
+            }
 
             return inflate;
         }

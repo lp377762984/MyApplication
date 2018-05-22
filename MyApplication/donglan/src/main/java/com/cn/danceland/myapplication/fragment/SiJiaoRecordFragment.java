@@ -52,7 +52,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
     Data data;
     Gson gson;
     String startTime,role,auth;
-    GradientDrawable background;
+    //GradientDrawable background;
     List<SiJiaoRecordBean.Content> contentList;
 
     @Override
@@ -258,7 +258,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
 
 
-            background = (GradientDrawable)viewHolder.rl_button.getBackground();
+            //background = (GradientDrawable)viewHolder.rl_button.getBackground();
 
             viewHolder.course_date.setText("预约时间:"+time.split(" ")[0]+" "+start_time);
             if("2".equals(list.get(position).getCategory())){
@@ -270,7 +270,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             if(list.get(position).getStatus()==2){
                 viewHolder.rl_button_tv.setText("已确认未签到");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_yellow));
-                background.setColor(Color.parseColor("#FFFFFF"));
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
@@ -278,7 +278,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             if(list.get(position).getStatus()==3){
                 viewHolder.rl_button_tv.setText("已取消");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                background.setColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
@@ -286,7 +286,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             if(list.get(position).getStatus()==4){
                 viewHolder.rl_button_tv.setText("已签到");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                background.setColor(Color.parseColor("#A9A9A9"));
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 viewHolder.rl_button.setClickable(false);
             }else{
                 viewHolder.rl_button.setClickable(true);
@@ -298,12 +298,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
                         viewHolder.rl_button_tv.setText("等待确认");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                         viewHolder.rl_button_tv.setTextColor(Color.parseColor("#FFFFFF"));
-                        background.setColor(Color.parseColor("#191970"));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                     }else{
                         viewHolder.rl_button_tv.setText("取消预约");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                         viewHolder.rl_button_tv.setTextColor(Color.parseColor("#FFFFFF"));
-                        background.setColor(Color.parseColor("#FF8C00"));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
                     }
                 }
             }else{
@@ -312,11 +312,11 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     if(list.get(position).getAppointment_type()==1){
                         viewHolder.rl_button_tv.setText("等待确认");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                        background.setColor(Color.parseColor("#191970"));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                     }else{
                         viewHolder.rl_button_tv.setText("取消预约");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                        background.setColor(Color.parseColor("#FF8C00"));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
                     }
                 }
             }
@@ -369,7 +369,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     ToastUtils.showToastShort("确认成功！");
                     tv.setText("上课中");
                     tv.setTextColor(getResources().getColor(R.color.white));
-                    background.setColor(Color.parseColor("#32CD32"));
+                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_green));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("确认失败！请稍后再试");
@@ -445,7 +445,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
                     tv.setTextColor(getResources().getColor(R.color.white));
-                    background.setColor(Color.parseColor("#A9A9A9"));
+                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("取消失败！请重新操作");
@@ -474,13 +474,5 @@ public class SiJiaoRecordFragment extends BaseFragment {
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(background!=null){
-            background.setColor(getResources().getColor(R.color.color_dl_yellow));
-        }
     }
 }

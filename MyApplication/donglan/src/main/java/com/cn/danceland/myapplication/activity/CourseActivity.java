@@ -89,7 +89,6 @@ public class CourseActivity extends FragmentActivity {
     Gson gson;
     ArrayList<String> yuyueTimeList;
     String from;
-    GradientDrawable background;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,11 +128,6 @@ public class CourseActivity extends FragmentActivity {
 
         gson = new Gson();
 
-    }
-
-
-    public void setBackGround(GradientDrawable background){
-        this.background = background;
     }
 
 
@@ -341,17 +335,7 @@ public class CourseActivity extends FragmentActivity {
         course_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //List<Fragment> fragments = fragmentManager.getFragments();
-//                if("2".equals(type)){
-//                    type= "1";
-//                    isTuanke = "1";
-//                    showFragment(type,isTuanke);
-//                }else{
-                if(background!=null){
-                    background.setColor(getResources().getColor(R.color.color_dl_yellow));
-                }
                     finish();
-               // }
             }
         });
 
@@ -412,13 +396,10 @@ public class CourseActivity extends FragmentActivity {
                 nccalendar.setVisibility(View.VISIBLE);
                 rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
-                try {
-                    tuanKeFragment = new TuanKeFragment();
-                    from = "免费团课";
-                    tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                tuanKeFragment = new TuanKeFragment();
+                from = "免费团课";
+                tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
+
                 fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
             }else{
                 siJiaoFragment = new SiJiaoFragment();
@@ -445,12 +426,9 @@ public class CourseActivity extends FragmentActivity {
 
         }else if("2".equals(type)){
             tuanKeFragment = new TuanKeFragment();
-            try {
-                from = "小团课";
-                tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            from = "小团课";
+            tuanKeFragment.refresh(from,startTime,endTime,course_type_id,id);
+
             fragmentTransaction.replace(R.id.rl_nv,tuanKeFragment);
         }
 
