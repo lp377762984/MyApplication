@@ -561,6 +561,7 @@ public class ShopDetailedActivity extends Activity{
 
     }
 
+    int clickNum;
     private class MyAdapter extends BaseExpandableListAdapter {
 
         List<ShopJiaoLianBean.Data> jiaolianList;
@@ -622,7 +623,17 @@ public class ShopDetailedActivity extends Activity{
 
             if(jiaolianList.size()<=6){
                 for(int i=0;i<jiaolianList.size();i++){
+                    clickNum = i;
                     circleImageViews[i].setVisibility(View.VISIBLE);
+                    circleImageViews[i].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
+                                    .putExtra("person_id",jiaolianList.get(clickNum).getPerson_id()+"")
+                                    .putExtra("employee_id",jiaolianList.get(clickNum).getId()+"")
+                                    .putExtra("branch_id",jiaolianList.get(clickNum).getBranch_id()+""));
+                        }
+                    });
                     if("".equals(jiaolianList.get(i).getSelf_avatar_path())||jiaolianList.get(i).getSelf_avatar_path()==null){
                         Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
                     }else{
@@ -645,13 +656,22 @@ public class ShopDetailedActivity extends Activity{
         }
 
         @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
             if(convertView==null){
                 convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child,null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
             grid_view.setAdapter(new MyGridAdapter(childList));
+            grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
+                            .putExtra("person_id",jiaolianList.get(childPosition).getPerson_id()+"")
+                            .putExtra("employee_id",jiaolianList.get(childPosition).getId()+"")
+                            .putExtra("branch_id",jiaolianList.get(childPosition).getBranch_id()+""));
+                }
+            });
 
             return convertView;
         }
