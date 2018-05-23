@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,12 +45,12 @@ public class TuanKeRecordFragment extends BaseFragment {
     View view;
     Data data;
     Gson gson;
-    MyListView lv_tuanke;
+    ListView lv_tuanke;
     String startTime;
     @Override
     public View initViews() {
 
-        view = View.inflate(mActivity, R.layout.tuanke, null);
+        view = View.inflate(mActivity, R.layout.tuankerecord, null);
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         initView();

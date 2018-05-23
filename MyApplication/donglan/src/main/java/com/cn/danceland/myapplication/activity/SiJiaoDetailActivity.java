@@ -465,7 +465,7 @@ public class SiJiaoDetailActivity extends Activity {
         siJiaoYuYueConBean.setStart_time(startM);
         siJiaoYuYueConBean.setEnd_time(endM);
 
-        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(startTime)));
+        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime,"yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);
         JSONObject jsonObject = new JSONObject(s);

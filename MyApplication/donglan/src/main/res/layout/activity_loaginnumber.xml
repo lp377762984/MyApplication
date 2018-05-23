@@ -18,6 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:textSize="18sp"
+        android:textColor="#666666"
         />
 
 
@@ -40,7 +41,8 @@
         android:layout_centerHorizontal="true"
         android:text="登录网址 http://md.dljsgw.com"
         android:layout_marginTop="20dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="#666666"/>
 
     <TextView
 
@@ -50,7 +52,7 @@
         android:layout_below="@+id/tv_url"
         android:layout_centerHorizontal="true"
         android:textSize="12sp"
-        android:textColor="#c0c0c0"
+        android:textColor="#999999"
         android:layout_marginTop="15dp"
         />
 

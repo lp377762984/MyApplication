@@ -19,6 +19,7 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
+import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -67,7 +68,8 @@ public class StoreFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mLocationClient = MyApplication.getInstance().locationClient;
+        mLocationClient = new LocationService(MyApplication.getInstance());
+        SDKInitializer.initialize(MyApplication.getInstance());
         startLocation();
     }
 

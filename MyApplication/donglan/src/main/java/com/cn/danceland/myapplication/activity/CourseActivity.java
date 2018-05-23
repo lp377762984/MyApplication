@@ -119,8 +119,9 @@ public class CourseActivity extends FragmentActivity {
         time = new Time();
         time.setToNow();
         yuyueTimeList = new ArrayList<String>();
-        nowTime = time.year+"-"+time.month+"-"+time.monthDay+" 00:00:00";
-        startTime = TimeUtils.date2TimeStamp(nowTime,"yyyy-MM-dd 00:00:00")+"";
+        nowTime = time.year+"-"+(time.month+1)+"-"+time.monthDay+" 00:00:00";
+        startTime = TimeUtils.date2TimeStamp(nowTime,"yyyy-MM-dd HH:mm:ss")+"";
+        endTime = (Long.valueOf(startTime)+86400000)+"";
 
 
         role = getIntent().getStringExtra("role");
@@ -242,8 +243,8 @@ public class CourseActivity extends FragmentActivity {
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
 
-                    startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
-                    endTime = (Long.valueOf(startTime)+86399)+"";
+                    startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd HH:mm:ss")+"";
+                    endTime = (Long.valueOf(startTime)+86400000)+"";
                     if("0".equals(isTuanke)||"1".equals(type)){
                         showFragment(type,isTuanke);
                     }else if("2".equals(type)){

@@ -13,14 +13,14 @@ public class Constants  {
         return PLATFORM;
     }
 
-    //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
+    //public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
    //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    public static final String HOST = "http://192.168.1.123:8003/";//老高
+    //public static final String HOST = "http://192.168.1.123:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
-  // public static final String HOST = " http://192.168.1.123:8003/";//
+  public static final String HOST = " http://192.168.1.123:8003/";//
     //public static final String HOST = "http://192.168.1.117:8003/";//老高
    // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
@@ -206,12 +206,12 @@ public class Constants  {
     public static final String FINDEMPCOURSE = HOST + "appCourse/findEmployeeCourse";//教练的私教
     public static final String FINDAVAI = HOST + "appCourse/availableList";//我的私教
     public static final String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
-    public static final String QUERYKECHENGBIAO = HOST + "appGroupCourse/queryGroupCourseByData";//小团课课程表
+    public static final String QUERYKECHENGBIAO = HOST + "/appGroupCourse/queryGroupCourseByStartDataAndEndData";//小团课课程表
     public static final String GROUPAPPOINT = HOST + "appGroupCourse/groupAppoint";//预约小团课
     public static final String FINDGROUP = HOST + "appGroupCourse/findById";//单节小团课详情
     public static final String FREEGROUPCOURSE = HOST + "appFreeGroupCourse/findById";//免费团课详情
     public static final String FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
-    public static final String FreeCourse = HOST + "appFreeGroupCourse/queryFreeGroupCourseByData";//查询某会员某天的团课课程表
+    public static final String FreeCourse = HOST + "/appFreeGroupCourse/queryFreeGroupCourseByStartDataAndEndData";//查询某会员某天的团课课程表
     public static final String FreeCourseApply = HOST + "appFreeGroupCourse/freeGroupApply";//报名小团课
     public static final String APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取自己的一对一预约记录
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教

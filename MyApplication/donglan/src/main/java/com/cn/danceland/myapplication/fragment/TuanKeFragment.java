@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.Inflater;
 
 import freemarker.template.utility.StringUtil;
 
@@ -186,7 +187,8 @@ public class TuanKeFragment extends BaseFragment {
             siJiaoYuYueConBean.setCourse_type_id(course_type_id);
         }
         siJiaoYuYueConBean.setStart_date(Long.valueOf(startTime));
-        //siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime+"000"));
+        siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime));
+        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime,"yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);
 
