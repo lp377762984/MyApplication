@@ -208,8 +208,10 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    ToastUtils.showToastLong("验证码是："
-                            + smsCode);
+                    if (Constants.HX_DEV_CONFIG){
+                        ToastUtils.showToastLong("验证码是："
+                                + smsCode);
+                    }
                 }
 
 

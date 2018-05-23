@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -283,7 +284,12 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));
                 break;
             case R.id.ll_my_shouhuan://我的手环
-                startActivity(new Intent(mActivity, ShouHuanMainActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+                    startActivity(new Intent(mActivity, ShouHuanMainActivity.class));
+                }else {
+                    ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
+                }
+
                 break;
             default:
                 break;

@@ -608,7 +608,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".shouhuan.activity.ShouHuanMainActivity"/>
         <activity android:name=".shouhuan.activity.DeviceScanActivity"/>
-        <service android:name=".shouhuan.service.BluetoothLeService" android:enabled="true"/>
+        <service android:name=".shouhuan.service.BluetoothLeService" android:enabled="true"
+            />
 
 
         <activity android:name=".activity.LoginNumberActivity"

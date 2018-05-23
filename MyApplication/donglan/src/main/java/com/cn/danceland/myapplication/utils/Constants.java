@@ -3,28 +3,29 @@ package com.cn.danceland.myapplication.utils;
 
 import com.cn.danceland.myapplication.MyApplication;
 
-public class Constants  {
+public class Constants {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
 
-    public static String getVersion(){
+    public static String getVersion() {
         return AppUtils.getVersionName(MyApplication.getContext());
     }
-    public static String getPlatform(){
+
+    public static String getPlatform() {
         return PLATFORM;
     }
 
     //public static final String HOST = "http://192.168.1.94:8003/";//服务器地址
-   //public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+    public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-    //  public static final String HOST = " http://192.168.1.123:8003/";//佳楠
-    public static final String HOST = "http://192.168.1.123:8003/";//老高
+    //public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
+    // public static final String HOST = "http://192.168.1.123:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
-  // public static final String HOST = " http://192.168.1.123:8003/";//
-    //public static final String HOST = "http://192.168.1.117:8003/";//老高
-   // public static  String HOST = "http://192.168.1.122:8003/";//超哥
+    // public static final String HOST = " http://192.168.1.123:8003/";//
+    //public static final String HOST = "http://192.168.1.123:8003/";//老高
+    // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean HX_DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean HX_DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -49,8 +50,8 @@ public class Constants  {
     public static final String MODIFYY_IMAGE = HOST + "user/modifySelfAvatar";//修改头像
     public static final String RESET_PHONE_URL = HOST + "user/modifyPhone";//修改手机号
     public static final String MODIFY_GENDER = HOST + "user/modifyGender";//修改性别
- public static final String MODIFY_WEIXIN = HOST + "user/modifyWeichatNo";//修改微信
- public static final String MODIFY_MAIL = HOST + "user/modifyMail";//修改邮箱
+    public static final String MODIFY_WEIXIN = HOST + "user/modifyWeichatNo";//修改微信
+    public static final String MODIFY_MAIL = HOST + "user/modifyMail";//修改邮箱
     public static final String MODIFY_HEIGHT = HOST + "user/modifyHeight";//修改身高
     public static final String MODIFY_WEIGHT = HOST + "user/modifyWeight";//修改身高
     public static final String MODIFY_IDENTIFY = HOST + "user/modifyIdentityCard";//修改身份证
@@ -96,7 +97,7 @@ public class Constants  {
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
     public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
-    public static final String UPDATE_MIPUSH_CONFIG =  "update_mipush_config";//更新mipush
+    public static final String UPDATE_MIPUSH_CONFIG = "update_mipush_config";//更新mipush
 
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
@@ -225,7 +226,7 @@ public class Constants  {
     public static final String FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
     public static final String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
     public static final String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
-  public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
+    public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
     public static final String QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
 
 

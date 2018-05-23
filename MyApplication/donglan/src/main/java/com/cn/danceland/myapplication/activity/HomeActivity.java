@@ -97,7 +97,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        requestPermissions();//请求权限
+    //    requestPermissions();//请求权限
         instance = this;
         initView();
         registerBroadcastReceiver();//注册环信监听

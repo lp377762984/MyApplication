@@ -150,8 +150,8 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                             if (!isTestHR) {
                                 Log.i("zgy", "实时测量打开");
                                 // manager.realTimeAndOnceMeasure(0x0A, 1);//实时测量
-                                manager.realTimeAndOnceMeasure(0x80, 1);//实时测量
                                 isTestHR = true;
+                                manager.realTimeAndOnceMeasure(0x80, 1);//实时测量
                                 view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                             } else {
                                 Log.i("zgy", "实时测量关闭");
@@ -209,6 +209,7 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 
                             break;
                         case 12://睡眠数据
+                            manager.setSyncSleepData(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
 //                            if (!isTestDCXL) {
 //                                manager.setOnceOrRealTimeMeasure(0X09, 1);
 //                                isTestDCXL = true;
@@ -218,8 +219,8 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 //                            }
 
                             manager.setSyncSleepData(System.currentTimeMillis());
-                           // manager.setSyncSleepData(System.currentTimeMillis()- 1 * 24 * 60 * 60 * 1000);
-
+                            // manager.setSyncSleepData(System.currentTimeMillis()- 1 * 24 * 60 * 60 * 1000);
+                            break;
                         case 13://实时心率
                             if (!isTestSSXL) {
                                 manager.setOnceOrRealTimeMeasure(0X0A, 1);

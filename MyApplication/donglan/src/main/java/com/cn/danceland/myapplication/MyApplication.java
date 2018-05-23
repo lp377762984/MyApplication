@@ -112,7 +112,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             builder.detectFileUriExposure();
         }
    //    initTXIM();
-        bindBleService();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            bindBleService();
+        }
+
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
 
