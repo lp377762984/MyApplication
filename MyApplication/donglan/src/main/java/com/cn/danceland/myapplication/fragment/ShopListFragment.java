@@ -27,6 +27,7 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
@@ -99,27 +100,19 @@ public class ShopListFragment extends BaseFragment {
         return inflate;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-//        String getlocationString = ((HomeActivity) activity).getlocationString();
-//        if (getlocationString != null) {
-//            jingdu = getlocationString.split(",")[0];
-//            weidu = getlocationString.split(",")[1];
-//        }
 
-        jingdu = getArguments().getString("jingdu");
-        weidu = getArguments().getString("weidu");
+    private void initData() {
+        if(getArguments()!=null){
+            jingdu = getArguments().getString("jingdu");
+            weidu = getArguments().getString("weidu");
+        }
         if(jingdu==null || weidu==null){
             jingdu="0";
             weidu="0";
             ToastUtils.showToastShort("定位失败，获取门店列表失败");
         }
-       // LogUtil.i(jingdu + weidu);
+         LogUtil.i(jingdu + weidu);
         startLng = new LatLng(Double.valueOf(weidu),Double.valueOf(jingdu));
-    }
-
-    private void initData() {
         getListData();
     }
 

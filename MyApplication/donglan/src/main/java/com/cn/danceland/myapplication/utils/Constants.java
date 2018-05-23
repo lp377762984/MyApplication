@@ -3,7 +3,7 @@ package com.cn.danceland.myapplication.utils;
 
 import com.cn.danceland.myapplication.MyApplication;
 
-public class Constants {
+public class Constants  {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
 
     public static String getVersion() {
@@ -97,7 +97,7 @@ public class Constants {
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
     public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
-    public static final String UPDATE_MIPUSH_CONFIG = "update_mipush_config";//更新mipush
+    public static final String UPDATE_MIPUSH_CONFIG =  "update_mipush_config";//更新mipush
 
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
@@ -207,12 +207,12 @@ public class Constants {
     public static final String FINDEMPCOURSE = HOST + "appCourse/findEmployeeCourse";//教练的私教
     public static final String FINDAVAI = HOST + "appCourse/availableList";//我的私教
     public static final String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
-    public static final String QUERYKECHENGBIAO = HOST + "appGroupCourse/queryGroupCourseByData";//小团课课程表
+    public static final String QUERYKECHENGBIAO = HOST + "/appGroupCourse/queryGroupCourseByStartDataAndEndData";//小团课课程表
     public static final String GROUPAPPOINT = HOST + "appGroupCourse/groupAppoint";//预约小团课
     public static final String FINDGROUP = HOST + "appGroupCourse/findById";//单节小团课详情
     public static final String FREEGROUPCOURSE = HOST + "appFreeGroupCourse/findById";//免费团课详情
     public static final String FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
-    public static final String FreeCourse = HOST + "appFreeGroupCourse/queryFreeGroupCourseByData";//查询某会员某天的团课课程表
+    public static final String FreeCourse = HOST + "/appFreeGroupCourse/queryFreeGroupCourseByStartDataAndEndData";//查询某会员某天的团课课程表
     public static final String FreeCourseApply = HOST + "appFreeGroupCourse/freeGroupApply";//报名小团课
     public static final String APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取自己的一对一预约记录
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教

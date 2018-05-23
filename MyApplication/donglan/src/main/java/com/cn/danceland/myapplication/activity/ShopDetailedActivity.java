@@ -399,7 +399,12 @@ public class ShopDetailedActivity extends Activity{
                         }
 
                     }
+                    if(huijiList!=null&&huijiList.size()==0){
+                        huiji_grid.setVisibility(View.GONE);
+                    }
                     huiji_grid.setAdapter(new MyAdapter(huijiList,objects));
+                }else{
+                    huiji_grid.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
@@ -448,7 +453,12 @@ public class ShopDetailedActivity extends Activity{
                         }
 
                     }
+                    if(jiaolianList!=null&&jiaolianList.size()==0){
+                        jiaolian_grid.setVisibility(View.GONE);
+                    }
                     jiaolian_grid.setAdapter(new MyAdapter(jiaolianList,objects));
+                }else{
+                    jiaolian_grid.setVisibility(View.GONE);
                 }
             }
         }, new Response.ErrorListener() {
@@ -561,7 +571,6 @@ public class ShopDetailedActivity extends Activity{
 
     }
 
-    int clickNum;
     private class MyAdapter extends BaseExpandableListAdapter {
 
         List<ShopJiaoLianBean.Data> jiaolianList;
@@ -623,15 +632,15 @@ public class ShopDetailedActivity extends Activity{
 
             if(jiaolianList.size()<=6){
                 for(int i=0;i<jiaolianList.size();i++){
-                    clickNum = i;
                     circleImageViews[i].setVisibility(View.VISIBLE);
+                    final int finalI = i;
                     circleImageViews[i].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                                    .putExtra("person_id",jiaolianList.get(clickNum).getPerson_id()+"")
-                                    .putExtra("employee_id",jiaolianList.get(clickNum).getId()+"")
-                                    .putExtra("branch_id",jiaolianList.get(clickNum).getBranch_id()+""));
+                                    .putExtra("person_id",jiaolianList.get(finalI).getPerson_id()+"")
+                                    .putExtra("employee_id",jiaolianList.get(finalI).getId()+"")
+                                    .putExtra("branch_id",jiaolianList.get(finalI).getBranch_id()+""));
                         }
                     });
                     if("".equals(jiaolianList.get(i).getSelf_avatar_path())||jiaolianList.get(i).getSelf_avatar_path()==null){
@@ -667,9 +676,9 @@ public class ShopDetailedActivity extends Activity{
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                            .putExtra("person_id",jiaolianList.get(childPosition).getPerson_id()+"")
-                            .putExtra("employee_id",jiaolianList.get(childPosition).getId()+"")
-                            .putExtra("branch_id",jiaolianList.get(childPosition).getBranch_id()+""));
+                            .putExtra("person_id",childList.get(childPosition).getPerson_id()+"")
+                            .putExtra("employee_id",childList.get(childPosition).getId()+"")
+                            .putExtra("branch_id",childList.get(childPosition).getBranch_id()+""));
                 }
             });
 

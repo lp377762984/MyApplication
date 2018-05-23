@@ -133,6 +133,22 @@ public class TimeUtils {
     }
 
 
+    //时间戳转date
+    public static Date millToDate(String mill){
+
+        //时间戳转化为Sting或Date
+        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Long time=new Long(mill);
+        String d = format.format(time);
+        Date date= null;
+        try {
+            date = format.parse(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     /**
      * 计算剩余时间
      * @param orderTime
@@ -226,9 +242,10 @@ public class TimeUtils {
      */
     public static String dateToWeek(String datetime) {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        String[] weekDays = { "7", "1", "2", "3", "4", "5", "6" };
+        String[] weekDays = { "0", "1", "2", "3", "4", "5", "6" };
         Calendar cal = Calendar.getInstance(); // 获得一个日历
         Date datet = null;
+
         try {
             datet = f.parse(datetime);
             cal.setTime(datet);
@@ -238,6 +255,7 @@ public class TimeUtils {
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
         if (w < 0)
             w = 0;
+        LogUtil.i(w+"");
         return weekDays[w];
     }
 

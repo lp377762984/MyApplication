@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
+import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
@@ -282,10 +283,14 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        mLocationClient = MyApplication.getInstance().locationClient;
+        mLocationClient = new LocationService(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
+        //mLocationClient = ((MyApplication) getApplication()).locationClient;
         mLocationClient.registerListener(myListener);
 
+
         mLocationClient.start();
+        LogUtil.i("mLocationClient_start");
 
     }
 
@@ -298,6 +303,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         super.onStop();
         mLocationClient.unregisterListener(myListener);
         mLocationClient.stop();
+        LogUtil.i("mLocationClient_stop");
      //   EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
@@ -306,10 +312,13 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         public void onReceiveLocation(BDLocation location) {
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
-            //LogUtil.e("zzf",location.getLocType()+"");
+            if(location!=null){
+                LogUtil.i(location.getLocType()+"");
+            }
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
+                LogUtil.i(weidu +"----"+jingdu);
                 SPUtils.setString("jingdu", jingdu + "");
                 SPUtils.setString("weidu", weidu + "");
                 if (shopListFragment != null) {
@@ -318,6 +327,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     bundle.putString("weidu", weidu + "");
                     shopListFragment.setArguments(bundle);
                 }
+                mLocationClient.unregisterListener(myListener);
+                mLocationClient.stop();
+                LogUtil.i("mLocationClient_stop");
             } else {
                 ToastUtils.showToastShort("定位失败!");
             }

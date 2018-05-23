@@ -45,7 +45,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private static RequestQueue requestQueue;
     public static Context applicationContext;
     private static MyApplication instance;
-    public LocationService locationClient;
+    //public LocationService locationClient;
     private DaoMaster.DevOpenHelper donglan, message;
     private SQLiteDatabase db, messagedb;
     private DaoMaster daoMaster, messageMaster;
@@ -84,8 +84,8 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         super.onCreate();
         Foreground.init(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        locationClient = new LocationService(getApplicationContext());
-        SDKInitializer.initialize(this);
+//        locationClient = new LocationService(getApplicationContext());
+//        SDKInitializer.initialize(getApplicationContext());
         applicationContext = this;
         instance = this;
         setUpDb();
