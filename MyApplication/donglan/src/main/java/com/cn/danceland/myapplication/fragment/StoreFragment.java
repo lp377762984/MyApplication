@@ -140,33 +140,33 @@ public class StoreFragment extends BaseFragment {
 
 
 
-    public class MyStoreAdapter extends BaseAdapter{
-        Context mContext;
-        ArrayList<StoreBean.Items> itemsArrayList;
-
-        MyStoreAdapter(Context context, ArrayList<StoreBean.Items> list){
-            mContext = context;
-            itemsArrayList = list;
-        }
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return null;
-        }
-    }
+//    public class MyStoreAdapter extends BaseAdapter{
+//        Context mContext;
+//        ArrayList<StoreBean.Items> itemsArrayList;
+//
+//        MyStoreAdapter(Context context, ArrayList<StoreBean.Items> list){
+//            mContext = context;
+//            itemsArrayList = list;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return 0;
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return null;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return 0;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            return null;
+//        }
+//    }
 }

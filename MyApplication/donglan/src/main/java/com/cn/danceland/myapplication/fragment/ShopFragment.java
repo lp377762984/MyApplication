@@ -92,7 +92,7 @@ public class ShopFragment extends BaseFragment {
     String PhoneNo;
     Gson gson;
     Data info;
-    List<StoreBean.Items> itemsList;
+    //List<StoreBean.Items> itemsList;
     ImageButton ibtn_call, ibtn_gps;
     List<MenusBean.Data> data;
     LinearLayout ll_top;
@@ -798,6 +798,9 @@ public class ShopFragment extends BaseFragment {
 
                         startActivity(new Intent(mActivity, FitnessTestActivity.class));
 
+                        break;
+                    case 35://动态码
+                        startActivity(new Intent(mActivity,LoginNumberActivity.class));
                         break;
                     default:
                         break;

@@ -59,13 +59,13 @@ public class ShopListFragment extends BaseFragment {
     MZBannerView shop_banner;
     ArrayList<String> drawableArrayList;
     String jingdu, weidu;
-    List<StoreBean.Items> itemsList;
+    List<StoreBean.DataBean> itemsList;
     Gson gson;
     Data info;
     TextView tv_shopname, tv_shopAddress;
     ImageButton ibtn_gps, ibtn_call;
     LatLng startLng;
-    List<StoreBean.Items> itemsList1;
+    List<StoreBean.DataBean> itemsList1;
 
     @Override
     public View initViews() {
@@ -125,15 +125,15 @@ public class ShopListFragment extends BaseFragment {
     }
 
     public void getListData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/0/" + weidu + "/" + jingdu, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + weidu + "/" + jingdu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
                 if (storeBean != null && storeBean.getData() != null) {
-                    itemsList = storeBean.getData().getItems();
+                    itemsList = storeBean.getData();
                     if (itemsList != null && itemsList.size() > 0) {
-                        tv_shopname.setText(itemsList.get(0).getBname());
-                        LatLng latLng = new LatLng(itemsList.get(0).getLat(),itemsList.get(0).getLng());
+                        tv_shopname.setText(itemsList.get(0).getName());
+                        LatLng latLng = new LatLng(Double.valueOf(itemsList.get(0).getLat()),Double.valueOf(itemsList.get(0).getLng()));
                         double distance = DistanceUtil.getDistance(startLng, latLng);
                         Double aDouble = new Double(distance);
                         int i1 = aDouble.intValue();
@@ -162,7 +162,7 @@ public class ShopListFragment extends BaseFragment {
                         ibtn_call.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showDialog(itemsList.get(0).getTelphone_no());
+                                showDialog(itemsList.get(0).getTelphone());
                             }
                         });
 
@@ -241,9 +241,9 @@ public class ShopListFragment extends BaseFragment {
 
     public class MyStoreAdapter extends BaseAdapter {
         Context mContext;
-        List<StoreBean.Items> itemsArrayList;
+        List<StoreBean.DataBean> itemsArrayList;
 
-        MyStoreAdapter(Context context, List<StoreBean.Items> list) {
+        MyStoreAdapter(Context context, List<StoreBean.DataBean> list) {
             mContext = context;
             itemsArrayList = list;
         }
@@ -266,7 +266,7 @@ public class ShopListFragment extends BaseFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
-            StoreBean.Items items;
+            StoreBean.DataBean items;
 
             if (convertView == null) {
                 viewHolder = new ViewHolder();
@@ -287,8 +287,8 @@ public class ShopListFragment extends BaseFragment {
 
             if (itemsArrayList != null) {
                 items = itemsArrayList.get(position);
-                double lat = items.getLat();
-                double lng = items.getLng();
+                double lat = Double.valueOf(items.getLat());
+                double lng = Double.valueOf(items.getLng());
                 LatLng latLng = new LatLng(lat, lng);
                 double distance = DistanceUtil.getDistance(startLng, latLng);
                 Double aDouble = new Double(distance);
@@ -301,7 +301,7 @@ public class ShopListFragment extends BaseFragment {
                     viewHolder.distance.setText("距我 "+i1+" m");
                 }
 
-                viewHolder.store_address.setText(items.getBname());
+                viewHolder.store_address.setText(items.getName());
 
                 Glide.with(getActivity()).load(items.getLogo_url()).into(viewHolder.store_item_img);
                 //PhoneNo = items.getTelphone_no();
@@ -313,7 +313,7 @@ public class ShopListFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (itemsArrayList != null) {
-                        showDialog(itemsArrayList.get(position).getTelphone_no());
+                        showDialog(itemsArrayList.get(position).getTelphone());
                     }
                 }
             });

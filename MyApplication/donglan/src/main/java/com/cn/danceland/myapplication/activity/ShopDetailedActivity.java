@@ -368,6 +368,7 @@ public class ShopDetailedActivity extends Activity{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         }) {

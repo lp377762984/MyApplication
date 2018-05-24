@@ -625,7 +625,7 @@ public class SiJiaoOrderActivity extends Activity {
         public View onCreatePopupView() {
 
             //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
-            return createPopupById(R.layout.popup_list_consultant);
+            return createPopupById(R.layout.popup_list_jiaolian);
 
         }
 
