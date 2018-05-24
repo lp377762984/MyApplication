@@ -24,13 +24,18 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.db.HeartRate;
+import com.cn.danceland.myapplication.db.HeartRateHelper;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.cn.danceland.myapplication.MyApplication.mBluetoothConnected;
@@ -50,6 +55,7 @@ public class ShouHuanMainActivity extends AppCompatActivity {
     private boolean isTestHR, isTestSSXL, isTestDCXL = false;
     private MyAdapter myAdapter;
     private TextView tv_search;
+    HeartRateHelper heartRateHelper = new HeartRateHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,17 +224,42 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 //                                isTestDCXL = false;
 //                            }
 
-                            manager.setSyncSleepData(System.currentTimeMillis());
+                            //      manager.setSyncSleepData(System.currentTimeMillis());
                             // manager.setSyncSleepData(System.currentTimeMillis()- 1 * 24 * 60 * 60 * 1000);
                             break;
-                        case 13://实时心率
-                            if (!isTestSSXL) {
-                                manager.setOnceOrRealTimeMeasure(0X0A, 1);
-                                isTestSSXL = true;
-                            } else {
-                                manager.setOnceOrRealTimeMeasure(0X0A, 0);
-                                isTestSSXL = false;
-                            }
+//                        case 13://实时心率
+//                            if (!isTestSSXL) {
+//                                manager.setOnceOrRealTimeMeasure(0X0A, 1);
+//                                isTestSSXL = true;
+//                            } else {
+//                                manager.setOnceOrRealTimeMeasure(0X0A, 0);
+//                                isTestSSXL = false;
+//                            }
+//                            break;
+                        case 13:
+
+                            Calendar calendar = Calendar.getInstance();
+//获取系统的日期
+//年
+                            int year = calendar.get(Calendar.YEAR);
+//月
+                            int month = calendar.get(Calendar.MONTH) + 1;
+//日
+                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+//获取系统时间
+//小时
+                            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//分钟
+                            int minute = calendar.get(Calendar.MINUTE);
+//秒
+                            int second = calendar.get(Calendar.SECOND);
+
+                          //  time2.setText("Calendar获取当前日期" + year + "年" + month + "月" + day + "日" + hour + ":" + minute + ":" + second);
+
+                            List<HeartRate> heartRateList = heartRateHelper.queryByDay(TimeUtils.date2TimeStamp(year+"-"+month+"-"+day,"yyyy-MM-dd"));
+                          //  LogUtil.i(TimeUtils.date2TimeStamp(year+"-"+month+"-"+day+" 00:00:00","yyyy-MM-dd HH:mm:ss")+"");
+                            LogUtil.i(heartRateList.toString());
+
                             break;
                         default:
                             break;
@@ -356,7 +387,8 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
 
-                Log.i("zgy", datas.toString());
+                //    Log.i("zgy", datas.toString());
+                LogUtil.i(datas.toString());
 
                 //RSSI
                 if (datas.get(4) == 0XB5) {// [171, 0, 4, 255, 181, 128, 72]
@@ -424,9 +456,21 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                 }
                 //测量心率
                 if (datas.get(4) == 0x84) {//[171, 0, 5, 255, 49, 10, 0, 190]   [171, 0, 5, 255, 49, 10, 84, 48]
+
+
                     Integer integer = datas.get(6);
                     test_result.setText(String.valueOf(integer));
                 }
+                if (datas.get(4) == 0x51 && datas.size() == 13) {//[171, 0, 10, 255, 81, 17, 18, 5, 19, 4, 35, 62, 62]//拉取心率数据
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
+                    HeartRate heartRate = new HeartRate();
+                    heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    heartRate.setHeartRate(datas.get(11));
+                    LogUtil.i(heartRate.toString());
+                    heartRateHelper.insert(heartRate);
+
+                }
+
 
             }
         }
@@ -448,6 +492,7 @@ public class ShouHuanMainActivity extends AppCompatActivity {
         list.add(getString(R.string.restore));
         list.add(getString(R.string.pull_to_refresh));
         list.add("睡眠数据");
+        list.add("查看数据");
 //        list.add(getString(R.string.hr_single_measurement));
 //        list.add(getString(R.string.hr_real_time_measurement));
 //        list.add(getString(R.string.oxygen_single_measurement));
