@@ -1332,141 +1332,383 @@ public class Data implements Serializable {
 
     public class Branch implements Serializable{
 
-        private int id;
-        private int parent_id;
-        private String name;
-        private String order_no;
-        private int level;
-        private boolean leaf;
-        private int delete_remark;
-        private String remark;
-        private String creater;
-        private long create_time;
-        private String updater;
-        private String update_time;
-        private String hx_groupid;
-        private String branch_name;
-        private int branch_id;
-        private String children;
-        private String member_no;
-        public void setId(int id) {
-            this.id = id;
-        }
-        public int getId() {
-            return id;
+        private String branch_id;// 主键
+        private String league_id;// 加盟商主键
+        private String name;// 门店名称
+        private String real_name;// 合同名称
+        private String address;// 门店地址
+        private String real_address;// 合同地址
+        private Integer status;// 营业状态
+        private Integer zone_code;// 区划编码
+        private String description;// 描述
+        private String logo_path;// 门店图标
+        private Integer enabled;// 可用标志
+        private Float lat;// 纬度
+        private Float lng;// 经度
+        private String telphone;// 固定电话
+        private Integer follows;// 关注数
+        private String pictures;// 图片
+        private String remark;// 备注
+        //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        private String create_time;// 创建时间
+        private String creator;// 创建人
+
+        //此处可添加查询显示辅助字段
+
+        private String logo_url;// 门店图标
+        private String league_name;
+        private String create_name;
+        private List<String> photo_url;//门店照片列表
+
+        @Override
+        public String toString() {
+            return "Branch{" +
+                    "branch_id='" + branch_id + '\'' +
+                    ", league_id='" + league_id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", real_name='" + real_name + '\'' +
+                    ", address='" + address + '\'' +
+                    ", real_address='" + real_address + '\'' +
+                    ", status=" + status +
+                    ", zone_code=" + zone_code +
+                    ", description='" + description + '\'' +
+                    ", logo_path='" + logo_path + '\'' +
+                    ", enabled=" + enabled +
+                    ", lat=" + lat +
+                    ", lng=" + lng +
+                    ", telphone='" + telphone + '\'' +
+                    ", follows=" + follows +
+                    ", pictures='" + pictures + '\'' +
+                    ", remark='" + remark + '\'' +
+                    ", create_time='" + create_time + '\'' +
+                    ", creator='" + creator + '\'' +
+                    ", logo_url='" + logo_url + '\'' +
+                    ", league_name='" + league_name + '\'' +
+                    ", create_name='" + create_name + '\'' +
+                    ", photo_url=" + photo_url +
+                    '}';
         }
 
-        public void setParent_id(int parent_id) {
-            this.parent_id = parent_id;
+        public String getBranch_id() {
+            return branch_id;
         }
-        public int getParent_id() {
-            return parent_id;
+
+        public void setBranch_id(String branch_id) {
+            this.branch_id = branch_id;
+        }
+
+        public String getLeague_id() {
+            return league_id;
+        }
+
+        public void setLeague_id(String league_id) {
+            this.league_id = league_id;
+        }
+
+        public String getName() {
+            return name;
         }
 
         public void setName(String name) {
             this.name = name;
         }
-        public String getName() {
-            return name;
+
+        public String getReal_name() {
+            return real_name;
         }
 
-        public void setOrder_no(String order_no) {
-            this.order_no = order_no;
-        }
-        public String getOrder_no() {
-            return order_no;
+        public void setReal_name(String real_name) {
+            this.real_name = real_name;
         }
 
-        public void setLevel(int level) {
-            this.level = level;
-        }
-        public int getLevel() {
-            return level;
+        public String getAddress() {
+            return address;
         }
 
-        public void setLeaf(boolean leaf) {
-            this.leaf = leaf;
-        }
-        public boolean getLeaf() {
-            return leaf;
+        public void setAddress(String address) {
+            this.address = address;
         }
 
-        public void setDelete_remark(int delete_remark) {
-            this.delete_remark = delete_remark;
+        public String getReal_address() {
+            return real_address;
         }
-        public int getDelete_remark() {
-            return delete_remark;
+
+        public void setReal_address(String real_address) {
+            this.real_address = real_address;
+        }
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
+
+        public Integer getZone_code() {
+            return zone_code;
+        }
+
+        public void setZone_code(Integer zone_code) {
+            this.zone_code = zone_code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getLogo_path() {
+            return logo_path;
+        }
+
+        public void setLogo_path(String logo_path) {
+            this.logo_path = logo_path;
+        }
+
+        public Integer getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Integer enabled) {
+            this.enabled = enabled;
+        }
+
+        public Float getLat() {
+            return lat;
+        }
+
+        public void setLat(Float lat) {
+            this.lat = lat;
+        }
+
+        public Float getLng() {
+            return lng;
+        }
+
+        public void setLng(Float lng) {
+            this.lng = lng;
+        }
+
+        public String getTelphone() {
+            return telphone;
+        }
+
+        public void setTelphone(String telphone) {
+            this.telphone = telphone;
+        }
+
+        public Integer getFollows() {
+            return follows;
+        }
+
+        public void setFollows(Integer follows) {
+            this.follows = follows;
+        }
+
+        public String getPictures() {
+            return pictures;
+        }
+
+        public void setPictures(String pictures) {
+            this.pictures = pictures;
+        }
+
+        public String getRemark() {
+            return remark;
         }
 
         public void setRemark(String remark) {
             this.remark = remark;
         }
-        public String getRemark() {
-            return remark;
-        }
 
-        public void setCreater(String creater) {
-            this.creater = creater;
-        }
-        public String getCreater() {
-            return creater;
-        }
-
-        public void setCreate_time(long create_time) {
-            this.create_time = create_time;
-        }
-        public long getCreate_time() {
+        public String getCreate_time() {
             return create_time;
         }
 
-        public void setUpdater(String updater) {
-            this.updater = updater;
-        }
-        public String getUpdater() {
-            return updater;
+        public void setCreate_time(String create_time) {
+            this.create_time = create_time;
         }
 
-        public void setUpdate_time(String update_time) {
-            this.update_time = update_time;
-        }
-        public String getUpdate_time() {
-            return update_time;
+        public String getCreator() {
+            return creator;
         }
 
-        public void setHx_groupid(String hx_groupid) {
-            this.hx_groupid = hx_groupid;
-        }
-        public String getHx_groupid() {
-            return hx_groupid;
+        public void setCreator(String creator) {
+            this.creator = creator;
         }
 
-        public void setBranch_name(String branch_name) {
-            this.branch_name = branch_name;
-        }
-        public String getBranch_name() {
-            return branch_name;
+        public String getLogo_url() {
+            return logo_url;
         }
 
-        public void setBranch_id(int branch_id) {
-            this.branch_id = branch_id;
-        }
-        public int getBranch_id() {
-            return branch_id;
+        public void setLogo_url(String logo_url) {
+            this.logo_url = logo_url;
         }
 
-        public void setChildren(String children) {
-            this.children = children;
-        }
-        public String getChildren() {
-            return children;
+        public String getLeague_name() {
+            return league_name;
         }
 
-        public void setMember_no(String member_no) {
-            this.member_no = member_no;
+        public void setLeague_name(String league_name) {
+            this.league_name = league_name;
         }
-        public String getMember_no() {
-            return member_no;
+
+        public String getCreate_name() {
+            return create_name;
         }
+
+        public void setCreate_name(String create_name) {
+            this.create_name = create_name;
+        }
+
+        public List<String> getPhoto_url() {
+            return photo_url;
+        }
+
+        public void setPhoto_url(List<String> photo_url) {
+            this.photo_url = photo_url;
+        }
+
+//
+//        private int id;
+//        private int parent_id;
+//        private String name;
+//        private String order_no;
+//        private int level;
+//        private boolean leaf;
+//        private int delete_remark;
+//        private String remark;
+//        private String creater;
+//        private long create_time;
+//        private String updater;
+//        private String update_time;
+//        private String hx_groupid;
+//        private String branch_name;
+//        private int branch_id;
+//        private String children;
+//        private String member_no;
+//        public void setId(int id) {
+//            this.id = id;
+//        }
+//        public int getId() {
+//            return id;
+//        }
+//
+//        public void setParent_id(int parent_id) {
+//            this.parent_id = parent_id;
+//        }
+//        public int getParent_id() {
+//            return parent_id;
+//        }
+//
+//        public void setName(String name) {
+//            this.name = name;
+//        }
+//        public String getName() {
+//            return name;
+//        }
+//
+//        public void setOrder_no(String order_no) {
+//            this.order_no = order_no;
+//        }
+//        public String getOrder_no() {
+//            return order_no;
+//        }
+//
+//        public void setLevel(int level) {
+//            this.level = level;
+//        }
+//        public int getLevel() {
+//            return level;
+//        }
+//
+//        public void setLeaf(boolean leaf) {
+//            this.leaf = leaf;
+//        }
+//        public boolean getLeaf() {
+//            return leaf;
+//        }
+//
+//        public void setDelete_remark(int delete_remark) {
+//            this.delete_remark = delete_remark;
+//        }
+//        public int getDelete_remark() {
+//            return delete_remark;
+//        }
+//
+//        public void setRemark(String remark) {
+//            this.remark = remark;
+//        }
+//        public String getRemark() {
+//            return remark;
+//        }
+//
+//        public void setCreater(String creater) {
+//            this.creater = creater;
+//        }
+//        public String getCreater() {
+//            return creater;
+//        }
+//
+//        public void setCreate_time(long create_time) {
+//            this.create_time = create_time;
+//        }
+//        public long getCreate_time() {
+//            return create_time;
+//        }
+//
+//        public void setUpdater(String updater) {
+//            this.updater = updater;
+//        }
+//        public String getUpdater() {
+//            return updater;
+//        }
+//
+//        public void setUpdate_time(String update_time) {
+//            this.update_time = update_time;
+//        }
+//        public String getUpdate_time() {
+//            return update_time;
+//        }
+//
+//        public void setHx_groupid(String hx_groupid) {
+//            this.hx_groupid = hx_groupid;
+//        }
+//        public String getHx_groupid() {
+//            return hx_groupid;
+//        }
+//
+//        public void setBranch_name(String branch_name) {
+//            this.branch_name = branch_name;
+//        }
+//        public String getBranch_name() {
+//            return branch_name;
+//        }
+//
+//        public void setBranch_id(int branch_id) {
+//            this.branch_id = branch_id;
+//        }
+//        public int getBranch_id() {
+//            return branch_id;
+//        }
+//
+//        public void setChildren(String children) {
+//            this.children = children;
+//        }
+//        public String getChildren() {
+//            return children;
+//        }
+//
+//        public void setMember_no(String member_no) {
+//            this.member_no = member_no;
+//        }
+//        public String getMember_no() {
+//            return member_no;
+//        }
 
     }
 
