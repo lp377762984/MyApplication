@@ -500,7 +500,7 @@ public class ShopDetailedActivity extends Activity{
             public void onResponse(String s) {
 
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
-                ShopDetailBean.Data data = shopDetailBean.getData();
+                ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data!=null){
                     List<String> photo_url = data.getPhoto_url();
                     if(photo_url!=null){
@@ -513,10 +513,10 @@ public class ShopDetailedActivity extends Activity{
                         }
                     }
 
-                    store_name.setText(data.getBname());
+                    store_name.setText(data.getName());
                     tv_adress.setText(data.getAddress());
                     tv_detail.setText(data.getDescription());
-                    phoneNo = data.getTelphone_no();
+                    phoneNo = data.getTelphone();
                     branchID = data.getBranch_id()+"";
                 }
 

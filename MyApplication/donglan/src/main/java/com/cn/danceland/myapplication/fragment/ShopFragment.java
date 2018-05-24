@@ -442,12 +442,12 @@ public class ShopFragment extends BaseFragment {
             public void onResponse(String s) {
 
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
-                ShopDetailBean.Data data = shopDetailBean.getData();
+                ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data != null) {
-                    tv_shopname.setText(data.getBname());
+                    tv_shopname.setText(data.getName());
                     shopWeidu = data.getLat() + "";
                     shopJingdu = data.getLng() + "";
-                    PhoneNo = data.getTelphone_no();
+                    PhoneNo = data.getTelphone();
                 }
 
             }
