@@ -65,13 +65,13 @@ public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollL
     private void initHost() {
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
-        findSiJiaoBean = new FindSiJiaoBean();
+
 
     }
 
     private int lastVisibleItem;//最后一个可见的item
     private int totalItemCount;//总的item
-    int page,totalPages;
+    int page,totalPages,totalElements;
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         this.lastVisibleItem = firstVisibleItem + visibleItemCount;
@@ -79,12 +79,13 @@ public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollL
     }
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages){
+        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages&&totalItemCount<totalElements){
             getData(page);
         }
     }
 
     private void getData(int nowPage) {
+        findSiJiaoBean = new FindSiJiaoBean();
         findSiJiaoBean.setPage(nowPage);
         findSiJiaoBean.setSize(15);
         findSiJiaoBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
@@ -99,6 +100,7 @@ public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollL
                     BuySiJiaoBean buySiJiaoBean = gson.fromJson(string, BuySiJiaoBean.class);
                     if(buySiJiaoBean!=null){
                         totalPages = buySiJiaoBean.getData().getTotalPages();
+                        totalElements = buySiJiaoBean.getData().getTotalElements();
                         content.addAll(buySiJiaoBean.getData().getContent());
                         if(content!=null){
                             myAdapter.notifyDataSetChanged();
@@ -204,12 +206,11 @@ public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollL
                 viewHolder = (ViewHolder)convertView.getTag();
             }
             Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img_1);
-            viewHolder.sijiao_name.setText("私教名称："+contentList.get(position).getName());
+            viewHolder.sijiao_name.setText(contentList.get(position).getName());
             viewHolder.sijiao_type.setText("课程类型："+contentList.get(position).getCourse_category_name());
-            viewHolder.sijiao_amount.setText(contentList.get(position).getCount()+"节私教课");
-            viewHolder.sijiao_price.setText("费用："+contentList.get(position).getPrice()+"元");
-
-
+            viewHolder.sijiao_amount.setText("课程节数："+contentList.get(position).getCount()+"节");
+            viewHolder.sijiao_price.setText("￥："+contentList.get(position).getPrice()+"元");
+            viewHolder.sijiao_price.setTextColor(getResources().getColor(R.color.color_dl_yellow));
             return convertView;
         }
     }

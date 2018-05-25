@@ -228,6 +228,10 @@ public class ReportFormActivity extends Activity {
             role = "5";
             report_title.setTitle("会籍报表");
             getPeople();
+        }else if("前台主管".equals(role_type)){
+            role = "7";
+            report_title.setTitle("服务报表");
+            getPeople();
         }else if("教练主管".equals(role_type)){
             role = "6";
             report_title.setTitle("教练报表");
@@ -244,6 +248,12 @@ public class ReportFormActivity extends Activity {
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
+        }else if("前台".equals(role_type)){
+            role = "3";
+            emp_id = myInfo.getEmployee().getId()+"";
+            report_rv.setVisibility(View.GONE);
+            btn_all.setVisibility(View.GONE);
+            report_title.setTitle("服务报表");
         }
 
         initBusData(selectDate,role,emp_id);

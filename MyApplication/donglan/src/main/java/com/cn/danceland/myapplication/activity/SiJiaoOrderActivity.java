@@ -109,7 +109,8 @@ public class SiJiaoOrderActivity extends Activity {
     int employee_id;
     String employee_name;
     String course_category_name,course_name;
-    Button btn_commit,btn_repay;
+    LinearLayout btn_commit;
+    LinearLayout btn_repay;
     Float price;
     Data info;
     PayBean payBean;
@@ -357,7 +358,7 @@ public class SiJiaoOrderActivity extends Activity {
             deposit = data.getFloatExtra("dingjin",0);
             deposit_id = data.getStringExtra("id");
             tv_dingjin.setText("- "+deposit+"元");
-            tv_pay_price.setText("￥"+(price-deposit));
+            tv_pay_price.setText("待支付：￥"+(price-deposit));
         }
     }
 
@@ -378,7 +379,6 @@ public class SiJiaoOrderActivity extends Activity {
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
         rl_name = findViewById(R.id.rl_name);
-        line7 = findViewById(R.id.line7);
         btn_zhifubao = findViewById(R.id.btn_zhifubao);
         btn_weixin = findViewById(R.id.btn_weixin);
         btn_chuzhika = findViewById(R.id.btn_chuzhika);
@@ -502,7 +502,6 @@ public class SiJiaoOrderActivity extends Activity {
                 }else{
                     rl_kaikeshijian.setVisibility(View.VISIBLE);
                 }
-                line7.setVisibility(View.GONE);
                 rl_phone.setVisibility(View.GONE);
                 rl_name.setVisibility(View.GONE);
                 if("1".equals(type)){
@@ -519,7 +518,6 @@ public class SiJiaoOrderActivity extends Activity {
                 btn_foryou.setChecked(true);
                 rl_kaikeshijian.setVisibility(View.GONE);
                 rl_name.setVisibility(View.VISIBLE);
-                line7.setVisibility(View.VISIBLE);
                 rl_phone.setVisibility(View.VISIBLE);
                 rl_name.setVisibility(View.VISIBLE);
                 if("1".equals(type)){
@@ -581,9 +579,9 @@ public class SiJiaoOrderActivity extends Activity {
         }
 
         if("1".equals(type)){
-            tv_pay_price.setText("￥"+deposit_course_price);
+            tv_pay_price.setText("待支付：￥"+deposit_course_price);
         }else {
-            tv_pay_price.setText("￥"+price);
+            tv_pay_price.setText("待支付：￥"+price);
         }
         getJiaoLian();
     }
@@ -717,7 +715,7 @@ public class SiJiaoOrderActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.i(volleyError.toString());
             }
         }){
             @Override
@@ -794,7 +792,7 @@ public class SiJiaoOrderActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.i(volleyError.toString());
 
             }
         }) {

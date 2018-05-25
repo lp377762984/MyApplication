@@ -775,6 +775,9 @@ public class ShopFragment extends BaseFragment {
                     case 26://体测分析
                         startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
                         break;
+                    case 28:
+                        startActivity(new Intent(mActivity,ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","3"));
+                        break;
                     case 29://私信
                    //     startActivity(new Intent(mActivity, MyChatListActivity.class));
                         break;

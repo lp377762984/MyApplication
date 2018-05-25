@@ -288,6 +288,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                 MyConSumeBean myConSumeBean = gson.fromJson(jsonObject.toString(), MyConSumeBean.class);
                 if(myConSumeBean!=null && myConSumeBean.getData()!=null&&myConSumeBean.getData().getContent()!=null){
                     totalPages = myConSumeBean.getData().getTotalPages();
+                    totalElements = myConSumeBean.getData().getTotalElements();
                     content.addAll(myConSumeBean.getData().getContent());
                     if(content!=null){
                         consumeAdapter.notifyDataSetChanged();
@@ -326,7 +327,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
     }
 
     private int lastVisibleItem;//最后一个可见的item
-    private int totalItemCount;//总的item
+    private int totalItemCount,totalElements;//总的item
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         this.lastVisibleItem = firstVisibleItem + visibleItemCount;
@@ -334,7 +335,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
     }
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages){
+        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages&&totalItemCount<totalElements){
             initData(page);
         }
     }

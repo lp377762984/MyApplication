@@ -41,19 +41,80 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             >
-            <com.cn.danceland.myapplication.view.XCRoundRectImageView
+            <FrameLayout
                 android:layout_width="300dp"
                 android:layout_height="187dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/img_man"
-                />
+                >
+                <com.cn.danceland.myapplication.view.XCRoundRectImageView
+                    android:id="@+id/xc_img"
+                    android:layout_width="300dp"
+                    android:layout_height="187dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/sijiao_card"
+                    />
 
-            <View
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#f5f5f5"
-                />
+                <TextView
+                    android:id="@+id/tv_branch_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/white"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_course_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="减脂"
+                        android:textColor="@color/color_dl_yellow"
+                        android:textSize="16sp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="一对一"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="一对一"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="2dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="一对一"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="2dp"
+                        />
+
+                </LinearLayout>
+
+
+
+            </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,22 +164,31 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="68dp"
                 android:layout_height="45dp"
-                android:background="#f5f5f5">
+                android:layout_gravity="left"
+                android:layout_marginLeft="15dp"
+                >
 
                 <TextView
+                    android:id="@+id/tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="会员须知"
                     android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="15dp"
+                    android:layout_centerInParent="true"
                     />
+                <View
+                    android:layout_below="@+id/tv"
+                    android:layout_width="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/color_dl_yellow"/>
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_shuoming"
@@ -132,95 +202,7 @@
 
         </LinearLayout>
 
-
-
-
-
     </ScrollView>
-    <!--<ScrollView-->
-        <!--android:id="@+id/tv_sc"-->
-        <!--android:layout_below="@+id/rl_1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dp">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="      北京动岚阳光健身有限公司于2013年01月06日成立。法定代表人张建,公司经营范围包括：器械健身；跆拳道、舞蹈技术培训；组织文化艺术交流活动（演出除外）；体育运动项目经营等。-->
-<!--"           android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:lineSpacingExtra="5dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--/>-->
-
-    <!--</ScrollView>-->
-    <!--<View-->
-        <!--android:id="@+id/line1"-->
-        <!--android:layout_below="@+id/tv_sc"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"-->
-        <!--android:background="#f5f5f5"-->
-        <!--/>-->
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_sijiao"-->
-        <!--android:layout_below="@+id/line1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="购买私教"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="16sp"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--/>-->
-        <!--<CheckBox-->
-            <!--android:id="@+id/btn_sijiao"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--/>-->
-
-
-    <!--</RelativeLayout>-->
-
-
-    <!--<View-->
-        <!--android:id="@+id/line2"-->
-        <!--android:layout_below="@+id/rl_sijiao"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"-->
-        <!--android:background="#f5f5f5"-->
-        <!--/>-->
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_sijiaodingjin"-->
-        <!--android:layout_below="@+id/line2"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="购买私教定金"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="16sp"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--/>-->
-        <!--<CheckBox-->
-            <!--android:id="@+id/btn_sijiaodingjin"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--/>-->
-
-    <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:id="@+id/rl_buy"

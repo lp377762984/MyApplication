@@ -23,8 +23,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestParamsBean;
@@ -36,6 +38,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -58,13 +61,19 @@ public class SellSiJiaoConfirmActivity extends Activity {
     RelativeLayout rl_buy;
     RadioButton btn_sijiao,btn_sijiaodingjin;
     ImageView sell_img;
-    Serializable itemContent;
+    BuySiJiaoBean.Content itemContent;
     Gson gson;
     ExplainRequest request;
     Data info;
     TextView tv_shuoming;
     Float deposit_course_min,deposit_course_max;
     String deposit_days;
+    XCRoundRectImageView xc_img;
+    private TextView tv_branch_name;
+    private TextView tv_course_name;
+    private TextView tv_category;
+    private TextView tv_count;
+    private TextView tv_price;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +84,7 @@ public class SellSiJiaoConfirmActivity extends Activity {
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        itemContent = getIntent().getSerializableExtra("itemContent");
+        itemContent = (BuySiJiaoBean.Content)getIntent().getSerializableExtra("itemContent");
         initView();
         queryList();
         findParams();
@@ -176,6 +185,8 @@ public class SellSiJiaoConfirmActivity extends Activity {
             }
         });
         tv_shuoming = findViewById(R.id.tv_shuoming);
+        xc_img = findViewById(R.id.xc_img);
+
 
         rl_buy = findViewById(R.id.rl_buy);
         btn_sijiao = findViewById(R.id.btn_sijiao);
@@ -211,6 +222,20 @@ public class SellSiJiaoConfirmActivity extends Activity {
 
             }
         });
+        tv_branch_name = findViewById(R.id.tv_branch_name);
+        tv_course_name = findViewById(R.id.tv_course_name);
+        tv_category = findViewById(R.id.tv_category);
+        tv_count = findViewById(R.id.tv_count);
+        tv_price = findViewById(R.id.tv_price);
+
+        if (itemContent!=null){
+            Glide.with(this).load(itemContent.getImg_url()).into(xc_img);
+            tv_branch_name.setText(itemContent.getBranch_name());
+            tv_course_name.setText(itemContent.getName());
+            tv_category.setText(itemContent.getCourse_category_name());
+            tv_count.setText(itemContent.getCount()+"节");
+            tv_price.setText("￥："+itemContent.getPrice()+"元");
+        }
 
     }
 

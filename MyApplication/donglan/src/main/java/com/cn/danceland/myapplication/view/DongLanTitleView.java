@@ -29,6 +29,7 @@ public class DongLanTitleView extends RelativeLayout {
         donglan_back = inflate.findViewById(R.id.donglan_back);
         donglan_title = inflate.findViewById(R.id.donglan_title);
         donglan_right_tv = inflate.findViewById(R.id.donglan_right_tv);
+        donglan_right_tv.setTextColor(getResources().getColor(R.color.color_dl_yellow));
 
         donglan_back.setOnClickListener(new OnClickListener() {
             @Override
