@@ -413,7 +413,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                    if (DemoHelper.getInstance().isLoggedIn()) {
 //
 //                    }
-//                    if (Constants.HX_DEV_CONFIG) {
+//                    if (Constants.DEV_CONFIG) {
 //                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
 //                    } else {
 //                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);

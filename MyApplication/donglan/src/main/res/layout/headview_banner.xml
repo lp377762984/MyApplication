@@ -16,4 +16,29 @@
 
         />
 
+    <LinearLayout
+        android:id="@+id/ll_xinwen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/banner"
+        android:layout_marginLeft="15dp"
+
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新闻推荐"
+            android:textColor="#333"
+            android:textSize="16sp"
+
+            />
+
+        <View
+            android:layout_marginTop="2dp"
+            android:layout_width="60dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:background="@color/color_dl_yellow" />
+    </LinearLayout>
 </RelativeLayout>

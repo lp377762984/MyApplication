@@ -484,7 +484,7 @@ public class RevisitListFragment1 extends BaseFragment {
 //                    String userName = datalist.get(position).getNick_name();
 //                    String userPic = datalist.get(position).getSelf_avatar_path();
 //                    String hxIdFrom;
-//                    if (Constants.HX_DEV_CONFIG) {
+//                    if (Constants.DEV_CONFIG) {
 //                        hxIdFrom = "dev" + datalist.get(position).getMember_no();
 //                    } else {
 //                        hxIdFrom = datalist.get(position).getMember_no();

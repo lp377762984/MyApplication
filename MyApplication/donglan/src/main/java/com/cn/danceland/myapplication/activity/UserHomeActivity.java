@@ -217,7 +217,7 @@ public class UserHomeActivity extends Activity {
 //                String userName = userInfo.getPerson().getNick_name();
 //                String userPic = userInfo.getPerson().getSelf_avatar_path();
 //                String hxIdFrom;
-//                if (Constants.HX_DEV_CONFIG) {
+//                if (Constants.DEV_CONFIG) {
 //                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
 //                } else {
 //                    hxIdFrom = userInfo.getPerson().getMember_no();

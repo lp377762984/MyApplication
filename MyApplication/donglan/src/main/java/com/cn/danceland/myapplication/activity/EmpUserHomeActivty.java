@@ -91,7 +91,7 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
     private void initData() {
         queryUserInfo(person_id);
         queryPingfen(employee_id, branch_id);
-        queryPingJia(employee_id, employee_id);
+        queryPingJia(employee_id, branch_id);
         queryZzrz(person_id);
     }
 

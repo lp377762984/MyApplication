@@ -3,25 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:background="@color/color_white"
         android:orientation="horizontal">
 
-        <com.cn.danceland.myapplication.view.XCRoundRectImageView
-            android:id="@+id/iv_card"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+
+            android:layout_width="145dp"
+            android:layout_height="93dp"
             android:layout_gravity="center"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/img_club_card" />
+            android:layout_marginTop="10dp">
+
+            <com.cn.danceland.myapplication.view.XCRoundRectImageView
+                android:id="@+id/iv_card"
+                android:layout_width="145dp"
+                android:layout_height="93dp"
+
+                android:layout_gravity="center"
+                android:src="@drawable/img_club_card" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_cardname1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="金卡"
+                    android:textColor="@color/color_dl_yellow"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_price1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="￥1580"
+                    android:textColor="#fff"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@id/tv_branch_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,12 +83,12 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="卡种："
-                    android:textColor="#333333"
-                    android:textSize="16sp" />
+                <!--         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:text="卡种："
+                             android:textColor="#333333"
+                             android:textSize="16sp" />-->
 
                 <TextView
                     android:id="@+id/tv_cardname"
@@ -61,7 +108,7 @@
                 android:layout_marginTop="5dp"
                 android:text="计次卡"
                 android:textColor="#333333"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <!--     <TextView
                  android:id="@+id/tv_more"
@@ -82,7 +129,7 @@
                 android:layout_marginTop="5dp"
                 android:text="次数：100次"
                 android:textColor="#444444"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:visibility="gone" />
 
             <TextView
@@ -92,7 +139,7 @@
                 android:layout_marginTop="5dp"
                 android:text="时间：有效期365天"
                 android:textColor="#444444"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -107,25 +154,37 @@
                 android:textColor="#333"
                 android:textSize="16sp" />
 -->
-                <TextView
-                    android:id="@+id/tv_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="￥1580"
-                    android:textColor="#333"
-                    android:textSize="16sp" />
             </LinearLayout>
 
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
             <TextView
-                android:layout_width="100dp"
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="￥1580"
+
+                android:textColor="@color/color_dl_yellow"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="60dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/btn_bg_selector"
                 android:gravity="center"
-                android:text="立即购买"
+                android:text="购买"
                 android:textColor="#fff"
                 android:textSize="16sp" />
 

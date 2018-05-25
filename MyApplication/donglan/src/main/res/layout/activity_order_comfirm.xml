@@ -45,12 +45,37 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="订单详情"
+                    android:textColor="#333"
+                    android:textSize="16sp"
+
+                    />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/color_dl_yellow" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
                 android:orientation="vertical">
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -140,27 +165,27 @@
                         android:textColor="#333333" />
                 </LinearLayout>
 
-             <!--   <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                <!--   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="5dp"
+                       android:orientation="horizontal"
+                       android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="优惠金额："
-                        android:textColor="#333333" />
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_marginLeft="10dp"
+                           android:text="优惠金额："
+                           android:textColor="#333333" />
 
-                    <TextView
-                        android:id="@+id/tv_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="#333333" />
-                </LinearLayout>-->
+                       <TextView
+                           android:id="@+id/tv_number"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text=""
+                           android:textColor="#333333" />
+                   </LinearLayout>-->
 
 
                 <LinearLayout
@@ -240,38 +265,53 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/bg_radiobtn"
                     android:layout_weight="1"
-                    android:checked="true"
-                    android:text="本人购买"
+                    android:background="@drawable/bg_radiobtn"
                     android:button="@null"
+                    android:checked="true"
                     android:gravity="center"
+                    android:text="本人购买"
                     android:textColor="#333333" />
 
                 <RadioButton
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/bg_radiobtn"
                     android:id="@+id/rbtn_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:text="为他人购买"
+                    android:background="@drawable/bg_radiobtn"
                     android:button="@null"
                     android:gravity="center"
+                    android:text="为他人购买"
                     android:textColor="#333333" />
             </RadioGroup>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:background="#fff"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:text="完善信息"
-                android:textColor="#999" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="完善信息"
+                    android:textColor="#333"
+                    android:textSize="16sp"
+
+                    />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/color_dl_yellow" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -434,17 +474,28 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:background="#fff">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="支付方式" />
+                    android:text="支付方式"
+                    android:textColor="#333"
+                    android:textSize="16sp"
+
+                    />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/color_dl_yellow" />
             </LinearLayout>
 
             <View
@@ -574,19 +625,37 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#fff"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="商品说明:"
-                    android:textColor="#333333" />
+                    android:text="产品说明"
+                    android:textColor="#333"
+                    android:textSize="16sp"
+
+                    />
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/color_dl_yellow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:background="#fff"
+                android:orientation="vertical">
+
 
                 <TextView
                     android:id="@+id/tv_explain"

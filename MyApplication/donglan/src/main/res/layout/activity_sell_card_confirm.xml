@@ -38,30 +38,77 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <com.cn.danceland.myapplication.view.XCRoundRectImageView
-            android:id="@+id/iv_card"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/img_club_card" />
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="187dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp">
+
+            <com.cn.danceland.myapplication.view.XCRoundRectImageView
+                android:id="@+id/iv_card"
+                android:layout_width="300dp"
+                android:layout_height="187dp"
+
+                android:layout_gravity="center"
+                android:src="@drawable/img_club_card" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_cardname1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="30dp"
+                    android:layout_weight="1"
+                    android:text="金卡"
+                    android:textColor="@color/color_dl_yellow"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_price1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="￥1580"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_branch_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+
                 android:orientation="horizontal">
 
                 <TextView
@@ -435,6 +482,7 @@
         android:textSize="12sp" />
 
     <TextView
+        android:layout_marginTop="2dp"
         android:layout_width="50dp"
         android:layout_height="2dp"
         android:layout_marginLeft="10dp"

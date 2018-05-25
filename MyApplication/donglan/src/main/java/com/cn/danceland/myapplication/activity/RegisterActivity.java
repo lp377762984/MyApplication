@@ -218,7 +218,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    if (Constants.HX_DEV_CONFIG){
+                    if (Constants.DEV_CONFIG){
                         ToastUtils.showToastLong("验证码是："
                                 + smsCode);
                     }
@@ -336,7 +336,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
                     //    ToastUtils.showToastShort("登录成功");
-//                    if (Constants.HX_DEV_CONFIG) {//判断是否是开发环境
+//                    if (Constants.DEV_CONFIG) {//判断是否是开发环境
 //                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
 //                    } else {
 //                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);

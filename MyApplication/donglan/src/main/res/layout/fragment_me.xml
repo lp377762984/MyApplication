@@ -22,7 +22,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_man" />
+               />
 
             <ImageView
 
@@ -41,7 +41,7 @@
                 android:layout_above="@id/ll_01"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="40dp"
-                android:textColor="#999999"
+                android:textColor="#333"
                 android:textSize="14sp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
