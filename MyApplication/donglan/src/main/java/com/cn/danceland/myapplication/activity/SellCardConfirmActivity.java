@@ -149,6 +149,9 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         TextView tv_time = findViewById(R.id.tv_time);
         TextView tv_price = findViewById(R.id.tv_price);
         TextView tv_cardtype = findViewById(R.id.tv_cardtype);
+        TextView tv_branch_name = findViewById(R.id.tv_branch_name);
+        TextView tv_price1 = findViewById(R.id.tv_price1);
+        TextView tv_cardname1 = findViewById(R.id.tv_cardname1);
         tv_shuoming = findViewById(R.id.tv_shuoming);
         XCRoundRectImageView iv_card = findViewById(R.id.iv_card);
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
@@ -166,7 +169,10 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
 
 
         tv_name.setText(CardsInfo.getName());
+        tv_cardname1.setText(CardsInfo.getName());
         tv_price.setText("售价：" + PriceUtils.formatPrice2String(CardsInfo.getPrice()));
+        tv_price1.setText(PriceUtils.formatPrice2String(CardsInfo.getPrice()));
+        tv_branch_name.setText(CardsInfo.getBranch_name());
         if (!TextUtils.isEmpty(CardsInfo.getTotal_count())) {
             tv_number.setText("次数：" + CardsInfo.getTotal_count() + "次");
             tv_number.setVisibility(View.VISIBLE);

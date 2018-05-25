@@ -191,7 +191,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    if (Constants.HX_DEV_CONFIG){
+                    if (Constants.DEV_CONFIG){
                         ToastUtils.showToastLong("验证码是："
                                 + smsCode);
                     }
@@ -251,7 +251,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
 //                    //登录环信
-//                    if(Constants.HX_DEV_CONFIG){//判断是否是开发环境
+//                    if(Constants.DEV_CONFIG){//判断是否是开发环境
 //                        login_hx("dev"+data.getPerson().getMember_no(),"dev" +data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
 //                    }else {
 //                        login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);

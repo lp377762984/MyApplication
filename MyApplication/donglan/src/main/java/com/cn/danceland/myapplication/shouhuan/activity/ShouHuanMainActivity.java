@@ -211,8 +211,8 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 
                             break;
                         case 11:
-                            manager.setSyncData(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
 
+                            manager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000);
                             break;
                         case 12://睡眠数据
                             manager.setSyncSleepData(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
@@ -469,6 +469,9 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                     LogUtil.i(heartRate.toString());
                     heartRateHelper.insert(heartRate);
 
+                }
+                if (datas.get(4) == 0x51 && datas.size() != 13){
+                    LogUtil.i(datas.toString());
                 }
 
 

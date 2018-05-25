@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.EmpUserHomeActivty;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyConsumeActivity;
@@ -279,7 +278,7 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.iv_top_bg:
 
-              startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
+           //   startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
                 break;
             case R.id.ll_my_xiaofei:
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));

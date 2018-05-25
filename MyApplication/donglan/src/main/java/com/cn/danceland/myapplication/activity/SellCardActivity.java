@@ -170,6 +170,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
                 viewHolder.tv_price = view.findViewById(R.id.tv_price);
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
                 viewHolder.iv_card = view.findViewById(R.id.iv_card);
+                viewHolder.tv_price1 = view.findViewById(R.id.tv_price1);
+                viewHolder.tv_branch_name = view.findViewById(R.id.tv_branch_name);
+                viewHolder.tv_cardname1 = view.findViewById(R.id.tv_cardname1);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
@@ -183,7 +186,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                viewHolder.tv_cardtype.setText("卡类型：计次卡（" + sellCardsInfoBean.getData().get(i).getTotal_count() + "次）");
+              //  viewHolder.tv_cardtype.setText("卡类型：计次卡（" + sellCardsInfoBean.getData().get(i).getTotal_count() + "次）");
             }
             if (sellCardsInfoBean.getData().get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");
@@ -191,7 +194,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
 
 
             viewHolder.tv_name.setText(sellCardsInfoBean.getData().get(i).getName());
-            viewHolder.tv_price.setText("售价：" + PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice()));
+            viewHolder.tv_cardname1.setText(sellCardsInfoBean.getData().get(i).getName());
+            viewHolder.tv_price.setText(  PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice())+"元");
+            viewHolder.tv_price1.setText(  PriceUtils.formatPrice2String(sellCardsInfoBean.getData().get(i).getPrice())+"元");
             if (!TextUtils.isEmpty(sellCardsInfoBean.getData().get(i).getTotal_count())) {
                 viewHolder.tv_number.setText("次数：" + sellCardsInfoBean.getData().get(i).getTotal_count() + "次");
                 viewHolder.tv_number.setVisibility(View.VISIBLE);
@@ -200,12 +205,12 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             }
 
             if (sellCardsInfoBean.getData().get(i).getTime_unit() == 1) {
-                viewHolder.tv_time.setText("使用时间：" + sellCardsInfoBean.getData().get(i).getTime_value() + "年");
+                viewHolder.tv_time.setText("有效期：" + sellCardsInfoBean.getData().get(i).getTime_value() + "年");
             }
             if (sellCardsInfoBean.getData().get(i).getTime_unit() == 2) {
-                viewHolder.tv_time.setText("使用时间：" + sellCardsInfoBean.getData().get(i).getTime_value() + "月");
+                viewHolder.tv_time.setText("有效期：" + sellCardsInfoBean.getData().get(i).getTime_value() + "月");
             }
-
+            viewHolder.tv_branch_name.setText(sellCardsInfoBean.getData().get(i).getBranch_name());
 
 
             return view;
@@ -217,6 +222,9 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             TextView tv_price;
             TextView tv_number;
             TextView tv_time;
+            TextView tv_price1;
+            TextView tv_branch_name;
+            TextView tv_cardname1;
             TextView tv_cardtype;
             XCRoundRectImageView iv_card;
         }

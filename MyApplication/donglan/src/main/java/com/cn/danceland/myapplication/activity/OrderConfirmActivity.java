@@ -179,7 +179,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Constants.HX_DEV_CONFIG){
+        if (Constants.DEV_CONFIG){
             EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         }
 
