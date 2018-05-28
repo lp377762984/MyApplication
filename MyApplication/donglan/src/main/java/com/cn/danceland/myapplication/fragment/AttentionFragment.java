@@ -313,6 +313,7 @@ public class AttentionFragment extends BaseFragment {
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
         pullToRefresh.getRefreshableView().setHeaderDividersEnabled(false);
         pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
+        pullToRefresh.getRefreshableView().setEmptyView(rl_no_info);
         init();
 
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {

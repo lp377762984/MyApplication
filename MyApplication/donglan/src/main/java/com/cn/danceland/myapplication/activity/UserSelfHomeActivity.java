@@ -65,6 +65,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     private ImageView iv_sex;
     RxShineButton rx_guangzhu;
     private ImageView iv_guanzhu;
+    private TextView tv_sign;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         //  iv_guanzhu = findViewById(R.id.iv_guanzhu);
         //   iv_guanzhu.setOnClickListener(this);
         tv_hobby = findViewById(R.id.tv_hobby);
+        tv_sign = findViewById(R.id.tv_sign);
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_edit).setVisibility(View.VISIBLE);
@@ -155,6 +157,9 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 
         if (!TextUtils.isEmpty(userInfo.getPerson().getHobby())) {
             tv_hobby.setText(userInfo.getPerson().getHobby());
+        }
+        if (!TextUtils.isEmpty(userInfo.getPerson().getSign())) {
+            tv_sign.setText(userInfo.getPerson().getSign());
         }
 
         if (TextUtils.equals(userInfo.getPerson().getGender(), "1")) {
