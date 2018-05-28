@@ -9,12 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <com.cn.danceland.myapplication.view.XCRoundRectImageView
             android:id="@+id/iv_card"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
+            android:layout_width="145dp"
+            android:layout_height="93dp"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:src="@drawable/img_club_card" />

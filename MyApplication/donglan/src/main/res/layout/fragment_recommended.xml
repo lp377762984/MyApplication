@@ -6,7 +6,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#000"/>
+        android:background="#eaeaea"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

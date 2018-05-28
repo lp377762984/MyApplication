@@ -12,8 +12,8 @@
         android:orientation="horizontal">
         <ImageView
             android:layout_marginLeft="10dp"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
+            android:layout_width="145dp"
+            android:layout_height="93dp"
             android:layout_centerInParent="true"
             android:src="@drawable/img_club_card" />
         <LinearLayout
