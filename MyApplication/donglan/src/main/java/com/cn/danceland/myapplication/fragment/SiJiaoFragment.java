@@ -653,14 +653,14 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder1.tv_pingfen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //if(list.get(position).getStatus()==4){
+                    if(list.get(position).getStatus()==4){
                     if("2".equals(course_category)){
                         startActivity(new Intent(mActivity,SmallTuankeDetailActivity.class).putExtra("record",list.get(position)));
                     }else{
                         startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item",list.get(position)).
                                 putExtra("course_category",course_category).putExtra("evaluate_id",list.get(position).getEvaluate_id()));
                     }
-                    //}
+                    }
                 }
             });
 

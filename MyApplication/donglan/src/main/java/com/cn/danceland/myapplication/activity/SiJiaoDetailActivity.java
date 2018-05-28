@@ -93,7 +93,6 @@ public class SiJiaoDetailActivity extends Activity {
     ArrayList<String> yuyueList;
     ArrayList<String> yuyueStartList;
     ArrayList<Integer> index,indexF,indexS;
-    boolean click=true;
     //int status=999;//1:等待对方确认,2:预约成功,3:上课中,4:已结束,5:待评分,6:已评分
     String weekDay;
     String role;
@@ -102,6 +101,7 @@ public class SiJiaoDetailActivity extends Activity {
     ArrayList<Long> startMillArr;
     ArrayList<Integer> requestStatusArr;
     Data data;
+    boolean isYuYue;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -228,7 +228,7 @@ public class SiJiaoDetailActivity extends Activity {
         list_2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(click){
+                if(!isYuYue){
                     //startActivity(new Intent(SiJiaoDetailActivity.this,PingJiaActivity.class).putExtra("item",item));
                     showTime();
                 }else{
@@ -278,8 +278,15 @@ public class SiJiaoDetailActivity extends Activity {
                     }
 
                 }
+                String[] split;
+                if(pos == 999){
+                    pos = 0;
+                    split = timeList.get(0).split(":");
+                }else{
+                    split  = timeList.get(pos).split(":");
+                }
 
-                String[] split = timeList.get(pos).split(":");
+
                 Long start=null,end=null;
                 if(split.length>=2) {
                     if (split[1].equals("00")) {
@@ -322,10 +329,11 @@ public class SiJiaoDetailActivity extends Activity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI,s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                LogUtil.e("zzf",jsonObject.toString());
                 TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
                 List<TimeAxisBean.Data> data = timeAxisBean.getData();
-                SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
-                String myYuYueString = myYuYue.getString(startTime,null);
+//                SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
+//                String myYuYueString = myYuYue.getString(startTime,null);
 
                 if(data!=null){
                     for(int i=0;i<data.size();i++){
@@ -385,6 +393,11 @@ public class SiJiaoDetailActivity extends Activity {
                     if(data!=null){
                         List<SiJiaoRecordBean.Content> content = data.getContent();
                         if(content!=null){
+                            if(content.size()>0){
+                                isYuYue = true;
+                            }else{
+                                isYuYue = false;
+                            }
                             for(int i=0;i<content.size();i++){
                                 Integer start_time = content.get(i).getStart_time();
                                 setTimeLine(content.get(i).getStatus(),start_time*60000);
@@ -425,6 +438,8 @@ public class SiJiaoDetailActivity extends Activity {
                         }
 
                     }
+                }else{
+                    isYuYue = false;
                 }
 
 

@@ -55,6 +55,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
@@ -749,7 +750,7 @@ public class MyProActivity extends Activity {
             dialogTitleIden.setVisibility(View.VISIBLE);
         }
         //normalDialog.setTitle("编辑昵称");
-        final EmojiconEditText ed = dialogView.findViewById(R.id.edit_name);
+        final ContainsEmojiEditText ed = dialogView.findViewById(R.id.edit_name);
         if (i==1){
             ed.setInputType(InputType.TYPE_CLASS_NUMBER);
         }

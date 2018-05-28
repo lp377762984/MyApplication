@@ -34,6 +34,7 @@
             android:layout_marginRight="15dp"
             android:text="时间"
             android:textSize="18sp"
+            android:textColor="@color/color_dl_yellow"
             android:layout_centerVertical="true"
             />
 
