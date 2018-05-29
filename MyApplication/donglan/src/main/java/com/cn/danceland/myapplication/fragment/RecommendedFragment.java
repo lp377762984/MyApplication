@@ -44,6 +44,8 @@ public class RecommendedFragment extends BaseFragment {
     private List<RequstRecommendBean.Data> dataList = new ArrayList<>();
     private Myadapter myadapter = new Myadapter();
     private StrBean strBean1;
+    private ImageView iv_error;
+    private TextView tv_error;
 
     @Override
     public View initViews() {
@@ -51,9 +53,9 @@ public class RecommendedFragment extends BaseFragment {
 
         ListView listView = v.findViewById(R.id.listview);
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error14);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        iv_error = listEmptyView.findViewById(R.id.iv_error);
+        iv_error.setImageResource(R.drawable.img_error14);
         tv_error.setText("还没有朋友推荐您");
         listView.setEmptyView(listEmptyView);
 
@@ -207,8 +209,9 @@ final Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                ToastUtils.showToastShort(volleyError.toString());
-
+               // ToastUtils.showToastShort(volleyError.toString());
+                iv_error.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

@@ -71,6 +71,8 @@ public class AttentionFragment extends BaseFragment {
     private boolean isEnd = false;//是否没有数据了 默认值false
     private Data userInfo;
     private RelativeLayout rl_no_info;
+    private ImageView imageView;
+    private TextView tv_error;
 
 
     @Override
@@ -300,8 +302,8 @@ public class AttentionFragment extends BaseFragment {
 //        }
 
         View    listEmptyView= v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error2);
         tv_error.setText("您还没有关注的人，去精选动态里关注一下吧");
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
@@ -618,6 +620,9 @@ public class AttentionFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("查看网络连接");
                 dialog.dismiss();
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
+
             }
         }) {
             @Override
@@ -687,6 +692,8 @@ public class AttentionFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("查看网络连接");
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

@@ -51,6 +51,8 @@ public class RecommendFragment extends BaseFragment {
     private List<RequstRecommendBean.Data> dataList=new ArrayList<>();
     private  Myadapter myadapter=new Myadapter();
     private StrBean strBean1;
+    private TextView tv_error;
+    private ImageView imageView;
 
     @Override
     public View initViews() {
@@ -58,8 +60,8 @@ public class RecommendFragment extends BaseFragment {
         v.findViewById(R.id.btn_add).setOnClickListener(this);
         ListView listView = v.findViewById(R.id.listview);
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error14);
         tv_error.setText("您还没有推荐过任何人，点击右下角推荐好友");
         listView.setEmptyView(listEmptyView);
@@ -240,8 +242,9 @@ public class RecommendFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                ToastUtils.showToastShort(volleyError.toString());
-
+               // ToastUtils.showToastShort(volleyError.toString());
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

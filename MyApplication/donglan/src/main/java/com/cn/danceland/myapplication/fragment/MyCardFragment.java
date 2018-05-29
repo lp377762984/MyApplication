@@ -45,15 +45,19 @@ public class MyCardFragment extends BaseFragment {
     private List<RequestMyCardListBean.Data> mCardList = new ArrayList<>();
     private MyListViewAdapter myListViewAdapter;
     Gson gson = new Gson();
+    private ImageView iv_error;
+    private TextView tv_error;
+
     @Override
     public View initViews() {
         View v=View.inflate(mActivity,R.layout.fragment_my_card,null);
 
         mListView = v.findViewById(R.id.listview);
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error3);
+
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        iv_error = listEmptyView.findViewById(R.id.iv_error);
+        iv_error.setImageResource(R.drawable.img_error3);
         tv_error.setText("请您先购买会员卡");
         mListView.setEmptyView(listEmptyView);
 
@@ -95,7 +99,8 @@ public class MyCardFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                iv_error.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

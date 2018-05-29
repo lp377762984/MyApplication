@@ -66,14 +66,17 @@ public class UpcomingMatterFragment extends BaseFragment {
     private String id;
     private String done="0";//0是未办，1是已办
     private String auth="1";
+    private TextView tv_error;
+    private ImageView imageView;
+
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_upcoming_matter_list, null);
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
         myListAatapter = new MyListAatapter();
         mListView.setAdapter(myListAatapter);
@@ -334,8 +337,9 @@ public class UpcomingMatterFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                ToastUtils.showToastShort(volleyError.toString());
-
+                //ToastUtils.showToastShort(volleyError.toString());
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

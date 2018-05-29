@@ -229,10 +229,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         }
         if (data.size() == 0) {
             viewHolder.no_ifo.setVisibility(View.VISIBLE);
-            TextView textView=viewHolder.no_ifo.findViewById(R.id.tv_error);
-
-
-            textView.setText("没有发布动态");
+            TextView tv_error=viewHolder.no_ifo.findViewById(R.id.tv_error);
+            tv_error.setText("没有发布动态");
             viewHolder.ll_item.setVisibility(View.GONE);
         } else {
             viewHolder.no_ifo.setVisibility(View.GONE);

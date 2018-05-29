@@ -56,6 +56,8 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
     private int mCurrentPage = 1;//起始请求页
     private boolean isEnd = false;
     private String id;
+    private TextView tv_error;
+    private ImageView imageView;
 
     @Override
     public View initViews() {
@@ -64,8 +66,8 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
         mListView = v.findViewById(R.id.pullToRefresh);
 
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
         myListAatapter = new MyListAatapter();
         mListView.setAdapter(myListAatapter);
@@ -279,8 +281,9 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                ToastUtils.showToastShort(volleyError.toString());
-
+              //  ToastUtils.showToastShort(volleyError.toString());
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

@@ -67,6 +67,8 @@ public class SelectionFragment extends BaseFragment {
     private DynHeadviewRecylerViewAdapter mRecylerViewAdapter;
     private View headView;
     private boolean isEnd = false;//是否没有数据了 默认值false
+    private TextView tv_error;
+    private ImageView imageView;
 
 
     @Override
@@ -304,8 +306,8 @@ public class SelectionFragment extends BaseFragment {
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
 
         View    listEmptyView= v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error2);
         tv_error.setText("精选动态无内容");
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
@@ -517,6 +519,7 @@ public class SelectionFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
+
             }
         }) {
             @Override
@@ -578,6 +581,8 @@ public class SelectionFragment extends BaseFragment {
                 ToastUtils.showToastShort("查看网络连接");
                 dialog.dismiss();
                 pullToRefresh.onRefreshComplete();
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override
@@ -648,6 +653,8 @@ public class SelectionFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("查看网络连接");
                 pullToRefresh.onRefreshComplete();
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

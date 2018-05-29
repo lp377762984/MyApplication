@@ -69,6 +69,8 @@ public class RevisitListFragment extends BaseFragment {
     private boolean isEnd = false;
     private StrBean strBean;
     private String auth;
+    private TextView tv_error;
+    private ImageView imageView;
 
 
     @Override
@@ -171,8 +173,8 @@ public class RevisitListFragment extends BaseFragment {
         v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
         View    listEmptyView=v.findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
         myListAatapter = new MyListAatapter();
         mListView.setAdapter(myListAatapter);
@@ -660,7 +662,8 @@ public class RevisitListFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                ToastUtils.showToastShort(volleyError.toString());
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
 
             }
         }) {

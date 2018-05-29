@@ -16,7 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.UserListviewAdapter;
@@ -55,6 +54,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
     private boolean isdyn = false;
     private TextView tv_tiltle;
     int type = 1;//1是关注，2是粉丝，3是点赞。默认是1
+    private ImageView imageView;
+    private TextView tv_error;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,8 +103,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         pullToRefresh = findViewById(R.id.pullToRefresh);
      //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
         View    listEmptyView=findViewById(R.id.rl_no_info);
-        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error5);
         switch (type) {
             case 1:
@@ -290,6 +291,9 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
+
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
 
@@ -422,6 +426,9 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
+
             }
         }) {
 
@@ -434,70 +441,70 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             }
         };
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_FANS_USER_LIST_MSG, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                dialog.dismiss();
-                Gson gson = new Gson();
-
-                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
-                LogUtil.i(UserListBean.toString());
-                if (UserListBean.getSuccess()) {
-                    data = UserListBean.getData().getItems();
-                    // requsetDynInfoBean.getData().getItems().toString();
-
-
-                    if (data.size() > 0) {
-                        if (data.size() < 20) {
-                            setEnd();
-                        }
-
-
-                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
-                        mListviewAdapter.notifyDataSetChanged();
-
-
-                        mCurrentPage = mCurrentPage + 1;
-                    } else {
-                        ToastUtils.showToastShort("到底啦");
-                        setEnd();
-                    }
-                } else {
-                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
-                }
-
-
-//                Message msg =Message.obtain();
-//                msg.obj = data;
-//                msg.what=1; //标志消息的标志
-//                handler.sendMessage(msg);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                dialog.dismiss();
-                LogUtil.i(volleyError.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("userId", userId);//用户id
-                map.put("page", page + "");//页数
-                return map;
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-
-        };
+//        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_FANS_USER_LIST_MSG, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//                dialog.dismiss();
+//                Gson gson = new Gson();
+//
+//                UserListBean = gson.fromJson(s, RequsetUserListBean.class);
+//                LogUtil.i(UserListBean.toString());
+//                if (UserListBean.getSuccess()) {
+//                    data = UserListBean.getData().getItems();
+//                    // requsetDynInfoBean.getData().getItems().toString();
+//
+//
+//                    if (data.size() > 0) {
+//                        if (data.size() < 20) {
+//                            setEnd();
+//                        }
+//
+//
+//                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
+//                        mListviewAdapter.notifyDataSetChanged();
+//
+//
+//                        mCurrentPage = mCurrentPage + 1;
+//                    } else {
+//                        ToastUtils.showToastShort("到底啦");
+//                        setEnd();
+//                    }
+//                } else {
+//                    ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());
+//                }
+//
+//
+////                Message msg =Message.obtain();
+////                msg.obj = data;
+////                msg.what=1; //标志消息的标志
+////                handler.sendMessage(msg);
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                dialog.dismiss();
+//                LogUtil.i(volleyError.toString());
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<>();
+//                map.put("userId", userId);//用户id
+//                map.put("page", page + "");//页数
+//                return map;
+//            }
+//
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> hm = new HashMap<String, String>();
+//                String token = SPUtils.getString(Constants.MY_TOKEN, "");
+//                hm.put("Authorization", token);
+//                return hm;
+//            }
+//
+//        };
         MyApplication.getHttpQueues().add(jsonRequest);
 
     }
@@ -555,6 +562,9 @@ public class UserListActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
+
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
 
