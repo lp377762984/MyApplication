@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.MyErrorLayout;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,11 +45,13 @@ public class SellStoreCardFragment extends BaseFragment {
     private SimpleDateFormat sdf;
     Data info;
     TextView tv_mystore;
+    MyErrorLayout my_error;
 
     @Override
     public View initViews() {
         View view = View.inflate(mActivity, R.layout.sellstorecard, null);
         lv_storecard = view.findViewById(R.id.lv_storecard);
+        my_error = view.findViewById(R.id.my_error);
         initHost();
         queryList();
 

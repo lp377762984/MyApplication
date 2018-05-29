@@ -11,5 +11,12 @@
 
     </ListView>
 
+    <com.cn.danceland.myapplication.view.MyErrorLayout
+        android:id="@+id/my_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </com.cn.danceland.myapplication.view.MyErrorLayout>
 
 </RelativeLayout>
