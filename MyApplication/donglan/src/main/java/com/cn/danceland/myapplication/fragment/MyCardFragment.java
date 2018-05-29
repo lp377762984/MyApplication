@@ -146,7 +146,13 @@ public class MyCardFragment extends BaseFragment {
             }
             if (mCardList.get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                viewHolder.tv_cardtype.setText("卡类型：计次卡（剩余次数：" + mCardList.get(i).getTotal_count() + "次）");
+                if (Integer.parseInt(mCardList.get(i).getTotal_count())>0){
+                    viewHolder.tv_cardtype.setText("卡类型：计次卡（剩余次数：" + mCardList.get(i).getTotal_count() + "次）");
+                    viewHolder.btn_commit.setVisibility(View.VISIBLE);
+                }else {
+                    viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+                }
+
             }
             if (mCardList.get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");

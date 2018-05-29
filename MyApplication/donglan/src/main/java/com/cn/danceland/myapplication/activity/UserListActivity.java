@@ -101,6 +101,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         pullToRefresh = findViewById(R.id.pullToRefresh);
      //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
         View    listEmptyView=findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        tv_error.setText("还啥都奥时代和欧尼");
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
 
