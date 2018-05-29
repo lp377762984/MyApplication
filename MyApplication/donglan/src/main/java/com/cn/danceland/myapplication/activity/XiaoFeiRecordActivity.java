@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
@@ -47,6 +49,9 @@ public class XiaoFeiRecordActivity extends Activity {
     float allchongzhi,allxiaofei;
     TextView tv_leijichongzhi,tv_leijixiaofei;
     SharedPreferences bus_type;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +83,13 @@ public class XiaoFeiRecordActivity extends Activity {
         lv_xiaofei = findViewById(R.id.lv_xiaofei);
         tv_leijichongzhi = findViewById(R.id.tv_leijichongzhi);
         tv_leijixiaofei = findViewById(R.id.tv_leijixiaofei);
+
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error1).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("请先购买储值卡");
+        lv_xiaofei.setEmptyView(rl_error);
 
         xiaofei_back = findViewById(R.id.xiaofei_back);
         xiaofei_back.setOnClickListener(new View.OnClickListener() {

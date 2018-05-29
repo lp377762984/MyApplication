@@ -149,8 +149,19 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_email = findViewById(R.id.tv_email);
 
         if (mInfo.getPerson() != null) {
-            tv_weixin.setText(mInfo.getPerson().getWeichat_no());
-            tv_email.setText(mInfo.getPerson().getMail());
+            if(mInfo.getPerson().getWeichat_no()==null || "".equals(mInfo.getPerson().getWeichat_no())){
+                tv_weixin.setText("未绑定");
+            }else{
+                tv_weixin.setText(mInfo.getPerson().getWeichat_no());
+            }
+            if(mInfo.getPerson().getMail()==null || "".equals(mInfo.getPerson().getMail())){
+                tv_email.setText("未绑定");
+            }else{
+                tv_email.setText(mInfo.getPerson().getMail());
+            }
+        }else{
+            tv_weixin.setText("未绑定");
+            tv_email.setText("未绑定");
         }
 
         if (zoneArr.size() > 0) {

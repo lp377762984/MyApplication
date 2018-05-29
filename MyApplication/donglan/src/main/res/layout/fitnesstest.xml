@@ -34,19 +34,29 @@
             android:paddingRight="15dp"
             android:text="历史"
             android:textSize="16sp"
-            android:textColor="@color/color_white"
+            android:textColor="@color/color_dl_yellow"
             />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/no_data"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_fitness"
-        android:text="您还没有体测数据！"
-        android:gravity="center"
-        android:visibility="gone"
-        />
+        android:layout_below="@+id/rl_fitness">
+        <include
+            android:id="@+id/rl_error"
+            layout="@layout/no_info_layout"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/no_data"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/rl_fitness"-->
+        <!--android:text="您还没有体测数据！"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--/>-->
 
 
     <ScrollView

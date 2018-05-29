@@ -91,25 +91,25 @@ public class StoreTypeService {
 
 
 	/**
-	 * @方法说明:按条件查询储值卡类型列表
-	 **/
-	public void queryList() {
-		StoreTypeCond cond = new StoreTypeCond();
-		// TODO 准备查询条件
-		request.queryList(cond, new Response.Listener<JSONObject>() {
-			public void onResponse(JSONObject json) {
-				DLResult<List<StoreType>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<StoreType>>>() {
-				}.getType());
-				if (result.isSuccess()) {
-					List<StoreType> list = result.getData();
-					System.out.println(list);
-					// TODO 请求成功后的代码
-				} else {
-					ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
-				}
-			}
-		});
-	}
+//	 * @方法说明:按条件查询储值卡类型列表
+//	 **/
+//	public void queryList() {
+//		StoreTypeCond cond = new StoreTypeCond();
+//		// TODO 准备查询条件
+//		request.queryList(cond, new Response.Listener<JSONObject>() {
+//			public void onResponse(JSONObject json) {
+//				DLResult<List<StoreType>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<StoreType>>>() {
+//				}.getType());
+//				if (result.isSuccess()) {
+//					List<StoreType> list = result.getData();
+//					System.out.println(list);
+//					// TODO 请求成功后的代码
+//				} else {
+//					ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
+//				}
+//			}
+//		});
+//	}
 
 
 	/**

@@ -1,5 +1,10 @@
 package com.cn.danceland.myapplication.bean.store.storetype;
 
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +17,8 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.R;
 import com.google.gson.Gson;
 
 import com.cn.danceland.myapplication.MyApplication;
@@ -105,7 +112,7 @@ public class StoreTypeRequest {
 	/**
 	 * @方法说明:按条件查询储值卡类型列表
 	 **/
-	public void queryList(StoreTypeCond cond, Listener<JSONObject> listener) {
+	public void queryList(StoreTypeCond cond, Listener<JSONObject> listener, final RelativeLayout rl, final ImageView img, final TextView tv) {
 		JSONObject json = null;
 		try {
 			json = new JSONObject(new Gson().toJson(cond));
@@ -115,6 +122,9 @@ public class StoreTypeRequest {
 		}
 		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
+				rl.setVisibility(View.VISIBLE);
+				img.setImageResource(R.drawable.img_error7);
+				tv.setText("网络异常");
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
 		}) {

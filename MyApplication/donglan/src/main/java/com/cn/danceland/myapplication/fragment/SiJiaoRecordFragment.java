@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -54,11 +56,19 @@ public class SiJiaoRecordFragment extends BaseFragment {
     String startTime,role,auth;
     //GradientDrawable background;
     List<SiJiaoRecordBean.Content> contentList;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     public View initViews() {
 
         inflate = View.inflate(mActivity, R.layout.tuanke, null);//界面类似，使用团课列表布局
+        rl_error = inflate.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还没有预约私教");
+
 
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         contentList = new ArrayList<>();
@@ -192,7 +202,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     private void initView() {
         lv_tuanke = inflate.findViewById(R.id.lv_tuanke);
-
+        lv_tuanke.setEmptyView(rl_error);
 
     }
 

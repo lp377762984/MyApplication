@@ -10,9 +10,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
@@ -44,7 +46,9 @@ public class AdviseRecordActivity extends Activity {
     Data data;
     List<FeedBack> list;
     ImageView fankui_back;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,13 @@ public class AdviseRecordActivity extends Activity {
                 startActivity(new Intent(AdviseRecordActivity.this,AdviseDetailActivity.class).putExtra("id",list.get(position).getId()));
             }
         });
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还没有反馈任何信息");
 
+        advise_record_lv.setEmptyView(rl_error);
         fankui_back = findViewById(R.id.fankui_back);
         fankui_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +109,7 @@ public class AdviseRecordActivity extends Activity {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }
             }
-        });
+        },rl_error,iv_error,tv_error);
     }
 
 

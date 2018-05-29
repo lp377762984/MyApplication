@@ -1,5 +1,10 @@
 package com.cn.danceland.myapplication.bean.feedback;
 
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +17,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.google.gson.Gson;
 
@@ -106,7 +112,7 @@ public class FeedBackRequest {
 	/**
 	 * @方法说明:按条件查询意见反馈列表
 	 **/
-	public void queryList(FeedBackCond cond, Listener<JSONObject> listener) {
+	public void queryList(FeedBackCond cond, Listener<JSONObject> listener, final RelativeLayout rl, final ImageView img, final TextView tv) {
 		JSONObject json = null;
 		try {
 			json = new JSONObject(new Gson().toJson(cond));
@@ -117,6 +123,9 @@ public class FeedBackRequest {
 		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "feedBack/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
+				rl.setVisibility(View.VISIBLE);
+				img.setImageResource(R.drawable.img_error7);
+				tv.setText("网络异常");
 			}
 		}) {
 			public Map<String, String> getHeaders() throws AuthFailureError {

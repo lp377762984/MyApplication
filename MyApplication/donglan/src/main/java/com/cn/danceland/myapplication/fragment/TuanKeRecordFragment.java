@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -47,6 +49,9 @@ public class TuanKeRecordFragment extends BaseFragment {
     Gson gson;
     ListView lv_tuanke;
     String startTime;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     public View initViews() {
 
@@ -110,7 +115,13 @@ public class TuanKeRecordFragment extends BaseFragment {
     private void initView() {
 
         lv_tuanke = view.findViewById(R.id.lv_tuanke);
+        rl_error = view.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还没有预约团课");
 
+        lv_tuanke.setEmptyView(rl_error);
     }
 
     @Override
