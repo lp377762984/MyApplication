@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -65,6 +66,9 @@ public class FitnessTestActivity extends Activity {
     String xingbie,height,weight;
     ProgressBar base_line1,base_line2,base_line3,base_line4,base_line5,base_line6,base_line7,base_line8;
     int width,low,normal,high;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,23 +122,23 @@ public class FitnessTestActivity extends Activity {
                             setData(data);
                         }else{
                             sv.setVisibility(View.GONE);
-                            no_data.setVisibility(View.VISIBLE);
+                            rl_error.setVisibility(View.VISIBLE);
                         }
                     }else{
                         sv.setVisibility(View.GONE);
-                        no_data.setVisibility(View.VISIBLE);
+                        rl_error.setVisibility(View.VISIBLE);
                     }
                 }else {
                     //noPie();
                     sv.setVisibility(View.GONE);
-                    no_data.setVisibility(View.VISIBLE);
+                    rl_error.setVisibility(View.VISIBLE);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 sv.setVisibility(View.GONE);
-                no_data.setVisibility(View.VISIBLE);
+                rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
             }
         }){
@@ -169,23 +173,23 @@ public class FitnessTestActivity extends Activity {
                             setData(data);
                         }else{
                             sv.setVisibility(View.GONE);
-                            no_data.setVisibility(View.VISIBLE);
+                            rl_error.setVisibility(View.VISIBLE);
                         }
                     }else{
                         sv.setVisibility(View.GONE);
-                        no_data.setVisibility(View.VISIBLE);
+                        rl_error.setVisibility(View.VISIBLE);
                     }
                 }else {
                     //noPie();
                     sv.setVisibility(View.GONE);
-                    no_data.setVisibility(View.VISIBLE);
+                    rl_error.setVisibility(View.VISIBLE);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 sv.setVisibility(View.GONE);
-                no_data.setVisibility(View.VISIBLE);
+                rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
             }
         }){
@@ -475,7 +479,12 @@ public class FitnessTestActivity extends Activity {
     }
 
     private void initView() {
-        no_data = findViewById(R.id.no_data);
+        //no_data = findViewById(R.id.no_data);
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error13).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("请联系您的会籍或教练为您体测");
         sv = findViewById(R.id.sv);
         pie_chart = findViewById(R.id.pie_chart);
         fitness_back = findViewById(R.id.fitness_back);

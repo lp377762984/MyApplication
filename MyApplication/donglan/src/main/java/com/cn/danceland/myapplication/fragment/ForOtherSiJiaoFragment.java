@@ -3,7 +3,9 @@ package com.cn.danceland.myapplication.fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -11,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -35,13 +38,21 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
     Data personInfo;
     Gson gson;
     List<ForOtherListBean.Data> dataList;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.fragment_forother, null);
 
         lv_forother = inflate.findViewById(R.id.lv_forother);
+        rl_error = inflate.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还没有给他人送出私教");
 
+        lv_forother.setEmptyView(rl_error);
         personInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
         gson = new Gson();
@@ -67,7 +78,9 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                rl_error.setVisibility(View.VISIBLE);
+                tv_error.setText("网络异常");
+                Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
         }){
             @Override

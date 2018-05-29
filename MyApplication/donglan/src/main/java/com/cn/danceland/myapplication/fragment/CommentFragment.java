@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.MessageAdapter;
 import com.cn.danceland.myapplication.db.DBData;
@@ -26,11 +29,21 @@ public class CommentFragment extends BaseFragment {
     Bundle arguments;
     String type;
     TextView tv_no;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_comment,null);
         lv_message = v.findViewById(R.id.lv_message);
-        tv_no = v.findViewById(R.id.tv_no);
+        rl_error = v.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还未收到任何通知");
+
+        lv_message.setEmptyView(rl_error);
+        //tv_no = v.findViewById(R.id.tv_no);
         arguments = getArguments();
         initData();
         return v;
@@ -44,14 +57,17 @@ public class CommentFragment extends BaseFragment {
         messageList = dbData.getMessageList();
         if(messageList!=null&&messageList.size()>0){
             if("4".equals(type)){
-                tv_no.setVisibility(View.VISIBLE);
+                //tv_no.setVisibility(View.VISIBLE);
                 lv_message.setVisibility(View.GONE);
             }else{
-                tv_no.setVisibility(View.GONE);
+                //tv_no.setVisibility(View.GONE);
                 lv_message.setAdapter(new MessageAdapter(messageList,mActivity));
             }
         }else{
-            tv_no.setVisibility(View.VISIBLE);
+            rl_error.setVisibility(View.VISIBLE);
+            tv_error.setText("您还未收到任何通知");
+            Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
+            //tv_no.setVisibility(View.VISIBLE);
             lv_message.setVisibility(View.GONE);
         }
     }

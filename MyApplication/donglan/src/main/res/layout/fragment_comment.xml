@@ -7,14 +7,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>
-    <TextView
-        android:id="@+id/tv_no"
+    <!--<TextView-->
+        <!--android:id="@+id/tv_no"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:textSize="16sp"-->
+        <!--android:text="暂无消息"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--/>-->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:text="暂无消息"
-        android:gravity="center"
-        android:visibility="gone"
-        />
+        android:layout_below="@+id/history_title">
+        <include
+            android:id="@+id/rl_error"
+            layout="@layout/no_info_layout"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>

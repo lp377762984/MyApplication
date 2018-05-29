@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.EnvUtils;
@@ -66,6 +68,9 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
     public static final int SDK_PAY_FLAG = 0x1001;
     int page = 0,totalPages;
     ConsumeAdapter consumeAdapter;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
 
 
     private Handler mHandler = new Handler() {
@@ -177,7 +182,13 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                 }
             }
         });
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您还没有任何消费记录");
 
+        lv_consume.setEmptyView(rl_error);
 
         initData(page);
     }
@@ -301,6 +312,9 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
+                rl_error.setVisibility(View.VISIBLE);
+                tv_error.setText("网络异常");
+                Glide.with(MyConsumeActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
         }){
             @Override

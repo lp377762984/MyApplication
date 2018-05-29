@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.FitnessHistoryBean;
@@ -39,7 +41,9 @@ public class FitnessHistoryActivity extends Activity {
     String member_no;
     List<FitnessHistoryBean.Content> content;
     ImageView history_back;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +78,9 @@ public class FitnessHistoryActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                rl_error.setVisibility(View.VISIBLE);
+                tv_error.setText("网络异常");
+                Glide.with(FitnessHistoryActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
         }){
             @Override
@@ -110,7 +116,13 @@ public class FitnessHistoryActivity extends Activity {
                 }
             }
         });
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("暂无体测记录");
 
+        lv_history.setEmptyView(rl_error);
         history_back = findViewById(R.id.history_back);
         history_back.setOnClickListener(new View.OnClickListener() {
             @Override

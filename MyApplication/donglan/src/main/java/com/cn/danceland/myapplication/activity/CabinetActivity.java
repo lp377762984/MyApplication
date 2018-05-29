@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -16,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CabinetBean;
@@ -42,7 +44,9 @@ public class CabinetActivity extends Activity {
     CabinetBean cabinetBean;
     Gson gson;
     List<CabinetBean.Data> dataList;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +66,13 @@ public class CabinetActivity extends Activity {
         });
 
         cabinet_lv = findViewById(R.id.cabinet_lv);
+        rl_error = findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(this).load(R.drawable.img_error16).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("如需购买租柜，请到门店前台");
 
+        cabinet_lv.setEmptyView(rl_error);
         getData();
     }
 
@@ -82,7 +92,9 @@ public class CabinetActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                rl_error.setVisibility(View.VISIBLE);
+                tv_error.setText("网络异常");
+                Glide.with(CabinetActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
         }){
             @Override

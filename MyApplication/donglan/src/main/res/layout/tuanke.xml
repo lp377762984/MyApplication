@@ -11,5 +11,10 @@
 
     </com.cn.danceland.myapplication.utils.MyListView>
 
+    <include
+        android:id="@+id/rl_error"
+        layout="@layout/no_info_layout"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

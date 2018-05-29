@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CourseActivity;
@@ -69,6 +70,9 @@ public class SiJiaoFragment extends BaseFragment {
     MyListView mylist;
     View view;
     String startTime;
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
 
     @Override
     public View initViews() {
@@ -98,7 +102,13 @@ public class SiJiaoFragment extends BaseFragment {
                 return false;
             }
         });
+        rl_error = inflate.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("请先购买私教");
 
+        ex_lv.setEmptyView(rl_error);
         gson = new Gson();
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
@@ -128,7 +138,7 @@ public class SiJiaoFragment extends BaseFragment {
 
         //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        MyCourseConBean myCourseConBean = new MyCourseConBean();
+        final MyCourseConBean myCourseConBean = new MyCourseConBean();
         String url;
         if(info!=null){
             myCourseConBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
@@ -172,7 +182,9 @@ public class SiJiaoFragment extends BaseFragment {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     LogUtil.e("zzf",volleyError.toString());
-
+                    rl_error.setVisibility(View.VISIBLE);
+                    tv_error.setText("网络异常");
+                    Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
                 }
             }){
                 @Override

@@ -34,5 +34,16 @@
         android:layout_height="wrap_content">
 
     </ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/history_title">
+        <include
+            android:id="@+id/rl_error"
+            layout="@layout/no_info_layout"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
 
 </RelativeLayout>
