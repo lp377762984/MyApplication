@@ -4,52 +4,73 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:id="@+id/ll_item"
-    android:background="@drawable/bg_setting_item_selector"
     android:orientation="vertical">
+    <include layout="@layout/no_info_layout"
+        android:id="@+id/rl_no_info"
+        android:visibility="gone"
 
+        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/img_my_avatar" />
-
+        android:orientation="vertical"
+        android:id="@+id/ll_item"
+        android:background="@drawable/bg_setting_item_selector"
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_nickname"
-                android:layout_width="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/img_my_avatar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="昵称"
-                android:textColor="@color/dl_gery"
-                android:textSize="12sp" />
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2014-7-2 12:30:01"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="昵称"
+                    android:textColor="@color/dl_gery"
+                    android:textSize="12sp" />
 
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2014-7-2 12:30:01"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <!--    <io.github.rockerhieu.emojicon.EmojiconTextView
+        <!--    <io.github.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                emojicon:emojiconSize="20sp" />-->
+
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,24 +78,14 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
+            emojicon:emojiconSize="16sp"
+            android:gravity="center_vertical"
             android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈"
             android:textColor="#333333"
             android:textSize="14sp"
-            emojicon:emojiconSize="20sp" />-->
+            />
 
-    <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
-        android:id="@+id/tv_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        emojicon:emojiconSize="16sp"
-        android:gravity="center_vertical"
-        android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈"
-        android:textColor="#333333"
-        android:textSize="14sp"
-         />
+    </LinearLayout>
+
 
 </LinearLayout>

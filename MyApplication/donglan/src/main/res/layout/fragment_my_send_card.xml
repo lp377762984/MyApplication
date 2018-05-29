@@ -14,5 +14,9 @@
         android:layout_height="match_parent">
 
     </ListView>
+    <include layout="@layout/no_info_layout"
+        android:id="@+id/rl_no_info"
+        android:visibility="gone"
 
+        />
 </LinearLayout>

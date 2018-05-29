@@ -52,6 +52,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cn.danceland.myapplication.R.id.rl_no_info;
+
 
 /**
  * Created by shy on 2017/11/21 09:36
@@ -91,6 +93,9 @@ public class CommentListviewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if (data.size() == 0) {
+            return 1;
+        }
         return data.size();
     }
 
@@ -109,6 +114,8 @@ public class CommentListviewAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = null;
         if (view == null) {
+
+
             viewHolder = new ViewHolder();
             view = mInflater.inflate(R.layout.listview_item_comment, null);
             viewHolder.iv_avatar = view.findViewById(R.id.iv_avatar);
@@ -116,59 +123,74 @@ public class CommentListviewAdapter extends BaseAdapter {
             viewHolder.tv_time = view.findViewById(R.id.tv_time);
             viewHolder.tv_content = view.findViewById(R.id.tv_content);
             viewHolder.ll_item = view.findViewById(R.id.ll_item);
+            viewHolder.rl_no_info = view.findViewById(rl_no_info);
 
             view.setTag(viewHolder);
+
+
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(context)
-                .load(data.get(position).getSelfUrl())
-                .apply(options)
-                .into(viewHolder.iv_avatar);
-        viewHolder.tv_nickname.setText(data.get(position).getNickName());
-        viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getTime()));
 
 
-        if (!TextUtils.isEmpty(data.get(position).getReplyUser())) {
-            //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
-            int pos = position;
-            viewHolder.tv_content.setText(getClickableSpan(data.get(position).getReplyNickName(), data.get(position).getContent(), pos));
-            viewHolder.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
+        if (data.size() > 0 && viewHolder != null) {
+            viewHolder.ll_item.setVisibility(View.VISIBLE);
+            viewHolder.rl_no_info.setVisibility(View.GONE);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(context)
+                    .load(data.get(position).getSelfUrl())
+                    .apply(options)
+                    .into(viewHolder.iv_avatar);
+            viewHolder.tv_nickname.setText(data.get(position).getNickName());
+            viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getTime()));
+
+
+            if (!TextUtils.isEmpty(data.get(position).getReplyUser())) {
+                //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
+                int pos = position;
+                viewHolder.tv_content.setText(getClickableSpan(data.get(position).getReplyNickName(), data.get(position).getContent(), pos));
+                viewHolder.tv_content.setMovementMethod(LinkMovementMethod.getInstance());
+            } else {
+                //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
+                viewHolder.tv_content.setText(data.get(position).getContent());
+            }
+
+
+            // LogUtil.i(data.get(position).getContent()+"!!!!!!!!!!!!!!!!!!!");
+            viewHolder.tv_nickname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
+                }
+            });
+            viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
+                }
+            });
+
+            viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = position;
+                    if (TextUtils.equals(data.get(position).getReplyUserId(), SPUtils.getString(Constants.MY_USERID, null))) {
+                        //如果动态评论是自己发布的
+                        showListDialog_self(pos);
+                    } else {
+                        showListDialog(pos);
+                    }
+
+
+                }
+            });
         } else {
-            //   LogUtil.i("要回复的人的id="+data.get(position).getReplyUser());
-            viewHolder.tv_content.setText(data.get(position).getContent());
+            viewHolder.rl_no_info.setVisibility(View.VISIBLE);
+            TextView textView=viewHolder.rl_no_info.findViewById(R.id.tv_error);
+            textView.setText("没有人评论");
+            viewHolder.ll_item.setVisibility(View.GONE);
         }
 
-
-        // LogUtil.i(data.get(position).getContent()+"!!!!!!!!!!!!!!!!!!!");
-        viewHolder.tv_nickname.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
-            }
-        });
-        viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getReplyUserId()));
-            }
-        });
-
-        viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int pos = position;
-                if (TextUtils.equals(data.get(position).getReplyUserId(), SPUtils.getString(Constants.MY_USERID, null))) {
-                    //如果动态评论是自己发布的
-                    showListDialog_self(pos);
-                } else {
-                    showListDialog(pos);
-                }
-
-
-            }
-        });
 
         return view;
     }
@@ -179,6 +201,7 @@ public class CommentListviewAdapter extends BaseAdapter {
         TextView tv_time;//时间
         hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;//内容
         LinearLayout ll_item;
+        View rl_no_info;
     }
 
     private void showListDialog(final int pos) {
@@ -204,7 +227,7 @@ public class CommentListviewAdapter extends BaseAdapter {
 
                         break;
                     case 2:
-                       // jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2);
+                        // jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2);
                         showJuBaoListDialog(pos);
                         break;
                     default:
@@ -227,7 +250,7 @@ public class CommentListviewAdapter extends BaseAdapter {
 
 
 //                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1,);
-                jubao(data.get(pos).getId(),data.get(pos).getReplyUserId(),2, items[which]);
+                jubao(data.get(pos).getId(), data.get(pos).getReplyUserId(), 2, items[which]);
 
 
             }
@@ -250,19 +273,19 @@ public class CommentListviewAdapter extends BaseAdapter {
      * @param user_id
      * @param type
      */
-    private void jubao(final String msgId, final String user_id, int type,String  content) {
-        JuBaoBean juBaoBean=new JuBaoBean();
-        juBaoBean.bereported_id=user_id;
-        juBaoBean.member_id=msgId;
-        juBaoBean.type=type+"";
-        juBaoBean.content=content;
+    private void jubao(final String msgId, final String user_id, int type, String content) {
+        JuBaoBean juBaoBean = new JuBaoBean();
+        juBaoBean.bereported_id = user_id;
+        juBaoBean.member_id = msgId;
+        juBaoBean.type = type + "";
+        juBaoBean.content = content;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                RequsetSimpleBean simpleBean=new Gson().fromJson(jsonObject.toString(),RequsetSimpleBean.class);
-                if (simpleBean.isSuccess()){
+                RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
                     ToastUtils.showToastShort("已举报");
-                }else {
+                } else {
                     ToastUtils.showToastShort("举报失败");
                 }
 
@@ -284,7 +307,6 @@ public class CommentListviewAdapter extends BaseAdapter {
 
 
     }
-
 
 
     private void showListDialog_self(final int pos) {
@@ -410,8 +432,8 @@ public class CommentListviewAdapter extends BaseAdapter {
      */
     private void sendCommentReply(final String msgId, final String id, final int pos) {
 
-      //  String Params = Constants.SEND_COMMENT_REPLY + "/" + id + "/" + msgId;
-        String Params = Constants.DEL_COMMENT_REPLY ;
+        //  String Params = Constants.SEND_COMMENT_REPLY + "/" + id + "/" + msgId;
+        String Params = Constants.DEL_COMMENT_REPLY;
         final StringRequest request = new StringRequest(Request.Method.POST, Params, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -427,7 +449,7 @@ public class CommentListviewAdapter extends BaseAdapter {
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.DEL_COMMENT));
 
                 } else {
-                    ToastUtils.showToastShort("删除失败" );
+                    ToastUtils.showToastShort("删除失败");
                 }
 
 
@@ -442,8 +464,8 @@ public class CommentListviewAdapter extends BaseAdapter {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> hm = new HashMap<String, String>();
-                hm.put("reply_id",id);
-                hm.put("dyn_id",msgId);
+                hm.put("reply_id", id);
+                hm.put("dyn_id", msgId);
                 return hm;
 
             }

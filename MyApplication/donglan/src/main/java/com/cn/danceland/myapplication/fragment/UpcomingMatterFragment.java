@@ -71,6 +71,10 @@ public class UpcomingMatterFragment extends BaseFragment {
         View v = View.inflate(mActivity, R.layout.fragment_upcoming_matter_list, null);
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
+        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        mListView.setEmptyView(listEmptyView);
         myListAatapter = new MyListAatapter();
         mListView.setAdapter(myListAatapter);
         //设置下拉刷新模式both是支持下拉和上拉

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,8 +42,13 @@ public class MySendCardFragment extends BaseFragment {
     @Override
     public View initViews() {
         View v=View.inflate(mActivity, R.layout.fragment_my_card,null);
-
         mListView = v.findViewById(R.id.listview);
+        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error3);
+        tv_error.setText("您还没有给他人送出会员卡");
+        mListView.setEmptyView(listEmptyView);
         myListViewAdapter = new MyListViewAdapter();
         mListView.setAdapter(myListViewAdapter);
         return  v;

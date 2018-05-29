@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -290,14 +292,20 @@ public class AttentionFragment extends BaseFragment {
     public View initViews() {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         View v = View.inflate(mActivity, R.layout.fragment_attention, null);
-        rl_no_info = v.findViewById(R.id.rl_no_info);
-        if (SPUtils.getInt(Constants.MY_FOLLOWS,0) == 0) {
-
-            rl_no_info.setVisibility(View.VISIBLE);
-        }
-
-
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
+        rl_no_info = v.findViewById(R.id.rl_no_info);
+//        if (SPUtils.getInt(Constants.MY_FOLLOWS,0) == 0) {
+//
+//            rl_no_info.setVisibility(View.VISIBLE);
+//        }
+
+        View    listEmptyView= v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error2);
+        tv_error.setText("您还没有关注的人，去精选动态里关注一下吧");
+        pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
+
         headView = initHeadview();
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("加载中……");
@@ -647,10 +655,14 @@ public class AttentionFragment extends BaseFragment {
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
 
                 if (requsetDynInfoBean.getSuccess()) {
-                    data = requsetDynInfoBean.getData().getItems();
+                    if (requsetDynInfoBean.getData()!=null){
+                        data = requsetDynInfoBean.getData().getItems();
+                    }
+
                     // requsetDynInfoBean.getData().getItems().toString();
                     LogUtil.i(requsetDynInfoBean.getData().toString());
-                    if (data.size() > 0) {
+
+                    if (requsetDynInfoBean.getData()!=null&&data.size() > 0) {
                         rl_no_info.setVisibility(View.GONE);
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                         LogUtil.i(data.toString());

@@ -53,6 +53,7 @@ import static android.R.attr.value;
 import static com.cn.danceland.myapplication.R.id.ll_my_dyn;
 import static com.cn.danceland.myapplication.R.id.ll_my_fans;
 import static com.cn.danceland.myapplication.R.id.ll_my_guanzhu;
+import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by shy on 2018/4/10 15:26
@@ -236,12 +237,12 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-//            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-//            Glide.with(EmpUserHomeActivty.this)
-//                    .load(pingjia_data.get(position).getSelfUrl())
-//                    .apply(options)
-//                    .into(viewHolder.iv_avatar);
-//            viewHolder.tv_nickname.setText(pingjia_data.get(position).getNickName());
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(EmpUserHomeActivty.this)
+                    .load(pingjia_data.get(position).getSelf_avatar_path())
+                    .apply(options)
+                    .into(viewHolder.iv_avatar);
+            viewHolder.tv_nickname.setText(pingjia_data.get(position).getNick_name());
             viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(pingjia_data.get(i).getCreate_date() + "", "yyyy-MM-dd HH:mm:ss"));
 
             viewHolder.tv_content.setText(pingjia_data.get(i).getContent());

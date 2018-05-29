@@ -14,7 +14,11 @@
             android:gravity="center"
             android:text="没有发布动态"
             android:visibility="gone" />-->
+    <include layout="@layout/no_info_layout"
+        android:id="@+id/rl_no_info"
+        android:visibility="gone"
 
+        />
     <LinearLayout
 
         android:id="@+id/ll_item"

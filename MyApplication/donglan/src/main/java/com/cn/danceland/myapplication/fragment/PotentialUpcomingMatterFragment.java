@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cn.danceland.myapplication.R.id.pullToRefresh;
 import static com.cn.danceland.myapplication.R.id.tv_lasttime;
 import static com.cn.danceland.myapplication.R.id.tv_name;
 
@@ -71,7 +72,14 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         auth = getArguments().getString("auth");
         View v = View.inflate(mActivity, R.layout.fragment_upcoming_matter_list, null);
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
-        mListView = v.findViewById(R.id.pullToRefresh);
+        mListView = v.findViewById(pullToRefresh);
+        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error5);
+        tv_error.setText("没有数据");
+        mListView.getRefreshableView().setEmptyView(listEmptyView);
+
         myListAatapter = new MyListAatapter();
         mListView.setAdapter(myListAatapter);
         //设置下拉刷新模式both是支持下拉和上拉

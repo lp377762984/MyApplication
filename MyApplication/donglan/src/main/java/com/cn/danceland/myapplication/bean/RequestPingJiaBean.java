@@ -132,6 +132,46 @@ public class RequestPingJiaBean {
             private float employee_score;
             private String room_id;
             private String room_score;
+            private String self_avatar_path;
+            private String nick_name;
+
+            @Override
+            public String toString() {
+                return "Content{" +
+                        "id='" + id + '\'' +
+                        ", branch_id='" + branch_id + '\'' +
+                        ", member_id='" + member_id + '\'' +
+                        ", member_no='" + member_no + '\'' +
+                        ", type=" + type +
+                        ", bus_id=" + bus_id +
+                        ", create_date=" + create_date +
+                        ", content='" + content + '\'' +
+                        ", course_type_id='" + course_type_id + '\'' +
+                        ", course_type_score='" + course_type_score + '\'' +
+                        ", employee_id='" + employee_id + '\'' +
+                        ", employee_score=" + employee_score +
+                        ", room_id='" + room_id + '\'' +
+                        ", room_score='" + room_score + '\'' +
+                        ", self_avatar_path='" + self_avatar_path + '\'' +
+                        ", nick_name='" + nick_name + '\'' +
+                        '}';
+            }
+
+            public String getSelf_avatar_path() {
+                return self_avatar_path;
+            }
+
+            public void setSelf_avatar_path(String self_avatar_path) {
+                this.self_avatar_path = self_avatar_path;
+            }
+
+            public String getNick_name() {
+                return nick_name;
+            }
+
+            public void setNick_name(String nick_name) {
+                this.nick_name = nick_name;
+            }
 
             public void setMember_no(String member_no) {
                 this.member_no = member_no;

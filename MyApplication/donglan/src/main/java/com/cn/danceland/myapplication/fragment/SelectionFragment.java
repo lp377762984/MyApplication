@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -300,6 +302,13 @@ public class SelectionFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_selection, null);
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
+
+        View    listEmptyView= v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error2);
+        tv_error.setText("精选动态无内容");
+        pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         headView = initHeadview();
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("加载中……");

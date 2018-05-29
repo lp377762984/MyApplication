@@ -57,6 +57,8 @@
             ptr:ptrRefreshableViewBackground="#00000000"
             ptr:ptrScrollingWhileRefreshingEnabled="true" />
 
+
+
         <FrameLayout
             android:id="@+id/fl"
             android:layout_width="match_parent"

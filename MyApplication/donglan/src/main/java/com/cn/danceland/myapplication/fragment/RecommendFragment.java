@@ -56,7 +56,15 @@ public class RecommendFragment extends BaseFragment {
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_recommend, null);
         v.findViewById(R.id.btn_add).setOnClickListener(this);
-        ListView listView=v.findViewById(R.id.listview);
+        ListView listView = v.findViewById(R.id.listview);
+        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error14);
+        tv_error.setText("您还没有推荐过任何人，点击右下角推荐好友");
+        listView.setEmptyView(listEmptyView);
+
+
         listView.setAdapter(myadapter);
         return v;
     }

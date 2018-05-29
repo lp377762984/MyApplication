@@ -50,6 +50,13 @@ public class RecommendedFragment extends BaseFragment {
         View v = View.inflate(mActivity, R.layout.fragment_recommended, null);
 
         ListView listView = v.findViewById(R.id.listview);
+        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error14);
+        tv_error.setText("还没有朋友推荐您");
+        listView.setEmptyView(listEmptyView);
+
         listView.setAdapter(myadapter);
 
         return v;

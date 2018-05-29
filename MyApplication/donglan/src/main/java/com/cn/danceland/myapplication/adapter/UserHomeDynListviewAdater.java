@@ -127,11 +127,10 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
     public int getCount() {
         // TODO Auto-generated method stub
         // LogUtil.i(data.size() + "");
-//        if (data.size() == 0) {
-//            return 1;
-//        } else {
+        if (data.size() == 0) {
+            return 1;
+        }
         return data.size();
-        //    }
 
 
     }
@@ -219,6 +218,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
             viewHolder.rl_more = convertView.findViewById(R.id.rl_more);
             viewHolder.iv_pic = convertView.findViewById(R.id.iv_pic);
+            viewHolder.no_ifo = convertView.findViewById(R.id.rl_no_info);
             viewHolder.expandableTextView = (ExpandableTextView) convertView.findViewById(R.id.expand_text_view);
             convertView.setTag(viewHolder);
         } else {
@@ -227,155 +227,163 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         if (data == null) {
             return convertView;
         }
+        if (data.size() == 0) {
+            viewHolder.no_ifo.setVisibility(View.VISIBLE);
+            TextView textView=viewHolder.no_ifo.findViewById(R.id.tv_error);
 
 
-        // LogUtil.i(data.size() + "");
-        viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//点击整个页面
-                // ToastUtils.showToastShort(position + "");
-                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
-
-            }
-        });
-        //设置评论数量
-        viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
-        //设置点赞数量
-        viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
-
-        //    LogUtil.i(data.get(position).isPraise()+"");
-        if (data.get(position).isPraise()) {//设置点赞
-             viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
-            viewHolder.rx_zan.setChecked(true);
+            textView.setText("没有发布动态");
+            viewHolder.ll_item.setVisibility(View.GONE);
         } else {
-              viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
-            viewHolder.rx_zan.setChecked(false);
-        }
-        viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
+            viewHolder.no_ifo.setVisibility(View.GONE);
+            viewHolder.ll_item.setVisibility(View.VISIBLE);
+            // LogUtil.i(data.size() + "");
+            viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {//点击整个页面
+                    // ToastUtils.showToastShort(position + "");
+                    context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
+
+                }
+            });
+            //设置评论数量
+            viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
+            //设置点赞数量
+            viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
+
+            //    LogUtil.i(data.get(position).isPraise()+"");
+            if (data.get(position).isPraise()) {//设置点赞
+                viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+                viewHolder.rx_zan.setChecked(true);
+            } else {
+                viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+                viewHolder.rx_zan.setChecked(false);
+            }
+            viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
 //        if (data.get(position).isAnimationFlag()) {
 //            buildAnima(position);
 //            viewHolder.iv_zan.clearAnimation();
 //            viewHolder.iv_zan.setAnimation(mAnimationSet);
 //        }
 
-        viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //点赞
+            viewHolder.ll_zan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //点赞
 
 
-                if (data.get(position).isPraise()) {//已点赞
+                    if (data.get(position).isPraise()) {//已点赞
 
-                    int pos = position;
-                    addZan(data.get(position).getId(), false, pos);
+                        int pos = position;
+                        addZan(data.get(position).getId(), false, pos);
 
 
-                } else {//未点赞
-                    data.get(position).setAnimationFlag(true);
+                    } else {//未点赞
+                        data.get(position).setAnimationFlag(true);
+                        notifyDataSetChanged();
+                        int pos = position;
+                        addZan(data.get(position).getId(), true, pos);
+
+
+                    }
+
                     notifyDataSetChanged();
+
+                }
+            });
+
+            viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //     ToastUtils.showToastShort("评论");
+                    context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
+
+                }
+            });
+            viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ToastUtils.showToastShort("转发");
+                }
+            });
+
+            viewHolder.rl_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     int pos = position;
-                    addZan(data.get(position).getId(), true, pos);
+                    //判断是否是本人的动态
+                    if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
+
+                        showListDialogSelf(pos);
+                    } else {
+                        showListDialog(pos);
+                    }
+
+                }
+            });
+
+            if (isMe) {//是否是个人页面
+                viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
+            } else {
+                viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
+            }
+
+
+            if (data.get(position).isFollower()) {
+                viewHolder.tv_guanzhu.setText("已关注");
+                viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
+                viewHolder.rx_guanzhu.setChecked(true);
+                viewHolder.rx_guanzhu.setClickable(false);
+            } else {
+                viewHolder.tv_guanzhu.setText("+关注");
+                viewHolder.tv_guanzhu.setTextColor(Color.parseColor("#ff6600"));
+                viewHolder.rx_guanzhu.setChecked(true);
+                viewHolder.rx_guanzhu.setClickable(false);
+            }
+            viewHolder.rx_guanzhu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!data.get(position).isFollower()) {//未关注添加关注
+                        int pos = position;
+                        addGuanzhu(data.get(position).getAuthor(), true, pos);
+                    }
 
 
                 }
+            });
 
-                notifyDataSetChanged();
 
+            //  LogUtil.i(data.get(position).getNickName());
+            if (!TextUtils.isEmpty(data.get(position).getNickName())) {
+                viewHolder.tv_nick_name.setText(data.get(position).getNickName());
             }
-        });
 
-        viewHolder.iv_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //     ToastUtils.showToastShort("评论");
-                context.startActivity(new Intent(context, DynHomeActivity.class).putExtra("msgId", data.get(position).getId()).putExtra("userId", data.get(position).getAuthor()));
 
+            //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
+            viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
+
+
+            if (TextUtils.isEmpty(data.get(position).getContent())) {
+                //   viewHolder.tv_content.setVisibility(View.GONE);
+                viewHolder.expandableTextView.setVisibility(View.GONE);
+            } else {//内容不为空赋值
+                viewHolder.expandableTextView.setText(data.get(position).getContent(), mCollapsedStatus, position);
+                //  viewHolder.tv_content.setText(data.get(position).getContent());
+                viewHolder.expandableTextView.setVisibility(View.VISIBLE);
             }
-        });
-        viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ToastUtils.showToastShort("转发");
+            if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
+                viewHolder.ll_location.setVisibility(View.GONE);
+            } else {//地点不为空赋值
+                viewHolder.ll_location.setVisibility(View.VISIBLE);
+                viewHolder.tv_location.setText(data.get(position).getPublishPlace());
             }
-        });
-
-        viewHolder.rl_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int pos = position;
-                //判断是否是本人的动态
-                if (TextUtils.equals(data.get(position).getAuthor(), SPUtils.getString(Constants.MY_USERID, null))) {
-
-                    showListDialogSelf(pos);
-                } else {
-                    showListDialog(pos);
-                }
-
-            }
-        });
-
-        if (isMe) {//是否是个人页面
-            viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
-        } else {
-            viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
-        }
 
 
-        if (data.get(position).isFollower()) {
-            viewHolder.tv_guanzhu.setText("已关注");
-            viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
-            viewHolder.rx_guanzhu.setChecked(true);
-            viewHolder.rx_guanzhu.setClickable(false);
-        } else {
-            viewHolder.tv_guanzhu.setText("+关注");
-            viewHolder.tv_guanzhu.setTextColor(Color.parseColor("#ff6600"));
-            viewHolder.rx_guanzhu.setChecked(true);
-            viewHolder.rx_guanzhu.setClickable(false);
-        }
-        viewHolder.rx_guanzhu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!data.get(position).isFollower()) {//未关注添加关注
-                    int pos = position;
-                    addGuanzhu(data.get(position).getAuthor(), true, pos);
-                }
-
-
-            }
-        });
-
-
-        //  LogUtil.i(data.get(position).getNickName());
-        if (!TextUtils.isEmpty(data.get(position).getNickName())) {
-            viewHolder.tv_nick_name.setText(data.get(position).getNickName());
-        }
-
-
-        //   viewHolder.tv_time.setText(data.get(position).getPublishTime());
-        viewHolder.tv_time.setText(TimeUtils.timeLogic(data.get(position).getPublishTime()));
-
-
-        if (TextUtils.isEmpty(data.get(position).getContent())) {
-            //   viewHolder.tv_content.setVisibility(View.GONE);
-            viewHolder.expandableTextView.setVisibility(View.GONE);
-        } else {//内容不为空赋值
-            viewHolder.expandableTextView.setText(data.get(position).getContent(), mCollapsedStatus, position);
-            //  viewHolder.tv_content.setText(data.get(position).getContent());
-            viewHolder.expandableTextView.setVisibility(View.VISIBLE);
-        }
-        if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
-            viewHolder.ll_location.setVisibility(View.GONE);
-        } else {//地点不为空赋值
-            viewHolder.ll_location.setVisibility(View.VISIBLE);
-            viewHolder.tv_location.setText(data.get(position).getPublishPlace());
-        }
-
-
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Glide.with(context)
-                .load(data.get(position).getSelfUrl())
-                .apply(options)
-                .into(viewHolder.iv_avatar);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(context)
+                    .load(data.get(position).getSelfUrl())
+                    .apply(options)
+                    .into(viewHolder.iv_avatar);
 
 //        viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -384,44 +392,44 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //            }
 //        });
 
-        if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
-            viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+            if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
+                viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
 
-            viewHolder.jzVideoPlayer.setUp(
-                    data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
-                    "");
-            Glide.with(convertView.getContext())
-                    .load(data.get(position).getVedioImg())
-                    .into(viewHolder.jzVideoPlayer.thumbImageView);
-            viewHolder.jzVideoPlayer.positionInList = position;
-        } else {
-            viewHolder.jzVideoPlayer.setVisibility(View.GONE);
-        }
+                viewHolder.jzVideoPlayer.setUp(
+                        data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
+                        "");
+                Glide.with(convertView.getContext())
+                        .load(data.get(position).getVedioImg())
+                        .into(viewHolder.jzVideoPlayer.thumbImageView);
+                viewHolder.jzVideoPlayer.positionInList = position;
+            } else {
+                viewHolder.jzVideoPlayer.setVisibility(View.GONE);
+            }
 
 
-        if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+            if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
-            viewHolder.gridView.setVisibility(View.VISIBLE);
+                viewHolder.gridView.setVisibility(View.VISIBLE);
 //            if (data.get(position).getImgList().size() == 1) {
 //                viewHolder.gridView.setVisibility(View.GONE);
 //            }
 
-            if (data.get(position).getImgList().size() == 1) {
-                viewHolder.gridView.setVisibility(View.GONE);
-                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                RequestOptions options1 = new RequestOptions()
-                        //  .placeholder(R.drawable.img_loading)//加载占位图
-                        .error(R.drawable.img_loadfail)//
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .priority(Priority.HIGH);
+                if (data.get(position).getImgList().size() == 1) {
+                    viewHolder.gridView.setVisibility(View.GONE);
+                    //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                    //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
+                    RequestOptions options1 = new RequestOptions()
+                            //  .placeholder(R.drawable.img_loading)//加载占位图
+                            .error(R.drawable.img_loadfail)//
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .priority(Priority.HIGH);
 
-                viewHolder.iv_pic.setVisibility(View.VISIBLE);
-                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
-                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".")+ 1);
-                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length()-1, "_400X400");
-                String[] b = sb.toString().split("_");
-                String[] c = b[1].toString().split("X");
+                    viewHolder.iv_pic.setVisibility(View.VISIBLE);
+                    StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+                    String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
+                    sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
+                    String[] b = sb.toString().split("_");
+                    String[] c = b[1].toString().split("X");
 
 //                LogUtil.i(b[2].toString());
 //
@@ -429,70 +437,70 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //                LogUtil.i(c[1]);
 //                LogUtil.i(sb.toString());
 
-                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
-                    if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
-                        if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                            viewHolder.iv_pic.setLayoutParams(linearParams);
-                        } else {
-                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                            linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                            viewHolder.iv_pic.setLayoutParams(linearParams);
+                    if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
+                        if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
+                            if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+                                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                                viewHolder.iv_pic.setLayoutParams(linearParams);
+                            } else {
+                                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+                                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                                viewHolder.iv_pic.setLayoutParams(linearParams);
+                            }
                         }
                     }
-                }
 
 
-                Glide.with(context)
-                        .load(sb.toString())
-                        // .apply(options1)
-                        .into(viewHolder.iv_pic);
-                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                                .setPosition(0)//图片下标（从第position张图片开始浏览）
-                                .setDownloadPath("DCIM")//图片下载文件夹地址
-                                .setIsShowNumber(false)//是否显示数字下标
-                                .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                .build();
-                        ImagePagerActivity.startActivity(context, config);
-                    }
-                });
-                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+                    Glide.with(context)
+                            .load(sb.toString())
+                            // .apply(options1)
+                            .into(viewHolder.iv_pic);
+                    viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PictureConfig config = new PictureConfig.Builder()
+                                    .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                    .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                    .setDownloadPath("DCIM")//图片下载文件夹地址
+                                    .setIsShowNumber(false)//是否显示数字下标
+                                    .needDownload(true)//是否支持图片下载
+                                    .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                    .build();
+                            ImagePagerActivity.startActivity(context, config);
+                        }
+                    });
+                    LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    linearParams1.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
 
-            } else if (data.get(position).getImgList().size() == 4) {
-                viewHolder.iv_pic.setVisibility(View.GONE);
-                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-                viewHolder.gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                } else if (data.get(position).getImgList().size() == 4) {
+                    viewHolder.iv_pic.setVisibility(View.GONE);
+                    //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+                    viewHolder.gridView.setNumColumns(2);
+                    int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            } else {
-                viewHolder.iv_pic.setVisibility(View.GONE);
-                viewHolder.gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-            }
+                } else {
+                    viewHolder.iv_pic.setVisibility(View.GONE);
+                    viewHolder.gridView.setNumColumns(3);
+                    int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
+                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                }
 
-            viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
-            /**
-             * 图片列表点击事件
-             */
-            viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
+                /**
+                 * 图片列表点击事件
+                 */
+                viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
 //                Intent intent = new Intent(context, ImagePagerActivity.class);
@@ -501,24 +509,26 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //                intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, i);
 //                context.startActivity(intent);
 
-                    PictureConfig config = new PictureConfig.Builder()
-                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                            .setPosition(i)//图片下标（从第position张图片开始浏览）
-                            .setDownloadPath("DCIM")//图片下载文件夹地址
-                            .setIsShowNumber(true)//是否显示数字下标
-                            .needDownload(true)//是否支持图片下载
-                            .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                            .build();
-                    ImagePagerActivity.startActivity(context, config);
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                .setPosition(i)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(true)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(context, config);
 
 
-                }
-            });
-        } else {
-            viewHolder.gridView.setVisibility(View.GONE);
-            viewHolder.iv_pic.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic.setVisibility(View.GONE);
 
+            }
         }
+
 
         return convertView;
 
@@ -549,6 +559,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         RxShineButton rx_guanzhu;
         ExpandableTextView expandableTextView;
         ImageView iv_pic;
+        View no_ifo;
     }
 
 

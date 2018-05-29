@@ -2,28 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg_mianlayout">
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_centerInParent="true">
-    <ImageView
-        android:id="@+id/iv_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@drawable/img_runer" />
+    android:background="@color/color_white">
 
-    <TextView
-        android:id="@+id/tv_error"
-        android:layout_marginTop="20dp"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="还没有关注健康达人"
-        android:textSize="15sp" />
-</LinearLayout>
+        android:layout_centerInParent="true"
+
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_error"
+            android:layout_width="168dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/img_error5" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="没有数据"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 
 </RelativeLayout>

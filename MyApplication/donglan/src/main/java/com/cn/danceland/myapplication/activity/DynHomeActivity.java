@@ -86,8 +86,6 @@ import cn.jzvd.JZVideoPlayerStandard;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 
-import static com.cn.danceland.myapplication.R.id.ll_zan;
-
 
 /**
  * Created by shy on 2017/11/17 17:32
@@ -135,6 +133,8 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
     private ImageView iv_pic;
     RxShineButton rx_zan;
     RxShineButton rx_guanzhu;
+  //  private View listEmptyView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -295,6 +295,12 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
+//
+//        listEmptyView = findViewById(R.id.rl_no_info);
+//        TextView tv_error= listEmptyView.findViewById(R.id.tv_error);
+//        ImageView imageView = listEmptyView.findViewById(R.id.iv_error);
+      //  pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
+
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
 
@@ -725,11 +731,16 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 commentInfoBean = gson.fromJson(jsonObject.toString(), RequstCommentInfoBean.class);
                 //  LogUtil.i(commentInfoBean.toString());
                 if (commentInfoBean.getSuccess()) {
+                //    listEmptyView.setVisibility(View.GONE);
 
                     if (commentInfoBean.getData().getItems() != null) {
                         data = commentInfoBean.getData().getItems();
 
                         if (mCurrentPage == 0) {
+//                            if (data.size()==0){
+//                                listEmptyView.setVisibility(View.VISIBLE);
+//                            }
+
                             myAdater.setData(data);
                         } else {
                             myAdater.addLastList(data);

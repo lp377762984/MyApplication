@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -102,7 +103,25 @@ public class UserListActivity extends Activity implements View.OnClickListener {
      //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
         View    listEmptyView=findViewById(R.id.rl_no_info);
         TextView tv_error=listEmptyView.findViewById(R.id.tv_error);
-        tv_error.setText("还啥都奥时代和欧尼");
+        ImageView imageView =listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error5);
+        switch (type) {
+            case 1:
+
+                tv_error.setText("你还没有关注的人");
+                break;
+            case 2:
+                tv_error.setText("您还没有粉丝");
+                break;
+            case 3:
+                tv_error.setText("没有数据");
+
+                break;
+            default:
+                break;
+        }
+
+
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
 
