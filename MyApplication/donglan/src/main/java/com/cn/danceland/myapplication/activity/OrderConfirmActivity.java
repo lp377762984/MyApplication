@@ -179,7 +179,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Constants.DEV_CONFIG){
+        if (Constants.DEV_CONFIG) {
             EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         }
 
@@ -193,10 +193,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (event.getEventCode()==40001){
+        if (event.getEventCode() == 40001) {
             finish();
         }
-        if (event.getEventCode()==40002){
+        if (event.getEventCode() == 40002) {
             btn_repay.setVisibility(View.VISIBLE);
         }
     }
@@ -204,10 +204,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     private void initData() {
         findConsultant(CardsInfo.getBranch_id());
         if (product_type == 2) {
-     //   find_deposit_days();
-         //find_deposit_price();
-            tv_useful_life.setText(bundle.getString("deposit_days","30") + "天");
-            deposit_price = Float.parseFloat(bundle.getString("deposit_price","00"));
+            //   find_deposit_days();
+            //find_deposit_price();
+            tv_useful_life.setText(bundle.getString("deposit_days", "30") + "天");
+            deposit_price = Float.parseFloat(bundle.getString("deposit_price", "00"));
 //            tv_useful_life.setText(deposit_days + "天");
             tv_price.setText(PriceUtils.formatPrice2String(deposit_price));
             tv_total_price.setText(PriceUtils.formatPrice2String(deposit_price * number));
@@ -291,7 +291,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                     pay_way = 3;
                     cb_chuzhjika.setChecked(false);
-               }
+                }
 // else {
 //                    cb_alipay.setChecked(true);
 //                    pay_way = 2;
@@ -556,8 +556,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     }
 
 
-
-
     /**
      * 提交卡订单
      *
@@ -578,7 +576,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
-                  //  ToastUtils.showToastShort("提交成功");
+                    //  ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
                     if (requestOrderInfoBean.getData().getPayWay() == 2) {//支付宝支付
                         alipay(requestOrderInfoBean.getData().getPay_params());
@@ -586,7 +584,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     if (requestOrderInfoBean.getData().getPayWay() == 3) {//微信支付
                         wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
-                    if(requestOrderInfoBean.getData().getPayWay() == 5){
+                    if (requestOrderInfoBean.getData().getPayWay() == 5) {
                         chuzhika(requestOrderInfoBean.getData().getPay_params());
                     }
                 } else {
@@ -633,7 +631,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 requestOrderInfoBean = gson.fromJson(jsonObject.toString(), RequestOrderPayInfoBean.class);
 
                 if (requestOrderInfoBean.getSuccess()) {
-                 //   ToastUtils.showToastShort("提交成功");
+                    //   ToastUtils.showToastShort("提交成功");
                     btn_commit.setVisibility(View.GONE);
 
                     if (requestOrderInfoBean.getData().getPayWay() == 2) {//支付宝支付
@@ -645,7 +643,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                         wxPay(requestOrderInfoBean.getData().getPay_params());
                     }
 
-                    if(requestOrderInfoBean.getData().getPayWay() == 5){
+                    if (requestOrderInfoBean.getData().getPayWay() == 5) {
                         chuzhika(requestOrderInfoBean.getData().getPay_params());
                     }
 
@@ -676,8 +674,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
     }
 
 
-
-
     /**
      * 支付宝支付
      */
@@ -700,7 +696,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         Thread payThread = new Thread(payRunnable);
         payThread.start();
     }
-
 
 
     private IWXAPI api;
@@ -744,15 +739,20 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         api.sendReq(req);
     }
+
     class PayBean {
         public String id;
     }
+
     /**
      * 储值卡支付
+     *
      * @param id
      */
     private void chuzhika(String id) {
-       PayBean payBean = new PayBean();
+        unpaidOrder=id;
+        PayBean payBean = new PayBean();
+
         payBean.id = id;
         String str = gson.toJson(payBean);
 
@@ -764,8 +764,16 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
+                    finish();
                 } else {
-                    ToastUtils.showToastShort("支付失败");
+                    if (TextUtils.equals(requestSimpleBean.getCode(),"-5")||TextUtils.equals(requestSimpleBean.getCode(),"-6")||TextUtils.equals(requestSimpleBean.getCode(),"-7")||TextUtils.equals(requestSimpleBean.getCode(),"-8"))
+                    {
+                        ToastUtils.showToastShort("储值卡余额不足");
+                        btn_repay.setVisibility(View.VISIBLE);
+                    }else {
+                        ToastUtils.showToastShort("支付异常");
+                    }
+
                 }
 
 
@@ -788,6 +796,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -869,7 +878,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.iv_back:
                 //   wxPay();
-                 finish();
+                finish();
                 //sendPayRequest();
                 break;
 
@@ -1016,7 +1025,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setAdmin_emp_name(consultantInfo.getCname());
                     extendsParams.setDeposit_type("1");//定金类型
                     newOrderInfoBean.setProduct_type("会籍卡定金");
-              //      newOrderInfoBean.setProduct_name("会籍卡定金");
+                    //      newOrderInfoBean.setProduct_name("会籍卡定金");
 
                     if (isme) {
                         newOrderInfoBean.setFor_other(0);
@@ -1057,6 +1066,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                 cb_alipay.setClickable(false);
                 cb_wechat.setClickable(false);
+                cb_chuzhjika.setClickable(false);
                 break;
             case R.id.btn_commit2://重新支付
 
@@ -1069,6 +1079,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     //微信
                     //  wechatPay(unpaidOrder);
                     wxPay(unpaidOrder);
+                }
+                if (pay_way == 5) {
+                    chuzhika(unpaidOrder);
                 }
 
                 break;
@@ -1124,6 +1137,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         public Protocol_Params protocol_params;
         public String product_type;//产品类型名称
         public String product_name;//产品名称
+
         public String getProduct_type() {
             return product_type;
         }
@@ -1306,7 +1320,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
             public String type_name;//卡名称
 
             public String admin_emp_name;
-
 
 
             //        private String card_type_id;//卡id
@@ -1519,7 +1532,6 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         startActivityForResult(intent, PICK_CONTACT);
     }
-
 
 
     class ListPopup extends BasePopupWindow {

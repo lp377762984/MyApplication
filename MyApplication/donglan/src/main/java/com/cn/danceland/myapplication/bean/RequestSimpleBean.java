@@ -11,7 +11,17 @@ public class RequestSimpleBean {
 
     private boolean success;
     private String errorMsg;
+    private  String code;
     private String data;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public void setSuccess(boolean success) {
         this.success = success;
     }

@@ -76,11 +76,11 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     Data myInfo;
 
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState) {
-//        //不处理崩溃时页面保存信息
-//        // super.onSaveInstanceState(outState);
-//    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //不处理崩溃时页面保存信息
+        // super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onBackPressed() {
