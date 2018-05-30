@@ -65,7 +65,7 @@ public class SellStoreCardActivity extends Activity{
     private Gson gson;
     private SimpleDateFormat sdf;
     Data info;
-    StoreType storeType;
+    //StoreType storeType;
     CheckBox btn_weixin,btn_zhifubao,cb_shuoming;
     TextView storecard_tv,tv_price;
     DongLanTitleView storecard_title;
@@ -267,7 +267,11 @@ public class SellStoreCardActivity extends Activity{
             @Override
             public void onClick(View v) {
                 if(cb_shuoming.isChecked()){
-                    confirmOrder(storeType.getFace()+"");
+                    if(cardid!=null){
+                        confirmOrder(cardid.getFace()+"");
+                    }else{
+                        ToastUtils.showToastShort("获取面额失败");
+                    }
                 }else {
                     ToastUtils.showToastShort("请阅读购买说明，并同意");
                 }
@@ -275,32 +279,35 @@ public class SellStoreCardActivity extends Activity{
 
             }
         });
-        findById();
-    }
-
-    public void findById() {
-        Long id = null;
-        // TODO 准备数据
         if(cardid!=null){
-            id = cardid.getId();
+            tv_price.setText("待支付：￥"+cardid.getFace()+"元");
         }
-        request.findById(id, new Response.Listener<String>() {
-            public void onResponse(String res) {
-                DLResult<StoreType> result = gson.fromJson(res, new TypeToken<DLResult<StoreType>>() {
-                }.getType());
-                if (result.isSuccess()) {
-                    LogUtil.e("zzf",res);
-
-                    storeType = result.getData();
-                    tv_price.setText("待支付：￥"+storeType.getFace()+"元");
-
-                } else {
-                    ToastUtils.showToastShort("请检查手机网络！");
-                }
-            }
-        });
-
+        //findById();
     }
+
+//    public void findById() {
+//        Long id = null;
+//        // TODO 准备数据
+//        if(cardid!=null){
+//            id = cardid.getId();
+//        }
+//        request.findById(id, new Response.Listener<String>() {
+//            public void onResponse(String res) {
+//                DLResult<StoreType> result = gson.fromJson(res, new TypeToken<DLResult<StoreType>>() {
+//                }.getType());
+//                if (result.isSuccess()) {
+//                    LogUtil.e("zzf",res);
+//
+//                    storeType = result.getData();
+//
+//
+//                } else {
+//                    ToastUtils.showToastShort("请检查手机网络！");
+//                }
+//            }
+//        });
+//
+//    }
 
     private void confirmOrder(String price) {
 
