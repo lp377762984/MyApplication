@@ -126,7 +126,7 @@ public class MyProActivity extends Activity {
             switch (msg.what) {
                 case 1:
 
-                    Glide.with(MyProActivity.this).load(selfAvatarPath).into(circleImageView);
+                    Glide.with(getApplicationContext()).load(selfAvatarPath).into(circleImageView);
                     file.delete();
                     break;
                 default:
