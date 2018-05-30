@@ -893,10 +893,13 @@ public class SiJiaoOrderActivity extends Activity {
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
                 } else {
-                    ToastUtils.showToastShort("支付失败");
+                    if (TextUtils.equals(requestSimpleBean.getCode(),"-5")||TextUtils.equals(requestSimpleBean.getCode(),"-6")||TextUtils.equals(requestSimpleBean.getCode(),"-7")||TextUtils.equals(requestSimpleBean.getCode(),"-8"))
+                    {
+                        ToastUtils.showToastShort("储值卡余额不足");
+                    }else {
+                        ToastUtils.showToastShort("支付异常");
+                    }
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
