@@ -208,6 +208,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 role = roleList.get(position);
+                SPUtils.setString("role_type",roleMap.get(role));
                 tv_role.setText(role);
                 initData();
                 dismissPop();
