@@ -167,6 +167,7 @@ public class ShopFragment extends BaseFragment {
         if(roleList!=null&&roleList.size()>0){
             tv_role.setText(roleList.get(0));
             role = roleList.get(0);
+            SPUtils.setString("role_type",roleMap.get(role));
         }
 
         gson = new Gson();
