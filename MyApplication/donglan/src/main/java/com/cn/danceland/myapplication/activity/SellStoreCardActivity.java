@@ -57,17 +57,17 @@ import java.util.Map;
  * Created by feng on 2018/3/14.
  */
 
-public class SellStoreCardActivity extends Activity{
+public class SellStoreCardActivity extends Activity {
     private String unpaidOrder;
     StoreType cardid;
-    LinearLayout ll_zhifu,btn_repay;
+    LinearLayout ll_zhifu, btn_repay;
     private StoreTypeRequest request;
     private Gson gson;
     private SimpleDateFormat sdf;
     Data info;
     //StoreType storeType;
-    CheckBox btn_weixin,btn_zhifubao,cb_shuoming;
-    TextView storecard_tv,tv_price;
+    CheckBox btn_weixin, btn_zhifubao, cb_shuoming;
+    TextView storecard_tv, tv_price;
     DongLanTitleView storecard_title;
     String zhifu;
     public static final int SDK_PAY_FLAG = 0x1001;
@@ -126,7 +126,7 @@ public class SellStoreCardActivity extends Activity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Constants.DEV_CONFIG){
+        if (Constants.DEV_CONFIG) {
             EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
         }
         super.onCreate(savedInstanceState);
@@ -141,11 +141,11 @@ public class SellStoreCardActivity extends Activity{
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (event.getEventCode()==40001){
+        if (event.getEventCode() == 40001) {
             ToastUtils.showToastShort("支付成功");
             finish();
         }
-        if (event.getEventCode()==40002){
+        if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             btn_zhifubao.setClickable(false);
             btn_repay.setVisibility(View.VISIBLE);
@@ -200,7 +200,7 @@ public class SellStoreCardActivity extends Activity{
                 }.getType());
                 if (result.isSuccess()) {
                     List<Explain> list = result.getData();
-                    if(list!=null&&list.size()>0){
+                    if (list != null && list.size() > 0) {
                         storecard_tv.setText(list.get(0).getContent());
                     }
                 } else {
@@ -213,8 +213,8 @@ public class SellStoreCardActivity extends Activity{
     private void initHost() {
         request = new StoreTypeRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        cardid = (StoreType)getIntent().getSerializableExtra("item");
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        cardid = (StoreType) getIntent().getSerializableExtra("item");
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         initWechat();
     }
@@ -254,9 +254,9 @@ public class SellStoreCardActivity extends Activity{
         btn_repay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if("2".equals(zhifu)){
+                if ("2".equals(zhifu)) {
                     alipay(unpaidOrder);
-                }else if("3".equals(zhifu)){
+                } else if ("3".equals(zhifu)) {
                     wxPay(unpaidOrder);
                 }
             }
@@ -266,21 +266,21 @@ public class SellStoreCardActivity extends Activity{
         ll_zhifu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cb_shuoming.isChecked()){
-                    if(cardid!=null){
-                        confirmOrder(cardid.getFace()+"");
-                    }else{
+                if (cb_shuoming.isChecked()) {
+                    if (cardid != null) {
+                        confirmOrder(cardid.getFace() + "");
+                    } else {
                         ToastUtils.showToastShort("获取面额失败");
                     }
-                }else {
+                } else {
                     ToastUtils.showToastShort("请阅读购买说明，并同意");
                 }
 
 
             }
         });
-        if(cardid!=null){
-            tv_price.setText("待支付：￥"+cardid.getFace()+"元");
+        if (cardid != null) {
+            tv_price.setText("待支付：￥" + cardid.getFace() + "元");
         }
         //findById();
     }
@@ -317,9 +317,9 @@ public class SellStoreCardActivity extends Activity{
         sijiaoOrderConfirmBean.setPlatform(1);
         sijiaoOrderConfirmBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
         sijiaoOrderConfirmBean.setBus_type(16);
-        extends_params.setStore_type_id(cardid.getId()+"");
-        extends_params.setFace(cardid.getFace()+"");
-        extends_params.setGiving(cardid.getGiving()+"");
+        extends_params.setStore_type_id(cardid.getId() + "");
+        extends_params.setFace(cardid.getFace() + "");
+        extends_params.setGiving(cardid.getGiving() + "");
         sijiaoOrderConfirmBean.setReceive(price);
         sijiaoOrderConfirmBean.setPrice(price);
         sijiaoOrderConfirmBean.setProduct_type("储值卡充值");
@@ -335,11 +335,11 @@ public class SellStoreCardActivity extends Activity{
 
                 if (requestOrderInfoBean.getSuccess()) {
                     ll_zhifu.setVisibility(View.GONE);
-                    if(requestOrderInfoBean.getData()!=null){
-                        if(requestOrderInfoBean.getData().getPayWay() == 2){
+                    if (requestOrderInfoBean.getData() != null) {
+                        if (requestOrderInfoBean.getData().getPayWay() == 2) {
                             alipay(requestOrderInfoBean.getData().getPay_params());
                         }
-                        if(requestOrderInfoBean.getData().getPayWay() == 3){
+                        if (requestOrderInfoBean.getData().getPayWay() == 3) {
                             wxPay(requestOrderInfoBean.getData().getPay_params());
                         }
                     }
@@ -354,11 +354,11 @@ public class SellStoreCardActivity extends Activity{
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
