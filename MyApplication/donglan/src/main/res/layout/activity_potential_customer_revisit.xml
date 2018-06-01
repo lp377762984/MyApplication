@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="潜客维护"
+            android:text="潜客管理"
             android:textColor="@color/color_white"
             android:textSize="18sp" />
     </RelativeLayout>

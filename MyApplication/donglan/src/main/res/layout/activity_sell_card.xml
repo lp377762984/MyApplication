@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="在线售卡"
+            android:text="在线购卡"
             android:textColor="@color/color_white"
             android:textSize="18sp"
 
