@@ -318,6 +318,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     class StrBean {
         public String page;
         public String auth ;
+        public String status="0" ;
+
         // public String member_id;
     }
 
@@ -372,7 +374,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         //   strBean.page = pageCount - 1 + "";
         //  strBean.member_id = id;
         String s = gson.toJson(strBean);
-
+LogUtil.i(s.toString());
         JSONObject jsonObject = new JSONObject(s.toString());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_NOT_UPCOMINGMATTER, jsonObject, new Response.Listener<JSONObject>() {

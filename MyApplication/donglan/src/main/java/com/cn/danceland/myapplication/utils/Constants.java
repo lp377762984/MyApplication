@@ -15,14 +15,14 @@ public class Constants  {
     }
 
     //public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-   // public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+ //  public static final String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-     //public static final String HOST = "http://192.168.1.117:8003/";//老高
+     public static final String HOST = "http://192.168.1.123:8003/";//老高
     //public static final String HOST = " http://192.168.1.119:8003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-    public static final String HOST = "http://192.168.1.117:8003/";//老高
+  //  public static final String HOST = "http://192.168.1.123:8003/";//老高
     // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -159,11 +159,11 @@ public class Constants  {
     public static final String ADD_VISIT_RECOR = HOST + "/appPotential/saveVisitRecord";//添加回访记录
     public static final String FIND_BY_ID_POTENTIAL = HOST + "/appPotential/findByIdPotential/";//查询潜客详情
     public static final String FIND_VISIT_RECORD = HOST + "/appPotential/findVisitRecord";//查询回访记录
-    public static final String ADD_UPCOMING_MATTER = HOST + "/appPotential/saveUpcomingMatter";//添加待办
-    public static final String FIND_UPCOMING_MATTER_PARAM = HOST + "appWorkResult/queryList";//查询待办参数
-    public static final String FIND_UPCOMING_MATTER = HOST + "/appPotential/findUpcomingMatter";//查询待办列表
-    public static final String UPDATE_MATTER_STATUS = HOST + "/appPotential/updateMatterStatus";//处理待办
-    public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/appPotential/findNotUpcomingMatter";//查询未处理待办
+    public static final String ADD_UPCOMING_MATTER = HOST + "/api/work/saveWork";//添加待办
+    public static final String FIND_UPCOMING_MATTER_PARAM = HOST + "/api/work/queryWorkType";//查询待办参数
+    public static final String FIND_UPCOMING_MATTER = HOST + "/api/work/queryWorkPage";//查询待办列表
+    public static final String UPDATE_MATTER_STATUS = HOST + "/api/work/updateWorkStatus";//处理待办
+    public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/api/work/queryWorkCount";//查询未处理待办
     public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
     public static final String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友

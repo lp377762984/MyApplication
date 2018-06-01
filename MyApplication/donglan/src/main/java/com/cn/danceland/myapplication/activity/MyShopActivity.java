@@ -170,7 +170,7 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
                     userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                     defaultshopId=userInfo.getPerson().getDefault_branch();
                 //    ToastUtils.showToastShort("加入成功！");
-//                    setResult(111);
+//                    setName(111);
                 //    finish();
                     listViewAdapter.notifyDataSetChanged();
                  //   lv_myshop.setAdapter(listViewAdapter);

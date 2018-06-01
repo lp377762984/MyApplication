@@ -80,7 +80,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         requsetBean.member_no = bundle.getString("member_no");
         customer_type = bundle.getString("auth");
         requsetBean.customer_type = customer_type;
-        requsetBean.auth=customer_type;
+        requsetBean.auth = customer_type;
         findViewById(R.id.iv_back).setOnClickListener(this);
         tv_type = findViewById(R.id.tv_type);
         tv_type.setOnClickListener(this);
@@ -92,6 +92,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         et_content = findViewById(R.id.et_content);
         findViewById(R.id.btn_commit).setOnClickListener(this);
         getDate();
+        //LogUtil.i(SPUtils.getString("role_type",""));
     }
 
     @Override
@@ -107,12 +108,12 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                     ToastUtils.showToastShort("待办内容不能为空");
                     return;
                 }
-                if (TextUtils.isEmpty(requsetBean.title)) {
+                if (TextUtils.isEmpty(requsetBean.work_type_id)) {
                     ToastUtils.showToastShort("请选择待办类型");
                     return;
                 }
-                if (et_content.getText().toString().length()>200){
-                    ToastUtils.showToastShort("输入文字数量:"+et_content.getText().toString().length()+"，超过上限");
+                if (et_content.getText().toString().length() > 200) {
+                    ToastUtils.showToastShort("输入文字数量:" + et_content.getText().toString().length() + "，超过上限");
                     return;
                 }
                 requsetBean.content = et_content.getText().toString();
@@ -121,6 +122,9 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                     requsetBean.warn_time = tv_date.getText().toString() + " " + tv_time.getText().toString();
 
                 }
+
+                requsetBean.role_type = SPUtils.getString("role_type", "");
+
                 try {
                     add_upcoming_matter(gson.toJson(requsetBean).toString());
                     LogUtil.i(gson.toJson(requsetBean).toString());
@@ -134,12 +138,12 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                 break;
             case R.id.tv_time:
 
-              //  show_select_time_dialog();
+                //  show_select_time_dialog();
 
                 break;
             case R.id.tv_date:
                 showDate();
-             //   show_select_date_dialog();
+                //   show_select_date_dialog();
                 break;
             default:
                 break;
@@ -147,9 +151,9 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
     }
 
 
-    private void showDate(){
+    private void showDate() {
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this,"请选择日期");
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择日期");
         customDatePicker.showWindow();
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
@@ -157,7 +161,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                 String dateString = customDatePicker.getTimeString();
                 tv_date.setText(dateString);
 
-                requsetBean.warn_time=dateString.replace("年","-").replace("月","-").replace("日"," ").replace("时",":").replace("分",":00");
+                requsetBean.warn_time = dateString.replace("年", "-").replace("月", "-").replace("日", " ").replace("时", ":").replace("分", ":00");
             }
         });
 
@@ -217,6 +221,7 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         public String warn_time;// 提醒时间
         public String auth;
         public String role_type;
+        public String work_type_id;
 
 
     }
@@ -249,8 +254,8 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.i(volleyError.networkResponse.statusCode + "");
+          //      ToastUtils.showToastShort(volleyError.toString());
 
             }
         }) {
@@ -270,8 +275,8 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
 
     private void findParams(final String customer_type) {
         RequsetBean requsetBean = new RequsetBean();
-        requsetBean.customer_type=customer_type;
-        requsetBean.role_type="1";
+        requsetBean.customer_type = customer_type;
+        requsetBean.role_type = SPUtils.getString("role_type", "1");
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(gson.toJson(requsetBean).toString());
@@ -296,8 +301,8 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.i(volleyError.toString());
+                //  ToastUtils.showToastShort(volleyError.toString());
 
             }
         }) {
@@ -385,14 +390,15 @@ public class AddUpcomingMatterActivity extends Activity implements View.OnClickL
                 } else {
                     vh = (ViewHolder) convertView.getTag();
                 }
-                vh.mTextView.setText(mParamInfoList.get(position).getResult());
+                vh.mTextView.setText(mParamInfoList.get(position).getName());
 
                 vh.mTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        tv_type.setText(mParamInfoList.get(position).getResult());
-                        requsetBean.title = mParamInfoList.get(position).getResult();
+                        tv_type.setText(mParamInfoList.get(position).getName());
+                        //    requsetBean.title = mParamInfoList.get(position).getName();
+                        requsetBean.work_type_id = mParamInfoList.get(position).getId();
                         listPopup.dismiss();
                     }
                 });

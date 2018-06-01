@@ -46,6 +46,7 @@ import java.util.Map;
 
 import static com.cn.danceland.myapplication.R.id.tv_lasttime;
 import static com.cn.danceland.myapplication.R.id.tv_name;
+import static com.cn.danceland.myapplication.R.id.tv_result;
 
 /**
  * Created by shy on 2018/1/11 17:18
@@ -163,7 +164,7 @@ public class UpcomingMatterFragment extends BaseFragment {
     @Override
     public void initDta() {
         mCurrentPage = 1;
-      //  done=null;
+      //  status=null;
         try {
             find_upcoming_list(id, mCurrentPage,done);
         } catch (JSONException e) {
@@ -273,7 +274,7 @@ public class UpcomingMatterFragment extends BaseFragment {
         public String page;
         //public String auth = "1";
         public String member_id;
-        public String done;
+        public String status;
     }
 
 
@@ -289,7 +290,7 @@ public class UpcomingMatterFragment extends BaseFragment {
         strBean.page = pageCount - 1 + "";
         strBean.member_id = id;
         if (!TextUtils.isEmpty(done)) {
-            strBean.done = done;
+            strBean.status = done;
         }
         String s = gson.toJson(strBean);
 
@@ -441,6 +442,8 @@ public class UpcomingMatterFragment extends BaseFragment {
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
                 vh.tv_lasttime = convertView.findViewById(tv_lasttime);
                 vh.iv_done = convertView.findViewById(R.id.iv_done);
+                vh.tv_result = convertView.findViewById(tv_result);
+
                 convertView.setTag(vh);
 
             } else {
@@ -448,21 +451,22 @@ public class UpcomingMatterFragment extends BaseFragment {
                 vh = (ViewHolder) convertView.getTag();
 
             }
-            vh.tv_name.setText(datalist.get(position).getOperate_name());
-            vh.tv_type.setText(datalist.get(position).getTitle());
+            vh.tv_name.setText(datalist.get(position).getEmployee_name());
+            vh.tv_type.setText(datalist.get(position).getWork_type_name());
             vh.tv_content.setText(datalist.get(position).getContent());
             vh.tv_lasttime.setText(datalist.get(position).getRecord_time());
             vh.tv_upcoming_name.setText(datalist.get(position).getMember_name());
             vh.tv_upcoming_time.setText(datalist.get(position).getWarn_time());
-            if (TextUtils.equals(datalist.get(position).getDone(), "1")) {
+            if (TextUtils.equals(datalist.get(position).getStatus(), "1")) {
                 vh.iv_done.setImageResource(R.drawable.img_isdone_off);
             } else {
                 vh.iv_done.setImageResource(R.drawable.img_isdone_up);
             }
+            vh.tv_result.setText(datalist.get(position).getResult());
 //            vh.iv_done.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
-//                    if (!TextUtils.equals(datalist.get(position).getDone(), "1")) {//未完成
+//                    if (!TextUtils.equals(datalist.get(position).getStatus(), "1")) {//未完成
 //
 //                    }
 //                }
@@ -470,7 +474,7 @@ public class UpcomingMatterFragment extends BaseFragment {
             vh.ll_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (TextUtils.equals(datalist.get(position).getDone(), "0")) {
+                    if (TextUtils.equals(datalist.get(position).getStatus(), "0")) {
                         showDialog1(position);
                     }
 
@@ -488,6 +492,7 @@ public class UpcomingMatterFragment extends BaseFragment {
             public TextView tv_upcoming_name;
             public TextView tv_upcoming_time;
             public TextView tv_lasttime;
+            public TextView tv_result;
             public LinearLayout ll_item;
             public ImageView iv_done;
         }
@@ -506,7 +511,8 @@ public class UpcomingMatterFragment extends BaseFragment {
                 switch (which) {
                     case 0:
                         //     RequsetUpcomingMaterListBean.Data.Content content = new RequsetUpcomingMaterListBean().getData().Content;
-                        datalist.get(pos).setDone("1");
+                        datalist.get(pos).setStatus("1");
+                        datalist.get(pos).setResult("");
                         change_done(datalist.get(pos));
                         break;
                     case 1:
@@ -531,7 +537,7 @@ public class UpcomingMatterFragment extends BaseFragment {
         customizeDialog.setTitle("填写待办结果");
         customizeDialog.setView(dialogView);
         final EditText edit_text = dialogView.findViewById(R.id.edit_text);
-        edit_text.setText(datalist.get(pos).getContent());
+     //   edit_text.setText(datalist.get(pos).getContent());
         customizeDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -542,8 +548,8 @@ public class UpcomingMatterFragment extends BaseFragment {
                             ToastUtils.showToastShort("请填写内容");
                             return;
                         }
-                        datalist.get(pos).setDone("1");
-                        datalist.get(pos).setContent(edit_text.getText().toString().trim());
+                        datalist.get(pos).setStatus("1");
+                        datalist.get(pos).setResult(edit_text.getText().toString().trim());
                         change_done(datalist.get(pos));
 
                     }

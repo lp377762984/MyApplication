@@ -471,7 +471,7 @@
     <string name="agreed">已同意</string>
     <string name="refuse">拒绝</string>
     <string name="refused">已拒绝</string>
-    <string name="done">完成</string>
+    <string name="status">完成</string>
     <string name="friend_allow_all">允许任何人添加</string>
     <string name="friend_refuse_all">拒绝任何人添加</string>
     <string name="friend_need_confirm">需验证</string>

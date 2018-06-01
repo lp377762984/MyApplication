@@ -91,7 +91,7 @@ public class MyDepositListActivity extends Activity implements View.OnClickListe
 //                Intent intent = getIntent();
 //                intent.putExtra("dingjin", mDepositList.get(i).getMoney());
 //                intent.putExtra("id", mDepositList.get(i).getId());
-//                setResult(11, intent);
+//                setName(11, intent);
 //                finish();
 //            }
 //        });
