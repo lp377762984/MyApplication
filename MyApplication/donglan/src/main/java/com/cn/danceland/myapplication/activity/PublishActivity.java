@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -53,6 +55,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -753,20 +757,44 @@ public class PublishActivity extends Activity {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (imgN <= 9) {
-                        if (position <= arrayLists.size()) {
-                            if ("0".equals(isPhoto)) {
-                                showListDialog();
-                            } else {
-//                                Intent intentr = new Intent(PublishActivity.this,RecordView.class);
-//                                startActivityForResult(intentr,111);
-                                showListDialog();
+                    if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO)) {
+                        //有权限
+                        if (imgN <= 9) {
+                            if (position <= arrayLists.size()) {
+                                if ("0".equals(isPhoto)) {
+                                    showListDialog();
+                                } else {
+                                    showListDialog();
+                                }
                             }
+                        } else {
+                            ToastUtils.showToastShort("最多选择9张图片");
                         }
                     } else {
-                        ToastUtils.showToastShort("最多选择9张图片");
-                    }
+                        PermissionsUtil.requestPermission(PublishActivity.this, new PermissionListener() {
+                            @Override
+                            public void permissionGranted(@NonNull String[] permissions) {
+                                //用户授予了权限
+                                if (imgN <= 9) {
+                                    if (position <= arrayLists.size()) {
+                                        if ("0".equals(isPhoto)) {
+                                            showListDialog();
+                                        } else {
+                                            showListDialog();
+                                        }
+                                    }
+                                } else {
+                                    ToastUtils.showToastShort("最多选择9张图片");
+                                }
+                            }
 
+                            @Override
+                            public void permissionDenied(@NonNull String[] permissions) {
+                                //用户拒绝了申请
+                                ToastUtils.showToastShort("没有权限");
+                            }
+                        }, new String[]{Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO}, false, null);
+                    }
                 }
             });
 

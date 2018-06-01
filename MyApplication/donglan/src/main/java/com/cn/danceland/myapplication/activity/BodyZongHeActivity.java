@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +41,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -57,7 +61,7 @@ import java.util.List;
 
 public class BodyZongHeActivity extends Activity {
 
-    RelativeLayout rl_01,rl_02,rl_03;
+    RelativeLayout rl_01, rl_02, rl_03;
     Uri uri;
     String cameraPath;
     public static String SAVED_IMAGE_DIR_PATH =
@@ -65,8 +69,8 @@ public class BodyZongHeActivity extends Activity {
                     + "/DCIM/camera/";// 拍照路径
     Gson gson;
     String num;//判断第几个图片
-    HashMap<Integer,String> numMap;
-    ImageView img_01,img_02,img_03;
+    HashMap<Integer, String> numMap;
+    ImageView img_01, img_02, img_03;
     DongLanTitleView body_zonghe_title;
     List<BcaResult> resultList;
     EditText et_content;
@@ -84,8 +88,8 @@ public class BodyZongHeActivity extends Activity {
 
     private void initHost() {
 
-        resultList = (List<BcaResult>)getIntent().getSerializableExtra("resultList");
-        if(resultList==null){
+        resultList = (List<BcaResult>) getIntent().getSerializableExtra("resultList");
+        if (resultList == null) {
             resultList = new ArrayList<>();
         }
 
@@ -94,6 +98,7 @@ public class BodyZongHeActivity extends Activity {
         gson = new Gson();
 
     }
+
     private void initView() {
 
         body_zonghe_title = findViewById(R.id.body_zonghe_title);
@@ -123,23 +128,23 @@ public class BodyZongHeActivity extends Activity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.rl_01:
                     num = "1";
-                    takePhoto();
+                    getPermission();
                     break;
                 case R.id.rl_02:
                     num = "2";
-                    takePhoto();
+                    getPermission();
                     break;
                 case R.id.rl_03:
                     num = "3";
-                    takePhoto();
+                    getPermission();
                     break;
                 case R.id.btn_commit:
-                    if(numMap.size()!=3){
+                    if (numMap.size() != 3) {
                         ToastUtils.showToastShort("请拍照完成后提交！");
-                    }else{
+                    } else {
                         save();
                     }
                     break;
@@ -148,6 +153,26 @@ public class BodyZongHeActivity extends Activity {
         }
     };
 
+    private void getPermission() {
+        if (PermissionsUtil.hasPermission(BodyZongHeActivity.this, Manifest.permission.CAMERA)) {
+            //有权限
+            takePhoto();
+        } else {
+            PermissionsUtil.requestPermission(BodyZongHeActivity.this, new PermissionListener() {
+                @Override
+                public void permissionGranted(@NonNull String[] permissions) {
+                    takePhoto();
+                }
+
+                @Override
+                public void permissionDenied(@NonNull String[] permissions) {
+                    //用户拒绝了申请
+                    ToastUtils.showToastShort("没有权限");
+                }
+            }, new String[]{Manifest.permission.CAMERA}, false, null);
+        }
+
+    }
 
     /**
      * @方法说明:新增体测分析
@@ -155,13 +180,13 @@ public class BodyZongHeActivity extends Activity {
     public void save() {
         BcaAnalysis bcaAnalysis = new BcaAnalysis();
         BcaAnalysisRequest request = new BcaAnalysisRequest();
-        bcaAnalysis.setMember_id((long)4);
-        bcaAnalysis.setMember_no(10000008+"");
+        bcaAnalysis.setMember_id((long) 4);
+        bcaAnalysis.setMember_no(10000008 + "");
         bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
         bcaAnalysis.setSide_path(numMap.get(2));//侧面照
         bcaAnalysis.setBehind_path(numMap.get(3));//背面照
         bcaAnalysis.setResult(resultList);
-        if(et_content.getText()!=null){
+        if (et_content.getText() != null) {
             bcaAnalysis.setContent(et_content.getText().toString());
         }
         request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
@@ -178,7 +203,7 @@ public class BodyZongHeActivity extends Activity {
 
     }
 
-    private void takePhoto(){
+    private void takePhoto() {
 
         // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
@@ -212,20 +237,20 @@ public class BodyZongHeActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode==1){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
                 MultipartRequestParams params = new MultipartRequestParams();
-                if(cameraPath!=null){
+                if (cameraPath != null) {
 
-                    if("1".equals(num)){
+                    if ("1".equals(num)) {
                         rl_01.setVisibility(View.GONE);
                         img_01.setVisibility(View.VISIBLE);
                         Glide.with(BodyZongHeActivity.this).load(uri).into(img_01);
-                    }else if("2".equals(num)){
+                    } else if ("2".equals(num)) {
                         rl_02.setVisibility(View.GONE);
                         img_02.setVisibility(View.VISIBLE);
                         Glide.with(BodyZongHeActivity.this).load(uri).into(img_02);
-                    }else if("3".equals(num)){
+                    } else if ("3".equals(num)) {
                         rl_03.setVisibility(View.GONE);
                         img_03.setVisibility(View.VISIBLE);
                         Glide.with(BodyZongHeActivity.this).load(uri).into(img_03);
@@ -243,15 +268,15 @@ public class BodyZongHeActivity extends Activity {
                             if (headImageBean != null && headImageBean.getData() != null) {
                                 String imgPath = headImageBean.getData().getImgPath();
                                 String imgUrl = headImageBean.getData().getImgUrl();
-                                if("1".equals(num)){
-                                    numMap.put(1,imgPath);
-                                }else if("2".equals(num)){
-                                    numMap.put(2,imgPath);
-                                }else if("3".equals(num)){
-                                    numMap.put(3,imgPath);
+                                if ("1".equals(num)) {
+                                    numMap.put(1, imgPath);
+                                } else if ("2".equals(num)) {
+                                    numMap.put(2, imgPath);
+                                } else if ("3".equals(num)) {
+                                    numMap.put(3, imgPath);
                                 }
                                 ToastUtils.showToastShort("上传图片成功！");
-                            }else{
+                            } else {
                                 ToastUtils.showToastShort("上传图片失败！请重新拍照！");
                             }
                         }

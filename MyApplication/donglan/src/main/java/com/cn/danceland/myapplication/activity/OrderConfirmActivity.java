@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -54,6 +55,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -883,8 +886,24 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 break;
 
             case R.id.iv_phonebook://选择通讯录
+                if (PermissionsUtil.hasPermission(OrderConfirmActivity.this, Manifest.permission.READ_CONTACTS)) {
+                    //有权限
+                    read_contacts();
+                } else {
+                    PermissionsUtil.requestPermission(OrderConfirmActivity.this, new PermissionListener() {
+                        @Override
+                        public void permissionGranted(@NonNull String[] permissions) {
+                            read_contacts();
+                        }
 
-                read_contacts();
+                        @Override
+                        public void permissionDenied(@NonNull String[] permissions) {
+                            //用户拒绝了申请
+                            ToastUtils.showToastShort("没有权限");
+                        }
+                    }, new String[]{Manifest.permission.READ_CONTACTS}, false, null);
+                }
+                //read_contacts();
                 break;
             case R.id.ll_counselor://选择会籍顾问
 

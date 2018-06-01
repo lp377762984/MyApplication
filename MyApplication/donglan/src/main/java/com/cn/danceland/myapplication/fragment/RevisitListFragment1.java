@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -480,7 +484,23 @@ public class RevisitListFragment1 extends BaseFragment {
             vh.iv_callphone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showDialog(datalist.get(position).getPhone_no(), position);
+                    if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CALL_PHONE)) {
+                        //有权限
+                        showDialog(datalist.get(position).getPhone_no(), position);
+                    } else {
+                        PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                            @Override
+                            public void permissionGranted(@NonNull String[] permissions) {
+                                showDialog(datalist.get(position).getPhone_no(), position);
+                            }
+                            @Override
+                            public void permissionDenied(@NonNull String[] permissions) {
+                                //用户拒绝了申请
+                                ToastUtils.showToastShort("没有权限");
+                            }
+                        }, new String[]{Manifest.permission.CALL_PHONE}, false, null);
+                    }
+
                     //pos = position;
                 }
             });

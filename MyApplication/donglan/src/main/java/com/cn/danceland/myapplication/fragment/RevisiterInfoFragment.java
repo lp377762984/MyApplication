@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,6 +35,8 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -182,13 +186,45 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         iv_callphone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog(info.getPhone_no());
+                if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CALL_PHONE)) {
+                    //有权限
+                    showDialog(info.getPhone_no());
+                } else {
+                    PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                        @Override
+                        public void permissionGranted(@NonNull String[] permissions) {
+                            showDialog(info.getPhone_no());
+                        }
+                        @Override
+                        public void permissionDenied(@NonNull String[] permissions) {
+                            //用户拒绝了申请
+                            ToastUtils.showToastShort("没有权限");
+                        }
+                    }, new String[]{Manifest.permission.CALL_PHONE}, false, null);
+                }
+
             }
         });
         iv_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                doSendSMSTo(info.getPhone_no(), "");
+                if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.READ_SMS)) {
+                    //有权限
+                    doSendSMSTo(info.getPhone_no(), "");
+                } else {
+                    PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                        @Override
+                        public void permissionGranted(@NonNull String[] permissions) {
+                            doSendSMSTo(info.getPhone_no(), "");
+                        }
+                        @Override
+                        public void permissionDenied(@NonNull String[] permissions) {
+                            //用户拒绝了申请
+                            ToastUtils.showToastShort("没有权限");
+                        }
+                    }, new String[]{Manifest.permission.READ_SMS}, false, null);
+                }
+
             }
         });
 

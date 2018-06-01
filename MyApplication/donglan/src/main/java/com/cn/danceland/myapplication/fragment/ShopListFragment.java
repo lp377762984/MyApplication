@@ -66,7 +66,9 @@ public class ShopListFragment extends BaseFragment {
     ImageButton ibtn_gps, ibtn_call;
     LatLng startLng;
     List<StoreBean.DataBean> itemsList1;
-
+    RelativeLayout rl_error;
+    ImageView iv_error;
+    TextView tv_error;
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.shoplist_fragment, null);
@@ -78,6 +80,12 @@ public class ShopListFragment extends BaseFragment {
         ibtn_call = headView.findViewById(R.id.ibtn_call);
         drawableArrayList = new ArrayList<>();
         itemsList1 = new ArrayList<>();
+
+        rl_error = inflate.findViewById(R.id.rl_error);
+        iv_error = rl_error.findViewById(R.id.iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error9).into(iv_error);
+        tv_error = rl_error.findViewById(R.id.tv_error);
+        tv_error.setText("您的附近没有门店");
 
         gson = new Gson();
         lv_shoplist = inflate.findViewById(R.id.lv_shoplist);
@@ -181,6 +189,9 @@ public class ShopListFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
+                rl_error.setVisibility(View.VISIBLE);
+                tv_error.setText("网络异常");
+                Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
         }) {
             @Override

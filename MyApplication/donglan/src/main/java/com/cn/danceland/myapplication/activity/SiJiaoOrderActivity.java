@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -57,6 +59,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -561,7 +565,24 @@ public class SiJiaoOrderActivity extends Activity {
         iv_phonebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                read_contacts();
+                if (PermissionsUtil.hasPermission(SiJiaoOrderActivity.this, Manifest.permission.READ_CONTACTS)) {
+                    //有权限
+                    read_contacts();
+                } else {
+                    PermissionsUtil.requestPermission(SiJiaoOrderActivity.this, new PermissionListener() {
+                        @Override
+                        public void permissionGranted(@NonNull String[] permissions) {
+                            read_contacts();
+                        }
+
+                        @Override
+                        public void permissionDenied(@NonNull String[] permissions) {
+                            //用户拒绝了申请
+                            ToastUtils.showToastShort("没有权限");
+                        }
+                    }, new String[]{Manifest.permission.READ_CONTACTS}, false, null);
+                }
+
             }
         });
 
