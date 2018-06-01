@@ -1,11 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -41,6 +43,8 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -207,7 +211,24 @@ public class ShopDetailedActivity extends Activity{
         detail_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                if (PermissionsUtil.hasPermission(ShopDetailedActivity.this, Manifest.permission.CALL_PHONE)) {
+                    //有权限
+                    showDialog();
+                } else {
+                    PermissionsUtil.requestPermission(ShopDetailedActivity.this, new PermissionListener() {
+                        @Override
+                        public void permissionGranted(@NonNull String[] permissions) {
+                            showDialog();
+                        }
+
+                        @Override
+                        public void permissionDenied(@NonNull String[] permissions) {
+                            //用户拒绝了申请
+                            ToastUtils.showToastShort("没有权限");
+                        }
+                    }, new String[]{Manifest.permission.CALL_PHONE}, false, null);
+                }
+
             }
         });
         detail_adress.setOnClickListener(new View.OnClickListener() {

@@ -41,6 +41,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
@@ -69,14 +71,9 @@ public class LoginActivity extends Activity implements OnClickListener {
     private ImageView iv_pswd_see;
     ProgressDialog dialog;
     public static final String PERMISSION_RECORD_AUDIO = Manifest.permission.RECORD_AUDIO;
-    public static final String PERMISSION_GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
-    public static final String PERMISSION_READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE;
     public static final String PERMISSION_CALL_PHONE = Manifest.permission.CALL_PHONE;
     public static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-    public static final String PERMISSION_SMS = Manifest.permission.SEND_SMS;
-    public static final String PERMISSION_ACCESS_FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     public static final String PERMISSION_ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    public static final String PERMISSION_READ_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE;
     public static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 
@@ -91,6 +88,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private CheckBox cb_agreement;
     private TLSService tlsService;
     private Button btn_login;
+    private boolean isPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,115 +148,34 @@ public class LoginActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-//        Thread thread = new Thread() {
-//            @Override
-//            public void run() {
-//
-//                permissions();
-//            }
-//        };
-//        thread.start();
         permissions();
-        //  handler.sendMessage(Message.obtain());
-        //    showdialog();
     }
 
-//    private void showdialog() {
-//        AlertDialog.Builder dialog =
-//                new AlertDialog.Builder(this);
-//        dialog.setTitle("提示");
-//        dialog.setMessage("请授权一些权限，以确保APP能正常使用");
-//        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                permissions();
-//            }
-//        });
-//        dialog.show();
-//    }
 
     public void permissions() {
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
-        }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
-        }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
-        }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
-        }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
-        }
-        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 6);
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 || requestCode == 3 || requestCode == 2 || requestCode == 4 || requestCode == 5 || requestCode == 6) {
-            if (grantResults.length > 0) {
-                if (grantResults[0] != 0) {
-                    AlertDialog.Builder inputDialog =
-                            new AlertDialog.Builder(LoginActivity.this);
-                    inputDialog.setTitle("请在系统应用管理中开启相机定位等必要权限，否则程序无法正常使用");
-                    inputDialog.setPositiveButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (requestCode == 1) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_RECORD_AUDIO)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_RECORD_AUDIO}, 1);
-                                        }
-                                    }
-                                    if (requestCode == 2) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CALL_PHONE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CALL_PHONE}, 2);
-                                        }
-                                    } else if (requestCode == 3) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_CAMERA)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_CAMERA}, 3);
-                                        }
-                                    } else if (requestCode == 4) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_ACCESS_COARSE_LOCATION)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_ACCESS_COARSE_LOCATION}, 4);
-                                        }
-                                    } else if (requestCode == 5) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, PERMISSION_WRITE_EXTERNAL_STORAGE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{PERMISSION_WRITE_EXTERNAL_STORAGE}, 5);
-                                        }
-                                    } else if (requestCode == 6) {
-                                        if (ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_CONTACTS)
-                                                != PackageManager.PERMISSION_GRANTED) {
-                                            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 6);
-                                        }
-                                    }
-                                    //System.exit(0);
-                                }
-                            }).show();
+        PermissionsUtil.TipInfo tip = new PermissionsUtil.TipInfo("注意:", "未授予位置和文件权限，应用将无法使用", "不了，谢谢", "打开权限");
+        if (PermissionsUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            //有权限
+            isPermission = true;
+        } else {
+            PermissionsUtil.requestPermission(this, new PermissionListener() {
+                @Override
+                public void permissionGranted(@NonNull String[] permissions) {
+                    //用户授予了权限
+                    isPermission = true;
                 }
 
+                @Override
+                public void permissionDenied(@NonNull String[] permissions) {
+                    //用户拒绝了申请
+                    isPermission = false;
 
-            }
+                }
+            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION}, true, tip);
         }
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -289,6 +206,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 if (!cb_agreement.isChecked()) {
                     ToastUtils.showToastShort("请阅读用户协议，并勾选");
+                    return;
+                }
+                if (!isPermission) {
+                    ToastUtils.showToastShort("请开启权限后登录");
                     return;
                 }
                 dialog.show();

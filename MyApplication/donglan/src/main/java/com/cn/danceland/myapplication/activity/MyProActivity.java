@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -16,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -56,6 +58,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
+import com.github.dfqin.grantor.PermissionListener;
+import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
@@ -298,10 +302,28 @@ public class MyProActivity extends Activity {
             int id = view.getId();
             switch (id) {
                 case R.id.head_image: {
-                    flag = 0;
-                    dismissWindow();
-                    showEditImage();
-                    showPop();
+                    if (PermissionsUtil.hasPermission(MyProActivity.this, Manifest.permission.CAMERA)) {
+                        //有权限
+                        flag = 0;
+                        dismissWindow();
+                        showEditImage();
+                        showPop();
+                    } else {
+                        PermissionsUtil.requestPermission(MyProActivity.this, new PermissionListener() {
+                            @Override
+                            public void permissionGranted(@NonNull String[] permissions) {
+                                flag = 0;
+                                dismissWindow();
+                                showEditImage();
+                                showPop();
+                            }
+                            @Override
+                            public void permissionDenied(@NonNull String[] permissions) {
+                                //用户拒绝了申请
+                                ToastUtils.showToastShort("没有权限");
+                            }
+                        }, new String[]{Manifest.permission.CAMERA}, false, null);
+                    }
                 }
                 break;
                 case R.id.rl_jianjie:
