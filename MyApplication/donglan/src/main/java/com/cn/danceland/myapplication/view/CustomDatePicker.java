@@ -184,7 +184,7 @@ public class CustomDatePicker extends AlertDialog{
         lp_month.setItemsVisibleCount(7);
         lp_date.setItemsVisibleCount(7);
 
-        sminute = minuteList.get(30);
+        //sminute = minuteList.get(30);
 
         lp_hour.setListener(new OnItemSelectedListener() {
             @Override
