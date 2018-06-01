@@ -399,6 +399,8 @@ public class PotentialDetailsActivity extends FragmentActivity implements View.O
         public String page;
         //public String auth = "1";
         public String member_id;
+        public String status="0";
+
     }
 
     class RequsetSimpleBean1 {

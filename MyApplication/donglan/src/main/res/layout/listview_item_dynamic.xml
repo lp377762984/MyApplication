@@ -14,11 +14,13 @@
             android:gravity="center"
             android:text="没有发布动态"
             android:visibility="gone" />-->
-    <include layout="@layout/no_info_layout"
+    <include
         android:id="@+id/rl_no_info"
+        layout="@layout/no_info_layout"
         android:visibility="gone"
 
         />
+
     <LinearLayout
 
         android:id="@+id/ll_item"
@@ -84,8 +86,7 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/img_xin"
-                    />
+                    android:src="@drawable/img_xin" />
 
                 <com.vondear.rxtools.view.likeview.RxShineButton
                     android:id="@+id/rx_guanzhu"
@@ -94,13 +95,13 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:src="@android:color/darker_gray"
+                    android:visibility="gone"
                     app:allow_random_color="false"
                     app:big_shine_color="@color/color_dl_yellow"
                     app:btn_color="@android:color/darker_gray"
                     app:btn_fill_color="@color/color_dl_yellow"
                     app:click_animation_duration="200"
                     app:enable_flashing="false"
-                    android:visibility="gone"
                     app:shine_animation_duration="1500"
                     app:shine_count="15"
                     app:shine_distance_multiple="1.5"
@@ -327,8 +328,8 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-
-                    android:src="@drawable/img_share" />
+                    android:src="@drawable/img_share"
+                    android:visibility="gone" />
 
                 <RelativeLayout
                     android:id="@+id/rl_more"

@@ -121,7 +121,7 @@ public class RequsetUpcomingMaterListBean {
             private String role_type;
             private String person_id;
             private String operate_id;
-            private String operate_name;
+            private String employee_name;
             private String member_id;
             private String member_no;
             private String member_name;
@@ -131,8 +131,47 @@ public class RequsetUpcomingMaterListBean {
             private String result_type;
             private String pushed;
             private String warn_time;
-            private String done;
+            private String status;
+            private String work_type_name;
+            private String result;
 
+            public String getResult() {
+                return result;
+            }
+
+            public void setResult(String result) {
+                this.result = result;
+            }
+
+            public String getWork_type_name() {
+                return work_type_name;
+            }
+
+            public void setWork_type_name(String work_type_name) {
+                this.work_type_name = work_type_name;
+            }
+
+            @Override
+            public String toString() {
+                return "Content{" +
+                        "id='" + id + '\'' +
+                        ", role_type='" + role_type + '\'' +
+                        ", person_id='" + person_id + '\'' +
+                        ", operate_id='" + operate_id + '\'' +
+                        ", employee_name='" + employee_name + '\'' +
+                        ", member_id='" + member_id + '\'' +
+                        ", member_no='" + member_no + '\'' +
+                        ", member_name='" + member_name + '\'' +
+                        ", title='" + title + '\'' +
+                        ", content='" + content + '\'' +
+                        ", record_time='" + record_time + '\'' +
+                        ", result_type='" + result_type + '\'' +
+                        ", pushed='" + pushed + '\'' +
+                        ", warn_time='" + warn_time + '\'' +
+                        ", status='" + status + '\'' +
+                        ", work_type_name='" + work_type_name + '\'' +
+                        '}';
+            }
 
             public String getId() {
                 return id;
@@ -166,12 +205,12 @@ public class RequsetUpcomingMaterListBean {
                 this.operate_id = operate_id;
             }
 
-            public String getOperate_name() {
-                return operate_name;
+            public String getEmployee_name() {
+                return employee_name;
             }
 
-            public void setOperate_name(String operate_name) {
-                this.operate_name = operate_name;
+            public void setEmployee_name(String employee_name) {
+                this.employee_name = employee_name;
             }
 
             public String getMember_id() {
@@ -246,34 +285,14 @@ public class RequsetUpcomingMaterListBean {
                 this.warn_time = warn_time;
             }
 
-            public String getDone() {
-                return done;
+            public String getStatus() {
+                return status;
             }
 
-            public void setDone(String done) {
-                this.done = done;
+            public void setStatus(String status) {
+                this.status = status;
             }
 
-            @Override
-            public String toString() {
-                return "Content{" +
-                        "id='" + id + '\'' +
-                        ", role_type='" + role_type + '\'' +
-                        ", person_id='" + person_id + '\'' +
-                        ", operate_id='" + operate_id + '\'' +
-                        ", operate_name='" + operate_name + '\'' +
-                        ", member_id='" + member_id + '\'' +
-                        ", member_no='" + member_no + '\'' +
-                        ", member_name='" + member_name + '\'' +
-                        ", title='" + title + '\'' +
-                        ", content='" + content + '\'' +
-                        ", record_time='" + record_time + '\'' +
-                        ", result_type='" + result_type + '\'' +
-                        ", pushed='" + pushed + '\'' +
-                        ", warn_time='" + warn_time + '\'' +
-                        ", done='" + done + '\'' +
-                        '}';
-            }
         }
     }
 }

@@ -44,7 +44,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
 
-        android:src="@drawable/img_my_avatar" />
+        android:src="@drawable/img_dl_logo" />
 
     <LinearLayout
         android:id="@+id/ll_phone"

@@ -48,7 +48,7 @@ public class RequsetUpcomingMaterParamBean {
         private String customer_type;
         private String role_type;
         private String result_type;
-        private String result;
+        private String name;
 
         @Override
         public String toString() {
@@ -57,7 +57,7 @@ public class RequsetUpcomingMaterParamBean {
                     ", customer_type='" + customer_type + '\'' +
                     ", role_type='" + role_type + '\'' +
                     ", result_type='" + result_type + '\'' +
-                    ", result='" + result + '\'' +
+                    ", name='" + name + '\'' +
                     '}';
         }
 
@@ -93,12 +93,12 @@ public class RequsetUpcomingMaterParamBean {
             this.result_type = result_type;
         }
 
-        public String getResult() {
-            return result;
+        public String getName() {
+            return name;
         }
 
-        public void setResult(String result) {
-            this.result = result;
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
