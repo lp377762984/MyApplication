@@ -116,8 +116,20 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //            discoverFragment = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[2]);
 //            meFragment = (MeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[3]);
 //        }
+        try{
+            myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        }catch(ClassCastException e){
+            LogUtil.i(e.toString());
+            startActivity(new Intent(this, LoginActivity.class));
+            if (SPUtils.getBoolean(Constants.ISLOGINED,false)){
+                SPUtils.setBoolean(Constants.ISLOGINED, false);
+                ToastUtils.showToastShort("请重新登录您的账号");
+            }
 
-        myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            //退出主页面
+            finish();
+        }
+
         if (myInfo != null) {
             if (myInfo.getPerson().getDefault_branch() != null) {
                 fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};

@@ -1331,7 +1331,7 @@ public class Data implements Serializable {
     }
 
     public class Branch implements Serializable{
-
+       
         private String branch_id;// 主键
         private String league_id;// 加盟商主键
         private String name;// 门店名称

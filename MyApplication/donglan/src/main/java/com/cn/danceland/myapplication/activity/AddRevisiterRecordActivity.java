@@ -99,7 +99,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                     ToastUtils.showToastShort("回访内容不能为空");
                     return;
                 }
-                if (TextUtils.isEmpty(requsetBean.type)) {
+                if (TextUtils.isEmpty(requsetBean.type)||TextUtils.isEmpty(tv_content.getText().toString())) {
                     ToastUtils.showToastShort("请选择回访方式");
                     return;
                 }
