@@ -147,7 +147,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         TextView tv_tiltle=findViewById(R.id.tv_tiltle);
         auth = getIntent().getStringExtra("auth");
         if (TextUtils.equals(auth,"2")){
-            tv_tiltle.setText("会员维护");
+            tv_tiltle.setText("会员管理");
         }
         findViewById(R.id.iv_back).setOnClickListener(this);
 
