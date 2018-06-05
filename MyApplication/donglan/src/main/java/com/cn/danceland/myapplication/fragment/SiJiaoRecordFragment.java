@@ -250,7 +250,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 viewHolder.rl_button_tv = convertView.findViewById(R.id.rl_button_tv);
                 viewHolder.rl_qiandao = convertView.findViewById(R.id.rl_qiandao);
                 viewHolder.rl_qiandao_tv = convertView.findViewById(R.id.rl_qiandao_tv);
-                viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
+
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -259,8 +259,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
             viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    StringBuilder  data =new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
-                    startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data",data.toString()));
+                    StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                    startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                 }
             });
 
@@ -354,9 +354,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
             });
             if (list.get(position).getStatus() == 2) {
+                viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
                 viewHolder.rl_button_tv.setText("已确认未签到");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                 viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+            } else {
+                viewHolder.rl_qiandao.setVisibility(View.GONE);
             }
             if (list.get(position).getStatus() == 3) {
                 viewHolder.rl_button_tv.setText("已取消");
