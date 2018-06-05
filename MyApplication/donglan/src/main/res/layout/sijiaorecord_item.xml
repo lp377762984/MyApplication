@@ -72,12 +72,13 @@
                 />
             <RelativeLayout
                 android:id="@+id/rl_button"
-                android:layout_width="100dp"
-                android:layout_height="20dp"
+                android:layout_width="80dp"
+                android:layout_height="25dp"
                 android:background="@drawable/btn_bg_blue"
                 android:layout_weight="1"
                 android:layout_gravity="right"
                 android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
                 >
                 <TextView
                     android:id="@+id/rl_button_tv"
@@ -85,11 +86,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="取消预约"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     />
 
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_qiandao"
+                android:layout_width="80dp"
+                android:layout_height="25dp"
+                android:background="@drawable/btn_bg_blue"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:id="@+id/rl_qiandao_tv"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="私教签到"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    />
 
+            </RelativeLayout>
 
         </LinearLayout>
 

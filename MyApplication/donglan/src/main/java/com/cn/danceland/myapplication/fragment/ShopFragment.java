@@ -51,6 +51,7 @@ import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
+import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.ReportFormActivity;
 import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
@@ -778,9 +779,25 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 19://扫码入场
+                        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
+                            //有权限
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                        } else {
+                            PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                                @Override
+                                public void permissionGranted(@NonNull String[] permissions) {
+                                    //用户授予了权限
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                                }
 
+                                @Override
+                                public void permissionDenied(@NonNull String[] permissions) {
+                                    //用户拒绝了申请
+                                    ToastUtils.showToastShort("没有权限");
+                                }
+                            }, new String[]{Manifest.permission.CAMERA}, false, null);
+                        }
 
-                        startActivity(new Intent(mActivity, ScanerCodeActivity.class));
                         break;
 
                     case 20://预约团课
