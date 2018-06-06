@@ -143,6 +143,12 @@ public class ShopDetailedActivity extends Activity{
 
         shop_banner = findViewById(R.id.shop_banner);
         img_kechenganpai = findViewById(R.id.img_kechenganpai);
+        img_kechenganpai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
+            }
+        });
         jiaolian_grid = findViewById(R.id.jiaolian_grid);
         huiji_grid = findViewById(R.id.huiji_grid);
         jiaolian_grid.setGroupIndicator(null);

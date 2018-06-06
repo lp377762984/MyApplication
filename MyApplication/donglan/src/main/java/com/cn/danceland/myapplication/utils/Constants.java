@@ -23,7 +23,7 @@ public class Constants  {
     //public static final String HOST = " http://192.168.1.119:8003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
   //  public static final String HOST = "http://192.168.1.123:8003/";//老高
-    // public static  String HOST = "http://192.168.1.122:8003/";//超哥
+     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
@@ -200,6 +200,7 @@ public class Constants  {
     public static final String CANCELTEST = HOST + "appBca/cancelTester";//取消体测
 
     //私教相关
+    public static final String TIMETABLES = HOST + "/appGroupCourse/queryGroupCourseTimetables";//课程表
     public static final String COURSETYPELIST = HOST + "appCourse/findPageCourseType";//购买私教课程列表
     public static final String FINDCourseTypeEmployee = HOST + "appCourse/findCourseTypeEmployee";//查私教教练
     public static final String FINDGROUPCLASS = HOST + "appGroupClass/queryPage";//小团课列表
