@@ -9,11 +9,16 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.RecommendFragment;
 import com.cn.danceland.myapplication.fragment.RecommendedFragment;
+import com.cn.danceland.myapplication.utils.SPUtils;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -74,6 +79,9 @@ public class RecommendActivity extends FragmentActivity implements View.OnClickL
 
             }
         });
+        if (   SPUtils.getBoolean("tuijian_show",true)){
+            showTuiJianDialog();
+        }
 
     }
     private void initMagicIndicator1() {
@@ -168,5 +176,55 @@ public class RecommendActivity extends FragmentActivity implements View.OnClickL
         }
 
     }
+    private void showTuiJianDialog() {
 
+        final AlertDialog.Builder inputDialog =
+                new AlertDialog.Builder(this);
+        final View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_tuijian_tishi, null);
+
+        Button btn_commit=dialogView.findViewById(R.id.btn_commit);
+        final CheckBox cb_tj=dialogView.findViewById(R.id.cb_tj);
+
+        inputDialog.setView(dialogView);
+        final AlertDialog dialog =inputDialog.show();
+        btn_commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cb_tj.isChecked()){
+                    SPUtils.setBoolean("tuijian_show",false);
+                }
+                dialog.dismiss();
+            }
+        });
+
+//        inputDialog.setTitle("设置会员号");
+//        inputDialog.setView(dialogView);
+//        inputDialog.setPositiveButton("确定",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // 获取EditView中的输入内容
+//                        EditText et_number =
+//
+//                                dialogView.findViewById(R.id.et_number);
+//
+//                        mInfo.getPerson().setMember_no(et_number.getText().toString());
+//                        // DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//
+//                        tv_number.setText(et_number.getText().toString());
+//
+////                        Toast.makeText(SettingActivity.this,
+////                                edit_phone.getText().toString(),
+////                                Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        inputDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//        });
+
+    }
 }

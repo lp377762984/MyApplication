@@ -95,15 +95,19 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 finish();
                 break;
             case R.id.btn_commit:
-                if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
-                    ToastUtils.showToastShort("回访内容不能为空");
-                    return;
-                }
-                if (TextUtils.isEmpty(requsetBean.type)||TextUtils.isEmpty(tv_content.getText().toString())) {
+
+                if (TextUtils.isEmpty(requsetBean.type)) {
                     ToastUtils.showToastShort("请选择回访方式");
                     return;
                 }
-
+                if (TextUtils.isEmpty(requsetBean.content)){
+                    ToastUtils.showToastShort("请选择回访内容");
+                    return;
+                }
+                if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                    ToastUtils.showToastShort("回访结果不能为空");
+                    return;
+                }
                 if (et_content.getText().toString().length()>200){
                     ToastUtils.showToastShort("输入文字数量:"+et_content.getText().toString().length()+"，超过上限");
                     return;
