@@ -47,6 +47,7 @@ public class CabinetActivity extends Activity {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,15 +78,15 @@ public class CabinetActivity extends Activity {
     }
 
 
-    private void getData(){
+    private void getData() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDMyLOCKERS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf",s);
+                LogUtil.e("zzf", s);
                 cabinetBean = gson.fromJson(s, CabinetBean.class);
                 dataList = cabinetBean.getData();
-                if(dataList!=null){
+                if (dataList != null) {
                     cabinet_lv.setAdapter(new MyAdapter(dataList));
                 }
             }
@@ -96,12 +97,12 @@ public class CabinetActivity extends Activity {
                 tv_error.setText("网络异常");
                 Glide.with(CabinetActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
 
                 return map;
             }
@@ -111,10 +112,10 @@ public class CabinetActivity extends Activity {
     }
 
 
-
-    private class MyAdapter extends BaseAdapter{
+    private class MyAdapter extends BaseAdapter {
         List<CabinetBean.Data> list;
-        MyAdapter(List<CabinetBean.Data> list){
+
+        MyAdapter(List<CabinetBean.Data> list) {
             this.list = list;
 
         }
@@ -144,11 +145,11 @@ public class CabinetActivity extends Activity {
             TextView overtime = inflate.findViewById(R.id.overtime);
             TextView tv_locker_zone = inflate.findViewById(R.id.tv_locker_zone);
 
-            cabinet_num.setText("柜号："+list.get(position).getLocker_no());
+            cabinet_num.setText("柜号：" + list.get(position).getLocker_name());
 
-            starttime.setText("开始日期："+TimeUtils.millToDate(list.get(position).getStart_date()));
+            starttime.setText("开始日期：" + TimeUtils.millToDate(list.get(position).getStart_date()));
 
-            overtime.setText("结束日期："+TimeUtils.millToDate(list.get(position).getEnd_date()));
+            overtime.setText("结束日期：" + TimeUtils.millToDate(list.get(position).getEnd_date()));
             tv_locker_zone.setText(list.get(position).getLocker_zone_name());
 
 
