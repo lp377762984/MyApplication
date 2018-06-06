@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequstRecommendBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -52,7 +53,7 @@ public class RecommendedFragment extends BaseFragment {
         View v = View.inflate(mActivity, R.layout.fragment_recommended, null);
 
         ListView listView = v.findViewById(R.id.listview);
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
         iv_error.setImageResource(R.drawable.img_error14);
@@ -93,7 +94,13 @@ public class RecommendedFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
 
-                ToastUtils.showToastShort(s);
+
+                RequestSimpleBean simpleBean = gson.fromJson(s.toString(), RequestSimpleBean.class);
+                if (simpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("确认推荐成功");
+                    initDta();
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -159,15 +166,15 @@ public class RecommendedFragment extends BaseFragment {
 
                 iv_sex.setImageResource(R.drawable.img_sex2);
             }
-            if (dataList.get(i).getStatus()==0){
+            if (dataList.get(i).getStatus() == 0) {
                 tv_status.setVisibility(View.VISIBLE);
-            }else  if (dataList.get(i).getStatus()==1){
+            } else if (dataList.get(i).getStatus() == 1) {
                 tv_status.setVisibility(View.INVISIBLE);
-            }else  if (dataList.get(i).getStatus()==2){
+            } else if (dataList.get(i).getStatus() == 2) {
 
             }
 
-final Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            final Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             tv_status.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -209,7 +216,7 @@ final Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-               // ToastUtils.showToastShort(volleyError.toString());
+                // ToastUtils.showToastShort(volleyError.toString());
                 iv_error.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }

@@ -437,12 +437,20 @@ public class UserHomeActivity extends Activity {
                 LogUtil.i("收到消息" + msg);
                 RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                 Glide.with(this).load(msg).apply(options).into(iv_userifno_avatar);
+                for (int i=0;i<data.size();i++){
+                    data.get(i).setSelfUrl(msg);
+                }
+                myDynListviewAdater.notifyDataSetChanged();
 
                 break;
             case 100:
                 if (100 == event.getEventCode()) {
                     tv_head_nickname.setText(event.getMsg());
                 }
+                for (int i=0;i<data.size();i++){
+                    data.get(i).setNickName(event.getMsg());
+                }
+                myDynListviewAdater.notifyDataSetChanged();
                 break;
             case EventConstants.ADD_GUANZHU:
 

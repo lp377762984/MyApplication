@@ -1,6 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -70,9 +73,17 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_user_self_home);
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initData() {
@@ -134,7 +145,29 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     };
 
 
-    private void setData() {
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch(event.getEventCode()){
+            case 99:
+                String msg = event.getMsg();
+                LogUtil.i("收到消息" + msg);
+                RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                Glide.with(this).load(msg).apply(options).into(iv_avatar);
+
+                break;
+            case 100:
+                tv_nick_name.setText(event.getMsg());
+
+                break;
+        default:
+        break;
+        }
+
+    }
+
+
+        private void setData() {
         tv_gauzhu_num.setText(userInfo.getFollow_no() + "");
         tv_fans.setText(userInfo.getFanse_no() + "");
         tv_dyn.setText(userInfo.getDyn_no() + "");
@@ -202,17 +235,19 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 //                break;
             case  R.id.iv_guanzhu:
                 if (userInfo.getIs_follow()) {
-                    addGuanzhu(userId, false);
+                    showClearDialog();
                 } else {
                     addGuanzhu(userId, true);
                 }
                 break;
             case R.id.rx_guangzhu:
                 if (userInfo.getIs_follow()) {
-                    addGuanzhu(userId, false);
+                    showClearDialog();
                 } else {
                     addGuanzhu(userId, true);
                 }
+
+
                 break;
 
             case R.id.ll_edit:
@@ -251,6 +286,30 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 break;
         }
     }
+
+    /**
+     * 取消关注
+     */
+    private void showClearDialog() {
+        AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        //  dialog.setTitle("提示");
+        dialog.setMessage("是否取消关注");
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                addGuanzhu(userId, false);
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+    }
+
 
     /***
      * 查找个人资料

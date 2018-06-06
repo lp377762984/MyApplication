@@ -967,7 +967,12 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
                     protocol_params.card_type_name = CardsInfo.getName();
                     protocol_params.order_price = pay_price + "";
-                    protocol_params.card_remark = CardsInfo.getRemark();
+                    if (CardsInfo.getRemark()==null){
+                        protocol_params.card_remark = "";
+                    }else {
+                        protocol_params.card_remark = CardsInfo.getRemark();
+                    }
+
                     protocol_params.admin_emp = consultantInfo.getCname();
 
                     if (isme) {

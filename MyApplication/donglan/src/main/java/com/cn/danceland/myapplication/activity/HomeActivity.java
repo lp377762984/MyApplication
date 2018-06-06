@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -98,7 +99,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-    //    requestPermissions();//请求权限
+        //    requestPermissions();//请求权限
         instance = this;
         initView();
         registerBroadcastReceiver();//注册环信监听
@@ -116,12 +117,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //            discoverFragment = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[2]);
 //            meFragment = (MeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[3]);
 //        }
-        try{
+        try {
             myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        }catch(ClassCastException e){
+        } catch (ClassCastException e) {
             LogUtil.i(e.toString());
             startActivity(new Intent(this, LoginActivity.class));
-            if (SPUtils.getBoolean(Constants.ISLOGINED,false)){
+            if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
                 SPUtils.setBoolean(Constants.ISLOGINED, false);
                 ToastUtils.showToastShort("请重新登录您的账号");
             }
@@ -131,6 +132,14 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
 
         if (myInfo != null) {
+            LogUtil.i(myInfo.toString());
+            if (TextUtils.isEmpty(myInfo.getPerson().getNick_name())) {
+                startActivity(new Intent(this, RegisterInfoActivity.class));
+                ToastUtils.showToastShort("请您填写个人信息");
+                finish();
+            }
+
+
             if (myInfo.getPerson().getDefault_branch() != null) {
                 fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
             } else {
@@ -169,9 +178,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
                 LogUtil.i(s);
                 CheckUpdateBean checkUpdateBean = new Gson().fromJson(s, CheckUpdateBean.class);
-                if(checkUpdateBean!=null && checkUpdateBean.getData()!=null){
+                if (checkUpdateBean != null && checkUpdateBean.getData() != null) {
                     String status = checkUpdateBean.getData().getStatus();
-                    if("2".equals(status) && checkUpdateBean.getData().getUrl()!=null){
+                    if ("2".equals(status) && checkUpdateBean.getData().getUrl() != null) {
                         showDialog(checkUpdateBean.getData().getUrl());
                     }
                 }
@@ -182,13 +191,13 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("version",Constants.getVersion());
-                map.put("platform",Constants.getPlatform());
+                map.put("version", Constants.getVersion());
+                map.put("platform", Constants.getPlatform());
                 return map;
             }
 
@@ -203,7 +212,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
-    private void showDialog(final String url){
+    private void showDialog(final String url) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getCurrentActivity());
         builder.setMessage("发现新版本，是否需要升级");
@@ -211,12 +220,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Uri uri;
-                if(HttpUtils.IsUrl(url)){
+                if (HttpUtils.IsUrl(url)) {
                     uri = Uri.parse(url);
-                }else{
+                } else {
                     uri = Uri.parse("https://www.baidu.com/");
                 }
-                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -316,7 +325,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         mLocationClient.unregisterListener(myListener);
         mLocationClient.stop();
         LogUtil.i("mLocationClient_stop");
-     //   EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        //   EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
     public class MyLocationListener extends BDAbstractLocationListener {
@@ -324,13 +333,13 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         public void onReceiveLocation(BDLocation location) {
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
-            if(location!=null){
-                LogUtil.i(location.getLocType()+"");
+            if (location != null) {
+                LogUtil.i(location.getLocType() + "");
             }
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
-                LogUtil.i(weidu +"----"+jingdu);
+                LogUtil.i(weidu + "----" + jingdu);
                 SPUtils.setString("jingdu", jingdu + "");
                 SPUtils.setString("weidu", weidu + "");
                 if (shopListFragment != null) {

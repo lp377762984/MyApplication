@@ -119,7 +119,7 @@ public class AttentionFragment extends BaseFragment {
                 break;
 
             case 8901:
-                if (event.getMsg()==1){
+                if (event.getMsg() == 1) {
                     pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -131,7 +131,7 @@ public class AttentionFragment extends BaseFragment {
                             JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
                         }
                     });
-                }else {
+                } else {
                     pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -301,7 +301,7 @@ public class AttentionFragment extends BaseFragment {
 //            rl_no_info.setVisibility(View.VISIBLE);
 //        }
 
-        View    listEmptyView= v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error2);
@@ -347,12 +347,9 @@ public class AttentionFragment extends BaseFragment {
                 // TODO Auto-generated method stub
 
 
-
                 new UpRefresh().execute();
             }
         });
-
-
 
 
         return v;
@@ -395,11 +392,11 @@ public class AttentionFragment extends BaseFragment {
 
         //  userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-        if (SPUtils.getInt(Constants.MY_FOLLOWS,0) != 0) {
+        if (SPUtils.getInt(Constants.MY_FOLLOWS, 0) != 0) {
             dialog.show();
 
 
-            findSelectionDyn_Down(mCurrentPage-1);
+            findSelectionDyn_Down(mCurrentPage - 1);
 
 
             // findPushUser();
@@ -421,8 +418,8 @@ public class AttentionFragment extends BaseFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            mCurrentPage=1;
-            findSelectionDyn_Down(mCurrentPage-1);
+            mCurrentPage = 1;
+            findSelectionDyn_Down(mCurrentPage - 1);
             init();
             return null;
         }
@@ -445,7 +442,7 @@ public class AttentionFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-                findSelectionDyn_Up(mCurrentPage-1);
+                findSelectionDyn_Up(mCurrentPage - 1);
             }
 
             return null;
@@ -563,10 +560,10 @@ public class AttentionFragment extends BaseFragment {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
-
+                LogUtil.i(s);
                 Gson gson = new Gson();
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
-                LogUtil.i(requsetDynInfoBean.toString());
+                //  LogUtil.i(requsetDynInfoBean.toString());
                 if (requsetDynInfoBean.getSuccess()) {
 
                     if (requsetDynInfoBean.getData() != null) {
@@ -579,7 +576,7 @@ public class AttentionFragment extends BaseFragment {
 
                             if (mCurrentPage == 1 && data.size() < 10) {
 
-                                isEnd=true;
+                                isEnd = true;
                                 ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
                                         false, true);
                                 endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
@@ -587,20 +584,17 @@ public class AttentionFragment extends BaseFragment {
                                 endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
                                 endLabels.setLoadingDrawable(null);
 
-                            }else {
+                            } else {
 
                                 mCurrentPage = 2;//下次从第二页请求
                             }
 
 
-
-
-
                         }
 
 
-                    }else {
-                        isEnd=true;
+                    } else {
+                        isEnd = true;
                         ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
                                 false, true);
                         endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
@@ -660,14 +654,14 @@ public class AttentionFragment extends BaseFragment {
                 requsetDynInfoBean = gson.fromJson(s, RequsetDynInfoBean.class);
 
                 if (requsetDynInfoBean.getSuccess()) {
-                    if (requsetDynInfoBean.getData()!=null){
+                    if (requsetDynInfoBean.getData() != null) {
                         data = requsetDynInfoBean.getData().getItems();
                     }
 
                     // requsetDynInfoBean.getData().getItems().toString();
                     LogUtil.i(requsetDynInfoBean.getData().toString());
 
-                    if (requsetDynInfoBean.getData()!=null&&data.size() > 0) {
+                    if (requsetDynInfoBean.getData() != null && data.size() > 0) {
                         rl_no_info.setVisibility(View.GONE);
                         myDynListviewAdater.addLastList((ArrayList<RequsetDynInfoBean.Data.Content>) data);
                         LogUtil.i(data.toString());
