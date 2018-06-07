@@ -3,13 +3,11 @@ package com.cn.danceland.myapplication.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -51,7 +48,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -264,61 +260,61 @@ public class LoginActivity extends Activity implements OnClickListener {
                 break;
         }
     }
-
-    private final String[] HistList = new String[]{"http://192.168.1.117:8003/", "http://192.168.1.123:8003/", "http://192.168.1.122:8003/", "http://192.168.1.119:8003/", "http://wx.dljsgw.com/"};
-    private final String[] HistListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器", "阿里云服务器"};
-
-    private void showHostDialog() {
-        AlertDialog.Builder listDialog =
-                new AlertDialog.Builder(this);
-        listDialog.setTitle("请选择您要切换的服务器地址，阿里云环境无法使用沙箱版支付宝");
-        listDialog.setItems(HistListName, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // which 下标从0开始
-                // ...To-do
-                Toast.makeText(LoginActivity.this, "已切换" + which + HistListName[which], Toast.LENGTH_SHORT).show();
-                motifyfiled(Constants.HOST, HistList[which]);
-
-//                Constants.HOST = HistList[which];
+//
+//    private final String[] HistList = new String[]{"http://192.168.1.117:8003/", "http://192.168.1.123:8003/", "http://192.168.1.122:8003/", "http://192.168.1.119:8003/", "http://wx.dljsgw.com/"};
+//    private final String[] HistListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器", "阿里云服务器"};
+//
+//    private void showHostDialog() {
+//        AlertDialog.Builder listDialog =
+//                new AlertDialog.Builder(this);
+//        listDialog.setTitle("请选择您要切换的服务器地址，阿里云环境无法使用沙箱版支付宝");
+//        listDialog.setItems(HistListName, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // which 下标从0开始
+//                // ...To-do
+//                Toast.makeText(LoginActivity.this, "已切换" + which + HistListName[which], Toast.LENGTH_SHORT).show();
+//                motifyfiled(Constants.HOST, HistList[which]);
+//
+////                Constants.HOST = HistList[which];
+////                LogUtil.i(Constants.HOST);
+////                if (which == 4) {
+////                    Constants.DEV_CONFIG = false;
+////                } else {
+////                    Constants.DEV_CONFIG = true;
+////                }
+//
 //                LogUtil.i(Constants.HOST);
-//                if (which == 4) {
-//                    Constants.DEV_CONFIG = false;
-//                } else {
-//                    Constants.DEV_CONFIG = true;
+//            }
+//        });
+//        listDialog.show();
+//
+//    }
+//
+//    public void motifyfiled(String oldHost, String newHost) {
+//        String updateOldHost = newHost;
+//        Class clazz = null;
+//        try {
+//            clazz = Class.forName("com.cn.danceland.myapplication.utils.Constants");
+//            //通过反射拿到变量名
+//            Field[] fields = clazz.getDeclaredFields();
+//            for (Field f : fields) {
+//                LogUtil.i(f.getType().toString());
+//                if (f.getType().toString().equals("class java.lang.String")) {
+//                    String address = (String) f.get(clazz);
+//                    if (address.contains(oldHost) && !address.equals(oldHost)) {
+//                        address = address.replace(oldHost, updateOldHost);
+//                    }
+//                    f.set(clazz, address);
 //                }
-
-                LogUtil.i(Constants.HOST);
-            }
-        });
-        listDialog.show();
-
-    }
-
-    public void motifyfiled(String oldHost, String newHost) {
-        String updateOldHost = newHost;
-        Class clazz = null;
-        try {
-            clazz = Class.forName("com.cn.danceland.myapplication.utils.Constants");
-            //通过反射拿到变量名
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field f : fields) {
-                LogUtil.i(f.getType().toString());
-                if (f.getType().toString().equals("class java.lang.String")) {
-                    String address = (String) f.get(clazz);
-                    if (address.contains(oldHost) && !address.equals(oldHost)) {
-                        address = address.replace(oldHost, updateOldHost);
-                    }
-                    f.set(clazz, address);
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-    }
+//            }
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     private boolean getServerVersion() {
         String urlStr = "http://192.168.1.93/test.txt";
