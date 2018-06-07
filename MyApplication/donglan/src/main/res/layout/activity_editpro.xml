@@ -9,7 +9,7 @@
 
     </com.cn.danceland.myapplication.view.DongLanTitleView>
 
-    <EditText
+    <com.cn.danceland.myapplication.view.ContainsEmojiEditText
         android:id="@+id/et_edit"
         android:layout_below="@+id/editpro_title"
         android:layout_width="match_parent"

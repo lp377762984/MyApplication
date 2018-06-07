@@ -2,7 +2,9 @@ package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -369,6 +371,7 @@ public class TimeTableActivity extends Activity {
             bos.flush();
             bos.close();
             ToastUtils.showToastShort("保存成功");
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }

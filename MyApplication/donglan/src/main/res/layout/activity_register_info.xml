@@ -110,6 +110,9 @@
                 android:textColor="@color/color_dl_yellow"
                 android:textSize="18sp"
                 android:layout_weight="1"
+                android:maxLines="1"
+                android:maxEms="6"
+                android:ellipsize="end"
                 />
 
             <RelativeLayout

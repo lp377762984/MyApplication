@@ -18,11 +18,13 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.im.utils.Foreground;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
+import com.cn.danceland.myapplication.utils.LocationService;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMManager;
@@ -61,7 +63,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     public static BluetoothLeService mBluetoothLeService;//蓝牙连接服务
     public static boolean mBluetoothConnected = false;
     public static boolean isBluetoothConnecting = false;
-
+    public LocationService locationClient;
 
     public static HttpProxyCacheServer getProxy(Context context) {
         MyApplication app = (MyApplication) context.getApplicationContext();
@@ -82,8 +84,8 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         super.onCreate();
         Foreground.init(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-//        locationClient = new LocationService(getApplicationContext());
-//        SDKInitializer.initialize(getApplicationContext());
+        locationClient = new LocationService(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         applicationContext = this;
         instance = this;
         setUpDb();

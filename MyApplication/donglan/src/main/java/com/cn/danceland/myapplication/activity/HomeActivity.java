@@ -304,9 +304,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        mLocationClient = new LocationService(getApplicationContext());
-        SDKInitializer.initialize(getApplicationContext());
-        //mLocationClient = ((MyApplication) getApplication()).locationClient;
+        mLocationClient = ((MyApplication) getApplication()).locationClient;
+//        mLocationClient = new LocationService(getApplicationContext());
         mLocationClient.registerListener(myListener);
 
 

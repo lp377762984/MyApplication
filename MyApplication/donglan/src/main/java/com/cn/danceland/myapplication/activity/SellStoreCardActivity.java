@@ -323,6 +323,7 @@ public class SellStoreCardActivity extends Activity {
         sijiaoOrderConfirmBean.setReceive(price);
         sijiaoOrderConfirmBean.setPrice(price);
         sijiaoOrderConfirmBean.setProduct_type("储值卡充值");
+        sijiaoOrderConfirmBean.setProduct_name("");
         sijiaoOrderConfirmBean.setExtends_params(extends_params);
         String s = gson.toJson(sijiaoOrderConfirmBean);
 
