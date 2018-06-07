@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -106,8 +107,8 @@ public class RecommendFragment extends BaseFragment {
 //        customizeDialog.setTitle("被推荐人资料");
         customizeDialog.setView(dialogView);
 
-        final EditText et_name =
-                (EditText) dialogView.findViewById(R.id.et_name);
+        final ContainsEmojiEditText et_name =
+                (ContainsEmojiEditText) dialogView.findViewById(R.id.et_name);
         final EditText et_phone =
                 (EditText) dialogView.findViewById(R.id.et_phone);
         RadioGroup rg_sex = dialogView.findViewById(R.id.rg_sex);

@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -29,6 +28,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -535,11 +535,11 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         AlertDialog.Builder customizeDialog =
                 new AlertDialog.Builder(mActivity);
         final View dialogView = LayoutInflater.from(mActivity)
-                .inflate(R.layout.dialog_customize, null);
+                .inflate(R.layout.dialog_customize_no_emoji, null);
 
         customizeDialog.setTitle("填写待办结果");
         customizeDialog.setView(dialogView);
-        final EditText edit_text = dialogView.findViewById(R.id.edit_text);
+        final ContainsEmojiEditText edit_text = dialogView.findViewById(R.id.edit_text);
       //  edit_text.setText(datalist.get(pos).getContent());
         customizeDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {

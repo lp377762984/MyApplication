@@ -13,6 +13,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSendCardBean;
@@ -139,6 +141,7 @@ public class MySendCardFragment extends BaseFragment {
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
                 viewHolder.tv_order_name = view.findViewById(R.id.tv_order_name);
                 viewHolder.tv_phone = view.findViewById(R.id.tv_phone);
+                viewHolder.iv_card = view.findViewById(R.id.iv_card);
 
                 view.setTag(viewHolder);
             } else {
@@ -177,6 +180,8 @@ public class MySendCardFragment extends BaseFragment {
             }
             viewHolder.tv_phone.setText("好友电话："+mCardList.get(i).getPhone_no());
             viewHolder.tv_order_name.setText("好友姓名："+mCardList.get(i).getMember_name());
+            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }
 
@@ -187,6 +192,7 @@ public class MySendCardFragment extends BaseFragment {
             TextView tv_cardtype;
             TextView   tv_order_name;
             TextView    tv_phone;
+            ImageView iv_card;
         }
 
     }

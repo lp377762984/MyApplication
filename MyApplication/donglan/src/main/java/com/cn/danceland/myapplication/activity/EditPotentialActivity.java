@@ -102,7 +102,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
     private int jiaolian_type = 0;
     private TextView tv_certificate_type;
     private ListJiaoLianPopup listJiaoLianPopup;
-    private ContainsEmojiEditText et_certificate_no,et_nationality;
+    private ContainsEmojiEditText et_certificate_no, et_nationality;
     private ContainsEmojiEditText et_emergency_name;
     private ContainsEmojiEditText et_emergency_phone;
     private TextView tv_birthday;
@@ -111,6 +111,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
     private TextView tv_admin_name;
     private TextView tv_teach_name;
     private Data data;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,8 +206,8 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         et_height.setText(info.getHeight());
         et_weight.setText(info.getWeight());
 
-        if (TextUtils.equals(info.getAuth(),"2")){
-            findViewById(R.id. ll_admin).setVisibility(View.GONE    );
+        if (TextUtils.equals(info.getAuth(), "2")) {
+            findViewById(R.id.ll_admin).setVisibility(View.GONE);
         }
 
     }
@@ -279,13 +280,12 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         tv_teach_name.setOnClickListener(this);
         tv_admin_name = findViewById(R.id.tv_admin_name);
         tv_admin_name.setOnClickListener(this);
-        et_nationality= findViewById(R.id.et_nationality);
+        et_nationality = findViewById(R.id.et_nationality);
 
 
-
-        inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect,null);
+        inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect, null);
         lp_year = inflate1.findViewById(R.id.lp_year);
-        lp_month  = inflate1.findViewById(R.id.lp_month);
+        lp_month = inflate1.findViewById(R.id.lp_month);
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(this);
         Time time = new Time();
@@ -307,11 +307,11 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
 
             case R.id.tv_teach_name://选择潜客教练
                 jiaolian_type = 1;
-               // findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                // findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.tv_admin_name://选择潜客会籍
                 jiaolian_type = 2;
-           //     findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                //     findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.et_certificate_type://证件类型
                 showCertificate_type();
@@ -324,7 +324,6 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 codeType = 20;
                 findCardsByCardId("");
                 break;
-
 
 
             case R.id.tv_guest_aware_way://选择客户来源
@@ -358,6 +357,14 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("姓名必须填写");
                     return;
                 }
+
+                if (et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
+
+                } else {
+                    ToastUtils.showToastShort("邮箱格式不合法");
+                    return;
+                }
+
                 info.setCname(et_name.getText().toString());
                 info.setCompany(et_company.getText().toString());
                 info.setAddress(et_address.getText().toString());
@@ -373,7 +380,6 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 info.setHeight(et_height.getText().toString().trim());
                 info.setWeight(et_weight.getText().toString().trim());
                 info.setNationality(et_nationality.getText().toString().trim());
-
 
 
                 LogUtil.i(gson.toJson(info).toString());
@@ -437,7 +443,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         final ArrayList<String> yearList = new ArrayList<String>();
         final ArrayList<String> monthList = new ArrayList<String>();
         final ArrayList<String> dateList = new ArrayList<String>();
-        int n = 1950;
+        int n = 1900;
         int len = year - n;
         for (int i = 0; i <= len; i++) {
             yearList.add((n + i) + "");
@@ -650,12 +656,12 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                             case 1://选择教练
                                 tv_teach_name.setText(consultantInfo.get(position).getCname());
                                 info.setTeach_name(consultantInfo.get(position).getCname());
-                                info.setTeach_emp_id(consultantInfo.get(position).getId()+"");
+                                info.setTeach_emp_id(consultantInfo.get(position).getId() + "");
                                 break;
                             case 2://选择会籍
                                 tv_admin_name.setText(consultantInfo.get(position).getCname());
                                 info.setAdmin_name(consultantInfo.get(position).getCname());
-                                info.setAdmin_emp_id(consultantInfo.get(position).getId()+"");
+                                info.setAdmin_emp_id(consultantInfo.get(position).getId() + "");
                                 break;
                             default:
                                 break;
@@ -736,6 +742,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
+
     /**
      * 编辑资料
      *
@@ -754,7 +761,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                 RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
                 if (requestOrderBean.isSuccess()) {
                     ToastUtils.showToastShort("保存成功");
-                    EventBus.getDefault().post(new IntEvent(0,211));//更新资料详情页面
+                    EventBus.getDefault().post(new IntEvent(0, 211));//更新资料详情页面
                     finish();
                 } else {
                     ToastUtils.showToastShort("保存失败");
@@ -832,22 +839,23 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
-    class  StrBean{
-        public  String branch_id;
-        public  String type_code;
+
+    class StrBean {
+        public String branch_id;
+        public String type_code;
     }
 
     private void findParams(final int codetype) {
-        StrBean strBean=new StrBean();
-        strBean.type_code=codetype+"";
-        if (codetype!=REGISTER_CHANNEL){//客户来源不分门店
-            Data data=(Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
-            strBean.branch_id=data.getPerson().getDefault_branch();
-        }else {
-            strBean.branch_id ="0";
+        StrBean strBean = new StrBean();
+        strBean.type_code = codetype + "";
+        if (codetype != REGISTER_CHANNEL) {//客户来源不分门店
+            Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            strBean.branch_id = data.getPerson().getDefault_branch();
+        } else {
+            strBean.branch_id = "0";
         }
-  //      LogUtil.i( gson.toJson(strBean).toString());
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        //      LogUtil.i( gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -858,11 +866,11 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                     mParamInfoList = paramInfoBean.getData();
 
                     if (codetype == REGISTER_CHANNEL) {
-                        listPopup=new ListPopup(EditPotentialActivity.this);
+                        listPopup = new ListPopup(EditPotentialActivity.this);
                         listPopup.showPopupWindow();
                     }
                     if (codetype == LIKE || codetype == TARGET || codetype == MEDICAL) {
-                        listPopupMultiSelect=new ListPopupMultiSelect(EditPotentialActivity.this);
+                        listPopupMultiSelect = new ListPopupMultiSelect(EditPotentialActivity.this);
                         listPopupMultiSelect.showPopupWindow();
                     }
                 }
@@ -873,7 +881,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();

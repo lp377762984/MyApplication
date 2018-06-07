@@ -472,7 +472,11 @@ public class RevisitListFragment1 extends BaseFragment {
             if (TextUtils.equals(datalist.get(position).getGender(), "2")) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex2);
             }
-            vh.tv_lasttime.setText("最后维护时间：" + datalist.get(position).getLast_time());
+            if (datalist.get(position).getLast_time()!=null){
+                vh.tv_lasttime.setText("最后维护时间：" + datalist.get(position).getLast_time());
+            }else {
+                vh.tv_lasttime.setText("最后维护时间：" + "最近未维护");
+            }
             vh.ll_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

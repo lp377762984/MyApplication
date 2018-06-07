@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +27,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
 
@@ -52,7 +52,7 @@ import razerdp.basepopup.BasePopupWindow;
 
 public class AddUpcomingMatterActivity extends Activity implements View.OnClickListener {
     private TextView tv_type;
-    private EditText et_content;
+    private ContainsEmojiEditText et_content;
     private Gson gson = new Gson();
     private ListPopup listPopup;
     private RequsetBean requsetBean = new RequsetBean();

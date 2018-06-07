@@ -6,34 +6,6 @@
     android:background="@color/color_bg_mianlayout"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery"
-
-        >
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            android:id="@+id/tv_tiltle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="添加潜客"
-            android:textColor="@color/color_white"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -64,9 +36,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="phone"
                     android:background="@null"
                     android:hint="请输入手机号"
+                    android:inputType="number"
+                    android:maxLength="11"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -97,8 +70,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="textPersonName"
                     android:hint="请输入姓名"
+                    android:inputType="textPersonName"
+                    android:maxLength="25"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -160,6 +134,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="请输入微信号"
+                    android:maxLength="50"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -180,6 +155,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:text="单位："
+
                     android:textColor="#333333" />
 
                 <com.cn.danceland.myapplication.view.ContainsEmojiEditText
@@ -190,6 +166,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入单位"
+                    android:maxLength="120"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -220,6 +197,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入住址"
+                    android:maxLength="120"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -240,6 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+
                     android:text="邮箱："
                     android:textColor="#333333" />
 
@@ -251,8 +230,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入邮箱"
+                    android:maxLength="50"
                     android:textColorHint="#999999" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -269,6 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+
                     android:text="国籍："
                     android:textColor="#333333" />
 
@@ -280,8 +262,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入国籍"
+                    android:maxLength="50"
                     android:textColorHint="#999999" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -341,8 +325,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入证件号码"
+                    android:maxLength="18"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -374,6 +358,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入紧急联系人"
+                    android:maxLength="25"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -405,8 +390,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="phone"
                     android:hint="请输入紧急电话"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -431,17 +416,16 @@
                     android:textColor="#333333" />
 
 
-
                 <TextView
                     android:id="@+id/tv_birthday"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="未选择"
 
-                    android:text="未选择" />
+                    android:textColor="#333" />
             </LinearLayout>
 
             <View
@@ -471,8 +455,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入身高"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -504,8 +488,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入体重"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -514,6 +498,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/line_bg" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
@@ -525,6 +510,7 @@
                 android:layout_height="40dp"
                 android:background="#fff"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -548,6 +534,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/line_bg" />
+
             <LinearLayout
                 android:layout_width="match_parent"
 
@@ -601,12 +588,12 @@
                     android:id="@+id/tv_guest_aware_way"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="未选择"
 
-                    android:text="未选择" />
+                    android:textColor="#333" />
             </LinearLayout>
 
             <View
@@ -710,11 +697,11 @@
                     android:id="@+id/tv_target"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="未选择" />
+                    android:gravity="center_vertical"
+                    android:text="未选择"
+                    android:textColor="#333" />
             </LinearLayout>
 
             <View
@@ -740,11 +727,11 @@
                     android:id="@+id/tv_card_type"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="未选择" />
+                    android:gravity="center_vertical"
+                    android:text="未选择"
+                    android:textColor="#333" />
 
             </LinearLayout>
 
@@ -771,11 +758,11 @@
                     android:id="@+id/tv_like"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="未选择" />
+                    android:gravity="center_vertical"
+                    android:text="未选择"
+                    android:textColor="#333" />
             </LinearLayout>
 
             <View
@@ -801,11 +788,11 @@
                     android:id="@+id/tv_medical_history"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="#333"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="未选择" />
+                    android:gravity="center_vertical"
+                    android:text="未选择"
+                    android:textColor="#333" />
 
             </LinearLayout>
 
@@ -836,8 +823,8 @@
                     android:textColor="#333333" />
 
                 <com.cn.danceland.myapplication.view.ContainsEmojiEditText
-                    style="@style/EtStyle"
                     android:id="@+id/et_remark"
+                    style="@style/EtStyle"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_gravity="center_vertical"
@@ -846,6 +833,7 @@
                     android:background="@null"
                     android:gravity="left"
                     android:hint="请输入备注"
+                    android:maxLength="120"
                     android:textColorHint="#999999"
 
                     />
@@ -861,11 +849,39 @@
                 android:id="@+id/btn_commit"
                 style="@style/BtnCommitStyle"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:text="保存" />
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/dl_gery"
+
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:onClick="back"
+            android:paddingLeft="15dp"
+            android:src="@drawable/img_back" />
+
+        <TextView
+            android:id="@+id/tv_tiltle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="添加潜客"
+            android:textColor="@color/color_white"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
 
 </LinearLayout>

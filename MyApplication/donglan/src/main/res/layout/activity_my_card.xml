@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="我的会员"
+            android:text="会员卡"
             android:textColor="@color/color_white"
             android:textSize="18sp"
 

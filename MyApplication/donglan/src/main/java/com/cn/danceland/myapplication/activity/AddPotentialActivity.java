@@ -257,6 +257,17 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("姓名必须填写");
                     return;
                 }
+
+                if(et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*"))
+                {
+
+                }
+                else
+                {
+                    ToastUtils.showToastShort("邮箱格式不合法");
+                    return;
+                }
+
                 potentialInfo.setCname(et_name.getText().toString());
                 potentialInfo.setCompany(et_company.getText().toString());
                 potentialInfo.setAddress(et_address.getText().toString());
@@ -335,7 +346,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         final ArrayList<String> yearList = new ArrayList<String>();
         final ArrayList<String> monthList = new ArrayList<String>();
         final ArrayList<String> dateList = new ArrayList<String>();
-        int n = 1950;
+        int n = 1900;
         int len = year - n;
         for (int i = 0; i <= len; i++) {
             yearList.add((n + i) + "");

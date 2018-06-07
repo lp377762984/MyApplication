@@ -126,7 +126,12 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         } else {
             tv_name.setText(info.getCname() + "(" + info.getNick_name() + ")");
         }
-        tv_lasttime.setText("最后维护时间：" + info.getLast_time());
+        if (info.getLast_time()!=null){
+            tv_lasttime.setText("最后维护时间：" + info.getLast_time());
+        }else {
+            tv_lasttime.setText("最后维护时间：" + "最近未维护");
+        }
+
         tv_weixin_no.setText(info.getWeichat_no());
         tv_company.setText(info.getCompany());
         tv_address.setText(info.getAddress());

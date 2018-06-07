@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/color_bg_mianlayout"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg_mianlayout">
 
     <RelativeLayout
         android:id="@+id/about_title"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_gery"
-        >
+        android:background="@color/dl_gery">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="关于我们"
             android:textColor="@color/color_white"
-            android:textSize="@dimen/title_size"
-            android:layout_centerInParent="true"
-            />
+            android:textSize="@dimen/title_size" />
 
         <ImageView
             android:id="@+id/about_back"
@@ -25,8 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
-            android:src="@drawable/img_back"
-            />
+            android:src="@drawable/img_back" />
 
     </RelativeLayout>
 
@@ -34,58 +32,57 @@
         android:id="@+id/about_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_dl_logo"
         android:layout_below="@+id/about_title"
-        android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="20dp"
+        android:src="@drawable/img_dl_logo" />
+
     <TextView
         android:id="@+id/about_verson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="版本号 1.0"
-        android:textSize="16sp"
-        android:textColor="#000000"
         android:layout_below="@+id/about_logo"
-        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="10dp"
+        android:text="版本号 1.0"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/office_name"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/about_verson"
-        android:background="@color/color_white"
-        android:layout_marginTop="15dp">
+        android:layout_marginTop="15dp"
+        android:background="@color/color_white">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="公司名称"
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
-            android:textSize="15sp"
+            android:text="公司名称"
             android:textColor="#000000"
-            />
+            android:textSize="15sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="北京动岚未来科技有限公司"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
-            android:textColor="@color/color_dl_yellow"
-            />
+            android:text="北京动岚未来科技有限公司"
+            android:textColor="@color/color_dl_yellow" />
 
     </RelativeLayout>
+
     <View
         android:id="@+id/line0"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@+id/office_name"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        />
+        android:layout_marginRight="15dp" />
 
     <RelativeLayout
         android:id="@+id/rl_email"
@@ -95,25 +92,25 @@
         android:background="@color/color_white"
 
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="邮箱"
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
-            android:textSize="15sp"
+            android:text="邮箱"
             android:textColor="#000000"
-            />
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/about_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/office_mail"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
-            android:textColor="@color/color_dl_yellow"
-            />
+            android:text="@string/office_mail"
+            android:textColor="@color/color_dl_yellow" />
     </RelativeLayout>
 
     <View
@@ -122,35 +119,32 @@
         android:layout_height="0.5dp"
         android:layout_below="@+id/rl_email"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        />
+        android:layout_marginRight="15dp" />
 
     <RelativeLayout
         android:id="@+id/rl_phone"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_below="@+id/line1"
-        android:background="@color/color_white"
-        >
+        android:background="@color/color_white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="电话"
-            android:paddingLeft="15dp"
             android:layout_centerVertical="true"
-            android:textSize="15sp"
+            android:paddingLeft="15dp"
+            android:text="电话"
             android:textColor="#000000"
-            />
+            android:textSize="15sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/office_phone"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="15dp"
-            android:textColor="@color/color_dl_yellow"
-            />
+            android:text="@string/office_phone"
+            android:textColor="@color/color_dl_yellow" />
 
     </RelativeLayout>
 
@@ -160,33 +154,49 @@
         android:layout_height="0.5dp"
         android:layout_below="@+id/rl_phone"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        />
+        android:layout_marginRight="15dp" />
 
     <RelativeLayout
         android:id="@+id/rl_weixin"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/color_white"
         android:layout_below="@+id/line2"
-        >
+        android:background="@color/color_white">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="关注微信号"
-            android:textSize="15sp"
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
+            android:text="关注微信号"
             android:textColor="#000000"
-            />
-        <ImageView
+            android:textSize="15sp" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:paddingRight="15dp"
-            android:src="@drawable/img_arrow_r"
-            />
+            android:layout_centerVertical="true"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:text="djdlwlkj"
+
+                android:textColor="@color/color_dl_yellow" />
+
+            <ImageView
+                android:id="@+id/iv_jiantou"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+
+                android:src="@drawable/img_arrow_r" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 

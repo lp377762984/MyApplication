@@ -129,6 +129,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public View initViews() {
+        LogUtil.i(Constants.HOST);
         View v = View.inflate(mActivity, R.layout.fragment_home, null);
 
         pullToRefresh = v.findViewById(R.id.pullToRefresh1);
@@ -196,7 +197,7 @@ public class HomeFragment extends BaseFragment {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
-                if (TextUtils.equals(data.getMember().getAuth(), "1")) {
+                if (data.getMember()==null||TextUtils.equals(data.getMember().getAuth(), "1")) {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }

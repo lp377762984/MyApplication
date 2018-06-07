@@ -28,7 +28,7 @@
             android:text="姓名："
             android:textSize="14sp" />
 
-        <EditText
+        <com.cn.danceland.myapplication.view.ContainsEmojiEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入手机号"
-            android:inputType="phone"
+            android:inputType="number"
             android:paddingLeft="10dp"
             android:textSize="14sp" />
     </LinearLayout>

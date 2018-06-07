@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -47,6 +49,8 @@ public class ClubDynActivity extends Activity {
     private int mCurrentPage = 0;//起始请求页
     private boolean isEnd = false;
     Gson gson=new Gson();
+    private TextView tv_error;
+    private ImageView imageView;
 
 
     @Override
@@ -71,6 +75,12 @@ public class ClubDynActivity extends Activity {
             }
         });
         pullToRefresh =findViewById(R.id.pullToRefresh1);
+
+        View    listEmptyView=findViewById(R.id.rl_no_info);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
+        pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
+
         init();
 
 
@@ -200,7 +210,8 @@ class StrBean{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                imageView.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }){
             @Override

@@ -68,7 +68,8 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:hint="请输入手机号"
-                    android:inputType="phone"
+                    android:inputType="number"
+                    android:maxLength="11"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -100,7 +101,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入姓名"
-
+                    android:maxLength="25"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -161,6 +162,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:maxLength="50"
                     android:hint="请输入微信号"
                     android:textColorHint="#999999" />
             </LinearLayout>
@@ -192,6 +194,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入单位"
+                    android:maxLength="120"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -222,6 +225,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入地址"
+                    android:maxLength="120"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -253,6 +257,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入邮箱"
+                    android:maxLength="50"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -283,6 +288,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入国籍"
+                    android:maxLength="50"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -345,9 +351,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-
-                    android:inputType="number"
+                    android:maxLength="18"
                     android:hint="请输入证件号码"
+                    android:inputType="number"
                     android:textColorHint="#999999" />
             </LinearLayout>
 
@@ -379,6 +385,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:hint="请输入紧急联系人"
+                    android:maxLength="25"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -410,8 +417,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:hint="请输入紧急电话"
+                    android:inputType="number"
+                    android:maxLength="11"
                     android:textColorHint="#999999" />
 
             </LinearLayout>
@@ -861,6 +869,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:maxLength="120"
                     android:gravity="left"
                     android:hint="请输入备注"
                     android:textColorHint="#999999"

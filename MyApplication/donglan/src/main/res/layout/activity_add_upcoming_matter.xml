@@ -149,7 +149,7 @@
         android:layout_height="1px"
         android:background="@color/line_bg" />
 
-    <EditText
+    <com.cn.danceland.myapplication.view.ContainsEmojiEditText
         android:id="@+id/et_content"
         style="@style/EtStyle"
         android:layout_width="match_parent"

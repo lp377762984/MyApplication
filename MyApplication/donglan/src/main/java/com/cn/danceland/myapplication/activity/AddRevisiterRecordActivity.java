@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +29,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,7 +53,7 @@ import razerdp.basepopup.BasePopupWindow;
 public class AddRevisiterRecordActivity extends Activity implements View.OnClickListener {
 
     private TextView tv_type;
-    private EditText et_content;
+    private ContainsEmojiEditText et_content;
     private Gson gson = new Gson();
     private ListPopup listPopup;
     private RequsetBean requsetBean = new RequsetBean();

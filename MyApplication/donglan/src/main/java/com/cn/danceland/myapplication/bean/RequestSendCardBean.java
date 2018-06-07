@@ -78,8 +78,18 @@ public class RequestSendCardBean {
         private String able_up;
         private String old_card_id;
         private String deposit;
+        private String img_url;
         private String phone_no;
         private String extends_info;
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
+        }
+
         public void setId(int id) {
             this.id = id;
         }
