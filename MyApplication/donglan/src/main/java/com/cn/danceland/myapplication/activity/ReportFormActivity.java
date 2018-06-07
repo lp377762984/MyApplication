@@ -56,17 +56,17 @@ import java.util.Map;
  */
 
 public class ReportFormActivity extends Activity {
-    MyListView report_mv,report_mv_02;
-    String role_type,role,emp_id;
+    MyListView report_mv, report_mv_02;
+    String role_type, role, emp_id;
     DongLanTitleView report_title;
     Gson gson;
-    MyListViewAdapter report_mv_Adapter,report_mv_02_Adapter;
+    MyListViewAdapter report_mv_Adapter, report_mv_02_Adapter;
     RecyclerView report_rv;
-    String nowDate,selectDate;
+    String nowDate, selectDate;
     TextView tv_date;
     RelativeLayout btn_date;
     Button btn_all;
-    String str_meet,str_clean,str_item_placement,str_body_build,str_sport_device,str_group_course,str_course,str_power,str_door,str_remark;
+    String str_meet, str_clean, str_item_placement, str_body_build, str_sport_device, str_group_course, str_course, str_power, str_door, str_remark;
     Data myInfo;
     String target_role_type;//要查询什么报表
     String branch_id;
@@ -88,7 +88,7 @@ public class ReportFormActivity extends Activity {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 ReportResultBean reportResultBean = gson.fromJson(s, ReportResultBean.class);
-                if(reportResultBean!=null){
+                if (reportResultBean != null) {
                     report_mv_Adapter = new MyListViewAdapter(reportResultBean.getData());
                     report_mv.setAdapter(report_mv_Adapter);
                 }
@@ -99,16 +99,16 @@ public class ReportFormActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("date",date);
-                map.put("current_role_type",current_role_type);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("date", date);
+                map.put("current_role_type", current_role_type);
                 //map.put("target_role_type",target_role_type);
-                if(employee_id!=null){
-                    map.put("employee_id",employee_id);
+                if (employee_id != null) {
+                    map.put("employee_id", employee_id);
                 }
 
                 return map;
@@ -134,7 +134,7 @@ public class ReportFormActivity extends Activity {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 ReportResultBean reportResultBean = gson.fromJson(s, ReportResultBean.class);
-                if(reportResultBean!=null){
+                if (reportResultBean != null) {
                     report_mv_02_Adapter = new MyListViewAdapter(reportResultBean.getData());
                     report_mv_02.setAdapter(report_mv_02_Adapter);
                 }
@@ -145,16 +145,16 @@ public class ReportFormActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("date",date);
-                map.put("current_role_type",current_role_type);
-                map.put("target_role_type",target_role_type);
-                if(employee_id!=null){
-                    map.put("employee_id",employee_id);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("date", date);
+                map.put("current_role_type", current_role_type);
+                map.put("target_role_type", target_role_type);
+                if (employee_id != null) {
+                    map.put("employee_id", employee_id);
                 }
 
                 return map;
@@ -192,12 +192,12 @@ public class ReportFormActivity extends Activity {
             @Override
             public void onClick(View v) {
                 emp_id = null;
-                if(PreclickText!=null){
+                if (PreclickText != null) {
                     PreclickText.setTextColor(Color.parseColor("#808080"));
                 }
-                initBusData(selectDate,role,emp_id);
-                initScoreData(selectDate,role,target_role_type,emp_id);
-                initReportData(selectDate,emp_id);
+                initBusData(selectDate, role, emp_id);
+                initScoreData(selectDate, role, target_role_type, emp_id);
+                initReportData(selectDate, emp_id);
             }
         });
 
@@ -208,57 +208,57 @@ public class ReportFormActivity extends Activity {
         report_rv.addItemDecoration(new SpacesItemDecoration(40));
 
         report_title = findViewById(R.id.report_title);
-        if("会籍顾问".equals(role_type)){
+        if ("会籍顾问".equals(role_type)) {
             role = "1";
-            emp_id = myInfo.getEmployee().getId()+"";
+            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("会籍报表");
-        }else if("教练".equals(role_type)){
+        } else if ("教练".equals(role_type)) {
             role = "2";
-            emp_id = myInfo.getEmployee().getId()+"";
+            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
-        }else if("店长".equals(role_type)){
+        } else if ("店长".equals(role_type)) {
             role = "4";
             report_title.setTitle("全店报表");
             getPeople();
-        }else if("会籍主管".equals(role_type)){
+        } else if ("会籍主管".equals(role_type)) {
             role = "5";
             report_title.setTitle("会籍报表");
             getPeople();
-        }else if("前台主管".equals(role_type)){
+        } else if ("前台主管".equals(role_type)) {
             role = "7";
             report_title.setTitle("服务报表");
             getPeople();
-        }else if("教练主管".equals(role_type)){
+        } else if ("教练主管".equals(role_type)) {
             role = "6";
             report_title.setTitle("教练报表");
             getPeople();
-        }else if("操教".equals(role_type)){
+        } else if ("操教".equals(role_type)) {
             role = "8";
-            emp_id = myInfo.getEmployee().getId()+"";
+            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
-        }else if("兼职教练".equals(role_type)){
+        } else if ("兼职教练".equals(role_type)) {
             role = "11";
-            emp_id = myInfo.getEmployee().getId()+"";
+            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
-        }else if("前台".equals(role_type)){
+        } else if ("前台".equals(role_type)) {
             role = "3";
-            emp_id = myInfo.getEmployee().getId()+"";
+            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("服务报表");
         }
 
-        initBusData(selectDate,role,emp_id);
-        initScoreData(selectDate,role,target_role_type,emp_id);
-        initReportData(selectDate,emp_id);
+        initBusData(selectDate, role, emp_id);
+        initScoreData(selectDate, role, target_role_type, emp_id);
+        initReportData(selectDate, emp_id);
 
         tv_meet = findViewById(R.id.tv_meet);
         tv_clean = findViewById(R.id.tv_clean);
@@ -288,27 +288,27 @@ public class ReportFormActivity extends Activity {
 
     }
 
-    private void initReportData(final String selectDate, final String emp_id){
+    private void initReportData(final String selectDate, final String emp_id) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
-                if(reportCommitResultBean!=null&&reportCommitResultBean.getData()!=null){
+                if (reportCommitResultBean != null && reportCommitResultBean.getData() != null) {
                     ReportCommitResultBean.Data data = reportCommitResultBean.getData();
-                    tv_meet.setText(data.getMeet()+"");
-                    tv_clean.setText(data.getClean()+"");
-                    tv_item_placement.setText(data.getItem_placement()+"");
-                    tv_body_build.setText(data.getBody_build()+"");
-                    tv_sport_device.setText(data.getSport_device()+"");
-                    tv_group_course.setText(data.getGroup_course()+"");
-                    tv_course.setText(data.getCourse()+"");
-                    tv_power.setText(data.getPower()+"");
-                    tv_door.setText(data.getDoor()+"");
-                    tv_remark.setText(data.getRemark()+"");
+                    tv_meet.setText(data.getMeet() + "");
+                    tv_clean.setText(data.getClean() + "");
+                    tv_item_placement.setText(data.getItem_placement() + "");
+                    tv_body_build.setText(data.getBody_build() + "");
+                    tv_sport_device.setText(data.getSport_device() + "");
+                    tv_group_course.setText(data.getGroup_course() + "");
+                    tv_course.setText(data.getCourse() + "");
+                    tv_power.setText(data.getPower() + "");
+                    tv_door.setText(data.getDoor() + "");
+                    tv_remark.setText(data.getRemark() + "");
                     clickAble = true;
                 }
-                if(!nowDate.equals(selectDate) || clickAble){
+                if (!nowDate.equals(selectDate) || clickAble) {
                     tv_meet.setClickable(false);
                     tv_clean.setClickable(false);
                     tv_item_placement.setClickable(false);
@@ -327,13 +327,13 @@ public class ReportFormActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("employee_id",emp_id);
-                map.put("date",selectDate);
+                map.put("employee_id", emp_id);
+                map.put("date", selectDate);
 
                 return map;
             }
@@ -355,36 +355,36 @@ public class ReportFormActivity extends Activity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_meet:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),11);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_meet", str_meet).putExtra("id", 11), 11);
                     break;
                 case R.id.tv_clean:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),12);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_clean", str_clean).putExtra("id", 12), 12);
                     break;
                 case R.id.tv_item_placement:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),13);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_item_placement", str_item_placement).putExtra("id", 13), 13);
                     break;
                 case R.id.tv_body_build:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),14);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_body_build", str_body_build).putExtra("id", 14), 14);
                     break;
                 case R.id.tv_sport_device:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),15);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_sport_device", str_sport_device).putExtra("id", 15), 15);
                     break;
                 case R.id.tv_group_course:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),16);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_group_course", str_group_course).putExtra("id", 16), 16);
                     break;
                 case R.id.tv_course:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),17);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_course", str_course).putExtra("id", 17), 17);
                     break;
                 case R.id.tv_power:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),18);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_power", str_power).putExtra("id", 18), 18);
                     break;
                 case R.id.tv_door:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),19);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_door", str_door).putExtra("id", 19), 19);
                     break;
                 case R.id.tv_remark:
-                    startActivityForResult(new Intent(ReportFormActivity.this,ReportEditActivity.class),20);
+                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_remark", str_remark).putExtra("id", 20), 20);
                     break;
                 case R.id.btn_commit:
                     showAleart();
@@ -393,7 +393,7 @@ public class ReportFormActivity extends Activity {
         }
     };
 
-    private void showAleart(){
+    private void showAleart() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -408,8 +408,10 @@ public class ReportFormActivity extends Activity {
         builder.show();
 
     }
+
     boolean clickAble;
-    TextView tv_meet,tv_clean,tv_item_placement,tv_body_build,tv_sport_device,tv_group_course,tv_course,tv_power,tv_door,tv_remark;
+    TextView tv_meet, tv_clean, tv_item_placement, tv_body_build, tv_sport_device, tv_group_course, tv_course, tv_power, tv_door, tv_remark;
+
     private void commit() {
         ReportCommitBean reportCommitBean = new ReportCommitBean();
         reportCommitBean.setMeet(str_meet);
@@ -429,7 +431,7 @@ public class ReportFormActivity extends Activity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.SAVEREPORT, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                if(jsonObject.toString().contains("true")){
+                if (jsonObject.toString().contains("true")) {
                     clickAble = true;
                     tv_meet.setClickable(false);
                     tv_clean.setClickable(false);
@@ -450,7 +452,7 @@ public class ReportFormActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
@@ -465,36 +467,36 @@ public class ReportFormActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==1){
+        if (resultCode == 1) {
             String tv = data.getStringExtra("tv");
-            if(requestCode==11){
+            if (requestCode == 11) {
                 str_meet = tv;
                 tv_meet.setText(str_meet);
-            }else if(requestCode==12){
+            } else if (requestCode == 12) {
                 str_clean = tv;
                 tv_clean.setText(str_clean);
-            }else if(requestCode==13){
+            } else if (requestCode == 13) {
                 str_item_placement = tv;
                 tv_item_placement.setText(str_item_placement);
-            }else if(requestCode==14){
+            } else if (requestCode == 14) {
                 str_body_build = tv;
                 tv_body_build.setText(str_body_build);
-            }else if(requestCode==15){
+            } else if (requestCode == 15) {
                 str_sport_device = tv;
                 tv_sport_device.setText(str_sport_device);
-            }else if(requestCode==16){
+            } else if (requestCode == 16) {
                 str_group_course = tv;
                 tv_group_course.setText(str_group_course);
-            }else if(requestCode==17){
+            } else if (requestCode == 17) {
                 str_course = tv;
                 tv_course.setText(str_course);
-            }else if(requestCode==18){
+            } else if (requestCode == 18) {
                 str_power = tv;
                 tv_power.setText(str_power);
-            }else if(requestCode==19){
+            } else if (requestCode == 19) {
                 str_door = tv;
                 tv_door.setText(str_door);
-            }else if(requestCode==20){
+            } else if (requestCode == 20) {
                 str_remark = tv;
                 tv_remark.setText(str_remark);
             }
@@ -509,9 +511,9 @@ public class ReportFormActivity extends Activity {
             public void onClick() {
                 selectDate = customDatePicker.getDateStringF();
                 tv_date.setText(selectDate);
-                initBusData(selectDate,role,emp_id);
-                initScoreData(selectDate,role,target_role_type,emp_id);
-                initReportData(selectDate,emp_id);
+                initBusData(selectDate, role, emp_id);
+                initScoreData(selectDate, role, target_role_type, emp_id);
+                initReportData(selectDate, emp_id);
 
             }
         });
@@ -522,9 +524,11 @@ public class ReportFormActivity extends Activity {
 
     public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         private int space;
+
         public SpacesItemDecoration(int space) {
             this.space = space;
         }
+
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             outRect.left = space;
@@ -542,24 +546,24 @@ public class ReportFormActivity extends Activity {
 
 
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        if(myInfo!=null && myInfo.getMember()!=null){
+        if (myInfo != null && myInfo.getMember() != null) {
             branch_id = myInfo.getMember().getDefault_branch();
         }
 
-        nowDate = time.year +"-"+(time.month+1)+"-"+time.monthDay;
+        nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;
         selectDate = nowDate;
     }
 
-    private void getPeople(){
+    private void getPeople() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
-                if(requestConsultantInfoBean!=null){
+                if (requestConsultantInfoBean != null) {
                     List<RequestConsultantInfoBean.Data> data = requestConsultantInfoBean.getData();
-                    if(data!=null){
+                    if (data != null) {
                         report_rv.setAdapter(new MyRecyclerViewAdapter(data));
                     }
                 }
@@ -570,11 +574,11 @@ public class ReportFormActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("branch_id",branch_id);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branch_id", branch_id);
                 return map;
             }
 
@@ -589,12 +593,13 @@ public class ReportFormActivity extends Activity {
     }
 
     TextView PreclickText;
-    public class MyRecyclerViewAdapter extends RecyclerView.Adapter<ReportFormActivity.ViewHolder>{
+
+    public class MyRecyclerViewAdapter extends RecyclerView.Adapter<ReportFormActivity.ViewHolder> {
         List<RequestConsultantInfoBean.Data> data;
         int click;
 
 
-        MyRecyclerViewAdapter(List<RequestConsultantInfoBean.Data> data){
+        MyRecyclerViewAdapter(List<RequestConsultantInfoBean.Data> data) {
             this.data = data;
         }
 
@@ -613,16 +618,16 @@ public class ReportFormActivity extends Activity {
             holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(click!=position && PreclickText!=null){
+                    if (click != position && PreclickText != null) {
                         PreclickText.setTextColor(Color.parseColor("#808080"));
                     }
                     click = position;
                     PreclickText = holder.tv_name;
                     holder.tv_name.setTextColor(Color.parseColor("#ff6600"));
                     emp_id = data.get(position).getEmployee_id() + "";
-                    initBusData(selectDate,role,emp_id);
-                    initScoreData(selectDate,role,target_role_type,emp_id);
-                    initReportData(selectDate,emp_id);
+                    initBusData(selectDate, role, emp_id);
+                    initScoreData(selectDate, role, target_role_type, emp_id);
+                    initReportData(selectDate, emp_id);
                 }
             });
             holder.tv_name.setText(data.get(position).getCname());
@@ -636,9 +641,10 @@ public class ReportFormActivity extends Activity {
 
     }
 
-    public  static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
         XCRoundRectImageView img_touxiang;
+
         public ViewHolder(View itemView) {
             super(itemView);
             img_touxiang = itemView.findViewById(R.id.img_touxiang);
@@ -646,16 +652,16 @@ public class ReportFormActivity extends Activity {
         }
     }
 
-    private class MyListViewAdapter extends BaseAdapter{
+    private class MyListViewAdapter extends BaseAdapter {
         List<ReportResultBean.Data> dataList;
 
-        MyListViewAdapter(List<ReportResultBean.Data> dataList){
+        MyListViewAdapter(List<ReportResultBean.Data> dataList) {
             this.dataList = dataList;
         }
 
         @Override
         public int getCount() {
-            return dataList==null? 0:dataList.size();
+            return dataList == null ? 0 : dataList.size();
         }
 
         @Override
@@ -678,9 +684,9 @@ public class ReportFormActivity extends Activity {
             TextView tv_total = inflate.findViewById(R.id.tv_total);
             ReportResultBean.Data data = dataList.get(position);
             tv_name.setText(data.getTitle());
-            tv_today.setText(data.getToday()+data.getUnit());
-            tv_thisMonth.setText(data.getEndOfToDay()+data.getUnit());
-            tv_total.setText(data.getAllOfMonth()+data.getUnit());
+            tv_today.setText(data.getToday() + data.getUnit());
+            tv_thisMonth.setText(data.getEndOfToDay() + data.getUnit());
+            tv_total.setText(data.getAllOfMonth() + data.getUnit());
 
             return inflate;
         }
