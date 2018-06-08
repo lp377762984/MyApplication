@@ -51,13 +51,11 @@ import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
-import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.ReportFormActivity;
 import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
-import com.cn.danceland.myapplication.activity.SiJiaoOrderActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -65,7 +63,6 @@ import com.cn.danceland.myapplication.bean.MenusBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
-import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -821,6 +818,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 29://私信
                    //     startActivity(new Intent(mActivity, MyChatListActivity.class));
+                        ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 30://教练报表
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","2"));

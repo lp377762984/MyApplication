@@ -49,6 +49,8 @@ public class DepositActivity extends Activity implements View.OnClickListener {
     private ListView listView;
     private List<RequestDepositBean.Data> mDepositList = new ArrayList<>();
     MyDepositListAdapter mListAdapter;
+    private TextView tv_error;
+    private ImageView iv_error;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,13 +70,13 @@ public class DepositActivity extends Activity implements View.OnClickListener {
 
         Gson gson = new Gson();
         Requsetbean requsetbean = new Requsetbean();
-        if (TextUtils.isEmpty(getIntent().getStringExtra("bus_type"))){
+        if (TextUtils.isEmpty(getIntent().getStringExtra("bus_type"))) {
             requsetbean.bus_type = "1";
-        }else {
-            requsetbean.bus_type=getIntent().getStringExtra("bus_type");
+        } else {
+            requsetbean.bus_type = getIntent().getStringExtra("bus_type");
         }
 
-        requsetbean.status="1";
+        requsetbean.status = "1";
         String strBean = gson.toJson(requsetbean);
 
         try {
@@ -86,6 +88,15 @@ public class DepositActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
         listView = findViewById(R.id.listview);
+
+
+        View listEmptyView = findViewById(R.id.rl_no_info);
+
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        iv_error = listEmptyView.findViewById(R.id.iv_error);
+        tv_error.setText("您没有可用的定金");
+        listView.setEmptyView(listEmptyView);
+
         findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(R.id.tv_cancel).setOnClickListener(this);
         mListAdapter = new MyDepositListAdapter(this);
@@ -144,8 +155,8 @@ public class DepositActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                iv_error.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
 
             }
         }) {

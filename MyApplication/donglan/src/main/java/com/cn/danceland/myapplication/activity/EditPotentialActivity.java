@@ -358,11 +358,13 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                     return;
                 }
 
-                if (et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
+                if (!TextUtils.isEmpty(et_email.getText().toString())) {
+                    if (et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
 
-                } else {
-                    ToastUtils.showToastShort("邮箱格式不合法");
-                    return;
+                    } else {
+                        ToastUtils.showToastShort("邮箱格式不合法");
+                        return;
+                    }
                 }
 
                 info.setCname(et_name.getText().toString());
