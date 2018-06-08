@@ -25,12 +25,13 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="我的二维码"
+            android:text="入场二维码"
             android:textColor="@color/color_white"
             android:textSize="18sp"
 
             />
     </RelativeLayout>
+
     <ImageView
         android:id="@+id/iv_qrcode"
         android:layout_width="match_parent"

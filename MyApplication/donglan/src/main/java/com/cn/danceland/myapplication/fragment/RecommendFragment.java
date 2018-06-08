@@ -112,6 +112,7 @@ public class RecommendFragment extends BaseFragment {
         final EditText et_phone =
                 (EditText) dialogView.findViewById(R.id.et_phone);
         RadioGroup rg_sex = dialogView.findViewById(R.id.rg_sex);
+        strBean.gender = 1;
         rg_sex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -191,6 +192,7 @@ public class RecommendFragment extends BaseFragment {
                 if (requsetSimpleBean.getSuccess()){
                     ToastUtils.showToastShort("成功推荐");
                     introduce_querylist(strBean1);
+                    strBean.gender = 1;
                 }else {
                     ToastUtils.showToastShort("推荐失败"+requsetSimpleBean.getErrorMsg());
                 }

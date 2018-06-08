@@ -681,6 +681,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
      * 支付宝支付
      */
     private void alipay(final String orderInfo) {
+        LogUtil.i(orderInfo);
         unpaidOrder = orderInfo;
         Runnable payRunnable = new Runnable() {
 
@@ -1049,7 +1050,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setAdmin_emp_name(consultantInfo.getCname());
                     extendsParams.setDeposit_type("1");//定金类型
                     newOrderInfoBean.setProduct_type("会籍卡定金");
-                    //      newOrderInfoBean.setProduct_name("会籍卡定金");
+                        newOrderInfoBean.setProduct_name("");
 
                     if (isme) {
                         newOrderInfoBean.setFor_other(0);

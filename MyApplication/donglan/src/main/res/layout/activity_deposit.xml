@@ -50,5 +50,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 
+    <include
+        android:id="@+id/rl_no_info"
+        layout="@layout/no_info_layout"
+        android:visibility="gone"
 
+        />
 </LinearLayout>

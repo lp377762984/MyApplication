@@ -184,11 +184,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         tv_teach_name.setOnClickListener(this);
         tv_admin_name = findViewById(R.id.tv_admin_name);
         tv_admin_name.setOnClickListener(this);
-        et_nationality= findViewById(R.id.et_nationality);
+        et_nationality = findViewById(R.id.et_nationality);
 
-        inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect,null);
+        inflate1 = LayoutInflater.from(this).inflate(R.layout.birthdayselect, null);
         lp_year = inflate1.findViewById(R.id.lp_year);
-        lp_month  = inflate1.findViewById(R.id.lp_month);
+        lp_month = inflate1.findViewById(R.id.lp_month);
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(this);
         Time time = new Time();
@@ -257,16 +257,15 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("姓名必须填写");
                     return;
                 }
+                if (!TextUtils.isEmpty(et_email.getText().toString())) {
+                    if (et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
 
-                if(et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*"))
-                {
+                    } else {
+                        ToastUtils.showToastShort("邮箱格式不合法");
+                        return;
+                    }
+                }
 
-                }
-                else
-                {
-                    ToastUtils.showToastShort("邮箱格式不合法");
-                    return;
-                }
 
                 potentialInfo.setCname(et_name.getText().toString());
                 potentialInfo.setCompany(et_company.getText().toString());
@@ -286,7 +285,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());
 
-                if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())){
+                if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())) {
                     ToastUtils.showToastShort("必须添加潜客会籍");
                     return;
                 }
@@ -586,8 +585,8 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         if (codetype != REGISTER_CHANNEL) {//客户来源不分门店
             Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             strBean.branch_id = data.getPerson().getDefault_branch();
-        }else {
-            strBean.branch_id ="0";
+        } else {
+            strBean.branch_id = "0";
         }
         //      LogUtil.i( gson.toJson(strBean).toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
@@ -602,11 +601,11 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
 
                     if (codetype == REGISTER_CHANNEL) {
-                        listPopup=new ListPopup(AddPotentialActivity.this);
+                        listPopup = new ListPopup(AddPotentialActivity.this);
                         listPopup.showPopupWindow();
                     }
                     if (codetype == LIKE || codetype == TARGET || codetype == MEDICAL) {
-                        listPopupMultiSelect=new ListPopupMultiSelect(AddPotentialActivity.this);
+                        listPopupMultiSelect = new ListPopupMultiSelect(AddPotentialActivity.this);
                         listPopupMultiSelect.showPopupWindow();
                     }
                 }
@@ -816,12 +815,12 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                             case 1://选择教练
                                 tv_teach_name.setText(consultantInfo.get(position).getCname());
                                 potentialInfo.setTeach_name(consultantInfo.get(position).getCname());
-                                potentialInfo.setTeach_emp_id(consultantInfo.get(position).getId()+"");
+                                potentialInfo.setTeach_emp_id(consultantInfo.get(position).getId() + "");
                                 break;
                             case 2://选择会籍
                                 tv_admin_name.setText(consultantInfo.get(position).getCname());
                                 potentialInfo.setAdmin_name(consultantInfo.get(position).getCname());
-                                potentialInfo.setAdmin_emp_id(consultantInfo.get(position).getId()+"");
+                                potentialInfo.setAdmin_emp_id(consultantInfo.get(position).getId() + "");
                                 break;
                             default:
                                 break;
@@ -862,7 +861,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 Gson gson = new Gson();
                 RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
                 if (requestConsultantInfoBean.getSuccess()) {
-                    listJiaoLianPopup=new ListJiaoLianPopup(AddPotentialActivity.this);
+                    listJiaoLianPopup = new ListJiaoLianPopup(AddPotentialActivity.this);
                     consultantInfo = requestConsultantInfoBean.getData();
                     //  LogUtil.i(consultantListInfo.toString());
 

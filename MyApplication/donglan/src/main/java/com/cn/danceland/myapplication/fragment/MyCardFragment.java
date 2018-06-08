@@ -24,6 +24,7 @@ import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 
@@ -181,17 +182,38 @@ public class MyCardFragment extends BaseFragment {
 //            }else {
 //                viewHolder.tv_number.setVisibility(View.GONE);
 //            }
-            if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
+            if (!TextUtils.isEmpty(mCardList.get(i).getOpen_date())){
+                Long currenttime=System.currentTimeMillis();
+                Long opendate=Long.valueOf(mCardList.get(i).getOpen_date());
+                if (opendate>currenttime){
+                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getOpen_date(),"yyyy-MM-dd")+"生效");
+                    viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+                }else {
+                    viewHolder.btn_commit.setVisibility(View.VISIBLE);
+//                    StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
+//
+//                    String[] b = sb.toString().split(" ");
+
+                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getEnd_date(),"yyyy-MM-dd") + "到期");
+                }
+
+            }else {
                 viewHolder.tv_time.setText("未开卡");
                 viewHolder.btn_commit.setVisibility(View.INVISIBLE);
-            } else {
-                viewHolder.btn_commit.setVisibility(View.VISIBLE);
-                StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
-
-                String[] b = sb.toString().split(" ");
-
-                viewHolder.tv_time.setText(b[0] + "到期");
             }
+
+
+//            if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
+//                viewHolder.tv_time.setText("未开卡");
+//                viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+//            } else {
+//                viewHolder.btn_commit.setVisibility(View.VISIBLE);
+//                StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
+//
+//                String[] b = sb.toString().split(" ");
+//
+//                viewHolder.tv_time.setText(b[0] + "到期");
+//            }
 
             viewHolder.btn_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
