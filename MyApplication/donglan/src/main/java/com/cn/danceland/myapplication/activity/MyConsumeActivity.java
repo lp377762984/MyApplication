@@ -400,6 +400,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
 
             switch (contentItem.getPay_way()){
                 case "1":
+                    Glide.with(MyConsumeActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
                 case "2":
                     Glide.with(MyConsumeActivity.this).load(R.drawable.alipay_logo).into(viewHolder.xc_img);
@@ -408,6 +409,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                     Glide.with(MyConsumeActivity.this).load(R.drawable.wechat_logo).into(viewHolder.xc_img);
                     break;
                 case "4":
+                    Glide.with(MyConsumeActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
                 case "5":
                     Glide.with(MyConsumeActivity.this).load(R.drawable.img_dl_logo).into(viewHolder.xc_img);

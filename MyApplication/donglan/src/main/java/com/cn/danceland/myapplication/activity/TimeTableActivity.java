@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +36,7 @@ import com.cn.danceland.myapplication.bean.TimeTableResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -59,14 +63,14 @@ import java.util.Map;
 public class TimeTableActivity extends Activity {
 
 
-    private ListView lv_timetable;
+    private MyListView lv_timetable;
     private Gson gson;
     private ArrayList<String> placeList;
     private HashSet<String> placeSet;
     private ArrayList<List<TimeTableResultBean.DataBean>> listViewList;
     private int num1, num2, num3, num4, num5, num6, num7, hangshu;
     private ArrayList<ArrayList<TimeTableResultBean.DataBean>> allGridViewList;
-    private LinearLayout wholeView;
+    private ScrollView wholeView;
     private Button btn_img;
 
     @Override
@@ -220,25 +224,23 @@ public class TimeTableActivity extends Activity {
     private void initView() {
         lv_timetable = findViewById(R.id.lv_timetable);
         wholeView = findViewById(R.id.wholeView);
-        wholeView.setDrawingCacheEnabled(true);
-        wholeView.buildDrawingCache();
+//        wholeView.setDrawingCacheEnabled(true);
+//        wholeView.buildDrawingCache();
         btn_img = findViewById(R.id.btn_img);
         btn_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (PermissionsUtil.hasPermission(TimeTableActivity.this, Manifest.permission.CAMERA)) {
                     //有权限
-                    Bitmap bmp = wholeView.getDrawingCache(); // 获取图片
-                    saveBitmapFile(bmp);// 保存图片
-                    wholeView.destroyDrawingCache(); // 保存过后释放资源
+                    //Bitmap bmp = wholeView.getDrawingCache(); // 获取图片
+                    saveBitmapFile(getBitmapByView(wholeView));// 保存图片
+                    //wholeView.destroyDrawingCache(); // 保存过后释放资源
                 } else {
                     PermissionsUtil.requestPermission(TimeTableActivity.this, new PermissionListener() {
                         @Override
                         public void permissionGranted(@NonNull String[] permissions) {
                             //用户授予了权限
-                            Bitmap bmp = wholeView.getDrawingCache(); // 获取图片
-                            saveBitmapFile(bmp);// 保存图片
-                            wholeView.destroyDrawingCache(); // 保存过后释放资源
+                            saveBitmapFile(getBitmapByView(wholeView));// 保存图片
                         }
 
                         @Override
@@ -378,4 +380,25 @@ public class TimeTableActivity extends Activity {
         return file;
     }
 
+    /**
+     * 截取scrollview的屏幕
+     * @param scrollView
+     * @return
+     */
+    public static Bitmap getBitmapByView(ScrollView scrollView) {
+        int h = 0;
+        Bitmap bitmap = null;
+        // 获取scrollview实际高度
+        for (int i = 0; i < scrollView.getChildCount(); i++) {
+            h += scrollView.getChildAt(i).getHeight();
+            scrollView.getChildAt(i).setBackgroundColor(
+                    Color.parseColor("#ffffff"));
+        }
+        // 创建对应大小的bitmap
+        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h,
+                Bitmap.Config.RGB_565);
+        final Canvas canvas = new Canvas(bitmap);
+        scrollView.draw(canvas);
+        return bitmap;
+    }
 }

@@ -188,7 +188,19 @@ public class ShopDetailedActivity extends Activity{
         });
 
         img_01 = findViewById(R.id.img_01);
+        img_01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", imgList.get(0)));
+            }
+        });
         img_02 = findViewById(R.id.img_02);
+        img_02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", imgList.get(0)));
+            }
+        });
         if(imgList!=null&&imgList.size()>0){
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_01);
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_02);

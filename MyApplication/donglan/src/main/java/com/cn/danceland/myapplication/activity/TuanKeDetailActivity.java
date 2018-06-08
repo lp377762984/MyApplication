@@ -210,7 +210,7 @@ public class TuanKeDetailActivity extends Activity {
         }
     }
 
-    public void initData(TuanKeBean.Data detailData){
+    public void initData(final TuanKeBean.Data detailData){
 
         RequestOptions  options =new RequestOptions().placeholder(R.drawable.piping);
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).apply(options).into(kecheng_img);
@@ -218,6 +218,24 @@ public class TuanKeDetailActivity extends Activity {
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options).into(img_2);
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).apply(options).into(img_3);
 
+        img_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TuanKeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_1()));
+            }
+        });
+        img_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TuanKeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_2()));
+            }
+        });
+        img_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TuanKeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_3()));
+            }
+        });
 
         String startTime,endTime;
         if(detailData.getStart_time()%60==0){

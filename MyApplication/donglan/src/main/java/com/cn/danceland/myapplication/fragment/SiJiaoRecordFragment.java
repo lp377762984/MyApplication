@@ -106,11 +106,15 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
                 if (groupRecordBean != null) {
                     List<GroupRecordBean.Data> data = groupRecordBean.getData();
+                    if (contentList==null){
+                        contentList = new ArrayList<>();
+                    }
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
                             SiJiaoRecordBean.Content content = new SiJiaoRecordBean().new Content();
                             content.setCourse_type_name(data.get(i).getCourse_type_name());
                             content.setCourse_date(Long.valueOf(data.get(i).getDate()));
+                            content.setEmployee_name(content.getEmployee_name());
                             content.setCategory("2");
                             content.setStatus(Integer.valueOf(data.get(i).getStatus()));
                             content.setMember_name(data.get(i).getMember_name());
@@ -169,7 +173,12 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
-                contentList.clear();
+                if(contentList==null){
+                    contentList = new ArrayList<>();
+                }else{
+                    contentList.clear();
+                }
+
                 SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
                 if (siJiaoRecordBean != null) {
                     SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();

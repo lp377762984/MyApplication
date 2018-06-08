@@ -280,7 +280,7 @@ public class SmallTuankeDetailActivity extends Activity {
 
     }
 
-    private void initData(TuanKeBean.Data detailData){
+    private void initData(final TuanKeBean.Data detailData){
         course_name.setText(detailData.getCourse_type_name());
         course_length.setText("上课时间:"+TimeUtils.timeStamp2Date(detailData.getCourse_date(),"yyyy-MM-dd")+" "+TimeUtils.MinuteToTime(detailData.getStart_time())
         +"-"+TimeUtils.MinuteToTime(detailData.getEnd_time()));
@@ -297,7 +297,24 @@ public class SmallTuankeDetailActivity extends Activity {
         Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_1()).into(pic_01);
         Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_2()).into(pic_02);
         Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_3()).into(pic_03);
-
+        pic_01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SmallTuankeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_1()));
+            }
+        });
+        pic_02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SmallTuankeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_2()));
+            }
+        });
+        pic_03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SmallTuankeDetailActivity.this, AvatarActivity.class).putExtra("url", detailData.getCourse_img_url_3()));
+            }
+        });
     }
 
 

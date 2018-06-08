@@ -70,6 +70,7 @@ public class ReportFormActivity extends Activity {
     Data myInfo;
     String target_role_type;//要查询什么报表
     String branch_id;
+    private Time time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -506,6 +507,8 @@ public class ReportFormActivity extends Activity {
     private void showDate() {
 
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
+        customDatePicker.setGoneHourAndMinute();
+        customDatePicker.setMax((time.month + 1),time.monthDay);
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
@@ -541,7 +544,7 @@ public class ReportFormActivity extends Activity {
         gson = new Gson();
         role_type = getIntent().getStringExtra("role_type");
         target_role_type = getIntent().getStringExtra("target_role_type");
-        Time time = new Time();
+        time = new Time();
         time.setToNow();
 
 
@@ -551,13 +554,13 @@ public class ReportFormActivity extends Activity {
         }
 
         if((time.month + 1)<10 && time.monthDay>=10){
-            nowDate = time.year+"-0"+(time.month + 1)+"-"+time.monthDay;
+            nowDate = time.year+"-0"+(time.month + 1)+"-"+ time.monthDay;
         }else if(time.monthDay<10 && (time.month + 1)>=10){
-            nowDate = time.year+"-"+(time.month + 1)+"-0"+time.monthDay;
+            nowDate = time.year+"-"+(time.month + 1)+"-0"+ time.monthDay;
         }else if(time.monthDay<10 && (time.month + 1)<10){
-            nowDate = time.year+"-0"+(time.month + 1)+"-0"+time.monthDay;
+            nowDate = time.year+"-0"+(time.month + 1)+"-0"+ time.monthDay;
         }else{
-            nowDate = time.year+"-"+(time.month + 1)+"-"+time.monthDay;
+            nowDate = time.year+"-"+(time.month + 1)+"-"+ time.monthDay;
         }
 
         //nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;

@@ -45,6 +45,7 @@ public class AllReportActivity extends Activity {
     String nowDate,selectDate;
     TextView tv_date;
     DongLanTitleView report_all_title;
+    private Time time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class AllReportActivity extends Activity {
     private void showDate() {
 
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
+        customDatePicker.setGoneHourAndMinute();
+        customDatePicker.setMax((time.month + 1),time.monthDay);
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
@@ -118,9 +121,9 @@ public class AllReportActivity extends Activity {
 
     private void initHost() {
 
-        Time time = new Time();
+        time = new Time();
         time.setToNow();
-        nowDate = time.year +"-"+(time.month+1)+"-"+time.monthDay;
+        nowDate = time.year +"-"+(time.month+1)+"-"+ time.monthDay;
         selectDate = nowDate;
         gson = new Gson();
         String role_type = getIntent().getStringExtra("role_type");

@@ -14,9 +14,11 @@ public class JiaoLianCourseBean implements Serializable {
     private Data data;
     private String errorMsg;
     private boolean success;
+
     public void setCode(int code) {
         this.code = code;
     }
+
     public int getCode() {
         return code;
     }
@@ -24,6 +26,7 @@ public class JiaoLianCourseBean implements Serializable {
     public void setData(Data data) {
         this.data = data;
     }
+
     public Data getData() {
         return data;
     }
@@ -31,6 +34,7 @@ public class JiaoLianCourseBean implements Serializable {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
+
     public String getErrorMsg() {
         return errorMsg;
     }
@@ -38,11 +42,12 @@ public class JiaoLianCourseBean implements Serializable {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
     public boolean getSuccess() {
         return success;
     }
 
-    public class Content implements Serializable{
+    public class Content implements Serializable {
 
         private int branch_id;
         private int count;
@@ -63,6 +68,15 @@ public class JiaoLianCourseBean implements Serializable {
         private int surplus_count;
         private int time_length;
         private String self_avatar_path;
+        private String img_url;
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
+        }
 
         public String getSelf_avatar_path() {
             return self_avatar_path;
@@ -75,6 +89,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setBranch_id(int branch_id) {
             this.branch_id = branch_id;
         }
+
         public int getBranch_id() {
             return branch_id;
         }
@@ -82,6 +97,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setCount(int count) {
             this.count = count;
         }
+
         public int getCount() {
             return count;
         }
@@ -89,6 +105,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setCourse_category(int course_category) {
             this.course_category = course_category;
         }
+
         public int getCourse_category() {
             return course_category;
         }
@@ -96,6 +113,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setCourse_type_id(int course_type_id) {
             this.course_type_id = course_type_id;
         }
+
         public int getCourse_type_id() {
             return course_type_id;
         }
@@ -103,6 +121,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setCourse_type_name(String course_type_name) {
             this.course_type_name = course_type_name;
         }
+
         public String getCourse_type_name() {
             return course_type_name;
         }
@@ -110,6 +129,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setDelete_remark(String delete_remark) {
             this.delete_remark = delete_remark;
         }
+
         public String getDelete_remark() {
             return delete_remark;
         }
@@ -117,6 +137,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setEmployee_id(int employee_id) {
             this.employee_id = employee_id;
         }
+
         public int getEmployee_id() {
             return employee_id;
         }
@@ -124,6 +145,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setEmployee_name(String employee_name) {
             this.employee_name = employee_name;
         }
+
         public String getEmployee_name() {
             return employee_name;
         }
@@ -131,6 +153,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setEnd_date(Long end_date) {
             this.end_date = end_date;
         }
+
         public Long getEnd_date() {
             return end_date;
         }
@@ -138,6 +161,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setId(int id) {
             this.id = id;
         }
+
         public int getId() {
             return id;
         }
@@ -145,6 +169,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setMember_id(int member_id) {
             this.member_id = member_id;
         }
+
         public int getMember_id() {
             return member_id;
         }
@@ -152,6 +177,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setMember_name(String member_name) {
             this.member_name = member_name;
         }
+
         public String getMember_name() {
             return member_name;
         }
@@ -159,6 +185,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setMember_no(String member_no) {
             this.member_no = member_no;
         }
+
         public String getMember_no() {
             return member_no;
         }
@@ -166,6 +193,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setPrice(int price) {
             this.price = price;
         }
+
         public int getPrice() {
             return price;
         }
@@ -173,6 +201,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setReal_price(int real_price) {
             this.real_price = real_price;
         }
+
         public int getReal_price() {
             return real_price;
         }
@@ -180,6 +209,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setStart_date(Long start_date) {
             this.start_date = start_date;
         }
+
         public Long getStart_date() {
             return start_date;
         }
@@ -187,6 +217,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setSurplus_count(int surplus_count) {
             this.surplus_count = surplus_count;
         }
+
         public int getSurplus_count() {
             return surplus_count;
         }
@@ -194,6 +225,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setTime_length(int time_length) {
             this.time_length = time_length;
         }
+
         public int getTime_length() {
             return time_length;
         }
@@ -201,7 +233,7 @@ public class JiaoLianCourseBean implements Serializable {
     }
 
 
-    public class Data implements Serializable{
+    public class Data implements Serializable {
 
         private List<Content> content;
         private boolean last;
@@ -210,9 +242,11 @@ public class JiaoLianCourseBean implements Serializable {
         private int size;
         private int totalElements;
         private int totalPages;
+
         public void setContent(List<Content> content) {
             this.content = content;
         }
+
         public List<Content> getContent() {
             return content;
         }
@@ -220,6 +254,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setLast(boolean last) {
             this.last = last;
         }
+
         public boolean getLast() {
             return last;
         }
@@ -227,6 +262,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setNumber(int number) {
             this.number = number;
         }
+
         public int getNumber() {
             return number;
         }
@@ -234,6 +270,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setNumberOfElements(int numberOfElements) {
             this.numberOfElements = numberOfElements;
         }
+
         public int getNumberOfElements() {
             return numberOfElements;
         }
@@ -241,6 +278,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setSize(int size) {
             this.size = size;
         }
+
         public int getSize() {
             return size;
         }
@@ -248,6 +286,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setTotalElements(int totalElements) {
             this.totalElements = totalElements;
         }
+
         public int getTotalElements() {
             return totalElements;
         }
@@ -255,6 +294,7 @@ public class JiaoLianCourseBean implements Serializable {
         public void setTotalPages(int totalPages) {
             this.totalPages = totalPages;
         }
+
         public int getTotalPages() {
             return totalPages;
         }

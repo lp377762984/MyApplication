@@ -48,28 +48,29 @@ import java.util.Map;
  * Created by feng on 2017/9/28.
  */
 
-public class RegisterInfoActivity extends Activity{
+public class RegisterInfoActivity extends Activity {
 
-    String strSex = "1",strBirthday = "1990-12-10",strHeight = "170",strWeight  = "55";
-    TextView text_birthday,text_height,text_name,text_male,text_female,text_weight,
-            button,tv_start,over_time;
+    String strSex = "1", strBirthday = "1990-12-10", strHeight = "170", strWeight = "55";
+    TextView text_birthday, text_height, text_name, text_male, text_female, text_weight,
+            button, tv_start, over_time;
     PopupWindow mPopWindow;
     //ListView list_year,list_date,list_height;
     SimpleAdapter mSchedule;
     MyAdapter arrayAdapter;
     //View contentView;
-    View inflate,inflate1;
+    View inflate, inflate1;
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
     RequestQueue requestQueue;
-    String id,strName,gender = "1",syear,smonth,sdate;//性别:1、男，2、女，3、未知，4、保密
+    String id, strName, gender = "1", syear, smonth, sdate;//性别:1、男，2、女，3、未知，4、保密
     Data mData;
     Gson gson;
     AlertDialog.Builder alertdialog;
-    LoopView loopview,lp_year,lp_month,lp_date;
+    LoopView loopview, lp_year, lp_month, lp_date;
     int year;
     String isleapyear;
     int daysByYearMonth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,26 +90,26 @@ public class RegisterInfoActivity extends Activity{
         requestQueue = Volley.newRequestQueue(RegisterInfoActivity.this);
 
         mData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        id = SPUtils.getString(Constants.MY_USERID,null);
+        id = SPUtils.getString(Constants.MY_USERID, null);
 
     }
 
-    private void showDate(){
-        ViewGroup parent = (ViewGroup)inflate1.getParent();
-        if(parent!=null){
+    private void showDate() {
+        ViewGroup parent = (ViewGroup) inflate1.getParent();
+        if (parent != null) {
             parent.removeAllViews();
         }
 
         final ArrayList<String> yearList = new ArrayList<String>();
         final ArrayList<String> monthList = new ArrayList<String>();
         final ArrayList<String> dateList = new ArrayList<String>();
-        int n=1950;
-        int len = year-n;
-        for(int i=0;i<=len;i++){
-            yearList.add((n+i)+"");
+        int n = 1900;
+        int len = year - n;
+        for (int i = 0; i <= len; i++) {
+            yearList.add((n + i) + "");
         }
-        for(int j = 0;j<12;j++){
-            monthList.add((1+j)+"");
+        for (int j = 0; j < 12; j++) {
+            monthList.add((1 + j) + "");
         }
         lp_year.setNotLoop();
         lp_date.setNotLoop();
@@ -116,16 +117,16 @@ public class RegisterInfoActivity extends Activity{
         lp_year.setItems(yearList);
         lp_month.setItems(monthList);
 
-        lp_year.setInitPosition(yearList.size()-20);
-        syear = yearList.get(yearList.size()-20);
+        lp_year.setInitPosition(yearList.size() - 20);
+        syear = yearList.get(yearList.size() - 20);
         lp_month.setInitPosition(0);
         smonth = monthList.get(0);
         sdate = "1";
 
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
-        for(int z=1;z<=daysByYearMonth;z++){
-            dateList.add(z+"");
+        for (int z = 1; z <= daysByYearMonth; z++) {
+            dateList.add(z + "");
         }
         lp_date.setItems(dateList);
 
@@ -140,8 +141,8 @@ public class RegisterInfoActivity extends Activity{
                 syear = yearList.get(index);
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
-                for(int z=1;z<=daysByYearMonth;z++){
-                    dateList.add(z+"");
+                for (int z = 1; z <= daysByYearMonth; z++) {
+                    dateList.add(z + "");
                 }
                 lp_date.setItems(dateList);
             }
@@ -153,8 +154,8 @@ public class RegisterInfoActivity extends Activity{
                 smonth = monthList.get(index);
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
-                for(int z=1;z<=daysByYearMonth;z++){
-                    dateList.add(z+"");
+                for (int z = 1; z <= daysByYearMonth; z++) {
+                    dateList.add(z + "");
                 }
                 lp_date.setItems(dateList);
             }
@@ -172,17 +173,17 @@ public class RegisterInfoActivity extends Activity{
         alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                text_birthday.setText(syear+"年"+smonth+"月"+sdate+"日");
-                strBirthday = syear+"-"+smonth+"-"+sdate;
+                text_birthday.setText(syear + "年" + smonth + "月" + sdate + "日");
+                strBirthday = syear + "-" + smonth + "-" + sdate;
             }
         });
         alertdialog.show();
 
     }
 
-    public void intiView(){
+    public void intiView() {
         inflate = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.timeselect, null);
-        inflate1 = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.birthdayselect,null);
+        inflate1 = LayoutInflater.from(RegisterInfoActivity.this).inflate(R.layout.birthdayselect, null);
         tv_start = inflate.findViewById(R.id.tv_start);
         tv_start.setVisibility(View.GONE);
         loopview = inflate.findViewById(R.id.loopview);
@@ -190,7 +191,7 @@ public class RegisterInfoActivity extends Activity{
         over_time.setVisibility(View.GONE);
 
         lp_year = inflate1.findViewById(R.id.lp_year);
-        lp_month  = inflate1.findViewById(R.id.lp_month);
+        lp_month = inflate1.findViewById(R.id.lp_month);
         lp_date = inflate1.findViewById(R.id.lp_date);
 
         alertdialog = new AlertDialog.Builder(RegisterInfoActivity.this);
@@ -214,7 +215,8 @@ public class RegisterInfoActivity extends Activity{
         button = findViewById(R.id.button);
         text_name = findViewById(R.id.text_name);
     }
-    public void setClick(){
+
+    public void setClick() {
         text_birthday.setOnClickListener(onclick);
         //cancel_action.setOnClickListener(onclick);
         text_height.setOnClickListener(onclick);
@@ -230,8 +232,8 @@ public class RegisterInfoActivity extends Activity{
         @Override
         public void onClick(View view) {
             int v = view.getId();
-            switch(v){
-                case R.id.text_birthday:{
+            switch (v) {
+                case R.id.text_birthday: {
                     showDate();
 //                    c = Calendar.getInstance();
 //                    new DatePickerDialog(RegisterInfoActivity.this,new DatePickerDialog.OnDateSetListener() {
@@ -261,7 +263,7 @@ public class RegisterInfoActivity extends Activity{
                     text_name.setText("");
                     showName();
                     break;
-                case R.id.cancel_action:{
+                case R.id.cancel_action: {
                     dismissWindow();
                 }
                 break;
@@ -281,9 +283,9 @@ public class RegisterInfoActivity extends Activity{
                     gender = "2";
                     break;
                 case R.id.button:
-                    if(strName==null||strName.equals("")){
+                    if (strName == null || strName.equals("")) {
                         ToastUtils.showToastShort("请输入昵称");
-                    }else{
+                    } else {
                         commit();
 
                     }
@@ -293,42 +295,49 @@ public class RegisterInfoActivity extends Activity{
         }
     };
 
-    private void showWH(final int j){
+    private void showWH(final int j) {
         int n;
         final ArrayList<String> arrayList = new ArrayList<String>();
-        ViewGroup parent = (ViewGroup)inflate.getParent();
-        if(parent!=null){
+        ViewGroup parent = (ViewGroup) inflate.getParent();
+        if (parent != null) {
             parent.removeAllViews();
         }
-        if(j==0){
-            for(int i = 0;i<71;i++){
-                n = 150+i;
-                arrayList.add(n+"");
+        if (j == 0) {
+            for (int i = 30; i < 300; i++) {
+                arrayList.add(i + "");
             }
-        }else {
-            for(int y=0;y<165;y++){
-                n = 35+y;
-                arrayList.add(n+"");
+        } else {
+            for (int y = 10; y < 500; y++) {
+                arrayList.add(y + "");
             }
         }
         loopview.setNotLoop();
         loopview.setItems(arrayList);
         //设置初始位置
-        loopview.setInitPosition(0);
+        if (j == 0) {
+            loopview.setInitPosition(arrayList.size() / 2);
+        } else {
+            for (int i = 0; i < arrayList.size(); i++) {
+                if ("60".equals(arrayList.get(i))) {
+                    loopview.setInitPosition(i);
+                }
+            }
+        }
+
         loopview.setTextSize(18);
         loopview.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                if(j==0){
-                    text_height.setText(arrayList.get(index)+" cm");
-                }else{
-                    text_weight.setText(arrayList.get(index)+" kg");
+                if (j == 0) {
+                    text_height.setText(arrayList.get(index) + " cm");
+                } else {
+                    text_weight.setText(arrayList.get(index) + " kg");
                 }
             }
         });
-        if(j==0){
+        if (j == 0) {
             alertdialog.setTitle("选择身高");
-        }else{
+        } else {
             alertdialog.setTitle("选择体重");
         }
 
@@ -342,12 +351,12 @@ public class RegisterInfoActivity extends Activity{
         alertdialog.show();
     }
 
-    public void showName(){
+    public void showName() {
 
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(RegisterInfoActivity.this);
         View dialogView = LayoutInflater.from(RegisterInfoActivity.this)
-                .inflate(R.layout.edit_name,null);
+                .inflate(R.layout.edit_name, null);
         //normalDialog.setTitle("编辑昵称");
         final TextView edit_name = dialogView.findViewById(R.id.edit_name);
         normalDialog.setView(dialogView);
@@ -355,7 +364,7 @@ public class RegisterInfoActivity extends Activity{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        strName =  edit_name.getText().toString();
+                        strName = edit_name.getText().toString();
                         text_name.setText(strName);
                     }
                 });
@@ -421,20 +430,22 @@ public class RegisterInfoActivity extends Activity{
 //
 //    }
 
-    public void dismissWindow(){
-        if(null != mPopWindow && mPopWindow.isShowing()){
+    public void dismissWindow() {
+        if (null != mPopWindow && mPopWindow.isShowing()) {
             mPopWindow.dismiss();
         }
     }
 
-    public class MyAdapter extends BaseAdapter{
+    public class MyAdapter extends BaseAdapter {
 
         ArrayList<String> arrayList;
         LayoutInflater inflater = null;
-        public MyAdapter(ArrayList<String> list, Context context){
+
+        public MyAdapter(ArrayList<String> list, Context context) {
             arrayList = list;
             inflater = LayoutInflater.from(context);
         }
+
         @Override
         public int getCount() {
             return arrayList.size();
@@ -453,37 +464,37 @@ public class RegisterInfoActivity extends Activity{
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             TextView item_text = null;
-            if(view==null){
-                view  = inflater.inflate(R.layout.selector_item,null);
+            if (view == null) {
+                view = inflater.inflate(R.layout.selector_item, null);
             }
-                item_text = view.findViewById(R.id.item_text);
-                item_text.setText(arrayList.get(i));
+            item_text = view.findViewById(R.id.item_text);
+            item_text.setText(arrayList.get(i));
             return view;
         }
     }
 
-    public void commit(){
+    public void commit() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.SET_BASE_USERINFO_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 RootBean rootBean = gson.fromJson(s, RootBean.class);
-                if("true".equals(rootBean.success)){
+                if ("true".equals(rootBean.success)) {
                     ToastUtils.showToastShort("提交成功！");
                     mData.getPerson().setBirthday(strBirthday);
                     mData.getPerson().setNick_name(strName);
                     mData.getPerson().setHeight(strHeight);
                     mData.getPerson().setWeight(strWeight);
                     mData.getPerson().setGender(gender);
-                    DataInfoCache.saveOneCache(mData,Constants.MY_INFO);
-                    EventBus.getDefault().post(new StringEvent("",1010));
-                    Intent intent = new Intent(RegisterInfoActivity.this,HomeActivity.class);
+                    DataInfoCache.saveOneCache(mData, Constants.MY_INFO);
+                    EventBus.getDefault().post(new StringEvent("", 1010));
+                    Intent intent = new Intent(RegisterInfoActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
 
 
-                }else{
+                } else {
                     ToastUtils.showToastShort("提交失败！");
                 }
             }
@@ -492,16 +503,16 @@ public class RegisterInfoActivity extends Activity{
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("提交失败！");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<String,String>();
-                hashMap.put("id",id);
-                hashMap.put("nickName",strName);
-                hashMap.put("gender",gender);
-                hashMap.put("height",strHeight);
-                hashMap.put("weight",strWeight);
-                hashMap.put("birthday",strBirthday);
+                HashMap<String, String> hashMap = new HashMap<String, String>();
+                hashMap.put("id", id);
+                hashMap.put("nickName", strName);
+                hashMap.put("gender", gender);
+                hashMap.put("height", strHeight);
+                hashMap.put("weight", strWeight);
+                hashMap.put("birthday", strBirthday);
                 //LogUtil.e("zzf",hashMap.toString());
                 return hashMap;
             }
@@ -509,7 +520,7 @@ public class RegisterInfoActivity extends Activity{
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                hashMap.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return hashMap;
             }
         };

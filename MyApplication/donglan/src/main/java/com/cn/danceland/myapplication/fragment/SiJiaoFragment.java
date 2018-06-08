@@ -59,8 +59,8 @@ import java.util.Map;
 public class SiJiaoFragment extends BaseFragment {
 
     NestedExpandaleListView ex_lv;
-    ImageView down_img,up_img;
-    String role,auth;
+    ImageView down_img, up_img;
+    String role, auth;
     Data data;
     Gson gson;
     MyListAdapter childListAdapter;
@@ -77,7 +77,7 @@ public class SiJiaoFragment extends BaseFragment {
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.sijiao, null);
-        view = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
+        view = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item, null);
         mylist = view.findViewById(R.id.mylist);
         mylist.setDividerHeight(0);
         ex_lv = inflate.findViewById(R.id.ex_lv);
@@ -87,14 +87,14 @@ public class SiJiaoFragment extends BaseFragment {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 down_img = v.findViewById(R.id.down_img);
                 up_img = v.findViewById(R.id.up_img);
-                if(down_img.getVisibility()==View.GONE){
+                if (down_img.getVisibility() == View.GONE) {
                     down_img.setVisibility(View.VISIBLE);
                     up_img.setVisibility(View.GONE);
-                }else{
-                    if(role!=null){
-                        getChildData(jiaolianContent.get(groupPosition).getId(),jiaolianContent.get(groupPosition).getCourse_category()+"");
-                    }else{
-                        getChildData(myCourseList.get(groupPosition).getId(),myCourseList.get(groupPosition).getCourse_category()+"");
+                } else {
+                    if (role != null) {
+                        getChildData(jiaolianContent.get(groupPosition).getId(), jiaolianContent.get(groupPosition).getCourse_category() + "");
+                    } else {
+                        getChildData(myCourseList.get(groupPosition).getId(), myCourseList.get(groupPosition).getCourse_category() + "");
                     }
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
@@ -127,51 +127,52 @@ public class SiJiaoFragment extends BaseFragment {
 
     }
 
-    public void getRoles(String role,String auth,String startTime){
+    public void getRoles(String role, String auth, String startTime) {
 
         this.role = role;
         this.auth = auth;
         this.startTime = startTime;
 
     }
+
     public void refresh() throws JSONException {
 
         //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         final MyCourseConBean myCourseConBean = new MyCourseConBean();
         String url;
-        if(info!=null){
+        if (info != null) {
             myCourseConBean.setBranch_id(Integer.valueOf(info.getPerson().getDefault_branch()));
             myCourseConBean.setPage(0);
             myCourseConBean.setPageCount(30);
             url = Constants.FINDMEMBERCOURSE;
-            if(role!=null){
+            if (role != null) {
                 myCourseConBean.setEmployee_id(info.getEmployee().getId());
-                url =Constants.FINDEMPCOURSE;
+                url = Constants.FINDEMPCOURSE;
             }
             String s = gson.toJson(myCourseConBean);
             JSONObject jsonObject = new JSONObject(s);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
-                    LogUtil.e("zzf",jsonObject.toString());
-                    if(role!=null){
+                    LogUtil.e("zzf", jsonObject.toString());
+                    if (role != null) {
                         JiaoLianCourseBean jiaoLianCourseBean = gson.fromJson(jsonObject.toString(), JiaoLianCourseBean.class);
-                        if(jiaoLianCourseBean!=null&&jiaoLianCourseBean.getData()!=null){
+                        if (jiaoLianCourseBean != null && jiaoLianCourseBean.getData() != null) {
 
                             jiaolianContent = jiaoLianCourseBean.getData().getContent();
-                            if(jiaolianContent!=null){
+                            if (jiaolianContent != null) {
                                 ex_lv.setAdapter(new JiaoLianAdapter(jiaolianContent));
                             }
 
                         }
 
-                    }else{
+                    } else {
                         MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
-                        if(myCourseBean!=null){
+                        if (myCourseBean != null) {
 
                             myCourseList = myCourseBean.getData();
-                            if(myCourseList!=null){
+                            if (myCourseList != null) {
                                 ex_lv.setAdapter(new MyExAdapter(myCourseList));
                             }
                         }
@@ -181,16 +182,16 @@ public class SiJiaoFragment extends BaseFragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    LogUtil.e("zzf",volleyError.toString());
+                    LogUtil.e("zzf", volleyError.toString());
                     rl_error.setVisibility(View.VISIBLE);
                     tv_error.setText("网络异常");
                     Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String,String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                     return map;
                 }
             };
@@ -210,15 +211,15 @@ public class SiJiaoFragment extends BaseFragment {
         String url = null;
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if(role!=null){
+        if (role != null) {
             siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
-        }else{
+        } else {
             siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         }
 
-        if("2".equals(course_category)){
+        if ("2".equals(course_category)) {
             url = Constants.FINDGROUPCOURSEAPPOINTLIST;
-        }else {
+        } else {
             url = Constants.APPOINTLIST;
         }
 
@@ -226,40 +227,40 @@ public class SiJiaoFragment extends BaseFragment {
         siJiaoYuYueConBean.setId(courseid);
         String s = gson.toJson(siJiaoYuYueConBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                if("2".equals(course_category)){
+                if ("2".equals(course_category)) {
                     GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
-                    if(groupRecordBean!=null){
+                    if (groupRecordBean != null) {
                         List<GroupRecordBean.Data> data = groupRecordBean.getData();
-                        if(data!=null){
-                                MyGroupListAdapter myGroupListAdapter = new MyGroupListAdapter(data, course_category);
-                                mylist.setAdapter(myGroupListAdapter);
-                                //childListAdapter.notifyDataSetChanged();
-                                //childListAdapter.notifyDataSetChanged();
-                                //lv_tuanke.setAdapter(new RecordAdapter(content));
-                            }
-                        }else{
+                        if (data != null) {
+                            MyGroupListAdapter myGroupListAdapter = new MyGroupListAdapter(data, course_category);
+                            mylist.setAdapter(myGroupListAdapter);
+                            //childListAdapter.notifyDataSetChanged();
+                            //childListAdapter.notifyDataSetChanged();
+                            //lv_tuanke.setAdapter(new RecordAdapter(content));
+                        }
+                    } else {
                         ToastUtils.showToastShort("当天无预约记录");
                     }
-                }else{
-                    LogUtil.e("zzf",jsonObject.toString());
+                } else {
+                    LogUtil.e("zzf", jsonObject.toString());
                     SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
-                    if(siJiaoRecordBean!=null){
+                    if (siJiaoRecordBean != null) {
                         SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
-                        if(data!=null){
-                            if(childContent!=null){
+                        if (data != null) {
+                            if (childContent != null) {
                                 childContent.clear();
                             }
                             childContent = data.getContent();
-                            if(childContent!=null){
-                                childListAdapter = new MyListAdapter(childContent,course_category);
+                            if (childContent != null) {
+                                childListAdapter = new MyListAdapter(childContent, course_category);
                                 mylist.setAdapter(childListAdapter);
                                 //childListAdapter.notifyDataSetChanged();
                                 //childListAdapter.notifyDataSetChanged();
                                 //lv_tuanke.setAdapter(new RecordAdapter(content));
-                            }else{
+                            } else {
                                 ToastUtils.showToastShort("当天无预约记录");
                             }
 
@@ -268,19 +269,18 @@ public class SiJiaoFragment extends BaseFragment {
                 }
 
 
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
 
@@ -291,10 +291,11 @@ public class SiJiaoFragment extends BaseFragment {
 
     }
 
-    private  class JiaoLianAdapter extends BaseExpandableListAdapter{
+    private class JiaoLianAdapter extends BaseExpandableListAdapter {
 
         List<JiaoLianCourseBean.Content> list;
-        JiaoLianAdapter(List<JiaoLianCourseBean.Content> list){
+
+        JiaoLianAdapter(List<JiaoLianCourseBean.Content> list) {
             this.list = list;
 
         }
@@ -336,8 +337,8 @@ public class SiJiaoFragment extends BaseFragment {
 
         @Override
         public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder=null;
-            if(convertView == null){
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_parent_item, null);
 
@@ -349,7 +350,7 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
 
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             RelativeLayout sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
@@ -358,38 +359,38 @@ public class SiJiaoFragment extends BaseFragment {
             sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(list.get(groupPosition).getCourse_category()==1){
+                    if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).
-                                putExtra("item",list.get(groupPosition)).
-                                putExtra("startTime",startTime).
-                                putExtra("endTime",endTime)
-                                .putExtra("role",role)
-                                .putExtra("auth",auth));
-                    }else if(list.get(groupPosition).getCourse_category()==2){
+                                putExtra("item", list.get(groupPosition)).
+                                putExtra("startTime", startTime).
+                                putExtra("endTime", endTime)
+                                .putExtra("role", role)
+                                .putExtra("auth", auth));
+                    } else if (list.get(groupPosition).getCourse_category() == 2) {
                         CourseActivity activity = (CourseActivity) getActivity();
-                        if(activity!=null){
-                            activity.getItemId(list.get(groupPosition).getId(),list.get(groupPosition).getCourse_type_id(),"2");
-                            activity.showFragment("2","");
+                        if (activity != null) {
+                            activity.getItemId(list.get(groupPosition).getId(), list.get(groupPosition).getCourse_type_id(), "2");
+                            activity.showFragment("2", "");
                         }
                     }
                 }
             });
             viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());
-            viewHolder.sijiao_num.setText("购买节数："+list.get(groupPosition).getCount()+"节");
-            viewHolder.sijiao_shengyu.setText("剩余节数："+list.get(groupPosition).getSurplus_count()+"节");
+            viewHolder.sijiao_num.setText("购买节数：" + list.get(groupPosition).getCount() + "节");
+            viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
-            viewHolder.sijiao_date.setText("有效期："+startTime+"至"+endTime);
-            if(list.get(groupPosition).getCourse_category()==1){
+            viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
+            if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("一对一");
-            }else if(list.get(groupPosition).getCourse_category()==2){
+            } else if (list.get(groupPosition).getCourse_category() == 2) {
                 viewHolder.sijiao_fangshi.setText("小团体");
-            }else {
+            } else {
                 viewHolder.sijiao_fangshi.setText("");
             }
 
-            if(list.get(groupPosition).getEmployee_name()!=null){
-                viewHolder.sijiao_jiaolian.setText("上课会员："+list.get(groupPosition).getEmployee_name());
-            }else{
+            if (list.get(groupPosition).getEmployee_name() != null) {
+                viewHolder.sijiao_jiaolian.setText("上课会员：" + list.get(groupPosition).getMember_name());
+            } else {
                 viewHolder.sijiao_jiaolian.setVisibility(View.GONE);
             }
 
@@ -398,13 +399,13 @@ public class SiJiaoFragment extends BaseFragment {
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder=null;
-            if (convertView==null){
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item,null);
+                convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_child_item, null);
                 //mylist = convertView.findViewById(R.id.mylist);
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             //mylist.setDividerHeight(0);
@@ -422,12 +423,10 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
 
-
-
-    private class MyExAdapter extends BaseExpandableListAdapter{
+    private class MyExAdapter extends BaseExpandableListAdapter {
         List<MyCourseBean.Data> list;
 
-        MyExAdapter(List<MyCourseBean.Data> list){
+        MyExAdapter(List<MyCourseBean.Data> list) {
             this.list = list;
         }
 
@@ -469,8 +468,8 @@ public class SiJiaoFragment extends BaseFragment {
 
         @Override
         public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder=null;
-            if(convertView == null){
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_parent_item, null);
 
@@ -484,7 +483,7 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_detail = convertView.findViewById(R.id.sijiao_detail);
 
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
@@ -492,51 +491,51 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(list.get(groupPosition).getCourse_category()==1){
+                    if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, SiJiaoDetailActivity.class).
-                                putExtra("item",list.get(groupPosition)).
-                                putExtra("startTime",startTime).
-                                putExtra("endTime",endTime)
-                        .putExtra("role",role)
-                        .putExtra("auth",auth));
-                    }else if(list.get(groupPosition).getCourse_category()==2){
-                    CourseActivity activity = (CourseActivity) getActivity();
-                    if(activity!=null){
-                        activity.getItemId(list.get(groupPosition).getId(),list.get(groupPosition).getCourse_type_id(),"2");
-                        activity.showFragment("2","");
-                    }
+                                putExtra("item", list.get(groupPosition)).
+                                putExtra("startTime", startTime).
+                                putExtra("endTime", endTime)
+                                .putExtra("role", role)
+                                .putExtra("auth", auth));
+                    } else if (list.get(groupPosition).getCourse_category() == 2) {
+                        CourseActivity activity = (CourseActivity) getActivity();
+                        if (activity != null) {
+                            activity.getItemId(list.get(groupPosition).getId(), list.get(groupPosition).getCourse_type_id(), "2");
+                            activity.showFragment("2", "");
+                        }
                     }
                 }
             });
             viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());
-            viewHolder.sijiao_num.setText("购买节数："+list.get(groupPosition).getCount()+"节");
-            viewHolder.sijiao_shengyu.setText("剩余节数："+list.get(groupPosition).getSurplus_count()+"节");
+            viewHolder.sijiao_num.setText("购买节数：" + list.get(groupPosition).getCount() + "节");
+            viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
-            viewHolder.sijiao_date.setText("有效期："+startTime+"至"+endTime);
-            if(list.get(groupPosition).getCourse_category()==1){
+            viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
+            if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("一对一");
-            }else if(list.get(groupPosition).getCourse_category()==2){
+            } else if (list.get(groupPosition).getCourse_category() == 2) {
                 viewHolder.sijiao_fangshi.setText("小团体");
-            }else {
+            } else {
                 viewHolder.sijiao_fangshi.setText("");
             }
 
-            if(list.get(groupPosition).getEmployee_name()!=null){
-                viewHolder.sijiao_jiaolian.setText("上课教练："+list.get(groupPosition).getEmployee_name());
-            }else{
+            if (list.get(groupPosition).getEmployee_name() != null) {
+                viewHolder.sijiao_jiaolian.setText("上课教练：" + list.get(groupPosition).getEmployee_name());
+            } else {
                 viewHolder.sijiao_jiaolian.setText("上课教练：---");
             }
 
             viewHolder.sijiao_detail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(list.get(groupPosition).getCourse_category()==1){
+                    if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, CourseDetailActivity.class).
-                                putExtra("item",list.get(groupPosition)).
-                                putExtra("startTime",startTime).
-                                putExtra("endTime",endTime)
-                                .putExtra("role",role)
-                                .putExtra("auth",auth));
+                                putExtra("item", list.get(groupPosition)).
+                                putExtra("startTime", startTime).
+                                putExtra("endTime", endTime)
+                                .putExtra("role", role)
+                                .putExtra("auth", auth));
                     }
 //                    else if(list.get(groupPosition).getCourse_category()==2){
 //                        CourseActivity activity = (CourseActivity) getActivity();
@@ -548,9 +547,9 @@ public class SiJiaoFragment extends BaseFragment {
                 }
             });
 
-            if(list.get(groupPosition).getCourse_category()==2){
+            if (list.get(groupPosition).getCourse_category() == 2) {
                 viewHolder.sijiao_detail.setVisibility(View.GONE);
-            }else if(list.get(groupPosition).getCourse_category()==1){
+            } else if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_detail.setVisibility(View.VISIBLE);
             }
 
@@ -560,13 +559,13 @@ public class SiJiaoFragment extends BaseFragment {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            ViewHolder viewHolder=null;
-            if (convertView==null){
+            ViewHolder viewHolder = null;
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = view;
                 //mylist = convertView.findViewById(R.id.mylist);
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             //mylist.setDividerHeight(0);
@@ -584,17 +583,17 @@ public class SiJiaoFragment extends BaseFragment {
         }
     }
 
-     class ViewHolder{
-        RelativeLayout sijiao_detail,sijiao_yuyue;
+    class ViewHolder {
+        RelativeLayout sijiao_detail, sijiao_yuyue;
         MyListView mylist;
-        TextView sijiao_title,sijiao_jiaolian,sijiao_num,sijiao_shengyu,sijiao_date,sijiao_fangshi;
+        TextView sijiao_title, sijiao_jiaolian, sijiao_num, sijiao_shengyu, sijiao_date, sijiao_fangshi;
     }
 
-    private class MyListAdapter extends BaseAdapter{
+    private class MyListAdapter extends BaseAdapter {
         List<SiJiaoRecordBean.Content> list;
         String course_category;
 
-        MyListAdapter(List<SiJiaoRecordBean.Content> list,String course_category){
+        MyListAdapter(List<SiJiaoRecordBean.Content> list, String course_category) {
             this.list = list;
             this.course_category = course_category;
         }
@@ -617,61 +616,60 @@ public class SiJiaoFragment extends BaseFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder1 viewHolder1;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder1 = new ViewHolder1();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_list_item, null);
                 viewHolder1.tv_time = convertView.findViewById(R.id.tv_time);
                 viewHolder1.tv_status = convertView.findViewById(R.id.tv_status);
                 viewHolder1.tv_pingfen = convertView.findViewById(R.id.tv_pingfen);
                 convertView.setTag(viewHolder1);
-            }else{
-                viewHolder1 = (ViewHolder1)convertView.getTag();
+            } else {
+                viewHolder1 = (ViewHolder1) convertView.getTag();
             }
 
             String time;
-            if(list.get(position).getStart_time()%60==0){
-                time = list.get(position).getStart_time()/60+":00";
-            }else{
-                time = list.get(position).getStart_time()/60+":"+list.get(position).getStart_time()%60;
+            if (list.get(position).getStart_time() % 60 == 0) {
+                time = list.get(position).getStart_time() / 60 + ":00";
+            } else {
+                time = list.get(position).getStart_time() / 60 + ":" + list.get(position).getStart_time() % 60;
             }
 
-            viewHolder1.tv_time.setText("时间："+TimeUtils.timeStamp2Date(list.get(position).getCourse_date()+"","yyyy-MM-dd HH:mm:ss").split(" ")[0]+" "+time);
+            viewHolder1.tv_time.setText("时间：" + TimeUtils.timeStamp2Date(list.get(position).getCourse_date() + "", "yyyy-MM-dd HH:mm:ss").split(" ")[0] + " " + time);
 
-            if("2".equals(course_category)){
+            if ("2".equals(course_category)) {
 
                 viewHolder1.tv_pingfen.setText("查看详情");
 
-            }else{
+            } else {
                 int status = list.get(position).getStatus();
                 viewHolder1.tv_pingfen.setText("无法评分");
-                if(status==1){
+                if (status == 1) {
                     viewHolder1.tv_status.setText("已过期");
-                }else if(status==2){
+                } else if (status == 2) {
                     viewHolder1.tv_status.setText("未签到");
-                }else if(status==3){
+                } else if (status == 3) {
                     viewHolder1.tv_status.setText("已取消");
-                }else if(status==4){
+                } else if (status == 4) {
                     viewHolder1.tv_status.setText("已签到");
-                    if(list.get(position).getEvaluate_id()>0){
+                    if (list.get(position).getEvaluate_id() > 0) {
                         viewHolder1.tv_pingfen.setText("查看评价");
-                    }else{
+                    } else {
                         viewHolder1.tv_pingfen.setText("去评分");
                     }
                 }
             }
 
 
-
             viewHolder1.tv_pingfen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(list.get(position).getStatus()==4){
-                    if("2".equals(course_category)){
-                        startActivity(new Intent(mActivity,SmallTuankeDetailActivity.class).putExtra("record",list.get(position)));
-                    }else{
-                        startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item",list.get(position)).
-                                putExtra("course_category",course_category).putExtra("evaluate_id",list.get(position).getEvaluate_id()));
-                    }
+                    if (list.get(position).getStatus() == 4) {
+                        if ("2".equals(course_category)) {
+                            startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record", list.get(position)));
+                        } else {
+                            startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item", list.get(position)).
+                                    putExtra("course_category", course_category).putExtra("evaluate_id", list.get(position).getEvaluate_id()));
+                        }
                     }
                 }
             });
@@ -681,11 +679,11 @@ public class SiJiaoFragment extends BaseFragment {
     }
 
 
-    private class MyGroupListAdapter extends BaseAdapter{
+    private class MyGroupListAdapter extends BaseAdapter {
         List<GroupRecordBean.Data> list;
         String course_category;
 
-        MyGroupListAdapter(List<GroupRecordBean.Data> list,String course_category){
+        MyGroupListAdapter(List<GroupRecordBean.Data> list, String course_category) {
             this.list = list;
             this.course_category = course_category;
         }
@@ -708,33 +706,32 @@ public class SiJiaoFragment extends BaseFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder1 viewHolder1;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder1 = new ViewHolder1();
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_list_item, null);
                 viewHolder1.tv_time = convertView.findViewById(R.id.tv_time);
                 viewHolder1.tv_status = convertView.findViewById(R.id.tv_status);
                 viewHolder1.tv_pingfen = convertView.findViewById(R.id.tv_pingfen);
                 convertView.setTag(viewHolder1);
-            }else{
-                viewHolder1 = (ViewHolder1)convertView.getTag();
+            } else {
+                viewHolder1 = (ViewHolder1) convertView.getTag();
             }
 
-            viewHolder1.tv_time.setText(TimeUtils.timeStamp2Date(list.get(position).getDate(),"yyyy-MM-dd"));
+            viewHolder1.tv_time.setText(TimeUtils.timeStamp2Date(list.get(position).getDate(), "yyyy-MM-dd"));
 
-            if("2".equals(course_category)){
+            if ("2".equals(course_category)) {
 
                 viewHolder1.tv_pingfen.setText("查看详情");
 
             }
 
 
-
             viewHolder1.tv_pingfen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //if(list.get(position).getStatus()==4){
-                    if("2".equals(course_category)){
-                        startActivity(new Intent(mActivity,SmallTuankeDetailActivity.class).putExtra("record",list.get(position)));
+                    if ("2".equals(course_category)) {
+                        startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record", list.get(position)));
                     }
                 }
             });
@@ -742,7 +739,8 @@ public class SiJiaoFragment extends BaseFragment {
             return convertView;
         }
     }
-    class ViewHolder1{
-        TextView tv_time,tv_status,tv_pingfen;
+
+    class ViewHolder1 {
+        TextView tv_time, tv_status, tv_pingfen;
     }
 }

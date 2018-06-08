@@ -46,6 +46,15 @@ public class MyCourseBean implements Serializable {
         private Integer surplus_count;
         private Integer time_length;
         private String self_avatar_path;
+        private String img_url;
+
+        public String getImg_url() {
+            return img_url;
+        }
+
+        public void setImg_url(String img_url) {
+            this.img_url = img_url;
+        }
 
         public String getSelf_avatar_path() {
             return self_avatar_path;

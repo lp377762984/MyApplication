@@ -54,25 +54,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CourseDetailActivity extends Activity {
 
-    String startTime,endTime,startTimeTv,endTimeTv;
+    String startTime, endTime, startTimeTv, endTimeTv;
     Data data;
     String role;
     String auth;
     MyCourseBean.Data item;
     JiaoLianCourseBean.Content item1;
-    TextView course_name,course_length,course_place,course_room,
-    course_jiaolian_huiyuan_name,course_renshu,tv_kecheng_fenshu,tv_jiaolian_fenshu,tv_changdi_fenshu,
+    TextView course_name, course_length, course_place, course_room,
+            course_jiaolian_huiyuan_name, course_renshu, tv_kecheng_fenshu, tv_jiaolian_fenshu, tv_changdi_fenshu,
             tv_content;
-    ImageView course_img,course_back;
+    ImageView course_img, course_back;
     CircleImageView course_jiaolian_huiyuan_circle;
     RelativeLayout rl_button_yuyue;
     NestedExpandaleListView my_expanda;
-    ImageView down_img,up_img;
+    ImageView down_img, up_img;
     Gson gson;
     CourseMemberBean courseMemberBean;
-    List<CourseMemberBean.Content> headList,childList;
+    List<CourseMemberBean.Content> headList, childList;
     MyAdapter myAdapter;
-    String emp_id,room_id,courseTypeId,branchId;
+    String emp_id, room_id, courseTypeId, branchId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,28 +85,28 @@ public class CourseDetailActivity extends Activity {
         queryAverage();
     }
 
-    private void queryAverage(){
+    private void queryAverage() {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERYAVERAGE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
                 CourseEvaluateBean courseEvaluateBean = gson.fromJson(s, CourseEvaluateBean.class);
-                if(courseEvaluateBean!=null && courseEvaluateBean.getData()!=null){
+                if (courseEvaluateBean != null && courseEvaluateBean.getData() != null) {
                     CourseEvaluateBean.Data data = courseEvaluateBean.getData();
-                    if(data.getCourse_type_score()!=null){
+                    if (data.getCourse_type_score() != null) {
                         tv_kecheng_fenshu.setText(data.getCourse_type_score());
-                    }else{
+                    } else {
                         tv_kecheng_fenshu.setText("暂无评分");
                     }
-                    if(data.getEmployee_score()!=null){
+                    if (data.getEmployee_score() != null) {
                         tv_jiaolian_fenshu.setText(data.getEmployee_score());
-                    }else{
+                    } else {
                         tv_jiaolian_fenshu.setText("暂无评分");
                     }
-                    if(data.getRoom_score()!=null){
+                    if (data.getRoom_score() != null) {
                         tv_changdi_fenshu.setText(data.getRoom_score());
-                    }else {
+                    } else {
                         tv_changdi_fenshu.setText("暂无评分");
                     }
                 }
@@ -114,24 +114,24 @@ public class CourseDetailActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if(volleyError!=null){
+                if (volleyError != null) {
                     LogUtil.i(volleyError.toString());
-                }else {
+                } else {
                     LogUtil.i("获取评分失败");
                 }
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("employeeId",emp_id);
-                map.put("courseTypeId",courseTypeId);
-                if(room_id!=null){
-                    map.put("roomId",room_id);
+                map.put("employeeId", emp_id);
+                map.put("courseTypeId", courseTypeId);
+                if (room_id != null) {
+                    map.put("roomId", room_id);
                 }
-                map.put("branchId",branchId);
+                map.put("branchId", branchId);
 
                 return map;
             }
@@ -153,20 +153,20 @@ public class CourseDetailActivity extends Activity {
 
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         startTimeTv = getIntent().getStringExtra("startTime");
-        startTime = TimeUtils.date2TimeStamp(startTimeTv+" 00:00:00", "yyyy-MM-dd 00:00:00")+"";
+        startTime = TimeUtils.date2TimeStamp(startTimeTv + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
         endTimeTv = getIntent().getStringExtra("endTime");
         role = getIntent().getStringExtra("role");
         auth = getIntent().getStringExtra("auth");
-        if(role!=null){
-            item1 = (JiaoLianCourseBean.Content)getIntent().getSerializableExtra("item");
-            emp_id = item1.getEmployee_id()+"";
-            courseTypeId = item1.getCourse_type_id()+"";
-            branchId = item1.getBranch_id()+"";
-        }else{
-            item = (MyCourseBean.Data)getIntent().getSerializableExtra("item");
-            emp_id = item.getEmployee_id()+"";
-            courseTypeId = item.getCourse_type_id()+"";
-            branchId = item.getBranch_id()+"";
+        if (role != null) {
+            item1 = (JiaoLianCourseBean.Content) getIntent().getSerializableExtra("item");
+            emp_id = item1.getEmployee_id() + "";
+            courseTypeId = item1.getCourse_type_id() + "";
+            branchId = item1.getBranch_id() + "";
+        } else {
+            item = (MyCourseBean.Data) getIntent().getSerializableExtra("item");
+            emp_id = item.getEmployee_id() + "";
+            courseTypeId = item.getCourse_type_id() + "";
+            branchId = item.getBranch_id() + "";
         }
 
 
@@ -215,8 +215,8 @@ public class CourseDetailActivity extends Activity {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-            if(convertView==null){
-                convertView = LayoutInflater.from(CourseDetailActivity.this).inflate(R.layout.kecheng_parent,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(CourseDetailActivity.this).inflate(R.layout.kecheng_parent, null);
             }
 
             CircleImageView circle_1 = convertView.findViewById(R.id.circle_1);
@@ -227,14 +227,14 @@ public class CourseDetailActivity extends Activity {
             CircleImageView circle_6 = convertView.findViewById(R.id.circle_6);
 
 
-            CircleImageView[] imgArr = {circle_1,circle_2,circle_3,circle_4,circle_5,circle_6};
+            CircleImageView[] imgArr = {circle_1, circle_2, circle_3, circle_4, circle_5, circle_6};
 
-            if(headList!=null&&headList.size()>0){
-                for(int i = 0;i<headList.size();i++){
+            if (headList != null && headList.size() > 0) {
+                for (int i = 0; i < headList.size(); i++) {
                     imgArr[i].setVisibility(View.VISIBLE);
-                    if(headList.get(i).getSelf_avatar_path()==null||headList.get(i).getSelf_avatar_path().equals("")){
+                    if (headList.get(i).getSelf_avatar_path() == null || headList.get(i).getSelf_avatar_path().equals("")) {
                         Glide.with(CourseDetailActivity.this).load(R.drawable.img_my_avatar).into(imgArr[i]);
-                    }else{
+                    } else {
                         Glide.with(CourseDetailActivity.this).load(headList.get(i).getSelf_avatar_path()).into(imgArr[i]);
                     }
                 }
@@ -245,8 +245,8 @@ public class CourseDetailActivity extends Activity {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            if(convertView==null){
-                convertView = LayoutInflater.from(CourseDetailActivity.this).inflate(R.layout.kecheng_child,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(CourseDetailActivity.this).inflate(R.layout.kecheng_child, null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
             grid_view.setAdapter(new MyGridAdapter());
@@ -265,7 +265,7 @@ public class CourseDetailActivity extends Activity {
 
         @Override
         public int getCount() {
-            return childList==null? 0:childList.size();
+            return childList == null ? 0 : childList.size();
         }
 
         @Override
@@ -282,10 +282,10 @@ public class CourseDetailActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(CourseDetailActivity.this).inflate(R.layout.kecheng_grid_item, null);
             CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            if(childList!=null){
-                if(childList.get(position).getSelf_avatar_path()==null||childList.get(position).getSelf_avatar_path().equals("")){
+            if (childList != null) {
+                if (childList.get(position).getSelf_avatar_path() == null || childList.get(position).getSelf_avatar_path().equals("")) {
                     Glide.with(CourseDetailActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
-                }else{
+                } else {
                     Glide.with(CourseDetailActivity.this).load(childList.get(position).getSelf_avatar_path()).into(circle_item);
                 }
 
@@ -320,10 +320,10 @@ public class CourseDetailActivity extends Activity {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 down_img = v.findViewById(R.id.down_img);
                 up_img = v.findViewById(R.id.up_img);
-                if(down_img.getVisibility()==View.GONE){
+                if (down_img.getVisibility() == View.GONE) {
                     down_img.setVisibility(View.VISIBLE);
                     up_img.setVisibility(View.GONE);
-                }else{
+                } else {
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
                 }
@@ -342,16 +342,16 @@ public class CourseDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(CourseDetailActivity.this,SiJiaoDetailActivity.class);
-                if(role!=null){
-                    intent.putExtra("item",item1);
-                }else{
-                    intent.putExtra("item",item);
+                Intent intent = new Intent(CourseDetailActivity.this, SiJiaoDetailActivity.class);
+                if (role != null) {
+                    intent.putExtra("item", item1);
+                } else {
+                    intent.putExtra("item", item);
                 }
-                intent.putExtra("startTime",startTimeTv);
-                intent.putExtra("endTime",endTimeTv);
-                intent.putExtra("role",role);
-                intent.putExtra("auth",auth);
+                intent.putExtra("startTime", startTimeTv);
+                intent.putExtra("endTime", endTimeTv);
+                intent.putExtra("role", role);
+                intent.putExtra("auth", auth);
 
                 startActivity(intent);
             }
@@ -367,7 +367,7 @@ public class CourseDetailActivity extends Activity {
     }
 
 
-    private void getPeople(){
+    private void getPeople() {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
@@ -376,43 +376,43 @@ public class CourseDetailActivity extends Activity {
         siJiaoYuYueConBean.setSize(6);
 
         String s = gson.toJson(siJiaoYuYueConBean);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYBUYCOURSEPERSONINFO,s ,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYBUYCOURSEPERSONINFO, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
-                if(courseMemberBean!=null){
+                if (courseMemberBean != null) {
                     CourseMemberBean.Data data = courseMemberBean.getData();
-                    if(data!=null){
-                        if(data.getTotalElements()>6){
+                    if (data != null) {
+                        if (data.getTotalElements() > 6) {
                             getTotlePeple();
-                        }else if(data.getTotalElements()<1){
+                        } else if (data.getTotalElements() < 1) {
                             my_expanda.setVisibility(View.GONE);
                         }
-                        course_renshu.setText("购买会员("+data.getTotalElements()+")");
+                        course_renshu.setText("购买会员(" + data.getTotalElements() + ")");
                         headList = data.getContent();
                         my_expanda.setAdapter(myAdapter);
                     }
 
-                }else{
+                } else {
                     my_expanda.setVisibility(View.GONE);
                     course_renshu.setText("购买会员(0)");
                 }
 
-                LogUtil.e("zzf",jsonObject.toString());
+                LogUtil.e("zzf", jsonObject.toString());
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -420,7 +420,7 @@ public class CourseDetailActivity extends Activity {
 
     }
 
-    private void getTotlePeple(){
+    private void getTotlePeple() {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
@@ -429,28 +429,28 @@ public class CourseDetailActivity extends Activity {
         siJiaoYuYueConBean.setSize(100);
 
         String s = gson.toJson(siJiaoYuYueConBean);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYGROUPCOURSE,s ,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERYGROUPCOURSE, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
-                if(courseMemberBean!=null&&courseMemberBean.getData()!=null){
+                if (courseMemberBean != null && courseMemberBean.getData() != null) {
                     childList = courseMemberBean.getData().getContent();
                 }
-                LogUtil.e("zzf",jsonObject.toString());
+                LogUtil.e("zzf", jsonObject.toString());
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -460,15 +460,19 @@ public class CourseDetailActivity extends Activity {
     }
 
     private void initData() {
-        if(role!=null){
+        if (role != null) {
             course_name.setText(item1.getCourse_type_name());
-
-        }else{
-            course_name.setText(item.getCourse_type_name());
-            course_length.setText("课程时长："+item.getTime_length()+"分钟");
-            course_place.setText("上课场馆："+data.getMember().getBranch_name());
+            course_length.setText("课程时长：" + item1.getTime_length() + "分钟");
+            course_place.setText("上课场馆：" + data.getMember().getBranch_name());
             course_room.setText("上课场地：");
-            Glide.with(CourseDetailActivity.this).load("http://cdn.duitang.com/uploads/item/201603/02/20160302141852_2tMwx.jpeg").into(course_img);
+            Glide.with(CourseDetailActivity.this).load(item1.getImg_url()).into(course_img);
+            course_jiaolian_huiyuan_name.setText(item1.getEmployee_name());
+        } else {
+            course_name.setText(item.getCourse_type_name());
+            course_length.setText("课程时长：" + item.getTime_length() + "分钟");
+            course_place.setText("上课场馆：" + data.getMember().getBranch_name());
+            course_room.setText("上课场地：");
+            Glide.with(CourseDetailActivity.this).load(item.getImg_url()).into(course_img);
             course_jiaolian_huiyuan_name.setText(item.getEmployee_name());
         }
 
