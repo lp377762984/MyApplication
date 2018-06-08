@@ -546,11 +546,21 @@ public class ReportFormActivity extends Activity {
 
 
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        if (myInfo != null && myInfo.getMember() != null) {
-            branch_id = myInfo.getMember().getDefault_branch();
+        if (myInfo != null && myInfo.getPerson() != null) {
+            branch_id = myInfo.getPerson().getDefault_branch();
         }
 
-        nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;
+        if((time.month + 1)<10 && time.monthDay>=10){
+            nowDate = time.year+"-0"+(time.month + 1)+"-"+time.monthDay;
+        }else if(time.monthDay<10 && (time.month + 1)>=10){
+            nowDate = time.year+"-"+(time.month + 1)+"-0"+time.monthDay;
+        }else if(time.monthDay<10 && (time.month + 1)<10){
+            nowDate = time.year+"-0"+(time.month + 1)+"-0"+time.monthDay;
+        }else{
+            nowDate = time.year+"-"+(time.month + 1)+"-"+time.monthDay;
+        }
+
+        //nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;
         selectDate = nowDate;
     }
 
@@ -563,16 +573,20 @@ public class ReportFormActivity extends Activity {
                 RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
                 if (requestConsultantInfoBean != null) {
                     List<RequestConsultantInfoBean.Data> data = requestConsultantInfoBean.getData();
-                    if (data != null) {
+                    if (data != null && data.size()>0) {
                         report_rv.setAdapter(new MyRecyclerViewAdapter(data));
+                    }else{
+                        report_rv.setVisibility(View.GONE);
                     }
+                }else{
+                    report_rv.setVisibility(View.GONE);
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.i(volleyError.toString());
             }
         }) {
             @Override

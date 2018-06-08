@@ -239,7 +239,15 @@ public class CustomDatePicker extends AlertDialog{
     }
 
     public String getDateStringF(){
-        dateString = syear+"-"+smonth+"-"+sdate;
+        if(Integer.valueOf(smonth)<10 && Integer.valueOf(sdate)>=10){
+            dateString = syear+"-0"+smonth+"-"+sdate;
+        }else if(Integer.valueOf(sdate)<10 && Integer.valueOf(smonth)>=10){
+            dateString = syear+"-"+smonth+"-0"+sdate;
+        }else if(Integer.valueOf(sdate)<10 && Integer.valueOf(smonth)<10){
+            dateString = syear+"-0"+smonth+"-0"+sdate;
+        }else{
+            dateString = syear+"-"+smonth+"-"+sdate;
+        }
         return dateString;
     }
 
