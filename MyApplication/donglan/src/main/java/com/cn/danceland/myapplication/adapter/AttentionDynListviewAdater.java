@@ -37,6 +37,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
@@ -46,6 +47,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
 import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -86,6 +88,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
     private Context context;
     boolean isMe = false;
     private final SparseBooleanArray mCollapsedStatus;
+
     public AttentionDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
@@ -254,10 +257,10 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
-         viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
             viewHolder.rx_zan.setChecked(true);
         } else {
-          viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
             viewHolder.rx_zan.setChecked(false);
         }
 
@@ -468,8 +471,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 viewHolder.iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
 
-                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".")+ 1);
-                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length()-1, "_400X400");
+                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
+                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
                 String[] b = sb.toString().split("_");
                 String[] c = b[1].toString().toString().split("X");
 
@@ -633,6 +636,11 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())) {
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
 
 
                 jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1, items[which]);

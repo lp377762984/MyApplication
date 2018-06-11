@@ -236,6 +236,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
         } else if (product_type == 2) {//如果是定金
             order_bustype = ORDER_BUS_TYPE_DEPOSIT_APP;
+
+            findViewById(R.id.ll_chuzhika).setVisibility(View.GONE);
         }
         myPopupListAdapter = new MyPopupListAdapter(this);
 

@@ -38,6 +38,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -46,6 +47,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
 import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -86,6 +88,7 @@ public class MyDynListviewAdater extends BaseAdapter {
     private Context context;
     boolean isMe = false;
     private final SparseBooleanArray mCollapsedStatus;
+
     public MyDynListviewAdater(Context context, ArrayList<RequsetDynInfoBean.Data.Content> data) {
         // TODO Auto-generated constructor stub
         mInflater = LayoutInflater.from(context);
@@ -258,10 +261,10 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
-           viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
             viewHolder.rx_zan.setChecked(true);
         } else {
-        viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
+            viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
 
             viewHolder.rx_zan.setChecked(false);
         }
@@ -344,22 +347,22 @@ public class MyDynListviewAdater extends BaseAdapter {
 
         if (isMe) {//是否是个人页面
             viewHolder.ll_guanzhu.setVisibility(View.INVISIBLE);
-        //    viewHolder.rx_guanzhu.setVisibility(View.INVISIBLE);
+            //    viewHolder.rx_guanzhu.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.ll_guanzhu.setVisibility(View.VISIBLE);
-       //     viewHolder.rx_guanzhu.setVisibility(View.VISIBLE);
+            //     viewHolder.rx_guanzhu.setVisibility(View.VISIBLE);
         }
 
 
         if (data.get(position).isFollower()) {
             viewHolder.tv_guanzhu.setText("已关注");
-          viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin1);
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin1);
             viewHolder.rx_guanzhu.setChecked(true);
             viewHolder.rx_guanzhu.setClickable(false);
             // viewHolder.tv_guanzhu.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
         } else {
             viewHolder.tv_guanzhu.setText("+关注");
-         viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
+            viewHolder.iv_guanzhu.setImageResource(R.drawable.img_xin);
             viewHolder.rx_guanzhu.setChecked(false);
             viewHolder.rx_guanzhu.setClickable(true);
             // viewHolder.tv_guanzhu.setTextColor(Color.BLACK);
@@ -408,11 +411,11 @@ public class MyDynListviewAdater extends BaseAdapter {
 
 
         if (TextUtils.isEmpty(data.get(position).getContent())) {
-         //   viewHolder.tv_content.setVisibility(View.GONE);
+            //   viewHolder.tv_content.setVisibility(View.GONE);
             viewHolder.expandableTextView.setVisibility(View.GONE);
         } else {//内容不为空赋值
             viewHolder.expandableTextView.setText(data.get(position).getContent(), mCollapsedStatus, position);
-          //  viewHolder.tv_content.setText(data.get(position).getContent());
+            //  viewHolder.tv_content.setText(data.get(position).getContent());
             viewHolder.expandableTextView.setVisibility(View.VISIBLE);
         }
         if (TextUtils.isEmpty(data.get(position).getPublishPlace())) {
@@ -492,8 +495,8 @@ public class MyDynListviewAdater extends BaseAdapter {
                 viewHolder.iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
 
-                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".")+ 1);
-                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length()-1, "_400X400");
+                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
+                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
                 String[] b = sb.toString().split("_");
                 String[] c = b[1].toString().split("X");
 
@@ -662,6 +665,11 @@ public class MyDynListviewAdater extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())) {
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
 
                 jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1, items[which]);
 

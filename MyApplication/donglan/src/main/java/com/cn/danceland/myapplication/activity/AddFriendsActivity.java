@@ -311,7 +311,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                     RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                     Glide.with(AddFriendsActivity.this).load(searchMember.getData().getSelf_avatar_path()).apply(options).into(iv_avatar);
                 } else {
-                    ToastUtils.showToastShort(searchMember.getErrorMsg());
+                    ToastUtils.showToastShort("找不到用户");
                     tv_result_null.setVisibility(View.VISIBLE);
                 }
 

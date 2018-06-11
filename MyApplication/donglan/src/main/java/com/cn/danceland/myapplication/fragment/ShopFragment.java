@@ -724,6 +724,9 @@ public class ShopFragment extends BaseFragment {
                     case 2://我的会员卡
                         startActivity(new Intent(mActivity, MyCardActivity.class));
                         break;
+                    case 3://我的会员卡
+                   ToastUtils.showToastShort("功能正在开发中");
+                        break;
                     case 4://购买私教
                         startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
                         break;
