@@ -105,6 +105,9 @@ public class TuanKeFragment extends BaseFragment {
                         startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
                                 putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
+                        if(xiaoTuanList.get(position).getSelf_appoint_count() == 0){
+                            xiaoTuanList.get(position).setSelf_appoint_count(self_appoint);
+                        }
                         startActivityForResult(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
                                 putExtra("yuyueStartTime",yuyueStartTime).putExtra("item",xiaoTuanList.get(position)),223);
                     }
@@ -134,6 +137,7 @@ public class TuanKeFragment extends BaseFragment {
 
     }
 
+    int self_appoint;
 
     private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {
         if(data!=null){
@@ -156,6 +160,9 @@ public class TuanKeFragment extends BaseFragment {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
+                        if(!"小团课".equals(from)){
+                            self_appoint = 1;
+                        }
                         rl.setClickable(false);
                         rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                         tv.setTextColor(Color.parseColor("#FF8C00"));

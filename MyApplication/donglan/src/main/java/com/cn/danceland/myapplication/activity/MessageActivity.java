@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -69,6 +70,20 @@ public class MessageActivity extends FragmentActivity {
         //lv_message.setAdapter(new MessageAdapter());
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            SPUtils.setInt("pinglunNum", 0);
+            SPUtils.setInt("dianzanNum", 0);
+            SPUtils.setInt("fansNum", 0);
+            EventBus.getDefault().post(new StringEvent(0 + "", 101));
+            finish();
+            return true;
+        }else{
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
     private void initViews() {
         pinglunNum = SPUtils.getInt("pinglunNum", 0);
         dianzanNum = SPUtils.getInt("dianzanNum", 0);

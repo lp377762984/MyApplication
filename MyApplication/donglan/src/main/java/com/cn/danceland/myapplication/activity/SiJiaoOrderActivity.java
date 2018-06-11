@@ -376,7 +376,7 @@ public class SiJiaoOrderActivity extends Activity {
     private void initView() {
 
         ll_storecard = findViewById(R.id.ll_storecard);
-        if(!"0".equals(type)){
+        if (!"0".equals(type)) {
             ll_storecard.setVisibility(View.GONE);
         }
         rl_jiaolian = findViewById(R.id.rl_jiaolian);
@@ -566,22 +566,22 @@ public class SiJiaoOrderActivity extends Activity {
         btn_chuzhika.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isStoreCard){
+                if (!isStoreCard) {
                     ToastUtils.showToastShort("储值卡余额不足，请使用其他支付方式");
-                    if("2".equals(zhifu)){
+                    if ("2".equals(zhifu)) {
                         btn_zhifubao.setChecked(true);
                         btn_weixin.setChecked(false);
                         btn_chuzhika.setChecked(false);
-                    }else if("3".equals(zhifu)){
+                    } else if ("3".equals(zhifu)) {
                         btn_zhifubao.setChecked(false);
                         btn_weixin.setChecked(true);
                         btn_chuzhika.setChecked(false);
-                    }else{
+                    } else {
                         btn_zhifubao.setChecked(false);
                         btn_weixin.setChecked(false);
                         btn_chuzhika.setChecked(false);
                     }
-                }else{
+                } else {
                     btn_zhifubao.setChecked(false);
                     btn_weixin.setChecked(false);
                     btn_chuzhika.setChecked(true);
@@ -638,29 +638,29 @@ public class SiJiaoOrderActivity extends Activity {
 
     public boolean isStoreCard;
 
-    private void getStoreCard(){
+    private void getStoreCard() {
         StoreAccountRequest request = new StoreAccountRequest();
         StoreAccountCond cond = new StoreAccountCond();
         // TODO 准备查询条件
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
-                LogUtil.e("zzf",json.toString());
+                LogUtil.e("zzf", json.toString());
                 DLResult<StoreAccount> result = gson.fromJson(json.toString(), new TypeToken<DLResult<StoreAccount>>() {
                 }.getType());
-                if(result!=null && result.getData()!=null){
+                if (result != null && result.getData() != null) {
                     StoreAccount data = result.getData();
                     float balance = data.getRemain() + data.getGiving();
 
-                    if("0".equals(type)){
-                        if(balance<(price-deposit)){
+                    if ("0".equals(type)) {
+                        if (balance < (price - deposit)) {
                             isStoreCard = false;
-                        }else {
+                        } else {
                             isStoreCard = true;
                         }
-                    }else{
-                        isStoreCard =false;
+                    } else {
+                        isStoreCard = false;
                     }
-                }else {
+                } else {
                     isStoreCard = false;
                 }
             }
@@ -752,8 +752,8 @@ public class SiJiaoOrderActivity extends Activity {
         extends_params.setTime_length(time_length);
         sijiaoOrderConfirmBean.setProduct_type(course_category_name);
         sijiaoOrderConfirmBean.setProduct_name(course_name);
-        sijiaoOrderConfirmBean.setReceive((price - deposit) + "");
-        sijiaoOrderConfirmBean.setPrice(price + "");
+        sijiaoOrderConfirmBean.setReceive(price + "");//商品价格
+        sijiaoOrderConfirmBean.setPrice((price - deposit) + "");//实付价格
 
         if ("1".equals(forme)) {
             extends_params.setOther_name(ed_name.getText().toString());
@@ -832,6 +832,7 @@ public class SiJiaoOrderActivity extends Activity {
         commitDepositBean.setReceive(deposit_course_price + "");
         commitDepositBean.setPrice(deposit_course_price + "");
         commitDepositBean.setProduct_type("私教定金");
+        commitDepositBean.setProduct_name("");
         extends_params.setBus_type("3");
         extends_params.setDeposit_type("3");
         extends_params.setAdmin_emp_id(employee_id + "");

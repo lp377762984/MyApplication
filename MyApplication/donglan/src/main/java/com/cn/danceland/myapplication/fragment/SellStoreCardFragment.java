@@ -156,7 +156,6 @@ public class SellStoreCardFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(mActivity,SellStoreCardActivity.class).putExtra("item",list.get(position)));
-                    mActivity.finish();
                 }
             });
 

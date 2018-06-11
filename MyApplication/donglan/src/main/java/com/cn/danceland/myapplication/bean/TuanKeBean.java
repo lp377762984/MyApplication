@@ -64,7 +64,16 @@ public class TuanKeBean implements Serializable {
         private String course_img_url_3;
         private int course_category;
         private String room_name;
+        private int self_appoint_count;
         private String employee_avatar_path;
+
+        public int getSelf_appoint_count() {
+            return self_appoint_count;
+        }
+
+        public void setSelf_appoint_count(int self_appoint_count) {
+            this.self_appoint_count = self_appoint_count;
+        }
 
         public String getEmployee_avatar_path() {
             return employee_avatar_path;
