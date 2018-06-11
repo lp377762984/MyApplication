@@ -46,6 +46,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
 import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
 import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestCommitCommentBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
@@ -58,6 +59,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
 import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -348,6 +350,13 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.tv_send:
                 //  LogUtil.i(et_comment.getText().toString());
+
+                Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
+
 
                 if (!TextUtils.isEmpty(et_comment.getText().toString())) {
 

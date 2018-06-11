@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/img_back"
             android:layout_centerVertical="true"
-            android:paddingLeft="15dp"
+            android:padding="10dp"
             />
         <TextView
             style="@style/TextViewTitileStyle"

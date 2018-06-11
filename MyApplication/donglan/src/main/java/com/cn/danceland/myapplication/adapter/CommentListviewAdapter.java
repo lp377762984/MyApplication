@@ -32,12 +32,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -248,6 +250,11 @@ public class CommentListviewAdapter extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())){
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
 
 //                jubao(data.get(pos).getId(), data.get(pos).getAuthor(), 1,);
                 jubao(data.get(pos).getId(), data.get(pos).getReplyUserId(), 2, items[which]);
