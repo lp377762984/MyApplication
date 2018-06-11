@@ -464,14 +464,14 @@ public class CourseDetailActivity extends Activity {
             course_name.setText(item1.getCourse_type_name());
             course_length.setText("课程时长：" + item1.getTime_length() + "分钟");
             course_place.setText("上课场馆：" + data.getMember().getBranch_name());
-            course_room.setText("上课场地：");
+            course_room.setText("上课场地：私人教室");
             Glide.with(CourseDetailActivity.this).load(item1.getImg_url()).into(course_img);
             course_jiaolian_huiyuan_name.setText(item1.getEmployee_name());
         } else {
             course_name.setText(item.getCourse_type_name());
             course_length.setText("课程时长：" + item.getTime_length() + "分钟");
             course_place.setText("上课场馆：" + data.getMember().getBranch_name());
-            course_room.setText("上课场地：");
+            course_room.setText("上课场地：私人教室");
             Glide.with(CourseDetailActivity.this).load(item.getImg_url()).into(course_img);
             course_jiaolian_huiyuan_name.setText(item.getEmployee_name());
         }
