@@ -151,6 +151,7 @@ public class MyConsumeAboutActivity extends Activity {
 
             switch (contentItem.getPay_way()){
                 case "1":
+                    Glide.with(MyConsumeAboutActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
                 case "2":
                     Glide.with(MyConsumeAboutActivity.this).load(R.drawable.alipay_logo).into(viewHolder.xc_img);
@@ -159,6 +160,7 @@ public class MyConsumeAboutActivity extends Activity {
                     Glide.with(MyConsumeAboutActivity.this).load(R.drawable.wechat_logo).into(viewHolder.xc_img);
                     break;
                 case "4":
+                    Glide.with(MyConsumeAboutActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
                 case "5":
                     Glide.with(MyConsumeAboutActivity.this).load(R.drawable.img_dl_logo).into(viewHolder.xc_img);
