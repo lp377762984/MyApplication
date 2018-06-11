@@ -38,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -52,11 +53,15 @@ import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccount;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountCond;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountRequest;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
@@ -181,6 +186,7 @@ public class SiJiaoOrderActivity extends Activity {
 
         }
     };
+    private LinearLayout ll_storecard;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,6 +197,7 @@ public class SiJiaoOrderActivity extends Activity {
         setContentView(R.layout.sijiaoorder);
         EventBus.getDefault().register(this);
         initHost();
+        getStoreCard();
         initView();
         queryList();
     }
@@ -368,6 +375,10 @@ public class SiJiaoOrderActivity extends Activity {
 
     private void initView() {
 
+        ll_storecard = findViewById(R.id.ll_storecard);
+        if(!"0".equals(type)){
+            ll_storecard.setVisibility(View.GONE);
+        }
         rl_jiaolian = findViewById(R.id.rl_jiaolian);
         tv_explain = findViewById(R.id.tv_explain);
         tv_pay_price = findViewById(R.id.tv_pay_price);
@@ -555,10 +566,28 @@ public class SiJiaoOrderActivity extends Activity {
         btn_chuzhika.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_zhifubao.setChecked(false);
-                btn_weixin.setChecked(false);
-                btn_chuzhika.setChecked(true);
-                zhifu = "5";
+                if(!isStoreCard){
+                    ToastUtils.showToastShort("储值卡余额不足，请使用其他支付方式");
+                    if("2".equals(zhifu)){
+                        btn_zhifubao.setChecked(true);
+                        btn_weixin.setChecked(false);
+                        btn_chuzhika.setChecked(false);
+                    }else if("3".equals(zhifu)){
+                        btn_zhifubao.setChecked(false);
+                        btn_weixin.setChecked(true);
+                        btn_chuzhika.setChecked(false);
+                    }else{
+                        btn_zhifubao.setChecked(false);
+                        btn_weixin.setChecked(false);
+                        btn_chuzhika.setChecked(false);
+                    }
+                }else{
+                    btn_zhifubao.setChecked(false);
+                    btn_weixin.setChecked(false);
+                    btn_chuzhika.setChecked(true);
+                    zhifu = "5";
+                }
+
             }
         });
         iv_phonebook = findViewById(R.id.iv_phonebook);
@@ -607,6 +636,37 @@ public class SiJiaoOrderActivity extends Activity {
         getJiaoLian();
     }
 
+    public boolean isStoreCard;
+
+    private void getStoreCard(){
+        StoreAccountRequest request = new StoreAccountRequest();
+        StoreAccountCond cond = new StoreAccountCond();
+        // TODO 准备查询条件
+        request.queryList(cond, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject json) {
+                LogUtil.e("zzf",json.toString());
+                DLResult<StoreAccount> result = gson.fromJson(json.toString(), new TypeToken<DLResult<StoreAccount>>() {
+                }.getType());
+                if(result!=null && result.getData()!=null){
+                    StoreAccount data = result.getData();
+                    float balance = data.getRemain() + data.getGiving();
+
+                    if("0".equals(type)){
+                        if(balance<(price-deposit)){
+                            isStoreCard = false;
+                        }else {
+                            isStoreCard = true;
+                        }
+                    }else{
+                        isStoreCard =false;
+                    }
+                }else {
+                    isStoreCard = false;
+                }
+            }
+        });
+
+    }
 
     private void read_contacts() {
         //  Intent intent = new Intent(Intent.ACTION_PICK,ContactsContract.Contacts.CONTENT_URI);
@@ -911,6 +971,7 @@ public class SiJiaoOrderActivity extends Activity {
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
+                    finish();
                 } else {
                     if (TextUtils.equals(requestSimpleBean.getCode(), "-5") || TextUtils.equals(requestSimpleBean.getCode(), "-6") || TextUtils.equals(requestSimpleBean.getCode(), "-7") || TextUtils.equals(requestSimpleBean.getCode(), "-8")) {
                         ToastUtils.showToastShort("储值卡余额不足");

@@ -92,7 +92,6 @@ public class TuanKeFragment extends BaseFragment {
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("店内还没有安排团课，请联系工作人员");
         lv_tuanke = view.findViewById(R.id.lv_tuanke);
-        lv_tuanke.setEmptyView(rl_error);
 
 //        myAdapter = new MyAdapter(xiaoTuanList);
 //        lv_tuanke.setAdapter(myAdapter);
@@ -157,6 +156,7 @@ public class TuanKeFragment extends BaseFragment {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if(jsonObject.toString().contains("true")){
+                        rl.setClickable(false);
                         rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                         tv.setTextColor(Color.parseColor("#FF8C00"));
                         tv.setText("已预约");
@@ -217,7 +217,9 @@ public class TuanKeFragment extends BaseFragment {
                     }
                     xiaoTuanList = keChengBiaoBean.getData();
                     lv_tuanke.setAdapter(new MyAdapter(xiaoTuanList));
+
                 }
+                lv_tuanke.setEmptyView(rl_error);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -336,6 +338,11 @@ public class TuanKeFragment extends BaseFragment {
                 viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                 viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_dl_yellow));
                 viewHolder.tv_yuyue.setText("已预约");
+            }else{
+                yuyue = true;
+                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+                viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
+                viewHolder.tv_yuyue.setText("预约");
             }
 
             viewHolder.tuanke_yuyue.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +352,9 @@ public class TuanKeFragment extends BaseFragment {
                         startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position))
                                 .putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
                     }else{
-                        commitYuyue(xiaoTuanList.get(position),viewHolder.tuanke_yuyue,viewHolder.tv_yuyue);
+                        if(xiaoTuanList.get(position).getSelf_appoint_count()==0){
+                            commitYuyue(xiaoTuanList.get(position),viewHolder.tuanke_yuyue,viewHolder.tv_yuyue);
+                        }
                     }
                 }
             });

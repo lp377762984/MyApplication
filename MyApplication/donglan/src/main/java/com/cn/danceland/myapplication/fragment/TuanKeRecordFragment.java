@@ -180,16 +180,15 @@ public class TuanKeRecordFragment extends BaseFragment {
             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showDialog(list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                    if(list.get(position).getStatus()!=2){
+                        showDialog(list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                    }
                 }
 
             });
             if(list.get(position).getStatus()==2){
                 viewHolder.rl_button_tv.setText("已取消");
                 viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                viewHolder.rl_button.setClickable(false);
-            }else{
-                viewHolder.rl_button.setClickable(true);
             }
 
             return convertView;

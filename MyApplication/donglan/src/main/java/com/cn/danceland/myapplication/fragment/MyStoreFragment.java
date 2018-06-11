@@ -113,7 +113,7 @@ public class MyStoreFragment extends BaseFragment {
                     StoreAccount data = result.getData();
                     Glide.with(mActivity).load(data.getImg_url()).into(card_img);
                     address_name.setText(data.getAddress_name());
-                    if(data.getRemain() == null || data.getRemain().equals("")){
+                    if(data.getRemain() == 0 &&data.getGiving()==0){
                         card_jine.setText("￥ 0");
                     }else{
                         card_jine.setText("￥ "+(data.getRemain()+data.getGiving()));
@@ -123,24 +123,6 @@ public class MyStoreFragment extends BaseFragment {
                     card_jine.setText("￥ 0");
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }
-//                DLResult<List<StoreAccount>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<StoreAccount>>>() {
-//                }.getType());
-//                if (result.isSuccess()) {
-//                    List<StoreAccount> list = result.getData();
-//                    //tv_mystore.setText("我的余额："+list.get(0).getRemain()+"");
-//                    if(list!=null&&list.size()>0){
-//
-////                        Glide.with(mActivity).load(list.get(0).getImg_url()).into(card_img);
-////                        address_name.setText(list.get(0).getAddress_name());
-//                        card_jine.setText("￥"+list.get(0).getRemain());
-//                    }
-//
-//                    // TODO 请求成功后的代码
-//                    LogUtil.e("zzf",json.toString());
-//
-//                } else {
-//                    ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
-//                }
             }
         });
     }

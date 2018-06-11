@@ -52,6 +52,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="课程名称"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="18sp"
                     android:textColor="@color/black"
                     />

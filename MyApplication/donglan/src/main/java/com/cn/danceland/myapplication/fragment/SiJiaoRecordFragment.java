@@ -343,9 +343,9 @@ public class SiJiaoRecordFragment extends BaseFragment {
                         }
                     } else {
                         if (list.get(position).getStatus() == 1) {
-                            if (list.get(position).getAppointment_type() == 2) {
+                            if (list.get(position).getAppointment_type() == 2 || list.get(position).getCategory().equals("2")) {
                                 showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
-                            } else if (list.get(position).getAppointment_type() == 1) {
+                            } else if (list.get(position).getAppointment_type() == 1 ) {
                                 showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
                             }
                         }
@@ -374,17 +374,17 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 viewHolder.rl_button_tv.setText("已取消");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                 viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                viewHolder.rl_button.setClickable(false);
+                //viewHolder.rl_button.setClickable(false);
             } else {
-                viewHolder.rl_button.setClickable(true);
+                //viewHolder.rl_button.setClickable(true);
             }
             if (list.get(position).getStatus() == 4) {
                 viewHolder.rl_button_tv.setText("已签到");
                 viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                 viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                viewHolder.rl_button.setClickable(false);
+                //viewHolder.rl_button.setClickable(false);
             } else {
-                viewHolder.rl_button.setClickable(true);
+                //viewHolder.rl_button.setClickable(true);
             }
 
 
@@ -417,7 +417,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
                 if (yuYueResultBean != null && yuYueResultBean.getData() > 0) {
                     ToastUtils.showToastShort("确认成功！");
-                    tv.setText("上课中");
+                    tv.setText("已确认未签到");
                     tv.setTextColor(getResources().getColor(R.color.white));
                     rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_green));
                     rl.setClickable(false);

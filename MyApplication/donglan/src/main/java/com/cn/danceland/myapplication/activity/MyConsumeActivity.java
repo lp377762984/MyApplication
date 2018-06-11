@@ -399,7 +399,7 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
             MyConSumeBean.Content contentItem = content.get(position);
 
             switch (contentItem.getPay_way()){
-                case "1":
+                case "1"://现金
                     Glide.with(MyConsumeActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
                 case "2":
@@ -408,11 +408,11 @@ public class MyConsumeActivity extends Activity implements AbsListView.OnScrollL
                 case "3":
                     Glide.with(MyConsumeActivity.this).load(R.drawable.wechat_logo).into(viewHolder.xc_img);
                     break;
-                case "4":
-                    Glide.with(MyConsumeActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
+                case "4"://刷卡
+                    Glide.with(MyConsumeActivity.this).load(R.drawable.zhifu_card).into(viewHolder.xc_img);
                     break;
                 case "5":
-                    Glide.with(MyConsumeActivity.this).load(R.drawable.img_dl_logo).into(viewHolder.xc_img);
+                    Glide.with(MyConsumeActivity.this).load(R.drawable.chuzhi_card).into(viewHolder.xc_img);
                     break;
             }
 

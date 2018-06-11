@@ -11,8 +11,8 @@ public class StoreAccount {
 	private Long id;// 主键
 	private Long member_id;// 会员ID
 	private Long branch_id;// 门店ID
-	private Float remain;// 余额
-	private Float giving;// 赠送金额
+	private float remain;// 余额
+	private float giving;// 赠送金额
 	private Byte enable;// 状态
 	private String img_path;
 	private String img_url;// 图片地址
@@ -61,16 +61,16 @@ public class StoreAccount {
 	public void setBranch_id(Long branch_id) {
 		this.branch_id = branch_id;
 	}
-	public Float getRemain() {
+	public float getRemain() {
 		return remain;
 	}
-	public void setRemain(Float remain) {
+	public void setRemain(float remain) {
 		this.remain = remain;
 	}
-	public Float getGiving() {
+	public float getGiving() {
 		return giving;
 	}
-	public void setGiving(Float giving) {
+	public void setGiving(float giving) {
 		this.giving = giving;
 	}
 	public Byte getEnable() {

@@ -100,7 +100,9 @@ public class TuanKeDetailActivity extends Activity {
         rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                commitYuyue(item,rl_button_yuyue,tv_status);
+                if(item.getSelf_appoint_count()==0){
+                    commitYuyue(item,rl_button_yuyue,tv_status);
+                }
             }
         });
         course_jiaolian_huiyuan_name = findViewById(R.id.course_jiaolian_huiyuan_name);
@@ -109,7 +111,7 @@ public class TuanKeDetailActivity extends Activity {
             if(item.getSelf_appoint_count()>0){
                 rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 tv_status.setText("已预约");
-                rl_button_yuyue.setClickable(false);
+                //rl_button_yuyue.setClickable(false);
             }
             course_jiaolian_huiyuan_name.setText(item.getEmployee_name());
 

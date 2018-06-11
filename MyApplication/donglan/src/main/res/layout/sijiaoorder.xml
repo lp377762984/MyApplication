@@ -606,6 +606,7 @@
                 <!--android:background="@color/color_bg_line" />-->
 
             <LinearLayout
+                android:id="@+id/ll_storecard"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="#fff">

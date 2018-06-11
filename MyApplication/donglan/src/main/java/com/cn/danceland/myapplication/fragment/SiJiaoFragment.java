@@ -108,7 +108,6 @@ public class SiJiaoFragment extends BaseFragment {
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("请先购买私教");
 
-        ex_lv.setEmptyView(rl_error);
         gson = new Gson();
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
@@ -177,7 +176,7 @@ public class SiJiaoFragment extends BaseFragment {
                             }
                         }
                     }
-
+                    ex_lv.setEmptyView(rl_error);
                 }
             }, new Response.ErrorListener() {
                 @Override
