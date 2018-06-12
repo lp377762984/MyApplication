@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,6 +21,8 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.UserListviewAdapter;
 import com.cn.danceland.myapplication.bean.RequsetUserListBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -29,6 +32,8 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -60,7 +65,11 @@ public class UserListActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //注册event事件
+        EventBus.getDefault().register(this);
+
         setContentView(R.layout.activity_user_list);
+
         userId = getIntent().getStringExtra("id");
         msgId = getIntent().getStringExtra("msgId");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
@@ -69,6 +78,12 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
         initView();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initData() {
@@ -91,18 +106,50 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
 
     }
-//    class StrBean {
-//        public Integer page;
-//        public Integer size;
-//        public String reply_msg_id;
-//        public String msg_id;
-//    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+
+        if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
+            LogUtil.i(":收到" + event.getEventCode());
+            LogUtil.i("TYPE"+type);
+            switch (event.getEventCode()) {
+
+
+                case EventConstants.ADD_DYN:  //设置动态数+1
+
+                    break;
+                case EventConstants.DEL_DYN:
+
+                    break;
+                case EventConstants.ADD_GUANZHU:
+                    if (type == 1) {
+                        mCurrentPage = 0;
+                        initData();
+                    }
+
+                    break;
+                case EventConstants.DEL_GUANZHU:
+                    if (type == 1) {
+                        mCurrentPage = 0;
+                        initData();
+                    }
+                    break;
+//
+                default:
+                    break;
+            }
+        }
+
+
+    }
 
     private void initView() {
         tv_tiltle = findViewById(R.id.tv_tiltle);
         pullToRefresh = findViewById(R.id.pullToRefresh);
-     //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
-        View    listEmptyView=findViewById(R.id.rl_no_info);
+        //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
+        View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error5);
@@ -249,7 +296,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
         StrBean strBean = new StrBean();
         strBean.page = page;
-        strBean.follower=followerId;
+        strBean.follower = followerId;
         strBean.size = 20;
         LogUtil.i(new Gson().toJson(strBean));
         JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_GUANZHU_USER_LIST_MSG, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
@@ -260,7 +307,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                 Gson gson = new Gson();
 
                 UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
-             //   LogUtil.i(UserListBean.toString());
+                //   LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
@@ -271,14 +318,19 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                             setEnd();
                         }
 
+                        if (mCurrentPage == 0) {
+                            mListviewAdapter.setData((ArrayList<RequsetUserListBean.Data.Content>) data, type);
+                        } else {
+                            mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
+                        }
 
-                        mListviewAdapter.addLastList((ArrayList<RequsetUserListBean.Data.Content>) data);
+
                         mListviewAdapter.notifyDataSetChanged();
 
 
                         mCurrentPage = mCurrentPage + 1;
                     } else {
-                      //  ToastUtils.showToastShort("到底啦");
+                        //  ToastUtils.showToastShort("到底啦");
                         setEnd();
                     }
                 } else {
@@ -386,7 +438,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
         dialog.show();
         StrBean strBean = new StrBean();
         strBean.page = page;
-        strBean.user_id=userId;
+        strBean.user_id = userId;
         strBean.size = 20;
         LogUtil.i(new Gson().toJson(strBean));
         JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_FANS_USER_LIST_MSG, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
@@ -532,7 +584,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                 Gson gson = new Gson();
                 LogUtil.i(jsonObject.toString());
                 UserListBean = gson.fromJson(jsonObject.toString(), RequsetUserListBean.class);
-            //    LogUtil.i(jsonObject.toString());
+                //    LogUtil.i(jsonObject.toString());
                 if (UserListBean.getSuccess()) {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();

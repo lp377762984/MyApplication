@@ -148,26 +148,93 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        switch(event.getEventCode()){
-            case 99:
-                String msg = event.getMsg();
-                LogUtil.i("收到消息" + msg);
-                RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-                Glide.with(this).load(msg).apply(options).into(iv_avatar);
 
-                break;
-            case 100:
-                tv_nick_name.setText(event.getMsg());
+        if (TextUtils.equals(userId,SPUtils.getString(Constants.MY_USERID,""))){
 
-                break;
-        default:
-        break;
+            switch (event.getEventCode()) {
+                case 99:
+                    String msg = event.getMsg();
+                    LogUtil.i("收到消息" + msg);
+                    RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                    Glide.with(this).load(msg).apply(options).into(iv_avatar);
+
+                    break;
+                case 100:
+                    tv_nick_name.setText(event.getMsg());
+
+                    break;
+
+
+                case EventConstants.ADD_DYN:  //设置动态数+1
+                    LogUtil.i("动态加1");
+                    //mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);
+                    //   DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                    //      SPUtils.setInt(Constants.MY_DYN, SPUtils.getInt(Constants.MY_DYN, 0) + 1);
+                    tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
+                    break;
+                case EventConstants.DEL_DYN:
+                    //设置动态数-1
+//                mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() - 1);
+//                tv_dyn.setText(mInfo.getDynMsgNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                    //      SPUtils.setInt(Constants.MY_DYN, SPUtils.getInt(Constants.MY_DYN, 0) - 1);
+                    tv_dyn.setText(SPUtils.getInt(Constants.MY_DYN, 0) + "");
+
+                    break;
+                case EventConstants.ADD_GUANZHU:
+                    LogUtil.i("设置关注数+1");
+                    //设置关注数+1
+//                mInfo.setFollowNumber(mInfo.getFollowNumber() + 1);
+//                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                    //     SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) + 1);
+                    tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
+
+                    break;
+                case EventConstants.DEL_GUANZHU:
+                    LogUtil.i("设置关注数-1");
+                    //设置关注数-1
+//                mInfo.setFollowNumber(mInfo.getFollowNumber() - 1);
+//                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                    //    SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) - 1);
+                    tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
+                    break;
+//
+//            case EventConstants.UPDATE_FANS:
+//
+//                //设置粉丝数
+//                // tv_fans.setText(mInfo.getFansNum() + "");
+//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//
+//                //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
+//                tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
+//
+//                break;
+//
+//            case EventConstants.UPDATE_USER_INFO:
+//                Data myinfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//
+//                updateUserInfo(myinfo);
+//
+//                //更新聊天头像和昵称
+//                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getPerson().getNick_name());
+//                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getPerson().getSelf_avatar_path());
+//
+//
+//                break;
+//
+
+                default:
+                    break;
+            }
         }
+
 
     }
 
 
-        private void setData() {
+    private void setData() {
         tv_gauzhu_num.setText(userInfo.getFollow_no() + "");
         tv_fans.setText(userInfo.getFanse_no() + "");
         tv_dyn.setText(userInfo.getDyn_no() + "");
@@ -183,7 +250,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
             rx_guangzhu.setChecked(true);
         } else {
             tv_guanzhu.setText("+关注");
-              iv_guanzhu.setImageResource(R.drawable.img_xin);
+            iv_guanzhu.setImageResource(R.drawable.img_xin);
             rx_guangzhu.setChecked(false);
         }
 
@@ -233,7 +300,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 //                }
 //
 //                break;
-            case  R.id.iv_guanzhu:
+            case R.id.iv_guanzhu:
                 if (userInfo.getIs_follow()) {
                     showClearDialog();
                 } else {
