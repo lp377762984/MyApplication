@@ -106,15 +106,16 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
                 if (groupRecordBean != null) {
                     List<GroupRecordBean.Data> data = groupRecordBean.getData();
-                    if (contentList==null){
+                    if (contentList == null) {
                         contentList = new ArrayList<>();
                     }
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
                             SiJiaoRecordBean.Content content = new SiJiaoRecordBean().new Content();
+                            content.setId(data.get(i).getId());
                             content.setCourse_type_name(data.get(i).getCourse_type_name());
                             content.setCourse_date(Long.valueOf(data.get(i).getDate()));
-                            content.setEmployee_name(content.getEmployee_name());
+                            content.setEmployee_name(data.get(i).getEmployee_name());
                             content.setCategory("2");
                             content.setStatus(Integer.valueOf(data.get(i).getStatus()));
                             content.setMember_name(data.get(i).getMember_name());
@@ -173,9 +174,9 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
-                if(contentList==null){
+                if (contentList == null) {
                     contentList = new ArrayList<>();
-                }else{
+                } else {
                     contentList.clear();
                 }
 
@@ -268,8 +269,14 @@ public class SiJiaoRecordFragment extends BaseFragment {
             viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
-                    startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                    if ("2".equals(list.get(position).getCategory())) {
+                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                    } else {
+                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                    }
+
                 }
             });
 
@@ -343,14 +350,16 @@ public class SiJiaoRecordFragment extends BaseFragment {
                         }
                     } else {
                         if (list.get(position).getStatus() == 1) {
-                            if (list.get(position).getAppointment_type() == 2 || list.get(position).getCategory().equals("2")) {
+                            if (list.get(position).getAppointment_type() == 2) {
                                 showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
-                            } else if (list.get(position).getAppointment_type() == 1 ) {
+                            } else if (list.get(position).getAppointment_type() == 1) {
                                 showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                            } else if ("2".equals(list.get(position).getCategory())) {
+                                showCancelGroup(list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv, viewHolder.rl_qiandao);
                             }
                         }
 
-                        if (list.get(position).getStatus() == 2) {
+                        if (list.get(position).getStatus() == 2 && !"2".equals(list.get(position).getCategory())) {
                             if ("1".equals(list.get(position).getCategory())) {
                                 showCancel();
                             } else {
@@ -362,29 +371,41 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 }
 
             });
-            if (list.get(position).getStatus() == 2) {
-                viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
-                viewHolder.rl_button_tv.setText("已确认未签到");
-                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+            if ("2".equals(list.get(position).getCategory())) {
+                if (list.get(position).getStatus() == 1) {
+                    viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
+                }
+                if (list.get(position).getStatus() == 2) {
+                    viewHolder.rl_qiandao.setVisibility(View.GONE);
+                    viewHolder.rl_button_tv.setText("已取消");
+                    viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
+                if (list.get(position).getStatus() == 3) {
+                    viewHolder.rl_qiandao.setVisibility(View.GONE);
+                    viewHolder.rl_button_tv.setText("已签到");
+                    viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
             } else {
-                viewHolder.rl_qiandao.setVisibility(View.GONE);
-            }
-            if (list.get(position).getStatus() == 3) {
-                viewHolder.rl_button_tv.setText("已取消");
-                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                //viewHolder.rl_button.setClickable(false);
-            } else {
-                //viewHolder.rl_button.setClickable(true);
-            }
-            if (list.get(position).getStatus() == 4) {
-                viewHolder.rl_button_tv.setText("已签到");
-                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                //viewHolder.rl_button.setClickable(false);
-            } else {
-                //viewHolder.rl_button.setClickable(true);
+                if (list.get(position).getStatus() == 2) {
+                    viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
+                    viewHolder.rl_button_tv.setText("已确认未签到");
+                    viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+                } else {
+                    viewHolder.rl_qiandao.setVisibility(View.GONE);
+                }
+                if (list.get(position).getStatus() == 3) {
+                    viewHolder.rl_button_tv.setText("已取消");
+                    viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
+                if (list.get(position).getStatus() == 4) {
+                    viewHolder.rl_button_tv.setText("已签到");
+                    viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
             }
 
 
@@ -455,6 +476,67 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     }
 
+    private void cancelGroup(final int id, final RelativeLayout rl, final TextView tv, final RelativeLayout rl1) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.GROUPCOURSEAPPOINTCANCEL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
+                if (yuYueResultBean != null && yuYueResultBean.getData() > 0) {
+                    ToastUtils.showToastShort("取消成功！");
+                    rl1.setVisibility(View.GONE);
+                    tv.setText("已取消");
+                    tv.setTextColor(getResources().getColor(R.color.white));
+                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                    rl.setClickable(false);
+                } else {
+                    ToastUtils.showToastShort("取消失败！请重新操作");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("groupCourseAppointId", id + "");
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    private void showCancelGroup(final int id, final RelativeLayout rl, final TextView tv, final RelativeLayout rl1) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
+        dialog.setTitle("提示");
+        dialog.setMessage("确定取消预约吗");
+
+        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cancelGroup(id, rl, tv, rl1);
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.show();
+
+    }
+
     private void showDialog(final boolean enter, final int id, final RelativeLayout rl, final TextView tv) {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
@@ -506,7 +588,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.i(volleyError.toString());
             }
         }) {
             @Override

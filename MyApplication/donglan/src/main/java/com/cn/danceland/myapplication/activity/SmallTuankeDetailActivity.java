@@ -357,10 +357,12 @@ public class SmallTuankeDetailActivity extends Activity {
             if(item.getSelf_appoint_count()>0){
                 tv_status.setText("已预约");
                 rl_button_yuyue.setClickable(false);
+                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
             }
         }else{
             tv_status.setText("已结束");
             rl_button_yuyue.setClickable(false);
+            rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
         }
 
 

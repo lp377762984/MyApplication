@@ -337,6 +337,9 @@ public class CustomDatePicker extends AlertDialog {
         return timeString;
 
     }
+    public String getHorizongtal(){
+        return timeString = syear + "-" + smonth + "-" + sdate;
+    }
 
     public void showWindow() {
         showDate();

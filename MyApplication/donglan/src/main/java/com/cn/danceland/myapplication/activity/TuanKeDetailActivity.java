@@ -69,6 +69,7 @@ public class TuanKeDetailActivity extends Activity {
     CircleImageView course_jiaolian_huiyuan_circle;
     List<CourseFindPerson.DataBean> headList,childList;
     RelativeLayout rl_button_yuyue;
+    private TuanKeBean.Data detailData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,15 +108,6 @@ public class TuanKeDetailActivity extends Activity {
         });
         course_jiaolian_huiyuan_name = findViewById(R.id.course_jiaolian_huiyuan_name);
         course_jiaolian_huiyuan_circle = findViewById(R.id.course_jiaolian_huiyuan_circle);
-        if(item!=null){
-            if(item.getSelf_appoint_count()>0){
-                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                tv_status.setText("已预约");
-                //rl_button_yuyue.setClickable(false);
-            }
-            course_jiaolian_huiyuan_name.setText(item.getEmployee_name());
-
-        }
 
 
         tuanke_back = findViewById(R.id.small_back);
@@ -165,6 +157,7 @@ public class TuanKeDetailActivity extends Activity {
                 return false;
             }
         });
+
         if(groupId!=999){
             getData(groupId);
         }
@@ -256,7 +249,13 @@ public class TuanKeDetailActivity extends Activity {
         kecheng_room.setText("上课场地:"+detailData.getRoom_name());
         kecheng_name.setText(detailData.getCourse_type_name());
         tv_jieshao.setText(detailData.getCourse_describe());
-
+        if(item!=null){
+            if(item.getSelf_appoint_count()>0){
+                tv_status.setText("已预约");
+                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+            }
+        }
+        course_jiaolian_huiyuan_name.setText(detailData.getEmployee_name());
 
     }
 
@@ -390,7 +389,7 @@ public class TuanKeDetailActivity extends Activity {
             public void onResponse(String s) {
                 TuanKeBean tuanKeBean = gson.fromJson(s, TuanKeBean.class);
                 if(tuanKeBean!=null){
-                    TuanKeBean.Data detailData = tuanKeBean.getData();
+                    detailData = tuanKeBean.getData();
                     initData(detailData);
                 }
             }

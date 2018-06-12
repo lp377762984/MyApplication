@@ -219,6 +219,7 @@ public class Constants  {
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
     public static final String FREECOURSELIST = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
     public static final String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
+    public static final String GROUPCOURSEAPPOINTCANCEL = HOST+"/appGroupCourse/groupCourseAppointCancel";//取消小团课报名
     public static final String PINGJIA = HOST + "evaluate/save";//评价接口
     public static final String FINDPINGJIA = HOST + "evaluate/findById/";//查询一条评价
     public static final String ENTERCOURSE = HOST + "appCourse/courseAppointConfirm ";//确认私教
