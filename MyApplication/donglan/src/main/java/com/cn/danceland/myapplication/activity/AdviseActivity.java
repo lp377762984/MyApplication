@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -41,7 +42,7 @@ public class AdviseActivity extends Activity {
     private FeedBackRequest request;
     private Gson gson;
     Integer type = 2;
-    EditText advise_ed;
+    ContainsEmojiEditText advise_ed;
     Data data;
     RelativeLayout rl_commit;
     ImageView feed_back,img_biaoqing;
