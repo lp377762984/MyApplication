@@ -84,8 +84,8 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         super.onCreate();
         Foreground.init(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        locationClient = new LocationService(getApplicationContext());
-        SDKInitializer.initialize(getApplicationContext());
+//        locationClient = new LocationService(getApplicationContext());
+//        SDKInitializer.initialize(getApplicationContext());
         applicationContext = this;
         instance = this;
         setUpDb();

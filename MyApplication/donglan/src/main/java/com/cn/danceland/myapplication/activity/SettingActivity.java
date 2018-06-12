@@ -57,7 +57,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private TextView tv_number;
     private TextView tv_phone, tv_weixin, tv_email;
     private Data mInfo;
-
+    private String myCity,myProvince;
 
     DBData dbData;
     String zoneCode, mZoneCode;
@@ -166,6 +166,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         if (zoneArr.size() > 0) {
             tx_location.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
+            myCity = zoneArr.get(0).getCity();
+            myProvince = dbData.queryCity(myCity).get(0).getProvince();
             zoneArr.clear();
         }
 
@@ -217,11 +219,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             case R.id.ll_setting_location://设置位置
                 //showLocation();
 
-                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this);
+                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this,myCity,myProvince);
                 customLocationPicker.setDialogOnClickListener(new CustomLocationPicker.OnClickEnter() {
                     @Override
                     public void onClick() {
                         String city = customLocationPicker.getCity();
+                        myCity  = city;
+                        myProvince = dbData.queryCity(city).get(0).getProvince();
                         mZoneCode = dbData.queryCity(city).get(0).getCityValue();
                         tx_location.setText(customLocationPicker.getZone());
 
