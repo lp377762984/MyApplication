@@ -66,7 +66,7 @@ public class TuanKeFragment extends BaseFragment {
     String small;
     String from;
     int member_course_id;
-    String yuyueStartTime,yuyueEndTime;
+    String yuyueStartTime, yuyueEndTime;
 
     boolean yuyue;
     MyAdapter myAdapter;
@@ -75,6 +75,7 @@ public class TuanKeFragment extends BaseFragment {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
     @Override
     public View initViews() {
 
@@ -100,16 +101,16 @@ public class TuanKeFragment extends BaseFragment {
         lv_tuanke.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(xiaoTuanList!=null){
-                    if("小团课".equals(from)){
-                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position)).
-                                putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
-                    }else{
-                        if(xiaoTuanList.get(position).getSelf_appoint_count() == 0){
+                if (xiaoTuanList != null) {
+                    if ("小团课".equals(from)) {
+                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item", xiaoTuanList.get(position)).
+                                putExtra("yuyueStartTime", yuyueStartTime).putExtra("member_course_id", member_course_id), 222);
+                    } else {
+                        if (xiaoTuanList.get(position).getSelf_appoint_count() == 0) {
                             xiaoTuanList.get(position).setSelf_appoint_count(self_appoint);
                         }
-                        startActivityForResult(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId",xiaoTuanList.get(position).getId()).
-                                putExtra("yuyueStartTime",yuyueStartTime).putExtra("item",xiaoTuanList.get(position)),223);
+                        startActivityForResult(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId", xiaoTuanList.get(position).getId()).
+                                putExtra("yuyueStartTime", yuyueStartTime).putExtra("item", xiaoTuanList.get(position)), 223);
                     }
                 }
             }
@@ -129,10 +130,10 @@ public class TuanKeFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==222){
-            activity.showFragment("2","0");
-        }else if(resultCode==223){
-            activity.showFragment("0","0");
+        if (resultCode == 222) {
+            activity.showFragment("2", "0");
+        } else if (resultCode == 223) {
+            activity.showFragment("0", "0");
         }
 
     }
@@ -140,10 +141,10 @@ public class TuanKeFragment extends BaseFragment {
     int self_appoint;
 
     private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {
-        if(data!=null){
+        if (data != null) {
             SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
             siJiaoYuYueConBean.setGroup_course_id(data.getId());
-            if("小团课".equals(from)){
+            if ("小团课".equals(from)) {
                 siJiaoYuYueConBean.setMember_course_id(member_course_id);
             }
             siJiaoYuYueConBean.setCourse_type_id(data.getCourse_type_id());
@@ -151,16 +152,16 @@ public class TuanKeFragment extends BaseFragment {
             siJiaoYuYueConBean.setDate(yuyueStartTime);
             String s = gson.toJson(siJiaoYuYueConBean);
             String url;
-            if("小团课".equals(from)){
+            if ("小团课".equals(from)) {
                 url = Constants.GROUPAPPOINT;
-            }else{
+            } else {
                 url = Constants.FreeCourseApply;
             }
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s,new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
-                    if(jsonObject.toString().contains("true")){
-                        if(!"小团课".equals(from)){
+                    if (jsonObject.toString().contains("true")) {
+                        if (!"小团课".equals(from)) {
                             self_appoint = 1;
                         }
                         rl.setClickable(false);
@@ -168,7 +169,7 @@ public class TuanKeFragment extends BaseFragment {
                         tv.setTextColor(Color.parseColor("#FF8C00"));
                         tv.setText("已预约");
                         ToastUtils.showToastShort("预约成功！");
-                    }else{
+                    } else {
                         ToastUtils.showToastShort("预约失败！请重新预约！");
                     }
                 }
@@ -177,11 +178,11 @@ public class TuanKeFragment extends BaseFragment {
                 public void onErrorResponse(VolleyError volleyError) {
                     ToastUtils.showToastShort("预约失败！请重新预约！");
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String,String> map = new HashMap<String,String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                     return map;
                 }
             };
@@ -191,35 +192,34 @@ public class TuanKeFragment extends BaseFragment {
     }
 
 
-
-    public void refresh(String from,String startTime,String endTime,int course_type_id,int member_course_id){
+    public void refresh(String from, String startTime, String endTime, int course_type_id, int member_course_id) {
         this.member_course_id = member_course_id;
         this.from = from;
         yuyueStartTime = startTime;
         yuyueEndTime = endTime;
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if("小团课".equals(from)){
+        if ("小团课".equals(from)) {
             siJiaoYuYueConBean.setCourse_type_id(course_type_id);
         }
         siJiaoYuYueConBean.setStart_date(Long.valueOf(startTime));
         siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime));
-        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime,"yyyy-MM-dd"))));
+        siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime, "yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);
 
         String url;
-        if("小团课".equals(from)){
+        if ("小团课".equals(from)) {
             url = Constants.QUERYKECHENGBIAO;
-        }else{
+        } else {
             url = Constants.FreeCourse;
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,s ,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 KeChengBiaoBean keChengBiaoBean = gson.fromJson(jsonObject.toString(), KeChengBiaoBean.class);
-                if(keChengBiaoBean!=null){
-                    if(xiaoTuanList!=null){
+                if (keChengBiaoBean != null) {
+                    if (xiaoTuanList != null) {
                         xiaoTuanList.clear();
                     }
                     xiaoTuanList = keChengBiaoBean.getData();
@@ -231,16 +231,16 @@ public class TuanKeFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
                 rl_error.setVisibility(View.VISIBLE);
                 tv_error.setText("网络异常");
                 Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -248,11 +248,11 @@ public class TuanKeFragment extends BaseFragment {
     }
 
 
-    private class MyAdapter extends BaseAdapter{
+    private class MyAdapter extends BaseAdapter {
 
         List<KeChengBiaoBean.Data> xiaoTuanList;
 
-        MyAdapter(List<KeChengBiaoBean.Data> xiaoTuanList){
+        MyAdapter(List<KeChengBiaoBean.Data> xiaoTuanList) {
             this.xiaoTuanList = xiaoTuanList;
 
         }
@@ -260,7 +260,7 @@ public class TuanKeFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return xiaoTuanList==null? 0: xiaoTuanList.size();
+            return xiaoTuanList == null ? 0 : xiaoTuanList.size();
 
         }
 
@@ -277,9 +277,9 @@ public class TuanKeFragment extends BaseFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = View.inflate(mActivity,R.layout.tuanke_item,null);
+                convertView = View.inflate(mActivity, R.layout.tuanke_item, null);
                 viewHolder.tuanke_img = convertView.findViewById(R.id.tuanke_img);
                 viewHolder.tuanke_jibie = convertView.findViewById(R.id.tuanke_jibie);
                 viewHolder.tuanke_leibie = convertView.findViewById(R.id.tuanke_leibie);
@@ -290,8 +290,8 @@ public class TuanKeFragment extends BaseFragment {
                 viewHolder.tv_yuyue = convertView.findViewById(R.id.tv_yuyue);
                 viewHolder.renshu = convertView.findViewById(R.id.renshu);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder  = (ViewHolder) convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
 
@@ -301,74 +301,84 @@ public class TuanKeFragment extends BaseFragment {
             //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#FF8C00"));
             viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.white));
             viewHolder.tv_yuyue.setText("预约");
-            String startTime,endTime;
+            String startTime, endTime;
 
-            startTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getStart_time()+""));
+            startTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getStart_time() + ""));
 
-            endTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getEnd_time()+""));
-            viewHolder.tuanke_time.setText(startTime+"-"+endTime);
+            endTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getEnd_time() + ""));
+            viewHolder.tuanke_time.setText(startTime + "-" + endTime);
             viewHolder.tuanke_leibie.setText(xiaoTuanList.get(position).getCourse_type_name());
             viewHolder.tuanke_name.setText(xiaoTuanList.get(position).getEmployee_name());
 
-            if(xiaoTuanList.get(position).getLevel()!=null){
-                viewHolder.tuanke_jibie.setText("课程级别:"+xiaoTuanList.get(position).getLevel());
+            if (xiaoTuanList.get(position).getLevel() != null) {
+                viewHolder.tuanke_jibie.setText("课程级别:" + xiaoTuanList.get(position).getLevel());
             }
-            if(xiaoTuanList.get(position).getRoom_name()!=null){
+            if (xiaoTuanList.get(position).getRoom_name() != null) {
                 viewHolder.tuanke_room.setText(xiaoTuanList.get(position).getRoom_name());
-            }else{
+            } else {
                 viewHolder.tuanke_room.setText("未知");
             }
 
-            if(xiaoTuanList.get(position).getMax_count()==xiaoTuanList.get(position).getAppoint_count()){
+            if (xiaoTuanList.get(position).getMax_count() == xiaoTuanList.get(position).getAppoint_count()) {
                 //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#A9A9A9"));
                 //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.QuXiao);
                 viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
                 viewHolder.tv_yuyue.setText("预约已满");
                 viewHolder.tuanke_yuyue.setClickable(false);
-            }else{
+            } else {
                 viewHolder.tuanke_yuyue.setClickable(true);
             }
 
 
-
-            if("小团课".equals(from)){
+            if ("小团课".equals(from)) {
                 viewHolder.renshu.setVisibility(View.VISIBLE);
-                viewHolder.renshu.setText("人数("+xiaoTuanList.get(position).getAppoint_count()+"/"+xiaoTuanList.get(position).getMax_count()+")");
-            }else{
+                viewHolder.renshu.setText("人数(" + xiaoTuanList.get(position).getAppoint_count() + "/" + xiaoTuanList.get(position).getMax_count() + ")");
+            } else {
                 viewHolder.renshu.setVisibility(View.GONE);
             }
 
-            if(xiaoTuanList.get(position).getSelf_appoint_count()>0){
-                yuyue = false;//有预约项，无法点击
-                //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
-                //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.YiYuYue);
-                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
-                viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_dl_yellow));
-                viewHolder.tv_yuyue.setText("已预约");
-            }else{
-                yuyue = true;
-                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+            if (Long.valueOf(yuyueStartTime) + xiaoTuanList.get(position).getStart_time() * 60000 >= System.currentTimeMillis()) {
+                if (xiaoTuanList.get(position).getSelf_appoint_count() > 0) {
+                    yuyue = false;//有预约项，无法点击
+                    //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
+                    //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.YiYuYue);
+                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
+                    viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_dl_yellow));
+                    viewHolder.tv_yuyue.setText("已预约");
+                } else {
+                    yuyue = true;
+                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+                    viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
+                    viewHolder.tv_yuyue.setText("预约");
+                }
+            } else {
+                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
-                viewHolder.tv_yuyue.setText("预约");
+                viewHolder.tv_yuyue.setText("已过期");
             }
+
 
             viewHolder.tuanke_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if("小团课".equals(from)){
-                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item",xiaoTuanList.get(position))
-                                .putExtra("yuyueStartTime",yuyueStartTime).putExtra("member_course_id",member_course_id),222);
-                    }else{
-                        if(xiaoTuanList.get(position).getSelf_appoint_count()==0){
-                            commitYuyue(xiaoTuanList.get(position),viewHolder.tuanke_yuyue,viewHolder.tv_yuyue);
+                    if ("小团课".equals(from)) {
+                        startActivityForResult(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("item", xiaoTuanList.get(position))
+                                .putExtra("yuyueStartTime", yuyueStartTime).putExtra("member_course_id", member_course_id), 222);
+                    } else {
+                        if (Long.valueOf(yuyueStartTime) + xiaoTuanList.get(position).getStart_time() * 60000 >= System.currentTimeMillis()) {
+                            if (xiaoTuanList.get(position).getSelf_appoint_count() == 0) {
+                                commitYuyue(xiaoTuanList.get(position), viewHolder.tuanke_yuyue, viewHolder.tv_yuyue);
+                            }
+                        } else {
+                            ToastUtils.showToastShort("已结束，无法预约");
                         }
                     }
                 }
             });
 
-            if(StringUtils.isNullorEmpty(xiaoTuanList.get(position).getCover_img_url())){
+            if (StringUtils.isNullorEmpty(xiaoTuanList.get(position).getCover_img_url())) {
                 Glide.with(mActivity).load(R.drawable.sijiao_card).into(viewHolder.tuanke_img);
-            }else{
+            } else {
                 Glide.with(mActivity).load(xiaoTuanList.get(position).getCover_img_url()).into(viewHolder.tuanke_img);
             }
 
@@ -376,9 +386,9 @@ public class TuanKeFragment extends BaseFragment {
         }
     }
 
-    class ViewHolder{
+    class ViewHolder {
         ImageView tuanke_img;
-        TextView tuanke_time,tuanke_leibie,tuanke_jibie,tuanke_room,tuanke_name,tv_yuyue,renshu;
+        TextView tuanke_time, tuanke_leibie, tuanke_jibie, tuanke_room, tuanke_name, tv_yuyue, renshu;
         RelativeLayout tuanke_yuyue;
 
     }
