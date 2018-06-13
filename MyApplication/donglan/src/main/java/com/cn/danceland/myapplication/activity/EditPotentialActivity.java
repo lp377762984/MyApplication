@@ -41,13 +41,11 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
-import com.weigan.loopview.OnItemSelectedListener;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -210,6 +208,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         if (TextUtils.equals(info.getAuth(), "2")) {
             findViewById(R.id.ll_admin).setVisibility(View.GONE);
         }
+        tv_birthday.setText(info.getBirthday());
 
     }
 
