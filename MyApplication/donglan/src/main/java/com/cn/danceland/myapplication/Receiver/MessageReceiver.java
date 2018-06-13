@@ -81,7 +81,7 @@ public class MessageReceiver extends PushMessageReceiver {
             miMessage.setSelfPath(selfPath);
             miMessage.setId(i);
             miMessage.setContent(message.getContent());
-            miMessage.setTime((time.month+1)+"-"+time.monthDay);
+            miMessage.setTime(time.year+"-"+(time.month+1)+"-"+time.monthDay+" "+time.hour+":"+time.minute);
             db.addMessageD(miMessage);
             SPUtils.setInt("messageN",i+1);
             pinglunNum = SPUtils.getInt("pinglunNum",0);

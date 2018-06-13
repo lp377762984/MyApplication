@@ -22,7 +22,7 @@ public class Constants  {
     //public static String HOST = "http://192.168.1.117:8003/";//佳楠
     public static final String HOST = " http://192.168.1.117:8003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-  //  public static final String HOST = "http://192.168.1.123:8003/";//老高
+    //public static final String HOST = "http://192.168.1.123:8003/";//老高
      //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
