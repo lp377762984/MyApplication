@@ -16,6 +16,7 @@ import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.MiMessage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +56,7 @@ public class CommentFragment extends BaseFragment {
         //3表示的是评论类型的推送消息
         messageList = new ArrayList<MiMessage>();
         messageList = dbData.getMessageList();
+        Collections.reverse(messageList);
         if(messageList!=null&&messageList.size()>0){
             if("4".equals(type)){
                 //tv_no.setVisibility(View.VISIBLE);
