@@ -186,7 +186,7 @@ public class MeFragment extends BaseFragment {
 //                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
 //                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                 SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) + 1);
-                tv_dyn.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
+                tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
 
                 break;
             case EventConstants.DEL_GUANZHU:
@@ -196,14 +196,9 @@ public class MeFragment extends BaseFragment {
 //                tv_guanzhu.setText(mInfo.getFollowNumber() + "");
 //                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                 SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) - 1);
-                tv_dyn.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
+                tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
                 break;
-//            case EventConstants.ADD_ZAN:
-//
-//                break;
-//            case EventConstants.DEL_ZAN:
-//
-//                break;
+
             case EventConstants.UPDATE_FANS:
 
                 //设置粉丝数
@@ -211,7 +206,7 @@ public class MeFragment extends BaseFragment {
                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
 
                 //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
-                tv_dyn.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
+                tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
 
                 break;
 

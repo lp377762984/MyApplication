@@ -51,12 +51,14 @@ public class EditProActivity extends Activity {
         editpro_title = findViewById(R.id.editpro_title);
         editpro_title.setTitle("编辑简介");
         et_edit = findViewById(R.id.et_edit);
+        et_edit.setText(getIntent().getStringExtra("hint"));
         btn_edit = findViewById(R.id.btn_edit);
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(et_edit.getText()!=null){
                     str_sign = et_edit.getText().toString();
+
                     commitSelf(Constants.MODIFY_SIGN,"sign",str_sign);
                 }
             }

@@ -48,6 +48,9 @@ import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
 import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccount;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountCond;
+import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountRequest;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -220,7 +223,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         }
         queryList(CardsInfo.getBranch_id());
 
-
+        getStoreCard();
     }
 
     private void initView() {
@@ -310,6 +313,13 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     cb_alipay.setChecked(false);
                     cb_wechat.setChecked(false);
                     pay_way = 5;
+                    if (pay_price>chuzhika){
+                        ToastUtils.showToastShort("储值卡余额不足");
+                        cb_chuzhjika.setChecked(false);
+                        pay_way = 2;
+                        cb_alipay.setChecked(true);
+                    }
+
                 }
 //                else {
 //                    cb_alipay.setChecked(true);
@@ -490,6 +500,38 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         };
         MyApplication.getHttpQueues().add(request);
     }
+
+   private float chuzhika=0;
+    private void getStoreCard(){
+        StoreAccountRequest request = new StoreAccountRequest();
+        StoreAccountCond cond = new StoreAccountCond();
+        // TODO 准备查询条件
+        request.queryList(cond, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject json) {
+                LogUtil.e("zzf",json.toString());
+                DLResult<StoreAccount> result = gson.fromJson(json.toString(), new TypeToken<DLResult<StoreAccount>>() {
+                }.getType());
+                if(result!=null && result.getData()!=null){
+                    StoreAccount data = result.getData();
+                    float balance = data.getRemain() + data.getGiving();
+                    chuzhika=balance;
+//                    if("0".equals(type)){
+//                        if(balance<(price-deposit)){
+//                            isStoreCard = false;
+//                        }else {
+//                            isStoreCard = true;
+//                        }
+//                    }else{
+//                        isStoreCard =false;
+//                    }
+                }else {
+                 //   isStoreCard = false;
+                }
+            }
+        });
+
+    }
+
 
     /**
      * 查询定金金额
@@ -946,8 +988,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     newOrderInfoBean.setProduct_name(CardsInfo.getName());
 
                     newOrderInfoBean.setPay_way(pay_way + "");
-                    newOrderInfoBean.setReceive(pay_price + "");
-                    newOrderInfoBean.setPrice(CardsInfo.getPrice() + "");
+                    newOrderInfoBean.setPrice(pay_price + "");//实付
+                    newOrderInfoBean.setReceive(CardsInfo.getPrice() + "");//总价
                     //佳楠专用参数
                     NewOrderInfoBean.Protocol_Params protocol_params = new NewOrderInfoBean.Protocol_Params();
                     protocol_params.admin_emp = consultantInfo.getBranch_name();

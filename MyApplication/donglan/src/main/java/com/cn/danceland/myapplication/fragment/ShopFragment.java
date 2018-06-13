@@ -57,6 +57,7 @@ import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
+import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
@@ -724,8 +725,8 @@ public class ShopFragment extends BaseFragment {
                     case 2://我的会员卡
                         startActivity(new Intent(mActivity, MyCardActivity.class));
                         break;
-                    case 3://我的会员卡
-                   ToastUtils.showToastShort("功能正在开发中");
+                    case 3://健身圈
+                        startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
                         break;
                     case 4://购买私教
                         startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
@@ -806,6 +807,9 @@ public class ShopFragment extends BaseFragment {
 
                     case 21://储值卡
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
+                        break;
+                    case 22://我要培训
+                        ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 23://会籍报表
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","1"));

@@ -218,6 +218,8 @@ public class UserListviewAdapter extends BaseAdapter {
         return view;
     }
 
+
+
     class StrBean {
         public String is_praise;
         public String msg_id;

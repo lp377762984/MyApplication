@@ -260,8 +260,8 @@ public class RegisterInfoActivity extends Activity {
                     showWH(1);
                     break;
                 case R.id.text_name:
-                    text_name.setText("");
-                    showName();
+                  //  text_name.setText("");
+                    showName(text_name.getText().toString() );
                     break;
                 case R.id.cancel_action: {
                     dismissWindow();
@@ -351,7 +351,7 @@ public class RegisterInfoActivity extends Activity {
         alertdialog.show();
     }
 
-    public void showName() {
+    public void showName(String hint) {
 
         AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(RegisterInfoActivity.this);
@@ -359,6 +359,7 @@ public class RegisterInfoActivity extends Activity {
                 .inflate(R.layout.edit_name, null);
         //normalDialog.setTitle("编辑昵称");
         final TextView edit_name = dialogView.findViewById(R.id.edit_name);
+        edit_name.setText(hint);
         normalDialog.setView(dialogView);
         normalDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {

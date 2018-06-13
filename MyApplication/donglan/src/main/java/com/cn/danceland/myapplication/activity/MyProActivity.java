@@ -75,7 +75,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 /**
@@ -104,8 +103,8 @@ public class MyProActivity extends Activity {
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity,hobby,rl_jianjie;
-    TextView  text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
+    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity, hobby, rl_jianjie;
+    TextView text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
     EmojiconTextView text_name;
     View contentView;
     PopupWindow mPopWindow;
@@ -122,7 +121,7 @@ public class MyProActivity extends Activity {
     View inflate;
     AlertDialog.Builder alertdialog;
     LoopView loopview;
-    TextView tv_start,over_time,tv_hobby,tv_sign;
+    TextView tv_start, over_time, tv_hobby, tv_sign;
 
     private Handler handler = new Handler() {
         @Override
@@ -157,7 +156,7 @@ public class MyProActivity extends Activity {
         zoneCode = infoData.getPerson().getZone_code();
         zoneArr = new ArrayList<Donglan>();
         if (zoneCode != null && !"".equals(zoneCode)) {
-            zoneArr = dbData.queryCityValue(zoneCode+".0");
+            zoneArr = dbData.queryCityValue(zoneCode + ".0");
         }
         initLocationData();
     }
@@ -175,9 +174,9 @@ public class MyProActivity extends Activity {
 
         rootview = LayoutInflater.from(MyProActivity.this).inflate(R.layout.activity_mypro, null);
         circleImageView = findViewById(R.id.circleimageview);
-        if (infoData.getPerson().getSelf_avatar_path() != null && !infoData.getPerson().getSelf_avatar_path().equals("")&&!infoData.getPerson().getSelf_avatar_path().contains("null")) {
+        if (infoData.getPerson().getSelf_avatar_path() != null && !infoData.getPerson().getSelf_avatar_path().equals("") && !infoData.getPerson().getSelf_avatar_path().contains("null")) {
             Glide.with(MyProActivity.this).load(infoData.getPerson().getSelf_avatar_path()).into(circleImageView);
-        }else{
+        } else {
             Glide.with(MyProActivity.this).load(R.drawable.img_my_avatar).into(circleImageView);
         }
         text_name = findViewById(R.id.text_name);
@@ -212,11 +211,11 @@ public class MyProActivity extends Activity {
             tv_weight.setText(infoData.getPerson().getWeight() + " kg");
         }
 
-        if(infoData.getPerson().getHobby()!=null){
+        if (infoData.getPerson().getHobby() != null) {
             tv_hobby.setText(infoData.getPerson().getHobby());
         }
 
-        if(infoData.getPerson().getSign()!=null){
+        if (infoData.getPerson().getSign() != null) {
             tv_sign.setText(infoData.getPerson().getSign());
         }
 
@@ -317,6 +316,7 @@ public class MyProActivity extends Activity {
                                 showEditImage();
                                 showPop();
                             }
+
                             @Override
                             public void permissionDenied(@NonNull String[] permissions) {
                                 //用户拒绝了申请
@@ -327,7 +327,8 @@ public class MyProActivity extends Activity {
                 }
                 break;
                 case R.id.rl_jianjie:
-                    startActivityForResult(new Intent(MyProActivity.this,EditProActivity.class),13);
+                    Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    startActivityForResult(new Intent(MyProActivity.this, EditProActivity.class).putExtra("hint",info.getPerson().getSign()), 13);
                     break;
                 case R.id.lo_cancel_action:
                     dismissWindow();
@@ -347,7 +348,7 @@ public class MyProActivity extends Activity {
                     //selecttitle.setText("选择体重");
                     break;
                 case R.id.hobby:
-                    showHobby();
+                    showHobby( infoData.getPerson().getHobby());
                     break;
 
 //                case R.id.over:
@@ -365,7 +366,7 @@ public class MyProActivity extends Activity {
 //                    dismissWindow();
 //                    break;
                 case R.id.name: {
-                    showName(0);
+                    showName(0, infoData.getPerson().getNick_name());
                 }
                 break;
                 case R.id.sex: {
@@ -432,28 +433,28 @@ public class MyProActivity extends Activity {
                     showLocation();
                     break;
                 case R.id.identity:
-                    showName(1);
+                    showName(1,infoData.getPerson().getIdentity_card());
                     break;
             }
         }
     };
 
-    private void showWH(final int j){
+    private void showWH(final int j) {
         int n;
         final ArrayList<String> arrayList = new ArrayList<String>();
-        ViewGroup parent = (ViewGroup)inflate.getParent();
-        if(parent!=null){
+        ViewGroup parent = (ViewGroup) inflate.getParent();
+        if (parent != null) {
             parent.removeAllViews();
         }
-        if(j==0){
-            for(int i = 0;i<71;i++){
-                n = 150+i;
-                arrayList.add(n+"");
+        if (j == 0) {
+            for (int i = 0; i < 71; i++) {
+                n = 150 + i;
+                arrayList.add(n + "");
             }
-        }else {
-            for(int y=0;y<165;y++){
-                n = 35+y;
-                arrayList.add(n+"");
+        } else {
+            for (int y = 0; y < 165; y++) {
+                n = 35 + y;
+                arrayList.add(n + "");
             }
         }
         loopview.setNotLoop();
@@ -464,18 +465,18 @@ public class MyProActivity extends Activity {
         loopview.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                if(j==0){
+                if (j == 0) {
                     //tv_height.setText(arrayList.get(index)+" cm");
-                    strHeight = arrayList.get(index)+"";
-                }else{
+                    strHeight = arrayList.get(index) + "";
+                } else {
                     //tv_weight.setText(arrayList.get(index)+" kg");
-                    strWeight = arrayList.get(index)+"";
+                    strWeight = arrayList.get(index) + "";
                 }
             }
         });
-        if(j==0){
+        if (j == 0) {
             alertdialog.setTitle("选择身高");
-        }else{
+        } else {
             alertdialog.setTitle("选择体重");
         }
 
@@ -484,11 +485,11 @@ public class MyProActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (j == 0) {
-                    tv_height.setText(strHeight+" cm");
+                    tv_height.setText(strHeight + " cm");
                     infoData.getPerson().setHeight(strHeight);
                     commitSelf(Constants.MODIFY_HEIGHT, "height", strHeight);
                 } else if (j == 1) {
-                    tv_weight.setText(strWeight+" kg");
+                    tv_weight.setText(strWeight + " kg");
                     infoData.getPerson().setWeight(strWeight);
                     commitSelf(Constants.MODIFY_WEIGHT, "weight", strWeight);
                 }
@@ -731,20 +732,22 @@ public class MyProActivity extends Activity {
     }
 
 
-    private void showHobby(){
+    private void showHobby(String hint) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MyProActivity.this);
         View dialogView = LayoutInflater.from(MyProActivity.this)
                 .inflate(R.layout.edit_name, null);
         TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
         dialogTitleName.setText("我的喜好");
         final EditText ed = dialogView.findViewById(R.id.edit_name);
+        ed.setText(hint);
         builder.setView(dialogView);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(ed.getText()!=null){
+                if (ed.getText() != null) {
                     tv_hobby.setText(ed.getText().toString());
-                    commitSelf(Constants.MODIFY_HOBBY,"hobby",ed.getText().toString());
+
+                    commitSelf(Constants.MODIFY_HOBBY, "hobby", ed.getText().toString());
                     infoData.getPerson().setHobby(ed.getText().toString());
                     DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                 }
@@ -754,8 +757,7 @@ public class MyProActivity extends Activity {
     }
 
 
-
-    public void showName(final int i) {
+    public void showName(final int i,String hint) {
         //i==0是编辑昵称i==1表示身份证
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(MyProActivity.this);
@@ -773,7 +775,8 @@ public class MyProActivity extends Activity {
         }
         //normalDialog.setTitle("编辑昵称");
         final ContainsEmojiEditText ed = dialogView.findViewById(R.id.edit_name);
-        if (i==1){
+        ed.setText(hint);
+        if (i == 1) {
             ed.setInputType(InputType.TYPE_CLASS_NUMBER);
         }
         normalDialog.setView(dialogView);
@@ -782,8 +785,8 @@ public class MyProActivity extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (i == 0) {
-                            if (TextUtils.isEmpty(ed.getText().toString())){
-                                    ToastUtils.showToastShort("请输入昵称");
+                            if (TextUtils.isEmpty(ed.getText().toString())) {
+                                ToastUtils.showToastShort("请输入昵称");
 
                                 return;
                             }
@@ -916,7 +919,7 @@ public class MyProActivity extends Activity {
             }
             if (requestCode == 222) {
                 if (imagePath != null) {
-               //     Glide.with(MyProActivity.this).load(imagePath).into(circleImageView);
+                    //     Glide.with(MyProActivity.this).load(imagePath).into(circleImageView);
                     file = new File(imagePath);
                 }
 
@@ -977,7 +980,7 @@ public class MyProActivity extends Activity {
                 MyApplication.getHttpQueues().add(request);
             }
 
-        }else if(resultCode == 13){
+        } else if (resultCode == 13) {
             String sign = data.getStringExtra("sign");
             tv_sign.setText(sign);
         }
@@ -1051,9 +1054,9 @@ public class MyProActivity extends Activity {
         if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
             cutfile.delete();
         }
-        try{
+        try {
             cutfile.createNewFile();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
 
 
