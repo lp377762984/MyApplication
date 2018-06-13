@@ -349,16 +349,27 @@ public class SmallTuankeDetailActivity extends Activity {
         rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commitYuyue();
+                if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+                    if(item.getSelf_appoint_count()==0){
+                        commitYuyue();
+                    }
+                }else{
+                    ToastUtils.showToastShort("不可预约过期课程");
+                }
             }
         });
 
         if(item!=null){
-            if(item.getSelf_appoint_count()>0){
-                tv_status.setText("已预约");
-                rl_button_yuyue.setClickable(false);
+            if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+                if(item.getSelf_appoint_count()>0){
+                    tv_status.setText("已预约");
+                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
+            }else{
+                tv_status.setText("已过期");
                 rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
             }
+
         }else{
             tv_status.setText("已结束");
             rl_button_yuyue.setClickable(false);

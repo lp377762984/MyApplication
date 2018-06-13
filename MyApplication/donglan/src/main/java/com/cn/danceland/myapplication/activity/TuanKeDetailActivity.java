@@ -101,8 +101,12 @@ public class TuanKeDetailActivity extends Activity {
         rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(item.getSelf_appoint_count()==0){
-                    commitYuyue(item,rl_button_yuyue,tv_status);
+                if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+                    if(item.getSelf_appoint_count()==0){
+                        commitYuyue(item,rl_button_yuyue,tv_status);
+                    }
+                }else{
+                    ToastUtils.showToastShort("不可预约过期课程");
                 }
             }
         });
@@ -250,10 +254,16 @@ public class TuanKeDetailActivity extends Activity {
         kecheng_name.setText(detailData.getCourse_type_name());
         tv_jieshao.setText(detailData.getCourse_describe());
         if(item!=null){
-            if(item.getSelf_appoint_count()>0){
-                tv_status.setText("已预约");
+            if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+                if(item.getSelf_appoint_count()>0){
+                    tv_status.setText("已预约");
+                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                }
+            }else{
+                tv_status.setText("已过期");
                 rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
             }
+
         }
         course_jiaolian_huiyuan_name.setText(detailData.getEmployee_name());
 
