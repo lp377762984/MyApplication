@@ -19,9 +19,11 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
+import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LocationService;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.ArrayList;
 
@@ -98,17 +100,19 @@ public class LocationActivity extends Activity {
 
     private void startLocation(){
         //声明LocationClient类
+        mLocationClient = new LocationService(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
         mLocationClient.registerListener(myListener);
 
-        mLocationClient.start();
 
+        mLocationClient.start();
+        LogUtil.i("mLocationClient_start");
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        mLocationClient = ((MyApplication) getApplication()).locationClient;
         startLocation();
 
     }

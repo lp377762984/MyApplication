@@ -10,6 +10,7 @@ import android.view.View;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
@@ -29,11 +30,13 @@ public class CustomLocationPicker extends AlertDialog {
     List<Donglan> zoneArr, cityList;
     ArrayList<String> proList, cityList1;
     View inflate;
+    private String myCity,myProvince;
 
-    public CustomLocationPicker(@NonNull Context context) {
+    public CustomLocationPicker(@NonNull Context context,String city,String province) {
         super(context);
         dbData = new DBData();
-
+        myCity = city;
+        myProvince = province;
         inflate = LayoutInflater.from(context).inflate(R.layout.location_picker, null);
         lp_province = inflate.findViewById(R.id.lp_province);
         lp_city = inflate.findViewById(R.id.lp_city);
@@ -90,19 +93,38 @@ public class CustomLocationPicker extends AlertDialog {
         lp_province.setNotLoop();
         lp_city.setNotLoop();
 
-        province = proList.get(0);
-        cityList1 = new ArrayList<>();
-        setLp_city();
-        city = cityList1.get(0);
 
-        lp_province.setInitPosition(0);
-        lp_city.setInitPosition(0);
+        cityList1 = new ArrayList<>();
+        if(StringUtils.isNullorEmpty(myCity) || StringUtils.isNullorEmpty(myProvince)){
+            lp_province.setInitPosition(0);
+            lp_city.setInitPosition(0);
+            province = proList.get(0);
+            setLp_city();
+            city = cityList1.get(0);
+        }else{
+            for(int i=0;i<proList.size();i++){
+                if(myProvince.equals(proList.get(i))){
+                    lp_province.setInitPosition(i);
+                    province = proList.get(i);
+                    setLp_city();
+                }
+            }
+            for (int j= 0 ;j<cityList1.size();j++){
+                if(myCity.equals(cityList1.get(j))){
+                    lp_city.setInitPosition(j);
+                    city = cityList1.get(j);
+                }
+            }
+        }
+
+
 
         lp_province.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 province = proList.get(index);
                 setLp_city();
+                city = cityList1.get(0);
             }
         });
 
