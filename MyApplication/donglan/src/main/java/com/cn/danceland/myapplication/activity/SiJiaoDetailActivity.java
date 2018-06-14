@@ -364,7 +364,7 @@ public class SiJiaoDetailActivity extends Activity {
                         int start_time = data.get(i).getStart_time() - 480;
                         int end_time = data.get(i).getEnd_time() - 480;
                         int pos = start_time / 10;
-                        for (int j = 0; j <= (end_time - start_time) / 10; j++) {
+                        for (int j = 0; j < (end_time - start_time) / 10; j++) {
                             jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
                             positionList.set(pos, 1);
                             statusList.set(pos, data.get(i).getStatus());
@@ -427,7 +427,7 @@ public class SiJiaoDetailActivity extends Activity {
                                 int start_time = content.get(i).getStart_time() - 480;
                                 int end_time = content.get(i).getEnd_time() - 480;
                                 int pos = start_time / 10;
-                                for (int j = 0; j <= (end_time - start_time) / 10; j++) {
+                                for (int j = 0; j < (end_time - start_time) / 10; j++) {
                                     positionList.set(pos, 1);
                                     statusList.set(pos, content.get(i).getStatus());
                                     roleList.set(pos, 2);
@@ -495,7 +495,7 @@ public class SiJiaoDetailActivity extends Activity {
                         int start_time = (int)startM - 480;
                         int end_time = (int)endM - 480;
                         int pos = start_time / 10;
-                        for (int j = 0; j <= (end_time - start_time) / 10; j++) {
+                        for (int j = 0; j < (end_time - start_time) / 10; j++) {
                             positionList.set(pos, 1);
                             statusList.set(pos, 2);
                             roleList.set(pos, 2);

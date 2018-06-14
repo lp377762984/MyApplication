@@ -104,9 +104,9 @@ public class CustomLine extends View {
             if(positionList!=null&&statusList!=null&&roleList!=null){
                 if (positionList.get(i) != 999) {
                     if (statusList.get(i) == 1) {
-                        canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectSure);
-                    } else if (statusList.get(i) == 2) {
                         canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectNoSure);
+                    } else if (statusList.get(i) == 2) {
+                        canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectSure);
                     } else if (statusList.get(i) == 3) {
                         canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectCancel);
                     } else if (statusList.get(i) == 4) {
