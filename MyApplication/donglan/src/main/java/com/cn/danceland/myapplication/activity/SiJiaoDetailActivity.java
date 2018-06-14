@@ -86,7 +86,6 @@ public class SiJiaoDetailActivity extends Activity {
     JiaoLianCourseBean.Content item1;
     String startTime, endTime, startTimeTv, endTimeTv;
     Gson gson;
-    ArrayList<String> yuyueList;
     ArrayList<String> yuyueStartList;
     ArrayList<Integer> index, indexF, indexS;
     //int status=999;//1:等待对方确认,2:预约成功,3:上课中,4:已结束,5:待评分,6:已评分
@@ -120,7 +119,6 @@ public class SiJiaoDetailActivity extends Activity {
 
 
     private void initHost() {
-        yuyueList = new ArrayList<>();
         positionList = new ArrayList<>();
         statusList = new ArrayList<>();
         roleList = new ArrayList<>();
@@ -422,8 +420,6 @@ public class SiJiaoDetailActivity extends Activity {
                         List<SiJiaoRecordBean.Content> content = data.getContent();
                         if (content != null && content.size() > 0) {
                             for (int i = 0; i < content.size(); i++) {
-                                String s1 = TimeUtils.timeStamp2Date(content.get(i).getCourse_date() + "", "yyyy-MM-dd");
-                                yuyueList.add(s1);
                                 int start_time = content.get(i).getStart_time() - 480;
                                 int end_time = content.get(i).getEnd_time() - 480;
                                 int pos = start_time / 10;
@@ -434,8 +430,6 @@ public class SiJiaoDetailActivity extends Activity {
                                     pos++;
                                 }
                             }
-                            nccalendar.setPoint(yuyueList);
-                            yuyueList.clear();
                         }
                     }
                 }
