@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.TextActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -231,8 +232,8 @@ public class MeFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_setting://设置页面
-                startActivity(new Intent(mActivity, SettingActivity.class));
-
+                //startActivity(new Intent(mActivity, SettingActivity.class));
+                startActivity(new Intent(mActivity, TextActivity.class));
                 break;
             case R.id.iv_edit://编辑资料页面
                 Intent intent = new Intent(mActivity, MyProActivity.class);

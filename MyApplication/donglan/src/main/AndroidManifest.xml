@@ -617,6 +617,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.TimeTableActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.TextActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
