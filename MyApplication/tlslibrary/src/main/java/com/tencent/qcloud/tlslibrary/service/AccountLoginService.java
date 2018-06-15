@@ -65,6 +65,7 @@ public class AccountLoginService {
         @Override
         public void OnPwdLoginSuccess(TLSUserInfo userInfo) {
             Util.showToast(context, "登录成功");
+            Log.i("taginfo",userInfo.identifier.toString());
             TLSService.getInstance().setLastErrno(0);
             AccountLoginService.this.jumpToSuccActivity();
         }
@@ -76,6 +77,7 @@ public class AccountLoginService {
 
         @Override
         public void OnPwdLoginNeedImgcode(byte[] picData, TLSErrInfo errInfo) {
+            Log.i("taginfo",errInfo.Msg.toString()+errInfo.ErrCode);
             Intent intent = new Intent(context, ImgCodeActivity.class);
             intent.putExtra(Constants.EXTRA_IMG_CHECKCODE, picData);
             intent.putExtra(Constants.EXTRA_LOGIN_WAY, Constants.USRPWD_LOGIN);
@@ -84,12 +86,14 @@ public class AccountLoginService {
 
         @Override
         public void OnPwdLoginFail(TLSErrInfo errInfo) {
+            Log.i("taginfo",errInfo.Msg.toString()+errInfo.ErrCode);
             TLSService.getInstance().setLastErrno(-1);
             Util.notOK(context, errInfo);
         }
 
         @Override
         public void OnPwdLoginTimeout(TLSErrInfo errInfo) {
+            Log.i("taginfo",errInfo.Msg.toString()+errInfo.ErrCode);
             TLSService.getInstance().setLastErrno(-1);
             Util.notOK(context, errInfo);
         }

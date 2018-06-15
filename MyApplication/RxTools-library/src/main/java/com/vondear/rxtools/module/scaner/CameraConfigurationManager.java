@@ -171,13 +171,18 @@ final class CameraConfigurationManager {
     void setDesiredCameraParameters(Camera camera) {
         Camera.Parameters parameters = camera.getParameters();
         Log.d(TAG, "Setting preview size: " + cameraResolution);
-        parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+       parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+//        parameters.setPreviewSize(width,height);
+//        cameraResolution.x=width;
+//        cameraResolution.y=height;
         setFlash(parameters);
         setZoom(parameters);
         //setSharpness(parameters);
         //modify here
         camera.setDisplayOrientation(90);
         camera.setParameters(parameters);
+
+
     }
 
     Point getCameraResolution() {
