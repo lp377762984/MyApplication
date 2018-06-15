@@ -7,13 +7,10 @@ import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PxUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
