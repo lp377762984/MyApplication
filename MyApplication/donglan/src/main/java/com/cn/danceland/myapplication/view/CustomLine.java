@@ -23,25 +23,29 @@ import java.util.List;
 public class CustomLine extends View {
 
     private int width, height;
-    private float padding;//每条线的间距10dp
-    private int top;//起始y
+    private float padding, margin;//每条线的间距10dp
+    private int top, courseTimeLength;//起始y
     private Paint paintLine;
     private Context context;
     private int startX;
-    private List<Integer> positionList, statusList, roleList;
-    private Paint paintRectSure, paintRectNoSure, paintRectCancel;
+    private List<Integer> positionList, statusList, roleList, textPositionList;
+    private Paint paintRectSure, paintRectNoSure, paintRectCancel, paintText;
+    private int preposition;
 
     public CustomLine(Context context) {
         super(context);
         this.context = context;
         initPaint();
     }
-    public CustomLine(Context context,List<Integer> positionList,List<Integer> statusList,List<Integer> roleList) {
+
+    public CustomLine(Context context, List<Integer> positionList, List<Integer> statusList, List<Integer> roleList, List<Integer> textPositionList, int courseTimeLength) {
         super(context);
         this.context = context;
         this.positionList = positionList;
         this.statusList = statusList;
         this.roleList = roleList;
+        this.textPositionList = textPositionList;
+        this.courseTimeLength = courseTimeLength;
         initPaint();
     }
 
@@ -81,6 +85,13 @@ public class CustomLine extends View {
         paintRectCancel.setColor(Color.parseColor("#A9A9A9"));
         paintRectCancel.setStyle(Paint.Style.FILL);
 
+        paintText = new Paint();//已取消和已签到颜色的画笔
+        paintText.setAntiAlias(true);
+        paintText.setColor(getResources().getColor(R.color.white));
+        paintText.setStyle(Paint.Style.FILL);
+        paintText.setTextAlign(Paint.Align.CENTER);
+        paintText.setTextSize(30);
+
     }
 
     @Override
@@ -100,8 +111,9 @@ public class CustomLine extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         LogUtil.i("onDraw");
+
         for (int i = 0; i < 84; i++) {
-            if(positionList!=null&&statusList!=null&&roleList!=null){
+            if (positionList != null && statusList != null && roleList != null) {
                 if (positionList.get(i) != 999) {
                     if (statusList.get(i) == 1) {
                         canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectNoSure);
@@ -128,5 +140,24 @@ public class CustomLine extends View {
         }
         canvas.drawLine(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding), paintLine);
 
+        if (textPositionList != null && textPositionList.size() > 0) {
+            for (int i = 0; i < textPositionList.size(); i++) {
+                if (textPositionList.get(i) != 999) {
+                    if (statusList.get(textPositionList.get(i)) == 1) {
+                        canvas.drawText("等待对方确认", width / 2, PxUtils.dp2px(context, positionList.get(textPositionList.get(i)) * 10 + courseTimeLength * 5), paintText);
+                    } else if (statusList.get(textPositionList.get(i)) == 2) {
+                        if (roleList.get(textPositionList.get(i)) == 1) {
+                            canvas.drawText("该时间段已被预约", width / 2, PxUtils.dp2px(context, positionList.get(textPositionList.get(i)) * 10 + courseTimeLength * 5), paintText);
+                        } else if (roleList.get(textPositionList.get(i)) == 2) {
+                            canvas.drawText("已确认未签到", width / 2, PxUtils.dp2px(context, positionList.get(textPositionList.get(i)) * 10 + courseTimeLength * 5), paintText);
+                        }
+                    } else if (statusList.get(textPositionList.get(i)) == 3) {
+                        canvas.drawText("已取消", width / 2, PxUtils.dp2px(context, positionList.get(textPositionList.get(i)) * 10 + courseTimeLength * 5), paintText);
+                    } else if (statusList.get(textPositionList.get(i)) == 4) {
+                        canvas.drawText("已签到", width / 2, PxUtils.dp2px(context, positionList.get(textPositionList.get(i)) * 10 + courseTimeLength * 5), paintText);
+                    }
+                }
+            }
+        }
     }
 }

@@ -68,9 +68,9 @@ import static com.xiaomi.smack.packet.h.a.s;
  */
 
 public class SiJiaoDetailActivity extends Activity {
-    ArrayList<Integer> arrPositionF, arrPositionS;
+    //ArrayList<Integer> arrPositionF, arrPositionS;
     ArrayList<Integer> arrStatusF, arrStatusS;
-    HashMap<Integer, Integer> arrPosition, arrStatus;
+    //HashMap<Integer, Integer> arrPosition, arrStatus;
     //ListView list_1, list_2;
     LinearLayout ll_time;
     LoopView loopview;
@@ -98,6 +98,7 @@ public class SiJiaoDetailActivity extends Activity {
     Data data;
     boolean isYuYue;
     private ArrayList<Integer> positionList;
+    private ArrayList<Integer> textPositionList;
     private ArrayList<Integer> statusList;
     private ArrayList<Integer> roleList;
     private CustomLine customLine;
@@ -120,6 +121,7 @@ public class SiJiaoDetailActivity extends Activity {
 
     private void initHost() {
         positionList = new ArrayList<>();
+        textPositionList = new ArrayList<>();
         statusList = new ArrayList<>();
         roleList = new ArrayList<>();
         for (int i = 0; i < 84; i++) {
@@ -131,7 +133,9 @@ public class SiJiaoDetailActivity extends Activity {
         for (int i = 0; i < 84; i++) {
             roleList.add(999);
         }
-
+//        for (int i = 0; i < 84; i++) {
+//            textPositionList.add(999);
+//        }
 
 
         startMillArr = new ArrayList<>();
@@ -178,6 +182,7 @@ public class SiJiaoDetailActivity extends Activity {
                     positionList.clear();
                     statusList.clear();
                     roleList.clear();
+                    textPositionList.clear();
                     for (int i = 0; i < 84; i++) {
                         positionList.add(999);
                     }
@@ -187,13 +192,16 @@ public class SiJiaoDetailActivity extends Activity {
                     for (int i = 0; i < 84; i++) {
                         roleList.add(999);
                     }
+//                    for (int i = 0; i < 84; i++) {
+//                        textPositionList.add(999);
+//                    }
 
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
                     startTime = TimeUtils.date2TimeStamp(ts[0] + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
                     endTime = (Long.valueOf(startTime) + 86399) + "";
                     weekDay = TimeUtils.dateToWeek(ts[0]);
-                    iniView();
+                    getData();
                 }
             }
 
@@ -255,21 +263,6 @@ public class SiJiaoDetailActivity extends Activity {
         });
 
         tv_date = findViewById(R.id.tv_date);
-
-        arrPosition = new HashMap<>();
-        arrPositionF = new ArrayList<>();
-        arrPositionS = new ArrayList<>();
-
-        for (int i = 0; i < 23; i++) {
-            arrPosition.put(i, 0);
-        }
-
-        arrStatus = new HashMap<>();
-        arrStatusF = new ArrayList<>();
-        arrStatusS = new ArrayList<>();
-        for (int i = 0; i < 23; i++) {
-            arrStatus.put(i, 0);
-        }
 
         getData();
     }
@@ -362,9 +355,10 @@ public class SiJiaoDetailActivity extends Activity {
                         int start_time = data.get(i).getStart_time() - 480;
                         int end_time = data.get(i).getEnd_time() - 480;
                         int pos = start_time / 10;
+                        textPositionList.add(pos);
                         for (int j = 0; j < (end_time - start_time) / 10; j++) {
                             jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
-                            positionList.set(pos, 1);
+                            positionList.set(pos, pos);
                             statusList.set(pos, data.get(i).getStatus());
                             roleList.set(pos, 1);
                             pos++;
@@ -423,8 +417,9 @@ public class SiJiaoDetailActivity extends Activity {
                                 int start_time = content.get(i).getStart_time() - 480;
                                 int end_time = content.get(i).getEnd_time() - 480;
                                 int pos = start_time / 10;
+                                textPositionList.add(pos);
                                 for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                                    positionList.set(pos, 1);
+                                    positionList.set(pos, pos);
                                     statusList.set(pos, content.get(i).getStatus());
                                     roleList.set(pos, 2);
                                     pos++;
@@ -436,7 +431,7 @@ public class SiJiaoDetailActivity extends Activity {
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList);
+                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
                 ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
@@ -489,16 +484,17 @@ public class SiJiaoDetailActivity extends Activity {
                         int start_time = (int)startM - 480;
                         int end_time = (int)endM - 480;
                         int pos = start_time / 10;
+                        textPositionList.add(pos);
                         for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                            positionList.set(pos, 1);
-                            statusList.set(pos, 2);
+                            positionList.set(pos, pos);
+                            statusList.set(pos, 1);
                             roleList.set(pos, 2);
                             pos++;
                         }
                         if (ll_01.getChildCount() > 0) {
                             ll_01.removeAllViews();
                         }
-                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList);
+                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
                         ll_01.addView(customLine);
                         ToastUtils.showToastShort("预约成功！");
                     } else {
