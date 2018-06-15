@@ -359,7 +359,7 @@ public class RegisterInfoActivity extends Activity {
                 .inflate(R.layout.edit_name, null);
         //normalDialog.setTitle("编辑昵称");
         final TextView edit_name = dialogView.findViewById(R.id.edit_name);
-        edit_name.setText(hint);
+       // edit_name.setText(hint);
         normalDialog.setView(dialogView);
         normalDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {

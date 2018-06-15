@@ -15,17 +15,18 @@ public class Constants  {
     }
 
     //public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-  // public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+  //public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
     //public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
     //public static String HOST = "http://192.168.1.117:8003/";//佳楠
-    public static final String HOST = " http://192.168.1.117:8003/";//
-   //  public static final String HOST = " http://192.168.1.96:8003/";//
-    //public static final String HOST = "http://192.168.1.123:8003/";//老高
+   // public static final String HOST = " http://192.168.1.117:8003/";//
+     public static final String HOST = " http://118.190.201.15:6003/";//阿里云测试环境
+    //public static final String HOST = " http://192.168.1.117:8003/";//
+  // public static final String HOST = "http://192.168.1.123:8003/";//老高
      //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -90,7 +91,6 @@ public class Constants  {
     public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
-
     public static final String FIND_COMMENT_LIST = HOST + "/reply/queryReplyByMsgId";//动态评论列表
     public static final String FIND_ONE_DYN = HOST + "/appDynMsg/findOneDynMsg";   //查一条动态
 
