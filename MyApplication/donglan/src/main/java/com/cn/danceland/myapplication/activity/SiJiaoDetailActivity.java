@@ -314,6 +314,9 @@ public class SiJiaoDetailActivity extends Activity {
                     }
 
                 }
+                if(pos==999){
+                    pos = 0;
+                }
                 int start = startMinutesList.get(pos);
                 int end = endMinuteList.get(pos);
 
