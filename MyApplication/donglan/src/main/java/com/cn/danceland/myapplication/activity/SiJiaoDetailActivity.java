@@ -322,7 +322,11 @@ public class SiJiaoDetailActivity extends Activity {
 
                 if (startTime != null && start != 0 && end != 0) {
                     if (Long.valueOf(startTime) + start * 60000 >= System.currentTimeMillis()) {
-                        commitYuYue((long)start, (long)end);
+                        if(end>1320){
+                            ToastUtils.showToastShort("失败，结束时间应在营业时间内");
+                        }else{
+                            commitYuYue((long)start, (long)end);
+                        }
                     } else {
                         ToastUtils.showToastShort("无法预约过去的时间段");
                     }
@@ -357,14 +361,16 @@ public class SiJiaoDetailActivity extends Activity {
                     for (int i = 0; i < data.size(); i++) {
                         int start_time = data.get(i).getStart_time() - 480;
                         int end_time = data.get(i).getEnd_time() - 480;
-                        int pos = start_time / 10;
-                        textPositionList.add(pos);
-                        for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                            jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
-                            positionList.set(pos, pos);
-                            statusList.set(pos, data.get(i).getStatus());
-                            roleList.set(pos, 1);
-                            pos++;
+                        if(data.get(i).getEnd_time()<=1320){
+                            int pos = start_time / 10;
+                            textPositionList.add(pos);
+                            for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
+                                positionList.set(pos, pos);
+                                statusList.set(pos, data.get(i).getStatus());
+                                roleList.set(pos, 1);
+                                pos++;
+                            }
                         }
                     }
                 }
@@ -419,13 +425,15 @@ public class SiJiaoDetailActivity extends Activity {
                             for (int i = 0; i < content.size(); i++) {
                                 int start_time = content.get(i).getStart_time() - 480;
                                 int end_time = content.get(i).getEnd_time() - 480;
-                                int pos = start_time / 10;
-                                textPositionList.add(pos);
-                                for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                                    positionList.set(pos, pos);
-                                    statusList.set(pos, content.get(i).getStatus());
-                                    roleList.set(pos, 2);
-                                    pos++;
+                                if(content.get(i).getEnd_time()<=1320){
+                                    int pos = start_time / 10;
+                                    textPositionList.add(pos);
+                                    for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                        positionList.set(pos, pos);
+                                        statusList.set(pos, content.get(i).getStatus());
+                                        roleList.set(pos, 2);
+                                        pos++;
+                                    }
                                 }
                             }
                         }
