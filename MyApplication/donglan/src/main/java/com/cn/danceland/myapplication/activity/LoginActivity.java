@@ -39,6 +39,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -384,11 +386,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                    if (DemoHelper.getInstance().isLoggedIn()) {
 //
 //                    }
-//                    if (Constants.DEV_CONFIG) {
-//                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    } else {
-//                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    }
+                    if (Constants.DEV_CONFIG) {
+                        login_txim("dev" + data.getPerson().getMember_no(),data.getSig());
+                    } else {
+                        login_txim( data.getPerson().getMember_no(),data.getSig());
+                    }
 
 //
 //                    PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
@@ -489,6 +491,31 @@ public class LoginActivity extends Activity implements OnClickListener {
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
 
+    }
+
+
+    /**
+     * 登录腾讯im
+     *
+     * @param identifier 账号
+     * @param userSig
+     */
+    private void login_txim(String identifier, String userSig) {
+        LogUtil.i(identifier+"/n"+userSig);
+// identifier为用户名，userSig 为用户登录凭证
+        TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+            }
+
+            @Override
+            public void onSuccess() {
+                LogUtil.i("login succ 登录成功");
+            }
+        });
     }
 //
 //    /**

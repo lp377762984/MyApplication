@@ -63,7 +63,9 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
         init();
-     //   init_txim();
+
+      //初始化腾讯IM
+        init_txim();
     }
 
     @Override
