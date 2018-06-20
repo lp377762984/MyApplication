@@ -212,7 +212,7 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                             break;
                         case 11:
 
-                            manager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000);
+                            manager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000);
                             break;
                         case 12://睡眠数据
                             manager.setSyncSleepData(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
@@ -388,8 +388,10 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
 
                 //    Log.i("zgy", datas.toString());
-                LogUtil.i(datas.toString());
-
+                //LogUtil.i(datas.toString());
+                if (datas.get(4) == 0x52){
+                    LogUtil.i(datas.toString());
+                }
                 //RSSI
                 if (datas.get(4) == 0XB5) {// [171, 0, 4, 255, 181, 128, 72]
                     Integer rssi = datas.get(6);
@@ -470,10 +472,12 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                     heartRateHelper.insert(heartRate);
 
                 }
-                if (datas.get(4) == 0x51 && datas.size() != 13){
+                if(datas.get(4) == 0x51 && datas.get(5)==17){
                     LogUtil.i(datas.toString());
                 }
-
+                if (datas.get(4) == 0x51 && datas.get(5)==8){
+                    LogUtil.i(datas.toString());
+            }
 
             }
         }
