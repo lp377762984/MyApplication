@@ -8,8 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.HeartRate;
@@ -20,7 +25,9 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,16 +39,41 @@ public class WearFitActivity extends Activity {
     private TextView tv_connect;
     private String address;
     private String name;
+    private GridView gv_wearfit;
+    private DongLanTitleView shouhuan_title;
+    private int[] imgID = {R.drawable.shouhuan_heart,R.drawable.shouhuan_sleep,R.drawable.shouhuan_pilao,R.drawable.shouhuan_photo,R.drawable.shouhuan_plan,R.drawable.shouhuan_find
+    ,R.drawable.shouhuan_setting};
+    private String[] text1s= {"心率","睡眠","疲劳","摇摇拍照","健身计划","查找手环","设置"};
+    private String[] text2s= {"--bpm","-时-分","--","","","",""};
+    private ArrayList<ItemBean> itemBeans;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wearfit);
+        initHost();
         initView();
     }
 
-    private void initView() {
+    private void initHost() {
 
+        itemBeans = new ArrayList<>();
+        for(int i=0;i<7;i++){
+            ItemBean itemBean = new ItemBean();
+            itemBean.img_url = imgID[i];
+            itemBean.text1 = text1s[i];
+            itemBean.text2 = text2s[i];
+            itemBeans.add(itemBean);
+        }
+
+    }
+
+
+    private void initView() {
+        gv_wearfit = findViewById(R.id.gv_wearfit);
+        gv_wearfit.setAdapter(new WearFitAdapter());
+        shouhuan_title = findViewById(R.id.shouhuan_title);
+        shouhuan_title.setTitle("我的手环");
         tv_connect = findViewById(R.id.tv_connect);
         if (MyApplication.mBluetoothConnected) {
             tv_connect.setText("断开");
@@ -51,6 +83,36 @@ public class WearFitActivity extends Activity {
             tv_connect.setText("搜索");
         }
         setListener();
+    }
+
+    private class WearFitAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return itemBeans.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = View.inflate(WearFitActivity.this, R.layout.shouhuan_gv_item, null);
+            ImageView img = inflate.findViewById(R.id.img);
+            TextView text1 = inflate.findViewById(R.id.tv_text1);
+            TextView text2 = inflate.findViewById(R.id.tv_text2);
+            Glide.with(WearFitActivity.this).load(itemBeans.get(i).img_url).into(img);
+            text1.setText(itemBeans.get(i).text1);
+            text2.setText(itemBeans.get(i).text2);
+            return inflate;
+        }
     }
 
     private void setListener() {
@@ -140,4 +202,11 @@ public class WearFitActivity extends Activity {
             }
         }
     };
+
+    private class ItemBean{
+        int img_url;
+        String text1;
+        String text2;
+
+    }
 }
