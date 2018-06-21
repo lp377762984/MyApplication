@@ -621,6 +621,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".shouhuan.activity.WearFitEquipmentActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".shouhuan.activity.WearFitSettingActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

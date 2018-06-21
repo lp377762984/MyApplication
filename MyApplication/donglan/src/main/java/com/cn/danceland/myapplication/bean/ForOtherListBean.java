@@ -100,8 +100,8 @@ public class ForOtherListBean implements Parcelable {
         private String member_no;
         private String nick_name;
         private int person_id;
-        private int price;
-        private int real_price;
+        private String price;
+        private String real_price;
         private String self_avatar_path;
         private String start_date;
         private int surplus_count;
@@ -218,17 +218,17 @@ public class ForOtherListBean implements Parcelable {
             return person_id;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(String price) {
             this.price = price;
         }
-        public int getPrice() {
+        public String getPrice() {
             return price;
         }
 
-        public void setReal_price(int real_price) {
+        public void setReal_price(String real_price) {
             this.real_price = real_price;
         }
-        public int getReal_price() {
+        public String getReal_price() {
             return real_price;
         }
 
@@ -284,8 +284,8 @@ public class ForOtherListBean implements Parcelable {
             dest.writeString(this.member_no);
             dest.writeString(this.nick_name);
             dest.writeInt(this.person_id);
-            dest.writeInt(this.price);
-            dest.writeInt(this.real_price);
+            dest.writeString(this.price);
+            dest.writeString(this.real_price);
             dest.writeString(this.self_avatar_path);
             dest.writeString(this.start_date);
             dest.writeInt(this.surplus_count);
@@ -312,8 +312,8 @@ public class ForOtherListBean implements Parcelable {
             this.member_no = in.readString();
             this.nick_name = in.readString();
             this.person_id = in.readInt();
-            this.price = in.readInt();
-            this.real_price = in.readInt();
+            this.price = in.readString();
+            this.real_price = in.readString();
             this.self_avatar_path = in.readString();
             this.start_date = in.readString();
             this.surplus_count = in.readInt();

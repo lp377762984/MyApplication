@@ -280,7 +280,7 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.ll_my_shouhuan://我的手环
 
-                ToastUtils.showToastShort("功能正在开发中");
+                //ToastUtils.showToastShort("功能正在开发中");
 //
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
                     startActivity(new Intent(mActivity, WearFitActivity.class));

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -126,6 +127,30 @@ public class WearFitActivity extends Activity {
                 } else {
                     Intent intent = new Intent(WearFitActivity.this, WearFitEquipmentActivity.class);
                     startActivityForResult(intent, REQUEST_SEARCH);
+                }
+            }
+        });
+
+        gv_wearfit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i){
+                    case 0://心率
+                        break;
+                    case 1://睡眠
+                        break;
+                    case 2://疲劳
+                        break;
+                    case 3://摇摇拍照
+                        break;
+                    case 4://健身计划
+                        break;
+                    case 5://查找手环
+                        break;
+                    case 6://设置
+                        startActivity(new Intent(WearFitActivity.this,WearFitSettingActivity.class));
+                        break;
+
                 }
             }
         });
