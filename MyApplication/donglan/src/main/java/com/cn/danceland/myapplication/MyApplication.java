@@ -20,6 +20,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
@@ -28,6 +29,7 @@ import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMLogLevel;
@@ -66,7 +68,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private HttpProxyCacheServer proxy;
     private static Activity currentActivity;
 
-    public static BluetoothLeService mBluetoothLeService;//蓝牙连接服务
+    public static BluetoothInterface mBluetoothLeService;//蓝牙连接服务
     public static boolean mBluetoothConnected = false;
     public static boolean isBluetoothConnecting = false;
     public LocationService locationClient;
@@ -241,19 +243,22 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = BluetoothInterface.Stub.asInterface(service);
+//            BluetoothInterface bluetoothInterface = BluetoothInterface.Stub.asInterface(service);
+//            mBluetoothLeService = ((BluetoothInterface.Stub) BluetoothInterface.Stub.asInterface(service)).getService();
+//            LogUtil.i("mBluetoothLeService");
+////            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             try {
-                String interfaceDescriptor = service.getInterfaceDescriptor();
-                if(!StringUtils.isNullorEmpty(interfaceDescriptor)){
-                    mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-                    if (!mBluetoothLeService.initialize()) {
-                        Log.e("zgy", "Unable to initialize Bluetooth");
+                if (!mBluetoothLeService.initialize()) {
+                    Log.e("zgy", "Unable to initialize Bluetooth");
 
-                    }
                 }
-                LogUtil.i(interfaceDescriptor);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+            // Automatically connects to the device upon successful start-up initialization.
+//            mBluetoothLeService.connect(mDeviceAddress);
+
 
         }
 

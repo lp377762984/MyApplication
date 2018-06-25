@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CustomLine;
 import com.google.gson.Gson;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
@@ -66,31 +68,24 @@ import static com.xiaomi.smack.packet.h.a.s;
  */
 
 public class SiJiaoDetailActivity extends Activity {
-    ArrayList<Integer> arrPositionF, arrPositionS;
+    //ArrayList<Integer> arrPositionF, arrPositionS;
     ArrayList<Integer> arrStatusF, arrStatusS;
-    HashMap<Integer, Integer> arrPosition, arrStatus;
-    ListView list_1, list_2;
+    //HashMap<Integer, Integer> arrPosition, arrStatus;
+    //ListView list_1, list_2;
     LinearLayout ll_time;
     LoopView loopview;
     View inflate;
-    String[] time = {"9:00", "9:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00"
-            , "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"};
-
-    List<String> timeList, timeMiList;
     TextView over_time, tv_date, course_name, course_jiaolian, buy, course_shengyu, course_length;
     int pos = 999;
-    ArrayList<Integer> status;
-    int yuyuestatus, statustype;//标记预约的时间段，时间段的状态类型
     ImageView sijiao_back, detail_img;
-    MyListF myListF;
-    MyListS myListS;
+    //    MyListF myListF;
+//    MyListS myListS;
     AlertDialog.Builder alertdialog;
     NCalendar nccalendar;
     MyCourseBean.Data item;
     JiaoLianCourseBean.Content item1;
     String startTime, endTime, startTimeTv, endTimeTv;
     Gson gson;
-    ArrayList<String> yuyueList;
     ArrayList<String> yuyueStartList;
     ArrayList<Integer> index, indexF, indexS;
     //int status=999;//1:等待对方确认,2:预约成功,3:上课中,4:已结束,5:待评分,6:已评分
@@ -102,6 +97,18 @@ public class SiJiaoDetailActivity extends Activity {
     ArrayList<Integer> requestStatusArr;
     Data data;
     boolean isYuYue;
+    private ArrayList<Integer> positionList;
+    private ArrayList<Integer> textPositionList;
+    private ArrayList<Integer> statusList;
+    private ArrayList<Integer> roleList;
+    private CustomLine customLine;
+    private NestedScrollView ns_view;
+    private LinearLayout ll_01;
+    private ArrayList<String> timeStrList;
+    private ArrayList<Integer> startMinutesList;
+    private int courseLength;
+    private ArrayList<Integer> endMinuteList;
+    private ArrayList<Integer> jiaolianMinuteList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +120,23 @@ public class SiJiaoDetailActivity extends Activity {
 
 
     private void initHost() {
+        positionList = new ArrayList<>();
+        textPositionList = new ArrayList<>();
+        statusList = new ArrayList<>();
+        roleList = new ArrayList<>();
+        for (int i = 0; i < 84; i++) {
+            positionList.add(999);
+        }
+        for (int i = 0; i < 84; i++) {
+            statusList.add(999);
+        }
+        for (int i = 0; i < 84; i++) {
+            roleList.add(999);
+        }
+//        for (int i = 0; i < 84; i++) {
+//            textPositionList.add(999);
+//        }
+
 
         startMillArr = new ArrayList<>();
         requestStatusArr = new ArrayList<>();
@@ -127,26 +151,57 @@ public class SiJiaoDetailActivity extends Activity {
         auth = getIntent().getStringExtra("auth");
         if (role != null) {
             item1 = (JiaoLianCourseBean.Content) getIntent().getSerializableExtra("item");
+            courseLength = item1.getTime_length();
         } else {
             item = (MyCourseBean.Data) getIntent().getSerializableExtra("item");
+            courseLength = item.getTime_length();
         }
-        timeList = new ArrayList<String>();
-        for (int i = 0; i < time.length - 2; i++) {
-            timeList.add(time[i]);
+        timeStrList = new ArrayList<>();
+        for (int i = 8; i < 23; i++) {
+            for (int j = 0; j < 6; j++) {
+                timeStrList.add(i+":"+j+"0");
+            }
         }
+        startMinutesList = new ArrayList<>();
+        for(int i=0;i<timeStrList.size();i++){
+            String[] split = timeStrList.get(i).split(":");
+            startMinutesList.add(Integer.valueOf(split[0])*60+Integer.valueOf(split[1]));
+        }
+        endMinuteList = new ArrayList<>();
+        for(int i=0;i<startMinutesList.size();i++){
+            endMinuteList.add(startMinutesList.get(i)+courseLength);
+        }
+
+        jiaolianMinuteList = new ArrayList<>();
+
         nccalendar = findViewById(R.id.nccalendar);
         nccalendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
             @Override
             public void onCalendarChanged(DateTime dateTime) {
                 if (dateTime != null) {
-                    arrPosition.clear();
-                    arrStatus.clear();
+                    positionList.clear();
+                    statusList.clear();
+                    roleList.clear();
+                    textPositionList.clear();
+                    for (int i = 0; i < 84; i++) {
+                        positionList.add(999);
+                    }
+                    for (int i = 0; i < 84; i++) {
+                        statusList.add(999);
+                    }
+                    for (int i = 0; i < 84; i++) {
+                        roleList.add(999);
+                    }
+//                    for (int i = 0; i < 84; i++) {
+//                        textPositionList.add(999);
+//                    }
+
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
                     startTime = TimeUtils.date2TimeStamp(ts[0] + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
                     endTime = (Long.valueOf(startTime) + 86399) + "";
                     weekDay = TimeUtils.dateToWeek(ts[0]);
-                    iniView();
+                    getData();
                 }
             }
 
@@ -155,7 +210,15 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
     public void iniView() {
-
+        //customLine = findViewById(R.id.customLine);
+        ll_01 = findViewById(R.id.ll_01);
+        ll_01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTime();
+            }
+        });
+        ns_view = findViewById(R.id.ns_view);
         inflate = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.timeselect, null);
         alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
         detail_img = findViewById(R.id.detail_img);
@@ -201,41 +264,6 @@ public class SiJiaoDetailActivity extends Activity {
 
         tv_date = findViewById(R.id.tv_date);
 
-        list_1 = findViewById(R.id.list_1);
-        list_1.setDividerHeight(0);
-        list_2 = findViewById(R.id.list_2);
-        list_2.setDividerHeight(0);
-        arrPosition = new HashMap<>();
-        arrPositionF = new ArrayList<>();
-        arrPositionS = new ArrayList<>();
-
-        for (int i = 0; i < 23; i++) {
-            arrPosition.put(i, 0);
-        }
-
-        arrStatus = new HashMap<>();
-        arrStatusF = new ArrayList<>();
-        arrStatusS = new ArrayList<>();
-        for (int i = 0; i < 23; i++) {
-            arrStatus.put(i, 0);
-        }
-        myListF = new MyListF(arrPositionF, arrStatusF);
-        myListS = new MyListS(arrPositionS, arrStatusS);
-        list_1.setAdapter(myListF);
-        list_2.setAdapter(myListS);
-//        list_1.setAdapter(myListF);
-//        list_2.setAdapter(myListS);
-        list_2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!isYuYue) {
-                    //startActivity(new Intent(SiJiaoDetailActivity.this,PingJiaActivity.class).putExtra("item",item));
-                    showTime();
-                } else {
-                    ToastUtils.showToastShort("不可重复预约！");
-                }
-            }
-        });
         getData();
     }
 
@@ -246,23 +274,31 @@ public class SiJiaoDetailActivity extends Activity {
         }
 
         loopview.setNotLoop();
-        loopview.setItems(timeList);
+        loopview.setItems(timeStrList);
         //设置初始位置
         loopview.setInitPosition(0);
-        over_time.setText(time[2] + "结束");
+        int endMinute = startMinutesList.get(0) + courseLength;
+        String endTime;
+        if(endMinute%60<10){
+            endTime = endMinute / 60 + ":0" + endMinute % 60;
+        }else{
+            endTime = endMinute / 60 + ":" + endMinute % 60;
+        }
+        over_time.setText(endTime + "结束");
         //设置字体大小
         loopview.setTextSize(16);
         loopview.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 pos = index;
-                if (index + 2 <= timeList.size() - 1) {
-                    over_time.setText(timeList.get(index + 2) + "结束");
-                } else if (index + 2 == timeList.size()) {
-                    over_time.setText(time[time.length - 2] + "结束");
-                } else if (index + 2 == timeList.size() + 1) {
-                    over_time.setText(time[time.length - 1] + "结束");
+                int endMinute = startMinutesList.get(index) + courseLength;
+                String endTime;
+                if(endMinute%60<10){
+                    endTime = endMinute / 60 + ":0" + endMinute % 60;
+                }else{
+                    endTime = endMinute / 60 + ":" + endMinute % 60;
                 }
+                over_time.setText(endTime + "结束");
 
             }
         });
@@ -271,35 +307,26 @@ public class SiJiaoDetailActivity extends Activity {
         alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for (int i = 0; i < arrPosition.size(); i++) {
-                    if (pos == arrPosition.get(i)) {
+                for (int i = 0; i < jiaolianMinuteList.size(); i++) {
+                    if (startMinutesList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue() || endMinuteList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue()) {
                         ToastUtils.showToastShort("该时间段已被预约！请重新选择");
                         return;
                     }
 
                 }
-                String[] split;
-                if (pos == 999) {
+                if(pos==999){
                     pos = 0;
-                    split = timeList.get(0).split(":");
-                } else {
-                    split = timeList.get(pos).split(":");
                 }
+                int start = startMinutesList.get(pos);
+                int end = endMinuteList.get(pos);
 
-
-                Long start = null, end = null;
-                if (split.length >= 2) {
-                    if (split[1].equals("00")) {
-                        start = Long.valueOf(split[0]) * 60;
-                    } else {
-                        start = Long.valueOf(Long.valueOf(split[0]) * 60 + 30);
-                    }
-
-                    end = Long.valueOf(start + 60);
-                }
-                if (startTime != null && start != null && end != null) {
+                if (startTime != null && start != 0 && end != 0) {
                     if (Long.valueOf(startTime) + start * 60000 >= System.currentTimeMillis()) {
-                        commitYuYue(start, end);
+                        if(end>1320){
+                            ToastUtils.showToastShort("失败，结束时间应在营业时间内");
+                        }else{
+                            commitYuYue((long)start, (long)end);
+                        }
                     } else {
                         ToastUtils.showToastShort("无法预约过去的时间段");
                     }
@@ -330,20 +357,24 @@ public class SiJiaoDetailActivity extends Activity {
                 LogUtil.e("zzf", jsonObject.toString());
                 TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
                 List<TimeAxisBean.Data> data = timeAxisBean.getData();
-//                SharedPreferences myYuYue = getSharedPreferences("myYuYue", MODE_PRIVATE);
-//                String myYuYueString = myYuYue.getString(startTime,null);
-
-                if (data != null) {
+                if (data != null && data.size() > 0) {
                     for (int i = 0; i < data.size(); i++) {
-                        if (data.get(i).getStart_time() != null) {
-                            Integer start_time = data.get(i).getStart_time();
-                            setTimeLine(data.get(i).getStatus(), start_time * 60000);
+                        int start_time = data.get(i).getStart_time() - 480;
+                        int end_time = data.get(i).getEnd_time() - 480;
+                        if(data.get(i).getEnd_time()<=1320){
+                            int pos = start_time / 10;
+                            textPositionList.add(pos);
+                            for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
+                                positionList.set(pos, pos);
+                                statusList.set(pos, data.get(i).getStatus());
+                                roleList.set(pos, 1);
+                                pos++;
+                            }
                         }
                     }
                 }
                 getHistory();
-//                list_1.setAdapter(myListF);
-//                list_2.setAdapter(myListS);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -390,57 +421,29 @@ public class SiJiaoDetailActivity extends Activity {
                     SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
                     if (data != null) {
                         List<SiJiaoRecordBean.Content> content = data.getContent();
-                        if (content != null) {
-                            if (content.size() > 0) {
-                                isYuYue = true;
-                            } else {
-                                isYuYue = false;
-                            }
+                        if (content != null && content.size() > 0) {
                             for (int i = 0; i < content.size(); i++) {
-                                Integer start_time = content.get(i).getStart_time();
-                                setTimeLine(content.get(i).getStatus(), start_time * 60000);
-                            }
-//                            arrPositionS.clear();
-//                            arrStatusS.clear();
-//                            arrStatusF.clear();
-//                            arrPositionF.clear();
-                            if (arrPosition.size() > 0) {
-                                for (int j = 0; j < arrPosition.size(); j++) {
-                                    if (arrPosition.get(j) != 0) {
-                                        if (j % 2 == 0) {
-                                            arrPositionF.add(3);
-                                            arrStatusF.add(arrStatus.get(j));
-                                        } else {
-                                            arrPositionS.add(3);
-                                            arrStatusS.add(arrStatus.get(j));
-                                        }
-                                    } else {
-                                        if (j % 2 == 0) {
-                                            arrPositionF.add(0);
-                                            arrStatusF.add(0);
-                                        } else {
-                                            arrPositionS.add(0);
-                                            arrStatusS.add(0);
-                                        }
+                                int start_time = content.get(i).getStart_time() - 480;
+                                int end_time = content.get(i).getEnd_time() - 480;
+                                if(content.get(i).getEnd_time()<=1320){
+                                    int pos = start_time / 10;
+                                    textPositionList.add(pos);
+                                    for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                        positionList.set(pos, pos);
+                                        statusList.set(pos, content.get(i).getStatus());
+                                        roleList.set(pos, 2);
+                                        pos++;
                                     }
                                 }
                             }
-                            myListF.notifyDataSetChanged();
-                            myListS.notifyDataSetChanged();
-//                            arrPositionF.clear();
-//                            arrStatusF.clear();
-//                            arrPositionS.clear();
-//                            arrStatusS.clear();
-                        } else {
-                            ToastUtils.showToastShort("当天无预约记录");
                         }
-
                     }
-                } else {
-                    isYuYue = false;
                 }
-
-
+                if (ll_01.getChildCount() > 0) {
+                    ll_01.removeAllViews();
+                }
+                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
+                ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -462,7 +465,7 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
 
-    private void commitYuYue(final Long startM, Long endM) {
+    private void commitYuYue(final long startM, final long endM) {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         if (role != null) {
@@ -489,10 +492,21 @@ public class SiJiaoDetailActivity extends Activity {
                 if (rootBean != null) {
                     Integer success = Integer.valueOf(rootBean.data);
                     if (success > 0) {
-                        for (int i = 0; i < 23; i++) {
-                            arrPosition.put(i, 0);
+                        int start_time = (int)startM - 480;
+                        int end_time = (int)endM - 480;
+                        int pos = start_time / 10;
+                        textPositionList.add(pos);
+                        for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                            positionList.set(pos, pos);
+                            statusList.set(pos, 1);
+                            roleList.set(pos, 2);
+                            pos++;
                         }
-                        getHistory();
+                        if (ll_01.getChildCount() > 0) {
+                            ll_01.removeAllViews();
+                        }
+                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
+                        ll_01.addView(customLine);
                         ToastUtils.showToastShort("预约成功！");
                     } else {
                         ToastUtils.showToastShort("失败！请重新预约！");
@@ -522,234 +536,4 @@ public class SiJiaoDetailActivity extends Activity {
         MyApplication.getHttpQueues().add(jsonObjectRequest);
 
     }
-
-
-    private class MyListF extends BaseAdapter {
-        ArrayList<Integer> arrPositionF;
-        ArrayList<Integer> arrStatusF;
-
-
-        MyListF(ArrayList<Integer> arrPosition, ArrayList<Integer> arrStatus) {
-            this.arrPositionF = arrPosition;
-            this.arrStatusF = arrStatus;
-        }
-
-        @Override
-        public int getCount() {
-            return 12;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.shixian_line_item, null);
-                viewHolder.shixian_item = convertView.findViewById(R.id.shixian_item);
-                viewHolder.shixian_item1 = convertView.findViewById(R.id.shixian_item1);
-                viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-            //for (int i=0;i<arrPosition.size();i++){
-            if (arrPositionF.size() > 0) {
-                if (arrPositionF.get(position) != 0) {
-                    if (arrStatusF.get(position) == 1) {
-                        viewHolder.tv_status.setText("等待对方确认");
-                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    } else if (arrStatusF.get(position) == 2) {
-                        viewHolder.tv_status.setText("已确认未签到");
-                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
-                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    } else if (arrStatusF.get(position) == 3) {
-                        viewHolder.tv_status.setText("已取消");
-                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-                    } else if (arrStatusF.get(position) == 4) {
-                        viewHolder.tv_status.setText("已签到");
-                        viewHolder.shixian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                        viewHolder.shixian_item1.setVisibility(View.VISIBLE);
-
-                    }
-                } else {
-                    viewHolder.shixian_item1.setVisibility(View.GONE);
-                }
-            }
-
-            // break;
-            //}
-            return convertView;
-        }
-    }
-
-    private class MyListS extends BaseAdapter {
-        ArrayList<Integer> arrPositionS;
-        ArrayList<Integer> arrStatusS;
-
-
-        MyListS(ArrayList<Integer> arrPosition, ArrayList<Integer> arrStatus) {
-            this.arrPositionS = arrPosition;
-            this.arrStatusS = arrStatus;
-        }
-
-        @Override
-        public int getCount() {
-            return 11;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder;
-            if (convertView == null) {
-                viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.xuxian_list_item, null);
-                viewHolder.xuxian_item = convertView.findViewById(R.id.xuxian_item);
-                viewHolder.xuxian_item1 = convertView.findViewById(R.id.xuxian_item1);
-                viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
-                convertView.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) convertView.getTag();
-            }
-
-            //for (int i=0;i<arrPosition.size();i++){
-            if (arrPositionS.size() > 0) {
-                if (arrPositionS.get(position) != 0) {
-                    if (arrStatusS.get(position) == 1) {
-                        viewHolder.tv_status.setText("等待对方确认");
-                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#87CEFA"));
-                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                        viewHolder.xuxian_item.setVisibility(View.GONE);
-                    } else if (arrStatusS.get(position) == 2) {
-                        viewHolder.tv_status.setText("已确认未签到");
-                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#FF8C00"));
-                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                        viewHolder.xuxian_item.setVisibility(View.GONE);
-                    } else if (arrStatusS.get(position) == 3) {
-                        viewHolder.tv_status.setText("已取消");
-                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                        viewHolder.xuxian_item.setVisibility(View.GONE);
-                    } else if (arrStatusS.get(position) == 4) {
-                        viewHolder.tv_status.setText("已签到");
-                        viewHolder.xuxian_item1.setBackgroundColor(Color.parseColor("#A9A9A9"));
-                        viewHolder.xuxian_item1.setVisibility(View.VISIBLE);
-                        viewHolder.xuxian_item.setVisibility(View.GONE);
-                    }
-                } else {
-                    viewHolder.xuxian_item1.setVisibility(View.GONE);
-                    viewHolder.xuxian_item.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            //break;
-            //}
-            return convertView;
-        }
-    }
-
-    class ViewHolder {
-
-        RelativeLayout xuxian_item, xuxian_item1, shixian_item, shixian_item1;
-        TextView tv_status;
-    }
-
-
-    private void setTimeLine(int status, long startTime) {
-        ArrayList<Long> longArr = new ArrayList<>();
-        long nine = hourMill * 9;
-        long nine_half = hourMill * 9 + 1800000;
-        long ten = hourMill * 10;
-        long ten_half = hourMill * 10 + 1800000;
-        long eleven = hourMill * 11;
-        long eleven_half = hourMill * 11 + 1800000;
-        long twelve = hourMill * 12;
-        long twelve_half = hourMill * 12 + 1800000;
-        long thirteen = hourMill * 13;
-        long thirteen_half = hourMill * 13 + 1800000;
-        long fourteen = hourMill * 14;
-        long fourteen_half = hourMill * 14 + 1800000;
-        long fifteen = hourMill * 15;
-        long fifteen_half = hourMill * 15 + 1800000;
-        long sixteen = hourMill * 16;
-        long sixteen_half = hourMill * 16 + 1800000;
-        long seventeen = hourMill * 17;
-        long seventeen_half = hourMill * 17 + 1800000;
-        long eighteen = hourMill * 18;
-        long eighteen_half = hourMill * 18 + 1800000;
-        long nineteen = hourMill * 19;
-        long nineteen_half = hourMill * 19 + 1800000;
-        long twenty = hourMill * 20;
-
-        longArr.add(nine);
-        longArr.add(nine_half);
-        longArr.add(ten);
-        longArr.add(ten_half);
-        longArr.add(eleven);
-        longArr.add(eleven_half);
-        longArr.add(twelve);
-        longArr.add(twelve_half);
-        longArr.add(thirteen);
-        longArr.add(thirteen_half);
-        longArr.add(fourteen);
-        longArr.add(fourteen_half);
-        longArr.add(fifteen);
-        longArr.add(fifteen_half);
-        longArr.add(sixteen);
-        longArr.add(sixteen_half);
-        longArr.add(seventeen);
-        longArr.add(seventeen_half);
-        longArr.add(eighteen);
-        longArr.add(eighteen_half);
-        longArr.add(nineteen);
-        longArr.add(nineteen_half);
-        longArr.add(twenty);
-
-        arrAdd(startTime, status, longArr);
-
-    }
-
-    private void arrAdd(long starTime, int status, ArrayList<Long> longArr) {
-        for (int i = 0; i < longArr.size(); i++) {
-            //if(arrPosition.size()<=longArr.size()){
-            if (longArr.get(i) == starTime) {
-                arrPosition.put(i, 1);
-                if (status == 1) {
-                    arrStatus.put(i, 1);
-                } else if (status == 2) {
-                    arrStatus.put(i, 2);
-                } else if (status == 3) {
-                    arrStatus.put(i, 3);
-                } else if (status == 4) {
-                    arrStatus.put(i, 4);
-                }
-            }
-            //}
-        }
-
-    }
-
 }

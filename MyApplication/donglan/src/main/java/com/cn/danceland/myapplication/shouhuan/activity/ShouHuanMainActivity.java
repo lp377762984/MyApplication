@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -83,7 +84,11 @@ public class ShouHuanMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (MyApplication.mBluetoothConnected) {
-                    MyApplication.mBluetoothLeService.disconnect();
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     tv_search.setText("搜索");
                 } else {
                     Intent intent = new Intent(ShouHuanMainActivity.this, DeviceScanActivity.class);
@@ -212,7 +217,7 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                             break;
                         case 11:
 
-                            manager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000);
+                            manager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000);
                             break;
                         case 12://睡眠数据
                             manager.setSyncSleepData(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000);
@@ -319,7 +324,11 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SEARCH);
                 break;
             case R.id.disconnect_ble:
-                MyApplication.mBluetoothLeService.disconnect();
+                try {
+                    MyApplication.mBluetoothLeService.disconnect();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
@@ -336,7 +345,11 @@ public class ShouHuanMainActivity extends AppCompatActivity {
             SPUtils.setString(Constants.ADDRESS, address);
             SPUtils.setString(Constants.NAME, name);
             if (!TextUtils.isEmpty(address)) {
-                MyApplication.mBluetoothLeService.connect(address);
+                try {
+                    MyApplication.mBluetoothLeService.connect(address);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 MyApplication.isBluetoothConnecting = true;
                 invalidateOptionsMenu();//显示正在连接 ...
             }
@@ -372,7 +385,11 @@ public class ShouHuanMainActivity extends AppCompatActivity {
 
                 device_name.setText("");
                 invalidateOptionsMenu();//更新菜单栏
-                MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                try {
+                    MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 Log.d("BluetoothLeService", "断开");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
@@ -388,8 +405,10 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
 
                 //    Log.i("zgy", datas.toString());
-                LogUtil.i(datas.toString());
-
+                //LogUtil.i(datas.toString());
+                if (datas.get(4) == 0x52){
+                    LogUtil.i(datas.toString());
+                }
                 //RSSI
                 if (datas.get(4) == 0XB5) {// [171, 0, 4, 255, 181, 128, 72]
                     Integer rssi = datas.get(6);
@@ -470,10 +489,12 @@ public class ShouHuanMainActivity extends AppCompatActivity {
                     heartRateHelper.insert(heartRate);
 
                 }
-                if (datas.get(4) == 0x51 && datas.size() != 13){
+                if(datas.get(4) == 0x51 && datas.get(5)==17){
                     LogUtil.i(datas.toString());
                 }
-
+                if (datas.get(4) == 0x51 && datas.get(5)==8){
+                    LogUtil.i(datas.toString());
+            }
 
             }
         }
