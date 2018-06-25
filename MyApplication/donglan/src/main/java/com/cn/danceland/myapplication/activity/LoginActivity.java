@@ -31,7 +31,6 @@ import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -464,11 +463,11 @@ public class LoginActivity extends Activity implements OnClickListener {
                     } else {
                         login_txim(data.getPerson().getMember_no(), data.getSig());
                     }
-
-                    //        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    //      startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
                     setMipushId();
-                    //       finish();
+                            SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                          startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
+                           finish();
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
@@ -583,7 +582,12 @@ public class LoginActivity extends Activity implements OnClickListener {
             @Override
             public void onSuccess() {
                 LogUtil.i("login succ 登录成功");
-                startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
+            //    startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
+
+//                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+//                      startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+//
+//                       finish();
             }
         });
     }
