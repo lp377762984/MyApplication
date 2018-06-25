@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.im.model.UserInfo;
+import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -24,6 +25,7 @@ import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qalsdk.QALSDKManager;
 import com.tencent.qcloud.presentation.business.InitBusiness;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
@@ -37,6 +39,8 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.tencent.qcloud.ui.NotifyDialog;
 
 import java.io.IOException;
+
+import tencent.tls.platform.TLSHelper;
 
 
 /**
@@ -63,7 +67,7 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
         init();
-     //   init_txim();
+       init_txim();
     }
 
     @Override
@@ -139,6 +143,7 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
     }
 
     private void init() {
+
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
         //初始化IMSDK
@@ -150,6 +155,13 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
         presenter = new SplashPresenter(this);
         presenter.start();
+        // 务必检查IMSDK已做以下初始化
+        QALSDKManager.getInstance().setEnv(0);
+        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
+
+// 初始化TLSSDK
+        TLSHelper tlsHelper = TLSHelper.getInstance().init(getApplicationContext(), 1400090939);
+//        tlsHelper.LOGIN
     }
 
     private void init_txim() {
@@ -170,9 +182,10 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                            logout();
+                        LogUtil.i("过期");
                     }
                 });
-                LogUtil.i("过期");
+
             }
         })
                 .setConnectionListener(new TIMConnListener() {
@@ -238,22 +251,26 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
 
     @Override
     public void onSuccess() {
-
+        LogUtil.i("连接成功");
     }
 
     @Override
     public void navToHome() {
-
+        LogUtil.i("tx进入主页面");
+        startActivity(new Intent( SplashActivity.this, TXIMHomeActivity.class));
     }
 
     @Override
     public void navToLogin() {
-
+        LogUtil.i("tx去登录");
     }
 
     @Override
     public boolean isUserLogin() {
-        return false;
+        LogUtil.i("tx已有登录");
+        return UserInfo.getInstance().getId()!= null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
+
+
     }
 
     /**

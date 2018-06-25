@@ -204,8 +204,8 @@ public class ConversationFragment extends Fragment implements ConversationView,F
     public void refresh() {
         Collections.sort(conversationList);
         adapter.notifyDataSetChanged();
-        if (getActivity() instanceof  HomeActivity)
-            ((HomeActivity) getActivity()).setMsgUnread(getTotalUnreadNum() == 0);
+        if (getActivity() instanceof TXIMHomeActivity)
+            ((TXIMHomeActivity) getActivity()).setMsgUnread(getTotalUnreadNum() == 0);
     }
 
 
