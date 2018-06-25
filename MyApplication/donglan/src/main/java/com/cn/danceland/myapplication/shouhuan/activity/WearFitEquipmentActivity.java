@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class WearFitEquipmentActivity extends Activity {
     private String name;
     private Button btn_bind;
     private ProgressDialog progressDialog;
+    private DongLanTitleView wearfitequipment_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class WearFitEquipmentActivity extends Activity {
     }
 
     private void initView() {
+        wearfitequipment_title = findViewById(R.id.wearfitequipment_title);
+        wearfitequipment_title.setTitle("连接管理");
         progressDialog = new ProgressDialog(this);
 
         tv_status = findViewById(R.id.tv_status);
@@ -62,7 +67,11 @@ public class WearFitEquipmentActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (MyApplication.mBluetoothConnected) {
-                    MyApplication.mBluetoothLeService.disconnect();
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     btn_bind.setText("绑定手环");
                 } else {
                     Intent intent = new Intent(WearFitEquipmentActivity.this, DeviceScanActivity.class);
@@ -84,13 +93,17 @@ public class WearFitEquipmentActivity extends Activity {
             SPUtils.setString(Constants.NAME, name);
             if (!TextUtils.isEmpty(address)) {
 
-                if(MyApplication.mBluetoothLeService.connect(address)){
-                    //tv_status.setText(name+"--"+address);
-                    //ToastUtils.showToastShort("正在连接...");
-                    progressDialog.setMessage("正在连接...");
-                    progressDialog.show();
-                }else{
-                    ToastUtils.showToastShort("连接失败");
+                try {
+                    if(MyApplication.mBluetoothLeService.connect(address)){
+                        //tv_status.setText(name+"--"+address);
+                        //ToastUtils.showToastShort("正在连接...");
+                        progressDialog.setMessage("正在连接...");
+                        progressDialog.show();
+                    }else{
+                        ToastUtils.showToastShort("连接失败");
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
                 }
 
                 MyApplication.isBluetoothConnecting = true;
@@ -141,7 +154,11 @@ public class WearFitEquipmentActivity extends Activity {
 //
 //                device_name.setText("");
                 invalidateOptionsMenu();//更新菜单栏
-                MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                try {
+                    MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 ToastUtils.showToastShort("断开");
                 //LogUtil.d("BluetoothLeService", "断开");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {

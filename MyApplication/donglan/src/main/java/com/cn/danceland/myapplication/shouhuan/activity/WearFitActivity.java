@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -122,7 +123,11 @@ public class WearFitActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (MyApplication.mBluetoothConnected) {
-                    MyApplication.mBluetoothLeService.disconnect();
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                     tv_connect.setText("搜索");
                 } else {
                     Intent intent = new Intent(WearFitActivity.this, WearFitEquipmentActivity.class);
@@ -166,11 +171,15 @@ public class WearFitActivity extends Activity {
 //            SPUtils.setString(Constants.ADDRESS, address);
 //            SPUtils.setString(Constants.NAME, name);
             if (!TextUtils.isEmpty(address)) {
-                if(MyApplication.mBluetoothLeService.connect(address)){
-                    tv_connect.setText(address);
-                    ToastUtils.showToastShort("正在连接...");
-                }else{
-                    ToastUtils.showToastShort("连接失败");
+                try {
+                    if(MyApplication.mBluetoothLeService.connect(address)){
+                        tv_connect.setText(address);
+                        ToastUtils.showToastShort("正在连接...");
+                    }else{
+                        ToastUtils.showToastShort("连接失败");
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
                 }
 
                 MyApplication.isBluetoothConnecting = true;
@@ -201,7 +210,11 @@ public class WearFitActivity extends Activity {
 //
 //                device_name.setText("");
                 invalidateOptionsMenu();//更新菜单栏
-                MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                try {
+                    MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
                 ToastUtils.showToastShort("断开");
                 //LogUtil.d("BluetoothLeService", "断开");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
