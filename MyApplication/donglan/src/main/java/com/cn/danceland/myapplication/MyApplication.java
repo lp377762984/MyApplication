@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteException;
@@ -27,12 +28,17 @@ import com.cn.danceland.myapplication.im.utils.Foreground;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
+import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushListener;
 import com.tencent.imsdk.TIMOfflinePushNotification;
+import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
+import com.tencent.qcloud.sdk.Constant;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.List;
@@ -101,11 +107,6 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 ////        }
 
 
-        // EaseUI.getInstance().init(applicationContext, null);
-//在做打包混淆时，关闭debug模式，避免消耗不必要的资源
-        //   EMClient.getInstance().setDebugMode(true);
-
-        //DemoHelper.getInstance().init(applicationContext);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -113,9 +114,9 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
-   //    initTXIM();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            bindBleService();
+      bindBleService();
         }
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -156,7 +157,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
             }
         });
-
+        initTXIM();
     }
 
     @Override
@@ -286,9 +287,9 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
                 }
             });
         }
-//        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
-//                .setLogLevel(TIMLogLevel.DEBUG)
-//                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
-//        boolean b = TIMManager.getInstance().init(this, config);
+        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+                .setLogLevel(TIMLogLevel.DEBUG)
+                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
+        boolean b = TIMManager.getInstance().init(this, config);
     }
 }

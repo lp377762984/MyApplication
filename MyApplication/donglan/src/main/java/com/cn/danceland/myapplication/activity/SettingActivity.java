@@ -477,7 +477,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //
 //                    SPUtils.setBoolean(Constants.ISLOGINED, false);
 //                    //退出主页面
-//                    HomeActivity.instance.finish();
+//                    TXIMHomeActivity.instance.finish();
 //                    finish();
                  //   logouthx();
 
@@ -542,7 +542,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //
 //                SPUtils.setBoolean(Constants.ISLOGINED, false);
 //                //退出主页面
-//                HomeActivity.instance.finish();
+//                TXIMHomeActivity.instance.finish();
 //                finish();
 //            }
 //

@@ -10,12 +10,36 @@ import java.util.List;
 public class Data implements Serializable {
 
     private String token;
+    private String sig;
     private Person person;
     private Employee employee;
     private Member member;
     private List<Roles> roles;
     private String verCode;
     private Branch branch;
+
+    @Override
+    public String toString() {
+        return "Data{" +
+                "token='" + token + '\'' +
+                ", sig='" + sig + '\'' +
+                ", person=" + person +
+                ", employee=" + employee +
+                ", member=" + member +
+                ", roles=" + roles +
+                ", verCode='" + verCode + '\'' +
+                ", branch=" + branch +
+                '}';
+    }
+
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
+    }
+
     public String getVerCode() {
         return verCode;
     }
@@ -30,17 +54,6 @@ public class Data implements Serializable {
 
     public void setVerCode(String verCode) {
         this.verCode = verCode;
-    }
-
-    @Override
-    public String toString() {
-        return "Data{" +
-                "token='" + token + '\'' +
-                ", person=" + person +
-                ", employee='" + employee + '\'' +
-                ", member=" + member +
-                ", roles=" + roles +
-                '}';
     }
 
     public void setToken(String token) {

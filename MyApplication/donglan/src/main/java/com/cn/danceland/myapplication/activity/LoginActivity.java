@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -39,6 +41,18 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMConnListener;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMSdkConfig;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
+import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.tencent.qcloud.sdk.Constant;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -92,6 +106,10 @@ public class LoginActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_login);
         //注册event事件
         EventBus.getDefault().register(this);
+
+        initTXIM();
+
+
         intView();
         dialog = new ProgressDialog(this);
         dialog.setMessage("登录中……");
@@ -134,8 +152,65 @@ public class LoginActivity extends Activity implements OnClickListener {
         cb_agreement = findViewById(R.id.cb_agreement);
         findViewById(R.id.tv_agreemnet).setOnClickListener(this);
         //腾讯云im
-        //tlsService = TLSService.getInstance();
-        //tlsService.initAccountLoginService(this,mEtPhone,mEtPsw,btn_login);
+        tlsService = TLSService.getInstance();
+//        tlsService.initAccountLoginService(this,mEtPhone,mEtPsw,btn_login);
+//        tlsService.init
+
+    }
+
+    private void initTXIM() {
+
+        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+                .setLogLevel(TIMLogLevel.DEBUG)
+                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
+        boolean b = TIMManager.getInstance().init(getApplicationContext(), config);
+        LogUtil.i(b + "");
+
+        //基本用户配置
+        TIMUserConfig userConfig = new TIMUserConfig()
+                .setUserStatusListener(new TIMUserStatusListener() {
+                    @Override
+                    public void onForceOffline() {
+                        //被其他终端踢下线
+                        LogUtil.i("onForceOffline");
+//                        App.TOKEN = "";
+//                        UserControl.getInstance().clear();
+//                        DataCleanManager.clearAllCache(getContext());
+//                        PageRouter.startLogin(getContext());
+//                        finish();
+                    }
+
+                    @Override
+                    public void onUserSigExpired() {
+                        //用户签名过期了，需要刷新userSig重新登录SDK
+                        LogUtil.i( "onUserSigExpired");
+                    }
+                })
+                //设置连接状态事件监听器
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        LogUtil.i( "onConnected连接聊天服务器");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        LogUtil.i( "onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        LogUtil.i( "onWifiNeedAuth");
+                    }
+                });
+        RefreshEvent.getInstance().init(userConfig);
+        userConfig = FriendshipEvent.getInstance().init(userConfig);
+        userConfig = MessageEvent.getInstance().init(userConfig);
+        userConfig = GroupEvent.getInstance().init(userConfig);
+        //将用户配置与通讯管理器进行绑定
+        TIMManager.getInstance().setUserConfig(userConfig);
+
+
 
 
     }
@@ -384,22 +459,16 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                    if (DemoHelper.getInstance().isLoggedIn()) {
 //
 //                    }
-//                    if (Constants.DEV_CONFIG) {
-//                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    } else {
-//                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    }
+                    if (Constants.DEV_CONFIG) {
+                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                    } else {
+                        login_txim(data.getPerson().getMember_no(), data.getSig());
+                    }
 
-//
-//                    PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
-//                    LogUtil.i(data.getPerson().getMember_no());
-//                    PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
-//                    PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
-                    //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    //        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    //      startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
                     setMipushId();
-                    finish();
+                    //       finish();
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
@@ -489,6 +558,34 @@ public class LoginActivity extends Activity implements OnClickListener {
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
 
+    }
+
+
+    /**
+     * 登录腾讯im
+     *
+     * @param identifier 账号
+     * @param userSig
+     */
+    private void login_txim(String identifier, String userSig) {
+        LogUtil.i(identifier + "/n" + userSig);
+        // identifier为用户名，userSig 为用户登录凭证
+   //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
+
+        TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+            }
+
+            @Override
+            public void onSuccess() {
+                LogUtil.i("login succ 登录成功");
+                startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
+            }
+        });
     }
 //
 //    /**

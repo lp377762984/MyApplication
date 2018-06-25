@@ -12,7 +12,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.im.model.CustomMessage;
 import com.cn.danceland.myapplication.im.model.Message;
 import com.cn.danceland.myapplication.im.model.MessageFactory;
-import com.cn.danceland.myapplication.im.ui.HomeActivity;
+import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.TIMMessage;
@@ -61,7 +61,7 @@ public class PushUtil implements Observer {
         Log.d(TAG, "recv msg " + contentStr);
         NotificationManager mNotificationManager = (NotificationManager) MyApplication.getContext().getSystemService(MyApplication.getContext().NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApplication.getContext());
-        Intent notificationIntent = new Intent(MyApplication.getContext(), HomeActivity.class);
+        Intent notificationIntent = new Intent(MyApplication.getContext(), TXIMHomeActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent = PendingIntent.getActivity(MyApplication.getContext(), 0,

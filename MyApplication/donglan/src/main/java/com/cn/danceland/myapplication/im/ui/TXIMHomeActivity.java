@@ -28,8 +28,8 @@ import java.util.List;
 /**
  * Tab页主界面
  */
-public class HomeActivity extends FragmentActivity {
-    private static final String TAG = HomeActivity.class.getSimpleName();
+public class TXIMHomeActivity extends FragmentActivity {
+    private static final String TAG = TXIMHomeActivity.class.getSimpleName();
     private LayoutInflater layoutInflater;
     private FragmentTabHost mTabHost;
     private final Class fragmentArray[] = {ConversationFragment.class, ContactFragment.class, SettingFragment.class};
@@ -42,15 +42,17 @@ public class HomeActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        if (requestPermission()) {
-            Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
-            finish();
-            startActivity(intent);
-        }else {
-            initView();
-            Toast.makeText(this, getString(TIMManager.getInstance().getEnv() == 0 ? R.string.env_normal : R.string.env_test), Toast.LENGTH_SHORT).show();
-        }
+        setContentView(R.layout.activity_txim_home);
+//        if (requestPermission()) {
+//            Intent intent = new Intent(TXIMHomeActivity.this,SplashActivity.class);
+//            finish();
+//            startActivity(intent);
+//        }else {
+//            initView();
+//            Toast.makeText(this, getString(TIMManager.getInstance().getEnv() == 0 ? R.string.env_normal : R.string.env_test), Toast.LENGTH_SHORT).show();
+//        }
+        initView();
+          Toast.makeText(this, getString(TIMManager.getInstance().getEnv() == 0 ? R.string.env_normal : R.string.env_test), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -94,7 +96,7 @@ public class HomeActivity extends FragmentActivity {
         MessageEvent.getInstance().clear();
         FriendshipInfo.getInstance().clear();
         GroupInfo.getInstance().clear();
-        Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
+        Intent intent = new Intent(TXIMHomeActivity.this,SplashActivity.class);
         finish();
         startActivity(intent);
 
