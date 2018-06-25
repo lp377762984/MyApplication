@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -116,6 +118,7 @@ public class WearFitSettingActivity extends Activity {
 
         rl_app.setOnClickListener(onClickListener);
         rl_peidai.setOnClickListener(onClickListener);
+        btn_jiebang.setOnClickListener(onClickListener);
 
     }
 
@@ -129,6 +132,12 @@ public class WearFitSettingActivity extends Activity {
                 case R.id.rl_peidai:
                     showPeiDaiSelect();
                     break;
+                case R.id.btn_jiebang:
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                    } catch (RemoteException e) {
+
+                    }
             }
         }
     };
