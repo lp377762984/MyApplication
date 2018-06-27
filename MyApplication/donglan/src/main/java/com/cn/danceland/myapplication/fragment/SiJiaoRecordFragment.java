@@ -407,7 +407,9 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 }
             }
-
+            if (role != null && !"".equals(role)) {
+                viewHolder.rl_qiandao.setVisibility(View.GONE);
+            }
 
             return convertView;
         }

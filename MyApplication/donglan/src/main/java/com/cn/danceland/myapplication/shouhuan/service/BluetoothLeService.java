@@ -33,9 +33,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.cn.danceland.myapplication.BluetoothInterface;
 import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.shouhuan.utils.SampleGattAttributes;
@@ -51,7 +55,7 @@ import java.util.UUID;
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
-public class BluetoothLeService extends Service {
+public class BluetoothLeService extends Service{
     private final static String TAG = BluetoothLeService.class.getSimpleName();
 
     private BluetoothManager mBluetoothManager;
@@ -250,7 +254,37 @@ public class BluetoothLeService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        //return mBinder;
+        return new MyBluetoothBinder();
+    }
+
+
+    public class MyBluetoothBinder extends BluetoothInterface.Stub{
+
+        @Override
+        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+
+        }
+
+        @Override
+        public boolean connect(String address) throws RemoteException {
+            return BluetoothLeService.this.connect(address);
+        }
+
+        @Override
+        public void disconnect() throws RemoteException {
+            BluetoothLeService.this.disconnect();
+        }
+
+        @Override
+        public void close() throws RemoteException {
+            BluetoothLeService.this.close();
+        }
+
+        @Override
+        public boolean initialize() throws RemoteException {
+            return BluetoothLeService.this.initialize();
+        }
     }
 
     @Override
@@ -656,5 +690,4 @@ public class BluetoothLeService extends Service {
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         mBluetoothGatt.writeDescriptor(descriptor);
     }
-
 }
