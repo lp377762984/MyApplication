@@ -250,7 +250,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 ////            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             try {
                 if (!mBluetoothLeService.initialize()) {
-                    Log.e("zgy", "Unable to initialize Bluetooth");
+                    LogUtil.i("Unable to initialize Bluetooth");
 
                 }
             } catch (RemoteException e) {

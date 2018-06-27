@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.shouhuan.command;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -10,6 +11,7 @@ import com.cn.danceland.myapplication.shouhuan.bean.DateModel;
 import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.Calendar;
 
@@ -677,7 +679,7 @@ public class CommandManager {
         try {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            LogUtil.i(e.toString());
         }
     }
 
