@@ -13,10 +13,7 @@ import android.widget.Toast;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.im.model.UserInfo;
-import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
 import com.cn.danceland.myapplication.utils.AppUtils;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.tencent.imsdk.TIMCallBack;
@@ -67,64 +64,64 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
         init();
-       init_txim();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        new Thread(new Runnable() {
-            public void run() {
-                if (!SPUtils.getBoolean("iscopy", false)) {
-                    copyDb();
-
-                }
-                //判断是否登录
-                if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
-
-                    long start = System.currentTimeMillis();
-
-
-//                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
-//                            (PrefUtils.getString(SplashActivity.this, Constants.MY_MIPUSHID, ""))) {
-//                        bindMIPushID_post();
+//        new Thread(new Runnable() {
+//            public void run() {
+//                if (!SPUtils.getBoolean("iscopy", false)) {
+//                    copyDb();
+//
+//                }
+//                //判断是否登录
+//                if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
+//
+//                    long start = System.currentTimeMillis();
+//
+//
+////                    if (!TextUtils.isEmpty(PrefUtils.getString(SplashActivity.this, Constants.MY_ID, "")) && !TextUtils.isEmpty
+////                            (PrefUtils.getString(SplashActivity.this, Constants.MY_MIPUSHID, ""))) {
+////                        bindMIPushID_post();
+////                    }
+//                    long costTime = System.currentTimeMillis() - start;
+//                    //wait
+//                    if (sleepTime - costTime > 0) {
+//                        try {
+//                            Thread.sleep(sleepTime - costTime);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
 //                    }
-                    long costTime = System.currentTimeMillis() - start;
-                    //wait
-                    if (sleepTime - costTime > 0) {
-                        try {
-                            Thread.sleep(sleepTime - costTime);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    //已经登录，进入主界面
-                    if (DataInfoCache.loadOneCache(Constants.MY_INFO) == null) {
-                        SPUtils.setString(Constants.ISLOGINED, null);
-
-                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                        finish();
-
-                    } else {
-                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
-                        finish();
-                    }
-
-
-                } else {
-
-
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                    }
-
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                    finish();
-                }
-            }
-        }).start();
+//                    //已经登录，进入主界面
+//                    if (DataInfoCache.loadOneCache(Constants.MY_INFO) == null) {
+//                        SPUtils.setString(Constants.ISLOGINED, null);
+//
+//                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+//                        finish();
+//
+//                    } else {
+//                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+//                        finish();
+//                    }
+//
+//
+//                } else {
+//
+//
+//                    try {
+//                        Thread.sleep(sleepTime);
+//                    } catch (InterruptedException e) {
+//                    }
+//
+//                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+//                    finish();
+//                }
+//            }
+//        }).start();
 
     }
 
@@ -143,6 +140,11 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
     }
 
     private void init() {
+        // 务必检查IMSDK已做以下初始化
+        QALSDKManager.getInstance().setEnv(0);
+        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
+// 初始化TLSSDK
+        TLSHelper tlsHelper = TLSHelper.getInstance().init(getApplicationContext(), 1400090939);
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
@@ -155,12 +157,7 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
         UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
         presenter = new SplashPresenter(this);
         presenter.start();
-        // 务必检查IMSDK已做以下初始化
-        QALSDKManager.getInstance().setEnv(0);
-        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
 
-// 初始化TLSSDK
-        TLSHelper tlsHelper = TLSHelper.getInstance().init(getApplicationContext(), 1400090939);
 //        tlsHelper.LOGIN
     }
 
@@ -252,23 +249,28 @@ public class SplashActivity extends FragmentActivity implements SplashView, TIMC
     @Override
     public void onSuccess() {
         LogUtil.i("连接成功");
+        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
     }
 
     @Override
     public void navToHome() {
         LogUtil.i("tx进入主页面");
-        startActivity(new Intent( SplashActivity.this, TXIMHomeActivity.class));
+    //    startActivity(new Intent(SplashActivity.this, TXIMHomeActivity.class));
+
+        init_txim();
     }
 
     @Override
     public void navToLogin() {
         LogUtil.i("tx去登录");
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public boolean isUserLogin() {
         LogUtil.i("tx已有登录");
-        return UserInfo.getInstance().getId()!= null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
+        return UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()));
 
 
     }

@@ -577,11 +577,13 @@ public class LoginActivity extends Activity implements OnClickListener {
                 //错误码 code 和错误描述 desc，可用于定位请求失败原因
                 //错误码 code 列表请参见错误码表
                 LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+                TLSService.getInstance().setLastErrno(-1);
             }
 
             @Override
             public void onSuccess() {
                 LogUtil.i("login succ 登录成功");
+                TLSService.getInstance().setLastErrno(0);
             //    startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
 
 //                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
