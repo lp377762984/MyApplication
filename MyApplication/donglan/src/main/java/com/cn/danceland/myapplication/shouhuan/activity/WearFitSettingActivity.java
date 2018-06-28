@@ -28,6 +28,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import java.util.List;
@@ -155,6 +156,9 @@ public class WearFitSettingActivity extends Activity {
         rl_app.setOnClickListener(onClickListener);
         rl_peidai.setOnClickListener(onClickListener);
         btn_jiebang.setOnClickListener(onClickListener);
+        rl_naozhong.setOnClickListener(onClickListener);
+        rl_rushui.setOnClickListener(onClickListener);
+        //抬手亮屏开关
         sw_taishou.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -165,9 +169,42 @@ public class WearFitSettingActivity extends Activity {
                         commandManager.setUpHandLightScreen(0);
                     }
                 }
-                //commandManager.setSyncData(System.currentTimeMillis() - 3 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 10 * 24 * 60 * 60 * 1000);
             }
         });
+        //防丢开关
+        sw_fangdiu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    commandManager.setAntiLostAlert(1);
+                }else {
+                    commandManager.setAntiLostAlert(0);
+                }
+            }
+        });
+        //来电提醒
+        sw_laidian.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    commandManager.setSmartWarnNoContent(1,0);
+                }else {
+                    commandManager.setSmartWarnNoContent(1,1);
+                }
+            }
+        });
+        //来短信提醒
+        sw_duanxin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    commandManager.setSmartWarnNoContent(3,0);
+                }else {
+                    commandManager.setSmartWarnNoContent(3,1);
+                }
+            }
+        });
+
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -191,9 +228,29 @@ public class WearFitSettingActivity extends Activity {
                         startActivityForResult(new Intent(WearFitSettingActivity.this,WearFitEquipmentActivity.class),2);
                     }
                     break;
+                case R.id.rl_naozhong:
+                    startActivity(new Intent(WearFitSettingActivity.this,AddClockActivity.class));
+                    break;
+                case R.id.rl_rushui:
+                    showTimeSelect();
+                    break;
             }
         }
     };
+
+    private void showTimeSelect() {
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "入睡时间");
+        customDatePicker.setGoneYearAndMounth();
+        customDatePicker.showWindow();
+        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+            @Override
+            public void onClick() {
+                String dateString = customDatePicker.getTime();
+                tv_rushui.setText(dateString);
+            }
+        });
+
+    }
 
 
     @Override

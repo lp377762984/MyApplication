@@ -187,7 +187,7 @@ public class BluetoothLeService extends Service{
             Log.d(TAG, "onReadRemoteRssi: ");
         }
     };
-    private SendDataToBleReceiver sendDataToBleReceiver;
+    public SendDataToBleReceiver sendDataToBleReceiver;
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
@@ -473,13 +473,6 @@ public class BluetoothLeService extends Service{
         }
     }
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //// TODO: 2017/5/24  注册发送数据的广播
-
-    }
 
     @Override
     public void onDestroy() {

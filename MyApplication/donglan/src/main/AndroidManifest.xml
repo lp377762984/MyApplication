@@ -652,7 +652,6 @@
         <activity android:name=".shouhuan.activity.DeviceScanActivity"/>
         <service android:name=".shouhuan.service.BluetoothLeService"
             android:enabled="true"
-            android:process=":BluetoothLeService"
             />
 
 
@@ -669,6 +668,10 @@
         <activity android:name=".shouhuan.activity.WearFitRemindActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".shouhuan.activity.WearFitLongSitActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".shouhuan.activity.AddClockActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".shouhuan.activity.ClockSettingActivity"
             android:screenOrientation="portrait"/>
 
         <receiver

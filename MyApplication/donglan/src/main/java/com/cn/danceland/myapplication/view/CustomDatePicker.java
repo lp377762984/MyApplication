@@ -31,14 +31,20 @@ public class CustomDatePicker extends AlertDialog {
     private final TextView tv_hour;
     private final TextView tv_minute;
     private Time time;
+    private final TextView tv_year;
+    private final TextView tv_mounth;
+    private final TextView tv_date;
 
     public CustomDatePicker(Context context, String title) {
         super(context);
         this.title = title;
         inflate1 = LayoutInflater.from(context).inflate(R.layout.datepicker, null);
         lp_year = inflate1.findViewById(R.id.lp_year);
+        tv_year = inflate1.findViewById(R.id.tv_year);
         lp_month = inflate1.findViewById(R.id.lp_month);
+        tv_mounth = inflate1.findViewById(R.id.tv_mounth);
         lp_date = inflate1.findViewById(R.id.lp_date);
+        tv_date = inflate1.findViewById(R.id.tv_date);
         lp_hour = inflate1.findViewById(R.id.lp_hour);
         lp_minute = inflate1.findViewById(R.id.lp_minute);
         tv_hour = inflate1.findViewById(R.id.tv_hour);
@@ -66,6 +72,16 @@ public class CustomDatePicker extends AlertDialog {
         lp_minute.setVisibility(View.GONE);
         tv_hour.setVisibility(View.GONE);
         tv_minute.setVisibility(View.GONE);
+    }
+
+    public void setGoneYearAndMounth() {
+        lp_year.setVisibility(View.GONE);
+        lp_month.setVisibility(View.GONE);
+        lp_date.setVisibility(View.GONE);
+
+        tv_year.setVisibility(View.GONE);
+        tv_mounth.setVisibility(View.GONE);
+        tv_date.setVisibility(View.GONE);
     }
 
     public void setMax(int month, int date) {
@@ -234,8 +250,12 @@ public class CustomDatePicker extends AlertDialog {
         final ArrayList<String> hourList = new ArrayList<String>();
         final ArrayList<String> minuteList = new ArrayList<String>();
 
-        for (int x = 0; x < 25; x++) {
-            hourList.add(x + "");
+        for (int x = 0; x < 24; x++) {
+            if(x<10){
+                hourList.add("0"+x);
+            }else{
+                hourList.add(x + "");
+            }
         }
         for (int y = 0; y < 60; y++) {
             minuteList.add(y + "");
@@ -339,6 +359,10 @@ public class CustomDatePicker extends AlertDialog {
     }
     public String getHorizongtal(){
         return timeString = syear + "-" + smonth + "-" + sdate;
+    }
+
+    public String getTime(){
+        return shour+":"+sminute;
     }
 
     public void showWindow() {

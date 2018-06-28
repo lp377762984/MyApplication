@@ -676,6 +676,7 @@ public class CommandManager {
     private void broadcastData(byte[] bytes) {
         final Intent intent = new Intent(BleConstans.ACTION_SEND_DATA_TO_BLE);
         intent.putExtra(Constants.EXTRA_SEND_DATA_TO_BLE, bytes);
+        //intent.setComponent(new ComponentName("com.cn.danceland.myapplication","com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService"));
         try {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } catch (Exception e) {
