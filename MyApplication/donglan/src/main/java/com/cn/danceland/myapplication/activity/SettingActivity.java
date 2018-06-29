@@ -28,6 +28,9 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.im.model.FriendshipInfo;
+import com.cn.danceland.myapplication.im.model.GroupInfo;
+import com.cn.danceland.myapplication.im.model.UserInfo;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataCleanManager;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -36,7 +39,10 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomLocationPicker;
 import com.google.gson.Gson;
-
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
+import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,7 +63,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private TextView tv_number;
     private TextView tv_phone, tv_weixin, tv_email;
     private Data mInfo;
-    private String myCity,myProvince;
+    private String myCity, myProvince;
 
     DBData dbData;
     String zoneCode, mZoneCode;
@@ -73,15 +79,17 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 0x01:
-                   // dialog.dismiss();
+                    // dialog.dismiss();
                     tv_cache.setText("0.0KB");
                     Toast.makeText(SettingActivity.this, "已清除缓存！", Toast.LENGTH_SHORT).show();
                     break;
                 case 0x02:
-                   // dialog.dismiss();
+                    // dialog.dismiss();
                     break;
             }
-        };
+        }
+
+        ;
     };
     private TextView tv_cache;
 
@@ -149,17 +157,17 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         tv_email = findViewById(R.id.tv_email);
 
         if (mInfo.getPerson() != null) {
-            if(mInfo.getPerson().getWeichat_no()==null || "".equals(mInfo.getPerson().getWeichat_no())){
+            if (mInfo.getPerson().getWeichat_no() == null || "".equals(mInfo.getPerson().getWeichat_no())) {
                 tv_weixin.setText("未绑定");
-            }else{
+            } else {
                 tv_weixin.setText(mInfo.getPerson().getWeichat_no());
             }
-            if(mInfo.getPerson().getMail()==null || "".equals(mInfo.getPerson().getMail())){
+            if (mInfo.getPerson().getMail() == null || "".equals(mInfo.getPerson().getMail())) {
                 tv_email.setText("未绑定");
-            }else{
+            } else {
                 tv_email.setText(mInfo.getPerson().getMail());
             }
-        }else{
+        } else {
             tv_weixin.setText("未绑定");
             tv_email.setText("未绑定");
         }
@@ -219,12 +227,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             case R.id.ll_setting_location://设置位置
                 //showLocation();
 
-                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this,myCity,myProvince);
+                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this, myCity, myProvince);
                 customLocationPicker.setDialogOnClickListener(new CustomLocationPicker.OnClickEnter() {
                     @Override
                     public void onClick() {
                         String city = customLocationPicker.getCity();
-                        myCity  = city;
+                        myCity = city;
                         myProvince = dbData.queryCity(city).get(0).getProvince();
                         mZoneCode = dbData.queryCity(city).get(0).getCityValue();
                         tx_location.setText(customLocationPicker.getZone());
@@ -394,12 +402,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Message msg=Message.obtain();
+                Message msg = Message.obtain();
                 try {
                     //清理内部缓存
                     DataCleanManager.cleanInternalCache(getApplicationContext());
                     DataCleanManager.cleanExternalCache(getApplicationContext());
-                   // LogUtil.i(getApplicationContext().getCacheDir().getPath());
+                    // LogUtil.i(getApplicationContext().getCacheDir().getPath());
                     msg.what = 0x01;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -479,8 +487,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //                    //退出主页面
 //                    TXIMHomeActivity.instance.finish();
 //                    finish();
-                 //   logouthx();
-
+                    //   logouthx();
+                    logoutTXIM();
                     startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
                     SPUtils.setBoolean(Constants.ISLOGINED, false);
@@ -531,6 +539,34 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
+    public void logoutTXIM() {
+
+        LoginBusiness.logout(new TIMCallBack() {
+            @Override
+            public void onError(int i, String s) {
+//                if (getActivity() != null){
+//                    Toast.makeText(getActivity(), getResources().getString(R.string.setting_logout_fail), Toast.LENGTH_SHORT).show();
+//                }
+            }
+
+            @Override
+            public void onSuccess() {
+                LogUtil.i("退出IM");
+                TlsBusiness.logout(UserInfo.getInstance().getId());
+                UserInfo.getInstance().setId(null);
+                MessageEvent.getInstance().clear();
+                FriendshipInfo.getInstance().clear();
+                GroupInfo.getInstance().clear();
+            }
+        });
+
+
+//        Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
+//        finish();
+//        startActivity(intent);
+
+    }
+
 //    private void logouthx() {
 //        EMClient.getInstance().logout(true, new EMCallBack() {
 //
@@ -559,9 +595,6 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //                LogUtil.i("环信退出登录失败");
 //            }
 //        });
-
-
-
 
 
 }

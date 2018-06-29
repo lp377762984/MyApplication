@@ -52,6 +52,7 @@ import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -61,6 +62,9 @@ import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMFriendshipManager;
+import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
@@ -795,6 +799,19 @@ public class MyProActivity extends Activity {
                             commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
                             infoData.getPerson().setNick_name(nickName);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                            FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
+                                @Override
+                                public void onError(int i, String s) {
+                                    LogUtil.i("昵称修改失败");
+                                }
+
+                                @Override
+                                public void onSuccess() {
+
+                                    LogUtil.i("昵称修改成功");
+                                }
+                            });
+
                             //发送事件
                             EventBus.getDefault().post(new StringEvent(nickName, 100));
                         } else {
@@ -818,6 +835,8 @@ public class MyProActivity extends Activity {
             public void onResponse(String s) {
                 if (s.contains("true")) {
                     ToastUtils.showToastShort("修改成功！");
+
+
                 } else {
                     ToastUtils.showToastShort("修改失败！");
                 }
@@ -965,6 +984,27 @@ public class MyProActivity extends Activity {
                             message.what = 1;
                             handler.sendMessage(message);
                             commitSelf(Constants.MODIFYY_IMAGE, "self_Avatar_path", compath);
+
+
+
+                            //初始化参数修改头像
+                            TIMFriendshipManager.ModifyUserProfileParam param = new TIMFriendshipManager.ModifyUserProfileParam();
+                            param.setFaceUrl(compath);
+
+                            TIMFriendshipManager.getInstance().modifyProfile(param, new TIMCallBack() {
+                                @Override
+                                public void onError(int code, String desc) {
+                                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                                    //错误码 code 列表请参见错误码表
+                                   LogUtil.i("modifyProfile failed: " + code + " desc" + desc);
+                                }
+
+                                @Override
+                                public void onSuccess() {
+                                    LogUtil.i("modifyProfile succ");
+                                }
+                            });
+
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                         }
                         //LogUtil.e("zzf",s);

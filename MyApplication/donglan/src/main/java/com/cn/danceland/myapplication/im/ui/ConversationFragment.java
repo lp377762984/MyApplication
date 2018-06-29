@@ -82,7 +82,7 @@ public class ConversationFragment extends Fragment implements ConversationView,F
 
                 }
             });
-            friendshipManagerPresenter = new FriendshipManagerPresenter(this);
+           friendshipManagerPresenter = new FriendshipManagerPresenter(this);
             groupManagerPresenter = new GroupManagerPresenter(this);
             presenter = new ConversationPresenter(this);
             presenter.getConversation();
@@ -120,7 +120,7 @@ public class ConversationFragment extends Fragment implements ConversationView,F
                     break;
             }
         }
-        friendshipManagerPresenter.getFriendshipLastMessage();
+      //  friendshipManagerPresenter.getFriendshipLastMessage();
         groupManagerPresenter.getGroupManageLastMessage();
     }
 

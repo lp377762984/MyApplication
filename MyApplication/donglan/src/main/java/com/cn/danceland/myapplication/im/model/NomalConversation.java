@@ -114,6 +114,17 @@ public class NomalConversation extends Conversation {
     }
 
 
+    @Override
+    public String getAvatarUrl() {
+        FriendProfile profile = FriendshipInfo.getInstance().getProfile(identify);
+        if (profile!=null){
+            profile.getAvatarUrl();
+        }
+        String avatar="";
+        avatar=profile == null?avatar:profile.getAvatarUrl();
+        return avatar;
+    }
+
     /**
      * 获取最后一条消息的时间
      */

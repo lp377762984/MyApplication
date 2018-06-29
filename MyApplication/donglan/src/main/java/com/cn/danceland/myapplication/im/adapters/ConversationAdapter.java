@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.im.model.Conversation;
 import com.cn.danceland.myapplication.im.utils.TimeUtil;
+import com.squareup.picasso.Picasso;
 import com.tencent.qcloud.ui.CircleImageView;
 
 import java.util.List;
@@ -53,7 +54,17 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         }
         final Conversation data = getItem(position);
         viewHolder.tvName.setText(data.getName());
-        viewHolder.avatar.setImageResource(data.getAvatar());
+       // viewHolder.avatar.setImageResource(data.getAvatar());
+        if(data.getAvatarUrl()!=null){
+            if(data.getAvatarUrl().equals("")){
+                viewHolder.avatar.setImageResource(data.getAvatar());
+            }else{
+                Picasso.with(getContext()).load(data.getAvatarUrl()).into(viewHolder.avatar);
+            }
+        }else {
+            viewHolder.avatar.setImageResource(data.getAvatar());
+        }
+
         viewHolder.lastMessage.setText(data.getLastMessageSummary());
         viewHolder.time.setText(TimeUtil.getTimeStr(data.getLastMessageTime()));
         long unRead = data.getUnreadNum();

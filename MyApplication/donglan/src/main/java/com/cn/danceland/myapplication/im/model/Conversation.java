@@ -18,7 +18,10 @@ public abstract class Conversation implements Comparable {
     //会话对象名称
     protected String name;
 
-
+    /**
+     * 获取头像URL
+     */
+    abstract public String getAvatarUrl();
     /**
      * 获取最后一条消息的时间
      */

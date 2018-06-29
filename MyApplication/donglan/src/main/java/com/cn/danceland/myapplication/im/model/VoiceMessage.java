@@ -84,9 +84,9 @@ public class VoiceMessage extends Message {
             tv.setLayoutParams(lp);
             linearLayout.addView(tv);
         }
-        clearView(viewHolder);
-        getBubbleView(viewHolder).addView(linearLayout);
-        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+        clearView(viewHolder,context);
+        getBubbleView(viewHolder,context).addView(linearLayout);
+        getBubbleView(viewHolder,context).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VoiceMessage.this.playAudio(frameAnimatio);

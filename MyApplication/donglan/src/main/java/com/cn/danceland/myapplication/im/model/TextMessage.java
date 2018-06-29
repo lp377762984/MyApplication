@@ -109,7 +109,7 @@ public class TextMessage extends Message {
      */
     @Override
     public void showMessage(ChatAdapter.ViewHolder viewHolder, Context context) {
-        clearView(viewHolder);
+        clearView(viewHolder,context);
         if (checkRevoke(viewHolder)) return;
         boolean hasText = false;
         TextView tv = new TextView(MyApplication.getContext());
@@ -127,7 +127,7 @@ public class TextMessage extends Message {
             stringBuilder.insert(0," ");
         }
         tv.setText(stringBuilder);
-        getBubbleView(viewHolder).addView(tv);
+        getBubbleView(viewHolder,context).addView(tv);
         showStatus(viewHolder);
     }
 

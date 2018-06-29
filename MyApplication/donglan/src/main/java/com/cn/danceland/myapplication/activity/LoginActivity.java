@@ -47,6 +47,7 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
 import com.tencent.qcloud.presentation.event.MessageEvent;
@@ -566,16 +567,15 @@ public class LoginActivity extends Activity implements OnClickListener {
      * @param identifier 账号
      * @param userSig
      */
-    private void login_txim(String identifier, String userSig) {
+    private void login_txim(final String identifier, final String userSig) {
         LogUtil.i(identifier + "/n" + userSig);
         // identifier为用户名，userSig 为用户登录凭证
    //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
 
-        TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
+
+        LoginBusiness.loginIm(identifier, userSig, new TIMCallBack() {
             @Override
             public void onError(int code, String desc) {
-                //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                //错误码 code 列表请参见错误码表
                 LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
                 TLSService.getInstance().setLastErrno(-1);
             }
@@ -584,52 +584,41 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void onSuccess() {
                 LogUtil.i("login succ 登录成功");
                 TLSService.getInstance().setLastErrno(0);
-            //    startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
+                SPUtils.setString("sig",userSig);
 
-//                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-//                      startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-//
-//                       finish();
+              //  TLSHelper.getInstance().setLocalId(UserInfo.ge);
             }
         });
-    }
+
+//        TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
+//            @Override
+//            public void onError(int code, String desc) {
+//                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+//                //错误码 code 列表请参见错误码表
+//                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+//                TLSService.getInstance().setLastErrno(-1);
 //
-//    /**
-//     * 登录环信账户
-//     *
-//     * @param admin
-//     * @param pswd
-//     * @param data
-//     */
-//    private void login_hx(String admin, String pswd, final Data data) {
+//            }
 //
-//        LogUtil.i(admin + "--" + pswd);
-//
-//        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
 //            @Override
 //            public void onSuccess() {
-//                EMClient.getInstance().groupManager().loadAllGroups();
-//                EMClient.getInstance().chatManager().loadAllConversations();
-//                LogUtil.i("登录聊天服务器成功！");
-//            //    ToastUtils.showToastShort("登录成功");
-////                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                //  EaseUserUtils.setUserAvatar();
-////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
-////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
+//                LogUtil.i("login succ 登录成功");
+//                TLSService.getInstance().setLastErrno(0);
+//                UserInfo userInfo=UserInfo.getInstance();
+//                UserInfo.getInstance().setId(identifier);
+//                UserInfo.getInstance().setUserSig(userSig);
+//          //      TLSUserInfo tlsUserInfo =TLSService.getInstance().getLastUserInfo();
 //
-//            }
+//            //    startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
 //
-//            @Override
-//            public void onProgress(int progress, String status) {
-//
-//            }
-//
-//            @Override
-//            public void onError(int code, String message) {
-//                LogUtil.i("登录聊天服务器失败！" + code + message);
+////                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+////                      startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+////
+////                       finish();
 //            }
 //        });
-//    }
+    }
+
 
     /**
      * 设置mipusid

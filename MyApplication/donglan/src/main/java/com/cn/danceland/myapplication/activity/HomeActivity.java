@@ -335,12 +335,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
             if (location != null) {
-                LogUtil.i(location.getLocType() + "");
+           //     LogUtil.i(location.getLocType() + "");
             }
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
-                LogUtil.i(weidu + "----" + jingdu);
+              //  LogUtil.i(weidu + "----" + jingdu);
                 SPUtils.setString("jingdu", jingdu + "");
                 SPUtils.setString("weidu", weidu + "");
                 if (shopListFragment != null) {

@@ -22,6 +22,11 @@ public class FriendshipConversation extends Conversation {
     }
 
 
+    @Override
+    public String getAvatarUrl() {
+        return "";
+    }
+
     /**
      * 获取最后一条消息的时间
      */

@@ -7,6 +7,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.im.ui.AddFriendActivity;
 import com.cn.danceland.myapplication.im.ui.ProfileActivity;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.tencent.imsdk.TIMUserProfile;
 
 /**
@@ -36,6 +37,10 @@ public class FriendProfile implements ProfileSummary {
      */
     @Override
     public String getAvatarUrl() {
+        if (profile.getFaceUrl()!=null){
+            LogUtil.i(profile.getFaceUrl());
+            return profile.getFaceUrl();
+        }
         return null;
     }
 

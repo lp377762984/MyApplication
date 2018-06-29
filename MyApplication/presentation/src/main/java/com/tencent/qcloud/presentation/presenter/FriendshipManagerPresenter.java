@@ -177,6 +177,7 @@ public class FriendshipManagerPresenter {
      */
     public void getMyProfile(){
         if (friendInfoView == null) return;
+
         TIMFriendshipManager.getInstance().getSelfProfile(new TIMValueCallBack<TIMUserProfile>() {
             @Override
             public void onError(int i, String s) {

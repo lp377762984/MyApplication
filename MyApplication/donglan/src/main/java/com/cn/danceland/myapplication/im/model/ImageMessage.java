@@ -64,7 +64,7 @@ public class ImageMessage extends Message {
      */
     @Override
     public void showMessage(final ChatAdapter.ViewHolder viewHolder, final Context context) {
-        clearView(viewHolder);
+        clearView(viewHolder,context);
         if (checkRevoke(viewHolder)) return;
         TIMImageElem e = (TIMImageElem) message.getElement(0);
         switch (message.status()){
@@ -72,8 +72,8 @@ public class ImageMessage extends Message {
 
                 ImageView imageView = new ImageView(MyApplication.getContext());
                 imageView.setImageBitmap(getThumb(e.getPath()));
-                clearView(viewHolder);
-                getBubbleView(viewHolder).addView(imageView);
+                clearView(viewHolder,context);
+                getBubbleView(viewHolder,context).addView(imageView);
                 break;
             case SendSucc:
                 for(final TIMImage image : e.getImageList()) {
@@ -100,7 +100,7 @@ public class ImageMessage extends Message {
                     if (image.getType() == TIMImageType.Original){
                         final String uuid = image.getUuid();
 //                        setImageEvent(viewHolder, uuid,context);
-                        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+                        getBubbleView(viewHolder,context).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 navToImageview(image, context);
@@ -204,11 +204,11 @@ public class ImageMessage extends Message {
         Bitmap bitmap = BitmapFactory.decodeFile(FileUtil.getCacheFilePath(filename));
         ImageView imageView = new ImageView(MyApplication.getContext());
         imageView.setImageBitmap(bitmap);
-        getBubbleView(viewHolder).addView(imageView);
+        getBubbleView(viewHolder,MyApplication.getContext()).addView(imageView);
     }
 
     private void setImageEvent(final ChatAdapter.ViewHolder viewHolder, final String fileName,final Context context){
-        getBubbleView(viewHolder).setOnClickListener(new View.OnClickListener() {
+        getBubbleView(viewHolder,context).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ImageViewActivity.class);

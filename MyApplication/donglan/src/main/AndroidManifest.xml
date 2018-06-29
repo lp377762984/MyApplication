@@ -60,35 +60,35 @@
 
 
     <!--手环  权限-->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!--环信相关权限-->
-<!--    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />-->
-<!--
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    &lt;!&ndash;bugly start&ndash;&gt;
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    &lt;!&ndash;bugly end&ndash;&gt;-->
+    <!--    <uses-permission android:name="android.permission.VIBRATE" />
+        <uses-permission android:name="android.permission.INTERNET" />-->
+    <!--
+        <uses-permission android:name="android.permission.CAMERA" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.GET_TASKS" />
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+        <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+        <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+        <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+        <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+        &lt;!&ndash;bugly start&ndash;&gt;
+        <uses-permission android:name="android.permission.READ_LOGS" />
+        &lt;!&ndash;bugly end&ndash;&gt;-->
 
     <!--腾讯im相关-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -105,7 +105,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
 
     <permission
@@ -125,85 +124,82 @@
         android:theme="@style/MyTheme">
 
 
-<!--        &lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="1103171109178312#donglan" />-->
+        <!--        &lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;
+                <meta-data
+                    android:name="EASEMOB_APPKEY"
+                    android:value="1103171109178312#donglan" />-->
         <!-- 声明SDK所需的service SDK核心功能-->
-<!--
-        <service
-            android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true" />
-        <service
-            android:name="com.hyphenate.chat.EMJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-            &lt;!&ndash; 可选filter &ndash;&gt;
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
--->
+        <!--
+                <service
+                    android:name="com.hyphenate.chat.EMChatService"
+                    android:exported="true" />
+                <service
+                    android:name="com.hyphenate.chat.EMJobService"
+                    android:exported="true"
+                    android:permission="android.permission.BIND_JOB_SERVICE" />
+                &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;
+                <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+                    <intent-filter>
+                        <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                        <data android:scheme="package" />
+                    </intent-filter>
+                    &lt;!&ndash; 可选filter &ndash;&gt;
+                    <intent-filter>
+                        <action android:name="android.intent.action.BOOT_COMPLETED" />
+                        <action android:name="android.intent.action.USER_PRESENT" />
+                    </intent-filter>
+                </receiver>
+        -->
 
 
-
-<!--
-        &lt;!&ndash; 消息收发service &ndash;&gt;
-        <service
-            android:name="com.tencent.qalsdk.service.QalService"
-            android:exported="false"
-            android:process=":QALSERVICE" />
-        <service
-            android:name="com.tencent.qalsdk.service.QalAssistService"
-            android:exported="false"
-            android:process=":QALSERVICE" />
-        &lt;!&ndash; 离线消息广播接收器 &ndash;&gt;
-        <receiver
-            android:name="com.tencent.qalsdk.QALBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.tencent.qalsdk.broadcast.qal" />
-            </intent-filter>
-        </receiver>
-        &lt;!&ndash; 系统消息广播接收器 &ndash;&gt;
-        <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
-            android:process=":QALSERVICE">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIME_SET" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
-            </intent-filter>
-        </receiver>-->
+        <!--
+                &lt;!&ndash; 消息收发service &ndash;&gt;
+                <service
+                    android:name="com.tencent.qalsdk.service.QalService"
+                    android:exported="false"
+                    android:process=":QALSERVICE" />
+                <service
+                    android:name="com.tencent.qalsdk.service.QalAssistService"
+                    android:exported="false"
+                    android:process=":QALSERVICE" />
+                &lt;!&ndash; 离线消息广播接收器 &ndash;&gt;
+                <receiver
+                    android:name="com.tencent.qalsdk.QALBroadcastReceiver"
+                    android:exported="false">
+                    <intent-filter>
+                        <action android:name="com.tencent.qalsdk.broadcast.qal" />
+                    </intent-filter>
+                </receiver>
+                &lt;!&ndash; 系统消息广播接收器 &ndash;&gt;
+                <receiver
+                    android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
+                    android:process=":QALSERVICE">
+                    <intent-filter>
+                        <action android:name="android.intent.action.BOOT_COMPLETED" />
+                    </intent-filter>
+                    <intent-filter>
+                        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                    </intent-filter>
+                    <intent-filter>
+                        <action android:name="android.intent.action.TIME_SET" />
+                    </intent-filter>
+                    <intent-filter>
+                        <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                    </intent-filter>
+                    <intent-filter>
+                        <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
+                    </intent-filter>
+                </receiver>-->
 
         <!-- 【必须】消息收发service -->
         <service
             android:name="com.tencent.qalsdk.service.QalService"
             android:exported="true"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
         <service
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
 
         <!-- 【必须】 离线消息广播接收器 -->
         <receiver
@@ -214,7 +210,8 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter" android:process=":QALSERVICE">
+            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
+            android:process=":QALSERVICE">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -233,6 +230,7 @@
                 <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".im.ui.ImageViewActivity" />
         <activity android:name=".im.ui.EditActivity" />
         <activity android:name=".im.ui.SearchGroupActivity" />
@@ -247,11 +245,12 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".im.ui.GroupMemberProfileActivity" />
         <activity android:name=".im.ui.FriendshipHandleActivity" />
-       <!-- <activity android:name=".im.im.ui.AboutActivity" />-->
+        <!-- <activity android:name=".im.im.ui.AboutActivity" />-->
         <activity android:name=".im.ui.BlackListActivity"></activity>
         <activity android:name=".im.ui.ImagePreviewActivity"></activity>
         <activity android:name=".im.ui.MessageNotifySettingActivity"></activity>
         <activity android:name=".im.ui.TXIMHomeActivity" />
+
         <activity
             android:name=".im.ui.ChatActivity"
             android:launchMode="singleTask"
@@ -263,17 +262,20 @@
             android:name=".im.ui.ProfileActivity"
             android:launchMode="singleTask" />
         <activity android:name=".im.ui.ManageFriendGroupActivity" />
-        <activity android:name=".im.ui.VideoActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".im.ui.VideoActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".im.ui.CreateGroupActivity" />
-        <activity android:name=".im.ui.TCVideoRecordActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".im.ui.TCVideoPreviewActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".im.ui.TCVideoRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".im.ui.TCVideoPreviewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".im.ui.GroupProfileActivity"
             android:launchMode="singleTask" />
-
+        <activity android:name=".im.ui.ConversationActivity" />
 
 
         <!--微信支付-->
@@ -281,12 +283,11 @@
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/myTransparent"
-            >
+            android:theme="@style/myTransparent">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="wx530b17b3c2de2e0d"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="wx530b17b3c2de2e0d" />
             </intent-filter>
 
 
@@ -644,32 +645,42 @@
         <activity
             android:name=".activity.ReportEditActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MyConsumeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.MyConsumeAboutActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.ShouHuanMainActivity"/>
-        <activity android:name=".shouhuan.activity.DeviceScanActivity"/>
-        <service android:name=".shouhuan.service.BluetoothLeService"
+        <activity
+            android:name=".activity.MyConsumeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyConsumeAboutActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".shouhuan.activity.ShouHuanMainActivity" />
+        <activity android:name=".shouhuan.activity.DeviceScanActivity" />
+
+        <service
+            android:name=".shouhuan.service.BluetoothLeService"
             android:enabled="true"
-            android:process=":BluetoothLeService"
-            />
+            android:process=":BluetoothLeService" />
 
 
-        <activity android:name=".activity.LoginNumberActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.TimeTableActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.WearFitActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.WearFitEquipmentActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.WearFitSettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.WearFitRemindActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".shouhuan.activity.WearFitLongSitActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.LoginNumberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TimeTableActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".shouhuan.activity.WearFitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".shouhuan.activity.WearFitEquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".shouhuan.activity.WearFitSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".shouhuan.activity.WearFitRemindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".shouhuan.activity.WearFitLongSitActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

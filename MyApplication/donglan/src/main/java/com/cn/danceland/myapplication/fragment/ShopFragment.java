@@ -825,6 +825,7 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity,ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","3"));
                         break;
                     case 29://私信
+                   //   startActivity(new Intent(mActivity, ConversationActivity.class));
                       startActivity(new Intent(mActivity, TXIMHomeActivity.class));
                       //  ToastUtils.showToastShort("功能正在开发中");
                         break;

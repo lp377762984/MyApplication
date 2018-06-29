@@ -20,7 +20,6 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
@@ -28,15 +27,29 @@ import com.cn.danceland.myapplication.im.utils.Foreground;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.tencent.imsdk.TIMConnListener;
+import com.tencent.imsdk.TIMConversation;
+import com.tencent.imsdk.TIMGroupEventListener;
+import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
+import com.tencent.imsdk.TIMGroupTipsElem;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMOfflinePushListener;
 import com.tencent.imsdk.TIMOfflinePushNotification;
+import com.tencent.imsdk.TIMRefreshListener;
+import com.tencent.imsdk.TIMSNSChangeInfo;
 import com.tencent.imsdk.TIMSdkConfig;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserProfile;
+import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.imsdk.ext.group.TIMGroupAssistantListener;
+import com.tencent.imsdk.ext.group.TIMGroupCacheInfo;
+import com.tencent.imsdk.ext.group.TIMUserConfigGroupExt;
+import com.tencent.imsdk.ext.message.TIMUserConfigMsgExt;
+import com.tencent.imsdk.ext.sns.TIMFriendshipProxyListener;
+import com.tencent.imsdk.ext.sns.TIMUserConfigSnsExt;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.tencent.qcloud.sdk.Constant;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -54,10 +67,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     public static Context applicationContext;
     private static MyApplication instance;
     //public LocationService locationClient;
-    private DaoMaster.DevOpenHelper donglan, message,heartRate;
-    private SQLiteDatabase db, messagedb,heartRatedb;
-    private DaoMaster daoMaster, messageMaster,heartRateMaster;
-    private DaoSession daoSession, messageSession,heartRateSession;
+    private DaoMaster.DevOpenHelper donglan, message, heartRate;
+    private SQLiteDatabase db, messagedb, heartRatedb;
+    private DaoMaster daoMaster, messageMaster, heartRateMaster;
+    private DaoSession daoSession, messageSession, heartRateSession;
     // 小米推送ID.
     private static final String APP_ID = "2882303761517681383";
     // 小米推送KEY.
@@ -81,7 +94,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private HttpProxyCacheServer newProxy() {
 
         return new HttpProxyCacheServer.Builder(this)
-                .maxCacheSize(1024 * 1024 *1024)       // 1G for cache
+                .maxCacheSize(1024 * 1024 * 1024)       // 1G for cache
                 .build();
 
     }
@@ -107,16 +120,14 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 ////        }
 
 
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
             builder.detectFileUriExposure();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-      bindBleService();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            bindBleService();
         }
 
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -267,14 +278,17 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
             mBluetoothLeService = null;
         }
     };
+
     private void bindBleService() {
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
 
-
     private void initTXIM() {
+        initTim();
+        initTimUser();
+
         if (MsfSdkUtils.isMainProcess(this)) {
             TIMManager.getInstance().setOfflinePushListener(new TIMOfflinePushListener() {
                 @Override
@@ -287,9 +301,150 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
                 }
             });
         }
-        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+//        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+//                .setLogLevel(TIMLogLevel.DEBUG)
+//                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
+//        boolean b = TIMManager.getInstance().init(this, config);
+    }
+
+    public void initTim() {
+        //初始化SDK基本配置
+        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID)
+                .setAccoutType(String.valueOf(Constant.ACCOUNT_TYPE))
+                .enableCrashReport(false)
+                .enableLogPrint(true)
                 .setLogLevel(TIMLogLevel.DEBUG)
                 .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
-        boolean b = TIMManager.getInstance().init(this, config);
+        //初始化SDK
+        boolean init = TIMManager.getInstance().init(getApplicationContext(), config);
+        if (init) {
+            LogUtil.i("init success");
+        } else {
+            LogUtil.i("init fail");
+        }
     }
+
+    public void initTimUser() {
+        //基本用户配置
+        TIMUserConfig userConfig = new TIMUserConfig()
+                //设置群组资料拉取字段
+                //.setGroupSettings(initGroupSettings())
+                //设置资料关系链拉取字段
+                //.setFriendshipSettings(initFriendshipSettings())
+                //设置用户状态变更事件监听器
+                .setUserStatusListener(new TIMUserStatusListener() {
+                    @Override
+                    public void onForceOffline() {
+                        //被其他终端踢下线
+                        LogUtil.i("onForceOffline");
+                    }
+
+                    @Override
+                    public void onUserSigExpired() {
+                        //用户签名过期了，需要刷新userSig重新登录SDK
+                        LogUtil.i("onUserSigExpired");
+                    }
+                })
+                //设置连接状态事件监听器
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        LogUtil.i("onConnected");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        LogUtil.i("onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        LogUtil.i("onWifiNeedAuth");
+                    }
+                })
+                //设置群组事件监听器
+                .setGroupEventListener(new TIMGroupEventListener() {
+                    @Override
+                    public void onGroupTipsEvent(TIMGroupTipsElem elem) {
+                        LogUtil.i("onGroupTipsEvent, type: " + elem.getTipsType());
+                    }
+                })
+                //设置会话刷新监听器
+                .setRefreshListener(new TIMRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        LogUtil.i("onRefresh");
+                    }
+
+                    @Override
+                    public void onRefreshConversation(List<TIMConversation> conversations) {
+                        LogUtil.i("onRefreshConversation, conversation size: " + conversations.size());
+                    }
+                });
+
+        userConfig = new TIMUserConfigMsgExt(userConfig)
+                .enableStorage(false)
+                .enableReadReceipt(true);
+        userConfig = new TIMUserConfigSnsExt(userConfig)
+                .enableFriendshipStorage(true)
+                .setFriendshipProxyListener(new TIMFriendshipProxyListener() {
+                    @Override
+                    public void OnAddFriends(List<TIMUserProfile> users) {
+                        LogUtil.i("OnAddFriends");
+                    }
+
+                    @Override
+                    public void OnDelFriends(List<String> identifiers) {
+                        LogUtil.i("OnDelFriends");
+                    }
+
+                    @Override
+                    public void OnFriendProfileUpdate(List<TIMUserProfile> profiles) {
+                        LogUtil.i("OnFriendProfileUpdate");
+                    }
+
+                    @Override
+                    public void OnAddFriendReqs(List<TIMSNSChangeInfo> reqs) {
+                        LogUtil.i("OnAddFriendReqs");
+                    }
+                });
+
+        userConfig = new TIMUserConfigGroupExt(userConfig)
+                .enableGroupStorage(true)
+                .setGroupAssistantListener(new TIMGroupAssistantListener() {
+                    @Override
+                    public void onMemberJoin(String groupId, List<TIMGroupMemberInfo> memberInfos) {
+                        LogUtil.i("onMemberJoin");
+                    }
+
+                    @Override
+                    public void onMemberQuit(String groupId, List<String> members) {
+                        LogUtil.i("onMemberQuit");
+                    }
+
+                    @Override
+                    public void onMemberUpdate(String groupId, List<TIMGroupMemberInfo> memberInfos) {
+                        LogUtil.i("onMemberUpdate");
+                    }
+
+                    @Override
+                    public void onGroupAdd(TIMGroupCacheInfo groupCacheInfo) {
+                        LogUtil.i("onGroupAdd");
+                    }
+
+                    @Override
+                    public void onGroupDelete(String groupId) {
+                        LogUtil.i("onGroupDelete");
+                    }
+
+                    @Override
+                    public void onGroupUpdate(TIMGroupCacheInfo groupCacheInfo) {
+                        LogUtil.i("onGroupUpdate");
+                    }
+                });
+
+        TIMManager.getInstance().setUserConfig(userConfig);
+    }
+
+
 }
