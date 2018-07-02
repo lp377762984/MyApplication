@@ -659,6 +659,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         public String content;
     }
 
+
     /**
      * 举报
      *
@@ -700,6 +701,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
 
     }
+
 
     private void showListDialogSelf(final int pos) {
         final String[] items = {"删除动态"};
@@ -905,7 +907,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
      */
     private void delDyn(final String msgId, final int pos) {
 
-        String Params = Constants.DEL_DYN_MSG + "/" + msgId;
+        String Params = Constants.DEL_DYN_MSG + "?msgId=" + msgId;
 
 
         final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
@@ -961,4 +963,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         };
         MyApplication.getHttpQueues().add(request);
     }
+
+
 }

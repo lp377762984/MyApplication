@@ -1,6 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.AlertDialog;
+
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -345,6 +346,80 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
         return heightDiff > DensityUtils.dp2px(this, SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD);
     }
 
+
+    private void showJuBaoListDialog() {
+        final String[] items = {"色情、裸露", "不友善行为", "广告、推销", "其他"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())) {
+                    ToastUtils.showToastShort("请先加人一个门店");
+                    return;
+                }
+
+
+                jubao(oneDynInfo.getId(), oneDynInfo.getAuthor(), 1, items[which]);
+
+
+            }
+        });
+        listDialog.show();
+    }
+    class JuBaoBean {
+
+        public String member_id;//评论或动态id
+        public String bereported_id;
+        public String type;//
+        public String content;
+    }
+
+
+    /**
+     * 举报
+     *
+     * @param msgId
+     * @param user_id
+     * @param type
+     */
+    private void jubao(final String msgId, final String user_id, int type, String content) {
+        JuBaoBean juBaoBean = new JuBaoBean();
+        juBaoBean.bereported_id = user_id;
+        juBaoBean.member_id = msgId;
+        juBaoBean.type = type + "";
+        juBaoBean.content = content;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
+                    ToastUtils.showToastShort("已举报");
+                } else {
+                    ToastUtils.showToastShort("举报失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -468,7 +543,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
                     showListDialogSelf(1);
                 } else {
-                    showListDialog(1);
+                    showListDialog();
                 }
             }
         });
@@ -1275,7 +1350,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
     }
 
-    private void showListDialog(final int pos) {
+    private void showListDialog() {
         final String[] items = {"举报"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(this);
@@ -1286,7 +1361,7 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
 
                 switch (which) {
                     case 0:
-                        ToastUtils.showToastShort("已举报");
+                     showJuBaoListDialog();
                         break;
                     case 1:
 

@@ -28,7 +28,6 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PreferenceManager;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 
@@ -216,8 +215,8 @@ public class MeFragment extends BaseFragment {
                 updateUserInfo(myinfo);
 
                 //更新聊天头像和昵称
-                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getPerson().getNick_name());
-                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getPerson().getSelf_avatar_path());
+//                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getPerson().getNick_name());
+//                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getPerson().getSelf_avatar_path());
 
 
                 break;

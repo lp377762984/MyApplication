@@ -880,24 +880,26 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
      */
     private void delDyn(final String msgId, final int pos) {
 
-        String Params = Constants.DEL_DYN_MSG + "/" + msgId;
+        String Params = Constants.DEL_DYN_MSG + "?msgId=" + msgId;
 
         final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
 
+                LogUtil.i(s);
+
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()) {
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
+                if (requestInfoBean.isSuccess()) {
                     ToastUtils.showToastShort("删除成功");
                     // data.remove(pos);
                     //   notifyDataSetChanged();
                     EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
                     EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
                 } else {
-                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
+                    ToastUtils.showToastShort("删除失败");
                 }
 
 

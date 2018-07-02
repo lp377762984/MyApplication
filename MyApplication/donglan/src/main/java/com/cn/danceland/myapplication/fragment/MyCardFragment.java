@@ -51,10 +51,10 @@ public class MyCardFragment extends BaseFragment {
 
     @Override
     public View initViews() {
-        View v=View.inflate(mActivity,R.layout.fragment_my_card,null);
+        View v = View.inflate(mActivity, R.layout.fragment_my_card, null);
 
         mListView = v.findViewById(R.id.listview);
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
 
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
@@ -65,7 +65,7 @@ public class MyCardFragment extends BaseFragment {
 
         myListViewAdapter = new MyListViewAdapter();
         mListView.setAdapter(myListViewAdapter);
-        return  v;
+        return v;
 
     }
 
@@ -116,7 +116,6 @@ public class MyCardFragment extends BaseFragment {
     }
 
 
-
     class MyListViewAdapter extends BaseAdapter
 
     {
@@ -148,8 +147,8 @@ public class MyCardFragment extends BaseFragment {
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
 
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
-                viewHolder.btn_commit=view.findViewById(R.id.btn_commit);
-                viewHolder.iv_card=view.findViewById(R.id.iv_card);
+                viewHolder.btn_commit = view.findViewById(R.id.btn_commit);
+                viewHolder.iv_card = view.findViewById(R.id.iv_card);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
@@ -161,10 +160,10 @@ public class MyCardFragment extends BaseFragment {
             }
             if (mCardList.get(i).getCharge_mode() == 2) {//计次卡
                 viewHolder.tv_cardtype.setText("卡类型：计次卡");
-                if (Integer.parseInt(mCardList.get(i).getTotal_count())>0){
+                if (Integer.parseInt(mCardList.get(i).getTotal_count()) > 0) {
                     viewHolder.tv_cardtype.setText("卡类型：计次卡（剩余次数：" + mCardList.get(i).getTotal_count() + "次）");
                     viewHolder.btn_commit.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     viewHolder.btn_commit.setVisibility(View.INVISIBLE);
                 }
 
@@ -182,25 +181,49 @@ public class MyCardFragment extends BaseFragment {
 //            }else {
 //                viewHolder.tv_number.setVisibility(View.GONE);
 //            }
-            if (!TextUtils.isEmpty(mCardList.get(i).getOpen_date())){
-                Long currenttime=System.currentTimeMillis();
-                Long opendate=Long.valueOf(mCardList.get(i).getOpen_date());
-                if (opendate>currenttime){
-                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getOpen_date(),"yyyy-MM-dd")+"生效");
+//可以入场
+            if (mCardList.get(i).getEnter_status() == 0) {
+                Long currenttime = System.currentTimeMillis();
+                Long opendate = Long.valueOf(mCardList.get(i).getOpen_date());
+                if (opendate > currenttime) {
+                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getOpen_date(), "yyyy-MM-dd") + "生效");
                     viewHolder.btn_commit.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     viewHolder.btn_commit.setVisibility(View.VISIBLE);
 //                    StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
 //
 //                    String[] b = sb.toString().split(" ");
 
-                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getEnd_date(),"yyyy-MM-dd") + "到期");
+                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getEnd_date(), "yyyy-MM-dd") + "到期");
                 }
+            } else {
 
-            }else {
-                viewHolder.tv_time.setText("未开卡");
+                viewHolder.tv_time.setText("会员卡不能使用");
                 viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+                if (TextUtils.isEmpty(mCardList.get(i).getOpen_date())){
+                    viewHolder.tv_time.setText("未开卡");
+               viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+                }
             }
+//            if (!TextUtils.isEmpty(mCardList.get(i).getOpen_date())) {
+//                Long currenttime = System.currentTimeMillis();
+//                Long opendate = Long.valueOf(mCardList.get(i).getOpen_date());
+//                if (opendate > currenttime) {
+//                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getOpen_date(), "yyyy-MM-dd") + "生效");
+//                    viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+//                } else {
+//                    viewHolder.btn_commit.setVisibility(View.VISIBLE);
+////                    StringBuilder sb = new StringBuilder(mCardList.get(i).getEnd_date());
+////
+////                    String[] b = sb.toString().split(" ");
+//
+//                    viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(mCardList.get(i).getEnd_date(), "yyyy-MM-dd") + "到期");
+//                }
+//
+//            } else {
+//                viewHolder.tv_time.setText("未开卡");
+//                viewHolder.btn_commit.setVisibility(View.INVISIBLE);
+//            }
 
 
 //            if (TextUtils.isEmpty(mCardList.get(i).getEnd_date())) {
@@ -218,11 +241,11 @@ public class MyCardFragment extends BaseFragment {
             viewHolder.btn_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    StringBuilder  data =new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(mCardList.get(i).getId());
-                   startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data",data.toString()));
+                    StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(mCardList.get(i).getId());
+                    startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                 }
             });
-            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }
