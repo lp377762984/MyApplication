@@ -158,6 +158,9 @@ public class WearFitSettingActivity extends Activity {
         btn_jiebang.setOnClickListener(onClickListener);
         rl_naozhong.setOnClickListener(onClickListener);
         rl_rushui.setOnClickListener(onClickListener);
+        rl_wake.setOnClickListener(onClickListener);
+        rl_jiuzuo.setOnClickListener(onClickListener);
+        rl_wurao.setOnClickListener(onClickListener);
         //抬手亮屏开关
         sw_taishou.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -187,9 +190,9 @@ public class WearFitSettingActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
-                    commandManager.setSmartWarnNoContent(1,0);
-                }else {
                     commandManager.setSmartWarnNoContent(1,1);
+                }else {
+                    commandManager.setSmartWarnNoContent(1,0);
                 }
             }
         });
@@ -198,9 +201,9 @@ public class WearFitSettingActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
-                    commandManager.setSmartWarnNoContent(3,0);
-                }else {
                     commandManager.setSmartWarnNoContent(3,1);
+                }else {
+                    commandManager.setSmartWarnNoContent(3,0);
                 }
             }
         });
@@ -232,21 +235,35 @@ public class WearFitSettingActivity extends Activity {
                     startActivity(new Intent(WearFitSettingActivity.this,AddClockActivity.class));
                     break;
                 case R.id.rl_rushui:
-                    showTimeSelect();
+                    showTimeSelect("入睡时间");
+                    break;
+                case R.id.rl_wake:
+                    showTimeSelect("醒来时间");
+                    break;
+                case R.id.rl_jiuzuo:
+                    startActivity(new Intent(WearFitSettingActivity.this,LongSitActivity.class).putExtra("from","久坐提醒"));
+                    break;
+                case R.id.rl_wurao:
+                    startActivity(new Intent(WearFitSettingActivity.this,LongSitActivity.class).putExtra("from","勿扰模式"));
                     break;
             }
         }
     };
 
-    private void showTimeSelect() {
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "入睡时间");
+    private void showTimeSelect(final String str) {
+        final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
         customDatePicker.setGoneYearAndMounth();
         customDatePicker.showWindow();
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
                 String dateString = customDatePicker.getTime();
-                tv_rushui.setText(dateString);
+                if("入睡时间".equals(str)){
+                    tv_rushui.setText(dateString);
+                }else if ("醒来时间".equals(str)){
+                    tv_wake.setText(dateString);
+                }
+
             }
         });
 

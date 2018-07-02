@@ -258,7 +258,12 @@ public class CustomDatePicker extends AlertDialog {
             }
         }
         for (int y = 0; y < 60; y++) {
-            minuteList.add(y + "");
+            if(y<10){
+                minuteList.add("0"+y);
+            }else{
+                minuteList.add(y + "");
+            }
+
         }
         lp_hour.setItems(hourList);
         lp_minute.setItems(minuteList);

@@ -673,6 +673,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".shouhuan.activity.ClockSettingActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".shouhuan.activity.LongSitActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"

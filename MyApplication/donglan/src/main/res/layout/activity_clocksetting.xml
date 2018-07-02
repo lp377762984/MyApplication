@@ -1,93 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <com.cn.danceland.myapplication.view.DongLanTitleView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.cn.danceland.myapplication.view.DongLanTitleView>
-
     <LinearLayout
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:orientation="horizontal">
-        <com.weigan.loopview.LoopView
-            android:id="@+id/lp_hour"
-            android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.cn.danceland.myapplication.view.DongLanTitleView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <com.weigan.loopview.LoopView
-            android:id="@+id/lp_minute"
-            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+        </com.cn.danceland.myapplication.view.DongLanTitleView>
+
+        <LinearLayout
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="210dp"
+            android:orientation="horizontal">
+            <com.weigan.loopview.LoopView
+                android:id="@+id/lp_hour"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <com.weigan.loopview.LoopView
+                android:id="@+id/lp_minute"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_yici"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:text="只提醒一次"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_meitian"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:text="每天"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_gongzuori"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:text="周一至周五"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_zidingyi"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:text="自定义"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_yici"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="只提醒一次"
-            android:layout_gravity="center_vertical"
-            />
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_meitian"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+    <Button
+        android:id="@+id/btn_save"
+        style="@style/BtnCommitStyle"
+        android:text="保存"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="每天"
-            android:layout_gravity="center_vertical"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_gongzuori"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="周一至周五"
-            android:layout_gravity="center_vertical"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_zidingyi"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="自定义"
-            android:layout_gravity="center_vertical"
-            />
-    </LinearLayout>
+        android:layout_height="45dp">
 
-</LinearLayout>
+
+    </Button>
+
+</RelativeLayout>
