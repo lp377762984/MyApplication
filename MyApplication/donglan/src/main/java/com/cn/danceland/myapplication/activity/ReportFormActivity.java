@@ -38,6 +38,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -211,13 +212,12 @@ public class ReportFormActivity extends Activity {
         report_title = findViewById(R.id.report_title);
         if ("会籍顾问".equals(role_type)) {
             role = "1";
-            emp_id = myInfo.getEmployee().getId() + "";
+            //emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("会籍报表");
         } else if ("教练".equals(role_type)) {
             role = "2";
-            emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
@@ -239,24 +239,24 @@ public class ReportFormActivity extends Activity {
             getPeople();
         } else if ("操教".equals(role_type)) {
             role = "8";
-            emp_id = myInfo.getEmployee().getId() + "";
+            //emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
         } else if ("兼职教练".equals(role_type)) {
             role = "11";
-            emp_id = myInfo.getEmployee().getId() + "";
+            //emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
         } else if ("前台".equals(role_type)) {
             role = "3";
-            emp_id = myInfo.getEmployee().getId() + "";
+            //emp_id = myInfo.getEmployee().getId() + "";
             report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("服务报表");
         }
-
+        emp_id = myInfo.getEmployee().getId() + "";
         initBusData(selectDate, role, emp_id);
         initScoreData(selectDate, role, target_role_type, emp_id);
         initReportData(selectDate, emp_id);
@@ -297,16 +297,57 @@ public class ReportFormActivity extends Activity {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
                 if (reportCommitResultBean != null && reportCommitResultBean.getData() != null) {
                     ReportCommitResultBean.Data data = reportCommitResultBean.getData();
-                    tv_meet.setText(data.getMeet() + "");
-                    tv_clean.setText(data.getClean() + "");
-                    tv_item_placement.setText(data.getItem_placement() + "");
-                    tv_body_build.setText(data.getBody_build() + "");
-                    tv_sport_device.setText(data.getSport_device() + "");
-                    tv_group_course.setText(data.getGroup_course() + "");
-                    tv_course.setText(data.getCourse() + "");
-                    tv_power.setText(data.getPower() + "");
-                    tv_door.setText(data.getDoor() + "");
-                    tv_remark.setText(data.getRemark() + "");
+                    if(StringUtils.isNullorEmpty(data.getMeet())){
+                        tv_meet.setText("未填写");
+                    }else{
+                        tv_meet.setText(data.getMeet() + "");
+                    }
+
+                    if(StringUtils.isNullorEmpty(data.getClean())){
+                        tv_clean.setText("未填写");
+                    }else{
+                        tv_clean.setText(data.getClean() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getItem_placement())){
+                        tv_item_placement.setText("未填写");
+                    }else{
+                        tv_item_placement.setText(data.getItem_placement() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getBody_build())){
+                        tv_body_build.setText("未填写");
+                    }else{
+                        tv_body_build.setText(data.getBody_build() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getSport_device())){
+                        tv_sport_device.setText("未填写");
+                    }else{
+                        tv_sport_device.setText(data.getSport_device() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getGroup_course())){
+                        tv_group_course.setText("未填写");
+                    }else{
+                        tv_group_course.setText(data.getGroup_course() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getCourse())){
+                        tv_course.setText("未填写");
+                    }else{
+                        tv_course.setText(data.getCourse() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getPower())){
+                        tv_power.setText("未填写");
+                    }else{
+                        tv_power.setText(data.getPower() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getDoor())){
+                        tv_door.setText("未填写");
+                    }else{
+                        tv_door.setText(data.getDoor() + "");
+                    }
+                    if(StringUtils.isNullorEmpty(data.getRemark())){
+                        tv_remark.setText("未填写");
+                    }else{
+                        tv_remark.setText(data.getRemark() + "");
+                    }
                     clickAble = true;
                 }
                 if (!nowDate.equals(selectDate) || clickAble) {
@@ -410,7 +451,7 @@ public class ReportFormActivity extends Activity {
 
     }
 
-    boolean clickAble;
+    boolean clickAble;//提交后不可点击
     TextView tv_meet, tv_clean, tv_item_placement, tv_body_build, tv_sport_device, tv_group_course, tv_course, tv_power, tv_door, tv_remark;
 
     private void commit() {
