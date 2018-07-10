@@ -21,11 +21,11 @@ public class Constants  {
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
     //public static String HOST = "http://192.168.1.117:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
-      public static final String HOST = "http://118.190.201.15:6003/";// 测试地址
-    //public static final String HOST = "http://192.168.1.117:8003/";//老高
+    public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+    // public static final String HOST = "http://192.168.1.120:8003/";//老高
      //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新

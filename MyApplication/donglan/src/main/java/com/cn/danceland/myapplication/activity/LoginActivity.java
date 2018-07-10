@@ -399,9 +399,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 //                    PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
                     //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
                     SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
                     setMipushId();
-                    finish();
+
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
@@ -456,7 +456,8 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
-
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
 
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());

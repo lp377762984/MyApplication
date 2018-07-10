@@ -165,7 +165,7 @@ public class RecommendFragment extends BaseFragment {
 
             }
         });
-        AlertDialog  dialog = customizeDialog.create();
+        final AlertDialog  dialog = customizeDialog.create();
         dialog.show();
         if(dialog.getButton(AlertDialog.BUTTON_POSITIVE)!=null) {
 
@@ -188,6 +188,7 @@ public class RecommendFragment extends BaseFragment {
                         ToastUtils.showToastShort("输入电话不合法请重新输入");
                     }else {
                         introduce_save(strBean);
+                        dialog.dismiss();
                     }
                     }
                 });

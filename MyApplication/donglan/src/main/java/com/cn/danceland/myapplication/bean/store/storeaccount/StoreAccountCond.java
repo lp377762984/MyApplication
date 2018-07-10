@@ -16,6 +16,18 @@ public class StoreAccountCond extends BaseCondition  {
 	private Float giving;// 赠送金额
 	private Byte enable;// 状态
 
+	@Override
+	public String toString() {
+		return "StoreAccountCond{" +
+				"id=" + id +
+				", member_id=" + member_id +
+				", branch_id=" + branch_id +
+				", remain=" + remain +
+				", giving=" + giving +
+				", enable=" + enable +
+				'}';
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -1,13 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,8 +26,6 @@ import com.cn.danceland.myapplication.bean.GroupRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeRecordBean;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.CommentFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoRecordFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeFragment;
@@ -46,11 +40,7 @@ import com.google.gson.Gson;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.joda.time.DateTime;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -390,8 +380,8 @@ public class CourseActivity extends FragmentActivity {
         fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if("0".equals(type)){
-            if("0".equals(isTuanke)){
+        if("0".equals(type)){//列表
+            if("0".equals(isTuanke)){//团课
                 date.setVisibility(View.VISIBLE);
                 week.setVisibility(View.VISIBLE);
                 nccalendar.setVisibility(View.VISIBLE);

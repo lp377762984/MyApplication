@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MyQRCodeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
-import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.YuYueResultBean;
@@ -37,7 +35,6 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -103,6 +100,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 //if("2".equals(course_category)){
+                LogUtil.i(jsonObject.toString());
                 GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
                 if (groupRecordBean != null) {
                     List<GroupRecordBean.Data> data = groupRecordBean.getData();
@@ -119,7 +117,10 @@ public class SiJiaoRecordFragment extends BaseFragment {
                             content.setCategory("2");
                             content.setStatus(Integer.valueOf(data.get(i).getStatus()));
                             content.setMember_name(data.get(i).getMember_name());
+                            content.setStart_time((int) data.get(i).getStart_time());
+                         //   LogUtil.i( data.get(i).getStart_time()+"");
                             contentList.add(content);
+
                         }
                         if (contentList != null) {
                             lv_tuanke.setAdapter(new RecordAdapter(contentList));
@@ -174,6 +175,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
+                LogUtil.i( jsonObject.toString());
                 if (contentList == null) {
                     contentList = new ArrayList<>();
                 } else {
@@ -228,6 +230,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
         RecordAdapter(List<SiJiaoRecordBean.Content> list) {
             this.list = list;
+            LogUtil.i(list.toString());
 
         }
 
@@ -269,12 +272,19 @@ public class SiJiaoRecordFragment extends BaseFragment {
             viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if ("2".equals(list.get(position).getCategory())) {
-                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
-                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
-                    } else {
-                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
-                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+
+
+                    if (list.get(position).getCourse_date()<System.currentTimeMillis()&&System.currentTimeMillis()<list.get(position).getCourse_date()+60*60*24*1000){
+                        //只有在当天可以签到
+                        if ("2".equals(list.get(position).getCategory())) {
+                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                            startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                        } else {
+                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                            startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                        }
+                    }else {
+                        ToastUtils.showToastShort("预约时间当天才可以签到");
                     }
 
                 }
@@ -289,18 +299,20 @@ public class SiJiaoRecordFragment extends BaseFragment {
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
             String time = TimeUtils.timeStamp2Date(list.get(position).getCourse_date() + "", null);
             String start_time;
+
             if (list.get(position).getStart_time() % 60 == 0) {
                 start_time = list.get(position).getStart_time() / 60 + ":00";
             } else {
                 start_time = list.get(position).getStart_time() / 60 + ":" + list.get(position).getStart_time() % 60;
             }
-
+       //     LogUtil.i(start_time+"@@@"+list.get(position).getStart_time()+list.get(position).getCategory());
 
             //background = (GradientDrawable)viewHolder.rl_button.getBackground();
 
             viewHolder.course_date.setText("预约时间:" + time.split(" ")[0] + " " + start_time);
             if ("2".equals(list.get(position).getCategory())) {
                 viewHolder.course_type.setText("小团体");
+//                String time1 = TimeUtils.timeStamp2Date(list.get(position).getd + "", null);
             } else {
                 viewHolder.course_type.setText("一对一");
             }
@@ -391,9 +403,11 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if (list.get(position).getStatus() == 2) {
                     viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
                     viewHolder.rl_button_tv.setText("已确认未签到");
+                    viewHolder.rl_button_tv.setClickable(false);
                     viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                     viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
                 } else {
+                    viewHolder.rl_button_tv.setClickable(true);
                     viewHolder.rl_qiandao.setVisibility(View.GONE);
                 }
                 if (list.get(position).getStatus() == 3) {
@@ -410,6 +424,9 @@ public class SiJiaoRecordFragment extends BaseFragment {
             if (role != null && !"".equals(role)) {
                 viewHolder.rl_qiandao.setVisibility(View.GONE);
             }
+
+            //LogUtil.i(list.get(position).getCourse_date()+"@@@@"+System.currentTimeMillis());
+
 
             return convertView;
         }

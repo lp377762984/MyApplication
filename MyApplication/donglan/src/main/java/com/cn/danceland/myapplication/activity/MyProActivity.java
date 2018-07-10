@@ -990,10 +990,14 @@ public class MyProActivity extends Activity {
 
     public void photoAlbum() {
 
-        Intent intent = new Intent(Intent.ACTION_PICK, null);
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, ALBUM_REQUEST_CODE);
+//        Intent intent = new Intent(Intent.ACTION_PICK, null);
+//        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, ALBUM_REQUEST_CODE);
+
+
+        Intent albumIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(albumIntent, ALBUM_REQUEST_CODE);
 
     }
 

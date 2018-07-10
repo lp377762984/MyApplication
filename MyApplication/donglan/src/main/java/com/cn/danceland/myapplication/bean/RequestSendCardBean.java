@@ -55,7 +55,7 @@ public class RequestSendCardBean {
         private int total_count;
         private String end_date;
         private int face_value;
-        private int sell_price;
+        private float sell_price;
         private int charge_mode;
         private long sell_date;
         private int operater_id;
@@ -153,10 +153,10 @@ public class RequestSendCardBean {
             return face_value;
         }
 
-        public void setSell_price(int sell_price) {
+        public void setSell_price(float sell_price) {
             this.sell_price = sell_price;
         }
-        public int getSell_price() {
+        public float getSell_price() {
             return sell_price;
         }
 

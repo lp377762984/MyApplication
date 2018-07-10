@@ -100,8 +100,8 @@ public class ForOtherListBean implements Parcelable {
         private String member_no;
         private String nick_name;
         private int person_id;
-        private int price;
-        private int real_price;
+        private float price;
+        private float real_price;
         private String self_avatar_path;
         private String start_date;
         private int surplus_count;
@@ -218,17 +218,17 @@ public class ForOtherListBean implements Parcelable {
             return person_id;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
         public void setReal_price(int real_price) {
             this.real_price = real_price;
         }
-        public int getReal_price() {
+        public float getReal_price() {
             return real_price;
         }
 
@@ -284,8 +284,8 @@ public class ForOtherListBean implements Parcelable {
             dest.writeString(this.member_no);
             dest.writeString(this.nick_name);
             dest.writeInt(this.person_id);
-            dest.writeInt(this.price);
-            dest.writeInt(this.real_price);
+            dest.writeFloat(this.price);
+            dest.writeFloat(this.real_price);
             dest.writeString(this.self_avatar_path);
             dest.writeString(this.start_date);
             dest.writeInt(this.surplus_count);

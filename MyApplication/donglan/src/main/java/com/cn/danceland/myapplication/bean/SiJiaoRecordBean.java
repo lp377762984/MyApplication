@@ -65,6 +65,42 @@ public class SiJiaoRecordBean implements Serializable{
         private int evaluate_id;
         private String category;
 
+
+        @Override
+        public String toString() {
+            return "Content{" +
+                    "initiator_name='" + initiator_name + '\'' +
+                    ", confirm_name='" + confirm_name + '\'' +
+                    ", employee_name='" + employee_name + '\'' +
+                    ", initiator_date=" + initiator_date +
+                    ", id=" + id +
+                    ", operater_id=" + operater_id +
+                    ", confirm_date=" + confirm_date +
+                    ", course_type_id=" + course_type_id +
+                    ", initiator_id=" + initiator_id +
+                    ", employee_id=" + employee_id +
+                    ", member_no='" + member_no + '\'' +
+                    ", sign_member_id='" + sign_member_id + '\'' +
+                    ", branch_id=" + branch_id +
+                    ", branch_name='" + branch_name + '\'' +
+                    ", course_type_name='" + course_type_name + '\'' +
+                    ", status=" + status +
+                    ", course_date=" + course_date +
+                    ", member_id=" + member_id +
+                    ", appointment_type=" + appointment_type +
+                    ", member_course_id=" + member_course_id +
+                    ", sign_date='" + sign_date + '\'' +
+                    ", end_time=" + end_time +
+                    ", confirm_id=" + confirm_id +
+                    ", start_time=" + start_time +
+                    ", member_name='" + member_name + '\'' +
+                    ", cancel_date='" + cancel_date + '\'' +
+                    ", week=" + week +
+                    ", evaluate_id=" + evaluate_id +
+                    ", category='" + category + '\'' +
+                    '}';
+        }
+
         public String getCategory() {
             return category;
         }

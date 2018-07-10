@@ -740,8 +740,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(jsonObject.toString(), RequestInfoBean.class);
+                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
+                requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
 
                 if (requestInfoBean.getSuccess()) {
 

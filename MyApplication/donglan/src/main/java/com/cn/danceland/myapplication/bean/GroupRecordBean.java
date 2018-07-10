@@ -56,6 +56,7 @@ public class GroupRecordBean implements Serializable {
         private int id;
         private int member_course_id;
         private int member_id;
+        private long start_time;
         private String member_name;
         private String member_no;
         private String nick_name;
@@ -65,6 +66,43 @@ public class GroupRecordBean implements Serializable {
         private String sign_date;
         private String status;
         private String employee_name;
+
+        public long getStart_time() {
+            return start_time;
+        }
+
+        public void setStart_time(long start_time) {
+            this.start_time = start_time;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "branch_id=" + branch_id +
+                    ", branch_name='" + branch_name + '\'' +
+                    ", cancel_date='" + cancel_date + '\'' +
+                    ", course_type_id=" + course_type_id +
+                    ", course_type_name='" + course_type_name + '\'' +
+                    ", create_date='" + create_date + '\'' +
+                    ", date='" + date + '\'' +
+                    ", delete_remark='" + delete_remark + '\'' +
+                    ", evaluate_id=" + evaluate_id +
+                    ", group_course_id=" + group_course_id +
+                    ", id=" + id +
+                    ", member_course_id=" + member_course_id +
+                    ", member_id=" + member_id +
+                    ", start_time=" + start_time +
+                    ", member_name='" + member_name + '\'' +
+                    ", member_no='" + member_no + '\'' +
+                    ", nick_name='" + nick_name + '\'' +
+                    ", operater_id=" + operater_id +
+                    ", person_id=" + person_id +
+                    ", self_avatar_path='" + self_avatar_path + '\'' +
+                    ", sign_date='" + sign_date + '\'' +
+                    ", status='" + status + '\'' +
+                    ", employee_name='" + employee_name + '\'' +
+                    '}';
+        }
 
         public String getEmployee_name() {
             return employee_name;

@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +27,6 @@ import com.cn.danceland.myapplication.activity.SiJiaoDetailActivity;
 import com.cn.danceland.myapplication.activity.SmallTuankeDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
-import com.cn.danceland.myapplication.bean.JiaoLianBean;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
@@ -47,7 +45,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -487,6 +484,14 @@ public class SiJiaoFragment extends BaseFragment {
             }
             final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
             final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
+            if (list.get(groupPosition).getDelete_remark()==1){
+                viewHolder.sijiao_yuyue.setVisibility(View.GONE);
+                viewHolder.sijiao_detail.setVisibility(View.GONE);
+            }else {
+                viewHolder.sijiao_yuyue.setVisibility(View.VISIBLE);
+                viewHolder.sijiao_detail.setVisibility(View.VISIBLE);
+            }
+
             viewHolder.sijiao_yuyue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -514,6 +519,7 @@ public class SiJiaoFragment extends BaseFragment {
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("一对一");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
+
                 viewHolder.sijiao_fangshi.setText("小团体");
             } else {
                 viewHolder.sijiao_fangshi.setText("");

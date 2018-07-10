@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.MyCardFragment;
 import com.cn.danceland.myapplication.fragment.MySendCardFragment;
 
@@ -23,6 +24,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
 
@@ -37,12 +41,34 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
 
     private ViewPager mViewPager;
 
-    public  String[] mTitleDataList = new String[]{"我的会员卡", "我送出的卡"};
+    public String[] mTitleDataList = new String[]{"我的会员卡", "我送出的卡"};
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_card);
+        EventBus.getDefault().register(this);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch (event.getEventCode()) {
+            case 6881://入场成功
+                finish();
+
+                break;
+            default:
+                break;
+        }
+
     }
 
     private void initView() {
@@ -76,6 +102,7 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
         });
 
     }
+
     private void initMagicIndicator1() {
         MagicIndicator magicIndicator = (MagicIndicator) findViewById(R.id.magic_indicator);
         CommonNavigator commonNavigator = new CommonNavigator(this);
@@ -123,7 +150,7 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
@@ -131,6 +158,7 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
                 break;
         }
     }
+
     public class MyViewPagerAdapter extends FragmentPagerAdapter {
 
 
@@ -168,7 +196,6 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
         }
 
     }
-
 
 
 }

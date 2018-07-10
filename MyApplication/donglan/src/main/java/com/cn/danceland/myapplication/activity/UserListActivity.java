@@ -113,7 +113,7 @@ public class UserListActivity extends Activity implements View.OnClickListener {
 
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             LogUtil.i(":收到" + event.getEventCode());
-            LogUtil.i("TYPE"+type);
+            LogUtil.i("TYPE" + type);
             switch (event.getEventCode()) {
 
 
@@ -452,7 +452,8 @@ public class UserListActivity extends Activity implements View.OnClickListener {
                     data = UserListBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
 
-
+                    SPUtils.setInt(Constants.MY_FANS, UserListBean.getData().getTotalElements());
+                    EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_FANS));
                     if (data.size() > 0) {
                         if (data.size() < 20) {
                             setEnd();

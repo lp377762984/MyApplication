@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,7 +37,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -61,7 +59,6 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
@@ -368,8 +365,17 @@ public class SiJiaoOrderActivity extends Activity {
         } else if (resultCode == 11) {
             deposit = data.getFloatExtra("dingjin", 0);
             deposit_id = data.getStringExtra("id");
-            tv_dingjin.setText("- " + deposit + "元");
-            tv_pay_price.setText("待支付：￥" + (price - deposit));
+            if (price>deposit){
+                tv_dingjin.setText("- " + deposit + "元");
+                tv_pay_price.setText("待支付：￥" + (price - deposit));
+            }else {
+                tv_dingjin.setText("未使用");
+                deposit=0;
+                deposit_id="";
+                ToastUtils.showToastShort("定金金额必须小于商品金额");
+                tv_pay_price.setText("待支付：￥" + (price));
+            }
+
         }
     }
 

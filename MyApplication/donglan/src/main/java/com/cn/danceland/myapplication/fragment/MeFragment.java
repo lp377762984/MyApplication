@@ -202,7 +202,7 @@ public class MeFragment extends BaseFragment {
 
                 //设置粉丝数
                 // tv_fans.setText(mInfo.getFansNum() + "");
-                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+          //      DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
 
                 //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
                 tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
