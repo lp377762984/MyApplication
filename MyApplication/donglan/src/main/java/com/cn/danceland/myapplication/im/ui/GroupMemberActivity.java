@@ -13,6 +13,7 @@ import com.cn.danceland.myapplication.im.adapters.ProfileSummaryAdapter;
 import com.cn.danceland.myapplication.im.model.GroupInfo;
 import com.cn.danceland.myapplication.im.model.GroupMemberProfile;
 import com.cn.danceland.myapplication.im.model.ProfileSummary;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.group.TIMGroupManagerExt;
@@ -83,8 +84,11 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
     public void onSuccess(List<TIMGroupMemberInfo> timGroupMemberInfos) {
         list.clear();
         if (timGroupMemberInfos == null) return;
-        for (TIMGroupMemberInfo item : timGroupMemberInfos){
-            list.add(new GroupMemberProfile(item));
+        for (TIMGroupMemberInfo info : timGroupMemberInfos){
+            list.add(new GroupMemberProfile(info));
+            LogUtil.i("user: " + info.getUser() +
+                    "join time: " + info.getJoinTime() +
+                    "role: " + info.getRole());
         }
         adapter.notifyDataSetChanged();
 
