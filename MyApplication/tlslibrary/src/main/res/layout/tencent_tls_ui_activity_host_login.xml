@@ -103,20 +103,20 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/accountLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
-                android:textColor="@color/tencent_tls_ui_defaultButtonColor"
-                android:text="@string/tencent_tls_ui_independentLoginTitle"/>
-
-            <TextView
                 android:id="@+id/hostRegisterNewUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|right"
                 android:textColor="@color/tencent_tls_ui_defaultButtonColor"
                 android:text="注册新用户"/>
+
+            <TextView
+                android:id="@+id/accountLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:text="@string/tencent_tls_ui_independentLoginTitle"
+                android:textColor="@color/tencent_tls_ui_defaultButtonColor" />
 
         </FrameLayout>
 

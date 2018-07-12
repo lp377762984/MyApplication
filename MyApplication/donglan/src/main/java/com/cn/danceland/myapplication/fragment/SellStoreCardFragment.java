@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,7 +22,6 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.MyErrorLayout;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -86,7 +84,7 @@ public class SellStoreCardFragment extends BaseFragment {
         // TODO 准备查询条件
 
         cond.setBranch_id(Long.valueOf(info.getPerson().getDefault_branch()));
-
+        cond.setEnable(1);
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
                 DLResult<List<StoreType>> result = gson.fromJson(json.toString(), new TypeToken<DLResult<List<StoreType>>>() {

@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
@@ -132,6 +133,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
 //        if (TextUtils.equals(info.getGender(), "2")) {
 //            iv_sex.setImageResource(R.drawable.img_sex2);
 //        }
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         et_phone.setText(info.getPhone_no());
         et_name.setText(info.getCname());
         //et_lasttime.setText("最后维护时间：" + info.getLast_time());
@@ -217,6 +219,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         Bundle bundle = getIntent().getExtras();
         info = (PotentialInfo) bundle.getSerializable("info");
         listPopup = new ListPopup(this);
+        listJiaoLianPopup = new ListJiaoLianPopup(this);
         listPopupMultiSelect = new ListPopupMultiSelect(this);
         listCardPopup = new ListCardPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
@@ -307,11 +310,11 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
 
             case R.id.tv_teach_name://选择潜客教练
                 jiaolian_type = 1;
-                // findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                 findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.tv_admin_name://选择潜客会籍
                 jiaolian_type = 2;
-                //     findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                     findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.et_certificate_type://证件类型
                 showCertificate_type();
@@ -366,7 +369,21 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
                         return;
                     }
                 }
+                if (!TextUtils.isEmpty(et_certificate_no.getText().toString()) && TextUtils.isEmpty(tv_certificate_type.getText().toString())) {
+                    ToastUtils.showToastShort("请选择证件类型");
+                    return;
+                }
+                if (TextUtils.equals(tv_certificate_type.getText().toString(), "身份证") && !TextUtils.isEmpty(et_certificate_no.getText().toString())) {
 
+                    try {
+                        if (!PhoneFormatCheckUtils.isIDNumber(et_certificate_no.getText().toString())) {
+                            ToastUtils.showToastShort("身份证不合法");
+                            return;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 info.setCname(et_name.getText().toString());
                 info.setCompany(et_company.getText().toString());
                 info.setAddress(et_address.getText().toString());

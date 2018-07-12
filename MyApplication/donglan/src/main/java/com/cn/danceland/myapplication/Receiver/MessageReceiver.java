@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.Receiver;
 
-import android.app.Notification;
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -11,7 +10,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
-import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.MiMessage;
@@ -68,9 +66,31 @@ public class MessageReceiver extends PushMessageReceiver {
                 SPUtils.setInt("fansNum",fansNum+1);
             }else if("3".equals(type)){
                 SPUtils.setInt("pinglunNum",pinglunNum+1);
-            }else if("4".equals(type)){
+            }
+            else if("4".equals(type)){
                 reloadInfo();
             }
+            else if("6".equals(type)){//会员卡入场
+                LogUtil.i("会员卡入场");
+                EventBus.getDefault().post(new StringEvent("会员卡入场成功",6881));
+           //     ToastUtils.showToastShort("会员卡入场成功");
+            }
+            else if("7".equals(type)){
+                LogUtil.i("一对一入场");
+                EventBus.getDefault().post(new StringEvent("一对一私教入场成功",6881));
+             //   ToastUtils.showToastShort("一对一私教入场成功");
+            }
+            else if("8".equals(type)){
+                LogUtil.i("小团课入场");
+                EventBus.getDefault().post(new StringEvent("小团课入场成功",6881));
+        //        ToastUtils.showToastShort("小团课入场成功");
+            }
+            else if("9".equals(type)){
+                LogUtil.i("会员卡出场");
+                EventBus.getDefault().post(new StringEvent("会员卡出场成功",6881));
+                //        ToastUtils.showToastShort("小团课入场成功");
+            }
+
             String personId = extra.get("personId");
             miMessage.setPersonId(personId);
             String personName = extra.get("personName");

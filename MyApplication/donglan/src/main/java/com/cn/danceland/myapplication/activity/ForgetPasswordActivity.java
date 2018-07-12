@@ -23,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
@@ -208,10 +209,12 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    if (Constants.DEV_CONFIG){
+
+                //    if (Constants.DEV_CONFIG){
                         ToastUtils.showToastLong("验证码是："
                                 + smsCode);
-                    }
+               //     }
+
                 }
 
 
@@ -243,8 +246,8 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequestInfoBean requestInfoBean = new RequestInfoBean();
-                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                RequestSimpleBean requestInfoBean = new RequestSimpleBean();
+                requestInfoBean = gson.fromJson(s, RequestSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
                     //成功
                     ToastUtils.showToastShort("密码修改成功");

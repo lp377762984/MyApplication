@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +25,11 @@ import com.cn.danceland.myapplication.bean.TuanKeRecordBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -172,7 +169,8 @@ public class TuanKeRecordFragment extends BaseFragment {
             }
 
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
-            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date() + "", null);
+//            LogUtil.i(list.get(position).getDate() + "   "list.get(position).getCreate_date());
+            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date()+ "", null);
             viewHolder.course_date.setText("预约时间:"+time);
             viewHolder.course_type.setText("免费团课");
             viewHolder.course_jiaolian.setText("");

@@ -523,7 +523,8 @@ public class LoginActivity extends Activity implements OnClickListener {
                     SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
-
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
 
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());

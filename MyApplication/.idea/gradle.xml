@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BluetoothTest-master" />
             <option value="$PROJECT_DIR$/ChatDemoUI3.0" />
             <option value="$PROJECT_DIR$/EaseChat-easeui_dev" />
             <option value="$PROJECT_DIR$/PullToRefreshLibrary" />
@@ -17,6 +18,7 @@
             <option value="$PROJECT_DIR$/donglan" />
             <option value="$PROJECT_DIR$/easeui" />
             <option value="$PROJECT_DIR$/hellocharts-library" />
+            <option value="$PROJECT_DIR$/hellocharts-samples" />
             <option value="$PROJECT_DIR$/jiaozivideoplayerLibrary" />
             <option value="$PROJECT_DIR$/presentation" />
             <option value="$PROJECT_DIR$/sdk" />

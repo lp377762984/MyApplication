@@ -37,6 +37,8 @@ import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -218,10 +220,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    if (Constants.DEV_CONFIG){
+               //     if (Constants.DEV_CONFIG){
                         ToastUtils.showToastLong("验证码是："
                                 + smsCode);
-                    }
+               //     }
 
                 }
 

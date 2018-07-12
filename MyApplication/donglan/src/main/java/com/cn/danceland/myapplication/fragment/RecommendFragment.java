@@ -27,6 +27,7 @@ import com.cn.danceland.myapplication.bean.RequstRecommendBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -100,7 +101,7 @@ public class RecommendFragment extends BaseFragment {
      * 由于dialog_customize.xml只放置了一个EditView，因此和图8一样
      * dialog_customize.xml可自定义更复杂的View
      */
-        AlertDialog.Builder customizeDialog =
+        final AlertDialog.Builder customizeDialog =
                 new AlertDialog.Builder(mActivity);
         final View dialogView = LayoutInflater.from(mActivity)
                 .inflate(R.layout.dialog_recommend, null);
@@ -131,34 +132,69 @@ public class RecommendFragment extends BaseFragment {
 
             }
         });
+//
+        customizeDialog.setPositiveButton("确定",null
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // 获取EditView中的输入内容
+//                        if (TextUtils.isEmpty(et_name.getText().toString())) {
+//                            ToastUtils.showToastShort("请填写姓名");
+//                            customizeDialog.show();
+//                            return;
+//                        }
+//                        if (TextUtils.isEmpty(et_phone.getText().toString())) {
+//                            ToastUtils.showToastShort("请填写电话");
+//                            return;
+//                        }
+//                        strBean.name = et_name.getText().toString();
+//                        strBean.phone_no = et_phone.getText().toString();
+//
+//                      if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())){
+//                          ToastUtils.showToastShort("输入电话不合法请重新输入");
+//                      }else {
+//                          introduce_save(strBean);
+//                      }
+//                    }
+//                }
 
-        customizeDialog.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 获取EditView中的输入内容
-                        if (TextUtils.isEmpty(et_name.getText().toString())) {
-                            ToastUtils.showToastShort("请填写姓名");
-                            return;
-                        }
-                        if (TextUtils.isEmpty(et_phone.getText().toString())) {
-                            ToastUtils.showToastShort("请填写姓名");
-                            return;
-                        }
-                        strBean.name = et_name.getText().toString();
-                        strBean.phone_no = et_phone.getText().toString();
-
-                        introduce_save(strBean);
-                    }
-                });
+                );
         customizeDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
         });
-        customizeDialog.show();
-    }
+        final AlertDialog  dialog = customizeDialog.create();
+        dialog.show();
+        if(dialog.getButton(AlertDialog.BUTTON_POSITIVE)!=null) {
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 获取EditView中的输入内容
+                    if (TextUtils.isEmpty(et_name.getText().toString())) {
+                        ToastUtils.showToastShort("请填写姓名");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(et_phone.getText().toString())) {
+                        ToastUtils.showToastShort("请填写电话");
+                        return;
+                    }
+                    strBean.name = et_name.getText().toString();
+                    strBean.phone_no = et_phone.getText().toString();
+
+                    if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())){
+                        ToastUtils.showToastShort("输入电话不合法请重新输入");
+                    }else {
+                        introduce_save(strBean);
+                        dialog.dismiss();
+                    }
+                    }
+                });
+
+
+    }}
 
 
     class StrBean {

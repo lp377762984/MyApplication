@@ -893,12 +893,22 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                 if (data != null) {
                     deposit_price = data.getFloatExtra("dingjin", 0);
                     if (deposit_price != 0f) {
-                        depositId = data.getStringExtra("id");
-                        //        LogUtil.i(depositId);
-                        tv_dingjin.setText("- " + PriceUtils.formatPrice2String(deposit_price));
 
-                        pay_price = total_price - deposit_price;
-                        tv_pay_price.setText(PriceUtils.formatPrice2String(pay_price));
+                        if (total_price > deposit_price){
+                            depositId = data.getStringExtra("id");
+                            //        LogUtil.i(depositId);
+                            tv_dingjin.setText("- " + PriceUtils.formatPrice2String(deposit_price));
+
+                            pay_price = total_price - deposit_price;
+                            tv_pay_price.setText(PriceUtils.formatPrice2String(pay_price));
+                        }else {
+                            ToastUtils.showToastShort("定金金额必须小于商品金额");
+                            depositId = "";
+                            tv_dingjin.setText("未使用");
+                            pay_price = total_price;
+                            tv_pay_price.setText(PriceUtils.formatPrice2String(pay_price));
+                        }
+
 
                     } else {
                         depositId = "";
@@ -1068,6 +1078,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     Gson gson = new Gson();
                     strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
+
+                    if (pay_price-0.01F<0){
+                        ToastUtils.showToastLong("订单金额不能小于0.01元");
+                        break;
+                    }
                     try {
                         commit_card(strBean.toString());
                     } catch (JSONException e) {
@@ -1125,6 +1140,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     Gson gson = new Gson();
                     strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
+                    if (pay_price<0.01F){
+                        ToastUtils.showToastLong("订单金额不能小于0.01元");
+                        return;
+                    }
                     try {
                         commit_deposit(strBean.toString());
                     } catch (JSONException e) {

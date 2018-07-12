@@ -38,14 +38,13 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
-import com.weigan.loopview.OnItemSelectedListener;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -249,6 +248,9 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("手机号码必须填写");
                     return;
                 }
+                if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())){
+                    ToastUtils.showToastShort("请填写正确的手机号");
+                }
                 potentialInfo.setPhone_no(et_phone.getText().toString());
                 if (TextUtils.isEmpty(potentialInfo.getGender())) {
                     ToastUtils.showToastShort("性别必须填写");
@@ -267,6 +269,21 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     }
                 }
 
+                if (!TextUtils.isEmpty(et_certificate_no.getText().toString()) && TextUtils.isEmpty(tv_certificate_type.getText().toString())) {
+                    ToastUtils.showToastShort("请选择证件类型");
+                    return;
+                }
+                if (TextUtils.equals(tv_certificate_type.getText().toString(), "身份证") && !TextUtils.isEmpty(et_certificate_no.getText().toString())) {
+
+                    try {
+                        if (!PhoneFormatCheckUtils.checkIdCardNo(et_certificate_no.getText().toString())) {
+                            ToastUtils.showToastShort("身份证不合法");
+                            return;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 potentialInfo.setCname(et_name.getText().toString());
                 potentialInfo.setCompany(et_company.getText().toString());

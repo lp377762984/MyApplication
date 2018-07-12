@@ -18,6 +18,14 @@ public class Data implements Serializable {
     private String verCode;
     private Branch branch;
 
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
+    }
+
     @Override
     public String toString() {
         return "Data{" +
@@ -30,14 +38,6 @@ public class Data implements Serializable {
                 ", verCode='" + verCode + '\'' +
                 ", branch=" + branch +
                 '}';
-    }
-
-    public String getSig() {
-        return sig;
-    }
-
-    public void setSig(String sig) {
-        this.sig = sig;
     }
 
     public String getVerCode() {

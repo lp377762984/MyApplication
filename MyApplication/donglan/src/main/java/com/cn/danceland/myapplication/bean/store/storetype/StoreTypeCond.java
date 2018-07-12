@@ -14,8 +14,9 @@ public class StoreTypeCond extends BaseCondition  {
 	private Float face;// 面值
 	private Float giving;// 赠送金额
 	private String remark;// 备注
-	private Byte enable;// 状态
+	private int enable;// 状态
 	private String name;// 储值卡名称
+
 
 	public Long getId() {
 		return id;
@@ -47,10 +48,10 @@ public class StoreTypeCond extends BaseCondition  {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public Byte getEnable() {
+	public int getEnable() {
 		return enable;
 	}
-	public void setEnable(Byte enable) {
+	public void setEnable(int enable) {
 		this.enable = enable;
 	}
 	public String getName() {

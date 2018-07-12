@@ -2,9 +2,6 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -12,19 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -51,17 +43,12 @@ import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
 import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.xiaomi.smack.packet.h.a.s;
 
 /**
  * Created by feng on 2018/1/13.
@@ -307,7 +294,12 @@ public class SiJiaoDetailActivity extends Activity {
         alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+//                if (){
+//
+//                }
+                LogUtil.i(jiaolianMinuteList.size()+"");
                 for (int i = 0; i < jiaolianMinuteList.size(); i++) {
+                    LogUtil.i(startMinutesList.get(pos).intValue()+"@@@"+endMinuteList.get(pos).intValue());
                     if (startMinutesList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue() || endMinuteList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue()) {
                         ToastUtils.showToastShort("该时间段已被预约！请重新选择");
                         return;
