@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.shouhuan.command;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -10,6 +11,7 @@ import com.cn.danceland.myapplication.shouhuan.bean.DateModel;
 import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.Calendar;
 
@@ -674,10 +676,11 @@ public class CommandManager {
     private void broadcastData(byte[] bytes) {
         final Intent intent = new Intent(BleConstans.ACTION_SEND_DATA_TO_BLE);
         intent.putExtra(Constants.EXTRA_SEND_DATA_TO_BLE, bytes);
+        //intent.setComponent(new ComponentName("com.cn.danceland.myapplication","com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService"));
         try {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            LogUtil.i(e.toString());
         }
     }
 

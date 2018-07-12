@@ -201,7 +201,7 @@ public class PublishActivity extends Activity {
         publish_status = findViewById(R.id.publish_status);
         //publish_photo = findViewById(R.id.publish_photo);
         publish_location = findViewById(R.id.publish_location);
-        publish_share1 = findViewById(R.id.publish_share1);
+        //publish_share1 = findViewById(R.id.publish_share1);
         SPUtils.setInt("imgN", 0);
         grid_view = findViewById(R.id.grid_view);
         grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));

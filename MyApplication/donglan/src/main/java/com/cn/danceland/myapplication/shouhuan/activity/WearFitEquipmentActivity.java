@@ -72,7 +72,7 @@ public class WearFitEquipmentActivity extends Activity {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                    btn_bind.setText("绑定手环");
+
                 } else {
                     Intent intent = new Intent(WearFitEquipmentActivity.this, DeviceScanActivity.class);
                     startActivityForResult(intent, REQUEST_SEARCH);
@@ -144,22 +144,24 @@ public class WearFitEquipmentActivity extends Activity {
                 //todo 更改界面ui
                 //tv_connect.setText(address);
                 tv_status.setText(name);
+                btn_bind.setText("解绑手环");
                 invalidateOptionsMenu();//更新菜单栏
                 ToastUtils.showToastShort("连接成功");
                 progressDialog.dismiss();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;
                 //todo 更改界面ui
-//                device_address.setText("未连接");
-//
-//                device_name.setText("");
                 invalidateOptionsMenu();//更新菜单栏
                 try {
                     MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-                ToastUtils.showToastShort("断开");
+                tv_status.setText("未绑定");
+                btn_bind.setText("绑定手环");
+                ToastUtils.showToastShort("已解绑");
+                SPUtils.setString(Constants.ADDRESS,"");
+                SPUtils.setString(Constants.NAME,"");
                 //LogUtil.d("BluetoothLeService", "断开");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.

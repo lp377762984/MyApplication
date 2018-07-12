@@ -44,6 +44,7 @@ import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.shouhuan.utils.SampleGattAttributes;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,7 @@ import java.util.UUID;
  * given Bluetooth LE device.
  */
 public class BluetoothLeService extends Service{
-    private final static String TAG = BluetoothLeService.class.getSimpleName();
-
+    private final static String TAG = "BluetoothLeService";
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
@@ -173,7 +173,12 @@ public class BluetoothLeService extends Service{
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
             Log.d(TAG, "onCharacteristicWrite: ");
-            
+            switch (status) {
+                case BluetoothGatt.GATT_SUCCESS:
+                    Log.e(TAG, "onCharacteristicWrite: GATT_SUCCESS");//接受指令
+                    packet_send = true;
+                    break;
+            }
         }
 
         @Override
@@ -182,12 +187,13 @@ public class BluetoothLeService extends Service{
             Log.d(TAG, "onReadRemoteRssi: ");
         }
     };
-    private SendDataToBleReceiver sendDataToBleReceiver;
+    public SendDataToBleReceiver sendDataToBleReceiver;
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
         sendBroadcast(intent);
     }
+
 
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
@@ -319,10 +325,17 @@ public class BluetoothLeService extends Service{
             Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
+        if(sendDataToBleReceiver==null){
+            sendDataToBleReceiver = new SendDataToBleReceiver();
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(BleConstans.ACTION_SEND_DATA_TO_BLE);
+            LocalBroadcastManager.getInstance(this).registerReceiver(sendDataToBleReceiver, intentFilter);
+            //registerReceiver(sendDataToBleReceiver,intentFilter);
+            LogUtil.i("广播注册成功");
+        }
 
         return true;
     }
-
     /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
@@ -448,12 +461,13 @@ public class BluetoothLeService extends Service{
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-
-            if (action.equals(BleConstans.ACTION_SEND_DATA_TO_BLE)) {
+            LogUtil.i("收到广播");
+            if (BleConstans.ACTION_SEND_DATA_TO_BLE.equals(action)) {
                 byte[] send_data = intent.getByteArrayExtra(Constants.EXTRA_SEND_DATA_TO_BLE);
                 if (send_data != null) {
                     //发送数据
                     BLE_send_data_set(send_data, false);
+                    LogUtil.i(send_data.toString());
                 }
             }
         }
@@ -461,19 +475,10 @@ public class BluetoothLeService extends Service{
 
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        //// TODO: 2017/5/24  注册发送数据的广播
-        sendDataToBleReceiver = new SendDataToBleReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BleConstans.ACTION_SEND_DATA_TO_BLE);
-        LocalBroadcastManager.getInstance(this).registerReceiver(sendDataToBleReceiver, intentFilter);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(sendDataToBleReceiver);
+        //unregisterReceiver(sendDataToBleReceiver);
     }
 
     /**
