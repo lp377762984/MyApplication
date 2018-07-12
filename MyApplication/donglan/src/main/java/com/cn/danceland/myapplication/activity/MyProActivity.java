@@ -50,8 +50,10 @@ import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -94,9 +96,10 @@ public class MyProActivity extends Activity {
     public final static int ALBUM_REQUEST_CODE = 1;
     public final static int CROP_REQUEST = 2;
     public final static int CAMERA_REQUEST_CODE = 3;
-    public static String SAVED_IMAGE_DIR_PATH =
-            Environment.getExternalStorageDirectory().getPath()
-                    + "/donglan/camera/";// 拍照路径
+//    public static String SAVED_IMAGE_DIR_PATH =
+//            Environment.getExternalStorageDirectory().getPath()
+//                    + "/donglan/camera/";// 拍照路径
+   // public String SAVED_IMAGE_DIR_PATH = AppUtils.getDiskCachePath(MyProActivity.this)+ "/";// 拍照路径
 
     String cameraPath, gemder, nickName, selfAvatarPath, strHeight, strWeight, iden;
     Data infoData;
@@ -322,7 +325,7 @@ public class MyProActivity extends Activity {
                                 //用户拒绝了申请
                                 ToastUtils.showToastShort("没有权限");
                             }
-                        }, new String[]{Manifest.permission.CAMERA}, false, null);
+                        }, new String[]{Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE}, false, null);
                     }
                 }
                 break;
@@ -862,11 +865,11 @@ public class MyProActivity extends Activity {
         // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
-            cameraPath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png";
+            cameraPath =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/" + System.currentTimeMillis() + ".png";
             Intent intent = new Intent();
             // 指定开启系统相机的Action
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            String out_file_path = SAVED_IMAGE_DIR_PATH;
+            String out_file_path =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/";
             File dir = new File(out_file_path);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -1007,7 +1010,9 @@ public class MyProActivity extends Activity {
             Intent intent = new Intent("com.android.camera.action.CROP");
             //设置裁剪之后的图片路径文件
             //随便命名一个
-            cutfile = new File(SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png");
+
+            cutfile = new File( AppUtils.getDiskCachePath(MyProActivity.this)+ "/"+System.currentTimeMillis() + ".png");
+            LogUtil.i(cutfile.getAbsolutePath());
             if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
             }
@@ -1052,7 +1057,7 @@ public class MyProActivity extends Activity {
     private String imagePath;
 
     public void startPhotoZoom(Uri uri) throws IOException {
-        imagePath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + "cut.png";
+        imagePath =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/" + System.currentTimeMillis() + "cut.png";
 
         cutfile = new File(imagePath);
         if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了

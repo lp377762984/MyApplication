@@ -12,6 +12,7 @@
     <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--请求访问使用照相设备-->
     <uses-permission android:name="android.permission.CAMERA" />
 

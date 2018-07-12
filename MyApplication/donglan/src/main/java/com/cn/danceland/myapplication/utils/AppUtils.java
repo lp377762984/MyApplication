@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -85,6 +86,21 @@ public class AppUtils
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取cache路径
+     *
+     * @param context
+     * @return
+     */
+    public static String getDiskCachePath(Context context) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            return context.getExternalCacheDir().getPath();
+        } else {
+            return context.getCacheDir().getPath();
+        }
     }
 
 }
