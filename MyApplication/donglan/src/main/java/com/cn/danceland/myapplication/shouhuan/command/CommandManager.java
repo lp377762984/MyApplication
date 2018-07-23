@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.shouhuan.command;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -677,6 +676,7 @@ public class CommandManager {
         final Intent intent = new Intent(BleConstans.ACTION_SEND_DATA_TO_BLE);
         intent.putExtra(Constants.EXTRA_SEND_DATA_TO_BLE, bytes);
         //intent.setComponent(new ComponentName("com.cn.danceland.myapplication","com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService"));
+        LogUtil.i(bytes.toString());
         try {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } catch (Exception e) {

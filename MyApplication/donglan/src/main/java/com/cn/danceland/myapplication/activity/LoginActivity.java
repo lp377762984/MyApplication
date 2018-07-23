@@ -183,24 +183,24 @@ public class LoginActivity extends Activity implements OnClickListener {
                     @Override
                     public void onUserSigExpired() {
                         //用户签名过期了，需要刷新userSig重新登录SDK
-                        LogUtil.i( "onUserSigExpired");
+                        LogUtil.i("onUserSigExpired");
                     }
                 })
                 //设置连接状态事件监听器
                 .setConnectionListener(new TIMConnListener() {
                     @Override
                     public void onConnected() {
-                        LogUtil.i( "onConnected连接聊天服务器");
+                        LogUtil.i("onConnected连接聊天服务器");
                     }
 
                     @Override
                     public void onDisconnected(int code, String desc) {
-                        LogUtil.i( "onDisconnected");
+                        LogUtil.i("onDisconnected");
                     }
 
                     @Override
                     public void onWifiNeedAuth(String name) {
-                        LogUtil.i( "onWifiNeedAuth");
+                        LogUtil.i("onWifiNeedAuth");
                     }
                 });
         RefreshEvent.getInstance().init(userConfig);
@@ -209,8 +209,6 @@ public class LoginActivity extends Activity implements OnClickListener {
         userConfig = GroupEvent.getInstance().init(userConfig);
         //将用户配置与通讯管理器进行绑定
         TIMManager.getInstance().setUserConfig(userConfig);
-
-
 
 
     }
@@ -456,19 +454,17 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
 
-//                    if (DemoHelper.getInstance().isLoggedIn()) {
-//
-//                    }
+
                     if (Constants.DEV_CONFIG) {
                         login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
                     } else {
                         login_txim(data.getPerson().getMember_no(), data.getSig());
                     }
                     setMipushId();
-                            SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                          startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    //SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
-                           finish();
+                    //        finish();
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
@@ -571,7 +567,7 @@ public class LoginActivity extends Activity implements OnClickListener {
     private void login_txim(final String identifier, final String userSig) {
         LogUtil.i(identifier + "/n" + userSig);
         // identifier为用户名，userSig 为用户登录凭证
-   //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
+        //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
 
 
         LoginBusiness.loginIm(identifier, userSig, new TIMCallBack() {
@@ -585,9 +581,9 @@ public class LoginActivity extends Activity implements OnClickListener {
             public void onSuccess() {
                 LogUtil.i("login succ 登录成功");
                 TLSService.getInstance().setLastErrno(0);
-                SPUtils.setString("sig",userSig);
+                SPUtils.setString("sig", userSig);
 
-              //  TLSHelper.getInstance().setLocalId(UserInfo.ge);
+                //  TLSHelper.getInstance().setLocalId(UserInfo.ge);
             }
         });
 

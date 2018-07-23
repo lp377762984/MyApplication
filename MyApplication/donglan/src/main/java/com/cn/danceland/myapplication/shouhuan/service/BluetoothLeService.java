@@ -33,8 +33,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -195,6 +193,7 @@ public class BluetoothLeService extends Service{
     }
 
 
+
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
@@ -304,11 +303,26 @@ public class BluetoothLeService extends Service{
 
     private final IBinder mBinder = new LocalBinder();
 
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        sendDataToBleReceiver = new SendDataToBleReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BleConstans.ACTION_SEND_DATA_TO_BLE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(sendDataToBleReceiver, intentFilter);
+        //registerReceiver(sendDataToBleReceiver,intentFilter);
+        LogUtil.i("广播注册成功");
+    }
+
     /**
      * Initializes a reference to the local Bluetooth com.wakeup.bluetoothtest.adapter.
      *
      * @return Return true if the initialization is successful.
      */
+
+
     public boolean initialize() {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
@@ -326,12 +340,14 @@ public class BluetoothLeService extends Service{
             return false;
         }
         if(sendDataToBleReceiver==null){
+
             sendDataToBleReceiver = new SendDataToBleReceiver();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(BleConstans.ACTION_SEND_DATA_TO_BLE);
             LocalBroadcastManager.getInstance(this).registerReceiver(sendDataToBleReceiver, intentFilter);
             //registerReceiver(sendDataToBleReceiver,intentFilter);
             LogUtil.i("广播注册成功");
+
         }
 
         return true;
@@ -478,6 +494,7 @@ public class BluetoothLeService extends Service{
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(sendDataToBleReceiver);
+        LogUtil.i("注销广播");
         //unregisterReceiver(sendDataToBleReceiver);
     }
 

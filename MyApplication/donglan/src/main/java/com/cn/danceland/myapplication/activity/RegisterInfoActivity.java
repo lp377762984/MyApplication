@@ -34,6 +34,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
@@ -490,6 +492,20 @@ public class RegisterInfoActivity extends Activity {
                     mData.getPerson().setGender(gender);
                     DataInfoCache.saveOneCache(mData, Constants.MY_INFO);
                     EventBus.getDefault().post(new StringEvent("", 1010));
+
+                    FriendshipManagerPresenter.setMyNick(strName, new TIMCallBack() {
+                        @Override
+                        public void onError(int i, String s) {
+                            LogUtil.i("昵称修改失败");
+                        }
+
+                        @Override
+                        public void onSuccess() {
+
+                            LogUtil.i("昵称修改成功");
+                        }
+                    });
+
                     Intent intent = new Intent(RegisterInfoActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();

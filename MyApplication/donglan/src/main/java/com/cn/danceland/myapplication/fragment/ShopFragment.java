@@ -47,6 +47,7 @@ import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.LoginNumberActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
+import com.cn.danceland.myapplication.activity.MyContactsActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
@@ -65,7 +66,7 @@ import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.im.ui.TXIMHomeActivity;
+import com.cn.danceland.myapplication.im.ui.ConversationActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -825,8 +826,8 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity,ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","3"));
                         break;
                     case 29://私信
-                   //   startActivity(new Intent(mActivity, ConversationActivity.class));
-                      startActivity(new Intent(mActivity, TXIMHomeActivity.class));
+                      startActivity(new Intent(mActivity, ConversationActivity.class));
+                    //  startActivity(new Intent(mActivity, TXIMHomeActivity.class));
                       //  ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 30://教练报表
@@ -852,6 +853,9 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 35://动态码
                         startActivity(new Intent(mActivity,LoginNumberActivity.class));
+                        break;
+                    case 36://
+                        startActivity(new Intent(mActivity,MyContactsActivity.class));
                         break;
                     default:
                         break;

@@ -54,7 +54,8 @@ public class NomalConversation extends Conversation {
      */
     @Override
     public void navToDetail(Context context) {
-        ChatActivity.navToChat(context,identify,type);
+      //  Conversation
+        ChatActivity.navToChat(context,identify,type,getAvatarUrl(),getName());
     }
 
     /**

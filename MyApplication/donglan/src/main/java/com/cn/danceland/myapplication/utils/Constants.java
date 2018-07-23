@@ -1,10 +1,9 @@
 package com.cn.danceland.myapplication.utils;
-
-
 import com.cn.danceland.myapplication.MyApplication;
 
 public class Constants  {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
+    public static final int MAX_FRIEND_COUNT = 900;//最大好友数量
 
     public static String getVersion() {
         return AppUtils.getVersionName(MyApplication.getContext());
@@ -15,20 +14,16 @@ public class Constants  {
     }
 
   //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-  // public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
-    //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
-    // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
+  //  public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-    //public static String HOST = "http://192.168.1.117:8003/";//佳楠
-    //public static final String HOST = " http://192.168.1.117:8003/";//
-    public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-    // public static final String HOST = "http://192.168.1.120:8003/";//老高
+ //   public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
  //   public static final String HOST = "http://118.190.201.15:6003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-    public static final String HOST = "http://192.168.1.123:8003/";//老高
-     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
+   public static final String HOST = "http://192.168.1.120:8003/";//老高
+ //  public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -155,6 +150,8 @@ public class Constants  {
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
     public static final String COMMIT_CHUZHIKA = HOST + "appOrder/storeConsume";//储值卡消费回调
+    public static final String GET_GROUP_MEMBERS = HOST + "/group/getGroupMembers";//获取IM群组成员资料
+    public static final String GET_CONTACTS = HOST + "/group/getEmployes";//获取IM群组成员资料
 
     //潜客相关
     public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客

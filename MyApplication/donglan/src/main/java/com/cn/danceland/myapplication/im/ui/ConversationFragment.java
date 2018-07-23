@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.im.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -17,6 +18,7 @@ import com.cn.danceland.myapplication.im.adapters.ConversationAdapter;
 import com.cn.danceland.myapplication.im.model.Conversation;
 import com.cn.danceland.myapplication.im.model.CustomMessage;
 import com.cn.danceland.myapplication.im.model.FriendshipConversation;
+import com.cn.danceland.myapplication.im.model.GroupInfo;
 import com.cn.danceland.myapplication.im.model.GroupManageConversation;
 import com.cn.danceland.myapplication.im.model.MessageFactory;
 import com.cn.danceland.myapplication.im.model.NomalConversation;
@@ -33,6 +35,7 @@ import com.tencent.qcloud.presentation.presenter.GroupManagerPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
+import com.tencent.qcloud.ui.TemplateTitle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,6 +73,16 @@ public class ConversationFragment extends Fragment implements ConversationView,F
         if (view == null){
             view = inflater.inflate(R.layout.fragment_conversation, container, false);
             listView = (ListView) view.findViewById(R.id.list);
+            TemplateTitle    TT_title = (TemplateTitle) view.findViewById(R.id.TT_title);
+            TT_title.setMoreTextContext("群组");
+            TT_title.setMoreTextAction(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), GroupListActivity.class);
+                    intent.putExtra("type", GroupInfo.publicGroup);
+                    getActivity().startActivity(intent);
+                }
+            });
             adapter = new ConversationAdapter(getActivity(), R.layout.item_conversation, conversationList);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

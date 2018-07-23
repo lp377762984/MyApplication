@@ -16,7 +16,6 @@ import android.os.RemoteException;
 import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -254,12 +253,20 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+
+
+
+
+
+
+
             mBluetoothLeService = BluetoothInterface.Stub.asInterface(service);
 //            BluetoothInterface bluetoothInterface = BluetoothInterface.Stub.asInterface(service);
 //            mBluetoothLeService = ((BluetoothInterface.Stub) BluetoothInterface.Stub.asInterface(service)).getService();
 //            LogUtil.i("mBluetoothLeService");
 ////            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             try {
+
                 if (!mBluetoothLeService.initialize()) {
                     LogUtil.i("Unable to initialize Bluetooth");
 

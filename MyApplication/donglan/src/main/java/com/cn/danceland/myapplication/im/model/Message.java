@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.im.adapters.ChatAdapter;
 import com.cn.danceland.myapplication.im.utils.TimeUtil;
@@ -56,12 +58,16 @@ public abstract class Message {
         viewHolder.systemMessage.setVisibility(hasTime ? View.VISIBLE : View.GONE);
         viewHolder.systemMessage.setText(TimeUtil.getChatTimeStr(message.timestamp()));
         showDesc(viewHolder);
+        //    LogUtil.i("FaceUrl:"+message.getSenderProfile().getFaceUrl());
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         if (message.isSelf()) {
             viewHolder.leftPanel.setVisibility(View.GONE);
             viewHolder.rightPanel.setVisibility(View.VISIBLE);
-            Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+            Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             if (info.getPerson().getSelf_avatar_path() != null) {
-                Glide.with(context).load(info.getPerson().getSelf_avatar_path()).into(viewHolder.rightAvatar);
+
+
+                Glide.with(context).load(info.getPerson().getSelf_avatar_path()).apply(options).into(viewHolder.rightAvatar);
 //               LogUtil.i(message.getSenderProfile().getFaceUrl());
             }
 
@@ -69,6 +75,16 @@ public abstract class Message {
         } else {
             viewHolder.leftPanel.setVisibility(View.VISIBLE);
             viewHolder.rightPanel.setVisibility(View.GONE);
+              if (message.getConversation().getType() == TIMConversationType.C2C){
+//            if (message.getSenderProfile() != null && message.getSenderProfile().getFaceUrl() != null) {
+//                Glide.with(context).load(message.getSenderProfile().getFaceUrl()).apply(options).into(viewHolder.leftAvatar);
+//                LogUtil.i("getNickName:" + message.getSenderProfile().getNickName());
+//                LogUtil.i("getPeer:" + message.getConversation().getPeer());
+//                LogUtil.i("getFaceUrl:" + message.getSenderProfile().getFaceUrl());
+//                         }
+                  Glide.with(context).load(viewHolder.avatarUrl).apply(options).into(viewHolder.leftAvatar);
+
+            }
             //群聊显示名称，群名片>个人昵称>identify
             if (message.getConversation().getType() == TIMConversationType.Group) {
                 viewHolder.sender.setVisibility(View.VISIBLE);
@@ -79,10 +95,10 @@ public abstract class Message {
                     name = message.getSenderProfile().getNickName();
                 if (name.equals("")) name = message.getSender();
                 viewHolder.sender.setText(name);
-                if (message.getSenderProfile()!=null&&message.getSenderProfile().getFaceUrl() != null) {
-                    Glide.with(context).load(message.getSenderProfile().getFaceUrl()).into(viewHolder.leftAvatar);
+                if (message.getSenderProfile() != null && message.getSenderProfile().getFaceUrl() != null) {
+                    Glide.with(context).load(message.getSenderProfile().getFaceUrl()).apply(options).into(viewHolder.leftAvatar);
 
-                   LogUtil.i(message.getSenderProfile().getFaceUrl());
+                    LogUtil.i("FaceUrl:" + message.getSenderProfile().getFaceUrl());
                 }
 
             } else {

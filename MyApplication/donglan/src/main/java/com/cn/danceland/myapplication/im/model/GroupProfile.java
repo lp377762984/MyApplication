@@ -1,10 +1,10 @@
 package com.cn.danceland.myapplication.im.model;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.im.ui.GroupProfileActivity;
+import com.cn.danceland.myapplication.im.ui.ChatActivity;
+import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupMemberRoleType;
 import com.tencent.imsdk.TIMGroupReceiveMessageOpt;
 import com.tencent.imsdk.ext.group.TIMGroupBasicSelfInfo;
@@ -20,12 +20,12 @@ public class GroupProfile implements ProfileSummary {
     private TIMGroupDetailInfo profile;
     private TIMGroupBasicSelfInfo selfInfo;
 
-    public GroupProfile(TIMGroupCacheInfo profile){
+    public GroupProfile(TIMGroupCacheInfo profile) {
         this.profile = profile.getGroupInfo();
         selfInfo = profile.getSelfInfo();
     }
 
-    public GroupProfile(TIMGroupDetailInfo profile){
+    public GroupProfile(TIMGroupDetailInfo profile) {
         this.profile = profile;
     }
 
@@ -33,7 +33,7 @@ public class GroupProfile implements ProfileSummary {
      * 获取群ID
      */
     @Override
-    public String getIdentify(){
+    public String getIdentify() {
         return profile.getGroupId();
     }
 
@@ -79,7 +79,7 @@ public class GroupProfile implements ProfileSummary {
     /**
      * 获取自己身份
      */
-    public TIMGroupMemberRoleType getRole(){
+    public TIMGroupMemberRoleType getRole() {
         return selfInfo.getRole();
     }
 
@@ -87,7 +87,7 @@ public class GroupProfile implements ProfileSummary {
     /**
      * 获取消息接收状态
      */
-    public TIMGroupReceiveMessageOpt getMessagOpt(){
+    public TIMGroupReceiveMessageOpt getMessagOpt() {
         return selfInfo.getRecvMsgOption();
     }
 
@@ -98,8 +98,10 @@ public class GroupProfile implements ProfileSummary {
      */
     @Override
     public void onClick(Context context) {
-        Intent intent = new Intent(context, GroupProfileActivity.class);
-        intent.putExtra("identify", profile.getGroupId());
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, GroupProfileActivity.class);
+//        intent.putExtra("identify", profile.getGroupId());
+//        context.startActivity(intent);
+//直接跳转到聊天界面
+        ChatActivity.navToChat(context, profile.getGroupId(), TIMConversationType.Group, "","");
     }
 }

@@ -11,6 +11,7 @@ public class Data implements Serializable {
 
     private String token;
     private String sig;
+    private String imgUrl;
     private Person person;
     private Employee employee;
     private Member member;
@@ -18,19 +19,12 @@ public class Data implements Serializable {
     private String verCode;
     private Branch branch;
 
-    public String getSig() {
-        return sig;
-    }
-
-    public void setSig(String sig) {
-        this.sig = sig;
-    }
-
     @Override
     public String toString() {
         return "Data{" +
                 "token='" + token + '\'' +
                 ", sig='" + sig + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
                 ", person=" + person +
                 ", employee=" + employee +
                 ", member=" + member +
@@ -38,6 +32,22 @@ public class Data implements Serializable {
                 ", verCode='" + verCode + '\'' +
                 ", branch=" + branch +
                 '}';
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
     }
 
     public String getVerCode() {

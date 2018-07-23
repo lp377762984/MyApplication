@@ -25,6 +25,7 @@ public class ChatAdapter extends ArrayAdapter<Message> {
     private int resourceId;
     private View view;
     private ViewHolder viewHolder;
+    private  String avatarUrl="";
 
     @Override
     public boolean hasStableIds() {
@@ -48,6 +49,9 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         super(context, resource, objects);
         resourceId = resource;
     }
+    public void  setavatarUrl(String avatarUrl){
+        this.avatarUrl=avatarUrl;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -68,10 +72,12 @@ public class ChatAdapter extends ArrayAdapter<Message> {
             viewHolder.sender = (TextView) view.findViewById(R.id.sender);
             viewHolder.rightDesc = (TextView) view.findViewById(R.id.rightDesc);
             viewHolder.systemMessage = (TextView) view.findViewById(R.id.systemMessage);
+            viewHolder.avatarUrl=avatarUrl;
             view.setTag(viewHolder);
         }
         if (position < getCount()){
             final Message data = getItem(position);
+
             data.showMessage(viewHolder, getContext());
         }
         return view;
@@ -90,5 +96,6 @@ public class ChatAdapter extends ArrayAdapter<Message> {
         public TextView sender;
         public TextView systemMessage;
         public TextView rightDesc;
+        public String avatarUrl;
     }
 }

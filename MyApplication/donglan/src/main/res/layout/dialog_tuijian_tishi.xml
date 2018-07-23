@@ -25,7 +25,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
-            android:text="很荣幸成为贵俱乐部会员，现推荐我的亲友成为贵中心会员，每推荐一位亲友，都将获得1-30天不等免费健身机会，他（她）可以是您的亲人、朋友、同事、爱人，您送出去的是一份选择健康的机会，如果你的亲友选择入会参加健身，您将获得一定的积分奖励，积分可到指定入口兑换礼品。" />
+            android:text="很荣幸成为我俱乐部会员：
+    推荐您的亲友成为我俱乐部会员，每推荐成功一位亲友，您都将获得我俱乐部的积分奖励，兑换指定奖品，他（她）可以是您的亲人、朋友、同事、爱人，您送出去的是一份选择健康的机会" />
 
         <Button
             android:id="@+id/btn_commit"

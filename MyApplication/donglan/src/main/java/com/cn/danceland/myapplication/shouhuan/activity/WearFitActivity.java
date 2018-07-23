@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -22,15 +24,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
+import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
@@ -68,7 +69,7 @@ public class WearFitActivity extends Activity {
     }
 
     private void initHost() {
-        //commandManager = CommandManager.getInstance(this);
+        commandManager = CommandManager.getInstance(this);
         progressDialog = new ProgressDialog(this);
         itemBeans = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
@@ -170,8 +171,24 @@ public class WearFitActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
                     case 0://心率
+
+
+
+                        commandManager.realTimeAndOnceMeasure(0x80,1);
                         break;
                     case 1://睡眠
+
+                        PackageManager manager =  getPackageManager();
+                        //要查找的BroadCastReceiver
+                        Intent intent = new Intent(BleConstans.ACTION_SEND_DATA_TO_BLE);
+
+                        List<ResolveInfo> resolveInfos = manager.queryBroadcastReceivers(intent,  PackageManager.GET_INTENT_FILTERS);
+
+                        if (resolveInfos.size() == 0) {
+                            LogUtil.i( "该BroadCast不存在");
+                        }
+
+
                         break;
                     case 2://疲劳
                         break;

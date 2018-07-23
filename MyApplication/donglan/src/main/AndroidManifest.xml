@@ -651,6 +651,9 @@
             android:name=".activity.MyConsumeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.MyContactsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.MyConsumeAboutActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".shouhuan.activity.ShouHuanMainActivity" />
@@ -659,7 +662,7 @@
         <service
             android:name=".shouhuan.service.BluetoothLeService"
             android:enabled="true"
-            android:process=":BluetoothLeService" />
+           />
 
 
         <activity

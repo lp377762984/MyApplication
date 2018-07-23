@@ -33,6 +33,9 @@ import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.im.model.FriendProfile;
+import com.cn.danceland.myapplication.im.model.FriendshipInfo;
+import com.cn.danceland.myapplication.im.ui.ChatActivity;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -44,6 +47,13 @@ import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMValueCallBack;
+import com.tencent.imsdk.ext.sns.TIMAddFriendRequest;
+import com.tencent.imsdk.ext.sns.TIMDelFriendType;
+import com.tencent.imsdk.ext.sns.TIMFriendResult;
+import com.tencent.imsdk.ext.sns.TIMFriendshipManagerExt;
+import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +61,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +88,7 @@ public class RevisitListFragment extends BaseFragment {
     private TextView tv_error;
     private ImageView imageView;
 
+    private FriendshipManagerPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +189,7 @@ public class RevisitListFragment extends BaseFragment {
         }
         v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
@@ -262,6 +275,53 @@ public class RevisitListFragment extends BaseFragment {
         }
     }
 
+
+    public void addUsers(final int position,String user) {
+        //创建请求列表
+        List<TIMAddFriendRequest> reqList = new ArrayList<TIMAddFriendRequest>();
+
+//添加好友请求
+        TIMAddFriendRequest req = new TIMAddFriendRequest(user);
+        req.setAddrSource("");
+        req.setAddWording("add me");
+        req.setRemark(System.currentTimeMillis()+"");
+        reqList.add(req);
+
+
+
+//申请添加好友
+        TIMFriendshipManagerExt.getInstance().addFriend(reqList, new TIMValueCallBack<List<TIMFriendResult>>() {
+            @Override
+            public void onError(int code, String desc) {
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                LogUtil.i( "addFriend failed: 添加好友好友失败" + code + " desc");
+                switch(code){
+                case 6011:
+                    ToastUtils.showToastShort("用户不在线");
+                break;
+                case 6200:
+                    ToastUtils.showToastShort("请查看网络连接");
+                break;
+                default:
+                    ToastUtils.showToastShort("请稍后重试");
+                break;
+                }
+            }
+            @Override
+            public void onSuccess(List<TIMFriendResult> result) {
+                LogUtil.i( "addFriend succ添加好友成功");
+                if (Constants.DEV_CONFIG) {
+                    ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                } else {
+                    ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                }
+                for (TIMFriendResult res : result) {
+                    LogUtil.i( "identifier: " + res.getIdentifer() + " status: " + res.getStatus());
+                }
+            }
+        });
+    }
 
     /**
      * 上拉拉刷新
@@ -453,9 +513,9 @@ public class RevisitListFragment extends BaseFragment {
             if (TextUtils.equals(datalist.get(position).getGender(), "2")) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex2);
             }
-            if (datalist.get(position).getLast_time()!=null){
+            if (datalist.get(position).getLast_time() != null) {
                 vh.tv_lasttime.setText("最后维护时间：" + datalist.get(position).getLast_time());
-            }else {
+            } else {
                 vh.tv_lasttime.setText("最后维护时间：" + "最近未维护");
             }
 
@@ -479,6 +539,7 @@ public class RevisitListFragment extends BaseFragment {
                             public void permissionGranted(@NonNull String[] permissions) {
                                 showDialog(datalist.get(position).getPhone_no(), position);
                             }
+
                             @Override
                             public void permissionDenied(@NonNull String[] permissions) {
                                 //用户拒绝了申请
@@ -490,43 +551,119 @@ public class RevisitListFragment extends BaseFragment {
                     //pos = position;
                 }
             });
+            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-//            vh.iv_hx_msg.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    String userName = datalist.get(position).getNick_name();
-//                    String userPic = datalist.get(position).getSelf_avatar_path();
-//                    String hxIdFrom ;
-//                    if (Constants.HX_DEV_CONFIG) {
-//                        hxIdFrom = "dev"+datalist.get(position).getMember_no();
-//                    }else {
-//                        hxIdFrom = datalist.get(position).getMember_no();
+                    if (TextUtils.isEmpty(datalist.get(position).getNick_name())){
+                        ToastUtils.showToastShort("该用户不在线");
+                        return;
+                    }
+
+                    if (Constants.DEV_CONFIG) {
+                        addUsers(position,"dev" + datalist.get(position).getMember_no());
+//                        presenter.addFriend("dev" + datalist.get(position).getMember_no(), time + "", getString(R.string.default_group_name), null);
+//                        ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "");
+                    } else {
+                        addUsers(position,datalist.get(position).getMember_no());
+
+                    }
+
+
+                    //               LogUtil.i(FriendshipInfo.getInstance().getFriends().toString());
+                    Map<String, List<FriendProfile>> friends = FriendshipInfo.getInstance().getFriends();
+                    List<FriendProfile> friends1 = friends.get(FriendshipInfo.getInstance().getGroups().get(0));
+                    //          LogUtil.i(friends1.size() + "");
+                    if (friends1.size() > Constants.MAX_FRIEND_COUNT) {
+
+                        //将好友列表升序排列
+                        Collections.sort(friends1, new Comparator<FriendProfile>() {
+                            @Override
+                            public int compare(FriendProfile o1, FriendProfile o2) {
+                                Long a;
+                                Long b;
+                                if (TextUtils.isEmpty(o1.getRemark())) {
+                                    a = 0L;
+                                } else {
+                                    a = Long.parseLong(o1.getRemark());
+                                }
+                                if (TextUtils.isEmpty(o2.getRemark())) {
+                                    b = 0L;
+                                } else {
+                                    b = Long.parseLong(o2.getRemark());
+                                }
+
+
+                                //升序
+                                return a.compareTo(b);
+                            }
+                        });
+                        LogUtil.i("升序排序后--:" + friends1.size());
+
+                        List<String> delUers = new ArrayList<String>();
+                        for (int i = 0; i < friends1.size(); i++) {
+                            LogUtil.i(friends1.get(i).getRemark());
+                            if (i < friends1.size() - Constants.MAX_FRIEND_COUNT) {
+                                //获取多余的好友id
+                                delUers.add(friends1.get(i).getIdentify());
+                            }
+                        }
+                        //删除多余的好友
+                        delUsers(position, delUers);
+
+                    }
+//                    else {
+//                        Long time = System.currentTimeMillis();
+//                        if (Constants.DEV_CONFIG) {
+//                            presenter.addFriend("dev" + datalist.get(position).getMember_no(), time + "", getString(R.string.default_group_name), null);
+//                            ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "");
+//                        } else {
+//                            presenter.addFriend(datalist.get(position).getMember_no(), "" + time, getString(R.string.default_group_name), null);
+//                            ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "");
+//                        }
 //                    }
-//
-//                    LogUtil.i(userName + userPic + hxIdFrom);
-//                    EaseUser easeUser = new EaseUser(hxIdFrom);
-//                    easeUser.setAvatar(userPic);
-//                    easeUser.setNick(userName);
-//
-//                    List<EaseUser> users = new ArrayList<EaseUser>();
-//                    users.add(easeUser);
-//                    if (easeUser != null) {
-//                        DemoHelper.getInstance().updateContactList(users);
-//                    } else {
-//                        LogUtil.i("USER IS NULL");
-//
-//                    }
-//
-//                        startActivity(new Intent(mActivity, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
-//
-//
-//                               }
-//            });
+
+
+                }
+            });
+
 
             return convertView;
 
         }
 
+        public void delUsers(final int position, List<String> users) {
+            //双向删除好友 test_user
+            TIMFriendshipManagerExt.DeleteFriendParam param = new TIMFriendshipManagerExt.DeleteFriendParam();
+            param.setType(TIMDelFriendType.TIM_FRIEND_DEL_BOTH)
+                    .setUsers(users);
+
+            TIMFriendshipManagerExt.getInstance().delFriend(param, new TIMValueCallBack<List<TIMFriendResult>>() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+                    LogUtil.e("delFriend failed: " + code + " desc");
+                    ToastUtils.showToastShort("此用户无法聊天");
+                }
+
+                @Override
+                public void onSuccess(List<TIMFriendResult> timFriendResults) {
+                    if (Constants.DEV_CONFIG) {
+                        ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                    } else {
+                        ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                    }
+
+
+                    LogUtil.i("delFriend succ");
+                    for (TIMFriendResult result : timFriendResults) {
+                        LogUtil.i("result id: " + result.getIdentifer() + "|status: " + result.getStatus());
+                    }
+
+                }
+            });
+        }
 
         /**
          * 是否添加回访记录
