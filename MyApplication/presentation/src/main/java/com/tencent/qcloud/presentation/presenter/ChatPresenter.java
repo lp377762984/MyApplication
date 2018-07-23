@@ -2,7 +2,6 @@ package com.tencent.qcloud.presentation.presenter;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversation;
@@ -75,6 +74,7 @@ public class ChatPresenter implements Observer {
      * @param message 发送的消息
      */
     public void sendMessage(final TIMMessage message) {
+
         conversation.sendMessage(message, new TIMValueCallBack<TIMMessage>() {
             @Override
             public void onError(int code, String desc) {//发送消息失败
@@ -151,6 +151,7 @@ public class ChatPresenter implements Observer {
         if (observable instanceof MessageEvent){
             if (data instanceof TIMMessage || data == null) {
                 TIMMessage msg = (TIMMessage) data;
+
                 if (msg==null||msg.getConversation().getPeer().equals(conversation.getPeer())&&msg.getConversation().getType()==conversation.getType()){
                     view.showMessage(msg);
                     //当前聊天界面已读上报，用于多终端登录时未读消息数同步
