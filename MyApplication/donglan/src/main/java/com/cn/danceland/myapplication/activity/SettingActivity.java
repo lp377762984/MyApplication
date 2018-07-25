@@ -149,6 +149,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ll_my_shop).setOnClickListener(this);
         findViewById(R.id.ll_setting_weixin).setOnClickListener(this);
         findViewById(R.id.ll_setting_email).setOnClickListener(this);
+        findViewById(R.id.ll_blacklist).setOnClickListener(this);
 
         tv_number = findViewById(R.id.tv_number);
         tv_phone = findViewById(R.id.tv_phone);
@@ -272,6 +273,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.ll_setting_email:
                 showName(1);
+                break;
+            case R.id.ll_blacklist:
+                    startActivity(new Intent(SettingActivity.this,BlackListActivity.class));
                 break;
             default:
                 break;

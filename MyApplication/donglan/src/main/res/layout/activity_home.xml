@@ -7,8 +7,6 @@
     android:background="#F9F9F9">
 
 
-
-
     <LinearLayout
         android:id="@+id/main_bottom"
         android:layout_width="match_parent"
@@ -47,6 +45,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/tabUnread"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/point1"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn_shop"
@@ -114,10 +122,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/main_bottom" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/color_bg_line"
-        android:layout_above="@id/main_bottom"/>
+        android:layout_above="@id/main_bottom"
+        android:background="@color/color_bg_line" />
 
 </RelativeLayout>

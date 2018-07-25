@@ -865,127 +865,6 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-//    public class MyStoreAdapter extends BaseAdapter {
-//        Context mContext;
-//        List<StoreBean.Items> itemsArrayList;
-//
-//        MyStoreAdapter(Context context, List<StoreBean.Items> list) {
-//            mContext = context;
-//            itemsArrayList = list;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return itemsArrayList.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return null;
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return 0;
-//        }
-//
-//        @Override
-//        public View getView(final int position, View convertView, ViewGroup parent) {
-//            ViewHolder viewHolder = null;
-//            StoreBean.Items items;
-//
-//            if (convertView == null) {
-//                viewHolder = new ViewHolder();
-//                convertView = View.inflate(mActivity, R.layout.store_item, null);
-//                viewHolder.store_item_img = convertView.findViewById(R.id.store_item_img);
-//                viewHolder.store_address = convertView.findViewById(R.id.store_address);
-//                viewHolder.distance = convertView.findViewById(R.id.distance);
-//                viewHolder.img_location = convertView.findViewById(R.id.img_location);
-//                viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
-//                viewHolder.img_join = convertView.findViewById(R.id.img_join);
-//                viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
-//                //iewById(R.id.unread_msg_number);
-//                convertView.setTag(viewHolder);
-//            } else {
-//                viewHolder = (ViewHolder) convertView.getTag();
-//            }
-//
-//
-//            if (itemsArrayList != null) {
-//                items = itemsArrayList.get(position);
-//                viewHolder.store_address.setText(items.getBname());
-//                viewHolder.distance.setText(items.getAddress());
-//                Glide.with(getActivity()).load("http://img0.imgtn.bdimg.com/it/u=2269433745,3578312737&fm=214&gp=0.jpg").into(viewHolder.store_item_img);
-//                //PhoneNo = items.getTelphone_no();
-////                shopJingdu = items.getLat()+"";
-////                shopWeidu = items.getLng()+"";
-////                branchId = items.getBranch_id()+"";
-//            }
-//            viewHolder.img_phone.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (itemsArrayList != null) {
-//                        showDialog(itemsArrayList.get(position).getTelphone_no());
-//                    }
-//                }
-//            });
-//            viewHolder.img_location.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (itemsArrayList != null) {
-//                        Intent intent = new Intent(getActivity(), MapActivity.class);
-//                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
-//                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
-//                        intent.putExtra("jingdu", jingdu);
-//                        intent.putExtra("weidu", weidu);
-//                        startActivity(intent);
-//                    }
-//                }
-//            });
-//            viewHolder.img_join.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    AlertDialog.Builder dialog =
-//                            new AlertDialog.Builder(mActivity);
-//                    dialog.setTitle("提示");
-//                    dialog.setMessage("是否加入此门店");
-//                    dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            if (itemsArrayList != null) {
-//                                join(itemsArrayList.get(position).getBranch_id() + "");
-//                            }
-//
-//                        }
-//                    });
-//                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                        }
-//                    });
-//                    dialog.show();
-//                }
-//            });
-//            viewHolder.clickitem.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (itemsArrayList != null) {
-//                        Intent intent = new Intent(getActivity(), ShopDetailedActivity.class);
-//                        intent.putExtra("shopWeidu", itemsArrayList.get(position).getLat() + "");
-//                        intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
-//                        intent.putExtra("jingdu", jingdu);
-//                        intent.putExtra("weidu", weidu);
-//                        intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
-//                        startActivityForResult(intent, 111);
-//                    }
-//                }
-//            });
-//
-//            return convertView;
-//        }
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1074,13 +953,19 @@ public class ShopFragment extends BaseFragment {
             ImageView ibtn = view.findViewById(R.id.ibtn);
             TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
             if (menuList.get(i).getId() == 29) {
-                //    LogUtil.i(EMClient.getInstance().chatManager().getUnreadMsgsCount()+"");
-//                if (EMClient.getInstance().chatManager().getUnreadMsgsCount() == 0) {
-//                    unread_msg_number.setVisibility(View.GONE);
-//                } else {
-//                    unread_msg_number.setVisibility(View.VISIBLE);
-//                    unread_msg_number.setText(EMClient.getInstance().chatManager().getUnreadMsgsCount() + "");
-//                }
+
+                long TotalUnreadNum=((HomeActivity)mActivity).getTotalUnreadNum();
+                if (TotalUnreadNum == 0) {
+                    unread_msg_number.setVisibility(View.GONE);
+                } else {
+                    unread_msg_number.setVisibility(View.VISIBLE);
+                    if (TotalUnreadNum>99){
+                        unread_msg_number.setText("99+");
+                    }else {
+                        unread_msg_number.setText(TotalUnreadNum + "");
+                    }
+
+                }
             }
 
 

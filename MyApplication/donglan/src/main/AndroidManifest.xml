@@ -669,6 +669,9 @@
             android:name=".activity.LoginNumberActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.BlackListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.TimeTableActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -686,6 +689,7 @@
         <activity
             android:name=".shouhuan.activity.WearFitLongSitActivity"
             android:screenOrientation="portrait" />
+
 
         <receiver
             android:name=".Receiver.MessageReceiver"

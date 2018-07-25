@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +35,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
@@ -49,9 +51,34 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMConnListener;
+import com.tencent.imsdk.TIMConversation;
+import com.tencent.imsdk.TIMGroupEventListener;
+import com.tencent.imsdk.TIMGroupMemberInfo;
+import com.tencent.imsdk.TIMGroupTipsElem;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMRefreshListener;
+import com.tencent.imsdk.TIMSNSChangeInfo;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserProfile;
+import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.imsdk.ext.group.TIMGroupAssistantListener;
+import com.tencent.imsdk.ext.group.TIMGroupCacheInfo;
+import com.tencent.imsdk.ext.group.TIMUserConfigGroupExt;
+import com.tencent.imsdk.ext.message.TIMConversationExt;
+import com.tencent.imsdk.ext.message.TIMManagerExt;
+import com.tencent.imsdk.ext.message.TIMUserConfigMsgExt;
+import com.tencent.imsdk.ext.sns.TIMFriendshipProxyListener;
+import com.tencent.imsdk.ext.sns.TIMUserConfigSnsExt;
+import com.tencent.qcloud.presentation.presenter.ConversationPresenter;
+import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
@@ -76,6 +103,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     double jingdu, weidu;
     Data myInfo;
 
+    private ConversationPresenter presenter;
+    private ImageView msgUnread;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -102,8 +131,10 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         //    requestPermissions();//请求权限
         instance = this;
         initView();
-        registerBroadcastReceiver();//注册环信监听
+        // registerBroadcastReceiver();//注册环信监听
         checkUpdate();
+
+
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
 
@@ -111,6 +142,45 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
         discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
+        msgUnread = (ImageView) findViewById(R.id.tabUnread);
+        presenter = new ConversationPresenter(new ConversationView() {
+            @Override
+            public void initView(List<TIMConversation> conversationList) {
+
+            }
+
+            @Override
+            public void updateMessage(TIMMessage message) {
+//                LogUtil.i("shuaxin xiaoxi"+message.getElementCount());
+//                getTotalUnreadNum();
+//                LogUtil.i( "未读数"+  getTotalUnreadNum());
+                setMsgUnread(getTotalUnreadNum() == 0);
+                EventBus.getDefault().post(new StringEvent("刷新消息",20001));
+            }
+
+            @Override
+            public void updateFriendshipMessage() {
+
+            }
+
+            @Override
+            public void removeConversation(String identify) {
+
+            }
+
+            @Override
+            public void updateGroupInfo(TIMGroupCacheInfo info) {
+
+            }
+
+            @Override
+            public void refresh() {
+                LogUtil.i("shuaxin");
+            }
+        });
+        presenter.getConversation();
+
+        initTimUser();
 //        if (savedInstanceState != null) {
 //            homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[0]);
 //            shopFragment = (ShopFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG[1]);
@@ -168,6 +238,153 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             setMipushId();
         }
     }
+
+
+    public void initTimUser() {
+        //基本用户配置
+        TIMUserConfig userConfig = new TIMUserConfig()
+                //设置群组资料拉取字段
+                //.setGroupSettings(initGroupSettings())
+                //设置资料关系链拉取字段
+                //.setFriendshipSettings(initFriendshipSettings())
+                //设置用户状态变更事件监听器
+                .setUserStatusListener(new TIMUserStatusListener() {
+                    @Override
+                    public void onForceOffline() {
+                        //被其他终端踢下线
+                        LogUtil.i("onForceOffline");
+                    }
+
+                    @Override
+                    public void onUserSigExpired() {
+                        //用户签名过期了，需要刷新userSig重新登录SDK
+                        LogUtil.i("onUserSigExpired");
+                    }
+                })
+                //设置连接状态事件监听器
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        LogUtil.i("onConnected");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        LogUtil.i("onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        LogUtil.i("onWifiNeedAuth");
+                    }
+                })
+                //设置群组事件监听器
+                .setGroupEventListener(new TIMGroupEventListener() {
+                    @Override
+                    public void onGroupTipsEvent(TIMGroupTipsElem elem) {
+                        LogUtil.i("onGroupTipsEvent, type: " + elem.getTipsType());
+                    }
+                })
+                //设置会话刷新监听器
+                .setRefreshListener(new TIMRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        LogUtil.i("onRefresh");
+                    }
+
+                    @Override
+                    public void onRefreshConversation(List<TIMConversation> conversations) {
+                        LogUtil.i("onRefreshConversation, conversation size: " + conversations.size());
+                    }
+                });
+
+        userConfig = new TIMUserConfigMsgExt(userConfig)
+                .enableStorage(false)
+                .enableReadReceipt(true);
+        userConfig = new TIMUserConfigSnsExt(userConfig)
+                .enableFriendshipStorage(true)
+                .setFriendshipProxyListener(new TIMFriendshipProxyListener() {
+                    @Override
+                    public void OnAddFriends(List<TIMUserProfile> users) {
+                        LogUtil.i("OnAddFriends");
+                    }
+
+                    @Override
+                    public void OnDelFriends(List<String> identifiers) {
+                        LogUtil.i("OnDelFriends");
+                    }
+
+                    @Override
+                    public void OnFriendProfileUpdate(List<TIMUserProfile> profiles) {
+                        LogUtil.i("OnFriendProfileUpdate");
+                    }
+
+                    @Override
+                    public void OnAddFriendReqs(List<TIMSNSChangeInfo> reqs) {
+                        LogUtil.i("OnAddFriendReqs");
+                    }
+                });
+
+        userConfig = new TIMUserConfigGroupExt(userConfig)
+                .enableGroupStorage(true)
+                .setGroupAssistantListener(new TIMGroupAssistantListener() {
+                    @Override
+                    public void onMemberJoin(String groupId, List<TIMGroupMemberInfo> memberInfos) {
+                        LogUtil.i("onMemberJoin");
+                    }
+
+                    @Override
+                    public void onMemberQuit(String groupId, List<String> members) {
+                        LogUtil.i("onMemberQuit");
+                    }
+
+                    @Override
+                    public void onMemberUpdate(String groupId, List<TIMGroupMemberInfo> memberInfos) {
+                        LogUtil.i("onMemberUpdate");
+                    }
+
+                    @Override
+                    public void onGroupAdd(TIMGroupCacheInfo groupCacheInfo) {
+                        LogUtil.i("onGroupAdd");
+                    }
+
+                    @Override
+                    public void onGroupDelete(String groupId) {
+                        LogUtil.i("onGroupDelete");
+                    }
+
+                    @Override
+                    public void onGroupUpdate(TIMGroupCacheInfo groupCacheInfo) {
+                        LogUtil.i("onGroupUpdate");
+                    }
+                });
+
+        TIMManager.getInstance().setUserConfig(userConfig);
+    }
+
+    /**
+     * 设置未读tab显示
+     */
+    public void setMsgUnread(boolean noUnread){
+        msgUnread.setVisibility(noUnread?View.GONE:View.VISIBLE);
+    }
+
+    public long getTotalUnreadNum(){
+
+//        //获取会话扩展实例
+//        TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, peer);
+//        TIMConversationExt conExt = new TIMConversationExt(con);
+//        //获取会话未读数
+//        long num = conExt.getUnreadMessageNum();
+
+        List<TIMConversation> conversationList = TIMManagerExt.getInstance().getConversationList();
+                long num = 0;
+                for (TIMConversation conversation : conversationList){
+                    num +=  new TIMConversationExt(conversation).getUnreadMessageNum();
+                }
+        return num;
+    }
+
 
 
     private void checkUpdate() {
@@ -335,12 +552,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             //获取周边POI信息
             //POI信息包括POI ID、名称等，具体信息请参照类参考中POI类的相关说明
             if (location != null) {
-             //   LogUtil.i(location.getLocType() + "");
+                //   LogUtil.i(location.getLocType() + "");
             }
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 weidu = location.getLatitude();
                 jingdu = location.getLongitude();
-              //  LogUtil.i(weidu + "----" + jingdu);
+                //  LogUtil.i(weidu + "----" + jingdu);
                 SPUtils.setString("jingdu", jingdu + "");
                 SPUtils.setString("weidu", weidu + "");
                 if (shopListFragment != null) {
@@ -472,7 +689,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterBroadcastReceiver();
+       // unregisterBroadcastReceiver();
     }
 
 //    //private EaseUI easeUI;

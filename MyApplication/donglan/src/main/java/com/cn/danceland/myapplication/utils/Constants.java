@@ -19,7 +19,7 @@ public class Constants  {
  //   public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
  //   public static final String HOST = "http://118.190.201.15:6003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-   public static final String HOST = "http://192.168.1.120:8003/";//老高
+   public static final String HOST = "http://192.168.1.117:8003/";//
  //  public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -86,6 +86,9 @@ public class Constants  {
     public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//加关注
     public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
+    public static final String ADD_BLACKLIST_URL = HOST + "/blackList/save";//添加黑名单
+    public static final String FIND_BLACKLIST_URL = HOST + "/blackList/queryList";//查询黑名单
+    public static final String DEL_BLACKLIST_URL= HOST + "/blackList/delete";//移除黑名单
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
 
