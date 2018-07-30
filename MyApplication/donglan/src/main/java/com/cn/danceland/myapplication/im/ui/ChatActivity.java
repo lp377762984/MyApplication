@@ -196,7 +196,11 @@ public class ChatActivity extends FragmentActivity implements ChatView {
         }
         voiceSendingView = (VoiceSendingView) findViewById(R.id.voice_sending);
         presenter.start();
-        setRemack();
+        if (type==TIMConversationType.C2C)
+        {
+            setRemack();
+        }
+
     }
 
     @Override
@@ -217,7 +221,10 @@ public class ChatActivity extends FragmentActivity implements ChatView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        setRemack();
+        if (type==TIMConversationType.C2C)
+        {
+            setRemack();
+        }
         presenter.stop();
     }
 

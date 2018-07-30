@@ -51,8 +51,10 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMConversation;
+import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMGroupEventListener;
 import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMGroupTipsElem;
@@ -71,11 +73,16 @@ import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.imsdk.ext.message.TIMUserConfigMsgExt;
 import com.tencent.imsdk.ext.sns.TIMFriendshipProxyListener;
 import com.tencent.imsdk.ext.sns.TIMUserConfigSnsExt;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
+import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
 import com.tencent.qcloud.presentation.presenter.ConversationPresenter;
 import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +119,23 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         // super.onSaveInstanceState(outState);
     }
 
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch (event.getEventCode()) {
+            case 20001:
+
+                if (shopFragment != null) {
+                    shopFragment.refresh();
+                }
+                setMsgUnread(getTotalUnreadNum() == 0);
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @Override
     public void onBackPressed() {
 
@@ -127,6 +151,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_home);
         //    requestPermissions();//请求权限
         instance = this;
@@ -154,8 +179,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                LogUtil.i("shuaxin xiaoxi"+message.getElementCount());
 //                getTotalUnreadNum();
 //                LogUtil.i( "未读数"+  getTotalUnreadNum());
-                setMsgUnread(getTotalUnreadNum() == 0);
-                EventBus.getDefault().post(new StringEvent("刷新消息",20001));
+
+                EventBus.getDefault().post(new StringEvent("刷新消息", 20001));
             }
 
             @Override
@@ -253,6 +278,18 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     public void onForceOffline() {
                         //被其他终端踢下线
                         LogUtil.i("onForceOffline");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                        builder.setMessage("您的账号已从从其他设备登录，请重新登录");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                                SPUtils.setBoolean(Constants.ISLOGINED,false);
+                                finish();
+                            }
+                        });
+                        builder.setCancelable(false);
+
                     }
 
                     @Override
@@ -324,6 +361,11 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                         LogUtil.i("OnAddFriendReqs");
                     }
                 });
+        //设置刷新监听
+        RefreshEvent.getInstance().init(userConfig);
+        userConfig = FriendshipEvent.getInstance().init(userConfig);
+        userConfig = GroupEvent.getInstance().init(userConfig);
+        userConfig = MessageEvent.getInstance().init(userConfig);
 
         userConfig = new TIMUserConfigGroupExt(userConfig)
                 .enableGroupStorage(true)
@@ -346,6 +388,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                     @Override
                     public void onGroupAdd(TIMGroupCacheInfo groupCacheInfo) {
                         LogUtil.i("onGroupAdd");
+
                     }
 
                     @Override
@@ -365,11 +408,11 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     /**
      * 设置未读tab显示
      */
-    public void setMsgUnread(boolean noUnread){
-        msgUnread.setVisibility(noUnread?View.GONE:View.VISIBLE);
+    public void setMsgUnread(boolean noUnread) {
+        msgUnread.setVisibility(noUnread ? View.GONE : View.VISIBLE);
     }
 
-    public long getTotalUnreadNum(){
+    public long getTotalUnreadNum() {
 
 //        //获取会话扩展实例
 //        TIMConversation con = TIMManager.getInstance().getConversation(TIMConversationType.C2C, peer);
@@ -378,13 +421,26 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //        long num = conExt.getUnreadMessageNum();
 
         List<TIMConversation> conversationList = TIMManagerExt.getInstance().getConversationList();
-                long num = 0;
-                for (TIMConversation conversation : conversationList){
-                    num +=  new TIMConversationExt(conversation).getUnreadMessageNum();
-                }
+        long num = 0;
+        for (TIMConversation conversation : conversationList) {
+            if (conversation.getType() == TIMConversationType.System) {
+                new TIMConversationExt(conversation).setReadMessage(null, new TIMCallBack() {
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+
+                    @Override
+                    public void onSuccess() {
+
+                    }
+                });
+            }
+
+            num += new TIMConversationExt(conversation).getUnreadMessageNum();
+        }
         return num;
     }
-
 
 
     private void checkUpdate() {
@@ -689,44 +745,10 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // unregisterBroadcastReceiver();
+        // unregisterBroadcastReceiver();
+        EventBus.getDefault().unregister(this);
     }
 
-//    //private EaseUI easeUI;
-//    EMMessageListener messageListener = new EMMessageListener() {
-//
-//        @Override
-//        public void onMessageReceived(List<EMMessage> messages) {
-//            // notify new message
-//            for (EMMessage message : messages) {
-//                //     DemoHelper.getInstance().getNotifier().onNewMsg(message);
-//                EaseUI.getInstance().getNotifier().onNewMesg(messages);
-//            }
-//            refreshUIWithMessage();
-//        }
-//
-//        @Override
-//        public void onCmdMessageReceived(List<EMMessage> messages) {
-//            refreshUIWithMessage();
-//        }
-//
-//        @Override
-//        public void onMessageRead(List<EMMessage> messages) {
-//        }
-//
-//        @Override
-//        public void onMessageDelivered(List<EMMessage> message) {
-//        }
-//
-//        @Override
-//        public void onMessageRecalled(List<EMMessage> messages) {
-//            refreshUIWithMessage();
-//        }
-//
-//        @Override
-//        public void onMessageChanged(EMMessage message, Object change) {
-//        }
-//    };
 
     private void refreshUIWithMessage() {
         runOnUiThread(new Runnable() {

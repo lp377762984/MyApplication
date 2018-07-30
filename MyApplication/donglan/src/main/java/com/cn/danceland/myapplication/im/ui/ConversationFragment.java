@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.adapters.ConversationAdapter;
 import com.cn.danceland.myapplication.im.model.Conversation;
 import com.cn.danceland.myapplication.im.model.CustomMessage;
@@ -36,6 +37,8 @@ import com.tencent.qcloud.presentation.viewfeatures.ConversationView;
 import com.tencent.qcloud.presentation.viewfeatures.FriendshipMessageView;
 import com.tencent.qcloud.presentation.viewfeatures.GroupManageMessageView;
 import com.tencent.qcloud.ui.TemplateTitle;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -133,8 +136,14 @@ public class ConversationFragment extends Fragment implements ConversationView,F
                     break;
             }
         }
-      //  friendshipManagerPresenter.getFriendshipLastMessage();
+      friendshipManagerPresenter.getFriendshipLastMessage();
         groupManagerPresenter.getGroupManageLastMessage();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().post(new StringEvent("刷新消息",20001));
     }
 
     /**

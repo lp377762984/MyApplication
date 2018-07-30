@@ -460,8 +460,8 @@ public class LoginActivity extends Activity implements OnClickListener {
                     } else {
                         login_txim(data.getPerson().getMember_no(), data.getSig());
                     }
-                    setMipushId();
-                    //SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                setMipushId();
+                  SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                     // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
 
                     //        finish();
