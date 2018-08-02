@@ -14,7 +14,6 @@ import java.util.List;
 public class HeartRateHelper {
     private HeartRateDao heartRateDao = MyApplication.getInstance().getHeartRateSessionSession().getHeartRateDao();
 
-
     public void insert(HeartRate heartRate) {
         if (heartRateDao==null){
             heartRateDao = MyApplication.getInstance().getHeartRateSessionSession().getHeartRateDao();

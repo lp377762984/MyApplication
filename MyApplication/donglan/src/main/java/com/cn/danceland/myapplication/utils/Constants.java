@@ -19,16 +19,16 @@ public class Constants  {
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-    //public static String HOST = "http://192.168.1.117:8003/";//佳楠
+    public static String HOST = "http://192.168.1.66:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
-    public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-    // public static final String HOST = "http://192.168.1.120:8003/";//老高
+   // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+//     public static final String HOST = "http://192.168.1.55:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-    public static final String HOST = "http://192.168.1.123:8003/";//老高
-     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
+//    public static final String HOST = "http://192.168.1.124:8003/";//老高
+//     public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -234,8 +234,17 @@ public class Constants  {
     public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
     public static final String QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
 
+    //手环相关
+    public static final String QUERY_WEAR_FIT_HEART_RATE_LIST = HOST + "/personHeartRate/queryList";//按条件查询不分页[人员心率数据]列表
+    public static final String QUERY_WEAR_FIT_HEART_RATE_FANDLAST = HOST + "/personHeartRate/findLast";//根据条件查询最后一条心率数据
+    public static final String QUERY_WEAR_FIT_HEART_RATE_SAVE = HOST + "/personHeartRate/save";//新增[人员心率数据]
+    public static final String QUERY_WEAR_FIT_HEART_RATE_FANDAVG = HOST + "/personHeartRate/findAvg";//根据条件查询心率每日平均数
+    public static final String QUERY_WEAR_FIT_HEART_RATE_FANDRATE = HOST + "/personHeartRate/findRate";//根据条件查询心率合格率
 
-    //环信相关
+
+
+
+  //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
     public static final String CHAT_ROOM = "item_chatroom";

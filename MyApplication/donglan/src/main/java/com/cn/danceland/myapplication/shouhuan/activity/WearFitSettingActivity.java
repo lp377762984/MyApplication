@@ -11,6 +11,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -165,6 +166,7 @@ public class WearFitSettingActivity extends Activity {
         sw_taishou.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Log.i("yxx","抬手亮屏开关"+MyApplication.mBluetoothConnected+MyApplication.mBluetoothConnected+";b="+b);
                 if(MyApplication.mBluetoothConnected){
                     if(b){
                         commandManager.setUpHandLightScreen(1);
@@ -224,12 +226,27 @@ public class WearFitSettingActivity extends Activity {
                     if(MyApplication.mBluetoothConnected){
                         try {
                             MyApplication.mBluetoothLeService.disconnect();
-                        } catch (RemoteException e) {
+                            MyApplication.mBluetoothConnected=false;//更改解绑连接状态 yxx
 
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
                         }
                     }else{
                         startActivityForResult(new Intent(WearFitSettingActivity.this,WearFitEquipmentActivity.class),2);
                     }
+                    setData();//更改解绑连接状态 yxx
+
+
+
+//                    if(MyApplication.mBluetoothConnected){
+//                        try {
+//                            MyApplication.mBluetoothLeService.disconnect();
+//                        } catch (RemoteException e) {
+//
+//                        }
+//                    }else{
+//                        startActivityForResult(new Intent(WearFitSettingActivity.this,WearFitEquipmentActivity.class),2);
+//                    }
                     break;
                 case R.id.rl_naozhong:
                     startActivity(new Intent(WearFitSettingActivity.this,AddClockActivity.class));
@@ -330,7 +347,7 @@ public class WearFitSettingActivity extends Activity {
                 ToastUtils.showToastShort("连接成功");
 
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                MyApplication.mBluetoothConnected = false;
+//                MyApplication.mBluetoothConnected = false;
                 //todo 更改界面ui
                 try {
                     MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)

@@ -312,8 +312,8 @@ public class ForOtherListBean implements Parcelable {
             this.member_no = in.readString();
             this.nick_name = in.readString();
             this.person_id = in.readInt();
-            this.price = in.readString();
-            this.real_price = in.readString();
+            this.price = in.readFloat();
+            this.real_price = in.readFloat();
             this.self_avatar_path = in.readString();
             this.start_date = in.readString();
             this.surplus_count = in.readInt();

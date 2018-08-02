@@ -591,6 +591,24 @@ public class CommandManager {
         broadcastData(bytes);
     }
 
+//    /**
+//     * 进入APP心率界面实时获取心率值
+//     *
+//     * @param status
+//     * @param control
+//     */
+//    public void realTimeAndOnceMeasure(int status, int control) {
+//        byte[] bytes = new byte[7];
+//        bytes[0] = (byte) 0xAB;
+//        bytes[1] = (byte) 0;
+//        bytes[2] = (byte) 4;
+//        bytes[3] = (byte) 0xFF;
+//        bytes[4] = (byte) 0x84;
+//        //心率：0X09(单次) 0X0A(实时)  血氧：0X11(单次) 0X12(实时) 血压：0X21 0X22
+//        bytes[5] = (byte) status;
+//        bytes[6] = (byte) control;//0关  1开
+//        broadcastData(bytes);
+//    }
 
     /**
      * 关机
@@ -676,7 +694,7 @@ public class CommandManager {
     private void broadcastData(byte[] bytes) {
         final Intent intent = new Intent(BleConstans.ACTION_SEND_DATA_TO_BLE);
         intent.putExtra(Constants.EXTRA_SEND_DATA_TO_BLE, bytes);
-        //intent.setComponent(new ComponentName("com.cn.danceland.myapplication","com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService"));
+//        intent.setComponent(new ComponentName("com.cn.danceland.myapplication","com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService"));
         try {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } catch (Exception e) {
