@@ -108,7 +108,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 
-
     <permission
         android:name="com.cn.danceland.myapplication.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
@@ -126,32 +125,32 @@
         android:theme="@style/MyTheme">
 
 
-<!--        &lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="1103171109178312#donglan" />-->
+        <!--        &lt;!&ndash; 设置环信应用的AppKey &ndash;&gt;
+                <meta-data
+                    android:name="EASEMOB_APPKEY"
+                    android:value="1103171109178312#donglan" />-->
         <!-- 声明SDK所需的service SDK核心功能-->
-<!--
-        <service
-            android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true" />
-        <service
-            android:name="com.hyphenate.chat.EMJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-            &lt;!&ndash; 可选filter &ndash;&gt;
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
--->
+        <!--
+                <service
+                    android:name="com.hyphenate.chat.EMChatService"
+                    android:exported="true" />
+                <service
+                    android:name="com.hyphenate.chat.EMJobService"
+                    android:exported="true"
+                    android:permission="android.permission.BIND_JOB_SERVICE" />
+                &lt;!&ndash; 声明SDK所需的receiver &ndash;&gt;
+                <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+                    <intent-filter>
+                        <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                        <data android:scheme="package" />
+                    </intent-filter>
+                    &lt;!&ndash; 可选filter &ndash;&gt;
+                    <intent-filter>
+                        <action android:name="android.intent.action.BOOT_COMPLETED" />
+                        <action android:name="android.intent.action.USER_PRESENT" />
+                    </intent-filter>
+                </receiver>
+        -->
 
 
         <!--
@@ -197,13 +196,11 @@
         <service
             android:name="com.tencent.qalsdk.service.QalService"
             android:exported="true"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
         <service
             android:name="com.tencent.qalsdk.service.QalAssistService"
             android:exported="false"
-            android:process=":QALSERVICE" >
-        </service>
+            android:process=":QALSERVICE"></service>
 
         <!-- 【必须】 离线消息广播接收器 -->
         <receiver
@@ -214,7 +211,8 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.tencent.qalsdk.core.NetConnInfoCenter" android:process=":QALSERVICE">
+            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
+            android:process=":QALSERVICE">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -233,6 +231,7 @@
                 <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
             </intent-filter>
         </receiver>
+
         <activity android:name=".im.ui.ImageViewActivity" />
         <activity android:name=".im.ui.EditActivity" />
         <activity android:name=".im.ui.SearchGroupActivity" />
@@ -378,6 +377,9 @@
             android:name=".activity.PaiMingActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ChartActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -388,9 +390,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginSMSActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.ForgetPasswordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MainActivity"
@@ -457,6 +456,12 @@
 
         <activity
             android:name=".activity.AddFriendsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BindDeviceNoPswdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginBindActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AddRevisiterRecordActivity"
@@ -555,6 +560,10 @@
 
         <activity
             android:name=".activity.CourseActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.SetPswdActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TuanKeDetailActivity"
@@ -661,8 +670,7 @@
 
         <service
             android:name=".shouhuan.service.BluetoothLeService"
-            android:enabled="true"
-           />
+            android:enabled="true" />
 
 
         <activity

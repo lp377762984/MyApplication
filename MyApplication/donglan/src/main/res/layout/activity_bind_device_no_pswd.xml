@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/dl_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+    </com.cn.danceland.myapplication.view.DongLanTitleView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#F9F9F9">
+
+        <LinearLayout
+            android:id="@+id/ll_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_bg_phone"
+            android:focusable="true"
+            android:visibility="gone"
+            android:focusableInTouchMode="true">
+            <!--       <Spinner
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:entries="@array/phone_codes"
+                       android:layout_gravity="center_vertical"
+                       android:id="@+id/sp_phone">
+
+                   </Spinner>-->
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_phone" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/EtStyle"
+                android:hint="请输入您的手机号"
+                android:inputType="phone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_getsms"
+            style="@style/TvGetsmsStyle"
+            android:layout_below="@+id/ll_phone"
+            android:visibility="gone"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_getsms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_getsms"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_bg_phone"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/img_muber" />
+
+            <EditText
+                android:id="@+id/et_sms"
+                style="@style/EtStyle"
+                android:hint="请输入短信验证码"
+                android:inputType="number"
+                android:maxLength="4" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_getsms"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_bg_phone"
+                android:orientation="horizontal">
+
+                <com.cn.danceland.myapplication.view.ContainsEmojiEditText
+                    android:id="@+id/et_name"
+                    style="@style/EtStyle"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:hint="请输入姓名"
+                    android:inputType="text" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_bg_phone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@id/tv_sex"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="请选择性别"
+                    android:textColor="#333"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_bg_phone"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_zhengjian"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+
+                    android:gravity="center_vertical"
+                    android:text="请选择证件类型"
+                    android:textColor="#333"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_bg_phone"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_zhengjian"
+                    style="@style/EtStyle"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:hint="请输入证件号"
+                    android:inputType="text" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_commit"
+            style="@style/BtnCommitStyle"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="172dp"
+            android:text="完成" />
+
+    </RelativeLayout>
+
+</LinearLayout>

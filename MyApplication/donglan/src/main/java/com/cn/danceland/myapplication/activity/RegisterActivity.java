@@ -2,11 +2,13 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,7 +30,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -151,7 +155,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 //设置倒计时
                 handler.postDelayed(runnable, 1000);
 
-                getSMS();//获取短信验证码
+                //  getSMS();//获取短信验证码
+
+                findPhoneIsExist(mEtPhone.getText().toString());
                 break;
             case R.id.btn_commit:
                 //判断验证码是否为空
@@ -247,6 +253,61 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    private void findPhoneIsExist(final String phone) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_PHONE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestSimpleBean simpleBean=new Gson().fromJson(s, RequestSimpleBean.class);
+                if (simpleBean.getSuccess()){
+                    if (TextUtils.equals("0",simpleBean.getData())){
+                        getSMS();
+//                        startActivity(new Intent(RegisterActivity.this, SetPswdActivity.class));
+                    }else {
+                        showDialogComfrim();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map=new HashMap<>();
+                map.put("phone",phone);
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+    private  void showDialogComfrim(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("该手机号已经注册");
+        builder.setPositiveButton("直接登录",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+
+            }
+        });
+        builder.setNegativeButton("找回密码", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                startActivity(new Intent(RegisterActivity.this,ForgetPasswordActivity.class));
+                finish();
+
+            }
+        });
+        builder.show();
+    }
     /**
      * 注册用户
      */
@@ -293,6 +354,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("platform", "1");
                 map.put("validateCode", mEtSms.getText().toString());
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
 
                 LogUtil.i(map.toString());
                 return map;

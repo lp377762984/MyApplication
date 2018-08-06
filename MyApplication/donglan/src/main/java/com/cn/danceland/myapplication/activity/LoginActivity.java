@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -67,9 +68,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-//import com.hyphenate.EMCallBack;
-//import com.hyphenate.chat.EMClient;
 
 public class LoginActivity extends Activity implements OnClickListener {
 
@@ -129,6 +127,10 @@ public class LoginActivity extends Activity implements OnClickListener {
             case 1010:
                 finish();
                 break;
+            case 1011://登录
+              login();
+                break;
+
             default:
                 break;
         }
@@ -439,6 +441,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
+                LogUtil.i(loginInfoBean.getCode() + "");
                 if (loginInfoBean.getSuccess()) {
 
                     SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
@@ -453,23 +456,26 @@ public class LoginActivity extends Activity implements OnClickListener {
 
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
-
-
                     if (Constants.DEV_CONFIG) {
                         login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
                     } else {
                         login_txim(data.getPerson().getMember_no(), data.getSig());
                     }
-                setMipushId();
-                  SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    setMipushId();
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                     // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-
                     //        finish();
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
+                    if (loginInfoBean.getCode()==5) {
 
-                    ToastUtils.showToastShort("用户名或密码错误");
+                        startActivity(new Intent(LoginActivity.this,LoginBindActivity.class));
+
+                    }else {
+                        ToastUtils.showToastShort("用户名或密码错误");
+                    }
+
                 }
 
 
@@ -489,6 +495,9 @@ public class LoginActivity extends Activity implements OnClickListener {
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("terminal", "1");
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
+                LogUtil.i(AppUtils.getDeviceId(MyApplication.getContext()));
+
                 return map;
             }
         };

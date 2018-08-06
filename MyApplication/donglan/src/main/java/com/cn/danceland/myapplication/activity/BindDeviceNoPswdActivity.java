@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.RequestBindBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -42,16 +40,17 @@ import java.util.Map;
 /**
  * Created by shy on 2018/8/1 11:43
  * Email:644563767@qq.com
- * 忘记密码
+ * 验证身份
  */
 
 
-public class ForgetPasswordActivity extends Activity implements View.OnClickListener {
+public class BindDeviceNoPswdActivity extends Activity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms, tv_sex, tv_zhengjian;
     private EditText mEtSms, et_zhengjian;
-    private ContainsEmojiEditText et_name;
+    private  ContainsEmojiEditText et_name;
     int sex = 0;
+    String phone;
     String zhengjian;
     private EditText mEtPhone;
     private int recLen = 30;//倒计时时长
@@ -85,7 +84,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
 
     private void initView() {
         DongLanTitleView titleView = findViewById(R.id.dl_title);
-        titleView.setTitle("忘记密码");
+        titleView.setTitle("验证身份");
         mTvGetsms = findViewById(R.id.tv_getsms);
         et_name = findViewById(R.id.et_name);
         et_zhengjian = findViewById(R.id.et_zhengjian);
@@ -125,16 +124,14 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
 
         switch (v.getId()) {
             case R.id.tv_getsms:
-
-
                 //判断电话号码是否为空
                 if (TextUtils.isEmpty(mEtPhone.getText().toString())) {
-                    Toast.makeText(ForgetPasswordActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断电话号码是否合法
                 if (!PhoneFormatCheckUtils.isPhoneLegal(mEtPhone.getText().toString())) {
-                    Toast.makeText(ForgetPasswordActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -152,26 +149,24 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
             case R.id.btn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
-                    Toast.makeText(ForgetPasswordActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(et_name.getText().toString())) {
-                    Toast.makeText(ForgetPasswordActivity.this, "请输入姓名", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入姓名", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(zhengjian)) {
-                    Toast.makeText(ForgetPasswordActivity.this, "选择证件类型", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "选择证件类型", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 if (TextUtils.isEmpty(et_zhengjian.getText().toString())) {
-                    Toast.makeText(ForgetPasswordActivity.this, "请输入证件号码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入证件号码", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     if (TextUtils.equals(zhengjian, "身份证") && !TextUtils.isEmpty(et_zhengjian.getText().toString())) {
 
                         try {
-                            LogUtil.i(et_zhengjian.getText().toString());
                             if (!PhoneFormatCheckUtils.isIDNumber(et_zhengjian.getText().toString())) {
                                 ToastUtils.showToastShort("身份证不合法");
                                 return;
@@ -291,22 +286,13 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
 
     private void bindDevice() {
 
-        String url = Constants.FORGET_PWD_URL;
+        String url = Constants.BIND_DEVICE_NOPWD_URL;
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
 
-                Gson gson = new Gson();
-                RequestBindBean requestInfoBean = gson.fromJson(s, RequestBindBean.class);
-                if (requestInfoBean.getSuccess()) {
-                    //成功
-                    startActivity(new Intent(ForgetPasswordActivity.this, SetPswdActivity.class).putExtra("id",requestInfoBean.getData().getId()));
-                    finish();
-                } else {
-                    //失败
 
-                }
 
             }
         }, new Response.ErrorListener() {
@@ -329,8 +315,8 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 map.put("validateCode", mEtSms.getText().toString());
                 map.put("name", et_name.getText().toString());
                 map.put("gender", sex + "");
-                map.put("certificateType", zhengjian);
-                map.put("identityCard", et_zhengjian.getText().toString());
+                map.put("certificateType", tv_zhengjian.getText().toString());
+                map.put("identityCard", zhengjian);
                 map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
                 return map;
             }

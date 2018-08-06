@@ -116,16 +116,7 @@ public class AppUtils {
         // 渠道标志
         deviceId.append("a");
         try {
-            //wifi mac地址
-            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = wifi.getConnectionInfo();
-            String wifiMac = info.getMacAddress();
-            if (!TextUtils.isEmpty(wifiMac)) {
-                deviceId.append("wifi");
-                deviceId.append(wifiMac);
-                LogUtil.e("getDeviceId : ", deviceId.toString());
-                return deviceId.toString();
-            }
+
             //IMEI（imei）
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             String imei = tm.getDeviceId();
@@ -152,6 +143,18 @@ public class AppUtils {
                 LogUtil.e("getDeviceId : ", deviceId.toString());
                 return deviceId.toString();
             }
+
+            //wifi mac地址
+            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo info = wifi.getConnectionInfo();
+            String wifiMac = info.getMacAddress();
+            if (!TextUtils.isEmpty(wifiMac)) {
+                deviceId.append("wifi");
+                deviceId.append(wifiMac);
+                LogUtil.e("getDeviceId : ", deviceId.toString());
+                return deviceId.toString();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             deviceId.append("id").append(getUUID(context));

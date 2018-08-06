@@ -276,7 +276,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 if (TextUtils.equals(tv_certificate_type.getText().toString(), "身份证") && !TextUtils.isEmpty(et_certificate_no.getText().toString())) {
 
                     try {
-                        if (!PhoneFormatCheckUtils.checkIdCardNo(et_certificate_no.getText().toString())) {
+                        if (!PhoneFormatCheckUtils.isIDNumber(et_certificate_no.getText().toString())) {
                             ToastUtils.showToastShort("身份证不合法");
                             return;
                         }
@@ -355,88 +355,6 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
 
     private void showDate() {
 
-//        ViewGroup parent = (ViewGroup) inflate1.getParent();
-//        if (parent != null) {
-//            parent.removeAllViews();
-//        }
-//
-//        final ArrayList<String> yearList = new ArrayList<String>();
-//        final ArrayList<String> monthList = new ArrayList<String>();
-//        final ArrayList<String> dateList = new ArrayList<String>();
-//        int n = 1900;
-//        int len = year - n;
-//        for (int i = 0; i <= len; i++) {
-//            yearList.add((n + i) + "");
-//        }
-//        for (int j = 0; j < 12; j++) {
-//            monthList.add((1 + j) + "");
-//        }
-//        lp_year.setNotLoop();
-//        lp_date.setNotLoop();
-//        lp_month.setNotLoop();
-//        lp_year.setItems(yearList);
-//        lp_month.setItems(monthList);
-//
-//        lp_year.setInitPosition(yearList.size() - 20);
-//        syear = yearList.get(yearList.size() - 20);
-//        lp_month.setInitPosition(0);
-//        smonth = monthList.get(0);
-//        sdate = "1";
-//        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//        dateList.clear();
-//        for (int z = 1; z <= daysByYearMonth; z++) {
-//            dateList.add(z + "");
-//        }
-//        lp_date.setItems(dateList);
-//
-//        //设置字体大小
-//        lp_year.setTextSize(16);
-//        lp_month.setTextSize(16);
-//        lp_date.setTextSize(16);
-//
-//        lp_year.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                syear = yearList.get(index);
-//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                dateList.clear();
-//                for (int z = 1; z <= daysByYearMonth; z++) {
-//                    dateList.add(z + "");
-//                }
-//                lp_date.setItems(dateList);
-//            }
-//        });
-//
-//        lp_month.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                smonth = monthList.get(index);
-//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                dateList.clear();
-//                for (int z = 1; z <= daysByYearMonth; z++) {
-//                    dateList.add(z + "");
-//                }
-//                lp_date.setItems(dateList);
-//            }
-//        });
-//
-//        lp_date.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                sdate = dateList.get(index);
-//            }
-//        });
-//
-//        alertdialog.setTitle("选择出生年月");
-//        alertdialog.setView(inflate1);
-//        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                tv_birthday.setText(syear + "年" + smonth + "月" + sdate + "日");
-//                potentialInfo.setBirthday(syear + "-" + smonth + "-" + sdate);
-//            }
-//        });
-//        alertdialog.show();
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择日期");
         customDatePicker.setGoneHourAndMinute();
         customDatePicker.showWindow();
@@ -454,7 +372,6 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         final String[] items = {"身份证", "军官证", "驾驶证"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(this);
-        //listDialog.setTitle("我是一个列表Dialog");
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

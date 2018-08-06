@@ -26,6 +26,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.AppUtils;
@@ -46,11 +47,11 @@ import java.util.Map;
  * Created by shy on 2017/9/22.
  */
 
-public class LoginSMSActivity extends Activity implements View.OnClickListener {
+public class LoginBindActivity extends Activity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;
-    private String  smsCode = "";
+    private String smsCode = "";
     private EditText mEtPhone;
     private int recLen = 30;//倒计时时长
     Handler handler = new Handler();
@@ -77,7 +78,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_sms);
+        setContentView(R.layout.activity_bind_device);
         initView();
     }
 
@@ -122,12 +123,12 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
             case R.id.tv_getsms:
                 //判断电话号码是否为空
                 if (TextUtils.isEmpty(mEtPhone.getText().toString())) {
-                    Toast.makeText(LoginSMSActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginBindActivity.this, "请输入电话号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //判断电话号码是否合法
                 if (!PhoneFormatCheckUtils.isPhoneLegal(mEtPhone.getText().toString())) {
-                    Toast.makeText(LoginSMSActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginBindActivity.this, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -147,23 +148,15 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
             case R.id.btn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
-                    Toast.makeText(LoginSMSActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginBindActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                //判断验证码是否正确
-//                if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
-//
-//                    login_by_phone_url(mEtPhone.getText().toString().trim());
-//
-//                } else {
-//                    Toast.makeText(LoginSMSActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
-//
-//                }
-                login_by_phone_url(mEtPhone.getText().toString().trim());
 
+                //  login_by_phone_url(mEtPhone.getText().toString().trim());
+                bindDevice(mEtPhone.getText().toString().trim(), mEtSms.getText().toString().trim());
                 break;
             case R.id.iv_back://返回
-                startActivity(new Intent(LoginSMSActivity.this, LoginActivity.class));
+                startActivity(new Intent(LoginBindActivity.this, LoginActivity.class));
                 finish();
                 break;
             default:
@@ -192,10 +185,10 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                  //  if (Constants.DEV_CONFIG){
-                        ToastUtils.showToastLong("验证码是："
-                                + smsCode);
-                 //   }
+                    //  if (Constants.DEV_CONFIG){
+                    ToastUtils.showToastLong("验证码是："
+                            + smsCode);
+                    //   }
                 }
 
 
@@ -217,15 +210,46 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    private void bindDevice(final String phone, final String validateCode) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.BIND_DEVICE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestSimpleBean simpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
+                if (simpleBean.getSuccess()){
+                  //  ToastUtils.showToastShort("绑定成功");
+                    EventBus.getDefault().post(new StringEvent("绑定成功",1011));
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("phone", phone);
+                map.put("validateCode", validateCode);
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
     /***
      *
      * @param phone
      */
     private void login_by_phone_url(final String phone) {
 
-        String params = phone;
 
-        String url = Constants.LOGIN_BY_PHONE_URL ;
+        String url = Constants.LOGIN_BY_PHONE_URL;
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -242,7 +266,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
-                 //   SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                    //   SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
                     if (loginInfoBean.getData().getMember() != null) {
                         SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
                     }
@@ -251,41 +275,22 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     ToastUtils.showToastShort("登录成功");
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
-//                    //登录环信
-//                    if(Constants.DEV_CONFIG){//判断是否是开发环境
-//                        login_hx("dev"+data.getPerson().getMember_no(),"dev" +data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
-//                    }else {
-//                        login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
-//                    }
 
-                    EventBus.getDefault().post(new StringEvent("",1010));
+                    EventBus.getDefault().post(new StringEvent("", 1010));
 
                 } else {
 
 
-
-
-                    if (loginInfoBean.getCode()==3||loginInfoBean.getCode()==4){
+                    if (loginInfoBean.getCode() == 3 || loginInfoBean.getCode() == 4) {
                         ToastUtils.showToastShort("该用户未注册");
-                        startActivity(new Intent(LoginSMSActivity.this,RegisterActivity.class));
+                        startActivity(new Intent(LoginBindActivity.this, RegisterActivity.class));
                         finish();
 
-                    }
-
-                   else  {
-                        if (loginInfoBean.getCode()==5){//绑定设备
-
-                            startActivity(new Intent(LoginSMSActivity.this,BindDeviceNoPswdActivity.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode",smsCode));
-                        }else {
-                            ToastUtils.showToastShort("登录失败");
-                        }
-
-
-
+                    } else {
+                        ToastUtils.showToastShort("登录失败");
                     }
 
                 }
-
 
 
             }
@@ -295,15 +300,13 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 LogUtil.i(volleyError.toString());
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map=new HashMap<>();
-                map.put("phone",phone);
-                map.put("validateCode",mEtSms.getText().toString());
+                Map<String, String> map = new HashMap<>();
+                map.put("phone", phone);
+                map.put("validateCode", mEtSms.getText().toString());
                 map.put("terminal", "1");
-                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
-                LogUtil.i(map.toString());
                 return map;
             }
         };
@@ -315,9 +318,6 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
-
-
-
 
 
     private void queryUserInfo(String id) {
@@ -341,26 +341,25 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 //                Data data = requestInfoBean.getData();
 //                DataInfoCache.saveOneCache(data, Constants.MY_INFO);
                 //    ToastUtils.showToastShort("登录成功");
-                if (requestInfoBean.getSuccess()){
-                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
-                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
-                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
 
 
-                }else {
+                } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
 
 
-
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                Data myinfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-                if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())){
+                if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())) {
                     ToastUtils.showToastShort("您补全您的资料");
-                    startActivity(new Intent(LoginSMSActivity.this,RegisterInfoActivity.class));
-                }else {
-                    startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
+                    startActivity(new Intent(LoginBindActivity.this, RegisterInfoActivity.class));
+                } else {
+                    startActivity(new Intent(LoginBindActivity.this, HomeActivity.class));
                 }
 
                 setMipushId();
@@ -398,9 +397,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     }
 
 
-
     /**
-     *
      * 设置mipusid
      */
     private void setMipushId() {
@@ -411,17 +408,17 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 //   LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-                if (requestInfoBean.getSuccess()){
-                 //   LogUtil.i("设置mipush成功");
-                }else {
-                   // LogUtil.i("设置mipush失败");
+                if (requestInfoBean.getSuccess()) {
+                    //   LogUtil.i("设置mipush成功");
+                } else {
+                    // LogUtil.i("设置mipush失败");
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
-              //  LogUtil.i("设置mipush失败"+volleyError.toString());
+                //  LogUtil.i("设置mipush失败"+volleyError.toString());
 
             }
 
@@ -431,7 +428,7 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
-                map.put("terminal","1");
+                map.put("terminal", "1");
                 return map;
             }
 
