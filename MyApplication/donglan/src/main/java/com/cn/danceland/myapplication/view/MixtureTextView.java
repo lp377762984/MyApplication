@@ -87,7 +87,7 @@ public class MixtureTextView extends RelativeLayout {
 
         //just for text
         if (mText == null) {
-            mText = getResources().getString(R.string.text1);
+            mText = getResources().getString(R.string.about_log);
         }
 
         //get text

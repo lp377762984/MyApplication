@@ -7,7 +7,6 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.im.ui.AddFriendActivity;
 import com.cn.danceland.myapplication.im.ui.ProfileActivity;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.tencent.imsdk.TIMUserProfile;
 
 /**
@@ -19,7 +18,7 @@ public class FriendProfile implements ProfileSummary {
     private TIMUserProfile profile;
     private boolean isSelected;
 
-    public FriendProfile(TIMUserProfile profile){
+    public FriendProfile(TIMUserProfile profile) {
         this.profile = profile;
     }
 
@@ -37,8 +36,8 @@ public class FriendProfile implements ProfileSummary {
      */
     @Override
     public String getAvatarUrl() {
-        if (profile.getFaceUrl()!=null){
-            LogUtil.i(profile.getFaceUrl());
+        if (profile.getFaceUrl() != null) {
+         //   LogUtil.i(profile.getFaceUrl());
             return profile.getFaceUrl();
         }
         return null;
@@ -49,9 +48,11 @@ public class FriendProfile implements ProfileSummary {
      */
     @Override
     public String getName() {
-        if (!profile.getRemark().equals("")){
-            return profile.getRemark();
-        }else if (!profile.getNickName().equals("")){
+//        if (!profile.getRemark().equals("")){
+//            return profile.getRemark();
+//        }else
+  //     LogUtil.i(profile.getRemark());
+        if (!profile.getNickName().equals("")) {
             return profile.getNickName();
         }
         return profile.getIdentifier();
@@ -72,12 +73,12 @@ public class FriendProfile implements ProfileSummary {
      */
     @Override
     public void onClick(Context context) {
-        if (FriendshipInfo.getInstance().isFriend(profile.getIdentifier())){
+        if (FriendshipInfo.getInstance().isFriend(profile.getIdentifier())) {
             ProfileActivity.navToProfile(context, profile.getIdentifier());
-        }else{
-            Intent person = new Intent(context,AddFriendActivity.class);
-            person.putExtra("id",profile.getIdentifier());
-            person.putExtra("name",getName());
+        } else {
+            Intent person = new Intent(context, AddFriendActivity.class);
+            person.putExtra("id", profile.getIdentifier());
+            person.putExtra("name", getName());
             context.startActivity(person);
         }
     }
@@ -89,11 +90,12 @@ public class FriendProfile implements ProfileSummary {
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
     }
+
     /**
      * 获取用户ID
      */
     @Override
-    public String getIdentify(){
+    public String getIdentify() {
         return profile.getIdentifier();
     }
 
@@ -101,7 +103,7 @@ public class FriendProfile implements ProfileSummary {
     /**
      * 获取用户备注名
      */
-    public String getRemark(){
+    public String getRemark() {
         return profile.getRemark();
     }
 
@@ -109,11 +111,11 @@ public class FriendProfile implements ProfileSummary {
     /**
      * 获取好友分组
      */
-    public String getGroupName(){
+    public String getGroupName() {
 
-        if (profile.getFriendGroups().size() == 0){
+        if (profile.getFriendGroups().size() == 0) {
             return MyApplication.getContext().getString(R.string.default_group_name);
-        }else{
+        } else {
             return profile.getFriendGroups().get(0);
         }
     }

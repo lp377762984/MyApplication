@@ -1,13 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +26,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -101,6 +102,8 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
         findViewById(R.id.ll_sixin).setOnClickListener(this);
         findViewById(R.id.ll_edit).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
+        findViewById(R.id.iv_more).setOnClickListener(this);
+
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
         rx_guangzhu = findViewById(R.id.rx_guangzhu);
@@ -149,7 +152,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
     @Subscribe
     public void onEventMainThread(StringEvent event) {
 
-        if (TextUtils.equals(userId,SPUtils.getString(Constants.MY_USERID,""))){
+        if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
 
             switch (event.getEventCode()) {
                 case 99:
@@ -200,30 +203,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                     //    SPUtils.setInt(Constants.MY_FOLLOWS, SPUtils.getInt(Constants.MY_FOLLOWS, 0) - 1);
                     tv_guanzhu.setText(SPUtils.getInt(Constants.MY_FOLLOWS, 0) + "");
                     break;
-//
-//            case EventConstants.UPDATE_FANS:
-//
-//                //设置粉丝数
-//                // tv_fans.setText(mInfo.getFansNum() + "");
-//                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
-//
-//                //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
-//                tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
-//
-//                break;
-//
-//            case EventConstants.UPDATE_USER_INFO:
-//                Data myinfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-//
-//                updateUserInfo(myinfo);
-//
-//                //更新聊天头像和昵称
-//                PreferenceManager.getInstance().setCurrentUserNick(myinfo.getPerson().getNick_name());
-//                PreferenceManager.getInstance().setCurrentUserAvatar(myinfo.getPerson().getSelf_avatar_path());
-//
-//
-//                break;
-//
+
 
                 default:
                     break;
@@ -280,6 +260,10 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.iv_more:
+                showListDialogSelf(userId);
+
+                break;
             case R.id.ll_my_dyn://我的动态
                 startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true));
                 break;
@@ -321,37 +305,72 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                 startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
                 break;
             case R.id.ll_sixin:
-//
-//                String userName = userInfo.getPerson().getNick_name();
-//                String userPic = userInfo.getPerson().getSelf_avatar_path();
-//                String hxIdFrom;
-//                if (Constants.HX_DEV_CONFIG) {
-//                    hxIdFrom = "dev" + userInfo.getPerson().getMember_no();
-//                } else {
-//                    hxIdFrom = userInfo.getPerson().getMember_no();
-//                }
-//
-//                LogUtil.i(userName + userPic + hxIdFrom);
-//                EaseUser easeUser = new EaseUser(hxIdFrom);
-//                easeUser.setAvatar(userPic);
-//                easeUser.setNick(userName);
-//
-//                List<EaseUser> users = new ArrayList<EaseUser>();
-//                users.add(easeUser);
-//                if (easeUser != null) {
-//                    DemoHelper.getInstance().updateContactList(users);
-//                } else {
-//                    LogUtil.i("USER IS NULL");
-//
-//                }
-//
-//                    startActivity(new Intent(UserSelfHomeActivity.this, MyChatActivity.class).putExtra("userId", hxIdFrom).putExtra("chatType", EMMessage.ChatType.Chat));
 
 
                 break;
             default:
                 break;
         }
+    }
+
+    private void showListDialogSelf(final String userid) {
+        final String[] items = {"加入黑名单"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+
+                        addBlack(userid);
+
+                        break;
+                    case 1:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+    private class Strbean {
+        public String blocked_id;
+    }
+
+    private void addBlack(String userid) {
+        Strbean strbean = new Strbean();
+        strbean.blocked_id = userid;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_BLACKLIST_URL, new Gson().toJson(strbean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                RequestSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequestSimpleBean.class);
+
+                if (simpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("已经加入黑名单");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
     }
 
     /**

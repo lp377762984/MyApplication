@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.im.model.Conversation;
 import com.cn.danceland.myapplication.im.utils.TimeUtil;
-import com.squareup.picasso.Picasso;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.tencent.qcloud.ui.CircleImageView;
 
 import java.util.List;
@@ -55,11 +56,13 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         final Conversation data = getItem(position);
         viewHolder.tvName.setText(data.getName());
        // viewHolder.avatar.setImageResource(data.getAvatar());
+        LogUtil.i(data.getAvatarUrl());
         if(data.getAvatarUrl()!=null){
             if(data.getAvatarUrl().equals("")){
                 viewHolder.avatar.setImageResource(data.getAvatar());
             }else{
-                Picasso.with(getContext()).load(data.getAvatarUrl()).into(viewHolder.avatar);
+             //   Picasso.with(getContext()).load(data.getAvatarUrl()).into(viewHolder.avatar);
+                Glide.with(getContext()).load(data.getAvatarUrl()).into(viewHolder.avatar);
             }
         }else {
             viewHolder.avatar.setImageResource(data.getAvatar());

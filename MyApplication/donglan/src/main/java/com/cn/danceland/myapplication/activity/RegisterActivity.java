@@ -2,11 +2,13 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,7 +30,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -38,7 +42,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMCallBack;
-import com.tencent.imsdk.TIMManager;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -150,7 +155,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 //设置倒计时
                 handler.postDelayed(runnable, 1000);
 
-                getSMS();//获取短信验证码
+                //  getSMS();//获取短信验证码
+
+                findPhoneIsExist(mEtPhone.getText().toString());
                 break;
             case R.id.btn_commit:
                 //判断验证码是否为空
@@ -186,7 +193,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     Toast.makeText(RegisterActivity.this, "密码输入不一致，请重新输入", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!cb_agreement.isChecked()){
+                if (!cb_agreement.isChecked()) {
                     ToastUtils.showToastShort("请阅读用户协议，并勾选");
                     return;
                 }
@@ -220,10 +227,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-               //     if (Constants.DEV_CONFIG){
-                        ToastUtils.showToastLong("验证码是："
-                                + smsCode);
-               //     }
+                    //     if (Constants.DEV_CONFIG){
+                    ToastUtils.showToastLong("验证码是："
+                            + smsCode);
+                    //     }
 
                 }
 
@@ -246,6 +253,61 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    private void findPhoneIsExist(final String phone) {
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_PHONE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestSimpleBean simpleBean=new Gson().fromJson(s, RequestSimpleBean.class);
+                if (simpleBean.getSuccess()){
+                    if (TextUtils.equals("0",simpleBean.getData())){
+                        getSMS();
+//                        startActivity(new Intent(RegisterActivity.this, SetPswdActivity.class));
+                    }else {
+                        showDialogComfrim();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map=new HashMap<>();
+                map.put("phone",phone);
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
+    private  void showDialogComfrim(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("该手机号已经注册");
+        builder.setPositiveButton("直接登录",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+
+            }
+        });
+        builder.setNegativeButton("找回密码", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                startActivity(new Intent(RegisterActivity.this,ForgetPasswordActivity.class));
+                finish();
+
+            }
+        });
+        builder.show();
+    }
     /**
      * 注册用户
      */
@@ -292,6 +354,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("platform", "1");
                 map.put("validateCode", mEtSms.getText().toString());
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
 
                 LogUtil.i(map.toString());
                 return map;
@@ -337,12 +400,11 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                     }
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                    //    ToastUtils.showToastShort("登录成功");
-//                    if (Constants.DEV_CONFIG) {//判断是否是开发环境
-//                        login_hx("dev" + data.getPerson().getMember_no(),"dev" + data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    } else {
-//                        login_hx(data.getPerson().getMember_no(), data.getPerson().getMember_no() + "_" + data.getPerson().getId(), data);
-//                    }
+                    if (Constants.DEV_CONFIG) {
+                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                    } else {
+                        login_txim(data.getPerson().getMember_no(), data.getSig());
+                    }
 
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
@@ -382,47 +444,36 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-//    /**
-//     * 登录环信账户
-//     *
-//     * @param admin
-//     * @param pswd
-//     * @param data
-//     */
-//    private void login_hx(String admin, String pswd, final Data data) {
-//        LogUtil.i(admin + pswd);
-//        EMClient.getInstance().login(admin, pswd, new EMCallBack() {//回调
-//            @Override
-//            public void onSuccess() {
-//                EMClient.getInstance().groupManager().loadAllGroups();
-//                EMClient.getInstance().chatManager().loadAllConversations();
-//                LogUtil.i("登录聊天服务器成功！");
-//
-//                //  EaseUserUtils.setUserAvatar();
-////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setAvatar(myinfo.getSelf_avatar_path());
-////                        EaseUI.getInstance().getUserProfileProvider().getUser("dlkj0002").setNickname(myinfo.getNick_name());
-//                PreferenceManager.getInstance().setCurrentUserNick(data.getPerson().getNick_name());
-//                LogUtil.i(data.getPerson().getMember_no());
-//                PreferenceManager.getInstance().setCurrentUserName(data.getPerson().getMember_no());
-//                PreferenceManager.getInstance().setCurrentUserAvatar(data.getPerson().getSelf_avatar_path());
-//                //   startActivity(new Intent(mActivity,MyChatActivity.class).putExtra("userId","dlkj0001").putExtra("chatType", EMMessage.ChatType.Chat));
-//                SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-//                startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
-//                setMipushId();
-//                finish();
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//
-//            }
-//
-//            @Override
-//            public void onError(int code, String message) {
-//                LogUtil.i("登录聊天服务器失败！");
-//            }
-//        });
-//    }
+
+    /**
+     * 登录腾讯im
+     *
+     * @param identifier 账号
+     * @param userSig
+     */
+    private void login_txim(final String identifier, final String userSig) {
+        LogUtil.i(identifier + "/n" + userSig);
+        // identifier为用户名，userSig 为用户登录凭证
+        //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
+
+
+        LoginBusiness.loginIm(identifier, userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+                TLSService.getInstance().setLastErrno(-1);
+            }
+
+            @Override
+            public void onSuccess() {
+                LogUtil.i("login succ 登录成功");
+                TLSService.getInstance().setLastErrno(0);
+                SPUtils.setString("sig", userSig);
+
+                //  TLSHelper.getInstance().setLocalId(UserInfo.ge);
+            }
+        });
+    }
 
     private void queryUserInfo(String id) {
 
@@ -449,9 +500,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                 }
-
-
-
 
 
                 // LogUtil.i(DataInfoCache.loadOneCache(Constants.MY_INFO).toString());

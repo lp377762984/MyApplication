@@ -47,14 +47,15 @@ public class GroupListActivity extends Activity implements Observer {
             }
         });
         TemplateTitle title = (TemplateTitle) findViewById(R.id.groupListTitle);
-        title.setMoreTextAction(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GroupListActivity.this, CreateGroupActivity.class);
-                intent.putExtra("type", type);
-                startActivityForResult(intent, CREATE_GROUP_CODE);
-            }
-        });
+        title.setTitleText("我的群组");
+//        title.setMoreTextAction(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(GroupListActivity.this, CreateGroupActivity.class);
+//                intent.putExtra("type", type);
+//                startActivityForResult(intent, CREATE_GROUP_CODE);
+//            }
+//        });
         GroupEvent.getInstance().addObserver(this);
 
     }
@@ -67,7 +68,8 @@ public class GroupListActivity extends Activity implements Observer {
 
     private void setTitle(){
         TemplateTitle title = (TemplateTitle) findViewById(R.id.groupListTitle);
-        title.setTitleText(GroupInfo.getTypeName(type));
+      //  title.setTitleText(GroupInfo.getTypeName(type));
+        title.setTitleText("我的群组");
         title.setMoreImgAction(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

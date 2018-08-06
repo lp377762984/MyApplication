@@ -1,7 +1,5 @@
 package com.cn.danceland.myapplication.utils;
 
-import android.text.TextUtils;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -45,68 +43,72 @@ public class PhoneFormatCheckUtils {
         return m.matches();
     }
 
+//
+//    /**
+//     * 检查身份证号码合法性
+//     * @param idCardNo
+//     * @return
+//     * @throws Exception
+//     */
+//    public static boolean checkIdCardNo(String idCardNo) throws Exception{
+//        try {
+//            if(TextUtils.isEmpty(idCardNo)){
+//                return false;
+//            }
+//            int length = idCardNo.length();
+//            if(length == 15){
+//                Pattern p = Pattern.compile("^[0-9]*$");
+//                Matcher m = p.matcher(idCardNo);
+//                return m.matches();
+//            }else if(length == 18){
+//                String front_17 = idCardNo.substring(0, idCardNo.length() - 1);//号码前17位
+//                String verify = idCardNo.substring(17, 18);//校验位(最后一位)
+//                Pattern p = Pattern.compile("^[0-9]*$");
+//                Matcher m = p.matcher(front_17);
+//                if(!m.matches()){
+//                    return false;
+//                }else{
+//                    checkVerify(front_17, verify);
+//                }
+//            }
+//            return false;
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
+//
+//    /**
+//     * 校验验证位合法性
+//     * @param front_17
+//     * @param verify
+//     * @return
+//     * @throws Exception
+//     */
+//    public static boolean checkVerify(String front_17,String verify) throws Exception{
+//        try {
+//            int[] wi = {7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1};
+//            String[] vi = {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
+//            int s = 0;
+//            for(int i = 0; i<front_17.length(); i++){
+//                int ai = Integer.parseInt(front_17.charAt(i) + "");
+//                s += wi[i]*ai;
+//            }
+//            int y = s % 11;
+//            String v = vi[y];
+//            if(!(verify.toUpperCase().equals(v))){
+//                return false;
+//            }
+//            return true;
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
 
     /**
-     * 检查身份证号码合法性
-     * @param idCardNo
+     * 判断身份证合法
+     * @param IDNumber
      * @return
-     * @throws Exception
      */
-    public static boolean checkIdCardNo(String idCardNo) throws Exception{
-        try {
-            if(TextUtils.isEmpty(idCardNo)){
-                return false;
-            }
-            int length = idCardNo.length();
-            if(length == 15){
-                Pattern p = Pattern.compile("^[0-9]*$");
-                Matcher m = p.matcher(idCardNo);
-                return m.matches();
-            }else if(length == 18){
-                String front_17 = idCardNo.substring(0, idCardNo.length() - 1);//号码前17位
-                String verify = idCardNo.substring(17, 18);//校验位(最后一位)
-                Pattern p = Pattern.compile("^[0-9]*$");
-                Matcher m = p.matcher(front_17);
-                if(!m.matches()){
-                    return false;
-                }else{
-                    checkVerify(front_17, verify);
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 校验验证位合法性
-     * @param front_17
-     * @param verify
-     * @return
-     * @throws Exception
-     */
-    public static boolean checkVerify(String front_17,String verify) throws Exception{
-        try {
-            int[] wi = {7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1};
-            String[] vi = {"1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"};
-            int s = 0;
-            for(int i = 0; i<front_17.length(); i++){
-                int ai = Integer.parseInt(front_17.charAt(i) + "");
-                s += wi[i]*ai;
-            }
-            int y = s % 11;
-            String v = vi[y];
-            if(!(verify.toUpperCase().equals(v))){
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-
     public static boolean isIDNumber(String IDNumber) {
         if (IDNumber == null || "".equals(IDNumber)) {
             return false;
@@ -160,14 +162,14 @@ public class PhoneFormatCheckUtils {
                     if (idCardY[idCardMod].toUpperCase().equals(String.valueOf(idCardLast).toUpperCase())) {
                         return true;
                     } else {
-                        System.out.println("身份证最后一位:" + String.valueOf(idCardLast).toUpperCase() +
+                       LogUtil.i("身份证最后一位:" + String.valueOf(idCardLast).toUpperCase() +
                                 "错误,正确的应该是:" + idCardY[idCardMod].toUpperCase());
                         return false;
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("异常:" + IDNumber);
+                    LogUtil.i("异常:" + IDNumber);
                     return false;
                 }
             }

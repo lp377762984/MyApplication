@@ -23,7 +23,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     greendao {
-        schemaVersion 1
+        schemaVersion 2//指定数据库版本号，更新操作会用到;
     }
     defaultConfig {
         applicationId "com.cn.danceland.myapplication"

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.format.Time;
@@ -34,6 +36,8 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.qcloud.presentation.presenter.FriendshipManagerPresenter;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
@@ -70,6 +74,28 @@ public class RegisterInfoActivity extends Activity {
     int year;
     String isleapyear;
     int daysByYearMonth;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what==1){
+                LogUtil.i(strName);
+                FriendshipManagerPresenter.setMyNick(strName, new TIMCallBack() {
+                    @Override
+                    public void onError(int i, String s) {
+                        LogUtil.i("昵称修改失败"+i);
+                    }
+
+                    @Override
+                    public void onSuccess() {
+
+                        LogUtil.i("昵称修改成功");
+                    }
+                });
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -260,8 +286,8 @@ public class RegisterInfoActivity extends Activity {
                     showWH(1);
                     break;
                 case R.id.text_name:
-                  //  text_name.setText("");
-                    showName(text_name.getText().toString() );
+                    //  text_name.setText("");
+                    showName(text_name.getText().toString());
                     break;
                 case R.id.cancel_action: {
                     dismissWindow();
@@ -359,7 +385,7 @@ public class RegisterInfoActivity extends Activity {
                 .inflate(R.layout.edit_name, null);
         //normalDialog.setTitle("编辑昵称");
         final TextView edit_name = dialogView.findViewById(R.id.edit_name);
-       // edit_name.setText(hint);
+        // edit_name.setText(hint);
         normalDialog.setView(dialogView);
         normalDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
@@ -490,6 +516,9 @@ public class RegisterInfoActivity extends Activity {
                     mData.getPerson().setGender(gender);
                     DataInfoCache.saveOneCache(mData, Constants.MY_INFO);
                     EventBus.getDefault().post(new StringEvent("", 1010));
+                    handler.sendEmptyMessage(1);
+
+
                     Intent intent = new Intent(RegisterInfoActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();

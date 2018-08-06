@@ -629,7 +629,7 @@ public class CommandManager {
     /**
      * 关机
      */
-    public void Shutdown() {
+    public void Shutdown(){
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;

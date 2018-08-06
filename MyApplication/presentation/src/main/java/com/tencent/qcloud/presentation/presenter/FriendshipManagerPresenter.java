@@ -252,6 +252,35 @@ public class FriendshipManagerPresenter {
 
 
     /**
+     * 删除好友
+     *
+     * @param id 删除对象Identify
+     */
+    public void delFriend(final String id){
+        if (friendshipManageView == null) return;
+        TIMFriendshipManagerExt.DeleteFriendParam param = new TIMFriendshipManagerExt.DeleteFriendParam();
+        param.setType(TIMDelFriendType.TIM_FRIEND_DEL_BOTH);
+        param.setUsers(Collections.singletonList(id));
+
+        TIMFriendshipManagerExt.getInstance().delFriend(param, new TIMValueCallBack<List<TIMFriendResult>>() {
+            @Override
+            public void onError(int i, String s) {
+                friendshipManageView.onAddFriend(TIMFriendStatus.TIM_FRIEND_STATUS_UNKNOWN);
+            }
+
+            @Override
+            public void onSuccess(List<TIMFriendResult> timFriendResults) {
+                for (TIMFriendResult item : timFriendResults) {
+                    if (item.getIdentifer().equals(id)) {
+                        friendshipManageView.onDelFriend(item.getStatus());
+                    }
+                }
+            }
+        });
+    }
+
+
+    /**
      * 添加好友
      *
      * @param id 添加对象Identify
@@ -284,35 +313,6 @@ public class FriendshipManagerPresenter {
                 }
             }
 
-        });
-    }
-
-
-    /**
-     * 删除好友
-     *
-     * @param id 删除对象Identify
-     */
-    public void delFriend(final String id){
-        if (friendshipManageView == null) return;
-        TIMFriendshipManagerExt.DeleteFriendParam param = new TIMFriendshipManagerExt.DeleteFriendParam();
-        param.setType(TIMDelFriendType.TIM_FRIEND_DEL_BOTH);
-        param.setUsers(Collections.singletonList(id));
-
-        TIMFriendshipManagerExt.getInstance().delFriend(param, new TIMValueCallBack<List<TIMFriendResult>>() {
-            @Override
-            public void onError(int i, String s) {
-                friendshipManageView.onAddFriend(TIMFriendStatus.TIM_FRIEND_STATUS_UNKNOWN);
-            }
-
-            @Override
-            public void onSuccess(List<TIMFriendResult> timFriendResults) {
-                for (TIMFriendResult item : timFriendResults) {
-                    if (item.getIdentifer().equals(id)) {
-                        friendshipManageView.onDelFriend(item.getStatus());
-                    }
-                }
-            }
         });
     }
 

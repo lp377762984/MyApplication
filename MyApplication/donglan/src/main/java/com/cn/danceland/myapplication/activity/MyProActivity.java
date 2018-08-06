@@ -801,6 +801,9 @@ public class MyProActivity extends Activity {
                             commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
                             infoData.getPerson().setNick_name(nickName);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+
+
+
                             FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
                                 @Override
                                 public void onError(int i, String s) {
@@ -991,7 +994,7 @@ public class MyProActivity extends Activity {
 
                             //初始化参数修改头像
                             TIMFriendshipManager.ModifyUserProfileParam param = new TIMFriendshipManager.ModifyUserProfileParam();
-                            param.setFaceUrl(compath);
+                            param.setFaceUrl(selfAvatarPath);
 
                             TIMFriendshipManager.getInstance().modifyProfile(param, new TIMCallBack() {
                                 @Override

@@ -25,6 +25,7 @@ import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qalsdk.QALSDKManager;
 import com.tencent.qcloud.presentation.business.InitBusiness;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
@@ -37,6 +38,8 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.tencent.qcloud.ui.NotifyDialog;
 
 import java.io.IOException;
+
+import tencent.tls.platform.TLSHelper;
 
 
 /**
@@ -69,7 +72,7 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
     @Override
     protected void onStart() {
         super.onStart();
-
+        LogUtil.i(AppUtils.getDeviceId(this));
         new Thread(new Runnable() {
             public void run() {
                 if (!SPUtils.getBoolean("iscopy", false)) {
@@ -93,8 +96,8 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
                     }
                     //已经登录，进入主界面
                     if (DataInfoCache.loadOneCache(Constants.MY_INFO) == null) {
-                        SPUtils.setString(Constants.ISLOGINED, null);
-
+                        SPUtils.setBoolean(Constants.ISLOGINED, false);
+                        LogUtil.i("MY_INFO=NULL");
 //                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
 //                        finish();
                         navToLogin();
@@ -116,6 +119,7 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
 //
 //                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
 //                    finish();
+
                     navToLogin();
                 }
             }
@@ -139,10 +143,10 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
 
     private void init() {
 //        // 务必检查IMSDK已做以下初始化
-//        QALSDKManager.getInstance().setEnv(0);
-//        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
-//// 初始化TLSSDK
-//        TLSHelper tlsHelper = TLSHelper.getInstance().init(getApplicationContext(), 1400090939);
+        QALSDKManager.getInstance().setEnv(0);
+        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
+// 初始化TLSSDK
+        TLSHelper tlsHelper = TLSHelper.getInstance().init(getApplicationContext(), 1400090939);
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         int loglvl = pref.getInt("loglvl", TIMLogLevel.DEBUG.ordinal());
@@ -150,13 +154,13 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         InitBusiness.start(getApplicationContext(), loglvl);
         //初始化TLS
         TlsBusiness.init(getApplicationContext());
-        LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
+        //LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
         String id = TLSService.getInstance().getLastUserIdentifier();
         UserInfo.getInstance().setId(id);
         UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
 
-        LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
-        LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
+        //     LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
+        //       LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
 //        LogUtil.i(UserInfo.getInstance().getId() + TLSService.getInstance().getLastUserInfo().accountType);
 //        presenter = new SplashPresenter(this);
 //        presenter.start();
@@ -212,10 +216,10 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         userConfig = MessageEvent.getInstance().init(userConfig);
         TIMManager.getInstance().setUserConfig(userConfig);
 
-        //   LogUtil.i(UserInfo.getInstance().getId()+UserInfo.getInstance().getUserSig() +TLSService.getInstance().getLastUserInfo());
+        LogUtil.i(UserInfo.getInstance().getId() + SPUtils.getString("sig", null));
         LoginBusiness.loginIm(UserInfo.getInstance().getId(), SPUtils.getString("sig", null), this);
 //        int sdkAppid = 开发者申请的SDK Appid;
-//
+//Constants.DEV_CONFIG?"dev"+UserInfo.getInstance().getId():UserInfo.getInstance().getId()
 //
 //
 //// 务必检查IMSDK已做以下初始化
@@ -243,11 +247,11 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
                 break;
             case 6200:
                 Toast.makeText(this, getString(R.string.login_error_timeout), Toast.LENGTH_SHORT).show();
-                  navToLogin();
+                navToLogin();
                 break;
             default:
                 Toast.makeText(this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
-                   navToLogin();
+                navToLogin();
                 break;
         }
     }
@@ -265,10 +269,11 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         LogUtil.i("tx进入主页面");
         //    startActivity(new Intent(SplashActivity.this, TXIMHomeActivity.class));
 
-        LogUtil.i(TLSService.getInstance().getLastErrno() + "");
-        if (!TextUtils.isEmpty(SPUtils.getString("sig", null)) ) {
+
+        if (!TextUtils.isEmpty(SPUtils.getString("sig", null))) {
             init_txim();
         } else {
+            LogUtil.i("sig=null");
             navToLogin();
         }
     }

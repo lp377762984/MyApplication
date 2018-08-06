@@ -1,10 +1,9 @@
 package com.cn.danceland.myapplication.utils;
-
-
 import com.cn.danceland.myapplication.MyApplication;
 
 public class Constants  {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
+    public static final int MAX_FRIEND_COUNT = 900;//最大好友数量
 
     public static String getVersion() {
         return AppUtils.getVersionName(MyApplication.getContext());
@@ -25,10 +24,11 @@ public class Constants  {
 //     public static final String HOST = "http://192.168.1.55:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
-//    public static final String HOST = "http://192.168.1.124:8003/";//老高
-//     public static  String HOST = "http://192.168.1.122:8003/";//超哥
+    //public static final String HOST = "http://192.168.1.123:8003/";//老高
+     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static final String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -41,10 +41,15 @@ public class Constants  {
     public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
     public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
     public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
+
     //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
     public static final String SET_BASE_USERINFO_URL = HOST + "user/updateBase";//设置用户基本资料
     public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
     public static final String LOGIN_BY_PHONE_URL = HOST + "/person/loginNoPwd";//短信登录
+    public static final String FIND_PHONE_URL = HOST + "/person/queryPhone";//查询手机号是否存在
+    public static final String BIND_DEVICE_NOPWD_URL = HOST + "/person/bindDeviceNoPwd";//绑定新设备
+    public static final String BIND_DEVICE_URL = HOST + "/person/bindDevice";//绑定新设备
+    public static final String FORGET_PWD_URL = HOST + "/person/forgetPwd";//忘记密码
 
     public static final String LOGOUT_URL = HOST + "/person/logout";//用户退出
     public static final String ZONE = HOST + "/zone";//城市区域
@@ -91,6 +96,9 @@ public class Constants  {
     public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
     public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//加关注
     public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
+    public static final String ADD_BLACKLIST_URL = HOST + "/blackList/save";//添加黑名单
+    public static final String FIND_BLACKLIST_URL = HOST + "/blackList/queryList";//查询黑名单
+    public static final String DEL_BLACKLIST_URL= HOST + "/blackList/delete";//移除黑名单
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
 
@@ -155,6 +163,8 @@ public class Constants  {
     public static final String COMMIT_ALIPAY = HOST + "/appOrder/alipayNotify";//支付宝回调
     public static final String COMMIT_WECHAT_PAY = HOST + "/appOrder/weichatNotify";//微信回调
     public static final String COMMIT_CHUZHIKA = HOST + "appOrder/storeConsume";//储值卡消费回调
+    public static final String GET_GROUP_MEMBERS = HOST + "/group/getGroupMembers";//获取IM群组成员资料
+    public static final String GET_CONTACTS = HOST + "/group/getEmployes";//获取IM群组成员资料
 
     //潜客相关
     public static final String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
