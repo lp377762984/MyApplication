@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.shouhuan.command;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,7 +16,7 @@ import java.util.Calendar;
 
 
 public class CommandManager {
-    
+
     private static final String TAG = "CommandManager";
     private static Context mContext;
     private static CommandManager instance;
@@ -37,7 +36,8 @@ public class CommandManager {
 
     /**
      * 跌倒提醒
-     * @param control  0(关闭)  1(打开)
+     *
+     * @param control 0(关闭)  1(打开)
      */
     public void setFalldownAlert(int control) {
         byte[] bytes = new byte[7];
@@ -54,7 +54,7 @@ public class CommandManager {
     /**
      * 清除数据
      */
-    public void setClearData(){
+    public void setClearData() {
         byte[] bytes = new byte[7];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -69,7 +69,7 @@ public class CommandManager {
     /**
      * 恢复手环出厂设置
      */
-    public void setResetBand(){
+    public void setResetBand() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -83,10 +83,10 @@ public class CommandManager {
 
     /**
      * 单次、实时测量
+     *
      * @param status  心率：0X09(单次) 0X0A(实时)
      *                血氧：0X11(单次) 0X12(实时)
      *                血压：0X21(单次) 0X22(实时)
-     *
      * @param control 0关  1开
      */
     public void setOnceOrRealTimeMeasure(int status, int control) {
@@ -103,7 +103,8 @@ public class CommandManager {
 
     /**
      * 一键测量
-     * @param control  0(关)  1(开)
+     *
+     * @param control 0(关)  1(开)
      */
     public void setOnceKeyMeasure(int control) {
         byte[] bytes = new byte[7];
@@ -113,18 +114,19 @@ public class CommandManager {
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0x32;
         bytes[5] = (byte) 0x80;
-        bytes[6] = (byte)control;
+        bytes[6] = (byte) control;
         broadcastData(bytes);
     }
 
 
     /**
      * 下拉同步数据
-     * @param timeInMillis 传入一个时间点，手环传这个时间点之后的整点数据过来
+     *
+     * @param timeInMillis  传入一个时间点，手环传这个时间点之后的整点数据过来
      * @param timeInMillis2 传入一个时间点，手环传这个时间点之后的运动模式数据过来
      */
-    public void setSyncData(long timeInMillis,long timeInMillis2) {//一个用于获取整点数据，一个用于获取运动模式数据
-        DateModel dateModel = new DateModel(timeInMillis,timeInMillis2);
+    public void setSyncData(long timeInMillis, long timeInMillis2) {//一个用于获取整点数据，一个用于获取运动模式数据
+        DateModel dateModel = new DateModel(timeInMillis, timeInMillis2);
         byte[] data = new byte[18];
         data[0] = (byte) 0xAB;
         data[1] = (byte) 0;
@@ -153,7 +155,7 @@ public class CommandManager {
      * 下拉同步睡眠数据
      */
     public void setSyncSleepData(long timeInMillis) {
-        DateModel dateModel = new DateModel(timeInMillis,0);
+        DateModel dateModel = new DateModel(timeInMillis, 0);
         byte[] data = new byte[10];
         data[0] = (byte) 0xAB;
         data[1] = (byte) 0;
@@ -161,7 +163,7 @@ public class CommandManager {
         data[3] = (byte) 0xff;
         data[4] = (byte) 0x52;
         data[5] = (byte) 0x80;
-        data[6] = (byte)0;//占位符，没意义
+        data[6] = (byte) 0;//占位符，没意义
         data[7] = (byte) ((dateModel.year - 2000));
         data[8] = (byte) (dateModel.month);
         data[9] = (byte) (dateModel.day - 1);
@@ -181,24 +183,27 @@ public class CommandManager {
         bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
+
     /**
      * 马达测试
      */
-    public void motorText(int control){
+    public void motorText(int control) {
         byte[] bytes = new byte[7];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 4;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB1;
-        bytes[5] = (byte)0x80;
-        bytes[6] = (byte)control;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) control;
         broadcastData(bytes);
     }
+
     /**
      * 智能提醒
+     *
      * @param MessageId
-     * @param type  0开  1关  2来消息通知
+     * @param type      0开  1关  2来消息通知
      */
     public void setSmartAlert(int MessageId, int type) {
         byte[] bytes = new byte[8];
@@ -215,7 +220,8 @@ public class CommandManager {
 
     /**
      * 抬手亮屏
-     * @param control  0关  1开
+     *
+     * @param control 0关  1开
      */
     public void setUpHandLightScreen(int control) {
         byte[] bytes = new byte[7];
@@ -231,7 +237,8 @@ public class CommandManager {
 
     /**
      * 整点测量
-     * @param control  0关  1开
+     *
+     * @param control 0关  1开
      */
     public void setOnTimeMeasure(int control) {
         byte[] bytes = new byte[7];
@@ -241,15 +248,16 @@ public class CommandManager {
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0x78;
         bytes[5] = (byte) 0x80;
-        bytes[6] = (byte)control;
+        bytes[6] = (byte) control;
         broadcastData(bytes);
     }
 
     /**
      * 摇摇拍照指令
+     *
      * @param control 0关  1开
      */
-    public void setSharkTakePhoto(int control){
+    public void setSharkTakePhoto(int control) {
         byte[] bytes = new byte[7];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -264,7 +272,8 @@ public class CommandManager {
 
     /**
      * 防丢
-     * @param control  0关  1开
+     *
+     * @param control 0关  1开
      */
     public void setAntiLostAlert(int control) {
         byte[] bytes = new byte[7];
@@ -280,7 +289,8 @@ public class CommandManager {
 
     /**
      * 中英文切换
-     * @param control  0中文  1英文
+     *
+     * @param control 0中文  1英文
      */
     public void setSwitchChineseOrEnglish(int control) {
         byte[] bytes = new byte[7];
@@ -296,7 +306,8 @@ public class CommandManager {
 
     /**
      * 时间制切换
-     * @param control  0（24小时制）  1(12小时制)
+     *
+     * @param control 0（24小时制）  1(12小时制)
      */
     public void set12HourSystem(int control) {
         byte[] bytes = new byte[7];
@@ -312,8 +323,9 @@ public class CommandManager {
 
     /**
      * 同步天气信息
-     * @param weather  0多云 1晴天 2雪天 3雨天
-     * @param temp  0(0度以上)  1(0度以下)
+     *
+     * @param weather 0多云 1晴天 2雪天 3雨天
+     * @param temp    0(0度以上)  1(0度以下)
      */
     public void setSyncWeather(int weather, int temp) {
         byte[] bytes = new byte[9];
@@ -328,6 +340,7 @@ public class CommandManager {
         bytes[8] = (byte) (temp >= 0 ? 0 : 1);
         broadcastData(bytes);
     }
+
     /**
      * 同步时间  ab 00 0b ff 93 80 00 07 e0 0a 0e 09 33 12
      */
@@ -361,9 +374,10 @@ public class CommandManager {
 
     /**
      * 中英文切换
-     * @param type  0中文   1英文
+     *
+     * @param type 0中文   1英文
      */
-    public void setChineseOrEnglish(int type){
+    public void setChineseOrEnglish(int type) {
         byte[] bytes = new byte[7];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -378,7 +392,7 @@ public class CommandManager {
     /**
      * 挂断电话
      */
-    public void setHangUpPhone(){
+    public void setHangUpPhone() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -391,6 +405,7 @@ public class CommandManager {
 
     /**
      * 智能提醒
+     *
      * @param MessageId
      * @param type
      */
@@ -409,20 +424,21 @@ public class CommandManager {
 
     /**
      * 智能提醒,带消息内容
+     *
      * @param MessageId
      * @param type
      */
     public void setSmartWarn(int MessageId, int type, String content) {
         byte[] bytes1 = null;
         int length = 0;
-        if (!TextUtils.isEmpty(content)){
+        if (!TextUtils.isEmpty(content)) {
             bytes1 = content.getBytes();
             length = bytes1.length;
         }
         byte[] bytes2 = new byte[8];
         bytes2[0] = (byte) 0xAB;
         bytes2[1] = (byte) 0;
-        bytes2[2] = (byte) (length+5);
+        bytes2[2] = (byte) (length + 5);
         bytes2[3] = (byte) 0xFF;
         bytes2[4] = (byte) 0x72;
         bytes2[5] = (byte) 0x80;
@@ -435,7 +451,7 @@ public class CommandManager {
     /**
      * 查看电量
      */
-    public void getBatteryInfo(){
+    public void getBatteryInfo() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -449,7 +465,7 @@ public class CommandManager {
     /**
      * 查看版本信息
      */
-    public void getVersionInfo(){
+    public void getVersionInfo() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -459,10 +475,6 @@ public class CommandManager {
         bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
-
-
-
-
 
 
     /**
@@ -484,30 +496,32 @@ public class CommandManager {
     /**
      * 屏显 ab 00 04 ff b0 80 01
      */
-    public void screenShow(int control){
+    public void screenShow(int control) {
         byte[] bytes = new byte[7];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 4;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB0;
-        bytes[5] = (byte)0x80;
-        bytes[6] = (byte)control;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) control;
         broadcastData(bytes);
     }
+
     /**
      * 智能提醒,带消息内容
+     *
      * @param MessageId
      * @param type
      */
-    public void smartWarnInfo(int MessageId, int type,String data) {
+    public void smartWarnInfo(int MessageId, int type, String data) {
         byte[] bytes1 = data.getBytes();
         int length = bytes1.length;
-        Log.e(TAG,"length:"+length);
+        Log.e(TAG, "length:" + length);
         byte[] bytes = new byte[8];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
-        bytes[2] = (byte) (length+5);
+        bytes[2] = (byte) (length + 5);
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0x72;
         bytes[5] = (byte) 0x80;
@@ -516,17 +530,18 @@ public class CommandManager {
         byte[] bytes2 = DataHandlerUtils.addBytes(bytes, bytes1);
         broadcastData(bytes2);
     }
+
     /**
-     *RSSI
+     * RSSI
      */
-    public void rssiTest(){
+    public void rssiTest() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 3;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB5;
-        bytes[5] = (byte)0x80;
+        bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
 
@@ -534,41 +549,42 @@ public class CommandManager {
     /**
      * 按键测试
      */
-    public void buttonClick(){
+    public void buttonClick() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 3;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB6;
-        bytes[5] = (byte)0x80;
+        bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
+
     /**
      * 三轴传感器
      */
-    public void sensorTest(){
+    public void sensorTest() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 3;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB3;
-        bytes[5] = (byte)0x80;
+        bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
 
     /**
      * 心率传感器
      */
-    public void heartRateSensorTest(){
+    public void heartRateSensorTest() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 3;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xB4;
-        bytes[5] = (byte)0x80;
+        bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
 
@@ -613,14 +629,14 @@ public class CommandManager {
     /**
      * 关机
      */
-    public void Shutdown(){
+    public void Shutdown() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
         bytes[2] = (byte) 3;
         bytes[3] = (byte) 0xFF;
         bytes[4] = (byte) 0xFF;
-        bytes[5] = (byte)0x80;
+        bytes[5] = (byte) 0x80;
         broadcastData(bytes);
     }
 

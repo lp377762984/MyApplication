@@ -31,4 +31,8 @@
     <dimen name="h11">19sp</dimen>
     <dimen name="device_name_size">20sp</dimen>
     <dimen name="result_size">25sp</dimen>
+
+    <dimen name="default_slider_margin_btw_title">20dp</dimen>
+    <dimen name="default_margin_edge_d">15.5dp</dimen>
+    <dimen name="line_chart_layout_height_d">280dp</dimen>
 </resources>

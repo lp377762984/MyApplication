@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -20,19 +22,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
-import com.cn.danceland.myapplication.shouhuan.bean.HeartRateLastBean;
-import com.cn.danceland.myapplication.shouhuan.bean.HeartRateResultBean;
+import com.cn.danceland.myapplication.db.WearFitSleepBean;
+import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
@@ -43,17 +39,11 @@ import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
-import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 手环首页
@@ -62,7 +52,7 @@ import java.util.Map;
 
 public class WearFitActivity extends Activity {
     private static final int REQUEST_SEARCH = 1;
-    private static final int REQUEST_SETTING = 3;
+    private static final int MSG_REFRESH_DATA = 0;//请求数据  心率  睡眠
     private TextView tv_connect;
     private String address;
     private String name;
@@ -78,7 +68,8 @@ public class WearFitActivity extends Activity {
     private RelativeLayout rl_connect;
     private CommandManager commandManager;
 
-    HeartRateHelper heartRateHelper = new HeartRateHelper();
+    private HeartRateHelper heartRateHelper = new HeartRateHelper();
+    private WearFitSleepHelper sleepHelper=new WearFitSleepHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,7 +122,8 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.VISIBLE);
             tv_connect.setText("还未绑定手环，点击绑定");
         }
-        initHeartData();
+//        initHeartData();//心率
+        initSleepData();//睡眠
     }
 
     private class WearFitAdapter extends BaseAdapter {
@@ -211,7 +203,6 @@ public class WearFitActivity extends Activity {
                     case 6://设置
                         startActivity(new Intent(WearFitActivity.this, WearFitSettingActivity.class));
                         break;
-
                 }
             }
         });
@@ -273,8 +264,6 @@ public class WearFitActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                initHeartData();//请求心率数据
-
                 MyApplication.mBluetoothConnected = true;
                 MyApplication.isBluetoothConnecting = false;
                 //todo 更改界面ui
@@ -282,6 +271,10 @@ public class WearFitActivity extends Activity {
                 ToastUtils.showToastShort("连接成功");
                 rl_connect.setVisibility(View.GONE);
                 progressDialog.dismiss();
+
+//                Message message = new Message();
+//                message.what = MSG_REFRESH_DATA;
+//                handler.sendMessage(message);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;
                 //todo 更改界面ui
@@ -300,12 +293,12 @@ public class WearFitActivity extends Activity {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
                 final byte[] txValue = intent
                         .getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-//                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
+                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
 
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
-                if (datas.get(4) == 0x92 && datas.size() == 17) {//不知道是啥  首次进入“我的手环”连接手环后会走
-                    initHeartData();//请求心率数据
-                }
+//                if (datas.get(4) == 0x92 && datas.size() == 17) {//不知道是啥  首次进入“我的手环”连接手环后会走
+//                    initHeartData();//请求心率数据
+//                }
                 //心率传感器
                 if (datas.get(4) == 0XB4) {//[171, 0, 4, 255, 180, 128, 1]
                     Integer integer = datas.get(6);
@@ -327,21 +320,17 @@ public class WearFitActivity extends Activity {
                     heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
                     heartRate.setHeartRate(datas.get(11));
                     String thTemp = new SimpleDateFormat("yyyy").format(new Date(heartRate.getDate())).toString();
-                    LogUtil.i("心率"+heartRate.getHeartRate()+",时间"+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(heartRate.getDate())).toString());
                     heartRateHelper.insert(heartRate);
-                    HeartRateResultBean heartRateResultBean = new HeartRateResultBean();//提交对象
-                    heartRateResultBean.setYear(new SimpleDateFormat("yyyy").format(new Date(heartRate.getDate())).toString());//年
-                    heartRateResultBean.setMonth(new SimpleDateFormat("MM").format(new Date(heartRate.getDate())).toString());//月
-                    heartRateResultBean.setDay(new SimpleDateFormat("dd").format(new Date(heartRate.getDate())).toString());//日
-                    heartRateResultBean.setHour(new SimpleDateFormat("HH").format(new Date(heartRate.getDate())).toString());//时
-                    heartRateResultBean.setMinute(new SimpleDateFormat("mm").format(new Date(heartRate.getDate())).toString());//分
-//                    LogUtil.i("--" + thTemp+"--"+new SimpleDateFormat("yyyy").format(new Date(heartRate.getDate())).toString());
-                    heartRateResultBean.setMax_value(datas.get(11) + "");//心率
-                    heartRateResultBean.setTimestamp(heartRate.getDate());//long 时间戳
-                    postHeartRateBeans.add(heartRateResultBean);
                 }
-                if (datas.get(4) == 0x51 && datas.size() == 20) {//结束心率
-//                    getLastHeart();//服务器最后心率
+                if (datas.get(4) == 0x52 && datas.size() == 14) {//[171, 0, 11, 255, 82, 128, 18, 7, 31, 0, 49, 2, 0, 29]  11位state 12位*256+13位
+                    LogUtil.i("14位"+datas.toString());
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
+                    WearFitSleepBean sleepBean = new WearFitSleepBean();
+                    sleepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    sleepBean.setState(datas.get(11));//11位state
+                    sleepBean.setGroup_time(datas.get(12)*256+datas.get(13));//睡了多久 12位*256+13位
+                    LogUtil.i("sleepBean"+sleepBean);
+                    sleepHelper.insert(sleepBean);
                 }
                 if (datas.get(4) == 0x51 && datas.get(5) == 17) {
 //                    LogUtil.i(datas.toString());
@@ -354,121 +343,34 @@ public class WearFitActivity extends Activity {
         }
     };
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case MSG_REFRESH_DATA:
+                    initHeartData();//请求心率数据
+                    initSleepData();//请求睡眠数据
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     String temp = "";//最后心率值  专为打印
 
     private void initHeartData() {
-        postHeartRateBeans=new ArrayList<>();//清空提交心率
         heartRateHelper.deleteAll();//删除所有的   因为本地只留七天
         long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
-        LogUtil.i("获取这个之后的数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
+        LogUtil.i("获取这个之后的心率数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();
         commandManager.setSyncData(time, time);
     }
 
-    private List<HeartRateResultBean> postHeartRateBeans = new ArrayList<>();//心率数据 HeartRate
-    private HeartRateResultBean lastHeart;//服务器最后心率
-
-    /**
-     * 提交心率  先请求后台最后一条   对比本地   提交剩下未提交的数据
-     */
-    private void isPostHeart() {
-        List<HeartRateResultBean> postHeartList = new ArrayList<>();
-        for (int i = 0; i < postHeartRateBeans.size(); i++) {
-            if (lastHeart != null) {
-                if (lastHeart.getTimestamp() != 0) {//不为空
-                    Date date1 = new Date(lastHeart.getTimestamp());//后台时间
-                    Date date2 = new Date(postHeartRateBeans.get(i).getTimestamp());
-//                    Date date2 = new Date(
-//                            Integer.valueOf(postHeartRateBeans.get(i).getYear())-20,
-//                            Integer.valueOf(postHeartRateBeans.get(i).getMonth())-1,
-//                            Integer.valueOf(postHeartRateBeans.get(i).getDay()),
-//                            Integer.valueOf(postHeartRateBeans.get(i).getHour()),
-//                            Integer.valueOf(postHeartRateBeans.get(i).getMinute()));//这条数据时间
-                    LogUtil.i("比较" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date1) + "**"
-                    + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date2));
-                    if (date1.before(date2)){ //表示date1小于date2  最后一条心率日期小于手环date2
-                        postHeartList.add(postHeartRateBeans.get(i));
-                    }
-//                    if (date1.after(date2)) {
-//                        postHeartList.add(postHeartRateBeans.get(i));
-//                        LogUtil.i("提交心率000");
-//                    }
-                } else {
-                    postHeartList = postHeartRateBeans;
-                }
-            } else {
-                postHeartList = postHeartRateBeans;
-            }
-        }
-        if (postHeartList != null && postHeartList.size() != 0) {
-            LogUtil.i("提交心率" + postHeartList.size()+"----"+(i++));
-//            postHeart(postHeartList);
-        }
-    }
-int i=0;
-    private void postHeart(List<HeartRateResultBean> postHeartList) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_SAVE
-                , new Gson().toJson(postHeartList), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                LogUtil.i("提交返回" + jsonObject.toString());
-                if (jsonObject.toString().contains("true")) {
-                    LogUtil.i("提交成功");
-                } else {
-                    LogUtil.i("提交失败");
-                }
-//                progressDialog.dismiss();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("onErrorResponse", volleyError.toString());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-        MyApplication.getHttpQueues().add(jsonObjectRequest);
-    }
-
-    //服务器最后心率
-    private void getLastHeart() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDLAST, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i("服务器最后心率" + s);
-                HeartRateLastBean heartRateLastBean = new Gson().fromJson(s, HeartRateLastBean.class);
-                lastHeart = heartRateLastBean.getData();//服务器最后心率
-                isPostHeart();//提交心率
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                if (volleyError != null) {
-                    LogUtil.i(volleyError.toString());
-                } else {
-                    LogUtil.i("NULL");
-                }
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                return map;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
-        MyApplication.getHttpQueues().add(stringRequest);
+    private void initSleepData() {
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        LogUtil.i("获取这个之后的睡眠数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
+        temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();
+        commandManager.setSyncSleepData(time);
     }
 
     private class ItemBean {

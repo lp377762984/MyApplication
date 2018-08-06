@@ -658,8 +658,9 @@
 
         <service
             android:name=".shouhuan.service.BluetoothLeService"
-            android:enabled="true"
-            android:process=":BluetoothLeService" />
+            android:enabled="true" />
+            <!--android:process=":BluetoothLeService" 加此处应该是冲突  收不到广播-->
+
 
 
         <activity
@@ -682,6 +683,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".shouhuan.activity.WearFitLongSitActivity"
+            android:screenOrientation="portrait" />
+        <!--睡眠-->
+        <activity
+            android:name=".shouhuan.activity.WearFitSleepActivity"
+            android:screenOrientation="portrait" />
+        <!--心率-->
+        <activity
+            android:name=".shouhuan.activity.WearFitHeartRateActivity"
+            android:screenOrientation="portrait" />
+        <!--摇摇拍照-->
+        <activity
+            android:name=".shouhuan.activity.WearFitCameraActivity"
             android:screenOrientation="portrait" />
 
         <receiver

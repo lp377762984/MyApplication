@@ -277,7 +277,6 @@ public class TimeUtils {
     /**
      * 获取月初的毫秒时间戳
      */
-
     public static long getMonthFirstDay(Calendar calendar) {
         //Calendar calendar = Calendar.getInstance();// 获取当前日期
         calendar.add(Calendar.MONTH + 1, 0);
@@ -291,7 +290,6 @@ public class TimeUtils {
     /**
      * 获取月末的毫秒时间戳
      */
-
     public static long getMonthLastDay(Calendar calendar) {
         //Calendar calendar = Calendar.getInstance();// 获取当前日期
         calendar.add(Calendar.MONTH, 0);
@@ -437,7 +435,7 @@ public class TimeUtils {
         for (int i = 0; i < 60; i++) {
             calendar.add(Calendar.DAY_OF_MONTH, 1); //向后推移一天
             Date date = calendar.getTime();
-            results.add(calendar.getTime()+"");
+            results.add(calendar.getTime() + "");
         }
 //        long temp = getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), 8);
 //        Calendar calendar = Calendar.getInstance();
@@ -510,10 +508,10 @@ public class TimeUtils {
     public static ArrayList<String> getWeekListData(int count) {
         ArrayList<String> results = new ArrayList<>();
         Calendar c = Calendar.getInstance(); // 当时的日期和时间
-        int day =  c.get(Calendar.DAY_OF_MONTH); // 需要更改的天数
+        int day = c.get(Calendar.DAY_OF_MONTH); // 需要更改的天数
         for (int i = 0; i < count; i++) {
-            if(i!=0){
-                day = c.get(Calendar.DAY_OF_MONTH) - 7 ;
+            if (i != 0) {
+                day = c.get(Calendar.DAY_OF_MONTH) - 7;
             }
             c.set(Calendar.DAY_OF_MONTH, day);
             long currentTime = c.getTimeInMillis();
@@ -563,7 +561,7 @@ public class TimeUtils {
                 day = c.get(Calendar.DAY_OF_MONTH) - 7;
                 c.set(Calendar.DAY_OF_MONTH, day);
                 break;
-            case 7: // 一个月前
+            case 7: // 一个月前 System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000
                 day = c.get(Calendar.DAY_OF_MONTH) - 30;
                 c.set(Calendar.DAY_OF_MONTH, day);
                 break;

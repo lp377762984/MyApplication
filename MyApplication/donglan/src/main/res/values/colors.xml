@@ -74,6 +74,12 @@
     <color name="colorGray6">#141414</color>
     <!--gray7-->
     <color name="colorGray7">#D8D8D8</color>
+    <!--gray8-->
+    <color name="colorGray8">#999999</color>
+    <!--gray9-->
+    <color name="colorGray9">#666666</color>
+    <!--gray10-->
+    <color name="colorGray10">#cecece</color>
 
     <color name="c1">#0ACCAC</color>
     <color name="c2">#222b48</color>
@@ -85,5 +91,11 @@
     <color name="c8">#FFFFFF</color>
     <color name="c9">#777777</color>
     <color name="colorBackground">#F5F5F5</color>
+
+    <color name="shallow_sleep_bg">#7ecef4</color>
+    <color name="deep_sleep_bg">#0068b7</color>
+    <color name="shallow_sleep_selected_bg">#0068b7</color>
+    <color name="deep_sleep_selected_bg">#0068b7</color>
+    <color name="sleep_line_bg">#e5e5e5</color>
 
 </resources>

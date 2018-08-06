@@ -71,8 +71,8 @@ import lecho.lib.hellocharts.view.LineChartView;
  */
 public class WearFitHeartRateActivity extends Activity implements View.OnClickListener {
     private int lableType = 1;//切换标签 1天  2周  3月
-    protected final int MSG_REFRESH_HEART_DATA = 0;
-    protected final int MSG_REFRESH_HEARTVIEW_DATA = 1;
+    private static final int MSG_REFRESH_HEART_DATA = 0;
+    private static final int MSG_REFRESH_HEARTVIEW_DATA = 1;
     private Context context;
     private DongLanTitleView heart_title;//心率title
     private CheckBox day_checkBox;//日
@@ -103,7 +103,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     private List<Date> ds = TimeUtils.getSegmentationTime(5, new Date());//默认轴数据
     private String lastData = "";//选择器上次滚动的数据
 
-    HeartRateHelper heartRateHelper = new HeartRateHelper();
+    private HeartRateHelper heartRateHelper = new HeartRateHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
 
     private void initView() {
         heart_title = findViewById(R.id.shouhuan_title);
-        heart_title.setTitle("心率");
+        heart_title.setTitle(context.getResources().getString(R.string.heart_rate_text));
         day_checkBox = (CheckBox) findViewById(R.id.day_checkBox);//日
         week_checkBox = (CheckBox) findViewById(R.id.week_checkBox);//周
         month_checkBox = (CheckBox) findViewById(R.id.month_checkBox);//年
