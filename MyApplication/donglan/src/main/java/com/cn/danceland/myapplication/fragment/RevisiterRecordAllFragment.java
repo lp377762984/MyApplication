@@ -17,9 +17,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetRevisiterRecordListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -46,7 +48,7 @@ import static com.cn.danceland.myapplication.R.id.tv_name;
  */
 
 
-public class RevisiterRecordFragment extends BaseFragmentEventBus {
+public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
     private PullToRefreshListView mListView;
     private List<RequsetRevisiterRecordListBean.Data.Content> datalist = new ArrayList<>();
@@ -56,7 +58,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
     private Gson gson = new Gson();
     private int mCurrentPage = 1;//起始请求页
     private boolean isEnd = false;
-    private String id;
+    private String auth;
     private TextView tv_error;
     private ImageView imageView;
 
@@ -100,7 +102,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             case 210://刷新页面
                 mCurrentPage = 1;
                 try {
-                    find_record_list(id, mCurrentPage);
+                    find_record_list(auth, mCurrentPage);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -112,9 +114,9 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
 
     @Override
     public void initDta() {
-        id = getArguments().getString("id");
+        auth = getArguments().getString("auth");
         try {
-            find_record_list(id, mCurrentPage);
+            find_record_list(auth, mCurrentPage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -170,7 +172,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             init_pullToRefresh();
             mCurrentPage = 1;
             try {
-                find_record_list(id, mCurrentPage);
+                find_record_list(auth, mCurrentPage);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -196,7 +198,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
                 try {
-                    find_record_list(id, mCurrentPage);
+                    find_record_list(auth, mCurrentPage);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -220,8 +222,10 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
 
     class StrBean {
         public String page;
-        //public String auth = "1";
-        public String member_id;
+        public String auth ;
+       // public String member_id;
+        public String operate_id
+                ;
     }
 
 
@@ -231,11 +235,13 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
      * @param pageCount
      * @throws JSONException
      */
-    public void find_record_list(final String id, final int pageCount) throws JSONException {
+    public void find_record_list(final String auth, final int pageCount) throws JSONException {
+
 
         StrBean strBean = new StrBean();
         strBean.page = pageCount - 1 + "";
-        strBean.member_id = id;
+        strBean.auth = auth;
+        strBean.operate_id= ((Data)DataInfoCache.loadOneCache(Constants.MY_INFO)).getEmployee().getId()+"";
         String s = gson.toJson(strBean);
         LogUtil.i(s);
         JSONObject jsonObject = new JSONObject(s.toString());

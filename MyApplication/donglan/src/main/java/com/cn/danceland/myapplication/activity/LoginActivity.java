@@ -3,12 +3,14 @@ package com.cn.danceland.myapplication.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -48,6 +50,7 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qalsdk.QALSDKManager;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
 import com.tencent.qcloud.presentation.event.GroupEvent;
@@ -162,6 +165,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 
     private void initTXIM() {
 
+        //        // 务必检查IMSDK已做以下初始化
+        QALSDKManager.getInstance().setEnv(0);
+        QALSDKManager.getInstance().init(getApplicationContext(), 1400090939);
         TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
                 .setLogLevel(TIMLogLevel.DEBUG)
                 .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
@@ -469,8 +475,16 @@ public class LoginActivity extends Activity implements OnClickListener {
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
                     if (loginInfoBean.getCode()==5) {
+                        AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage("您未在此设备登录，请绑定设备");
+                        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(LoginActivity.this,LoginBindActivity.class));
+                            }
+                        });
+                        builder.show();
 
-                        startActivity(new Intent(LoginActivity.this,LoginBindActivity.class));
 
                     }else {
                         ToastUtils.showToastShort("用户名或密码错误");
@@ -592,37 +606,10 @@ public class LoginActivity extends Activity implements OnClickListener {
                 TLSService.getInstance().setLastErrno(0);
                 SPUtils.setString("sig", userSig);
 
-                //  TLSHelper.getInstance().setLocalId(UserInfo.ge);
             }
         });
 
-//        TIMManager.getInstance().login(identifier, userSig, new TIMCallBack() {
-//            @Override
-//            public void onError(int code, String desc) {
-//                //错误码 code 和错误描述 desc，可用于定位请求失败原因
-//                //错误码 code 列表请参见错误码表
-//                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
-//                TLSService.getInstance().setLastErrno(-1);
-//
-//            }
-//
-//            @Override
-//            public void onSuccess() {
-//                LogUtil.i("login succ 登录成功");
-//                TLSService.getInstance().setLastErrno(0);
-//                UserInfo userInfo=UserInfo.getInstance();
-//                UserInfo.getInstance().setId(identifier);
-//                UserInfo.getInstance().setUserSig(userSig);
-//          //      TLSUserInfo tlsUserInfo =TLSService.getInstance().getLastUserInfo();
-//
-//            //    startActivity(new Intent(LoginActivity.this, TXIMHomeActivity.class));
-//
-////                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-////                      startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-////
-////                       finish();
-//            }
-//        });
+
     }
 
 

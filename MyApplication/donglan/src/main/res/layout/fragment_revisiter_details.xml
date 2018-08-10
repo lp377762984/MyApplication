@@ -182,6 +182,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:text="微信号："
@@ -557,11 +558,12 @@
 
                 <TextView
                     android:id="@+id/tv_branch_name"
+
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
                     android:textColor="#333" />
             </LinearLayout>
@@ -599,7 +601,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginRight="10dp"
                         android:text="未填写"
                         android:textColor="#333" />
                 </LinearLayout>
@@ -630,7 +633,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginRight="10dp"
                         android:text="未填写"
 
                         android:textColor="#333" />
@@ -670,7 +674,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginRight="10dp"
                         android:text="未填写"
                         android:textColor="#333" />
                 </LinearLayout>
@@ -701,7 +706,8 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginRight="10dp"
                         android:text="未填写"
 
                         android:textColor="#333" />
@@ -735,7 +741,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
 
                     android:textColor="#333" />
@@ -768,7 +775,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
 
                     android:textColor="#333" />
@@ -801,7 +809,10 @@
                     android:id="@+id/sr_fitness_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
+
                     android:focusable="false"
                     app:srb_clearRatingEnabled="true"
                     app:srb_clickable="false"
@@ -838,6 +849,9 @@
                 <com.willy.ratingbar.ScaleRatingBar xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/sr_follow_level"
                     android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:focusable="false"
@@ -878,7 +892,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
                     android:textColor="#333" />
             </LinearLayout>
@@ -908,7 +923,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
                     android:textColor="#333" />
 
@@ -939,7 +955,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
                     android:textColor="#333" />
             </LinearLayout>
@@ -969,7 +986,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:gravity="right|center_vertical"
+                    android:layout_marginRight="10dp"
                     android:text="未填写"
                     android:textColor="#333" />
 

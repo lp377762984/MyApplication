@@ -220,6 +220,7 @@ public class LoginBindActivity extends Activity implements View.OnClickListener 
                 if (simpleBean.getSuccess()){
                   //  ToastUtils.showToastShort("绑定成功");
                     EventBus.getDefault().post(new StringEvent("绑定成功",1011));
+                    finish();
                 }
 
             }
