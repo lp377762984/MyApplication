@@ -25,14 +25,13 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
-import com.cn.danceland.myapplication.im.utils.TimeUtil;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRateBean;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRateLastBean;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRateResultBean;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRateViewBean;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRateViewPostBean;
-import com.cn.danceland.myapplication.shouhuan.bean.HeartRateWeekPostBean;
+import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -92,7 +91,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
 
     private List<HeartRate> heartRates = new ArrayList<>();//心率数据 HeartRate
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
-    private List<HeartRateResultBean> allHeartRates = new ArrayList<>();//最后一条后面所有的心率数据 ALL
+    private List<HeartRateResultBean> behindData = new ArrayList<>();//最后一条后面所有的心率数据 ALL
     private List<PointValue> mPointValues = new ArrayList<PointValue>();//折线数据list
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();//折线X轴list
     private List<AxisValue> mAxisYValues = new ArrayList<AxisValue>();//折线Y轴list
@@ -364,17 +363,22 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
         super.onDestroy();
     }
 
-    private HeartRateResultBean lastHeart;//服务器最后心率
+    private HeartRateResultBean lastDateTime;//服务器最后心率
 
     //服务器最后心率
     private void getLastHeart() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDLAST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.i("服务器最后心率" + s);
+                LogUtil.i("服务器最后一条数据是" + s);
                 HeartRateLastBean heartRateLastBean = new Gson().fromJson(s, HeartRateLastBean.class);
-                lastHeart = heartRateLastBean.getData();//服务器最后心率
-                queryAllHeartByDay(lastHeart.getTimestamp());//
+
+                long lastTime = 0;
+                if (heartRateLastBean != null) {
+                    lastDateTime = heartRateLastBean.getData();//服务器最后心率
+                    lastTime = lastDateTime.getTimestamp();
+                }
+                queryAllHeartByDay(lastTime);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -403,9 +407,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     }
 
     private void queryAllHeartByDay(long date1Time) {//最后一条心率数据时间  获取本地数据库这时间后的数据
-        Date date1 = new Date(date1Time);//后台时间
-        Date date2 = new Date();
-        int day = Integer.valueOf(TimeUtils.getInterval(date1, date2));// 计算差多少天
+        int day = TimeUtils.differentDaysByMillisecond(date1Time, new Date().getTime());// 计算差多少天
         for (int i = 0; i < day + 1; i++) {
             List<HeartRate> hrList = new ArrayList<>();
             Calendar calendar = Calendar.getInstance();
@@ -420,7 +422,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                 heartRateResultBean.setMinute(new SimpleDateFormat("mm").format(new Date(hrList.get(j).getDate())).toString());//分
                 heartRateResultBean.setMax_value(hrList.get(j).getHeartRate() + "");//心率
                 heartRateResultBean.setTimestamp(hrList.get(j).getDate());//long 时间戳
-                allHeartRates.add(heartRateResultBean);
+                behindData.add(heartRateResultBean);
             }
         }
         isPostHeart();
@@ -431,21 +433,21 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
      */
     private void isPostHeart() {
         List<HeartRateResultBean> postHeartList = new ArrayList<>();
-        for (int i = 0; i < allHeartRates.size(); i++) {
-            if (lastHeart != null) {
-                if (lastHeart.getTimestamp() != 0) {//不为空
-                    Date date1 = new Date(lastHeart.getTimestamp());//后台时间
-                    Date date2 = new Date(allHeartRates.get(i).getTimestamp());
+        for (int i = 0; i < behindData.size(); i++) {
+            if (lastDateTime != null) {
+                if (lastDateTime.getTimestamp() != 0) {//不为空
+                    Date date1 = new Date(lastDateTime.getTimestamp());//后台时间
+                    Date date2 = new Date(behindData.get(i).getTimestamp());
                     LogUtil.i("比较" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date1) + "**"
                             + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date2));
                     if (date1.before(date2)) { //表示date1小于date2  最后一条心率日期小于手环date2
-                        postHeartList.add(allHeartRates.get(i));
+                        postHeartList.add(behindData.get(i));
                     }
                 } else {
-                    postHeartList = allHeartRates;
+                    postHeartList = behindData;
                 }
             } else {
-                postHeartList = allHeartRates;
+                postHeartList = behindData;
             }
         }
         if (postHeartList != null && postHeartList.size() != 0) {
@@ -490,7 +492,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
      */
     private void queryHeartByWeekOrMonth(String timestamp_gt, String timestamp_lt) {
 
-        HeartRateWeekPostBean weekPostBean = new HeartRateWeekPostBean();
+        MorePostBean weekPostBean = new MorePostBean();
         weekPostBean.setTimestamp_gt(timestamp_gt);
         weekPostBean.setTimestamp_lt(timestamp_lt);
         LogUtil.i("请求后台心率" + weekPostBean.toString());
@@ -554,7 +556,6 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
      */
     private void queryHeartByDay(String year, String month, String day) {
         heartRates = heartRateHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
-        //  LogUtil.i(TimeUtils.date2TimeStamp(year+"-"+month+"-"+day+" 00:00:00","yyyy-MM-dd HH:mm:ss")+"");
         LogUtil.i("本地数据库共有个" + heartRates.size());
         if (heartRates != null && heartRates.size() != 0) {
             getAxisXLables();//获取x轴的标注

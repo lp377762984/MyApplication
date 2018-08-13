@@ -14,6 +14,7 @@ import com.cn.danceland.myapplication.shouhuan.bean.SleepBean;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +30,6 @@ public class SleepAdapter extends BaseAdapter {
         super();
         this.sleepBeans = sleepBeans;
         this.context = context;
-
     }
 
     public void setData(ArrayList<SleepBean> sleepBeans) {
@@ -82,10 +82,10 @@ public class SleepAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.period_time_tv.setText(new SimpleDateFormat("HH:mm").format(sleepBeans.get(i).getStartTime())
+        viewHolder.period_time_tv.setText(new SimpleDateFormat("HH:mm").format(new Date(sleepBeans.get(i).getStartTime())).toString()
                 + context.getResources().getString(R.string.waves_text)
-                + new SimpleDateFormat("HH:mm").format(sleepBeans.get(i).getEndTime()));
-        viewHolder.time_tv.setText(sleepBeans.get(i).getTime() + "");
+                + new SimpleDateFormat("HH:mm").format(new Date(sleepBeans.get(i).getEndTime())).toString());
+        viewHolder.time_tv.setText(sleepBeans.get(i).getContinuoustime() + "");
         switch (sleepBeans.get(i).getState()) {
             case -1:
                 viewHolder.sleep_state_tv.setText(context.getResources().getString(R.string.awake_text));

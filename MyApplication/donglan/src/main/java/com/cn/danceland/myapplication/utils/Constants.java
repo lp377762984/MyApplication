@@ -250,6 +250,13 @@ public class Constants  {
     public static final String QUERY_WEAR_FIT_HEART_RATE_SAVE = HOST + "/personHeartRate/save";//新增[人员心率数据]
     public static final String QUERY_WEAR_FIT_HEART_RATE_FANDAVG = HOST + "/personHeartRate/findAvg";//根据条件查询心率每日平均数
     public static final String QUERY_WEAR_FIT_HEART_RATE_FANDRATE = HOST + "/personHeartRate/findRate";//根据条件查询心率合格率
+    public static final String QUERY_WEAR_FIT_SLEEP_FANDLAST = HOST + "/personSleep/findLast";//根据条件查询最后一条睡眠数据
+    public static final String QUERY_WEAR_FIT_SLEEP_LIST = HOST + "/personSleep/queryList";//按条件查询不分页[人员睡眠数据]列表
+    public static final String QUERY_WEAR_FIT_SLEEP_SAVE = HOST + "/personSleep/save";//新增[人员睡眠数据]
+    public static final String QUERY_WEAR_FIT_SLEEP_FINDSUM = HOST + "/personSleep/findSum";//查询指定时间段内，每天睡眠时间的总和
+
+
+
 
 
 

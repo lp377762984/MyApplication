@@ -832,7 +832,13 @@
     <string name="sleep_line_text">——</string>
     <string name="shallow_sleep_two_text">浅眠</string>
     <string name="deep_sleep_two_text">深睡</string>
+    <string name="more_sleep_time_text">日均睡眠</string>
+    <string name="more_sleep_quality_text">日均清醒</string>
+    <string name="more_shallow_sleep_two_text">日均浅眠</string>
+    <string name="more_deep_sleep_two_text">日均深睡</string>
     <string name="waves_text">~</string>
     <string name="health_tips_text">健康小贴士</string>
     <string name="health_tips_hint_text">由于年龄、体质诸方面的差异，人们各自的最低睡眠需要（MSR）是不同的。资料表明：每晚平均睡7~8小时的人寿命最长。</string>
+    <string name="step_gauge_text">计步</string>
+
 </resources>

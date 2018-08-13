@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -49,7 +50,6 @@ import java.util.List;
  * 手环首页
  * Created by feng on 2018/6/19.
  */
-
 public class WearFitActivity extends Activity {
     private static final int REQUEST_SEARCH = 1;
     private static final int MSG_REFRESH_DATA = 0;//请求数据  心率  睡眠
@@ -63,13 +63,14 @@ public class WearFitActivity extends Activity {
     private String[] text1s = {"心率", "睡眠", "疲劳", "摇摇拍照", "健身计划", "查找手环", "设置"};
     private String[] text2s = {"--bpm", "-时-分", "--", "", "", "", ""};
     private ArrayList<ItemBean> itemBeans;
+    private FrameLayout step_gauge_layout;//计步
     private ProgressDialog progressDialog;
     private String address1;//手环默认链接地址  yxx
     private RelativeLayout rl_connect;
     private CommandManager commandManager;
 
     private HeartRateHelper heartRateHelper = new HeartRateHelper();
-    private WearFitSleepHelper sleepHelper=new WearFitSleepHelper();
+    private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,11 +97,18 @@ public class WearFitActivity extends Activity {
     private void initView() {
         rl_connect = findViewById(R.id.rl_connect);
         gv_wearfit = findViewById(R.id.gv_wearfit);
+        step_gauge_layout = findViewById(R.id.step_gauge_layout);
         gv_wearfit.setAdapter(new WearFitAdapter());
         shouhuan_title = findViewById(R.id.shouhuan_title);
         shouhuan_title.setTitle("我的手环");
         tv_connect = findViewById(R.id.tv_connect);
         setListener();
+        step_gauge_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(WearFitActivity.this, WearFitStepGaugeActivity.class));//计步
+            }
+        });
         if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1)) {
             try {
                 if (MyApplication.mBluetoothLeService.connect(address1)) {
@@ -122,7 +130,7 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.VISIBLE);
             tv_connect.setText("还未绑定手环，点击绑定");
         }
-//        initHeartData();//心率
+        initHeartData();//心率
         initSleepData();//睡眠
     }
 
@@ -191,11 +199,13 @@ public class WearFitActivity extends Activity {
                         startActivity(new Intent(WearFitActivity.this, WearFitSleepActivity.class));
                         break;
                     case 2://疲劳
+                        startActivity(new Intent(WearFitActivity.this, WearFitFatigueActivity.class));
                         break;
                     case 3://摇摇拍照
                         startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
                         break;
                     case 4://健身计划
+                        startActivity(new Intent(WearFitActivity.this, WearFitFitnessPlanActivity.class));
                         break;
                     case 5://查找手环
                         startActivityForResult(new Intent(WearFitActivity.this, DeviceScanActivity.class), REQUEST_SEARCH);
@@ -293,7 +303,7 @@ public class WearFitActivity extends Activity {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
                 final byte[] txValue = intent
                         .getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
+//                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
 
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
 //                if (datas.get(4) == 0x92 && datas.size() == 17) {//不知道是啥  首次进入“我的手环”连接手环后会走
@@ -323,13 +333,13 @@ public class WearFitActivity extends Activity {
                     heartRateHelper.insert(heartRate);
                 }
                 if (datas.get(4) == 0x52 && datas.size() == 14) {//[171, 0, 11, 255, 82, 128, 18, 7, 31, 0, 49, 2, 0, 29]  11位state 12位*256+13位
-                    LogUtil.i("14位"+datas.toString());
+                    LogUtil.i("14位" + datas.toString());
                     String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
                     WearFitSleepBean sleepBean = new WearFitSleepBean();
                     sleepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
-                    sleepBean.setState(datas.get(11));//11位state
-                    sleepBean.setGroup_time(datas.get(12)*256+datas.get(13));//睡了多久 12位*256+13位
-                    LogUtil.i("sleepBean"+sleepBean);
+                    sleepBean.setState(datas.get(11) + "");//11位state
+                    sleepBean.setContinuoustime(datas.get(12) * 256 + datas.get(13));//睡了多久 12位*256+13位
+                    LogUtil.i("sleepBean" + sleepBean + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(sleepBean.getTimestamp())).toString());
                     sleepHelper.insert(sleepBean);
                 }
                 if (datas.get(4) == 0x51 && datas.get(5) == 17) {
@@ -367,6 +377,7 @@ public class WearFitActivity extends Activity {
     }
 
     private void initSleepData() {
+        sleepHelper.deleteAll();//删除所有的   因为本地只留七天
         long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
         LogUtil.i("获取这个之后的睡眠数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();

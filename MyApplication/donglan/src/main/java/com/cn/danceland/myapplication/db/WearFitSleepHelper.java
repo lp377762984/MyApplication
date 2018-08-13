@@ -27,7 +27,7 @@ public class WearFitSleepHelper {
         if (wearFitSleepDao==null){
             wearFitSleepDao = MyApplication.getInstance().getWearFitSleepSession().getWearFitSleepBeanDao();
         }
-        List<WearFitSleepBean> wearFitSleepBeans =  wearFitSleepDao.queryBuilder().where(WearFitSleepBeanDao.Properties.Timestamp.between(day,day+ 1 * 24 * 60 * 60 * 1000)).orderAsc(HeartRateDao.Properties.Date).list();
+        List<WearFitSleepBean> wearFitSleepBeans =  wearFitSleepDao.queryBuilder().where(WearFitSleepBeanDao.Properties.Timestamp.between(day,day+ 1 * 24 * 60 * 60 * 1000)).orderAsc(WearFitSleepBeanDao.Properties.Timestamp).list();
         return wearFitSleepBeans;
     }
 

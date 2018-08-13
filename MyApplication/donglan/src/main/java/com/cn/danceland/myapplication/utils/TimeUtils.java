@@ -171,8 +171,6 @@ public class TimeUtils {
             return sb.append(time / 3600 + "小时" + (time % 3600) / 60 + "分钟").toString();
 
         }
-
-
     }
 
 
@@ -231,7 +229,18 @@ public class TimeUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(Long.valueOf(seconds)));
     }
-
+    //毫秒转凌晨整点
+    public static long timeToTopHour(long time) {
+        Date date = new Date();
+        date.setTime(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
+    }
 
     /**
      * 日期转星期
@@ -244,7 +253,6 @@ public class TimeUtils {
         String[] weekDays = {"0", "1", "2", "3", "4", "5", "6"};
         Calendar cal = Calendar.getInstance(); // 获得一个日历
         Date datet = null;
-
         try {
             datet = f.parse(datetime);
             cal.setTime(datet);
@@ -254,7 +262,23 @@ public class TimeUtils {
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
         if (w < 0)
             w = 0;
-        LogUtil.i(w + "");
+        return weekDays[w];
+    }
+
+    public static String dateToWeek2(String datetime) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance(); // 获得一个日历
+        Date datet = null;
+        try {
+            datet = f.parse(datetime);
+            cal.setTime(datet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+        if (w < 0)
+            w = 0;
         return weekDays[w];
     }
 
@@ -604,6 +628,17 @@ public class TimeUtils {
         } else {
             return false;//没有超过今天
         }
+    }
+    /**
+     * 计算两个日期相差多少天
+     *
+     * @param date1
+     * @param date2
+     * @return 天数
+     */
+    public static int differentDaysByMillisecond(long date1, long date2) {
+        int days = (int) ((date2 - date1) / (1000 * 3600 * 24));
+        return days;
     }
 
     /**

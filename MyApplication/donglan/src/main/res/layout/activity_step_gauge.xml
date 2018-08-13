@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/shouhuan_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.cn.danceland.myapplication.view.DongLanTitleView>
+
+
+</RelativeLayout>
