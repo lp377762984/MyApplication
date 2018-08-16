@@ -635,9 +635,11 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                     }
                     break;
                 case MSG_REFRESH_HEARTVIEW_DATA:
-//                    if(heartViewBean!=null){
-                    initHeartView(heartViewBean.getSumcount(), heartViewBean.getCount());
-//                    }
+                    if (heartViewBean != null) {
+                        if (heartViewBean.getSumcount() != null && heartViewBean.getCount() != null) {
+                            initHeartView(heartViewBean.getSumcount(), heartViewBean.getCount());
+                        }
+                    }
                     break;
                 default:
                     break;

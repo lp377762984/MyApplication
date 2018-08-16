@@ -6,7 +6,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.cn.danceland.myapplication.bean.ClockBean;
 import com.cn.danceland.myapplication.shouhuan.bean.DateModel;
+import com.cn.danceland.myapplication.shouhuan.bean.LongSit;
+import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 import com.cn.danceland.myapplication.shouhuan.constans.BleConstans;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -629,7 +632,7 @@ public class CommandManager {
     /**
      * 关机
      */
-    public void Shutdown(){
+    public void Shutdown() {
         byte[] bytes = new byte[6];
         bytes[0] = (byte) 0xAB;
         bytes[1] = (byte) 0;
@@ -702,6 +705,133 @@ public class CommandManager {
         broadcastData(bytes);
     }
 
+    /**
+     * 个人资料
+     *
+     * @param userInfo
+     */
+    public void personalData(WearFitUser userInfo) {
+        byte[] bytes = new byte[13];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 10;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x74;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) userInfo.getStepLength();
+        bytes[7] = (byte) userInfo.getAge();
+        bytes[8] = (byte) userInfo.getHeight();
+        bytes[9] = (byte) userInfo.getWeight();
+        bytes[10] = (byte) userInfo.getBpMax();
+        bytes[11] = (byte) userInfo.getBpMin();
+        bytes[12] = (byte) userInfo.getDistanceUnit();
+        broadcastData(bytes);
+    }
+
+    /**
+     * 闹钟设置
+     *
+     * @param clockBean
+     */
+    public void setAlarmClock(ClockBean clockBean, int week) {
+        byte[] bytes = new byte[11];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 8;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x73;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) clockBean.getId();
+        bytes[7] = (byte) clockBean.getOffOn();
+        bytes[8] = (byte) clockBean.getHour();
+        bytes[9] = (byte) clockBean.getMinute();
+        bytes[10] = (byte) week;
+        broadcastData(bytes);
+    }
+
+    /**
+     * 久坐提醒
+     *
+     * @param longSit
+     */
+    public void sendLongSit(LongSit longSit) {
+        byte[] bytes = new byte[12];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 9;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x75;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) longSit.getOn();
+        bytes[7] = (byte) longSit.getStartHour();
+        bytes[8] = (byte) longSit.getStartMinute();
+        bytes[9] = (byte) longSit.getEndHour();
+        bytes[10] = (byte) longSit.getEndMinute();
+        bytes[11] = (byte) 30;
+        broadcastData(bytes);
+    }
+
+    /**
+     * 入睡时间
+     *
+     * @param longSit
+     */
+    public void sendSleepTime(LongSit longSit) {
+        byte[] bytes = new byte[11];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 9;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x7F;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) longSit.getOn();
+        bytes[7] = (byte) longSit.getStartHour();
+        bytes[8] = (byte) longSit.getStartMinute();
+        bytes[9] = (byte) longSit.getEndHour();
+        bytes[10] = (byte) longSit.getEndMinute();
+        broadcastData(bytes);
+
+    }
+
+    /**
+     * 勿扰模式
+     *
+     * @param longSit
+     */
+    public void sendIgnoreAction(LongSit longSit) {
+        byte[] bytes = new byte[11];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 8;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x76;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) longSit.getOn();
+        bytes[7] = (byte) longSit.getStartHour();
+        bytes[8] = (byte) longSit.getStartMinute();
+        bytes[9] = (byte) longSit.getEndHour();
+        bytes[10] = (byte) longSit.getEndMinute();
+        broadcastData(bytes);
+    }
+
+    /**
+     * APP提醒
+     *
+     * @param notifyid 微信：9   QQ：7   微博：19
+     * @param isOn
+     */
+    public void sendNotify(int notifyid, int isOn) {
+        byte[] bytes = new byte[8];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 5;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x72;
+        bytes[5] = (byte) 0x80;
+        bytes[6] = (byte) notifyid;
+        bytes[7] = (byte) isOn;
+        broadcastData(bytes);
+    }
 
     /**
      * @brief Broadcast intent with pointed bytes.

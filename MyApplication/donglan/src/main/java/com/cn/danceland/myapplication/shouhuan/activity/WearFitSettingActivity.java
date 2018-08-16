@@ -14,32 +14,44 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.shouhuan.bean.LongSit;
+import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.PickerViewDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by feng on 2018/6/21.
  */
-
 public class WearFitSettingActivity extends Activity {
-
+    private Context context;
     private DongLanTitleView wearfit_setting_title;
     private TextView tv_shouhuan_name;
     private TextView tv_shouhuan_num;
@@ -50,10 +62,10 @@ public class WearFitSettingActivity extends Activity {
     private RelativeLayout rl_peidai;
     private Switch sw_taishou;
     private Switch sw_fangdiu;
-    private Button btn_juli_left;
-    private Button btn_juli_right;
-    private Button btn_buchang_left;
-    private Button btn_buchang_right;
+    private CheckBox btn_juli_left;
+    private CheckBox btn_juli_right;
+    private CheckBox btn_buchang_left;
+    private CheckBox btn_buchang_right;
     private RelativeLayout rl_rushui;
     private RelativeLayout rl_wake;
     private Switch sw_laidian;
@@ -65,33 +77,42 @@ public class WearFitSettingActivity extends Activity {
     private TextView tv_buchang;
     private TextView tv_peidai;
     private TextView tv_rushui;
+    private LinearLayout clear_phone_layout;//清除手机数据
+    private LinearLayout clear_wearfit_layout;//清除手环数据
+    private LinearLayout restore_layout;//恢复出厂设置
+    private LinearLayout firmware_update_layout;//固件升级
+
     private TextView tv_wake;
-    private String address;
+    private String address;//手环地址
     private String name;
     private CommandManager commandManager;
+    private Data infoData;
+    private WearFitUser wearFitUser = new WearFitUser();
+
+    private AlertDialog.Builder builder;
+    private AlertDialog dia;
+
+    private Gson gson;
+    private LongSit sleepTime;//睡眠时间
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wearfitsetting);
-//注册广播
+        context = this;
+        //注册广播
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);//动岚个人资料
+        if (DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING) != null) {
+            wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
+        } else {
+            wearFitUser = new WearFitUser();
+        }
         initHost();
         initView();
+        initData();
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-//    }
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        unregisterReceiver(mGattUpdateReceiver);
-//    }
-
 
     @Override
     protected void onDestroy() {
@@ -106,7 +127,6 @@ public class WearFitSettingActivity extends Activity {
     }
 
     private void initView() {
-
         wearfit_setting_title = findViewById(R.id.wearfit_setting_title);
         wearfit_setting_title.setTitle("设置");
         tv_shouhuan_name = findViewById(R.id.tv_shouhuan_name);
@@ -134,45 +154,174 @@ public class WearFitSettingActivity extends Activity {
         tv_peidai = findViewById(R.id.tv_peidai);
         tv_rushui = findViewById(R.id.tv_rushui);
         tv_wake = findViewById(R.id.tv_wake);
+
+        clear_phone_layout = findViewById(R.id.clear_phone_layout);
+        clear_wearfit_layout = findViewById(R.id.clear_wearfit_layout);
+        restore_layout = findViewById(R.id.restore_layout);
+        firmware_update_layout = findViewById(R.id.firmware_update_layout);
+
         setData();
         setClickListener();
     }
 
-    private void setData() {
+    private void initData() {
+        builder = new AlertDialog.Builder(this);
 
+        //------同步动岚的个人信息--开始------
+        if ("2".equals(infoData.getPerson().getGender())) {
+            wearFitUser.setSex(2);//性别
+        } else {
+            wearFitUser.setSex(1);
+        }
+        if (infoData.getPerson().getHeight() != null) {//身高  "170.0"
+            String hStr = infoData.getPerson().getHeight().substring(0, infoData.getPerson().getHeight().indexOf("."));
+            wearFitUser.setHeight(Integer.valueOf(hStr));
+        } else {
+            wearFitUser.setHeight(173);//手环默认
+        }
+        if (infoData.getPerson().getWeight() != null) {
+            String wStr = infoData.getPerson().getWeight().substring(0, infoData.getPerson().getWeight().indexOf("."));
+            wearFitUser.setWeight(Integer.valueOf(wStr));
+        } else {
+            wearFitUser.setWeight(65);//手环默认
+        }
+        if (infoData.getPerson().getBirthday() != null) {//1990-12-10
+            int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(infoData.getPerson().getBirthday(), "yyyy-MM-dd")));
+            wearFitUser.setAge(age);
+        } else {
+            wearFitUser.setAge(24);
+        }
+        //------同步动岚的个人信息--结束------
+
+        if (wearFitUser.getWear() != 2) {//佩戴 1左手   2右手
+            wearFitUser.setWear(1);
+            tv_peidai.setText("左手");
+        } else {
+            tv_peidai.setText("右手");
+        }
+        if (wearFitUser.getStepLength() <= 0) {//步长
+            wearFitUser.setStepLength(50);
+        }
+        tv_buchang.setText(wearFitUser.getStepLength() + "");
+        if (wearFitUser.getUpHand() != 1) {//抬手亮屏 0关  1开
+            wearFitUser.setUpHand(0);
+            sw_taishou.setChecked(false);
+        } else {
+            sw_taishou.setChecked(true);
+        }
+        if (wearFitUser.getAntiLostAlert() != 1) {//防丢开关 0关  1开
+            wearFitUser.setAntiLostAlert(0);
+            sw_fangdiu.setChecked(false);
+        } else {
+            sw_fangdiu.setChecked(true);
+        }
+        if (wearFitUser.getDistanceUnit() != 1) {//距离单位 0英里 1厘米
+            wearFitUser.setDistanceUnit(0);
+            btn_juli_left.setChecked(true);
+            btn_juli_right.setChecked(false);
+        } else {
+            btn_juli_left.setChecked(false);
+            btn_juli_right.setChecked(true);
+        }
+        if (wearFitUser.getHeightUnit() != 1) {//身高单位 0英里 1厘米
+            wearFitUser.setHeightUnit(0);
+            btn_buchang_left.setChecked(true);
+            btn_buchang_right.setChecked(false);
+        } else {
+            btn_buchang_left.setChecked(false);
+            btn_buchang_right.setChecked(true);
+        }
+
+        tv_rushui.setText(wearFitUser.getSleepHour() + ":" + wearFitUser.getSleepMinutes());//入睡
+        tv_wake.setText(wearFitUser.getWakeUpHour() + ":" + wearFitUser.getWakeUpMinutes());//醒来
+
+        if (wearFitUser.getCallsAlerts() != 1) {//来电提醒 0关  1开
+            wearFitUser.setCallsAlerts(0);
+            sw_laidian.setChecked(false);
+        } else {
+            sw_laidian.setChecked(true);
+        }
+        if (wearFitUser.getSMSAlerts() != 1) {//短信提醒 0关  1开
+            wearFitUser.setSMSAlerts(0);
+            sw_duanxin.setChecked(false);
+        } else {
+            sw_duanxin.setChecked(true);
+        }
+        //目标距离  目前没有设置的地方   给默认
+        wearFitUser.setGold_steps(8000);
+        //血压最大 最小  目前没有设置的地方   给默认
+        wearFitUser.setBpMax(120);
+        wearFitUser.setBpMin(75);
+        commandManager.setSmartWarnNoContent(1, 1);
+
+        gson = new Gson();
+        sleepTime = new LongSit();
+    }
+
+    private void setData() {
         if (!MyApplication.mBluetoothConnected) {
             tv_shouhuan_name.setText("未绑定");
             btn_jiebang.setText("去绑定");
-        }else{
+        } else {
             tv_shouhuan_name.setText(name);
             tv_shouhuan_num.setText(address);
             tv_status.setText("已绑定");
             btn_jiebang.setText("解绑");
         }
-
     }
 
     private void setClickListener() {
-
         rl_app.setOnClickListener(onClickListener);
         rl_peidai.setOnClickListener(onClickListener);
-        btn_jiebang.setOnClickListener(onClickListener);
         rl_naozhong.setOnClickListener(onClickListener);
         rl_rushui.setOnClickListener(onClickListener);
         rl_wake.setOnClickListener(onClickListener);
         rl_jiuzuo.setOnClickListener(onClickListener);
         rl_wurao.setOnClickListener(onClickListener);
+        tv_buchang.setOnClickListener(onClickListener);
+        clear_phone_layout.setOnClickListener(onClickListener);
+        clear_wearfit_layout.setOnClickListener(onClickListener);
+        restore_layout.setOnClickListener(onClickListener);
+        firmware_update_layout.setOnClickListener(onClickListener);
+        btn_juli_left.setOnCheckedChangeListener(juliListener);
+        btn_juli_right.setOnCheckedChangeListener(juliListener);
+        btn_buchang_left.setOnCheckedChangeListener(buchangListener);
+        btn_buchang_left.setOnCheckedChangeListener(buchangListener);
+
+        btn_jiebang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MyApplication.mBluetoothConnected) {
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                        MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
+                        SPUtils.setString(Constants.ADDRESS, "");
+                        SPUtils.setString(Constants.NAME, "");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    startActivityForResult(new Intent(WearFitSettingActivity.this, WearFitEquipmentActivity.class), 2);
+                }
+                setData();//更改解绑连接状态 yxx
+            }
+        });
         //抬手亮屏开关
         sw_taishou.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Log.i("yxx","抬手亮屏开关"+MyApplication.mBluetoothConnected+MyApplication.mBluetoothConnected+";b="+b);
-                if(MyApplication.mBluetoothConnected){
-                    if(b){
+                Log.i("yxx", "抬手亮屏开关" + MyApplication.mBluetoothConnected + MyApplication.mBluetoothConnected + ";b=" + b);
+                if (MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address)) {//如果已连接手环
+                    if (b) {
+                        wearFitUser.setUpHand(1);
                         commandManager.setUpHandLightScreen(1);
-                    }else {
+                    } else {
+                        wearFitUser.setUpHand(0);
                         commandManager.setUpHandLightScreen(0);
                     }
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                } else {
+                    Toast.makeText(context, "请先连接手环", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -180,10 +329,17 @@ public class WearFitSettingActivity extends Activity {
         sw_fangdiu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    commandManager.setAntiLostAlert(1);
-                }else {
-                    commandManager.setAntiLostAlert(0);
+                if (MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address)) {//如果已连接手环
+                    if (b) {
+                        wearFitUser.setAntiLostAlert(1);
+                        commandManager.setAntiLostAlert(1);
+                    } else {
+                        wearFitUser.setAntiLostAlert(0);
+                        commandManager.setAntiLostAlert(0);
+                    }
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                } else {
+                    Toast.makeText(context, "请先连接手环", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -191,10 +347,17 @@ public class WearFitSettingActivity extends Activity {
         sw_laidian.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    commandManager.setSmartWarnNoContent(1,1);
-                }else {
-                    commandManager.setSmartWarnNoContent(1,0);
+                if (MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address)) {//如果已连接手环
+                    if (b) {
+                        wearFitUser.setCallsAlerts(1);//来电提醒 0关  1开
+                        commandManager.setSmartWarnNoContent(1, 1);
+                    } else {
+                        wearFitUser.setCallsAlerts(0);
+                        commandManager.setSmartWarnNoContent(1, 0);
+                    }
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                } else {
+                    Toast.makeText(context, "请先连接手环", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -202,70 +365,194 @@ public class WearFitSettingActivity extends Activity {
         sw_duanxin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    commandManager.setSmartWarnNoContent(3,1);
-                }else {
-                    commandManager.setSmartWarnNoContent(3,0);
+                if (MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address)) {//如果已连接手环
+                    if (b) {
+                        wearFitUser.setSMSAlerts(1);
+                        commandManager.setSmartWarnNoContent(3, 1);
+                    } else {
+                        wearFitUser.setSMSAlerts(0);
+                        commandManager.setSmartWarnNoContent(3, 0);
+                    }
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                } else {
+                    Toast.makeText(context, "请先连接手环", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.rl_app:
-                    startActivity(new Intent(WearFitSettingActivity.this, WearFitRemindActivity.class));
-                    break;
-                case R.id.rl_peidai:
-                    showPeiDaiSelect();
-                    break;
-                case R.id.btn_jiebang:
-                    if(MyApplication.mBluetoothConnected){
-                        try {
-                            MyApplication.mBluetoothLeService.disconnect();
-                            MyApplication.mBluetoothConnected=false;//更改解绑连接状态 yxx
+            if (MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address)) {//如果已连接手环
+                switch (view.getId()) {
+                    case R.id.rl_app:
+                        startActivity(new Intent(WearFitSettingActivity.this, WearFitRemindActivity.class));
+                        break;
+                    case R.id.rl_peidai:
+                        showDialogToApp("请选择左右手", "", "左手", "右手"
+                                , new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        tv_peidai.setText("左手");
+                                        wearFitUser.setWear(1);
+                                        DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        tv_peidai.setText("右手");
+                                        wearFitUser.setWear(2);
+                                        DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                                    }
+                                });
+                        break;
+                    case R.id.rl_naozhong://闹钟提醒
+                        startActivity(new Intent(WearFitSettingActivity.this, WearFitAddClockActivity.class));
+                        break;
+                    case R.id.rl_rushui:
+                        showTimeSelect("入睡时间");
+                        break;
+                    case R.id.rl_wake:
+                        showTimeSelect("醒来时间");
+                        break;
+                    case R.id.rl_jiuzuo://久坐
+                        startActivity(new Intent(WearFitSettingActivity.this, WearFitLongSitActivity.class).putExtra("from", "久坐提醒"));
+                        break;
+                    case R.id.rl_wurao://勿扰
+                        startActivity(new Intent(WearFitSettingActivity.this, WearFitLongSitActivity.class).putExtra("from", "勿扰模式"));
+                        break;
+                    case R.id.tv_buchang://步长
+                        PickerViewDialog dialog = new PickerViewDialog(context, new PickerViewDialog.PickerListener() {
+                            @Override
+                            public void getPickerSelect(String text) {
+                                tv_buchang.setText(text);
+                                int stepLength = Integer.valueOf(text);
+                                wearFitUser.setStepLength(stepLength);
+                                DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                                commandManager.personalData(wearFitUser);
+                            }
+                        });
+                        dialog.show();
+                        break;
+                    case R.id.clear_phone_layout://清除手机数据
+                        showDialogToApp("清除机数据", "清除手机数据后，手机的所有历史数据将被清除，若手环有数据，重连刷新仍会同步过来，是否确认清除？", "确定", "取消"
+                                , new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {//确定
+                                        wearFitUser = new WearFitUser();
+                                        DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {//取消
+                                        dia.dismiss();
+                                    }
+                                });
+                        break;
+                    case R.id.clear_wearfit_layout://清除手环数据
+                        showDialogToApp("清除手环数据", "清除手环数据后，手环的所有历史数据将被清除，是否确认清除？", "确定", "取消"
+                                , new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {//确定
+                                        commandManager.setClearData();
+                                    }
+                                }, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {//取消
+                                        dia.dismiss();
+                                    }
+                                });
+                        break;
+                    case R.id.restore_layout://恢复出厂设置
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(context);
+                        builder2.setTitle("警告");
+                        builder2.setMessage("确定要恢复出厂设置吗?");
+                        builder2.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dia.dismiss();
+                            }
+                        });
+                        builder2.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                commandManager.setClearData();
+                                commandManager.Shutdown();
 
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        startActivityForResult(new Intent(WearFitSettingActivity.this,WearFitEquipmentActivity.class),2);
-                    }
-                    setData();//更改解绑连接状态 yxx
+                            }
+                        });
+                        builder2.show();
+                        break;
+                    case R.id.firmware_update_layout://固件升级
+                        //TODO
+                        //TODO
+                        //TODO
+                        break;
+                }
+            } else {
+                Toast.makeText(context, "请先连接手环", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
-
-
-//                    if(MyApplication.mBluetoothConnected){
-//                        try {
-//                            MyApplication.mBluetoothLeService.disconnect();
-//                        } catch (RemoteException e) {
-//
-//                        }
-//                    }else{
-//                        startActivityForResult(new Intent(WearFitSettingActivity.this,WearFitEquipmentActivity.class),2);
-//                    }
+    CompoundButton.OnCheckedChangeListener juliListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            switch (compoundButton.getId()) {
+                case R.id.btn_juli_left://距离单位 0英里 1厘米
+                    wearFitUser.setDistanceUnit(0);
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                    commandManager.personalData(wearFitUser);
+                    btn_juli_left.setTextColor(context.getResources().getColor(R.color.white));
+                    btn_juli_left.setBackground(context.getResources().getDrawable(R.drawable.button_left_checked));
+                    btn_juli_right.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+                    btn_juli_right.setBackground(context.getResources().getDrawable(R.drawable.button_right));
                     break;
-                case R.id.rl_naozhong:
-                    startActivity(new Intent(WearFitSettingActivity.this,AddClockActivity.class));
-                    break;
-                case R.id.rl_rushui:
-                    showTimeSelect("入睡时间");
-                    break;
-                case R.id.rl_wake:
-                    showTimeSelect("醒来时间");
-                    break;
-                case R.id.rl_jiuzuo:
-                    startActivity(new Intent(WearFitSettingActivity.this,LongSitActivity.class).putExtra("from","久坐提醒"));
-                    break;
-                case R.id.rl_wurao:
-                    startActivity(new Intent(WearFitSettingActivity.this,LongSitActivity.class).putExtra("from","勿扰模式"));
+                case R.id.btn_juli_right://距离单位 0英里 1厘米
+                    wearFitUser.setDistanceUnit(1);
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                    commandManager.personalData(wearFitUser);
+                    btn_juli_left.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+                    btn_juli_left.setBackground(context.getResources().getDrawable(R.drawable.button_left));
+                    btn_juli_right.setTextColor(context.getResources().getColor(R.color.white));
+                    btn_juli_right.setBackground(context.getResources().getDrawable(R.drawable.button_right_checked));
                     break;
             }
         }
     };
+    CompoundButton.OnCheckedChangeListener buchangListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            switch (compoundButton.getId()) {
+                case R.id.btn_buchang_left://身高单位 0英里 1厘米
+                    wearFitUser.setHeightUnit(0);
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                    btn_buchang_left.setTextColor(context.getResources().getColor(R.color.white));
+                    btn_buchang_left.setBackground(context.getResources().getDrawable(R.drawable.button_left_checked));
+                    btn_buchang_right.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+                    btn_buchang_right.setBackground(context.getResources().getDrawable(R.drawable.button_right));
+                    break;
+                case R.id.btn_buchang_right://身高单位 0英里 1厘米
+                    wearFitUser.setHeightUnit(1);
+                    DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                    btn_buchang_left.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+                    btn_buchang_left.setBackground(context.getResources().getDrawable(R.drawable.button_left));
+                    btn_buchang_right.setTextColor(context.getResources().getColor(R.color.white));
+                    btn_buchang_right.setBackground(context.getResources().getDrawable(R.drawable.button_right_checked));
+                    break;
+            }
+        }
+    };
+
+    private void getHistory() {
+        String sleepTimeGson = SPUtils.getString("SleepTimeLongSit", "");
+        if (!StringUtils.isNullorEmpty(sleepTimeGson)) {
+            Type listType = new TypeToken<LongSit>() {
+            }.getType();
+            sleepTime = gson.fromJson(sleepTimeGson, listType);
+        }
+    }
 
     private void showTimeSelect(final String str) {
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
@@ -275,30 +562,40 @@ public class WearFitSettingActivity extends Activity {
             @Override
             public void onClick() {
                 String dateString = customDatePicker.getTime();
-                if("入睡时间".equals(str)){
+                if ("入睡时间".equals(str)) {
                     tv_rushui.setText(dateString);
-                }else if ("醒来时间".equals(str)){
+                    String[] startTime = dateString.split(":");
+                    if (startTime != null && startTime.length > 2) {
+                        sleepTime.setStartHour(Integer.valueOf(startTime[0]));
+                        sleepTime.setStartMinute(Integer.valueOf(startTime[1]));
+                    }
+                } else if ("醒来时间".equals(str)) {
                     tv_wake.setText(dateString);
+                    String[] endTime = dateString.split(":");
+                    if (endTime != null && endTime.length > 2) {
+                        sleepTime.setEndHour(Integer.valueOf(endTime[0]));
+                        sleepTime.setEndMinute(Integer.valueOf(endTime[1]));
+                    }
                 }
-
+                sleepTime.setOn(1);
+                SPUtils.setString("SleepTimeLongSit", gson.toJson(sleepTime));
+                commandManager.sendSleepTime(sleepTime);
             }
         });
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2){
-            if(MyApplication.mBluetoothConnected){
+        if (requestCode == 2) {
+            if (MyApplication.mBluetoothConnected) {
                 String name = SPUtils.getString(Constants.NAME, "");
-                String address = SPUtils.getString(Constants.ADDRESS,"");
+                String address = SPUtils.getString(Constants.ADDRESS, "");
                 tv_shouhuan_name.setText(name);
                 tv_shouhuan_num.setText(address);
                 tv_status.setText("已绑定");
                 btn_jiebang.setText("解绑");
-            }else{
+            } else {
                 tv_shouhuan_name.setText("已断开");
                 tv_shouhuan_num.setText("");
                 tv_status.setText("");
@@ -307,24 +604,24 @@ public class WearFitSettingActivity extends Activity {
         }
     }
 
-    private void showPeiDaiSelect() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("请选择左右手");
-        builder.setPositiveButton("左手", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                tv_peidai.setText("左手");
-            }
-        });
-        builder.setNegativeButton("右手", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                tv_peidai.setText("右手");
-            }
-        });
-        builder.show();
+    /**
+     * 通用dialog
+     *
+     * @param title
+     * @param message
+     * @param PositiveStr
+     * @param NegativeStr
+     * @param onClick1
+     * @param onClick2
+     */
+    private void showDialogToApp(String title, String message, final String PositiveStr, final String NegativeStr
+            , DialogInterface.OnClickListener onClick1, DialogInterface.OnClickListener onClick2) {
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(PositiveStr, onClick1);
+        builder.setNegativeButton(NegativeStr, onClick2);
+        dia = builder.show();
     }
-
 
     private IntentFilter makeGattUpdateIntentFilter() {
         IntentFilter intentFilter = new IntentFilter();
@@ -343,12 +640,10 @@ public class WearFitSettingActivity extends Activity {
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = true;
                 MyApplication.isBluetoothConnecting = false;
-                //todo 更改界面ui
                 ToastUtils.showToastShort("连接成功");
 
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 //                MyApplication.mBluetoothConnected = false;
-                //todo 更改界面ui
                 try {
                     MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
                 } catch (RemoteException e) {
@@ -359,8 +654,8 @@ public class WearFitSettingActivity extends Activity {
                 tv_status.setText("");
                 btn_jiebang.setText("去绑定");
                 ToastUtils.showToastShort("已断开");
-                SPUtils.setString(Constants.ADDRESS,"");
-                SPUtils.setString(Constants.NAME,"");
+                SPUtils.setString(Constants.ADDRESS, "");
+                SPUtils.setString(Constants.NAME, "");
                 //LogUtil.d("BluetoothLeService", "断开");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
@@ -375,17 +670,24 @@ public class WearFitSettingActivity extends Activity {
 
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
 
-                if(datas.get(4) == 0x51 && datas.get(5)==17){
+                if (datas.get(4) == 0x51 && datas.get(5) == 17) {
                     LogUtil.i(datas.toString());
                 }
-                if (datas.get(4) == 0x51 && datas.get(5)==8){
+                if (datas.get(4) == 0x51 && datas.get(5) == 8) {
                     LogUtil.i(datas.toString());
                 }
-                if (datas.get(4) == 0x77 ){
+                if (datas.get(4) == 0x77) {
                     LogUtil.i("抬手亮屏");
                 }
 
             }
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getHistory();
+        address = SPUtils.getString(Constants.ADDRESS, "");
+    }
 }

@@ -723,6 +723,18 @@
         <activity
             android:name=".shouhuan.activity.WearFitStepGaugeActivity"
             android:screenOrientation="portrait" />
+        <!--闹钟-->
+        <activity
+            android:name=".shouhuan.activity.WearFitAddClockActivity"
+            android:screenOrientation="portrait" />
+        <!--闹钟-->
+        <activity
+            android:name=".shouhuan.activity.WearFitClockSettingActivity"
+            android:screenOrientation="portrait" />
+        <!--闹钟-自定义-->
+        <activity
+            android:name=".shouhuan.activity.WearFitClockWeekdayActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

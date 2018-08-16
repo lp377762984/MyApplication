@@ -199,6 +199,7 @@ public class Constants  {
     public static final String MY_LOCATION = "my_location";//我的地区
     public static final String MY_INFO = "my_info";//我的资料
     public static final String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
+    public static final String MY_WEAR_FIT_SETTING = "my_wear_fit_setting";//手环设置
 
     public static final String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static final String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
@@ -285,6 +286,6 @@ public class Constants  {
     public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
 
     public final static String EXTRA_SEND_DATA_TO_BLE = "EXTRA_SEND_DATA_TO_BLE";
-    public final static String ADDRESS = "address";
+    public final static String ADDRESS = "address";//手环
     public final static String NAME = "name";
 }

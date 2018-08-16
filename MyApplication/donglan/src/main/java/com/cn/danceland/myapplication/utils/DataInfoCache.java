@@ -181,7 +181,7 @@ public class DataInfoCache {
             if (data == null) {     /** 如果没有 */
                 //  Log.d("taginfo", "data == null");
                 LogUtil.i("data == null" + "data是空");
-                data = new Object();
+             //   data = new Object();
                 // data = new Class<T>().newInstance();Class<?>
             }
             return data;

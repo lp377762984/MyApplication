@@ -250,6 +250,7 @@ public class WearFitSleepActivity extends Activity {
                     initPickerMonth();
                     lableType = 3;//切换标签 1天  2周  3月
                     day_checkBox.setTextColor(context.getResources().getColor(R.color.colorGray8));
+                    day_checkBox.setTextColor(context.getResources().getColor(R.color.colorGray8));
                     week_checkBox.setTextColor(context.getResources().getColor(R.color.colorGray8));
                     month_checkBox.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
                     break;
@@ -291,7 +292,6 @@ public class WearFitSleepActivity extends Activity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         LogUtil.i(year + "-" + month + "-" + day);
         querySleepByDay(year + "", month + "", day + "");
-
     }
 
     private void addChildLayout() {//-1 清醒  1 浅水  2 深睡\
@@ -568,7 +568,7 @@ public class WearFitSleepActivity extends Activity {
             sleep_start_tv.setText("00:00");//开始睡眠时长
             end_start_tv.setText("00:00");//截止睡眠时长
         }
-//        wearFitSleepBeanList = sleepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
+        wearFitSleepBeanList = sleepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
         LogUtil.i("本地数据库共有个" + wearFitSleepBeanList.size());
         if (wearFitSleepBeanList != null && wearFitSleepBeanList.size() != 0) {
             initViewToData();
@@ -678,9 +678,6 @@ public class WearFitSleepActivity extends Activity {
                                     break;
                             }
                             source.setSource(weekStr);
-                            if (weekStr.equals("星期二")) {
-                                LogUtil.i("&&&&&-" + (sum - shenshui) + "-&&-" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(data.get(i).getGroup_time()))));
-                            }
                             source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
                             moreList.add(source);
                         }

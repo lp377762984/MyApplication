@@ -71,6 +71,7 @@ public class WearFitActivity extends Activity {
 
     private HeartRateHelper heartRateHelper = new HeartRateHelper();
     private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
+    private WearFitSleepHelper stepGaugeHelper = new WearFitSleepHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,8 +131,9 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.VISIBLE);
             tv_connect.setText("还未绑定手环，点击绑定");
         }
-        initHeartData();//心率
-        initSleepData();//睡眠
+//        initHeartData();//心率
+//        initSleepData();//睡眠
+        initStepGaugeData();//计步
     }
 
     private class WearFitAdapter extends BaseAdapter {
@@ -332,6 +334,7 @@ public class WearFitActivity extends Activity {
                     String thTemp = new SimpleDateFormat("yyyy").format(new Date(heartRate.getDate())).toString();
                     heartRateHelper.insert(heartRate);
                 }
+                //拉取睡眠数据
                 if (datas.get(4) == 0x52 && datas.size() == 14) {//[171, 0, 11, 255, 82, 128, 18, 7, 31, 0, 49, 2, 0, 29]  11位state 12位*256+13位
                     LogUtil.i("14位" + datas.toString());
                     String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
@@ -342,13 +345,43 @@ public class WearFitActivity extends Activity {
                     LogUtil.i("sleepBean" + sleepBean + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(sleepBean.getTimestamp())).toString());
                     sleepHelper.insert(sleepBean);
                 }
+                //拉取心率数据
+                if (datas.get(4) == 0x51 && datas.size() == 13) {//[171, 0, 10, 255, 81, 17, 18, 5, 19, 4, 35, 62, 62]
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
+                    HeartRate heartRate = new HeartRate();
+                    heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    heartRate.setHeartRate(datas.get(11));
+                    String thTemp = new SimpleDateFormat("yyyy").format(new Date(heartRate.getDate())).toString();
+                    heartRateHelper.insert(heartRate);
+                }
                 if (datas.get(4) == 0x51 && datas.get(5) == 17) {
 //                    LogUtil.i(datas.toString());
                 }
                 if (datas.get(4) == 0x51 && datas.get(5) == 8) {
 //                    LogUtil.i(datas.toString());
                 }
+                //拉取心率数据
+                if (datas.get(4) == 0x51&& datas.size()  == 20) {
+//                    LogUtil.i(datas.toString());
 
+//                    _hourData = [[HourData alloc] init];
+//                    _hourData.year = byte[6] + 2000;
+//                    _hourData.month = byte[7];
+//                    _hourData.day = byte[8];
+//                    _hourData.hour = byte[9];
+//                    _hourData.step = byte[10] * 256 * 256 + byte[11] * 256 + byte[12];//步长
+//                    _hourData.cal = byte[13] * 256 * 256 + byte[14] * 256 + byte[15];//卡路里
+//                    _hourData.hrValue = byte[16];//心率
+//                    _hourData.oxValue = byte[17];
+//                    _hourData.bpMax = byte[18];
+//                    _hourData.bpMin = byte[19];
+
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + "00" + ":" + "00";
+                    String step=datas.get(10) * 256 * 256 + datas.get(11) * 256 + datas.get(12)+"";
+                    String cal=datas.get(13) * 256 * 256 +datas.get(14) * 256 + datas.get(15)+"";
+
+                    LogUtil.i("时间："+date+" 步数："+step+" 卡路里："+cal);
+                }
             }
         }
     };
@@ -382,6 +415,14 @@ public class WearFitActivity extends Activity {
         LogUtil.i("获取这个之后的睡眠数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();
         commandManager.setSyncSleepData(time);
+    }
+
+    private void initStepGaugeData() {
+        stepGaugeHelper.deleteAll();//删除所有的   因为本地只留七天
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        LogUtil.i("获取这个之后的计步数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
+        temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();
+        commandManager.setSyncData(time, time);
     }
 
     private class ItemBean {
