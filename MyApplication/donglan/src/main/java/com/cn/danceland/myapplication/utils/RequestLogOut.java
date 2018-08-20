@@ -11,7 +11,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.LoginActivity;
-import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.google.gson.Gson;
@@ -37,8 +36,7 @@ public class RequestLogOut {
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
-                RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
-                requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
+                RequsetSimpleBean    requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
                     MyApplication.getCurrentActivity().startActivity(new Intent(MyApplication.getCurrentActivity(), LoginActivity.class));
 

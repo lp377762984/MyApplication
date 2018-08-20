@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -29,11 +28,9 @@ import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
-import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -44,10 +41,10 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.apache.http.cookie.SM;
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -390,7 +387,17 @@ public class SmallTuankeDetailActivity extends Activity {
         siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
         siJiaoYuYueConBean.setCourse_type_name(item.getCourse_type_name());
         siJiaoYuYueConBean.setDate(yuyueStartTime);
+        siJiaoYuYueConBean.setStart_time(item.getStart_time());
+        siJiaoYuYueConBean.setEnd_time(item.getEnd_time());
+
         String s = gson.toJson(siJiaoYuYueConBean);
+
+        if (TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd").format(new Date()), "yyyy-MM-dd") + 6 * 24 * 60 * 60 * 1000 < Long.valueOf(yuyueStartTime)) {
+
+            ToastUtils.showToastShort("不能预约七日后的课程");
+            return;
+        }
+
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.GROUPAPPOINT, s,new Response.Listener<JSONObject>() {
             @Override

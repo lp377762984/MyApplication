@@ -15,10 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,7 +28,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.TimeTableConBean;
 import com.cn.danceland.myapplication.bean.TimeTableResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
@@ -90,11 +86,21 @@ public class TimeTableActivity extends Activity {
         allGridViewList = new ArrayList<>();
     }
 
+    class StrBean{
+
+     public  String   date_gt;
+     public  String   date_lt;
+
+    }
+
     private void initData() {
-        TimeTableConBean timeTableConBean = new TimeTableConBean();
-        timeTableConBean.setStart_date(TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "");
-        timeTableConBean.setEnd_date(TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "");
-        String s = gson.toJson(timeTableConBean);
+//        TimeTableConBean timeTableConBean = new TimeTableConBean();
+//        timeTableConBean.setStart_date(TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "");
+//        timeTableConBean.setEnd_date(TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "");
+        StrBean strBean=new StrBean();
+        strBean.date_gt=TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "";
+        strBean.date_lt=TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "";
+        String s = gson.toJson(strBean);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.TIMETABLES, s, new Response.Listener<JSONObject>() {
             @Override

@@ -2,14 +2,11 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,14 +22,10 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.SmallTuankeDetailActivity;
 import com.cn.danceland.myapplication.activity.TuanKeDetailActivity;
-import com.cn.danceland.myapplication.bean.CourseBean;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.GroupClassBean;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -41,18 +34,13 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.Inflater;
-
-import freemarker.template.utility.StringUtil;
 
 /**
  * Created by feng on 2018/1/11.
@@ -150,13 +138,25 @@ public class TuanKeFragment extends BaseFragment {
             siJiaoYuYueConBean.setCourse_type_id(data.getCourse_type_id());
             siJiaoYuYueConBean.setCourse_type_name(data.getCourse_type_name());
             siJiaoYuYueConBean.setDate(yuyueStartTime);
+
+            siJiaoYuYueConBean.setStart_time(data.getStart_time());
+            siJiaoYuYueConBean.setEnd_time(data.getEnd_time());
             String s = gson.toJson(siJiaoYuYueConBean);
             String url;
             if ("小团课".equals(from)) {
                 url = Constants.GROUPAPPOINT;
             } else {
                 url = Constants.FreeCourseApply;
+
+
             }
+
+            if (TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd").format(new Date()), "yyyy-MM-dd") + 6 * 24 * 60 * 60 * 1000 < Long.valueOf(yuyueStartTime)) {
+
+                ToastUtils.showToastShort("不能预约七日后的课程");
+                return;
+            }
+
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
@@ -201,8 +201,8 @@ public class TuanKeFragment extends BaseFragment {
         if ("小团课".equals(from)) {
             siJiaoYuYueConBean.setCourse_type_id(course_type_id);
         }
-        siJiaoYuYueConBean.setStart_date(Long.valueOf(startTime));
-        siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime));
+        siJiaoYuYueConBean.setDate(startTime);
+//        siJiaoYuYueConBean.setEnd_date(Long.valueOf(endTime));
         siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime, "yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);
@@ -211,7 +211,7 @@ public class TuanKeFragment extends BaseFragment {
         if ("小团课".equals(from)) {
             url = Constants.QUERYKECHENGBIAO;
         } else {
-            url = Constants.FreeCourse;
+            url = Constants.FreeCourse;//免费团课
         }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
@@ -352,6 +352,10 @@ public class TuanKeFragment extends BaseFragment {
                     viewHolder.tv_yuyue.setText("预约");
                 }
             } else {
+//                yuyue = true;
+//                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+//                viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
+//                viewHolder.tv_yuyue.setText("预约");
                 viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
                 viewHolder.tv_yuyue.setText("已过期");

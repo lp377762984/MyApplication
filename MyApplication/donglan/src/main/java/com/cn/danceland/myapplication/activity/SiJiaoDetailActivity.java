@@ -25,10 +25,8 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.RootBean;
-import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
+import com.cn.danceland.myapplication.bean.SiJiaoYuYueBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
-import com.cn.danceland.myapplication.bean.TimeAxisBean;
-import com.cn.danceland.myapplication.bean.TimeAxisCon;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -45,7 +43,9 @@ import com.weigan.loopview.OnItemSelectedListener;
 import org.joda.time.DateTime;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,17 +146,17 @@ public class SiJiaoDetailActivity extends Activity {
         timeStrList = new ArrayList<>();
         for (int i = 8; i < 23; i++) {
             for (int j = 0; j < 6; j++) {
-                timeStrList.add(i+":"+j+"0");
+                timeStrList.add(i + ":" + j + "0");
             }
         }
         startMinutesList = new ArrayList<>();
-        for(int i=0;i<timeStrList.size();i++){
+        for (int i = 0; i < timeStrList.size(); i++) {
             String[] split = timeStrList.get(i).split(":");
-            startMinutesList.add(Integer.valueOf(split[0])*60+Integer.valueOf(split[1]));
+            startMinutesList.add(Integer.valueOf(split[0]) * 60 + Integer.valueOf(split[1]));
         }
         endMinuteList = new ArrayList<>();
-        for(int i=0;i<startMinutesList.size();i++){
-            endMinuteList.add(startMinutesList.get(i)+courseLength);
+        for (int i = 0; i < startMinutesList.size(); i++) {
+            endMinuteList.add(startMinutesList.get(i) + courseLength);
         }
 
         jiaolianMinuteList = new ArrayList<>();
@@ -186,6 +186,7 @@ public class SiJiaoDetailActivity extends Activity {
                     String[] ts = dateTime.toString().split("T");
                     tv_date.setText(ts[0]);
                     startTime = TimeUtils.date2TimeStamp(ts[0] + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
+                    LogUtil.i(ts[0] + " 00:00:00");
                     endTime = (Long.valueOf(startTime) + 86399) + "";
                     weekDay = TimeUtils.dateToWeek(ts[0]);
                     getData();
@@ -207,7 +208,7 @@ public class SiJiaoDetailActivity extends Activity {
         });
         ns_view = findViewById(R.id.ns_view);
         inflate = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.timeselect, null);
-        alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
+
         detail_img = findViewById(R.id.detail_img);
         course_name = findViewById(R.id.course_name);
         course_jiaolian = findViewById(R.id.course_jiaolian);
@@ -255,6 +256,7 @@ public class SiJiaoDetailActivity extends Activity {
     }
 
     private void showTime() {
+        alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
         ViewGroup parent = (ViewGroup) inflate.getParent();
         if (parent != null) {
             parent.removeAllViews();
@@ -264,11 +266,12 @@ public class SiJiaoDetailActivity extends Activity {
         loopview.setItems(timeStrList);
         //设置初始位置
         loopview.setInitPosition(0);
+        loopview.setCurrentPosition(0);
         int endMinute = startMinutesList.get(0) + courseLength;
         String endTime;
-        if(endMinute%60<10){
+        if (endMinute % 60 < 10) {
             endTime = endMinute / 60 + ":0" + endMinute % 60;
-        }else{
+        } else {
             endTime = endMinute / 60 + ":" + endMinute % 60;
         }
         over_time.setText(endTime + "结束");
@@ -280,9 +283,9 @@ public class SiJiaoDetailActivity extends Activity {
                 pos = index;
                 int endMinute = startMinutesList.get(index) + courseLength;
                 String endTime;
-                if(endMinute%60<10){
+                if (endMinute % 60 < 10) {
                     endTime = endMinute / 60 + ":0" + endMinute % 60;
-                }else{
+                } else {
                     endTime = endMinute / 60 + ":" + endMinute % 60;
                 }
                 over_time.setText(endTime + "结束");
@@ -297,16 +300,26 @@ public class SiJiaoDetailActivity extends Activity {
 //                if (){
 //
 //                }
-                LogUtil.i(jiaolianMinuteList.size()+"");
-                for (int i = 0; i < jiaolianMinuteList.size(); i++) {
-                    LogUtil.i(startMinutesList.get(pos).intValue()+"@@@"+endMinuteList.get(pos).intValue());
-                    if (startMinutesList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue() || endMinuteList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue()) {
-                        ToastUtils.showToastShort("该时间段已被预约！请重新选择");
-                        return;
-                    }
+                LogUtil.i(TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd").format(new Date()), "yyyy-MM-dd")+ 7 * 24 * 60 * 60 * 1000 + "");
+                LogUtil.i(startTime);
+                LogUtil.i(TimeUtils.date2TimeStamp(startTime, "yyyy-MM-dd HH:mm:ss") + "");
 
+                if (TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd").format(new Date()), "yyyy-MM-dd") + 6 * 24 * 60 * 60 * 1000 < Long.valueOf(startTime)) {
+
+                    ToastUtils.showToastShort("不能预约七日后的课程");
+                    return;
                 }
-                if(pos==999){
+
+//
+//                for (int i = 0; i < jiaolianMinuteList.size(); i++) {
+//                    LogUtil.i(startMinutesList.get(pos).intValue() + "@@@" + endMinuteList.get(pos).intValue());
+//                    if (startMinutesList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue() || endMinuteList.get(pos).intValue() == jiaolianMinuteList.get(i).intValue()) {
+//                        ToastUtils.showToastShort("该时间段已被预约！请重新选择");
+//                        return;
+//                    }
+//
+//                }
+                if (pos == 999) {
                     pos = 0;
                 }
                 int start = startMinutesList.get(pos);
@@ -314,10 +327,10 @@ public class SiJiaoDetailActivity extends Activity {
 
                 if (startTime != null && start != 0 && end != 0) {
                     if (Long.valueOf(startTime) + start * 60000 >= System.currentTimeMillis()) {
-                        if(end>1320){
+                        if (end > 1320) {
                             ToastUtils.showToastShort("失败，结束时间应在营业时间内");
-                        }else{
-                            commitYuYue((long)start, (long)end);
+                        } else {
+                            commitYuYue((long) start, (long) end);
                         }
                     } else {
                         ToastUtils.showToastShort("无法预约过去的时间段");
@@ -325,6 +338,12 @@ public class SiJiaoDetailActivity extends Activity {
                 } else {
                     ToastUtils.showToastShort("请选择时间重新提交");
                 }
+
+//                int start = startMinutesList.get(pos);
+//                int end = endMinuteList.get(pos);
+//
+//                commitYuYue((long) start, (long) end);
+
             }
         });
 
@@ -332,41 +351,90 @@ public class SiJiaoDetailActivity extends Activity {
 
     }
 
+    class StrBean {
+
+
+        public String occ_date;
+        public String type;
+        public String user_obj_id;
+
+    }
+
+
     private void getData() {
 
-        TimeAxisCon timeAxis = new TimeAxisCon();
+//        TimeAxisCon timeAxis = new TimeAxisCon();
+//        if (item != null) {
+//            timeAxis.setEmployee_id(item.getEmployee_id());
+//        } else if (item1 != null) {
+//            timeAxis.setEmployee_id(item1.getEmployee_id());
+//        }
+//        timeAxis.setWeek(weekDay);
+//        timeAxis.setCourse_date(Long.valueOf(startTime));
+        StrBean strBean = new StrBean();
+        strBean.occ_date = startTime + "";
         if (item != null) {
-            timeAxis.setEmployee_id(item.getEmployee_id());
-        } else if (item1 != null) {
-            timeAxis.setEmployee_id(item1.getEmployee_id());
+            strBean.type = "1";
+            strBean.user_obj_id = item.getMember_id() + "";
         }
-        timeAxis.setWeek(weekDay);
-        timeAxis.setCourse_date(Long.valueOf(startTime));
-        String s = gson.toJson(timeAxis);
+        if (item1 != null) {
+            strBean.type = "1";
+            strBean.user_obj_id = item1.getMember_id() + "";
+        }
+
+
+        String s = gson.toJson(strBean);
+        LogUtil.e("zzf", s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
-                TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
-                List<TimeAxisBean.Data> data = timeAxisBean.getData();
+                SiJiaoYuYueBean siJiaoYuYueBean = gson.fromJson(jsonObject.toString(), SiJiaoYuYueBean.class);
+                List<SiJiaoYuYueBean.Data> data = siJiaoYuYueBean.getData();
                 if (data != null && data.size() > 0) {
                     for (int i = 0; i < data.size(); i++) {
-                        int start_time = data.get(i).getStart_time() - 480;
-                        int end_time = data.get(i).getEnd_time() - 480;
-                        if(data.get(i).getEnd_time()<=1320){
-                            int pos = start_time / 10;
-                            textPositionList.add(pos);
-                            for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                                jiaolianMinuteList.add(data.get(i).getStart_time()+(j*10));
-                                positionList.set(pos, pos);
-                                statusList.set(pos, data.get(i).getStatus());
-                                roleList.set(pos, 1);
-                                pos++;
+                        if ((data.get(i).getStart_time() != 0)) {
+                            int start_time = (int) (data.get(i).getStart_time() - 480);
+                            int end_time = (int) (data.get(i).getEnd_time() - 480);
+                            if (data.get(i).getEnd_time() <= 1320) {
+                                int pos = start_time / 10;
+                                textPositionList.add(pos);
+                                for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                    jiaolianMinuteList.add((int) (data.get(i).getStart_time() + (j * 10)));
+                                    positionList.set(pos, pos);
+                                    statusList.set(pos, data.get(i).getOcc_obj_status());
+                                    roleList.set(pos, 1);
+                                    pos++;
+                                }
                             }
                         }
+
                     }
+                    LogUtil.i(textPositionList.toString());
                 }
+
+//                TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
+//                List<TimeAxisBean.Data> data = timeAxisBean.getData();
+//                if (data != null && data.size() > 0) {
+//                    for (int i = 0; i < data.size(); i++) {
+//                        int start_time = data.get(i).getStart_time() - 480;
+//                        int end_time = data.get(i).getEnd_time() - 480;
+//                        if (data.get(i).getEnd_time() <= 1320) {
+//                            int pos = start_time / 10;
+//                            textPositionList.add(pos);
+//                            for (int j = 0; j < (end_time - start_time) / 10; j++) {
+//                                jiaolianMinuteList.add(data.get(i).getStart_time() + (j * 10));
+//                                positionList.set(pos, pos);
+//                                statusList.set(pos, data.get(i).getStatus());
+//                                roleList.set(pos, 1);
+//                                pos++;
+//                            }
+//                        }
+//                    }
+//                }
                 getHistory();
+
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -390,51 +458,88 @@ public class SiJiaoDetailActivity extends Activity {
 
     private void getHistory() {
 
-        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        if (role != null) {
-            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
-        } else {
-            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+//        SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
+//        if (role != null) {
+//            siJiaoYuYueConBean.setEmployee_id(data.getEmployee().getId());
+//        } else {
+//            siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
+//        }
+//
+//        if (startTime != null) {
+//            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
+//        } else {
+//            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
+//        }
+        StrBean strBean = new StrBean();
+        strBean.occ_date = startTime + "";
+        if (item != null) {//教练
+            strBean.type = "2";
+            strBean.user_obj_id = item.getEmployee_id() + "";
+        }
+        if (item1 != null) {
+            strBean.type = "2";
+            strBean.user_obj_id = item1.getEmployee_id() + "";
         }
 
-        if (startTime != null) {
-            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
-        } else {
-            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
-        }
-        String s = gson.toJson(siJiaoYuYueConBean);
+        String s = gson.toJson(strBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
-                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
-                if (siJiaoRecordBean != null) {
-                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
-                    if (data != null) {
-                        List<SiJiaoRecordBean.Content> content = data.getContent();
-                        if (content != null && content.size() > 0) {
-                            for (int i = 0; i < content.size(); i++) {
-                                int start_time = content.get(i).getStart_time() - 480;
-                                int end_time = content.get(i).getEnd_time() - 480;
-                                if(content.get(i).getEnd_time()<=1320){
-                                    int pos = start_time / 10;
-                                    textPositionList.add(pos);
-                                    for (int j = 0; j < (end_time - start_time) / 10; j++) {
-                                        positionList.set(pos, pos);
-                                        statusList.set(pos, content.get(i).getStatus());
-                                        roleList.set(pos, 2);
-                                        pos++;
-                                    }
+                SiJiaoYuYueBean siJiaoYuYueBean = gson.fromJson(jsonObject.toString(), SiJiaoYuYueBean.class);
+                List<SiJiaoYuYueBean.Data> data = siJiaoYuYueBean.getData();
+                if (data != null) {
+
+                    if (data != null && data.size() > 0) {
+                        for (int i = 0; i < data.size(); i++) {
+                            int start_time = data.get(i).getStart_time() - 480;
+                            int end_time = data.get(i).getEnd_time() - 480;
+                            if (data.get(i).getEnd_time() <= 1320) {
+                                int pos = start_time / 10;
+                                textPositionList.add(pos);
+                                for (int j = 0; j < (end_time - start_time) / 10; j++) {
+                                    positionList.set(pos, pos);
+                                    statusList.set(pos, data.get(i).getOcc_obj_status());
+                                    roleList.set(pos, 2);
+                                    pos++;
                                 }
+                                LogUtil.i(textPositionList.toString());
                             }
                         }
                     }
                 }
+
+
+//                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
+//                if (siJiaoRecordBean != null) {
+//                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
+//                    if (data != null) {
+//                        List<SiJiaoRecordBean.Content> content = data.getContent();
+//                        if (content != null && content.size() > 0) {
+//                            for (int i = 0; i < content.size(); i++) {
+//                                int start_time = content.get(i).getStart_time() - 480;
+//                                int end_time = content.get(i).getEnd_time() - 480;
+//                                if (content.get(i).getEnd_time() <= 1320) {
+//                                    int pos = start_time / 10;
+//                                    textPositionList.add(pos);
+//                                    for (int j = 0; j < (end_time - start_time) / 10; j++) {
+//                                        positionList.set(pos, pos);
+//                                        statusList.set(pos, content.get(i).getStatus());
+//                                        roleList.set(pos, 2);
+//                                        pos++;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+
+
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
+                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
                 ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
@@ -476,16 +581,17 @@ public class SiJiaoDetailActivity extends Activity {
         siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime, "yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);
-
+        LogUtil.i(s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COURSEAPPOIN, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 RootBean rootBean = gson.fromJson(jsonObject.toString(), RootBean.class);
                 if (rootBean != null) {
                     Integer success = Integer.valueOf(rootBean.data);
                     if (success > 0) {
-                        int start_time = (int)startM - 480;
-                        int end_time = (int)endM - 480;
+                        int start_time = (int) startM - 480;
+                        int end_time = (int) endM - 480;
                         int pos = start_time / 10;
                         textPositionList.add(pos);
                         for (int j = 0; j < (end_time - start_time) / 10; j++) {
@@ -497,11 +603,11 @@ public class SiJiaoDetailActivity extends Activity {
                         if (ll_01.getChildCount() > 0) {
                             ll_01.removeAllViews();
                         }
-                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList,textPositionList,courseLength/10);
+                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
                         ll_01.addView(customLine);
                         ToastUtils.showToastShort("预约成功！");
                     } else {
-                        ToastUtils.showToastShort("失败！请重新预约！");
+                        ToastUtils.showToastShort(rootBean.errorMsg);
                     }
 
                 }
