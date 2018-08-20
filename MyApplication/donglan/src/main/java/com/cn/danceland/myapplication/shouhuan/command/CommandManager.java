@@ -834,6 +834,21 @@ public class CommandManager {
     }
 
     /**
+     * 首页步数
+     */
+    public void sendStep() {
+        byte[] bytes = new byte[7];
+        bytes[0] = (byte) 0xAB;
+        bytes[1] = (byte) 0;
+        bytes[2] = (byte) 4;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0x51;
+        bytes[5] = (byte) 0x08;
+        bytes[6] = (byte) 0;
+        broadcastData(bytes);
+    }
+
+    /**
      * @brief Broadcast intent with pointed bytes.
      * @param[in] bytes Array of byte to send on BLE.
      */

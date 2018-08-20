@@ -30,6 +30,8 @@ import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
 import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.db.WearFitSleepHelper;
+import com.cn.danceland.myapplication.db.WearFitStepBean;
+import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
@@ -43,6 +45,7 @@ import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +57,8 @@ public class WearFitActivity extends Activity {
     private static final int REQUEST_SEARCH = 1;
     private static final int MSG_REFRESH_DATA = 0;//请求数据  心率  睡眠
     private TextView tv_connect;
+    private TextView tv_kcal;
+    private TextView tv_km;
     private String address;
     private String name;
     private GridView gv_wearfit;
@@ -71,7 +76,7 @@ public class WearFitActivity extends Activity {
 
     private HeartRateHelper heartRateHelper = new HeartRateHelper();
     private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
-    private WearFitSleepHelper stepGaugeHelper = new WearFitSleepHelper();
+    private WearFitStepHelper stepHelper = new WearFitStepHelper();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,11 +108,13 @@ public class WearFitActivity extends Activity {
         shouhuan_title = findViewById(R.id.shouhuan_title);
         shouhuan_title.setTitle("我的手环");
         tv_connect = findViewById(R.id.tv_connect);
+        tv_kcal = findViewById(R.id.tv_kcal);
+        tv_km = findViewById(R.id.tv_km);
         setListener();
         step_gauge_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(WearFitActivity.this, WearFitStepGaugeActivity.class));//计步
+                startActivity(new Intent(WearFitActivity.this, WearFitStepActivity.class));//计步
             }
         });
         if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1)) {
@@ -134,6 +141,8 @@ public class WearFitActivity extends Activity {
 //        initHeartData();//心率
 //        initSleepData();//睡眠
         initStepGaugeData();//计步
+        commandManager.sendStep();//首页数据
+//        commandManager.setTimeSync();//同步时间给手环
     }
 
     private class WearFitAdapter extends BaseAdapter {
@@ -280,13 +289,14 @@ public class WearFitActivity extends Activity {
                 MyApplication.isBluetoothConnecting = false;
                 //todo 更改界面ui
                 invalidateOptionsMenu();//更新菜单栏
-                ToastUtils.showToastShort("连接成功");
-                rl_connect.setVisibility(View.GONE);
-                progressDialog.dismiss();
 
 //                Message message = new Message();
 //                message.what = MSG_REFRESH_DATA;
 //                handler.sendMessage(message);
+
+                ToastUtils.showToastShort("连接成功");
+                rl_connect.setVisibility(View.GONE);
+                progressDialog.dismiss();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;
                 //todo 更改界面ui
@@ -361,26 +371,29 @@ public class WearFitActivity extends Activity {
 //                    LogUtil.i(datas.toString());
                 }
                 //拉取心率数据
-                if (datas.get(4) == 0x51&& datas.size()  == 20) {
+                if (datas.get(4) == 0x51 && datas.size() == 20) {
 //                    LogUtil.i(datas.toString());
 
-//                    _hourData = [[HourData alloc] init];
-//                    _hourData.year = byte[6] + 2000;
-//                    _hourData.month = byte[7];
-//                    _hourData.day = byte[8];
-//                    _hourData.hour = byte[9];
-//                    _hourData.step = byte[10] * 256 * 256 + byte[11] * 256 + byte[12];//步长
-//                    _hourData.cal = byte[13] * 256 * 256 + byte[14] * 256 + byte[15];//卡路里
-//                    _hourData.hrValue = byte[16];//心率
-//                    _hourData.oxValue = byte[17];
-//                    _hourData.bpMax = byte[18];
-//                    _hourData.bpMin = byte[19];
-
                     String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + "00" + ":" + "00";
-                    String step=datas.get(10) * 256 * 256 + datas.get(11) * 256 + datas.get(12)+"";
-                    String cal=datas.get(13) * 256 * 256 +datas.get(14) * 256 + datas.get(15)+"";
-
-                    LogUtil.i("时间："+date+" 步数："+step+" 卡路里："+cal);
+                    int step = datas.get(10) * 256 * 256 + datas.get(11) * 256 + datas.get(12);
+                    int cal = datas.get(13) * 256 * 256 + datas.get(14) * 256 + datas.get(15);
+                    WearFitStepBean wearFitStepBean = new WearFitStepBean();
+                    wearFitStepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    wearFitStepBean.setStep(step);
+                    wearFitStepBean.setCal(cal);
+                    LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal);
+                    stepHelper.insert(wearFitStepBean);
+                }
+                if (datas.get(4) == 0x51 && datas.size() == 17) {//首页数据
+                    LogUtil.i(datas.toString());
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + "00" + ":" + "00";
+                    int step= (datas.get(6)<<16)+(datas.get(7)<<8)+datas.get(8);
+                    int cal= (datas.get(9)<<16)+(datas.get(10)<<8)+datas.get(11);
+                            int ligthSleep=datas.get(12)*60+datas.get(13);
+                    LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal);
+                }
+                if (datas.get(4) == 0x51 ) {//首页数据
+                    LogUtil.i(datas.toString());
                 }
             }
         }
@@ -391,8 +404,11 @@ public class WearFitActivity extends Activity {
         public void handleMessage(Message message) {
             switch (message.what) {
                 case MSG_REFRESH_DATA:
-                    initHeartData();//请求心率数据
-                    initSleepData();//请求睡眠数据
+                    initHeartData();//心率
+                    initSleepData();//睡眠
+                    initStepGaugeData();//计步
+                    commandManager.sendStep();//首页数据
+                    commandManager.setTimeSync();//同步时间给手环
                     break;
                 default:
                     break;
@@ -418,11 +434,11 @@ public class WearFitActivity extends Activity {
     }
 
     private void initStepGaugeData() {
-        stepGaugeHelper.deleteAll();//删除所有的   因为本地只留七天
+        stepHelper.deleteAll();//删除所有的   因为本地只留七天
         long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
         LogUtil.i("获取这个之后的计步数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         temp = new SimpleDateFormat("yyyy-MM-dd").format(new Date(time)).toString();
-        commandManager.setSyncData(time, time);
+        commandManager.setSyncData(time, time);//整点计步
     }
 
     private class ItemBean {

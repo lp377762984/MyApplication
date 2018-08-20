@@ -1,60 +1,58 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.db.WearFitSleepBean;
-import com.cn.danceland.myapplication.db.WearFitSleepHelper;
-import com.cn.danceland.myapplication.shouhuan.adapter.StepGaugeAdapter;
-import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepListBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepMorePostBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepResultBean;
+import com.cn.danceland.myapplication.db.WearFitStepBean;
+import com.cn.danceland.myapplication.db.WearFitStepHelper;
+import com.cn.danceland.myapplication.shouhuan.adapter.StepAdapter;
+import com.cn.danceland.myapplication.shouhuan.bean.StepBean;
+import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
+import com.cn.danceland.myapplication.shouhuan.chart.BarEntity;
+import com.cn.danceland.myapplication.shouhuan.chart.BarGroup;
+import com.cn.danceland.myapplication.shouhuan.chart.BarView;
 import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.HorizontalPickerView;
-import com.google.gson.Gson;
+import com.cn.danceland.myapplication.view.NoScrollListView;
 
-import org.json.JSONObject;
-
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 计步
  * Created by yxx on 2018/8/13.
  */
 
-public class WearFitStepGaugeActivity extends Activity {
+public class WearFitStepActivity extends Activity {
     private static final int MSG_REFRESH_DATA_DATA = 0;//日
     private static final int MSG_REFRESH_DATA_MORE_DATA = 1;//周 月
     private int lableType = 1;//切换标签 1天  2周  3月
@@ -67,28 +65,41 @@ public class WearFitStepGaugeActivity extends Activity {
     private HorizontalPickerView picker;//水平选择器
     private LinearLayout day_layout;
     private LinearLayout more_layout;
-
-    PopupWindow mPopupWindow;
-
+    private NoScrollListView listview;
+    private BarGroup barGroup;
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
+
     private List<String> dayPickerList = new ArrayList<>();//日选择器对应的时间戳  开始-截止  -连接
     private List<String> weekPickerList = new ArrayList<>();//周选择器对应的时间戳  开始-截止  -连接
     private List<String> monthPickerList = new ArrayList<>();//月选择器对应的时间戳  开始-截止  -连接
-    private List<WearFitSleepBean> wearFitDataBeanList = new ArrayList<>();//本地数据库和后台共用模式
-//    private List<WearFitSleepBean> sleepBeans = new ArrayList<>();//本地数据库和后台共用模式
-    private List<SourceEntity.Source> moreList = new ArrayList<>();//柱形图数据
+    private List<WearFitStepBean> wearFitDataBeanList = new ArrayList<>();//本地数据库和后台共用模式
+    private List<StepBean> stepBeans = new ArrayList<>();//本地数据库和后台共用模式
+    private WearFitStepHelper stepHelper = new WearFitStepHelper();
 
-    private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
 
-    private StepGaugeAdapter adapter;
+    private WearFitUser wearFitUser = new WearFitUser();//本地用户数据
+    private StepAdapter adapter;
+
     private String lastData = "";//选择器上次滚动的数据
+    /*柱状图的最大值*/
+    private float sourceMax = 0.00f;
+    private int left;
+    private int baseLineHeiht;
+    private RelativeLayout.LayoutParams lp;
+    private List<SourceEntity.Source> moreList = new ArrayList<>();
+    private HorizontalScrollView root;
+    private View popView;
+    private PopupWindow popupWindow;
+    private DecimalFormat mFormat = new DecimalFormat("##.####");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step_gauge);
+        setContentView(R.layout.activity_step);
         context = this;
+        wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
         initView();
+
     }
 
     private void initView() {
@@ -101,6 +112,11 @@ public class WearFitStepGaugeActivity extends Activity {
         picker = (HorizontalPickerView) findViewById(R.id.scrollPicker);//水平选择器
         day_layout = (LinearLayout) findViewById(R.id.day_layout);
         more_layout = (LinearLayout) findViewById(R.id.more_layout);
+        listview = (NoScrollListView) findViewById(R.id.listview);
+        barGroup = (BarGroup) findViewById(R.id.bar_group);
+        root = (HorizontalScrollView) findViewById(R.id.bar_scroll);
+        popView = LayoutInflater.from(context).inflate(
+                R.layout.pop_bg, null);
 
         day_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
         week_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -196,7 +212,7 @@ public class WearFitStepGaugeActivity extends Activity {
         String[] temp = null;
         switch (lableType) {//切换标签 1天  2周  3月
             case 1:
-                defaultQuerySleepByDay();
+                defaultQueryStepByDay();
                 break;
             case 2:
                 temp = weekPickerList.get(weekPickerList.size() - 1).split("&");
@@ -273,11 +289,11 @@ public class WearFitStepGaugeActivity extends Activity {
     }
 
     private void defaultQueryDataByDay() {
-//        sleepBeans.clear();//睡眠数据
-//        wearFitSleepBeanList.clear();//本地数据库和后台共用模式
+//        stepBeans.clear();//睡眠数据
+//        wearFitStepBeanList.clear();//本地数据库和后台共用模式
 //        column_layout.removeAllViews();
-//        sleep_detail_tv.setVisibility(View.VISIBLE);
-//        sleep_detail_tv.setText("");
+//        step_detail_tv.setVisibility(View.VISIBLE);
+//        step_detail_tv.setText("");
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -294,36 +310,36 @@ public class WearFitStepGaugeActivity extends Activity {
      * @param day
      */
     public void queryDataByDay(String year, String month, String day) {
-//        deep_sleep_two_tv.setText(context.getResources().getString(R.string.sleep_line_text));//深睡
-//        shallow_sleep_two_tv.setText(context.getResources().getString(R.string.sleep_line_text));//浅睡
-//        sleep_time_tv.setText(context.getResources().getString(R.string.sleep_line_text));//睡眠时长
-//        sleep_quality_tv.setText(context.getResources().getString(R.string.sleep_line_text));//睡眠质量
-//        wearFitDataBeanList = sleepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
-//        LogUtil.i("本地数据库共有个" + wearFitDataBeanList.size());
-//        if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
-////            initViewToData();
-//        } else {
+//        deep_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//深睡
+//        shallow_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//浅睡
+//        step_time_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠时长
+//        step_quality_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠质量
+        wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
+        LogUtil.i("本地数据库共有个" + wearFitDataBeanList.size());
+        if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
+            initViewToData();
+        } else {
 //            HeartRatePostBean heartRatePostBean = new HeartRatePostBean();
 //            heartRatePostBean.setYear(year);
 //            heartRatePostBean.setMonth(month);
 //            heartRatePostBean.setDay(day);
 //            LogUtil.i("请求后台心率" + heartRatePostBean.toString());
 //            //获取后台数据
-//            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_LIST
+//            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_Step_LIST
 //                    , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
 //                @Override
 //                public void onResponse(JSONObject jsonObject) {
 //                    LogUtil.i("jsonObject" + jsonObject.toString());
 //                    if (jsonObject.toString().contains("true")) {
-//                        SleepListBean sleepListBean = new Gson().fromJson(jsonObject.toString(), SleepListBean.class);
-//                        List<SleepResultBean> data = sleepListBean.getData();
+//                        StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
+//                        List<StepResultBean> data = stepListBean.getData();
 //                        if (data != null && data.size() != 0) {
 //                            LogUtil.i("data.size()" + data.size());
 //                            wearFitDataBeanList.clear();
 //                            for (int i = 0; i < data.size(); i++) {
 //                                String time = data.get(i).getYear() + "-" + data.get(i).getMonth() + "-" + data.get(i).getDay() + " "
 //                                        + data.get(i).getHour() + ":" + data.get(i).getMinute() + ":" + "00";
-//                                WearFitSleepBean wfsb = new WearFitSleepBean();
+//                                WearFitStepBean wfsb = new WearFitStepBean();
 //                                wfsb.setTimestamp(TimeUtils.date2TimeStamp(time, "yyyy-MM-dd HH:mm:ss"));
 //                                wfsb.setState(data.get(i).getState());//11位state
 //                                wfsb.setContinuoustime(Integer.valueOf(data.get(i).getMinutes()));//睡了多久 12位*256+13位
@@ -355,7 +371,7 @@ public class WearFitStepGaugeActivity extends Activity {
 //                }
 //            };
 //            MyApplication.getHttpQueues().add(request);
-//        }
+        }
     }
 
     /**
@@ -365,26 +381,26 @@ public class WearFitStepGaugeActivity extends Activity {
      * @param timestamp_lt 截止时间
      */
     private void querysDataByWeekOrMonth(String timestamp_gt, String timestamp_lt) {
-//        more_deep_sleep_two_tv.setText(context.getResources().getString(R.string.sleep_line_text));//深睡
-//        more_shallow_sleep_two_tv.setText(context.getResources().getString(R.string.sleep_line_text));//浅睡
-//        more_sleep_time_tv.setText(context.getResources().getString(R.string.sleep_line_text));//睡眠时长
-//        more_sleep_quality_tv.setText(context.getResources().getString(R.string.sleep_line_text));//睡眠质量
+//        more_deep_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//深睡
+//        more_shallow_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//浅睡
+//        more_step_time_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠时长
+//        more_step_quality_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠质量
 //        moreList.clear();
 //        barGroup.removeAllViews();
-//        SleepMorePostBean weekPostBean = new SleepMorePostBean();
+//        StepMorePostBean weekPostBean = new StepMorePostBean();
 //        weekPostBean.setGroup_time_gt(timestamp_gt);
 //        weekPostBean.setGroup_time_lt(timestamp_lt);
 //        LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
 //                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
 //        //获取后台数据
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FINDSUM
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_Step_FINDSUM
 //                , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
 //            @Override
 //            public void onResponse(JSONObject jsonObject) {
 //                LogUtil.i("jsonObject" + jsonObject.toString());
 //                if (jsonObject.toString().contains("true")) {
-//                    SleepListBean sleepListBean = new Gson().fromJson(jsonObject.toString(), SleepListBean.class);
-//                    List<SleepResultBean> data = sleepListBean.getData();
+//                    StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
+//                    List<StepResultBean> data = stepListBean.getData();
 //                    if (data != null && data.size() != 0) {
 //                        LogUtil.i("data.size()" + data.size());
 //                        wearFitDataBeanList.clear();
@@ -446,18 +462,201 @@ public class WearFitStepGaugeActivity extends Activity {
 //        MyApplication.getHttpQueues().add(request);
     }
 
-    private void defaultQuerySleepByDay() {
-//        sleepBeans.clear();//睡眠数据
+    private void defaultQueryStepByDay() {
+//        stepBeans.clear();//睡眠数据
 //        wearFitDataBeanList.clear();//本地数据库和后台共用模式
 //        column_layout.removeAllViews();
-//        sleep_detail_tv.setVisibility(View.VISIBLE);
-//        sleep_detail_tv.setText("");
+//        step_detail_tv.setVisibility(View.VISIBLE);
+//        step_detail_tv.setText("");
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         LogUtil.i(year + "-" + month + "-" + day);
         queryDataByDay(year + "", month + "", day + "");
+    }
+
+    private void initViewToData() {
+
+        for (int i = 0; i < wearFitDataBeanList.size(); i++) {
+            if (i == 0) {//第一条
+                StepBean stepBean = new StepBean();
+                stepBean.setStartTime(wearFitDataBeanList.get(i).getTimestamp());
+                stepBean.setEndTime(0);
+                stepBean.setStep(wearFitDataBeanList.get(i).getStep());
+                stepBean.setCal(wearFitDataBeanList.get(i).getCal());
+                stepBeans.add(stepBean);
+            } else if (i == wearFitDataBeanList.size() - 1) {//最后一条
+                StepBean stepB = stepBeans.get(stepBeans.size() - 1);
+                stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
+                stepBeans.set(stepBeans.size() - 1, stepB);
+            } else {
+                LogUtil.i("i="+i+"stepBeans.size() ="+stepBeans.size() +"--"+stepBeans.get(stepBeans.size() - 1).getEndTime());
+                //stepBeans最后一条没有截止时间，并且步数和wearFitDataBeanList步数一样
+                LogUtil.i("&&1--"+stepBeans.get(stepBeans.size() - 1).getStep()+" &&2--"+ wearFitDataBeanList.get(i).getStep());
+                if (stepBeans.get(stepBeans.size() - 1).getEndTime() == 0
+                        && stepBeans.get(stepBeans.size() - 1).getStep() != wearFitDataBeanList.get(i).getStep()) {
+                    StepBean stepB = stepBeans.get(stepBeans.size() - 1);
+                    stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
+                    stepBeans.set(stepBeans.size() - 1, stepB);
+                } else {
+                    StepBean stepBean2 = new StepBean();
+                    stepBean2.setStartTime(wearFitDataBeanList.get(i).getTimestamp());
+                    stepBean2.setEndTime(0);
+                    stepBean2.setStep(wearFitDataBeanList.get(i).getStep());
+                    stepBean2.setCal(wearFitDataBeanList.get(i).getCal());
+                    stepBeans.add(stepBean2);
+                }
+            }
+        }
+
+
+//        initChildView1(deepStep, shallowStep, stepTime);
+        addChildLayout();
+
+        adapter = new StepAdapter(context, stepBeans, wearFitUser.getStepLength());
+        listview.setAdapter(adapter);
+    }
+
+    private void addChildLayout() {
+        if (moreList != null && moreList.size() != 0) {
+            setBarChart();
+//            long deepSleep = 0;//深睡
+//            long shallowSleep = 0;//浅睡
+//            long awakeCount = 0;//清醒
+//            long sleepTime = 0;//睡眠时长
+//
+//            for (int i = 0; i < moreList.size(); i++) {
+//                shallowSleep += moreList.get(i).getShallowCount();//浅睡
+//                deepSleep += moreList.get(i).getDeepCount();//深睡
+//                awakeCount += moreList.get(i).getDayAwake();//清醒
+//            }
+//            sleepTime = shallowSleep + deepSleep;
+//            initChildView2(deepSleep / moreList.size()
+//                    , shallowSleep / moreList.size()
+//                    , awakeCount / moreList.size()
+//                    , sleepTime / moreList.size());
+        }
+    }
+
+    public void setBarChart() {
+        final SourceEntity sourceEntity = new SourceEntity();
+//        sourceEntity.parseData();
+        sourceEntity.setList(moreList);
+        setYAxis(sourceEntity.getList());
+
+        barGroup.removeAllViews();
+        List<BarEntity> datas = new ArrayList<>();
+        final int size = sourceEntity.getList().size();
+        for (int i = 0; i < size; i++) {
+            BarEntity barEntity = new BarEntity();
+            SourceEntity.Source entity = sourceEntity.getList().get(i);
+            String negative = mFormat.format(entity.getAwakeCount() / sourceMax);
+            barEntity.setNegativePer(Float.parseFloat(negative));
+            String neutral = mFormat.format(entity.getDeepCount() / sourceMax);
+            barEntity.setNeutralPer(Float.parseFloat(neutral));
+            String positive = mFormat.format(entity.getShallowCount() / sourceMax);
+            barEntity.setPositivePer(Float.parseFloat(positive));
+            barEntity.setTitle(entity.getSource());
+            barEntity.setScale(entity.getScale());
+            barEntity.setAllcount(entity.getAllCount());
+            /*计算柱状图透明区域的比例*/
+            barEntity.setFillScale(1 - entity.getAllCount() / sourceMax);
+            datas.add(barEntity);
+        }
+        barGroup.setDatas(datas);
+        //计算间距
+        barGroup.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                barGroup.getViewTreeObserver().removeOnPreDrawListener(this);
+                int height = findViewById(R.id.bg).getMeasuredHeight();
+                final View baseLineView = findViewById(R.id.left_base_line);
+                int baseLineTop = baseLineView.getTop();
+                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2);
+                barGroup.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        BarView barItem = (BarView) barGroup.getChildAt(0).findViewById(R.id.barView);
+                        baseLineHeiht = findViewById(R.id.base_line).getTop();
+                        lp = (RelativeLayout.LayoutParams) root.getLayoutParams();
+                        left = baseLineView.getLeft();
+                        lp.leftMargin = (int) (left + context.getResources().getDisplayMetrics().density * 3);
+                        lp.topMargin = Math.abs(baseLineHeiht - barItem.getHeight());
+                        root.setLayoutParams(lp);
+//                        final int initHeight = barItem.getHeight();
+//                        final ObjectAnimator anim = ObjectAnimator.ofFloat(barItem, "zch", 0.0F, 1.0F).setDuration(1500);
+//                        final LinearLayout.LayoutParams barLP= (LinearLayout.LayoutParams) barItem.getLayoutParams();
+//                        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                            @Override
+//                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                                float cVal = (Float) anim.getAnimatedValue();
+//                                barLP.height = (int) (initHeight * cVal);
+//                                barItem.setLayoutParams(barLP);
+//                            }
+//                        });
+//                        anim.start();
+                    }
+                }, 0);
+
+                for (int i = 0; i < size; i++) {
+                    final BarView barItem = (BarView) barGroup.getChildAt(i).findViewById(R.id.barView);
+                    final int finalI = i;
+                    barItem.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final float top = view.getHeight() - barItem.getFillHeight();
+                            SourceEntity.Source ss = sourceEntity.getList().get(finalI);
+                            String showText = "深睡：" + (int) ss.getDeepCount() + "分\n"
+                                    + "浅睡：" + (int) ss.getShallowCount() + "分\n"
+                                    + "清醒：" + (int) ss.getAwakeCount() + "分";
+                            ((TextView) popView.findViewById(R.id.txt)).setText(showText);
+                            showPop(barItem, top);
+                        }
+                    });
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setYAxis(List<SourceEntity.Source> list) {
+//        sourceMax = list.get(0).getAllCount();
+        sourceMax = 750;
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i).getAllCount() > sourceMax) {
+                sourceMax = list.get(i).getAllCount();
+            }
+        }
+        ((TextView) findViewById(R.id.tv_num1)).setText((int) sourceMax / 3 + "");
+        ((TextView) findViewById(R.id.tv_num2)).setText((int) sourceMax * 2 / 3 + "");
+        ((TextView) findViewById(R.id.tv_num3)).setText((int) sourceMax + "");
+    }
+
+    private int initPopHeitht = 0;
+
+    @SuppressLint("NewApi")
+    private void showPop(final View barItem, final float top) {
+        if (popupWindow != null)
+            popupWindow.dismiss();
+        popupWindow = null;
+        popupWindow = new PopupWindow(popView,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(barItem, barItem.getWidth() / 2, -((int) top + initPopHeitht));
+        if (initPopHeitht == 0) {
+            popView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    popView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    initPopHeitht = popView.getHeight();
+                    popupWindow.update(barItem, barItem.getWidth() / 2, -((int) top + initPopHeitht),
+                            popupWindow.getWidth(), popupWindow.getHeight());
+                    return false;
+                }
+            });
+        }
     }
 
     Handler handler = new Handler() {
@@ -470,21 +669,21 @@ public class WearFitStepGaugeActivity extends Activity {
                 case MSG_REFRESH_DATA_MORE_DATA:
 //                    if (moreList != null && moreList.size() != 0) {
 //                        setBarChart();
-//                        long deepSleep = 0;//深睡
-//                        long shallowSleep = 0;//浅睡
+//                        long deepStep = 0;//深睡
+//                        long shallowStep = 0;//浅睡
 //                        long awakeCount = 0;//清醒
-//                        long sleepTime = 0;//睡眠时长
+//                        long stepTime = 0;//睡眠时长
 //
 //                        for (int i = 0; i < moreList.size(); i++) {
-//                            shallowSleep += moreList.get(i).getShallowCount();//浅睡
-//                            deepSleep += moreList.get(i).getDeepCount();//深睡
+//                            shallowStep += moreList.get(i).getShallowCount();//浅睡
+//                            deepStep += moreList.get(i).getDeepCount();//深睡
 //                            awakeCount += moreList.get(i).getDayAwake();//清醒
 //                        }
-//                        sleepTime = shallowSleep + deepSleep;
-//                        initChildView2(deepSleep / moreList.size()
-//                                , shallowSleep / moreList.size()
+//                        stepTime = shallowStep + deepStep;
+//                        initChildView2(deepStep / moreList.size()
+//                                , shallowStep / moreList.size()
 //                                , awakeCount / moreList.size()
-//                                , sleepTime / moreList.size());
+//                                , stepTime / moreList.size());
 //                    }
                     break;
                 default:

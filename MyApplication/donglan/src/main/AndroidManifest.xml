@@ -721,7 +721,7 @@
             android:screenOrientation="portrait" />
         <!--计步-->
         <activity
-            android:name=".shouhuan.activity.WearFitStepGaugeActivity"
+            android:name=".shouhuan.activity.WearFitStepActivity"
             android:screenOrientation="portrait" />
         <!--闹钟-->
         <activity

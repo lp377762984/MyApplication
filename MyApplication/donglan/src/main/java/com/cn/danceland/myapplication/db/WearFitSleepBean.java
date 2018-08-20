@@ -10,12 +10,6 @@ import org.greenrobot.greendao.annotation.Id;
  */
 @Entity
 public class WearFitSleepBean {
-    //    private int year;
-//    private int month;
-//    private int day;
-//    private int hour;
-//    private int minute;
-//    private int minutes;
     @Id(autoincrement = true)
     private Long id;
 
@@ -70,12 +64,6 @@ public class WearFitSleepBean {
     @Override
     public String toString() {
         return "WearFitSleepBean{" +
-//                "year=" + year +
-//                ", month=" + month +
-//                "day=" + day +
-//                ", hour=" + hour +
-//                "minute=" + minute +
-//                ", minutes=" + minutes +
                 "state=" + state +
                 ", timestamp=" + timestamp +
                 ", continuoustime=" + continuoustime +
