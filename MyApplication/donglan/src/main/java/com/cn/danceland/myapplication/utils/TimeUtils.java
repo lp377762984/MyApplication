@@ -229,6 +229,7 @@ public class TimeUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(Long.valueOf(seconds)));
     }
+
     //毫秒转凌晨整点
     public static long timeToTopHour(long time) {
         Date date = new Date();
@@ -267,7 +268,7 @@ public class TimeUtils {
 
     public static String dateToWeek2(String datetime) {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance(); // 获得一个日历
         Date datet = null;
         try {
@@ -619,6 +620,7 @@ public class TimeUtils {
      * @return
      */
     public static boolean isAfterToday(int year, int month, int date, int hour, int minute) {
+
         Date date1 = new Date(year, month, date, hour, minute);
         Calendar c = Calendar.getInstance();
         Date now = new Date(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
@@ -627,6 +629,37 @@ public class TimeUtils {
             return true;//超过了今天
         } else {
             return false;//没有超过今天
+        }
+    }
+
+    /**
+     * 判断当前时间是否在[startTime, endTime]区间，注意时间格式要一致
+     *
+     * @param nowTime 当前时间
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return
+     * @author jqlin
+     */
+    public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
+        if (nowTime.getTime() == startTime.getTime()
+                || nowTime.getTime() == endTime.getTime()) {
+            return true;
+        }
+
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -642,9 +675,9 @@ public class TimeUtils {
         return days;
     }
 
-    public static int getAgeFromBirthTime(Date  date) {
+    public static int getAgeFromBirthTime(Date date) {
         // 得到当前时间的年、月、日
-        if (date!=null){
+        if (date != null) {
             Calendar cal = Calendar.getInstance();
             int yearNow = cal.get(Calendar.YEAR);
             int monthNow = cal.get(Calendar.MONTH) + 1;
@@ -653,19 +686,20 @@ public class TimeUtils {
             cal.setTime(date);
             int selectYear = cal.get(Calendar.YEAR);
             int selectMonth = cal.get(Calendar.MONTH) + 1;
-            int selectDay =cal.get(Calendar.DATE);
+            int selectDay = cal.get(Calendar.DATE);
             // 用当前年月日减去生日年月日
             int yearMinus = yearNow - selectYear;
             int monthMinus = monthNow - selectMonth;
             int dayMinus = dayNow - selectDay;
             int age = yearMinus;// 先大致赋值
-            if (yearMinus <=0) {
+            if (yearMinus <= 0) {
                 age = 0;
-            }if (monthMinus < 0) {
-                age=age-1;
+            }
+            if (monthMinus < 0) {
+                age = age - 1;
             } else if (monthMinus == 0) {
                 if (dayMinus < 0) {
-                    age=age-1;
+                    age = age - 1;
                 }
             }
             return age;
