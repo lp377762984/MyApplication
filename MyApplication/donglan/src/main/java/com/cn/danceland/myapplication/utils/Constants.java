@@ -156,6 +156,7 @@ public class Constants  {
     //参数相关
 
     public static final String FIND_BY_TYPE_CODE = HOST + "/appDict/queryList";//查询潜客资料相关参数
+    public static final String FIND_BY_TYPE_CODE_VISIT = HOST + "appDict/queryVisitList";//查询潜客资料相关参数
     public static final String FIND_BY_TYPE_CODE_GET = HOST + "/appDict/findByTypeCode/";//查询潜客资料相关参数
 
     public static final String FIND_PING_FEN = HOST + "evaluate/findEmployeeAverage";//查找教练

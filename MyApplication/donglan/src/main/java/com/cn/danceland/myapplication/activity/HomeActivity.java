@@ -227,6 +227,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
 
         if (myInfo != null) {//判断资料是否全
+            if (myInfo.getHasPwd()!=null&&!myInfo.getHasPwd()){
+                ToastUtils.showToastShort("请您设置密码");
+                startActivity(new Intent(HomeActivity.this, SetPswdActivity.class).putExtra("id",myInfo.getPerson().getId()));
+
+            }
+
             LogUtil.i(myInfo.toString());
             if (TextUtils.isEmpty(myInfo.getPerson().getNick_name())||TextUtils.isEmpty(myInfo.getPerson().getBirthday())||TextUtils.isEmpty(myInfo.getPerson().getHeight())||TextUtils.isEmpty(myInfo.getPerson().getWeight())) {
                 startActivity(new Intent(this, RegisterInfoActivity.class));

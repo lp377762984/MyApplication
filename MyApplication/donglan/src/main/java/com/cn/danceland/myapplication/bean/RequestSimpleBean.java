@@ -7,7 +7,7 @@ package com.cn.danceland.myapplication.bean;
 
 
 
-public class RequestSimpleBean {
+public class    RequestSimpleBean {
 
     private boolean success;
     private String errorMsg;

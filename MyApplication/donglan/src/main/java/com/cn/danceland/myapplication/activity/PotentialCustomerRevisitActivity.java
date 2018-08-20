@@ -33,7 +33,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.fragment.PotentialUpcomingMatterFragment;
 import com.cn.danceland.myapplication.fragment.RevisitListFragment;
-import com.cn.danceland.myapplication.fragment.RevisitListFragment1;
+import com.cn.danceland.myapplication.fragment.RevisiterRecordAllFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -75,7 +75,7 @@ import razerdp.basepopup.BasePopupWindow;
 public class PotentialCustomerRevisitActivity extends FragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    public String[] TITLES = new String[]{"最近维护", "本月未维护", "未处理待办事项"};
+    public String[] TITLES = new String[]{"最近维护", "回访记录", "未处理待办事项"};
     public  String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
 
@@ -291,7 +291,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                RevisitListFragment1 fragment = new RevisitListFragment1();
+                //RevisitListFragment1 fragment = new RevisitListFragment1();
+                RevisiterRecordAllFragment fragment = new RevisiterRecordAllFragment();
                 fragment.setArguments(bundle);
                 return fragment;
             } else {

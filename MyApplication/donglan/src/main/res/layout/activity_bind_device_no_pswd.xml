@@ -26,7 +26,6 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/edit_bg_phone"
             android:focusable="true"
-            android:visibility="gone"
             android:focusableInTouchMode="true">
             <!--       <Spinner
                        android:layout_width="wrap_content"
@@ -55,7 +54,7 @@
             android:id="@+id/tv_getsms"
             style="@style/TvGetsmsStyle"
             android:layout_below="@+id/ll_phone"
-            android:visibility="gone"
+
             android:layout_marginTop="10dp" />
 
         <LinearLayout
@@ -67,7 +66,7 @@
             android:layout_marginRight="25dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_bg_phone"
-            android:visibility="gone"
+
             android:orientation="horizontal">
 
             <ImageView

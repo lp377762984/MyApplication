@@ -300,7 +300,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 potentialInfo.setHeight(et_height.getText().toString().trim());
                 potentialInfo.setWeight(et_weight.getText().toString().trim());
                 potentialInfo.setNationality(et_nationality.getText().toString().trim());
-
+                potentialInfo.setPlatform("6");
                 LogUtil.i(gson.toJson(potentialInfo).toString());
 
                 if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())) {

@@ -18,6 +18,15 @@ public class Data implements Serializable {
     private List<Roles> roles;
     private String verCode;
     private Branch branch;
+    private Boolean hasPwd;
+
+    public Boolean getHasPwd() {
+        return hasPwd;
+    }
+
+    public void setHasPwd(Boolean hasPwd) {
+        this.hasPwd = hasPwd;
+    }
 
     @Override
     public String toString() {
@@ -897,7 +906,7 @@ public class Data implements Serializable {
 
     }
 
-    public class Employee  implements Serializable{
+    public class Employee implements Serializable {
 
         private int id;
         private int branch_id;
@@ -948,9 +957,11 @@ public class Data implements Serializable {
         private String emp_name;
         private String emp_no;
         private String role_type;
+
         public void setId(int id) {
             this.id = id;
         }
+
         public int getId() {
             return id;
         }
@@ -958,6 +969,7 @@ public class Data implements Serializable {
         public void setBranch_id(int branch_id) {
             this.branch_id = branch_id;
         }
+
         public int getBranch_id() {
             return branch_id;
         }
@@ -965,6 +977,7 @@ public class Data implements Serializable {
         public void setPerson_id(int person_id) {
             this.person_id = person_id;
         }
+
         public int getPerson_id() {
             return person_id;
         }
@@ -972,6 +985,7 @@ public class Data implements Serializable {
         public void setEnabled(int enabled) {
             this.enabled = enabled;
         }
+
         public int getEnabled() {
             return enabled;
         }
@@ -979,6 +993,7 @@ public class Data implements Serializable {
         public void setAuth(int auth) {
             this.auth = auth;
         }
+
         public int getAuth() {
             return auth;
         }
@@ -986,6 +1001,7 @@ public class Data implements Serializable {
         public void setBranch_name(String branch_name) {
             this.branch_name = branch_name;
         }
+
         public String getBranch_name() {
             return branch_name;
         }
@@ -993,6 +1009,7 @@ public class Data implements Serializable {
         public void setAvatar_url(String avatar_url) {
             this.avatar_url = avatar_url;
         }
+
         public String getAvatar_url() {
             return avatar_url;
         }
@@ -1000,6 +1017,7 @@ public class Data implements Serializable {
         public void setCname(String cname) {
             this.cname = cname;
         }
+
         public String getCname() {
             return cname;
         }
@@ -1007,6 +1025,7 @@ public class Data implements Serializable {
         public void setMember_no(String member_no) {
             this.member_no = member_no;
         }
+
         public String getMember_no() {
             return member_no;
         }
@@ -1014,6 +1033,7 @@ public class Data implements Serializable {
         public void setPhone_no(String phone_no) {
             this.phone_no = phone_no;
         }
+
         public String getPhone_no() {
             return phone_no;
         }
@@ -1021,6 +1041,7 @@ public class Data implements Serializable {
         public void setGender(int gender) {
             this.gender = gender;
         }
+
         public int getGender() {
             return gender;
         }
@@ -1028,6 +1049,7 @@ public class Data implements Serializable {
         public void setNick_name(String nick_name) {
             this.nick_name = nick_name;
         }
+
         public String getNick_name() {
             return nick_name;
         }
@@ -1035,6 +1057,7 @@ public class Data implements Serializable {
         public void setHeight(String height) {
             this.height = height;
         }
+
         public String getHeight() {
             return height;
         }
@@ -1042,6 +1065,7 @@ public class Data implements Serializable {
         public void setWeight(String weight) {
             this.weight = weight;
         }
+
         public String getWeight() {
             return weight;
         }
@@ -1049,6 +1073,7 @@ public class Data implements Serializable {
         public void setBirthday(String birthday) {
             this.birthday = birthday;
         }
+
         public String getBirthday() {
             return birthday;
         }
@@ -1056,6 +1081,7 @@ public class Data implements Serializable {
         public void setReg_date(long reg_date) {
             this.reg_date = reg_date;
         }
+
         public long getReg_date() {
             return reg_date;
         }
@@ -1063,6 +1089,7 @@ public class Data implements Serializable {
         public void setPassword(String password) {
             this.password = password;
         }
+
         public String getPassword() {
             return password;
         }
@@ -1070,6 +1097,7 @@ public class Data implements Serializable {
         public void setDefault_branch(int default_branch) {
             this.default_branch = default_branch;
         }
+
         public int getDefault_branch() {
             return default_branch;
         }
@@ -1077,6 +1105,7 @@ public class Data implements Serializable {
         public void setZone_code(String zone_code) {
             this.zone_code = zone_code;
         }
+
         public String getZone_code() {
             return zone_code;
         }
@@ -1084,6 +1113,7 @@ public class Data implements Serializable {
         public void setPlatform(int platform) {
             this.platform = platform;
         }
+
         public int getPlatform() {
             return platform;
         }
@@ -1091,6 +1121,7 @@ public class Data implements Serializable {
         public void setAvatar_path(String avatar_path) {
             this.avatar_path = avatar_path;
         }
+
         public String getAvatar_path() {
             return avatar_path;
         }
@@ -1098,6 +1129,7 @@ public class Data implements Serializable {
         public void setSelf_avatar_path(String self_avatar_path) {
             this.self_avatar_path = self_avatar_path;
         }
+
         public String getSelf_avatar_path() {
             return self_avatar_path;
         }
@@ -1105,6 +1137,7 @@ public class Data implements Serializable {
         public void setReg_id(String reg_id) {
             this.reg_id = reg_id;
         }
+
         public String getReg_id() {
             return reg_id;
         }
@@ -1112,6 +1145,7 @@ public class Data implements Serializable {
         public void setRemark(String remark) {
             this.remark = remark;
         }
+
         public String getRemark() {
             return remark;
         }
@@ -1119,6 +1153,7 @@ public class Data implements Serializable {
         public void setIdentity_card(String identity_card) {
             this.identity_card = identity_card;
         }
+
         public String getIdentity_card() {
             return identity_card;
         }
@@ -1126,6 +1161,7 @@ public class Data implements Serializable {
         public void setLogin_name(String login_name) {
             this.login_name = login_name;
         }
+
         public String getLogin_name() {
             return login_name;
         }
@@ -1133,6 +1169,7 @@ public class Data implements Serializable {
         public void setTerminal(String terminal) {
             this.terminal = terminal;
         }
+
         public String getTerminal() {
             return terminal;
         }
@@ -1140,6 +1177,7 @@ public class Data implements Serializable {
         public void setDepartment_id(int department_id) {
             this.department_id = department_id;
         }
+
         public int getDepartment_id() {
             return department_id;
         }
@@ -1147,6 +1185,7 @@ public class Data implements Serializable {
         public void setWeichat_no(String weichat_no) {
             this.weichat_no = weichat_no;
         }
+
         public String getWeichat_no() {
             return weichat_no;
         }
@@ -1154,6 +1193,7 @@ public class Data implements Serializable {
         public void setMedical_history(String medical_history) {
             this.medical_history = medical_history;
         }
+
         public String getMedical_history() {
             return medical_history;
         }
@@ -1161,6 +1201,7 @@ public class Data implements Serializable {
         public void setMail(String mail) {
             this.mail = mail;
         }
+
         public String getMail() {
             return mail;
         }
@@ -1168,6 +1209,7 @@ public class Data implements Serializable {
         public void setFollow_level(String follow_level) {
             this.follow_level = follow_level;
         }
+
         public String getFollow_level() {
             return follow_level;
         }
@@ -1175,6 +1217,7 @@ public class Data implements Serializable {
         public void setFitness_level(String fitness_level) {
             this.fitness_level = fitness_level;
         }
+
         public String getFitness_level() {
             return fitness_level;
         }
@@ -1182,6 +1225,7 @@ public class Data implements Serializable {
         public void setEmergency_name(String emergency_name) {
             this.emergency_name = emergency_name;
         }
+
         public String getEmergency_name() {
             return emergency_name;
         }
@@ -1189,6 +1233,7 @@ public class Data implements Serializable {
         public void setAddress(String address) {
             this.address = address;
         }
+
         public String getAddress() {
             return address;
         }
@@ -1196,6 +1241,7 @@ public class Data implements Serializable {
         public void setCompany(String company) {
             this.company = company;
         }
+
         public String getCompany() {
             return company;
         }
@@ -1203,6 +1249,7 @@ public class Data implements Serializable {
         public void setNationality(String nationality) {
             this.nationality = nationality;
         }
+
         public String getNationality() {
             return nationality;
         }
@@ -1210,6 +1257,7 @@ public class Data implements Serializable {
         public void setCertificate_type(String certificate_type) {
             this.certificate_type = certificate_type;
         }
+
         public String getCertificate_type() {
             return certificate_type;
         }
@@ -1217,6 +1265,7 @@ public class Data implements Serializable {
         public void setSys_role(String sys_role) {
             this.sys_role = sys_role;
         }
+
         public String getSys_role() {
             return sys_role;
         }
@@ -1224,6 +1273,7 @@ public class Data implements Serializable {
         public void setEmergency_phone(String emergency_phone) {
             this.emergency_phone = emergency_phone;
         }
+
         public String getEmergency_phone() {
             return emergency_phone;
         }
@@ -1231,6 +1281,7 @@ public class Data implements Serializable {
         public void setHonor(String honor) {
             this.honor = honor;
         }
+
         public String getHonor() {
             return honor;
         }
@@ -1238,6 +1289,7 @@ public class Data implements Serializable {
         public void setSign(String sign) {
             this.sign = sign;
         }
+
         public String getSign() {
             return sign;
         }
@@ -1245,6 +1297,7 @@ public class Data implements Serializable {
         public void setFitness(String fitness) {
             this.fitness = fitness;
         }
+
         public String getFitness() {
             return fitness;
         }
@@ -1252,6 +1305,7 @@ public class Data implements Serializable {
         public void setGood_at(String good_at) {
             this.good_at = good_at;
         }
+
         public String getGood_at() {
             return good_at;
         }
@@ -1259,6 +1313,7 @@ public class Data implements Serializable {
         public void setHobby(String hobby) {
             this.hobby = hobby;
         }
+
         public String getHobby() {
             return hobby;
         }
@@ -1266,6 +1321,7 @@ public class Data implements Serializable {
         public void setQq_no(String qq_no) {
             this.qq_no = qq_no;
         }
+
         public String getQq_no() {
             return qq_no;
         }
@@ -1273,6 +1329,7 @@ public class Data implements Serializable {
         public void setEmp_name(String emp_name) {
             this.emp_name = emp_name;
         }
+
         public String getEmp_name() {
             return emp_name;
         }
@@ -1280,6 +1337,7 @@ public class Data implements Serializable {
         public void setEmp_no(String emp_no) {
             this.emp_no = emp_no;
         }
+
         public String getEmp_no() {
             return emp_no;
         }
@@ -1287,6 +1345,7 @@ public class Data implements Serializable {
         public void setRole_type(String role_type) {
             this.role_type = role_type;
         }
+
         public String getRole_type() {
             return role_type;
         }
@@ -1302,9 +1361,11 @@ public class Data implements Serializable {
         private String delete_remark;
         private String remark;
         private String department_name;
+
         public void setId(int id) {
             this.id = id;
         }
+
         public int getId() {
             return id;
         }
@@ -1312,6 +1373,7 @@ public class Data implements Serializable {
         public void setDepartment_id(int department_id) {
             this.department_id = department_id;
         }
+
         public int getDepartment_id() {
             return department_id;
         }
@@ -1319,6 +1381,7 @@ public class Data implements Serializable {
         public void setName(String name) {
             this.name = name;
         }
+
         public String getName() {
             return name;
         }
@@ -1326,6 +1389,7 @@ public class Data implements Serializable {
         public void setRole_type(int role_type) {
             this.role_type = role_type;
         }
+
         public int getRole_type() {
             return role_type;
         }
@@ -1333,6 +1397,7 @@ public class Data implements Serializable {
         public void setDelete_remark(String delete_remark) {
             this.delete_remark = delete_remark;
         }
+
         public String getDelete_remark() {
             return delete_remark;
         }
@@ -1340,6 +1405,7 @@ public class Data implements Serializable {
         public void setRemark(String remark) {
             this.remark = remark;
         }
+
         public String getRemark() {
             return remark;
         }
@@ -1347,14 +1413,15 @@ public class Data implements Serializable {
         public void setDepartment_name(String department_name) {
             this.department_name = department_name;
         }
+
         public String getDepartment_name() {
             return department_name;
         }
 
     }
 
-    public class Branch implements Serializable{
-       
+    public class Branch implements Serializable {
+
         private String branch_id;// 主键
         private String league_id;// 加盟商主键
         private String name;// 门店名称

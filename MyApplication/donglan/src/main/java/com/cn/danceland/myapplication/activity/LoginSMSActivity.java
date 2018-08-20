@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -36,8 +39,23 @@ import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMConnListener;
+import com.tencent.imsdk.TIMLogLevel;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMSdkConfig;
+import com.tencent.imsdk.TIMUserConfig;
+import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
+import com.tencent.qcloud.presentation.event.FriendshipEvent;
+import com.tencent.qcloud.presentation.event.GroupEvent;
+import com.tencent.qcloud.presentation.event.MessageEvent;
+import com.tencent.qcloud.presentation.event.RefreshEvent;
+import com.tencent.qcloud.sdk.Constant;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,8 +95,33 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_login_sms);
+
+        initTXIM();
         initView();
+    }
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch (event.getEventCode()) {
+            case 1010:
+                finish();
+                break;
+            case 1012://短信
+             login_by_phone_url(event.getMsg());
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initView() {
@@ -242,21 +285,23 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                     SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
                     SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                    SPUtils.setBoolean(Constants.ISLOGINED,true);
                  //   SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
                     if (loginInfoBean.getData().getMember() != null) {
                         SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
                     }
+
                     Data data = loginInfoBean.getData();
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
                     ToastUtils.showToastShort("登录成功");
                     //查询信息
                     queryUserInfo(loginInfoBean.getData().getPerson().getId());
-//                    //登录环信
-//                    if(Constants.DEV_CONFIG){//判断是否是开发环境
-//                        login_hx("dev"+data.getPerson().getMember_no(),"dev" +data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
-//                    }else {
-//                        login_hx(data.getPerson().getMember_no(),data.getPerson().getMember_no()+"_"+data.getPerson().getId(),data);
-//                    }
+                    //登录腾讯IM
+                    if (Constants.DEV_CONFIG) {
+                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                    } else {
+                        login_txim(data.getPerson().getMember_no(), data.getSig());
+                    }
 
                     EventBus.getDefault().post(new StringEvent("",1010));
 
@@ -267,16 +312,41 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
                     if (loginInfoBean.getCode()==3||loginInfoBean.getCode()==4){
                         ToastUtils.showToastShort("该用户未注册");
-                        startActivity(new Intent(LoginSMSActivity.this,RegisterActivity.class));
-                        finish();
+                        AlertDialog.Builder builder=new AlertDialog.Builder(LoginSMSActivity.this);
+                        builder.setMessage("您未在此设备登录，请绑定设备");
+                        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(LoginSMSActivity.this,RegisterActivity.class));
+                                finish();
+                            }
+                        });
+                        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        builder.show();
+
+
+
 
                     }
 
                    else  {
                         if (loginInfoBean.getCode()==5){//绑定设备
+                            AlertDialog.Builder builder=new AlertDialog.Builder(LoginSMSActivity.this);
+                            builder.setMessage("您未在此设备登录，请绑定设备");
+                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(LoginSMSActivity.this,BindDeviceNoPswdActivity.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode",smsCode));
 
-                            startActivity(new Intent(LoginSMSActivity.this,BindDeviceNoPswdActivity.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode",smsCode));
-                        }else {
+                                }
+                            });
+                            builder.show();
+                                                }else {
                             ToastUtils.showToastShort("登录失败");
                         }
 
@@ -316,9 +386,92 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
 
     }
 
+    /**
+     * 登录腾讯im
+     *
+     * @param identifier 账号
+     * @param userSig
+     */
+    private void login_txim(final String identifier, final String userSig) {
+        LogUtil.i(identifier + "/n" + userSig);
+        // identifier为用户名，userSig 为用户登录凭证
+        //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
 
 
+        LoginBusiness.loginIm(identifier, userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+                TLSService.getInstance().setLastErrno(-1);
+            }
 
+            @Override
+            public void onSuccess() {
+                LogUtil.i("login succ 登录成功");
+                TLSService.getInstance().setLastErrno(0);
+                SPUtils.setString("sig", userSig);
+
+            }
+        });
+
+
+    }
+
+    private TLSService tlsService;
+    private void initTXIM() {
+        tlsService = TLSService.getInstance();
+        TIMSdkConfig config = new TIMSdkConfig(Constant.SDK_APPID).enableCrashReport(false).enableLogPrint(true)
+                .setLogLevel(TIMLogLevel.DEBUG)
+                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/donglan/log");
+        boolean b = TIMManager.getInstance().init(getApplicationContext(), config);
+        LogUtil.i(b + "");
+
+        //基本用户配置
+        TIMUserConfig userConfig = new TIMUserConfig()
+                .setUserStatusListener(new TIMUserStatusListener() {
+                    @Override
+                    public void onForceOffline() {
+                        //被其他终端踢下线
+                        LogUtil.i("onForceOffline");
+//                        App.TOKEN = "";
+//                        UserControl.getInstance().clear();
+//                        DataCleanManager.clearAllCache(getContext());
+//                        PageRouter.startLogin(getContext());
+//                        finish();
+                    }
+
+                    @Override
+                    public void onUserSigExpired() {
+                        //用户签名过期了，需要刷新userSig重新登录SDK
+                        LogUtil.i("onUserSigExpired");
+                    }
+                })
+                //设置连接状态事件监听器
+                .setConnectionListener(new TIMConnListener() {
+                    @Override
+                    public void onConnected() {
+                        LogUtil.i("onConnected连接聊天服务器");
+                    }
+
+                    @Override
+                    public void onDisconnected(int code, String desc) {
+                        LogUtil.i("onDisconnected");
+                    }
+
+                    @Override
+                    public void onWifiNeedAuth(String name) {
+                        LogUtil.i("onWifiNeedAuth");
+                    }
+                });
+        RefreshEvent.getInstance().init(userConfig);
+        userConfig = FriendshipEvent.getInstance().init(userConfig);
+        userConfig = MessageEvent.getInstance().init(userConfig);
+        userConfig = GroupEvent.getInstance().init(userConfig);
+        //将用户配置与通讯管理器进行绑定
+        TIMManager.getInstance().setUserConfig(userConfig);
+
+
+    }
 
     private void queryUserInfo(String id) {
 
@@ -356,9 +509,19 @@ public class LoginSMSActivity extends Activity implements View.OnClickListener {
                 SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
                 Data myinfo= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-                if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())){
-                    ToastUtils.showToastShort("您补全您的资料");
-                    startActivity(new Intent(LoginSMSActivity.this,RegisterInfoActivity.class));
+                if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())||TextUtils.isEmpty(myinfo.getPerson().getBirthday())||TextUtils.isEmpty(myinfo.getPerson().getHeight())){
+                    AlertDialog.Builder builder=new AlertDialog.Builder(LoginSMSActivity.this);
+                    builder.setMessage("您的资料不全，请补全您的资料");
+                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            startActivity(new Intent(LoginSMSActivity.this,RegisterInfoActivity.class));
+                        }
+                    });
+                    builder.show();
+
+
                 }else {
                     startActivity(new Intent(LoginSMSActivity.this, HomeActivity.class));
                 }

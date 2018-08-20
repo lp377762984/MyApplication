@@ -301,8 +301,8 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
                 RequestBindBean requestInfoBean = gson.fromJson(s, RequestBindBean.class);
                 if (requestInfoBean.getSuccess()) {
                     //成功
-                    startActivity(new Intent(ForgetPasswordActivity.this, SetPswdActivity.class).putExtra("id",requestInfoBean.getData().getId()));
                     finish();
+                    startActivity(new Intent(ForgetPasswordActivity.this, SetPswdActivity.class).putExtra("id",requestInfoBean.getData().getId()));
                 } else {
                     //失败
 

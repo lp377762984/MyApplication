@@ -154,13 +154,13 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         InitBusiness.start(getApplicationContext(), loglvl);
         //初始化TLS
         TlsBusiness.init(getApplicationContext());
-        //LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
+        LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
         String id = TLSService.getInstance().getLastUserIdentifier();
         UserInfo.getInstance().setId(id);
         UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
 
-        //     LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
-        //       LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
+           LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
+             LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
 //        LogUtil.i(UserInfo.getInstance().getId() + TLSService.getInstance().getLastUserInfo().accountType);
 //        presenter = new SplashPresenter(this);
 //        presenter.start();

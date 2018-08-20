@@ -18,6 +18,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -123,7 +124,7 @@ public class SetPswdActivity extends Activity implements View.OnClickListener {
                 Map<String, String> map = new HashMap<String, String>();
 
                 map.put("person_id", id);
-                map.put("pwd", pswd);
+                map.put("pwd", MD5Utils.encode(pswd));
 
                 LogUtil.i(map.toString());
                 return map;

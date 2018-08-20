@@ -100,7 +100,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                     ToastUtils.showToastShort("请选择回访方式");
                     return;
                 }
-                if (TextUtils.isEmpty(requsetBean.content)){
+                if (TextUtils.isEmpty(requsetBean.content)) {
                     ToastUtils.showToastShort("请选择回访内容");
                     return;
                 }
@@ -108,8 +108,8 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                     ToastUtils.showToastShort("回访结果不能为空");
                     return;
                 }
-                if (et_content.getText().toString().length()>200){
-                    ToastUtils.showToastShort("输入文字数量:"+et_content.getText().toString().length()+"，超过上限");
+                if (et_content.getText().toString().length() > 200) {
+                    ToastUtils.showToastShort("输入文字数量:" + et_content.getText().toString().length() + "，超过上限");
                     return;
                 }
                 requsetBean.result = et_content.getText().toString();
@@ -161,8 +161,9 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
         strBean.type_code = codetype + "";
         Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         strBean.branch_id = data.getPerson().getDefault_branch();
-        //      LogUtil.i( gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+
+        LogUtil.i(gson.toJson(strBean).toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE_VISIT, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -170,7 +171,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
                 ParamInfoBean paramInfoBean = gson.fromJson(jsonObject.toString(), ParamInfoBean.class);
 
                 if (paramInfoBean.getSuccess()) {
-                    listPopup=new ListPopup(AddRevisiterRecordActivity.this);
+                    listPopup = new ListPopup(AddRevisiterRecordActivity.this);
                     mParamInfoList = paramInfoBean.getData();
 
                     listPopup.showPopupWindow();
@@ -188,7 +189,7 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -250,14 +251,14 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
         strBean.type_code = codetype + "";
         strBean.branch_id = "0";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE ,gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject s) {
                 LogUtil.i(s.toString());
                 ParamInfoBean paramInfoBean = gson.fromJson(s.toString(), ParamInfoBean.class);
                 if (paramInfoBean.getSuccess()) {
 
-                    listPopup=new ListPopup(AddRevisiterRecordActivity.this);
+                    listPopup = new ListPopup(AddRevisiterRecordActivity.this);
 
                     mParamInfoList = paramInfoBean.getData();
 
@@ -368,9 +369,9 @@ public class AddRevisiterRecordActivity extends Activity implements View.OnClick
 
                             requsetBean.type = mParamInfoList.get(position).getData_value();
                         }
-                        if (codetype==17){
+                        if (codetype == 17) {
                             tv_content.setText(mParamInfoList.get(position).getData_value());
-                            requsetBean.content=mParamInfoList.get(position).getData_value();
+                            requsetBean.content = mParamInfoList.get(position).getData_value();
                         }
 
                         listPopup.dismiss();

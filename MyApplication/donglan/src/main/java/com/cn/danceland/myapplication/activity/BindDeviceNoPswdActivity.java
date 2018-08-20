@@ -25,6 +25,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -33,6 +35,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -85,10 +89,16 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
     private void initView() {
         DongLanTitleView titleView = findViewById(R.id.dl_title);
         titleView.setTitle("验证身份");
+        phone=getIntent().getStringExtra("phone");
+        smsCode=getIntent().getStringExtra("smscode");
         mTvGetsms = findViewById(R.id.tv_getsms);
         et_name = findViewById(R.id.et_name);
         et_zhengjian = findViewById(R.id.et_zhengjian);
         mTvGetsms.setOnClickListener(this);
+
+        mTvGetsms.setVisibility(View.GONE);
+        findViewById(R.id.ll_phone).setVisibility(View.GONE);
+        findViewById(R.id.ll_getsms).setVisibility(View.GONE);
         mEtPhone = findViewById(R.id.et_phone);
         tv_sex = findViewById(R.id.tv_sex);
         tv_sex.setOnClickListener(this);
@@ -148,10 +158,10 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
                 break;
             case R.id.btn_commit:
                 //判断验证码是否为空
-                if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
-                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
+//                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 if (TextUtils.isEmpty(et_name.getText().toString())) {
                     Toast.makeText(BindDeviceNoPswdActivity.this, "请输入姓名", Toast.LENGTH_SHORT).show();
                     return;
@@ -291,7 +301,29 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
+                RequestSimpleBean simpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
+            if (simpleBean.getSuccess()){
 
+                if (TextUtils.equals("4",simpleBean.getCode())){
+                    android.support.v7.app.AlertDialog.Builder alertDialog=new android.support.v7.app.AlertDialog.Builder(BindDeviceNoPswdActivity.this);
+                    alertDialog.setMessage("身份验证不通过");
+                    alertDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    alertDialog.show();
+
+                }
+                if (TextUtils.equals("4",simpleBean.getCode())){
+                    ToastUtils.showToastShort("验证通过");
+                    EventBus.getDefault().post(new StringEvent(phone,1012));
+                    finish();
+                }
+
+
+            }
 
 
             }
@@ -310,14 +342,15 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
 
-                map.put("phone", mEtPhone.getText().toString().trim());
+                map.put("phone", phone);
                 //         map.put("pwd", MD5Utils.encode(mEtPsw.getText().toString().trim()));
-                map.put("validateCode", mEtSms.getText().toString());
+                map.put("validateCode", smsCode);
                 map.put("name", et_name.getText().toString());
                 map.put("gender", sex + "");
-                map.put("certificateType", tv_zhengjian.getText().toString());
-                map.put("identityCard", zhengjian);
+                map.put("certificateType", zhengjian);
+                map.put("identityCard",et_zhengjian.getText().toString());
                 map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
+                LogUtil.i(map.toString());
                 return map;
             }
 
