@@ -523,13 +523,10 @@ public class WearFitStepActivity extends Activity {
             }
         }
         for (int i = 0; i < stepListTemp.size(); i++) {
-            LogUtil.i("步数00--" + stepListTemp.get(i).getStep());
             if (i == 0) {//第一条
                 stepBeans.add(stepListTemp.get(i));
             } else {
                 StepBean lastStep = stepListTemp.get(i);
-                LogUtil.i("步数11--" + stepListTemp.get(i).getStep() + "步数" + stepListTemp.get(i - 1).getStep());
-                LogUtil.i("步数22--" + stepListTemp.get(i).getCal() + "步数--" + stepListTemp.get(i - 1).getCal());
                 int step = stepListTemp.get(i).getStep() - stepListTemp.get(i - 1).getStep();
                 int cal = stepListTemp.get(i).getCal() - stepListTemp.get(i - 1).getCal();
                 StepBean stepBean = new StepBean();
