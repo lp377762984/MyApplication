@@ -171,8 +171,6 @@ public class TimeUtils {
             return sb.append(time / 3600 + "小时" + (time % 3600) / 60 + "分钟").toString();
 
         }
-
-
     }
 
 
@@ -231,7 +229,18 @@ public class TimeUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(new Date(Long.valueOf(seconds)));
     }
-
+    //毫秒转凌晨整点
+    public static long timeToTopHour(long time) {
+        Date date = new Date();
+        date.setTime(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTimeInMillis();
+    }
 
     /**
      * 日期转星期
@@ -244,7 +253,6 @@ public class TimeUtils {
         String[] weekDays = {"0", "1", "2", "3", "4", "5", "6"};
         Calendar cal = Calendar.getInstance(); // 获得一个日历
         Date datet = null;
-
         try {
             datet = f.parse(datetime);
             cal.setTime(datet);
@@ -254,7 +262,23 @@ public class TimeUtils {
         int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
         if (w < 0)
             w = 0;
-        LogUtil.i(w + "");
+        return weekDays[w];
+    }
+
+    public static String dateToWeek2(String datetime) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance(); // 获得一个日历
+        Date datet = null;
+        try {
+            datet = f.parse(datetime);
+            cal.setTime(datet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+        if (w < 0)
+            w = 0;
         return weekDays[w];
     }
 
@@ -609,219 +633,44 @@ public class TimeUtils {
     /**
      * 计算两个日期相差多少天
      *
-     * @param begin_date
-     * @param end_date
+     * @param date1
+     * @param date2
      * @return 天数
      */
-    public static String getInterval(Date begin_date, Date end_date) {
-        long day = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        try {
-            if (begin_date != null) {
-                String begin = sdf.format(begin_date);
-                begin_date = sdf.parse(begin);
-            }
-            if (end_date != null) {
-                String end = sdf.format(end_date);
-                end_date = sdf.parse(end);
-            }
-            day = (end_date.getTime() - begin_date.getTime()) / (24 * 60 * 60 * 1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new SimpleDateFormat("d").format(day);
+    public static int differentDaysByMillisecond(long date1, long date2) {
+        int days = (int) ((date2 - date1) / (1000 * 3600 * 24));
+        return days;
     }
 
-//    /**
-//     * 多月起始截止时间
-//     *
-//     * @param count
-//     * @return
-//     */
-//    public static ArrayList<String> getMonthListData(int count) {
-//        ArrayList<String> results = new ArrayList<>();
-//        Calendar c = Calendar.getInstance(); // 当时的日期和时间
-//        int month; // 需要更改的月数
-//        for (int i = 0; i < count; i++) {
-//            month = c.get(Calendar.MONTH) - 1;
-//            c.set(Calendar.MONTH, month);
-//            String weekDataStr = getTimesMonthmorning(c) + "-" + getTimesMonthnight(c);//本月第一天0点时间 + 本月最后一天24点时间
-//            results.add(weekDataStr);
-//        }
-//
-//
-//
-////        Calendar c = Calendar.getInstance();
-////        int mMonth = c.get(Calendar.MONTH) + 1;// 获取当前月份
-//        return results;
-//    }
-//
-//    /**
-//     * 获得本月第一天0点时间 可改变Calendar cal = Calendar.getInstance();
-//     *
-//     * @param cal
-//     * @return
-//     */
-//    public static long getTimesMonthmorning(Calendar cal) {
-//        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-//        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-////        return (int) (cal.getTimeInMillis() / 1000);
-//        return cal.getTimeInMillis();
-//    }
-//
-//    /**
-//     * 获得本月最后一天24点时间 可改变Calendar cal = Calendar.getInstance();
-//     *
-//     * @return
-//     */
-//    public static long getTimesMonthnight(Calendar cal) {
-//        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-//        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-//        cal.set(Calendar.HOUR_OF_DAY, 24);
-////        return (int) (cal.getTimeInMillis() / 1000);
-//        return cal.getTimeInMillis();
-//    }
-//
-//    /**
-//     * 获取阶段日期
-//     *
-//     * @param dateType 使用方法 char datetype = '7';
-//     * @author Yangtse
-//     */
-//    public static long getPeriodDate(SimpleDateFormat format, int dateType) {
-//        Calendar c = Calendar.getInstance(); // 当时的日期和时间
-//        int hour; // 需要更改的小时
-//        int day; // 需要更改的天数
-//        switch (dateType) {
-//            case 0: // 1小时前
-//                hour = c.get(Calendar.HOUR_OF_DAY) - 1;
-//                c.set(Calendar.HOUR_OF_DAY, hour);
-//                break;
-//            case 1: // 2小时前
-//                hour = c.get(Calendar.HOUR_OF_DAY) - 2;
-//                c.set(Calendar.HOUR_OF_DAY, hour);
-//                break;
-//            case 2: // 3小时前
-//                hour = c.get(Calendar.HOUR_OF_DAY) - 3;
-//                c.set(Calendar.HOUR_OF_DAY, hour);
-//                break;
-//            case 3: // 6小时前
-//                hour = c.get(Calendar.HOUR_OF_DAY) - 6;
-//                c.set(Calendar.HOUR_OF_DAY, hour);
-//                break;
-//            case 4: // 12小时前
-//                hour = c.get(Calendar.HOUR_OF_DAY) - 12;
-//                c.set(Calendar.HOUR_OF_DAY, hour);
-//                break;
-//            case 5: // 一天前
-//                day = c.get(Calendar.DAY_OF_MONTH) - 1;
-//                c.set(Calendar.DAY_OF_MONTH, day);
-//                break;
-//            case 6: // 一星期前
-//                day = c.get(Calendar.DAY_OF_MONTH) - 7;
-//                c.set(Calendar.DAY_OF_MONTH, day);
-//                break;
-//            case 7: // 一个月前
-//                day = c.get(Calendar.DAY_OF_MONTH) - 30;
-//                c.set(Calendar.DAY_OF_MONTH, day);
-//                break;
-//        }
-//        int mYear = c.get(Calendar.YEAR);
-//        int mMonth = c.get(Calendar.MONTH);
-//        int mDay = c.get(Calendar.DAY_OF_MONTH);
-//        StringBuilder strForwardDate = new StringBuilder().append(mYear).append(
-//                (mMonth + 1) < 10 ? "0" + (mMonth + 1) : (mMonth + 1)).append(
-//                (mDay < 10) ? "0" + mDay : mDay);
-//        LogUtil.i("strDate------->" + strForwardDate + "-" + format.format(c.getTime()) + "-" + c.getTimeInMillis());
-//        return c.getTimeInMillis();
-//    }
-//
-//
-//  //  获得本周一0点时间
-//    public static int getTimesWeekmorning() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-//        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//        return (int) (cal.getTimeInMillis() / 1000);
-//    }
-//
-//    //获得本周日24点时间
-//    public static int getTimesWeeknight() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONDAY), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-//        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//        return (int) ((cal.getTime().getTime() + (7 * 24 * 60 * 60 * 1000)) / 1000);
-//    }
-//
-//
-//    //获得当天0点时间
-//    public static int getTimesmorning() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.set(Calendar.HOUR_OF_DAY, 0);
-//        cal.set(Calendar.SECOND, 0);
-//        cal.set(Calendar.MINUTE, 0);
-//        cal.set(Calendar.MILLISECOND, 0);
-//        return (int) (cal.getTimeInMillis() / 1000);
-//    }
-//
-//    //获得当天24点时间
-//    public static int getTimesnight() {
-//        Calendar cal = Calendar.getInstance();
-//        cal.set(Calendar.HOUR_OF_DAY, 24);
-//        cal.set(Calendar.SECOND, 0);
-//        cal.set(Calendar.MINUTE, 0);
-//        cal.set(Calendar.MILLISECOND, 0);
-//        return (int) (cal.getTimeInMillis() / 1000);
-//    }
-//
-//
-//    //-----------------------------------
-//
-//    private static char[] daysInGregorianMonth = {31, 28, 31, 30, 31, 30, 31,
-//            31, 30, 31, 30, 31};
-//
-//    // 判断是否是闰年
-//    public static boolean isGregorianLeapYear(int year) {
-//        boolean isLeap = false;
-//        if (year % 4 == 0)
-//            isLeap = true;
-//        if (year % 100 == 0)
-//            isLeap = false;
-//        if (year % 400 == 0)
-//            isLeap = true;
-//        return isLeap;
-//    }
-//
-//    // 返回一个月有几天
-//    public static int daysInGregorianMonth(int y, int m) {
-//        int d = daysInGregorianMonth[m - 1];
-//        if (m == 2 && isGregorianLeapYear(y))
-//            d++; // 公历闰年二月多一天
-//        return d;
-//    }
-//
-//    // 计算当前天在本年中是第几天
-//    public static int dayOfYear(int y, int m, int d) {
-//        int c = 0;
-//        for (int i = 1; i < m; i++) {
-//            c = c + daysInGregorianMonth(y, i);
-//        }
-//        c = c + d;
-//        return c;
-//    }
-//
-//    // 当前天是本周的第几天 ， 从星期天开始算
-//    public static int dayOfWeek(int y, int m, int d) {
-//        int w = 1; // 公历一年一月一日是星期一，所以起始值为星期日
-//        y = (y - 1) % 400 + 1; // 公历星期值分部 400 年循环一次
-//        int ly = (y - 1) / 4; // 闰年次数
-//        ly = ly - (y - 1) / 100;
-//        ly = ly + (y - 1) / 400;
-//        int ry = y - 1 - ly; // 常年次数
-//        w = w + ry; // 常年星期值增一
-//        w = w + 2 * ly; // 闰年星期值增二
-//        w = w + dayOfYear(y, m, d);
-//        w = (w - 1) % 7 + 1;
-//        return w;
-//    }
+    public static int getAgeFromBirthTime(Date  date) {
+        // 得到当前时间的年、月、日
+        if (date!=null){
+            Calendar cal = Calendar.getInstance();
+            int yearNow = cal.get(Calendar.YEAR);
+            int monthNow = cal.get(Calendar.MONTH) + 1;
+            int dayNow = cal.get(Calendar.DATE);
+            //得到输入时间的年，月，日
+            cal.setTime(date);
+            int selectYear = cal.get(Calendar.YEAR);
+            int selectMonth = cal.get(Calendar.MONTH) + 1;
+            int selectDay =cal.get(Calendar.DATE);
+            // 用当前年月日减去生日年月日
+            int yearMinus = yearNow - selectYear;
+            int monthMinus = monthNow - selectMonth;
+            int dayMinus = dayNow - selectDay;
+            int age = yearMinus;// 先大致赋值
+            if (yearMinus <=0) {
+                age = 0;
+            }if (monthMinus < 0) {
+                age=age-1;
+            } else if (monthMinus == 0) {
+                if (dayMinus < 0) {
+                    age=age-1;
+                }
+            }
+            return age;
+        }
+        return 0;
+    }
+
 }

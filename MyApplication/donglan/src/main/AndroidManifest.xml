@@ -711,7 +711,30 @@
         <activity
             android:name=".shouhuan.activity.WearFitCameraActivity"
             android:screenOrientation="portrait" />
-
+        <!--疲劳-->
+        <activity
+            android:name=".shouhuan.activity.WearFitFatigueActivity"
+            android:screenOrientation="portrait" />
+        <!--健身计划-->
+        <activity
+            android:name=".shouhuan.activity.WearFitFitnessPlanActivity"
+            android:screenOrientation="portrait" />
+        <!--计步-->
+        <activity
+            android:name=".shouhuan.activity.WearFitStepActivity"
+            android:screenOrientation="portrait" />
+        <!--闹钟-->
+        <activity
+            android:name=".shouhuan.activity.WearFitAddClockActivity"
+            android:screenOrientation="portrait" />
+        <!--闹钟-->
+        <activity
+            android:name=".shouhuan.activity.WearFitClockSettingActivity"
+            android:screenOrientation="portrait" />
+        <!--闹钟-自定义-->
+        <activity
+            android:name=".shouhuan.activity.WearFitClockWeekdayActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

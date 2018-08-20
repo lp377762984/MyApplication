@@ -6,9 +6,19 @@ package com.cn.danceland.myapplication.shouhuan.bean;
  */
 public class SleepBean {
     private int state;//状态 -1清醒  1浅水  2深睡
-    private int time;//时间 图表item的宽度
+    private int continuoustime;//持续时间 图表item的宽度
     private long startTime;//开始时间
     private long endTime;//结束时间
+
+    public SleepBean(){
+    }
+
+    public SleepBean(int state, int continuoustime, long startTime, long endTime) {
+        this.state = state;
+        this.continuoustime = continuoustime;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public int getState() {
         return state;
@@ -18,12 +28,12 @@ public class SleepBean {
         this.state = state;
     }
 
-    public int getTime() {
-        return time;
+    public int getContinuoustime() {
+        return continuoustime;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setContinuoustime(int continuoustime) {
+        this.continuoustime = continuoustime;
     }
 
     public long getStartTime() {
@@ -46,8 +56,8 @@ public class SleepBean {
     public String toString() {
         return "SleepBean{" +
                 "state=" + state +
-                ", time=" + time +
-                "startTime=" + startTime +
+                ", continuoustime=" + continuoustime +
+                ",startTime=" + startTime +
                 ", endTime=" + endTime +
                 '}';
     }

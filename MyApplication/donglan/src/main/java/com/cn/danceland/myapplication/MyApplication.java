@@ -66,10 +66,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     public static Context applicationContext;
     private static MyApplication instance;
     //public LocationService locationClient;
-    private DaoMaster.DevOpenHelper donglan, message, heartRate,wearFitSleep;
-    private SQLiteDatabase db, messagedb, heartRatedb,wearFitSleepdb;
-    private DaoMaster daoMaster, messageMaster, heartRateMaster,wearFitSleepMaster;
-    private DaoSession daoSession, messageSession, heartRateSession,wearFitSleepSession;
+    private DaoMaster.DevOpenHelper donglan, message, heartRate,wearFitSleep,wearFitStep;
+    private SQLiteDatabase db, messagedb, heartRatedb,wearFitSleepdb,wearFitStepdb;
+    private DaoMaster daoMaster, messageMaster, heartRateMaster,wearFitSleepMaster,wearFitStepMaster;
+    private DaoSession daoSession, messageSession, heartRateSession,wearFitSleepSession,wearFitStepSession;
     // 小米推送ID.
     private static final String APP_ID = "2882303761517681383";
     // 小米推送KEY.
@@ -198,21 +198,25 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         message = new DaoMaster.DevOpenHelper(this, "message", null);
         heartRate = new DaoMaster.DevOpenHelper(this, "heartRate", null);
         wearFitSleep = new DaoMaster.DevOpenHelper(this, "wearFitSleep", null);
+        wearFitStep = new DaoMaster.DevOpenHelper(this, "wearFitStep", null);
 
         db = donglan.getWritableDatabase();
         messagedb = message.getWritableDatabase();
         heartRatedb = message.getWritableDatabase();
         wearFitSleepdb = message.getWritableDatabase();
+        wearFitStepdb = message.getWritableDatabase();
 
         daoMaster = new DaoMaster(db);
         messageMaster = new DaoMaster(messagedb);
         heartRateMaster = new DaoMaster(heartRatedb);
         wearFitSleepMaster = new DaoMaster(wearFitSleepdb);
+        wearFitStepMaster = new DaoMaster(wearFitStepdb);
 
         daoSession = daoMaster.newSession();
         messageSession = messageMaster.newSession();
         heartRateSession = heartRateMaster.newSession();
         wearFitSleepSession = wearFitSleepMaster.newSession();
+        wearFitStepSession = wearFitStepMaster.newSession();
     }
 
     public SQLiteDatabase getDb() {
@@ -239,6 +243,10 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
     public DaoSession getWearFitSleepSession() {
         return wearFitSleepSession;
+    }
+
+    public DaoSession getWearFitStepSession() {
+        return wearFitStepSession;
     }
 
     private boolean shouldInit() {

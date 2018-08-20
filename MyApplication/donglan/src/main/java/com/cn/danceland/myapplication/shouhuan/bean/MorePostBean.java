@@ -3,11 +3,12 @@ package com.cn.danceland.myapplication.shouhuan.bean;
 import java.io.Serializable;
 
 /**
- * 请求后台心率对象  提交  周数据
- * 根据条件查询心率每日平均数
+ * 请求后台数据对象  提交  周数据
+ * 1.根据条件查询心率每日平均数
+ * 2.查询指定时间段内，每天睡眠时间的总和
  * Created by ${yxx} on 2018/7/30.
  */
-public class HeartRateWeekPostBean implements Serializable {
+public class MorePostBean implements Serializable {
     private String timestamp_gt;
     private String timestamp_lt;
 

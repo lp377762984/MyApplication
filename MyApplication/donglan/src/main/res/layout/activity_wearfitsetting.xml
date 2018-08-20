@@ -138,20 +138,21 @@
 
                     <TextView
                         android:id="@+id/tv_buchang"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_centerVertical="true"
+                        android:gravity="right|center_vertical"
                         android:text="70厘米"
                         android:textColor="@color/color_dl_yellow"
                         android:textSize="14sp" />
 
                     <!--<ImageView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_toRightOf="@+id/tv_buchang"-->
-                        <!--android:src="@drawable/img_arrow_r" />-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_toRightOf="@+id/tv_buchang"-->
+                    <!--android:src="@drawable/img_arrow_r" />-->
                 </RelativeLayout>
 
             </LinearLayout>
@@ -284,34 +285,38 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical|right">
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal">
 
-                    <Button
+                    <CheckBox
                         android:id="@+id/btn_juli_left"
                         android:layout_width="42dp"
                         android:layout_height="20dp"
+                        android:layout_gravity="center_horizontal"
                         android:background="@drawable/button_left"
+                        android:button="@null"
+                        android:gravity="center"
                         android:text="英里"
                         android:textColor="@color/color_dl_yellow"
                         android:textSize="14sp" />
 
-                    <Button
+                    <CheckBox
                         android:id="@+id/btn_juli_right"
                         android:layout_width="42dp"
                         android:layout_height="20dp"
-                        android:layout_toRightOf="@+id/btn_juli_left"
-                        android:background="@drawable/button_right"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/button_right_checked"
+                        android:button="@null"
+                        android:gravity="center"
                         android:text="厘米"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
-                </RelativeLayout>
-
+                </LinearLayout>
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -327,31 +332,37 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical|right">
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal">
 
-                    <Button
+                    <CheckBox
                         android:id="@+id/btn_buchang_left"
                         android:layout_width="42dp"
                         android:layout_height="20dp"
+                        android:layout_gravity="center_horizontal"
                         android:background="@drawable/button_left"
+                        android:button="@null"
+                        android:gravity="center"
                         android:text="英里"
                         android:textColor="@color/color_dl_yellow"
                         android:textSize="14sp" />
 
-                    <Button
+                    <CheckBox
                         android:id="@+id/btn_buchang_right"
                         android:layout_width="42dp"
                         android:layout_height="20dp"
-                        android:layout_toRightOf="@+id/btn_buchang_left"
-                        android:background="@drawable/button_right"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/button_right_checked"
+                        android:button="@null"
+                        android:gravity="center"
                         android:text="厘米"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
-                </RelativeLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -712,6 +723,7 @@
 
 
             <LinearLayout
+                android:id="@+id/clear_phone_layout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
@@ -728,6 +740,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/clear_wearfit_layout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
@@ -740,11 +753,10 @@
                     android:text="清除手环数据"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
-
             </LinearLayout>
 
-
             <LinearLayout
+                android:id="@+id/restore_layout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
@@ -761,6 +773,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/firmware_update_layout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
@@ -775,10 +788,6 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
-
-
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

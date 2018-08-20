@@ -23,7 +23,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
     greendao {
-        schemaVersion 2//指定数据库版本号，更新操作会用到;
+        schemaVersion 3//指定数据库版本号，更新操作会用到;
     }
     defaultConfig {
         applicationId "com.cn.danceland.myapplication"
@@ -102,6 +102,8 @@ android {
         compile "me.leolin:ShortcutBadger:1.1.21@aar"
         compile 'com.ms-square:expandableTextView:0.1.4'
         compile 'com.github.dfqin:grantor:2.1.0'
+
+
     }
 }
 

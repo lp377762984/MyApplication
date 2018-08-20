@@ -10,28 +10,23 @@ import org.greenrobot.greendao.annotation.Id;
  */
 @Entity
 public class WearFitSleepBean {
-    //    private int year;
-//    private int month;
-//    private int day;
-//    private int hour;
-//    private int minute;
-//    private int minutes;
     @Id(autoincrement = true)
     private Long id;
-    private int state; // 11位state  1 睡眠(包含深睡和浅睡) 2 深睡
+
+    private String state; // 11位state  1 睡眠(包含深睡和浅睡) 2 深睡
     private long timestamp;//时间戳
-    private int group_time;//12位 * 256+13位 睡了多久
+    private int continuoustime;//12位 * 256+13位 睡了多久
 
     @Generated(hash = 1114343845)
     public WearFitSleepBean() {
     }
 
-    @Generated(hash = 1437105322)
-    public WearFitSleepBean(Long id, int state, long timestamp, int group_time) {
+    @Generated(hash = 1560330387)
+    public WearFitSleepBean(Long id, String state, long timestamp, int continuoustime) {
         this.id = id;
         this.state = state;
         this.timestamp = timestamp;
-        this.group_time = group_time;
+        this.continuoustime = continuoustime;
     }
 
     public Long getId() {
@@ -42,11 +37,11 @@ public class WearFitSleepBean {
         this.id = id;
     }
 
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
     }
 
@@ -58,26 +53,20 @@ public class WearFitSleepBean {
         this.timestamp = timestamp;
     }
 
-    public int getGroup_time() {
-        return group_time;
+    public int getContinuoustime() {
+        return continuoustime;
     }
 
-    public void setGroup_time(int group_time) {
-        this.group_time = group_time;
+    public void setContinuoustime(int continuoustime) {
+        this.continuoustime = continuoustime;
     }
 
     @Override
     public String toString() {
         return "WearFitSleepBean{" +
-//                "year=" + year +
-//                ", month=" + month +
-//                "day=" + day +
-//                ", hour=" + hour +
-//                "minute=" + minute +
-//                ", minutes=" + minutes +
                 "state=" + state +
                 ", timestamp=" + timestamp +
-                ", group_time=" + group_time +
+                ", continuoustime=" + continuoustime +
                 '}';
     }
 }
