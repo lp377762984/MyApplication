@@ -24,6 +24,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -331,7 +332,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
                 vh = new ViewHolder();
 
-                convertView = View.inflate(mActivity, R.layout.listview_item_record_list, null);
+                convertView = View.inflate(mActivity, R.layout.listview_item_all_record_list, null);
 
 
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
@@ -345,6 +346,8 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
                 vh.tv_lasttime = convertView.findViewById(tv_lasttime);
                 vh.tv_result = convertView.findViewById(R.id.tv_result);
+                vh.tv_username = convertView.findViewById(R.id.tv_username);
+                vh.tv_member = convertView.findViewById(R.id.tv_member_no);
                 convertView.setTag(vh);
 
             } else {
@@ -368,7 +371,11 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
                 vh.tv_time.setVisibility(View.GONE);
             }
             vh.tv_content.setText(datalist.get(position).getContent());
-            vh.tv_lasttime.setText(datalist.get(position).getMaintain_time());
+        //    LogUtil.i(      TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
+
+            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
+            vh.tv_member.setText(datalist.get(position).getMember_no());
+            vh.tv_username.setText(datalist.get(position).getMember_name());
             return convertView;
 
         }
@@ -377,6 +384,8 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
             public TextView tv_content;
             public TextView tv_type;
             public TextView tv_name;
+            public TextView tv_username;
+            public TextView tv_member;
             public TextView tv_time;
             public TextView tv_result;
             public TextView tv_lasttime;

@@ -225,10 +225,10 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
 
-                    //    if (Constants.DEV_CONFIG){
+                       if (Constants.DEV_CONFIG){
                     ToastUtils.showToastLong("验证码是："
                             + smsCode);
-                    //     }
+                         }
 
                 }
 
@@ -316,7 +316,7 @@ public class BindDeviceNoPswdActivity extends Activity implements View.OnClickLi
                     alertDialog.show();
 
                 }
-                if (TextUtils.equals("4",simpleBean.getCode())){
+                if (TextUtils.equals("5",simpleBean.getCode())){
                     ToastUtils.showToastShort("验证通过");
                     EventBus.getDefault().post(new StringEvent(phone,1012));
                     finish();

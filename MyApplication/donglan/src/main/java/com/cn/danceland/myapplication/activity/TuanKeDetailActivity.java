@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
 import com.cn.danceland.myapplication.bean.CourseFindPerson;
-import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
@@ -38,13 +36,15 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +175,17 @@ public class TuanKeDetailActivity extends Activity {
             siJiaoYuYueConBean.setCourse_type_id(data.getCourse_type_id());
             siJiaoYuYueConBean.setCourse_type_name(data.getCourse_type_name());
             siJiaoYuYueConBean.setDate(yuyueStartTime);
+
+            siJiaoYuYueConBean.setStart_time(data.getStart_time());
+            siJiaoYuYueConBean.setEnd_time(data.getEnd_time());
             String s = gson.toJson(siJiaoYuYueConBean);
+            LogUtil.i(s);
+            if (TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd").format(new Date()), "yyyy-MM-dd") + 6 * 24 * 60 * 60 * 1000 < Long.valueOf(yuyueStartTime)) {
+
+                ToastUtils.showToastShort("不能预约七日后的课程");
+                return;
+            }
+
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FreeCourseApply, s,new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
@@ -254,6 +264,7 @@ public class TuanKeDetailActivity extends Activity {
         kecheng_name.setText(detailData.getCourse_type_name());
         tv_jieshao.setText(detailData.getCourse_describe());
         if(item!=null){
+
             if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
                 if(item.getSelf_appoint_count()>0){
                     tv_status.setText("已预约");
