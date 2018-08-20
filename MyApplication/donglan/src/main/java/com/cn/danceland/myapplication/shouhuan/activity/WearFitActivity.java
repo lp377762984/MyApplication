@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,10 +33,12 @@ import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
+import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
@@ -43,6 +46,7 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,8 +61,10 @@ public class WearFitActivity extends Activity {
     private static final int REQUEST_SEARCH = 1;
     private static final int MSG_REFRESH_DATA = 0;//请求数据  心率  睡眠
     private TextView tv_connect;
+    private TextView tv_step;
     private TextView tv_kcal;
     private TextView tv_km;
+    private ProgressBar progressb_target;
     private String address;
     private String name;
     private GridView gv_wearfit;
@@ -108,8 +114,10 @@ public class WearFitActivity extends Activity {
         shouhuan_title = findViewById(R.id.shouhuan_title);
         shouhuan_title.setTitle("我的手环");
         tv_connect = findViewById(R.id.tv_connect);
+        tv_step = findViewById(R.id.tv_step_gauge);
         tv_kcal = findViewById(R.id.tv_kcal);
         tv_km = findViewById(R.id.tv_km);
+        progressb_target = findViewById(R.id.progressb_target);
         setListener();
         step_gauge_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,15 +393,31 @@ public class WearFitActivity extends Activity {
                     stepHelper.insert(wearFitStepBean);
                 }
                 if (datas.get(4) == 0x51 && datas.size() == 17) {//首页数据
-                    LogUtil.i(datas.toString());
+//                    LogUtil.i(datas.toString());
                     String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + "00" + ":" + "00";
-                    int step= (datas.get(6)<<16)+(datas.get(7)<<8)+datas.get(8);
-                    int cal= (datas.get(9)<<16)+(datas.get(10)<<8)+datas.get(11);
-                            int ligthSleep=datas.get(12)*60+datas.get(13);
-                    LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal);
+                    int step = (datas.get(6) << 16) + (datas.get(7) << 8) + datas.get(8);
+                    int cal = (datas.get(9) << 16) + (datas.get(10) << 8) + datas.get(11);
+                    int ligthSleep = datas.get(12) * 60 + datas.get(13);
+                    int deepSleep = datas.get(14) * 60 + datas.get(15);
+                    int wakeupTime = datas.get(16);//醒来次数
+                    LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal + "浅睡" + ligthSleep + "深睡" + deepSleep);
+                    WearFitUser wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
+                    int km = wearFitUser.getStepLength() * step / 100000;//100步长  1000km
+
+                    NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
+                    numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
+                    String targetStr = numberFormat.format((float) (wearFitUser.getGold_steps() - step) / (float) wearFitUser.getGold_steps() * 100);//达标
+                    int target=0;
+                    if (StringUtils.isNumeric(targetStr)) {
+                         target = Integer.valueOf(targetStr);
+                    }
+                    tv_step.setText(50+"");
+                    tv_kcal.setText(cal + context.getResources().getString(R.string.kcal_text));
+                    tv_km.setText(km + context.getResources().getString(R.string.km_english_text));
+                    progressb_target.setProgress(50);
                 }
-                if (datas.get(4) == 0x51 ) {//首页数据
-                    LogUtil.i(datas.toString());
+                if (datas.get(4) == 0x51) {//首页数据
+//                    LogUtil.i(datas.toString());
                 }
             }
         }
