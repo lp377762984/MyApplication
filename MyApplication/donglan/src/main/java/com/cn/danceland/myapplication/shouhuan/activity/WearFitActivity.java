@@ -46,6 +46,7 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -353,16 +354,14 @@ public class WearFitActivity extends Activity {
                     heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
                     heartRate.setHeartRate(datas.get(11));
                     heartRateHelper.insert(heartRate);
-                    LogUtil.i("书--" + date);
 
-                    Calendar calendar =Calendar.getInstance();
-                    Date nowTime=new Date(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
-                    Date endTime=new Date(calendar.getTimeInMillis());
-                    calendar.set(Calendar.MINUTE,calendar.get(Calendar.MINUTE)-15);
-                    Date startTime=new Date(calendar.getTimeInMillis());
+                    Calendar calendar = Calendar.getInstance();
+                    Date nowTime = new Date(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    Date endTime = new Date(calendar.getTimeInMillis());
+                    calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) - 15);
+                    Date startTime = new Date(calendar.getTimeInMillis());
 
-                    LogUtil.i("书2--" + TimeUtils.isEffectiveDate(nowTime,startTime,endTime)+datas.get(11));
-                    if (TimeUtils.isEffectiveDate(nowTime,startTime,endTime)) {
+                    if (TimeUtils.isEffectiveDate(nowTime, startTime, endTime)) {
                         heartRateLast = datas.get(11);
                         itemBeans.get(0).text2 = heartRateLast + "";//item 心率
                         adapter.notifyDataSetChanged();
@@ -409,16 +408,17 @@ public class WearFitActivity extends Activity {
                     int wakeupTime = datas.get(16);//醒来次数
 
                     WearFitUser wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
-                    int km = wearFitUser.getStepLength() * step / 100000;//100步长  1000km
+                    float kmf = (float) wearFitUser.getStepLength() * (float) step / (float) 100000.00;//100步长  1000km
+                    DecimalFormat fnum = new DecimalFormat("##0.00");
+                    String km = fnum.format(kmf);
 
                     NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
                     numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
-                    String targetStr = numberFormat.format((float) (wearFitUser.getGold_steps() - step) / (float) wearFitUser.getGold_steps() * 100);//达标
+                    String targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
                     int target = 0;
                     if (StringUtils.isNumeric(targetStr)) {
                         target = Integer.valueOf(targetStr);
                     }
-
                     Calendar c = Calendar.getInstance();
                     int hour = c.get(Calendar.HOUR_OF_DAY);
                     int fatigue = 0;
@@ -468,7 +468,7 @@ public class WearFitActivity extends Activity {
 
     private void initHeartData() {
         heartRateHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 5);
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
         LogUtil.i("获取这个之后的心率数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);
     }
@@ -482,7 +482,7 @@ public class WearFitActivity extends Activity {
 
     private void initStepGaugeData() {
         stepHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);//TODO
         LogUtil.i("获取这个之后的计步数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);//整点计步
     }

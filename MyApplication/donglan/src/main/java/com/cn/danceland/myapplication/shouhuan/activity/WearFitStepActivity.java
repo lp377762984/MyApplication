@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,12 +35,14 @@ import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.HorizontalPickerView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +70,13 @@ public class WearFitStepActivity extends Activity {
     private LinearLayout more_layout;
     private NoScrollListView listview;
     private BarGroup barGroup;
+    private TextView km_tv;
+    private TextView step_tv;
+    private TextView kilocalorie_tv;
+    private TextView average_daily_step_tv;
+    private TextView standard_days_tv;
+    private ProgressBar progressb_target;
+
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
 
     private List<String> dayPickerList = new ArrayList<>();//日选择器对应的时间戳  开始-截止  -连接
@@ -115,6 +125,13 @@ public class WearFitStepActivity extends Activity {
         listview = (NoScrollListView) findViewById(R.id.listview);
         barGroup = (BarGroup) findViewById(R.id.bar_group);
         root = (HorizontalScrollView) findViewById(R.id.bar_scroll);
+        km_tv = (TextView) findViewById(R.id.km_tv);
+        step_tv = (TextView) findViewById(R.id.step_tv);
+        kilocalorie_tv = (TextView) findViewById(R.id.kilocalorie_tv);
+        average_daily_step_tv = (TextView) findViewById(R.id.average_daily_step_tv);
+        standard_days_tv = (TextView) findViewById(R.id.standard_days_tv);
+        progressb_target = (ProgressBar) findViewById(R.id.progressb_target);
+
         popView = LayoutInflater.from(context).inflate(
                 R.layout.pop_bg, null);
 
@@ -310,10 +327,6 @@ public class WearFitStepActivity extends Activity {
      * @param day
      */
     public void queryDataByDay(String year, String month, String day) {
-//        deep_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//深睡
-//        shallow_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//浅睡
-//        step_time_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠时长
-//        step_quality_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠质量
         wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
         LogUtil.i("本地数据库共有个" + wearFitDataBeanList.size());
         if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
@@ -477,7 +490,7 @@ public class WearFitStepActivity extends Activity {
     }
 
     private void initViewToData() {
-
+        List<StepBean> stepListTemp = new ArrayList<>();//本地数据库和后台共用模式
         for (int i = 0; i < wearFitDataBeanList.size(); i++) {
             if (i == 0) {//第一条
                 StepBean stepBean = new StepBean();
@@ -485,37 +498,99 @@ public class WearFitStepActivity extends Activity {
                 stepBean.setEndTime(0);
                 stepBean.setStep(wearFitDataBeanList.get(i).getStep());
                 stepBean.setCal(wearFitDataBeanList.get(i).getCal());
-                stepBeans.add(stepBean);
+                stepListTemp.add(stepBean);
             } else if (i == wearFitDataBeanList.size() - 1) {//最后一条
-                StepBean stepB = stepBeans.get(stepBeans.size() - 1);
-                stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
-                stepBeans.set(stepBeans.size() - 1, stepB);
-            } else {
-                LogUtil.i("i="+i+"stepBeans.size() ="+stepBeans.size() +"--"+stepBeans.get(stepBeans.size() - 1).getEndTime());
-                //stepBeans最后一条没有截止时间，并且步数和wearFitDataBeanList步数一样
-                LogUtil.i("&&1--"+stepBeans.get(stepBeans.size() - 1).getStep()+" &&2--"+ wearFitDataBeanList.get(i).getStep());
-                if (stepBeans.get(stepBeans.size() - 1).getEndTime() == 0
-                        && stepBeans.get(stepBeans.size() - 1).getStep() != wearFitDataBeanList.get(i).getStep()) {
-                    StepBean stepB = stepBeans.get(stepBeans.size() - 1);
+                if (stepListTemp.get(stepListTemp.size() - 1).getEndTime() == 0) {//更改最后一条截止时间
+                    StepBean stepB = stepListTemp.get(stepListTemp.size() - 1);
                     stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
-                    stepBeans.set(stepBeans.size() - 1, stepB);
-                } else {
+                    stepListTemp.set(stepListTemp.size() - 1, stepB);
+                }
+            } else {
+                //stepListTemp最后一条没有截止时间，并且步数和wearFitDataBeanList步数一样
+                if (stepListTemp.get(stepListTemp.size() - 1).getEndTime() == 0) {//更改最后一条截止时间
+                    StepBean stepB = stepListTemp.get(stepListTemp.size() - 1);
+                    stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
+                    stepListTemp.set(stepListTemp.size() - 1, stepB);
+                }
+                if (stepListTemp.get(stepListTemp.size() - 1).getStep() != wearFitDataBeanList.get(i).getStep()) {
                     StepBean stepBean2 = new StepBean();
                     stepBean2.setStartTime(wearFitDataBeanList.get(i).getTimestamp());
                     stepBean2.setEndTime(0);
                     stepBean2.setStep(wearFitDataBeanList.get(i).getStep());
                     stepBean2.setCal(wearFitDataBeanList.get(i).getCal());
-                    stepBeans.add(stepBean2);
+                    stepListTemp.add(stepBean2);
                 }
             }
         }
+        for (int i = 0; i < stepListTemp.size(); i++) {
+            LogUtil.i("步数00--" + stepListTemp.get(i).getStep());
+            if (i == 0) {//第一条
+                stepBeans.add(stepListTemp.get(i));
+            } else {
+                StepBean lastStep = stepListTemp.get(i);
+                LogUtil.i("步数11--" + stepListTemp.get(i).getStep() + "步数" + stepListTemp.get(i - 1).getStep());
+                LogUtil.i("步数22--" + stepListTemp.get(i).getCal() + "步数--" + stepListTemp.get(i - 1).getCal());
+                int step = stepListTemp.get(i).getStep() - stepListTemp.get(i - 1).getStep();
+                int cal = stepListTemp.get(i).getCal() - stepListTemp.get(i - 1).getCal();
+                StepBean stepBean = new StepBean();
+                stepBean.setStep(step);
+                stepBean.setStartTime(lastStep.getStartTime());
+                stepBean.setEndTime(lastStep.getEndTime());
+                if (cal > 0) {
+                    stepBean.setCal(cal);
+                } else {
+                    stepBean.setCal(stepListTemp.get(i).getCal());
+                }
+                stepBeans.add(stepBean);
+            }
+        }
+        Collections.reverse(stepBeans);
 
-
-//        initChildView1(deepStep, shallowStep, stepTime);
+        initChildView1();
         addChildLayout();
 
         adapter = new StepAdapter(context, stepBeans, wearFitUser.getStepLength());
         listview.setAdapter(adapter);
+    }
+
+    private void initChildView1() {
+        float km = (float) wearFitUser.getStepLength() * (float) wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep() / (float) 100000.00;//100步长  1000km
+        int step = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep();
+        int cal = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getCal();
+        NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
+        numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
+        String targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+        int target = 0;
+        if (StringUtils.isNumeric(targetStr)) {
+            target = Integer.valueOf(targetStr);
+        }
+        km_tv.setText(km + "");
+        step_tv.setText(step + "");
+        kilocalorie_tv.setText(cal + "");
+        switch (lableType) {//切换标签 1天  2周  3月
+            case 1:
+                //----日布局
+                progressb_target.setProgress(target);
+                day_layout.setVisibility(View.VISIBLE);
+                more_layout.setVisibility(View.GONE);
+                break;
+            case 2:
+                //----周月布局
+                average_daily_step_tv.setText(km + "");
+                standard_days_tv.setText(km + "");
+                day_layout.setVisibility(View.GONE);
+                more_layout.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                //----周月布局
+                average_daily_step_tv.setText(km + "");
+                standard_days_tv.setText(km + "");
+                day_layout.setVisibility(View.GONE);
+                more_layout.setVisibility(View.VISIBLE);
+                break;
+        }
+
+
     }
 
     private void addChildLayout() {
