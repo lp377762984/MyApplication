@@ -79,6 +79,7 @@ public class WearFitActivity extends Activity {
     private String address1;//手环默认链接地址  yxx
     private RelativeLayout rl_connect;
     private CommandManager commandManager;
+    private  WearFitAdapter adapter;
 
     private HeartRateHelper heartRateHelper = new HeartRateHelper();
     private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
@@ -110,7 +111,8 @@ public class WearFitActivity extends Activity {
         rl_connect = findViewById(R.id.rl_connect);
         gv_wearfit = findViewById(R.id.gv_wearfit);
         step_gauge_layout = findViewById(R.id.step_gauge_layout);
-        gv_wearfit.setAdapter(new WearFitAdapter());
+         adapter=new WearFitAdapter();
+        gv_wearfit.setAdapter(adapter);
         shouhuan_title = findViewById(R.id.shouhuan_title);
         shouhuan_title.setTitle("我的手环");
         tv_connect = findViewById(R.id.tv_connect);
@@ -148,7 +150,7 @@ public class WearFitActivity extends Activity {
         }
 //        initHeartData();//心率
 //        initSleepData();//睡眠
-        initStepGaugeData();//计步
+//        initStepGaugeData();//计步
         commandManager.sendStep();//首页数据
 //        commandManager.setTimeSync();//同步时间给手环
     }
@@ -411,10 +413,19 @@ public class WearFitActivity extends Activity {
                     if (StringUtils.isNumeric(targetStr)) {
                          target = Integer.valueOf(targetStr);
                     }
-                    tv_step.setText(50+"");
+
+                    int fatigue=0;
+//                    if(fatigue){
+//
+//                    }
+                    tv_step.setText(step+"");
                     tv_kcal.setText(cal + context.getResources().getString(R.string.kcal_text));
                     tv_km.setText(km + context.getResources().getString(R.string.km_english_text));
-                    progressb_target.setProgress(50);
+                    progressb_target.setProgress(target);
+                    itemBeans.get(0).text2="心率";//item 心率
+                    itemBeans.get(1).text2="睡眠";//item 睡眠
+                    itemBeans.get(2).text2="疲劳";//item 疲劳
+                    adapter.notifyDataSetChanged();
                 }
                 if (datas.get(4) == 0x51) {//首页数据
 //                    LogUtil.i(datas.toString());

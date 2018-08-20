@@ -26,6 +26,24 @@
             android:src="@drawable/shouhuan_background" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:text="@string/step_gauge_text"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_step_gauge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="42dp"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/tv_kcal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +76,7 @@
             android:gravity="center_vertical">
 
             <ProgressBar
+                android:id="@+id/progressb_target"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
