@@ -96,7 +96,9 @@ public class FriendshipManagerPresenter {
                         arg0.getMeta().getDecideUnReadCnt() +
                         arg0.getMeta().getRecommendUnReadCnt();
                 if (friendshipMessageView != null && arg0.getItems().size() > 0){
-                    friendshipMessageView.onGetFriendshipLastMessage(arg0.getItems().get(0), unread);
+                    //
+
+                //    friendshipMessageView.onGetFriendshipLastMessage(arg0.getItems().get(0), unread);
                 }
             }
 
@@ -164,7 +166,7 @@ public class FriendshipManagerPresenter {
                 decideSeq = arg0.getMeta().getDecideSeq();
                 recommendSeq = arg0.getMeta().getRecommendSeq();
                 if (friendshipMessageView != null){
-                    friendshipMessageView.onGetFriendshipMessage(arg0.getItems());
+                  //  friendshipMessageView.onGetFriendshipMessage(arg0.getItems());
                 }
             }
 
@@ -421,6 +423,7 @@ public class FriendshipManagerPresenter {
                             public void onSuccess(List<TIMFriendResult> timFriendResults) {
                                 friendshipManageView.onChangeGroup(timFriendResults.get(0).getStatus(), dest);
                             }
+
                         });
                     }else{
                         friendshipManageView.onChangeGroup(TIMFriendStatus.TIM_FRIEND_STATUS_SUCC, dest);
