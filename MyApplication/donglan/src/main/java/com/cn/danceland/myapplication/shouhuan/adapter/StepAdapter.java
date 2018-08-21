@@ -25,7 +25,11 @@ public class StepAdapter extends BaseAdapter {
     private Context context;
     private int stepLength;
 
-    public StepAdapter(Context context, List<StepBean> stepBeans,int stepLength) {
+    public StepAdapter() {
+        super();
+    }
+
+    public StepAdapter(Context context, List<StepBean> stepBeans, int stepLength) {
         super();
         this.stepBeans = stepBeans;
         this.context = context;

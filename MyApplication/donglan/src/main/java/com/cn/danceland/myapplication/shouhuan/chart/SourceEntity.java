@@ -18,6 +18,15 @@ public class SourceEntity {
         private int scale;
         private long time;
         private long dayAwake;//每天清醒
+        private int cal;//卡路里
+
+        public int getCal() {
+            return cal;
+        }
+
+        public void setCal(int cal) {
+            this.cal = cal;
+        }
 
         public long getDayAwake() {
             return dayAwake;
@@ -96,7 +105,7 @@ public class SourceEntity {
             source.setShallowCount(200);//浅睡
             source.setDeepCount(300);//深睡
             source.setScale(r.nextInt(210));
-            source.setSource("星期" + (i+1));
+            source.setSource("星期" + (i + 1));
             source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
             list.add(source);
         }

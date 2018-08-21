@@ -45,15 +45,16 @@ public class BarGroup extends LinearLayout {
         }
     }
 
-    public void setHeight(float maxValue, int height) {
+    public void setHeight(float maxValue, int height,int width) {
         if (datas != null) {
             for (int i = 0; i < datas.size(); i++) {
                 /*通过柱状图的最大值和相对比例计算出每条柱状图的高度*/
                 float barHeight = datas.get(i).getAllcount() / maxValue * height;
                 View view = LayoutInflater.from(getContext()).inflate(R.layout.bar_item, null);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(DensityUtil.dip2px(getContext(), 45), height);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(DensityUtil.dip2px(getContext(), width), height);
 //                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(DensityUtil.dip2px(getContext(),30),height);
 //                view.setLayoutParams(lp);
+                lp.setMargins(10,0,10,0);
                 ((BarView) view.findViewById(R.id.barView)).setData(datas.get(i));
                 (view.findViewById(R.id.barView)).setLayoutParams(lp);
 //                ((TextView)view.findViewById(R.id.title)).setText(getFeedString(datas.get(i).getTitle()));

@@ -149,8 +149,8 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.VISIBLE);
             tv_connect.setText("还未绑定手环，点击绑定");
         }
-        initHeartData();//心率
-        initSleepData();//睡眠
+//        initHeartData();//心率
+//        initSleepData();//睡眠
         initStepGaugeData();//计步
         commandManager.sendStep();//首页数据
 //        commandManager.setTimeSync();//同步时间给手环
@@ -396,7 +396,7 @@ public class WearFitActivity extends Activity {
                     wearFitStepBean.setStep(step);
                     wearFitStepBean.setCal(cal);
                     LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal);
-                    stepHelper.insert(wearFitStepBean);
+                    stepHelper.insert(wearFitStepBean);// 计步
                 }
                 if (datas.get(4) == 0x51 && datas.size() == 17) {//首页数据
 //                    LogUtil.i(datas.toString());

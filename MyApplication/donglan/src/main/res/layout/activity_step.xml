@@ -247,7 +247,7 @@
                             android:textSize="@dimen/h6" />
 
                         <TextView
-                            android:id="@+id/more_sleep_time_tv"
+                            android:id="@+id/km_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sleep_line_text"
@@ -283,7 +283,7 @@
                             android:textSize="@dimen/h6" />
 
                         <TextView
-                            android:id="@+id/more_sleep_quality_tv"
+                            android:id="@+id/step_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sleep_line_text"
@@ -340,7 +340,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="70dp"
@@ -351,7 +352,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/more_shallow_sleep_two_tv"
+                            android:id="@+id/average_daily_step_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="13.5dp"
@@ -377,7 +378,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/more_deep_sleep_two_tv"
+                            android:id="@+id/standard_days_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="13.5dp"
@@ -388,7 +389,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/average_daily_days_text"
+                            android:text="@string/standard_days_text"
                             android:textColor="@color/colorGray9"
                             android:textSize="@dimen/h6" />
 
@@ -405,7 +406,7 @@
                     android:layout_marginRight="@dimen/default_padding_side"
                     android:layout_marginTop="15dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -414,15 +415,23 @@
                         android:textColor="@color/colorGray9"
                         android:textSize="@dimen/h6" />
 
-                    <ProgressBar
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:layout_centerVertical="true"
+                        android:layout_height="10dp"
                         android:layout_marginTop="10dp"
-                        android:max="100"
-                        android:progress="20"
-                        android:progressDrawable="@drawable/progress_round" />
+                        android:background="@drawable/progressstroke"
+                        android:gravity="center_vertical">
+
+                        <ProgressBar
+                            android:id="@+id/progressb_target"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_centerVertical="true"
+                            android:max="100"
+                            android:progress="20"
+                            android:progressDrawable="@drawable/progress_round" />
+                    </RelativeLayout>
 
                     <TextView
                         android:layout_width="wrap_content"

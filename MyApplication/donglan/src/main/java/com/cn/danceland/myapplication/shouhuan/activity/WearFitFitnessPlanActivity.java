@@ -130,7 +130,7 @@ public class WearFitFitnessPlanActivity extends Activity {
                 int height = findViewById(R.id.bg).getMeasuredHeight();
                 final View baseLineView = findViewById(R.id.left_base_line);
                 int baseLineTop = baseLineView.getTop();
-                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2);
+                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2,45);
                 barGroup.postDelayed(new Runnable() {
                     @Override
                     public void run() {
