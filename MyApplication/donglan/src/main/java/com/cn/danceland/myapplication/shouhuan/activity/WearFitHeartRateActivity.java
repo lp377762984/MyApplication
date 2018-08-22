@@ -143,7 +143,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         LogUtil.i(year + "-" + month + "-" + day);
         queryHeartByDay(year + "", month + "", day + "");
-        getLastHeart();//服务器最后心率
+        getLastData();//服务器最后数据
         picker.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -213,8 +213,6 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            String text = compoundButton.getText().toString();
-            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
             switch (compoundButton.getId()) {
                 case R.id.day_checkBox://日
                     initPickerDay();
@@ -365,8 +363,8 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
 
     private HeartRateResultBean lastDateTime;//服务器最后心率
 
-    //服务器最后心率
-    private void getLastHeart() {
+    //服务器最后数据
+    private void getLastData() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDLAST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {

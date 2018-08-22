@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.shouhuan.activity.WearFitActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -276,13 +278,13 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.ll_my_shouhuan://我的手环
 
-                ToastUtils.showToastShort("功能正在开发中");
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-//                    startActivity(new Intent(mActivity, WearFitActivity.class));
-//                }else {
-//                    ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
-//                }
+//                ToastUtils.showToastShort("功能正在开发中");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+                    startActivity(new Intent(mActivity, WearFitActivity.class));
+                }else {
+                    ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
+                }
 
                 break;
             default:

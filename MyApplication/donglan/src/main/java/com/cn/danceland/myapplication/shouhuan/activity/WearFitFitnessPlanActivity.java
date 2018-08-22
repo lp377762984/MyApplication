@@ -76,7 +76,6 @@ public class WearFitFitnessPlanActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wearfit_fitness_plan);
         context = this;
@@ -130,7 +129,7 @@ public class WearFitFitnessPlanActivity extends Activity {
                 int height = findViewById(R.id.bg).getMeasuredHeight();
                 final View baseLineView = findViewById(R.id.left_base_line);
                 int baseLineTop = baseLineView.getTop();
-                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2);
+                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2,45);
                 barGroup.postDelayed(new Runnable() {
                     @Override
                     public void run() {

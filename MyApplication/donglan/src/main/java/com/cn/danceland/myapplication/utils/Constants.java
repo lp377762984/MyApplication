@@ -1,7 +1,8 @@
 package com.cn.danceland.myapplication.utils;
+
 import com.cn.danceland.myapplication.MyApplication;
 
-public class Constants  {
+public class Constants {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
     public static final int MAX_FRIEND_COUNT = 900;//最大好友数量
 
@@ -13,19 +14,19 @@ public class Constants  {
         return PLATFORM;
     }
 
-  //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+    //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
+//   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-  // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-//   public static String HOST = "http://192.168.1.66:8003/";//佳楠
+    // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
+    public static String HOST = "http://192.168.1.66:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
-   // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
 //     public static final String HOST = "http://192.168.1.55:8003/";//老高
- //   public static final String HOST = "http://118.190.201.15:6003/";//
-   //  public static final String HOST = " http://192.168.1.96:8003/";//
+    //   public static final String HOST = "http://118.190.201.15:6003/";//
+    //  public static final String HOST = " http://192.168.1.96:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
-     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
+    //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
@@ -98,7 +99,7 @@ public class Constants  {
     public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
     public static final String ADD_BLACKLIST_URL = HOST + "/blackList/save";//添加黑名单
     public static final String FIND_BLACKLIST_URL = HOST + "/blackList/queryList";//查询黑名单
-    public static final String DEL_BLACKLIST_URL= HOST + "/blackList/delete";//移除黑名单
+    public static final String DEL_BLACKLIST_URL = HOST + "/blackList/delete";//移除黑名单
 
     public static final String FIND_SELF_DT_MSG = HOST + "/appDynMsg/findSelfDynMsg";//个人动态
 
@@ -108,7 +109,7 @@ public class Constants  {
     public static final String SAVE_DYN_MSG = HOST + "appDynMsg/saveDynMsg";//发布动态
     public static final String DEL_DYN_MSG = HOST + "appDynMsg/deleteOneDynMsg/";//删除一条动态
     public static final String SET_MIPUSH_ID = HOST + "user/modifyRegId";//设置mipushid
-    public static final String UPDATE_MIPUSH_CONFIG =  "update_mipush_config";//更新mipush
+    public static final String UPDATE_MIPUSH_CONFIG = "update_mipush_config";//更新mipush
 
 
     public static final String FIND_JINGXUAN_DT_MSG = HOST + "/appDynMsg/findChoiceness";//精选动态
@@ -234,7 +235,7 @@ public class Constants  {
     public static final String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
     public static final String FREECOURSELIST = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
     public static final String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
-    public static final String GROUPCOURSEAPPOINTCANCEL = HOST+"/appGroupCourse/groupCourseAppointCancel";//取消小团课报名
+    public static final String GROUPCOURSEAPPOINTCANCEL = HOST + "/appGroupCourse/groupCourseAppointCancel";//取消小团课报名
     public static final String PINGJIA = HOST + "evaluate/save";//评价接口
     public static final String FINDPINGJIA = HOST + "evaluate/findById/";//查询一条评价
     public static final String ENTERCOURSE = HOST + "appCourse/courseAppointConfirm ";//确认私教
@@ -256,14 +257,12 @@ public class Constants  {
     public static final String QUERY_WEAR_FIT_SLEEP_LIST = HOST + "/personSleep/queryList";//按条件查询不分页[人员睡眠数据]列表
     public static final String QUERY_WEAR_FIT_SLEEP_SAVE = HOST + "/personSleep/save";//新增[人员睡眠数据]
     public static final String QUERY_WEAR_FIT_SLEEP_FINDSUM = HOST + "/personSleep/findSum";//查询指定时间段内，每天睡眠时间的总和
+    public static final String QUERY_WEAR_FIT_STEP_SAVE = HOST + "/personStep/save";//新增[人员计步数据]
+    public static final String QUERY_WEAR_FIT_STEP_FANDLAST = HOST + "/personStep/findLast";//根据条件查询最后一条计步数据
+    public static final String QUERY_WEAR_FIT_STEP_LIST = HOST + "/personStep/queryList";//按条件查询不分页[人员计步数据]列表
+    public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条计步数据
 
-
-
-
-
-
-
-  //环信相关
+    //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
     public static final String CHAT_ROOM = "item_chatroom";

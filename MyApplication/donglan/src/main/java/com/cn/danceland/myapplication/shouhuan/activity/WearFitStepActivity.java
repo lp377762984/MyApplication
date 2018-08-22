@@ -1,5 +1,7 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -17,15 +19,32 @@ import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.shouhuan.adapter.StepAdapter;
+import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
+import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
+import com.cn.danceland.myapplication.shouhuan.bean.SleepLastBean;
+import com.cn.danceland.myapplication.shouhuan.bean.SleepMorePostBean;
+import com.cn.danceland.myapplication.shouhuan.bean.SleepResultBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepBean;
+import com.cn.danceland.myapplication.shouhuan.bean.StepLastBean;
+import com.cn.danceland.myapplication.shouhuan.bean.StepListBean;
+import com.cn.danceland.myapplication.shouhuan.bean.StepResultBean;
 import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 import com.cn.danceland.myapplication.shouhuan.chart.BarEntity;
 import com.cn.danceland.myapplication.shouhuan.chart.BarGroup;
@@ -34,18 +53,27 @@ import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.HorizontalPickerView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 计步
@@ -53,7 +81,7 @@ import java.util.List;
  */
 
 public class WearFitStepActivity extends Activity {
-    private static final int MSG_REFRESH_DATA_DATA = 0;//日
+    private static final int MSG_REFRESH_DATA = 0;//日
     private static final int MSG_REFRESH_DATA_MORE_DATA = 1;//周 月
     private int lableType = 1;//切换标签 1天  2周  3月
     private Context context;
@@ -67,6 +95,13 @@ public class WearFitStepActivity extends Activity {
     private LinearLayout more_layout;
     private NoScrollListView listview;
     private BarGroup barGroup;
+    private TextView km_tv;
+    private TextView step_tv;
+    private TextView kilocalorie_tv;
+    private TextView average_daily_step_tv;
+    private TextView standard_days_tv;
+    private ProgressBar progressb_target;
+
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
 
     private List<String> dayPickerList = new ArrayList<>();//日选择器对应的时间戳  开始-截止  -连接
@@ -74,13 +109,15 @@ public class WearFitStepActivity extends Activity {
     private List<String> monthPickerList = new ArrayList<>();//月选择器对应的时间戳  开始-截止  -连接
     private List<WearFitStepBean> wearFitDataBeanList = new ArrayList<>();//本地数据库和后台共用模式
     private List<StepBean> stepBeans = new ArrayList<>();//本地数据库和后台共用模式
+    private List<StepResultBean> behindData = new ArrayList<>();//最后一条后面所有的数据 ALL
     private WearFitStepHelper stepHelper = new WearFitStepHelper();
-
 
     private WearFitUser wearFitUser = new WearFitUser();//本地用户数据
     private StepAdapter adapter;
 
+    private StepResultBean lastDateTime;//服务器最后睡眠
     private String lastData = "";//选择器上次滚动的数据
+
     /*柱状图的最大值*/
     private float sourceMax = 0.00f;
     private int left;
@@ -115,6 +152,13 @@ public class WearFitStepActivity extends Activity {
         listview = (NoScrollListView) findViewById(R.id.listview);
         barGroup = (BarGroup) findViewById(R.id.bar_group);
         root = (HorizontalScrollView) findViewById(R.id.bar_scroll);
+        km_tv = (TextView) findViewById(R.id.km_tv);
+        step_tv = (TextView) findViewById(R.id.step_tv);
+        kilocalorie_tv = (TextView) findViewById(R.id.kilocalorie_tv);
+        average_daily_step_tv = (TextView) findViewById(R.id.average_daily_step_tv);
+        standard_days_tv = (TextView) findViewById(R.id.standard_days_tv);
+        progressb_target = (ProgressBar) findViewById(R.id.progressb_target);
+
         popView = LayoutInflater.from(context).inflate(
                 R.layout.pop_bg, null);
 
@@ -133,6 +177,7 @@ public class WearFitStepActivity extends Activity {
                     }
                     if (!lastData.equals(lableText)) {//最后一次和本次滚动的值不相等请求
                         String[] temp = null;
+                        setViewClear();
                         switch (lableType) {//切换标签 1天  2周  3月
                             case 1:
                                 String[] splitDay = null;
@@ -167,14 +212,15 @@ public class WearFitStepActivity extends Activity {
         });
 
         initPickerDay();//默认日数据
-        defaultQueryDataByDay();
+        setViewClear();
+        defaultQueryStepByDay();
+        getLastData();//服务器最后数据
     }
 
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            String text = compoundButton.getText().toString();
-            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+            setViewClear();
             switch (compoundButton.getId()) {
                 case R.id.day_checkBox://日
                     day_layout.setVisibility(View.VISIBLE);
@@ -225,7 +271,6 @@ public class WearFitStepActivity extends Activity {
             LogUtil.i("上传参数" + new SimpleDateFormat("yyyy-MM-dd").format(TimeUtils.timeToTopHour(Long.valueOf(temp[0] + ""))).toString() + "&"
                     + new SimpleDateFormat("yyyy-MM-dd").format(TimeUtils.timeToTopHour(Long.valueOf(temp[0] + ""))).toString());
             querysDataByWeekOrMonth(TimeUtils.timeToTopHour(Long.valueOf(temp[0] + "")) + "", TimeUtils.timeToTopHour(Long.valueOf(temp[1] + "")) + "");
-//            setHeartViewToService(temp[0] + "", temp[1] + "");
         }
     }
 
@@ -264,7 +309,6 @@ public class WearFitStepActivity extends Activity {
             }
         }
         picker.setData(pickerList);
-//        LogUtil.i("/"+pickerList.size()/2+"%"+pickerList.size()%2+"aa"+(pickerList.size()-pickerList.size()%2)/2);
         picker.setSelectNum(pickerList.size() - 1);//时间选择器偏移
     }
 
@@ -288,18 +332,28 @@ public class WearFitStepActivity extends Activity {
         picker.setSelectNum(pickerList.size() - 1);//时间选择器偏移
     }
 
-    private void defaultQueryDataByDay() {
-//        stepBeans.clear();//睡眠数据
-//        wearFitStepBeanList.clear();//本地数据库和后台共用模式
-//        column_layout.removeAllViews();
-//        step_detail_tv.setVisibility(View.VISIBLE);
-//        step_detail_tv.setText("");
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        LogUtil.i(year + "-" + month + "-" + day);
-        queryDataByDay(year + "", month + "", day + "");
+    //清除布局值
+    private void setViewClear() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+        stepBeans.clear();
+        wearFitDataBeanList.clear();
+        moreList.clear();
+        barGroup.removeAllViews();
+        km_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+        step_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+        kilocalorie_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+        average_daily_step_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+        standard_days_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+        if (lableType == 1) {   //----日布局
+            progressb_target.setProgress(0);
+            day_layout.setVisibility(View.VISIBLE);
+            more_layout.setVisibility(View.GONE);
+        } else { //----周月布局
+            day_layout.setVisibility(View.GONE);
+            more_layout.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -310,67 +364,64 @@ public class WearFitStepActivity extends Activity {
      * @param day
      */
     public void queryDataByDay(String year, String month, String day) {
-//        deep_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//深睡
-//        shallow_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//浅睡
-//        step_time_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠时长
-//        step_quality_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠质量
-        wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
+//        wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
         LogUtil.i("本地数据库共有个" + wearFitDataBeanList.size());
         if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
             initViewToData();
         } else {
-//            HeartRatePostBean heartRatePostBean = new HeartRatePostBean();
-//            heartRatePostBean.setYear(year);
-//            heartRatePostBean.setMonth(month);
-//            heartRatePostBean.setDay(day);
-//            LogUtil.i("请求后台心率" + heartRatePostBean.toString());
-//            //获取后台数据
-//            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_Step_LIST
-//                    , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
-//                @Override
-//                public void onResponse(JSONObject jsonObject) {
-//                    LogUtil.i("jsonObject" + jsonObject.toString());
-//                    if (jsonObject.toString().contains("true")) {
-//                        StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
-//                        List<StepResultBean> data = stepListBean.getData();
-//                        if (data != null && data.size() != 0) {
-//                            LogUtil.i("data.size()" + data.size());
-//                            wearFitDataBeanList.clear();
-//                            for (int i = 0; i < data.size(); i++) {
-//                                String time = data.get(i).getYear() + "-" + data.get(i).getMonth() + "-" + data.get(i).getDay() + " "
-//                                        + data.get(i).getHour() + ":" + data.get(i).getMinute() + ":" + "00";
-//                                WearFitStepBean wfsb = new WearFitStepBean();
+            HeartRatePostBean heartRatePostBean = new HeartRatePostBean();
+            heartRatePostBean.setYear(year);
+            heartRatePostBean.setMonth(month);
+            heartRatePostBean.setDay(day);
+            LogUtil.i("请求后台心率" + heartRatePostBean.toString());
+            //获取后台数据
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_LIST
+                    , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    LogUtil.i("jsonObject" + jsonObject.toString());
+                    if (jsonObject.toString().contains("true")) {
+                        StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
+                        List<StepResultBean> data = stepListBean.getData();
+                        if (data != null && data.size() != 0) {
+                            LogUtil.i("data.size()" + data.size());
+                            wearFitDataBeanList.clear();
+                            for (int i = 0; i < data.size(); i++) {
+                                String time = data.get(i).getYear() + "-" + data.get(i).getMonth() + "-" + data.get(i).getDay() + " "
+                                        + data.get(i).getHour() + ":" + data.get(i).getMinute() + ":" + "00";
+                                WearFitStepBean wfsb = new WearFitStepBean();
 //                                wfsb.setTimestamp(TimeUtils.date2TimeStamp(time, "yyyy-MM-dd HH:mm:ss"));
-//                                wfsb.setState(data.get(i).getState());//11位state
-//                                wfsb.setContinuoustime(Integer.valueOf(data.get(i).getMinutes()));//睡了多久 12位*256+13位
-//                                wearFitDataBeanList.add(wfsb);
-//                            }
-//                        }
-//                        Message message = new Message();
-//                        message.what = MSG_REFRESH_DATA_DATA;
-//                        handler.sendMessage(message);
-//                    } else {
-//                        ToastUtils.showToastShort("请查看网络连接");
-//                        Message message = new Message();
-//                        message.what = MSG_REFRESH_DATA_DATA;
-//                        handler.sendMessage(message);
-//                    }
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError volleyError) {
-//                    ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
-//                    LogUtil.e("onErrorResponse", volleyError.toString());
-//                }
-//            }) {
-//                @Override
-//                public Map<String, String> getHeaders() throws AuthFailureError {
-//                    Map<String, String> map = new HashMap<String, String>();
-//                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-//                    return map;
-//                }
-//            };
-//            MyApplication.getHttpQueues().add(request);
+                                wfsb.setTimestamp(data.get(i).getTimestamp());
+                                wfsb.setStep(Integer.valueOf(data.get(i).getStep()));
+                                wfsb.setCal(Integer.valueOf(data.get(i).getCal()));//睡了多久 12位*256+13位
+                                wearFitDataBeanList.add(wfsb);
+                            }
+                        }
+                        Message message = new Message();
+                        message.what = MSG_REFRESH_DATA;
+                        handler.sendMessage(message);
+                    } else {
+                        ToastUtils.showToastShort("请查看网络连接");
+                        Message message = new Message();
+                        message.what = MSG_REFRESH_DATA;
+                        handler.sendMessage(message);
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
+                    LogUtil.e("onErrorResponse", volleyError.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                    return map;
+                }
+            };
+            MyApplication.getHttpQueues().add(request);
         }
     }
 
@@ -381,93 +432,78 @@ public class WearFitStepActivity extends Activity {
      * @param timestamp_lt 截止时间
      */
     private void querysDataByWeekOrMonth(String timestamp_gt, String timestamp_lt) {
-//        more_deep_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//深睡
-//        more_shallow_step_two_tv.setText(context.getResources().getString(R.string.step_line_text));//浅睡
-//        more_step_time_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠时长
-//        more_step_quality_tv.setText(context.getResources().getString(R.string.step_line_text));//睡眠质量
-//        moreList.clear();
-//        barGroup.removeAllViews();
-//        StepMorePostBean weekPostBean = new StepMorePostBean();
-//        weekPostBean.setGroup_time_gt(timestamp_gt);
-//        weekPostBean.setGroup_time_lt(timestamp_lt);
-//        LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
-//                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
-//        //获取后台数据
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_Step_FINDSUM
-//                , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                LogUtil.i("jsonObject" + jsonObject.toString());
-//                if (jsonObject.toString().contains("true")) {
-//                    StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
-//                    List<StepResultBean> data = stepListBean.getData();
-//                    if (data != null && data.size() != 0) {
-//                        LogUtil.i("data.size()" + data.size());
-//                        wearFitDataBeanList.clear();
-//                        for (int i = 0; i < data.size(); i++) {
-//                            SourceEntity.Source source = new SourceEntity.Source();
-//                            source.setAwakeCount(0);//清醒
-//                            int sum = Integer.valueOf(data.get(i).getMinutes1());
-//                            int shenshui = Integer.valueOf(data.get(i).getMinutes2());
-//                            source.setShallowCount(sum - shenshui);//浅睡
-//                            source.setDeepCount(shenshui);//深睡
-//                            source.setDayAwake(Long.valueOf(data.get(i).getState_one_count() + ""));
-//                            source.setScale(100);
-//                            source.setTime(Long.valueOf(data.get(i).getGroup_time()));
-//                            String weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(data.get(i).getGroup_time() + "", "yyyy-MM-dd"));
-//                            switch (lableType) {//切换标签 1天  2周  3月
-//                                case 2:
-//                                    weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(data.get(i).getGroup_time() + "", "yyyy-MM-dd"));
-//                                    break;
-//                                case 3:
-//                                    weekStr = new SimpleDateFormat("d").format(new Date(Long.valueOf(data.get(i).getGroup_time()))).toString();
-//                                    break;
-//                            }
-//                            source.setSource(weekStr);
-//                            if (weekStr.equals("星期二")) {
-//                                LogUtil.i("&&&&&-" + (sum - shenshui) + "-&&-" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(data.get(i).getGroup_time()))));
-//                            }
-//                            source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
-//                            moreList.add(source);
-//                        }
-//                    }
-//
-//                    Message message = new Message();
-//                    message.what = MSG_REFRESH_DATA_MORE_DATA;
-//                    handler.sendMessage(message);
-//                } else {
-//                    ToastUtils.showToastShort("请查看网络连接");
-//                    Message message = new Message();
-//                    message.what = MSG_REFRESH_DATA_MORE_DATA;
-//                    handler.sendMessage(message);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                Message message = new Message();
-//                message.what = MSG_REFRESH_DATA_MORE_DATA;
-//                handler.sendMessage(message);
-//                ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
-//                LogUtil.e("onErrorResponse", volleyError.toString());
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-//                return map;
-//            }
-//        };
-//        MyApplication.getHttpQueues().add(request);
+        MorePostBean weekPostBean = new MorePostBean();
+        weekPostBean.setTimestamp_gt(timestamp_gt);
+        weekPostBean.setTimestamp_lt(timestamp_lt);
+        LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
+                + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
+        //获取后台数据
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_FINDMAX
+                , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i("jsonObject" + jsonObject.toString());
+                if (jsonObject.toString().contains("true")) {
+                    StepListBean stepListBean = new Gson().fromJson(jsonObject.toString(), StepListBean.class);
+                    List<StepResultBean> data = stepListBean.getData();
+                    if (data != null && data.size() != 0) {
+                        LogUtil.i("data.size()" + data.size());
+                        for (int i = 0; i < data.size(); i++) {
+
+                            SourceEntity.Source source = new SourceEntity.Source();
+                            source.setAwakeCount(0);//清醒
+                            source.setShallowCount(Integer.valueOf(data.get(i).getStep()));//浅睡 步数
+                            source.setCal(Integer.valueOf(data.get(i).getCal()));//cal
+                            LogUtil.i("步数" + data.get(i).getStep());
+                            source.setDeepCount(0);//深睡
+                            source.setDayAwake(10);
+                            source.setScale(100);
+                            source.setTime(data.get(i).getTimestamp());
+                            String weekStr = TimeUtils.timeStamp2Date(data.get(i).getTimestamp() + "", "HH");
+                            switch (lableType) {//切换标签 1天  2周  3月
+                                case 2:
+                                    weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(data.get(i).getTimestamp() + "", "yyyy-MM-dd"));
+                                    break;
+                                case 3:
+                                    weekStr = new SimpleDateFormat("d").format(new Date(Long.valueOf(data.get(i).getTimestamp()))).toString();
+                                    break;
+                            }
+                            source.setSource(weekStr);
+                            source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
+                            moreList.add(source);
+                        }
+                    }
+                    Message message = new Message();
+                    message.what = MSG_REFRESH_DATA_MORE_DATA;
+                    handler.sendMessage(message);
+                } else {
+                    ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
+                    Message message = new Message();
+                    message.what = MSG_REFRESH_DATA_MORE_DATA;
+                    handler.sendMessage(message);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Message message = new Message();
+                message.what = MSG_REFRESH_DATA_MORE_DATA;
+                handler.sendMessage(message);
+                ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
+                LogUtil.e("onErrorResponse", volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 
     private void defaultQueryStepByDay() {
-//        stepBeans.clear();//睡眠数据
-//        wearFitDataBeanList.clear();//本地数据库和后台共用模式
-//        column_layout.removeAllViews();
-//        step_detail_tv.setVisibility(View.VISIBLE);
-//        step_detail_tv.setText("");
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -477,7 +513,7 @@ public class WearFitStepActivity extends Activity {
     }
 
     private void initViewToData() {
-
+        List<StepBean> stepListTemp = new ArrayList<>();//本地数据库和后台共用模式
         for (int i = 0; i < wearFitDataBeanList.size(); i++) {
             if (i == 0) {//第一条
                 StepBean stepBean = new StepBean();
@@ -485,57 +521,139 @@ public class WearFitStepActivity extends Activity {
                 stepBean.setEndTime(0);
                 stepBean.setStep(wearFitDataBeanList.get(i).getStep());
                 stepBean.setCal(wearFitDataBeanList.get(i).getCal());
-                stepBeans.add(stepBean);
+                stepListTemp.add(stepBean);
             } else if (i == wearFitDataBeanList.size() - 1) {//最后一条
-                StepBean stepB = stepBeans.get(stepBeans.size() - 1);
-                stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
-                stepBeans.set(stepBeans.size() - 1, stepB);
-            } else {
-                LogUtil.i("i="+i+"stepBeans.size() ="+stepBeans.size() +"--"+stepBeans.get(stepBeans.size() - 1).getEndTime());
-                //stepBeans最后一条没有截止时间，并且步数和wearFitDataBeanList步数一样
-                LogUtil.i("&&1--"+stepBeans.get(stepBeans.size() - 1).getStep()+" &&2--"+ wearFitDataBeanList.get(i).getStep());
-                if (stepBeans.get(stepBeans.size() - 1).getEndTime() == 0
-                        && stepBeans.get(stepBeans.size() - 1).getStep() != wearFitDataBeanList.get(i).getStep()) {
-                    StepBean stepB = stepBeans.get(stepBeans.size() - 1);
+                if (stepListTemp.get(stepListTemp.size() - 1).getEndTime() == 0) {//更改最后一条截止时间
+                    StepBean stepB = stepListTemp.get(stepListTemp.size() - 1);
                     stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
-                    stepBeans.set(stepBeans.size() - 1, stepB);
-                } else {
+                    stepListTemp.set(stepListTemp.size() - 1, stepB);
+                }
+            } else {
+                //stepListTemp最后一条没有截止时间，并且步数和wearFitDataBeanList步数一样
+                if (stepListTemp.get(stepListTemp.size() - 1).getEndTime() == 0) {//更改最后一条截止时间
+                    StepBean stepB = stepListTemp.get(stepListTemp.size() - 1);
+                    stepB.setEndTime(wearFitDataBeanList.get(i).getTimestamp());
+                    stepListTemp.set(stepListTemp.size() - 1, stepB);
+                }
+                if (stepListTemp.get(stepListTemp.size() - 1).getStep() != wearFitDataBeanList.get(i).getStep()) {
                     StepBean stepBean2 = new StepBean();
                     stepBean2.setStartTime(wearFitDataBeanList.get(i).getTimestamp());
                     stepBean2.setEndTime(0);
                     stepBean2.setStep(wearFitDataBeanList.get(i).getStep());
                     stepBean2.setCal(wearFitDataBeanList.get(i).getCal());
-                    stepBeans.add(stepBean2);
+                    stepListTemp.add(stepBean2);
                 }
             }
         }
+        for (int i = 0; i < stepListTemp.size(); i++) {
+            if (i == 0) {//第一条
+                stepBeans.add(stepListTemp.get(i));
+            } else {
+                StepBean lastStep = stepListTemp.get(i);
+                int step = stepListTemp.get(i).getStep() - stepListTemp.get(i - 1).getStep();
+                int cal = stepListTemp.get(i).getCal() - stepListTemp.get(i - 1).getCal();
+                StepBean stepBean = new StepBean();
+                stepBean.setStep(step);
+                stepBean.setStartTime(lastStep.getStartTime());
+                stepBean.setEndTime(lastStep.getEndTime());
+                if (cal > 0) {
+                    stepBean.setCal(cal);
+                } else {
+                    stepBean.setCal(stepListTemp.get(i).getCal());
+                }
+                stepBeans.add(stepBean);
+            }
+        }
+        Collections.reverse(stepBeans);
 
-
-//        initChildView1(deepStep, shallowStep, stepTime);
+        initChildView1();
         addChildLayout();
 
         adapter = new StepAdapter(context, stepBeans, wearFitUser.getStepLength());
         listview.setAdapter(adapter);
     }
 
+    private void initChildView1() {
+        if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
+            float kmf = (float) wearFitUser.getStepLength() * (float) wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep() / (float) 100000.00;//100步长  1000km
+            int step = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep();
+            int cal = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getCal();
+            DecimalFormat fnum = new DecimalFormat("##0.00");
+            String km = fnum.format(kmf);
+            NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
+            numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
+            String targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+            int target = 0;
+            if (StringUtils.isNumeric(targetStr)) {
+                target = Integer.valueOf(targetStr);
+            }
+            km_tv.setText(km + "");
+            step_tv.setText(step + "");
+            kilocalorie_tv.setText(cal + "");
+            //----日布局
+            progressb_target.setProgress(target);
+            day_layout.setVisibility(View.VISIBLE);
+            more_layout.setVisibility(View.GONE);
+        }
+    }
+
+    private void initChildView2() {
+        int sumStep = 0;//总步数
+        int sumCal = 0;//cal
+        int standard = 0;//达标天数
+        for (int i = 0; i < moreList.size(); i++) {
+            sumStep += moreList.get(i).getShallowCount();//浅睡 步数
+            sumCal += moreList.get(i).getCal();// cal
+            if (moreList.get(i).getShallowCount() >= wearFitUser.getGold_steps()) {
+                ++standard;
+            }
+        }
+        float kmf = (float) wearFitUser.getStepLength() * (float) sumStep / (float) 100000.00;//100步长  1000km
+        DecimalFormat fnum = new DecimalFormat("##0.00");
+        String km = fnum.format(kmf);
+        km_tv.setText(km + "");
+        step_tv.setText(sumStep + "");
+        kilocalorie_tv.setText(sumCal + "");
+        //----周月布局
+        average_daily_step_tv.setText(sumStep / moreList.size() + "");//日均步数
+        standard_days_tv.setText(standard + "");//达标天数
+        day_layout.setVisibility(View.GONE);
+        more_layout.setVisibility(View.VISIBLE);
+    }
+
     private void addChildLayout() {
+        for (int i = 0; i < stepBeans.size(); i++) {
+            SourceEntity.Source source = new SourceEntity.Source();
+            source.setAwakeCount(0);//清醒
+            source.setShallowCount(stepBeans.get(i).getStep());//浅睡 步数
+            LogUtil.i("步数" + stepBeans.get(i).getStep());
+            source.setDeepCount(0);//深睡
+            source.setDayAwake(10);
+            source.setScale(100);
+            source.setTime(stepBeans.get(i).getStartTime());
+            String weekStr = TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "HH");
+//            switch (lableType) {//切换标签 1天  2周  3月
+//                case 1:
+            weekStr = TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "HH");
+//                    break;
+//                case 2:
+//                    weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "yyyy-MM-dd"));
+//                    break;
+//                case 3:
+//                    weekStr = new SimpleDateFormat("d").format(new Date(Long.valueOf(stepBeans.get(i).getStartTime()))).toString();
+//                    break;
+//            }
+            source.setSource(weekStr);
+            if (weekStr.equals("星期二")) {
+                LogUtil.i("&&&&&-" + stepBeans.get(i).getState() + "-&&-"
+                        + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(stepBeans.get(i).getStartTime()))));
+            }
+            source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
+            moreList.add(source);
+        }
+        Collections.reverse(moreList);
         if (moreList != null && moreList.size() != 0) {
             setBarChart();
-//            long deepSleep = 0;//深睡
-//            long shallowSleep = 0;//浅睡
-//            long awakeCount = 0;//清醒
-//            long sleepTime = 0;//睡眠时长
-//
-//            for (int i = 0; i < moreList.size(); i++) {
-//                shallowSleep += moreList.get(i).getShallowCount();//浅睡
-//                deepSleep += moreList.get(i).getDeepCount();//深睡
-//                awakeCount += moreList.get(i).getDayAwake();//清醒
-//            }
-//            sleepTime = shallowSleep + deepSleep;
-//            initChildView2(deepSleep / moreList.size()
-//                    , shallowSleep / moreList.size()
-//                    , awakeCount / moreList.size()
-//                    , sleepTime / moreList.size());
         }
     }
 
@@ -573,11 +691,23 @@ public class WearFitStepActivity extends Activity {
                 int height = findViewById(R.id.bg).getMeasuredHeight();
                 final View baseLineView = findViewById(R.id.left_base_line);
                 int baseLineTop = baseLineView.getTop();
-                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2);
+                int width = 15;
+                switch (lableType) {//切换标签 1天  2周  3月
+                    case 1:
+                        width = 15;
+                        break;
+                    case 2:
+                        width = 30;
+                        break;
+                    case 3:
+                        width = 30;
+                        break;
+                }
+                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2, width);
                 barGroup.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        BarView barItem = (BarView) barGroup.getChildAt(0).findViewById(R.id.barView);
+                        final BarView barItem = (BarView) barGroup.getChildAt(0).findViewById(R.id.barView);
                         baseLineHeiht = findViewById(R.id.base_line).getTop();
                         lp = (RelativeLayout.LayoutParams) root.getLayoutParams();
                         left = baseLineView.getLeft();
@@ -585,7 +715,7 @@ public class WearFitStepActivity extends Activity {
                         lp.topMargin = Math.abs(baseLineHeiht - barItem.getHeight());
                         root.setLayoutParams(lp);
 //                        final int initHeight = barItem.getHeight();
-//                        final ObjectAnimator anim = ObjectAnimator.ofFloat(barItem, "zch", 0.0F, 1.0F).setDuration(1500);
+//                        final ObjectAnimator anim = ObjectAnimator.ofFloat(barItem, "alpha", 0, 0.5f, 1.0f).setDuration(1500);
 //                        final LinearLayout.LayoutParams barLP= (LinearLayout.LayoutParams) barItem.getLayoutParams();
 //                        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 //                            @Override
@@ -607,9 +737,21 @@ public class WearFitStepActivity extends Activity {
                         public void onClick(View view) {
                             final float top = view.getHeight() - barItem.getFillHeight();
                             SourceEntity.Source ss = sourceEntity.getList().get(finalI);
-                            String showText = "深睡：" + (int) ss.getDeepCount() + "分\n"
-                                    + "浅睡：" + (int) ss.getShallowCount() + "分\n"
-                                    + "清醒：" + (int) ss.getAwakeCount() + "分";
+                            String showText = new SimpleDateFormat("HH:mm").format(new Date(Long.valueOf(ss.getTime()))).toString() + "\n"
+                                    + ss.getShallowCount() + "步\n";
+                            switch (lableType) {//切换标签 1天  2周  3月
+                                case 1:
+                                    showText = new SimpleDateFormat("HH:mm").format(new Date(Long.valueOf(ss.getTime()))).toString() + "\n"
+                                            + ss.getShallowCount() + "步\n";
+                                    break;
+                                case 2:
+                                    showText = ss.getSource() + "\n"
+                                            + ss.getShallowCount() + "步\n";
+                                    break;
+                                case 3:
+                                    showText = ss.getShallowCount() + "步\n";
+                                    break;
+                            }
                             ((TextView) popView.findViewById(R.id.txt)).setText(showText);
                             showPop(barItem, top);
                         }
@@ -622,7 +764,17 @@ public class WearFitStepActivity extends Activity {
 
     private void setYAxis(List<SourceEntity.Source> list) {
 //        sourceMax = list.get(0).getAllCount();
-        sourceMax = 750;
+        switch (lableType) {//切换标签 1天  2周  3月
+            case 1:
+                sourceMax = 1500;
+                break;
+            case 2:
+                sourceMax = 15000;
+                break;
+            case 3:
+                sourceMax = 15000;
+                break;
+        }
         for (int i = 0; i < list.size() - 1; i++) {
             if (list.get(i).getAllCount() > sourceMax) {
                 sourceMax = list.get(i).getAllCount();
@@ -659,32 +811,142 @@ public class WearFitStepActivity extends Activity {
         }
     }
 
+    //服务器最后数据
+    private void getLastData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_FANDLAST, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i("服务器最后一条数据是" + s);
+                StepLastBean lastBean = new Gson().fromJson(s, StepLastBean.class);
+                long lastTime = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+                lastDateTime = lastBean.getData();//服务器最后数据
+                if (lastDateTime != null) {
+                    lastTime = lastDateTime.getTimestamp();
+                }
+                queryAllSleepByDay(lastTime);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null) {
+                    LogUtil.i(volleyError.toString());
+                } else {
+                    LogUtil.i("NULL");
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    private void queryAllSleepByDay(long date1Time) {//最后一条数据时间  获取本地数据库这时间后的数据
+        int day = TimeUtils.differentDaysByMillisecond(date1Time, new Date().getTime());// 计算差多少天
+        LogUtil.i("day" + day);
+        for (int i = 0; i < day + 1; i++) {
+            List<WearFitStepBean> sleepList = new ArrayList<>();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date(date1Time));
+            LogUtil.i("data" + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + (calendar.get(Calendar.DAY_OF_MONTH) + i));
+            sleepList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + (calendar.get(Calendar.DAY_OF_MONTH) + i), "yyyy-MM-dd"));//获取本地数据库心率
+            for (int j = 0; j < sleepList.size(); j++) {
+                StepResultBean bean = new StepResultBean();//提交对象
+                bean.setYear(new SimpleDateFormat("yyyy").format(new Date(sleepList.get(j).getTimestamp())).toString());//年
+                bean.setMonth(new SimpleDateFormat("MM").format(new Date(sleepList.get(j).getTimestamp())).toString());//月
+                bean.setDay(new SimpleDateFormat("dd").format(new Date(sleepList.get(j).getTimestamp())).toString());//日
+                bean.setHour(new SimpleDateFormat("HH").format(new Date(sleepList.get(j).getTimestamp())).toString());//时
+                bean.setMinute(new SimpleDateFormat("mm").format(new Date(sleepList.get(j).getTimestamp())).toString());//分
+                bean.setTimestamp(sleepList.get(j).getTimestamp());//long 时间戳
+                bean.setStep(sleepList.get(j).getStep() + "");//步数
+                bean.setCal(sleepList.get(j).getCal() + "");//卡路里
+                LogUtil.i(bean.toString());
+                behindData.add(bean);
+            }
+        }
+        isPostData();
+    }
+
+    /**
+     * 提交心率  先请求后台最后一条   对比本地   提交剩下未提交的数据
+     */
+    private void isPostData() {
+        LogUtil.i("behindData" + behindData.size());
+        List<StepResultBean> postDataList = new ArrayList<>();
+        for (int i = 0; i < behindData.size(); i++) {
+            if (lastDateTime != null) {
+                if (lastDateTime.getTimestamp() != 0) {//不为空
+                    Date date1 = new Date(lastDateTime.getTimestamp());//后台时间
+                    Date date2 = new Date(behindData.get(i).getTimestamp());
+                    LogUtil.i("比较" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date1) + "**"
+                            + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date2));
+                    if (date1.before(date2)) { //表示date1小于date2  最后一条数据日期小于手环date2
+                        postDataList.add(behindData.get(i));
+                    }
+                } else {
+                    postDataList = behindData;
+                }
+            } else {
+                postDataList = behindData;
+            }
+        }
+        if (postDataList != null && postDataList.size() != 0) {
+            LogUtil.i("提交" + postDataList.size());
+            postHeart(postDataList);
+        }
+    }
+
+    private void postHeart(List<StepResultBean> postDataList) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_SAVE
+                , new Gson().toJson(postDataList), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i("提交返回" + jsonObject.toString());
+                if (jsonObject.toString().contains("true")) {
+                    LogUtil.i("提交成功");
+                } else {
+                    LogUtil.i("提交失败");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("onErrorResponse", volleyError.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(jsonObjectRequest);
+    }
+
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
-                case MSG_REFRESH_DATA_DATA:
-//                    initViewToData();
+                case MSG_REFRESH_DATA:
+                    initViewToData();
                     break;
                 case MSG_REFRESH_DATA_MORE_DATA:
-//                    if (moreList != null && moreList.size() != 0) {
-//                        setBarChart();
-//                        long deepStep = 0;//深睡
-//                        long shallowStep = 0;//浅睡
-//                        long awakeCount = 0;//清醒
-//                        long stepTime = 0;//睡眠时长
-//
-//                        for (int i = 0; i < moreList.size(); i++) {
-//                            shallowStep += moreList.get(i).getShallowCount();//浅睡
-//                            deepStep += moreList.get(i).getDeepCount();//深睡
-//                            awakeCount += moreList.get(i).getDayAwake();//清醒
-//                        }
-//                        stepTime = shallowStep + deepStep;
-//                        initChildView2(deepStep / moreList.size()
-//                                , shallowStep / moreList.size()
-//                                , awakeCount / moreList.size()
-//                                , stepTime / moreList.size());
-//                    }
+                    if (moreList != null && moreList.size() != 0) {
+                        setBarChart();
+                        initChildView2();
+                    }
                     break;
                 default:
                     break;

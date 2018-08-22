@@ -8,11 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.shouhuan.bean.DeviceBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepBean;
-import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,7 +25,11 @@ public class StepAdapter extends BaseAdapter {
     private Context context;
     private int stepLength;
 
-    public StepAdapter(Context context, List<StepBean> stepBeans,int stepLength) {
+    public StepAdapter() {
+        super();
+    }
+
+    public StepAdapter(Context context, List<StepBean> stepBeans, int stepLength) {
         super();
         this.stepBeans = stepBeans;
         this.context = context;
@@ -71,12 +73,15 @@ public class StepAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        float kmf = (float) stepLength * (float)stepBeans.get(i).getStep()/ (float) 100000.00;//100步长  1000km
+        DecimalFormat fnum  =   new  DecimalFormat("##0.00");
+        String km=fnum.format(kmf );
         viewHolder.time_tv.setText(new SimpleDateFormat("HH:mm").format(new Date(stepBeans.get(i).getStartTime())).toString()
                 + context.getResources().getString(R.string.waves_text)
                 + new SimpleDateFormat("HH:mm").format(new Date(stepBeans.get(i).getEndTime())).toString());
-        viewHolder.step_tv.setText((stepBeans.get(i).getStep()/stepLength) + "");
+        viewHolder.step_tv.setText((stepBeans.get(i).getStep()) + "");
         viewHolder.kcal_tv.setText(stepBeans.get(i).getCal() + "");
-        viewHolder.km_english_tv.setText(stepBeans.get(i).getStep() + "");
+        viewHolder.km_english_tv.setText(km);
         return view;
     }
 

@@ -1,5 +1,7 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -215,7 +217,7 @@ public class WearFitSleepActivity extends Activity {
 
         initPickerDay();//默认日数据
         defaultQuerySleepByDay();
-        getLastHeart();
+        getLastData();//服务器最后数据
         col_layout.setVisibility(View.VISIBLE);
         more_layout.setVisibility(View.GONE);
     }
@@ -223,8 +225,6 @@ public class WearFitSleepActivity extends Activity {
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            String text = compoundButton.getText().toString();
-            Toast.makeText(context, text, Toast.LENGTH_LONG).show();
             switch (compoundButton.getId()) {
                 case R.id.day_checkBox://日
                     col_layout.setVisibility(View.VISIBLE);
@@ -466,11 +466,11 @@ public class WearFitSleepActivity extends Activity {
                 int height = findViewById(R.id.bg).getMeasuredHeight();
                 final View baseLineView = findViewById(R.id.left_base_line);
                 int baseLineTop = baseLineView.getTop();
-                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2);
+                barGroup.setHeight(sourceMax, height - baseLineTop - baseLineView.getHeight() / 2,45);
                 barGroup.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        BarView barItem = (BarView) barGroup.getChildAt(0).findViewById(R.id.barView);
+                        final BarView barItem = (BarView) barGroup.getChildAt(0).findViewById(R.id.barView);
                         baseLineHeiht = findViewById(R.id.base_line).getTop();
                         lp = (RelativeLayout.LayoutParams) root.getLayoutParams();
                         left = baseLineView.getLeft();
@@ -478,7 +478,7 @@ public class WearFitSleepActivity extends Activity {
                         lp.topMargin = Math.abs(baseLineHeiht - barItem.getHeight());
                         root.setLayoutParams(lp);
 //                        final int initHeight = barItem.getHeight();
-//                        final ObjectAnimator anim = ObjectAnimator.ofFloat(barItem, "zch", 0.0F, 1.0F).setDuration(1500);
+//                        final ObjectAnimator anim = ObjectAnimator.ofFloat(barItem, "scaleY", 0.0F, 1.0F).setDuration(1500);
 //                        final LinearLayout.LayoutParams barLP= (LinearLayout.LayoutParams) barItem.getLayoutParams();
 //                        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 //                            @Override
@@ -890,8 +890,8 @@ public class WearFitSleepActivity extends Activity {
         more_sleep_quality_tv.setText(awakeCount / 60 + "时" + awakeCount % 60 + "分");//睡眠质量
     }
 
-    //服务器最后心率
-    private void getLastHeart() {
+    //服务器最后数据
+    private void getLastData() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FANDLAST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
