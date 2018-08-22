@@ -85,7 +85,7 @@ public class WearFitStepActivity extends Activity {
     private static final int MSG_REFRESH_DATA_MORE_DATA = 1;//周 月
     private int lableType = 1;//切换标签 1天  2周  3月
     private Context context;
-    private DongLanTitleView title;//心率title
+    private DongLanTitleView title;//数据title
     private LinearLayout statistical_layout;//统计
     private CheckBox day_checkBox;//日
     private CheckBox week_checkBox;//周
@@ -364,7 +364,7 @@ public class WearFitStepActivity extends Activity {
      * @param day
      */
     public void queryDataByDay(String year, String month, String day) {
-//        wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
+        wearFitDataBeanList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库数据
         LogUtil.i("本地数据库共有个" + wearFitDataBeanList.size());
         if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
             initViewToData();
@@ -373,7 +373,7 @@ public class WearFitStepActivity extends Activity {
             heartRatePostBean.setYear(year);
             heartRatePostBean.setMonth(month);
             heartRatePostBean.setDay(day);
-            LogUtil.i("请求后台心率" + heartRatePostBean.toString());
+            LogUtil.i("请求后台数据" + heartRatePostBean.toString());
             //获取后台数据
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_LIST
                     , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
@@ -426,7 +426,7 @@ public class WearFitStepActivity extends Activity {
     }
 
     /**
-     * 查询心率 周 月
+     * 查询数据 周 月
      *
      * @param timestamp_gt 开始时间
      * @param timestamp_lt 截止时间
@@ -435,7 +435,7 @@ public class WearFitStepActivity extends Activity {
         MorePostBean weekPostBean = new MorePostBean();
         weekPostBean.setTimestamp_gt(timestamp_gt);
         weekPostBean.setTimestamp_lt(timestamp_lt);
-        LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
+        LogUtil.i("请求后台数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
         //获取后台数据
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_FINDMAX
@@ -568,21 +568,28 @@ public class WearFitStepActivity extends Activity {
 
         initChildView1();
         addChildLayout();
-
-        adapter = new StepAdapter(context, stepBeans, wearFitUser.getStepLength());
+        int stepLength = 50;//默认步长
+        if (wearFitUser != null) {
+            stepLength = wearFitUser.getStepLength();
+        }
+        adapter = new StepAdapter(context, stepBeans, stepLength);
         listview.setAdapter(adapter);
     }
 
     private void initChildView1() {
         if (wearFitDataBeanList != null && wearFitDataBeanList.size() != 0) {
-            float kmf = (float) wearFitUser.getStepLength() * (float) wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep() / (float) 100000.00;//100步长  1000km
+            float kmf = (float) 50 * (float) wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep() / (float) 100000.00;//100步长  1000km
             int step = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep();
             int cal = wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getCal();
             DecimalFormat fnum = new DecimalFormat("##0.00");
-            String km = fnum.format(kmf);
             NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
             numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
-            String targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+            String targetStr = numberFormat.format((float) step / (float) 8000 * 100);//达标
+            if (wearFitUser != null) {
+                kmf = (float) wearFitUser.getStepLength() * (float) wearFitDataBeanList.get(wearFitDataBeanList.size() - 1).getStep() / (float) 100000.00;//100步长  1000km
+                targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+            }
+            String km = fnum.format(kmf);
             int target = 0;
             if (StringUtils.isNumeric(targetStr)) {
                 target = Integer.valueOf(targetStr);
@@ -632,17 +639,7 @@ public class WearFitStepActivity extends Activity {
             source.setScale(100);
             source.setTime(stepBeans.get(i).getStartTime());
             String weekStr = TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "HH");
-//            switch (lableType) {//切换标签 1天  2周  3月
-//                case 1:
             weekStr = TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "HH");
-//                    break;
-//                case 2:
-//                    weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(stepBeans.get(i).getStartTime() + "", "yyyy-MM-dd"));
-//                    break;
-//                case 3:
-//                    weekStr = new SimpleDateFormat("d").format(new Date(Long.valueOf(stepBeans.get(i).getStartTime()))).toString();
-//                    break;
-//            }
             source.setSource(weekStr);
             if (weekStr.equals("星期二")) {
                 LogUtil.i("&&&&&-" + stepBeans.get(i).getState() + "-&&-"
@@ -859,7 +856,7 @@ public class WearFitStepActivity extends Activity {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date(date1Time));
             LogUtil.i("data" + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + (calendar.get(Calendar.DAY_OF_MONTH) + i));
-            sleepList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + (calendar.get(Calendar.DAY_OF_MONTH) + i), "yyyy-MM-dd"));//获取本地数据库心率
+            sleepList = stepHelper.queryByDay(TimeUtils.date2TimeStamp(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + (calendar.get(Calendar.DAY_OF_MONTH) + i), "yyyy-MM-dd"));//获取本地数据库数据
             for (int j = 0; j < sleepList.size(); j++) {
                 StepResultBean bean = new StepResultBean();//提交对象
                 bean.setYear(new SimpleDateFormat("yyyy").format(new Date(sleepList.get(j).getTimestamp())).toString());//年
@@ -870,6 +867,8 @@ public class WearFitStepActivity extends Activity {
                 bean.setTimestamp(sleepList.get(j).getTimestamp());//long 时间戳
                 bean.setStep(sleepList.get(j).getStep() + "");//步数
                 bean.setCal(sleepList.get(j).getCal() + "");//卡路里
+                bean.setFatigue(getFatigueData(Integer.valueOf(new SimpleDateFormat("HH").format(new Date(sleepList.get(j).getTimestamp())).toString())
+                        , sleepList.get(i).getStep()) + "");//疲劳共用
                 LogUtil.i(bean.toString());
                 behindData.add(bean);
             }
@@ -877,8 +876,23 @@ public class WearFitStepActivity extends Activity {
         isPostData();
     }
 
+    private int getFatigueData(int hour, int step) {
+        int fatigue = 0;
+        if (hour >= 6 && hour < 11) {
+            fatigue = 0;
+        } else if (hour >= 11 && hour < 18) {
+            fatigue = 10;
+        } else if (hour >= 18 && hour < 24) {
+            fatigue = 20;
+        } else {
+            fatigue = 30;
+        }
+        fatigue = (int) (fatigue + Math.sqrt(step) / 2);
+        return fatigue;
+    }
+
     /**
-     * 提交心率  先请求后台最后一条   对比本地   提交剩下未提交的数据
+     * 提交数据  先请求后台最后一条   对比本地   提交剩下未提交的数据
      */
     private void isPostData() {
         LogUtil.i("behindData" + behindData.size());

@@ -27,12 +27,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
 import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
+import com.cn.danceland.myapplication.shouhuan.bean.LongSit;
 import com.cn.danceland.myapplication.shouhuan.bean.WearFitUser;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
@@ -45,6 +47,7 @@ import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -240,6 +243,75 @@ public class WearFitActivity extends Activity {
         });
     }
 
+    private Data infoData;
+    private WearFitUser wearFitUser;
+
+    private void setDefaultData() {
+        infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);//动岚个人资料
+        if (DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING) != null) {
+            wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
+        }else{
+            wearFitUser = new WearFitUser();
+            //------同步动岚的个人信息--开始------
+            if ("2".equals(infoData.getPerson().getGender())) {
+                wearFitUser.setSex(2);//性别
+            } else {
+                wearFitUser.setSex(1);
+            }
+            if (infoData.getPerson().getHeight() != null) {//身高  "170.0"
+                String hStr = infoData.getPerson().getHeight().substring(0, infoData.getPerson().getHeight().indexOf("."));
+                wearFitUser.setHeight(Integer.valueOf(hStr));
+            } else {
+                wearFitUser.setHeight(173);//手环默认
+            }
+            if (infoData.getPerson().getWeight() != null) {
+                String wStr = infoData.getPerson().getWeight().substring(0, infoData.getPerson().getWeight().indexOf("."));
+                wearFitUser.setWeight(Integer.valueOf(wStr));
+            } else {
+                wearFitUser.setWeight(65);//手环默认
+            }
+            if (infoData.getPerson().getBirthday() != null) {//1990-12-10
+                int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(infoData.getPerson().getBirthday(), "yyyy-MM-dd")));
+                wearFitUser.setAge(age);
+            } else {
+                wearFitUser.setAge(24);
+            }
+            //------同步动岚的个人信息--结束------
+
+            if (wearFitUser.getWear() != 2) {//佩戴 1左手   2右手
+                wearFitUser.setWear(1);
+            }
+            if (wearFitUser.getStepLength() <= 0) {//步长
+                wearFitUser.setStepLength(50);
+            }
+            if (wearFitUser.getUpHand() != 1) {//抬手亮屏 0关  1开
+                wearFitUser.setUpHand(0);
+            }
+            if (wearFitUser.getAntiLostAlert() != 1) {//防丢开关 0关  1开
+                wearFitUser.setAntiLostAlert(0);
+            }
+            if (wearFitUser.getDistanceUnit() != 1) {//距离单位 0英里 1厘米
+                wearFitUser.setDistanceUnit(0);
+            }
+            if (wearFitUser.getHeightUnit() != 1) {//身高单位 0英里 1厘米
+                wearFitUser.setHeightUnit(0);
+            }
+
+            if (wearFitUser.getCallsAlerts() != 1) {//来电提醒 0关  1开
+                wearFitUser.setCallsAlerts(0);
+            }
+            if (wearFitUser.getSMSAlerts() != 1) {//短信提醒 0关  1开
+                wearFitUser.setSMSAlerts(0);
+            }
+            //目标距离  目前没有设置的地方   给默认
+            wearFitUser.setGold_steps(8000);
+            //血压最大 最小  目前没有设置的地方   给默认
+            wearFitUser.setBpMax(120);
+            wearFitUser.setBpMin(75);
+//            commandManager.setSmartWarnNoContent(1, 1);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -300,7 +372,7 @@ public class WearFitActivity extends Activity {
                 MyApplication.isBluetoothConnecting = false;
                 //todo 更改界面ui
                 invalidateOptionsMenu();//更新菜单栏
-
+                setDefaultData();//设置手环默认数据
 //                Message message = new Message();
 //                message.what = MSG_REFRESH_DATA;
 //                handler.sendMessage(message);
@@ -395,6 +467,19 @@ public class WearFitActivity extends Activity {
                     wearFitStepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
                     wearFitStepBean.setStep(step);
                     wearFitStepBean.setCal(cal);
+                    int fatigue = 0;
+                    int hour=datas.get(9);
+                    if (hour >= 6 && hour < 11) {
+                        fatigue = 0;
+                    } else if (hour >= 11 && hour < 18) {
+                        fatigue = 10;
+                    } else if (hour >= 18 && hour < 24) {
+                        fatigue = 20;
+                    } else {
+                        fatigue = 30;
+                    }
+                    fatigue = (int) (fatigue + Math.sqrt(step) / 2);
+                    wearFitStepBean.setFatigue(fatigue);//疲劳
                     LogUtil.i("时间：" + date + " 步数：" + step + " 卡路里：" + cal);
                     stepHelper.insert(wearFitStepBean);// 计步
                 }
@@ -408,20 +493,24 @@ public class WearFitActivity extends Activity {
                     int wakeupTime = datas.get(16);//醒来次数
 
                     WearFitUser wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
-                    float kmf = (float) wearFitUser.getStepLength() * (float) step / (float) 100000.00;//100步长  1000km
-                    DecimalFormat fnum = new DecimalFormat("##0.00");
-                    String km = fnum.format(kmf);
 
                     NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
                     numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
-                    String targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+                    String targetStr = numberFormat.format((float) step / (float) 8000 * 100);//达标
+                    float kmf= (float) 50 * (float) step / (float) 100000.00;//100步长  1000km
+                    if(wearFitUser!=null){
+                        targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
+                        kmf = (float) wearFitUser.getStepLength() * (float) step / (float) 100000.00;//100步长  1000km
+                    }
+                    DecimalFormat fnum = new DecimalFormat("##0.00");
+                    String km = fnum.format(kmf);
                     int target = 0;
                     if (StringUtils.isNumeric(targetStr)) {
                         target = Integer.valueOf(targetStr);
                     }
                     Calendar c = Calendar.getInstance();
                     int hour = c.get(Calendar.HOUR_OF_DAY);
-                    int fatigue = 0;
+                    int fatigue = 0;//疲劳
                     if (hour >= 6 && hour < 11) {
                         fatigue = 0;
                     } else if (hour >= 11 && hour < 18) {
@@ -482,7 +571,7 @@ public class WearFitActivity extends Activity {
 
     private void initStepGaugeData() {
         stepHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);//TODO
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
         LogUtil.i("获取这个之后的计步数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);//整点计步
     }

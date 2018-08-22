@@ -28,7 +28,7 @@ public class Constants {
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
     //public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
@@ -261,6 +261,7 @@ public class Constants {
     public static final String QUERY_WEAR_FIT_STEP_FANDLAST = HOST + "/personStep/findLast";//根据条件查询最后一条计步数据
     public static final String QUERY_WEAR_FIT_STEP_LIST = HOST + "/personStep/queryList";//按条件查询不分页[人员计步数据]列表
     public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条计步数据
+    public static final String QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG = HOST + "/personStep/findFatigueAvg";//根据条件查询疲劳每日平均数
 
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";

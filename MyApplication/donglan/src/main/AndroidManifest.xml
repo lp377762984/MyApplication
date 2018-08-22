@@ -735,6 +735,10 @@
         <activity
             android:name=".shouhuan.activity.WearFitClockWeekdayActivity"
             android:screenOrientation="portrait" />
+        <!--疲劳-单次测量-->
+        <activity
+            android:name=".shouhuan.activity.WearFitFatigueMeasureActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

@@ -22,7 +22,7 @@ public class StepResultBean implements Serializable {
     private String bpMax;
     private String light;
     private String hrValue;
-    private String fatigue;
+    private String fatigue;//疲劳
     private int id;
     private int person_id;
 
@@ -181,6 +181,7 @@ public class StepResultBean implements Serializable {
                 ", minute=" + minute +
                 "，step=" + step +
                 "，cal=" + cal +
+                "，fatigue=" + fatigue +
                 '}';
     }
 }

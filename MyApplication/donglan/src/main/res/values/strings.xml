@@ -856,4 +856,13 @@
     <string name="goal_completion_hint_text">根据世界卫生组织建议，每天需要进行中等强度活动40分钟，相当于快走8000步。</string>
     <string name="notification_location">需要通知栏权限</string>
     <string name="location_notification_warn">请允许访问通知栏，否则将会导致部分功能无法正常运行！</string>
+
+    <string name="fatigue_text">疲劳</string>
+    <string name="measure_text">测量</string>
+    <string name="fatigue_average_text">平均疲劳</string>
+    <string name="fatigue_analysis_text">疲劳分析</string>
+    <string name="fatigue_analysis_detail_text">快速解除疲劳妙招，拳头按压，指弹轻敲，热石按摩颈部，嗅闻精油。</string>
+    <string name="fatigue_measure_text">单次测量</string>
+    <string name="fatigue_measure_instructions_text">测量须知</string>
+    <string name="fatigue_measure_instructions_hint_text">1.测量请在静止状态下戴紧手环，紧贴皮肤不漏光\n2.应用进入后台，可能会测量失败\n3.实时测量在离开页面会停止测量\n4.实时测量每5分钟接收一次数据，开始一段时间收到0的次数较多</string>
 </resources>

@@ -91,15 +91,15 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
 
     private List<HeartRate> heartRates = new ArrayList<>();//心率数据 HeartRate
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
-    private List<HeartRateResultBean> behindData = new ArrayList<>();//最后一条后面所有的心率数据 ALL
     private List<PointValue> mPointValues = new ArrayList<PointValue>();//折线数据list
     private List<AxisValue> mAxisXValues = new ArrayList<AxisValue>();//折线X轴list
     private List<AxisValue> mAxisYValues = new ArrayList<AxisValue>();//折线Y轴list
     private List<String> dayPickerList = new ArrayList<>();//日选择器对应的时间戳  开始-截止  -连接
     private List<String> weekPickerList = new ArrayList<>();//周选择器对应的时间戳  开始-截止  -连接
     private List<String> monthPickerList = new ArrayList<>();//月选择器对应的时间戳  开始-截止  -连接
-    private HeartRateViewBean.Data heartViewBean = new HeartRateViewBean.Data();
     private List<Date> ds = TimeUtils.getSegmentationTime(5, new Date());//默认轴数据
+    private List<HeartRateResultBean> behindData = new ArrayList<>();//最后一条后面所有的心率数据 ALL
+    private HeartRateViewBean.Data heartViewBean = new HeartRateViewBean.Data();
     private String lastData = "";//选择器上次滚动的数据
 
     private HeartRateHelper heartRateHelper = new HeartRateHelper();
@@ -831,7 +831,8 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                         mAxisXValues.add(new AxisValue(i).setLabel(new SimpleDateFormat("HH:mm").format(heartRates.get(i).getDate()).toString()));
                         break;
                     case 2:
-                        mAxisXValues.add(new AxisValue(i).setLabel(new SimpleDateFormat("MM.dd").format(heartRates.get(i).getDate()).toString()));
+                        String weekStr = TimeUtils.dateToWeek2(TimeUtils.timeStamp2Date(heartRates.get(i).getDate() + "", "yyyy-MM-dd"));
+                        mAxisXValues.add(new AxisValue(i).setLabel(weekStr));
                         break;
                     case 3:
                         mAxisXValues.add(new AxisValue(i).setLabel(new SimpleDateFormat("dd").format(heartRates.get(i).getDate()).toString()));
