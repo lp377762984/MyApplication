@@ -218,7 +218,6 @@ public class WearFitActivity extends Activity {
                         startActivity(new Intent(WearFitActivity.this, WearFitHeartRateActivity.class));
                         //   commandManager.realTimeAndOnceMeasure(0x80, 1);
 //                        commandManager.setSyncData(System.currentTimeMillis() - 15 * 24 * 60 * 60 * 1000, System.currentTimeMillis() - 15 * 24 * 60 * 60 * 1000);
-
                         break;
                     case 1://睡眠
                         startActivity(new Intent(WearFitActivity.this, WearFitSleepActivity.class));

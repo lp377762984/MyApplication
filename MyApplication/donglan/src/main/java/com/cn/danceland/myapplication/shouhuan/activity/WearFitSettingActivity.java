@@ -37,6 +37,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.BatteryView;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.PickerViewDialog;
@@ -57,6 +58,7 @@ public class WearFitSettingActivity extends Activity {
     private TextView tv_shouhuan_num;
     private TextView tv_status;
     private TextView tv_power;
+    private BatteryView battery_view;
     private Button btn_jiebang;
     private RelativeLayout rl_buchang;
     private RelativeLayout rl_peidai;
@@ -112,6 +114,8 @@ public class WearFitSettingActivity extends Activity {
         initHost();
         initView();
         initData();
+
+
     }
 
     @Override
@@ -133,6 +137,7 @@ public class WearFitSettingActivity extends Activity {
         tv_shouhuan_num = findViewById(R.id.tv_shouhuan_num);
         tv_status = findViewById(R.id.tv_status);
         tv_power = findViewById(R.id.tv_power);
+        battery_view = findViewById(R.id.battery_view);
         btn_jiebang = findViewById(R.id.btn_jiebang);
         rl_buchang = findViewById(R.id.rl_buchang);
         rl_peidai = findViewById(R.id.rl_peidai);
@@ -253,6 +258,7 @@ public class WearFitSettingActivity extends Activity {
         wearFitUser.setBpMax(120);
         wearFitUser.setBpMin(75);
         commandManager.setSmartWarnNoContent(1, 1);
+        battery_view.setPower((float) 0.0);
 
         gson = new Gson();
         sleepTime = new LongSit();
@@ -262,12 +268,15 @@ public class WearFitSettingActivity extends Activity {
         if (!MyApplication.mBluetoothConnected) {
             tv_shouhuan_name.setText("未绑定");
             btn_jiebang.setText("去绑定");
+            tv_power.setText("");
+            battery_view.setVisibility(View.GONE);
         } else {
             tv_shouhuan_name.setText(name);
             tv_shouhuan_num.setText(address);
             tv_status.setText("已绑定");
             btn_jiebang.setText("解绑");
         }
+        commandManager.getBatteryInfo();//充电  电量
     }
 
     private void setClickListener() {
@@ -291,19 +300,20 @@ public class WearFitSettingActivity extends Activity {
         btn_jiebang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MyApplication.mBluetoothConnected) {
-                    try {
-                        MyApplication.mBluetoothLeService.disconnect();
-                        MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
-                        SPUtils.setString(Constants.ADDRESS, "");
-                        SPUtils.setString(Constants.NAME, "");
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    startActivityForResult(new Intent(WearFitSettingActivity.this, WearFitEquipmentActivity.class), 2);
-                }
-                setData();//更改解绑连接状态 yxx
+//                if (MyApplication.mBluetoothConnected) {
+//                    try {
+//                        MyApplication.mBluetoothLeService.disconnect();
+//                        MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
+//                        SPUtils.setString(Constants.ADDRESS, "");
+//                        SPUtils.setString(Constants.NAME, "");
+//                    } catch (RemoteException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    startActivityForResult(new Intent(WearFitSettingActivity.this, WearFitEquipmentActivity.class), 2);
+//                }
+//                setData();//更改解绑连接状态 yxx
+                commandManager.getBatteryInfo();//充电  电量
             }
         });
         //抬手亮屏开关
@@ -599,6 +609,8 @@ public class WearFitSettingActivity extends Activity {
                 tv_shouhuan_name.setText("已断开");
                 tv_shouhuan_num.setText("");
                 tv_status.setText("");
+                tv_power.setText("");
+                battery_view.setVisibility(View.GONE);
                 btn_jiebang.setText("去绑定");
             }
         }
@@ -641,7 +653,6 @@ public class WearFitSettingActivity extends Activity {
                 MyApplication.mBluetoothConnected = true;
                 MyApplication.isBluetoothConnecting = false;
                 ToastUtils.showToastShort("连接成功");
-
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 //                MyApplication.mBluetoothConnected = false;
                 try {
@@ -652,6 +663,8 @@ public class WearFitSettingActivity extends Activity {
                 tv_shouhuan_name.setText("已断开");
                 tv_shouhuan_num.setText("");
                 tv_status.setText("");
+                tv_power.setText("");
+                battery_view.setVisibility(View.GONE);
                 btn_jiebang.setText("去绑定");
                 ToastUtils.showToastShort("已断开");
                 SPUtils.setString(Constants.ADDRESS, "");
@@ -679,7 +692,21 @@ public class WearFitSettingActivity extends Activity {
                 if (datas.get(4) == 0x77) {
                     LogUtil.i("抬手亮屏");
                 }
+                if (datas.get(4) == 0x91) {//[171, 0, 5, 255, 145, 128, 3, 60]
+                    LogUtil.i(datas.toString());
 
+                    Integer integer = datas.get(6);//是否充电
+                    Integer integer1 = datas.get(7);//电量多少
+                    if (integer == 0) {
+                        tv_power.setText(integer1 + "%");
+                        battery_view.setmIsCharging(false);
+                    } else {
+                        tv_power.setText("正在充电  " + integer1 + "%");
+                        battery_view.setmIsCharging(true);
+                    }
+                    battery_view.setPower(((float) integer1) / 100);
+                    battery_view.setVisibility(View.VISIBLE);
+                }
             }
         }
     };
@@ -689,5 +716,13 @@ public class WearFitSettingActivity extends Activity {
         super.onResume();
         getHistory();
         address = SPUtils.getString(Constants.ADDRESS, "");
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mGattUpdateReceiver);
+    }
+
 }

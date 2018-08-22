@@ -865,4 +865,6 @@
     <string name="fatigue_measure_text">单次测量</string>
     <string name="fatigue_measure_instructions_text">测量须知</string>
     <string name="fatigue_measure_instructions_hint_text">1.测量请在静止状态下戴紧手环，紧贴皮肤不漏光\n2.应用进入后台，可能会测量失败\n3.实时测量在离开页面会停止测量\n4.实时测量每5分钟接收一次数据，开始一段时间收到0的次数较多</string>
+
+    <string name="link_bracelet_text">连接手环</string>
 </resources>

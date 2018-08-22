@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.shouhuan.adapter.LeDeviceListAdapter;
 import com.cn.danceland.myapplication.shouhuan.bean.DeviceBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import java.util.ArrayList;
 
@@ -37,12 +38,13 @@ import java.util.ArrayList;
  * Created by liuqiong on 2017/4/21.
  */
 
-public class DeviceScanActivity extends AppCompatActivity {
+public class DeviceScanActivity extends Activity {
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter bluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1;
     private Context context;
     private ListView listView;
+    private DongLanTitleView shouhuan_title;
     private ArrayList<DeviceBean> deviceBeens;
     private Handler mHandler;
     private boolean mScanning;
@@ -56,8 +58,9 @@ public class DeviceScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device);
         context = this;
         mHandler = new Handler();
-
-      //  getSupportActionBar().setTitle(R.string.device_list);
+        //  getSupportActionBar().setTitle(R.string.device_list);
+        shouhuan_title = (DongLanTitleView) findViewById(R.id.shouhuan_title);
+        shouhuan_title.setTitle(context.getResources().getString(R.string.link_bracelet_text));
         listView = (ListView) findViewById(R.id.listview);
 
         BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -132,7 +135,7 @@ public class DeviceScanActivity extends AppCompatActivity {
     private void scanLeDevice(final boolean enable) {
         if (enable) {
             // Stops scanning after a pre-defined scan period.
-             runnable = new Runnable() {
+            runnable = new Runnable() {
                 @Override
                 public void run() {
                     mScanning = false;

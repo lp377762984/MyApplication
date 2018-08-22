@@ -25,7 +25,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-/**
+/** APP提醒
  * Created by feng on 2018/6/22.
  */
 
