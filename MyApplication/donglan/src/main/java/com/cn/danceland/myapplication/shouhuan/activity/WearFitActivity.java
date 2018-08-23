@@ -152,11 +152,11 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.VISIBLE);
             tv_connect.setText("还未绑定手环，点击绑定");
         }
-//        initHeartData();//心率
-//        initSleepData();//睡眠
+        initHeartData();//心率
+        initSleepData();//睡眠
         initStepGaugeData();//计步
         commandManager.sendStep();//首页数据
-//        commandManager.setTimeSync();//同步时间给手环
+        commandManager.setTimeSync();//同步时间给手环
     }
 
     private class WearFitAdapter extends BaseAdapter {
