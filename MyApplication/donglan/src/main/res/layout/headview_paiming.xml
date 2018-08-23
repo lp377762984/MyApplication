@@ -17,12 +17,16 @@
 
             android:layout_centerInParent="true">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <!--<de.hdodenhof.circleimageview.CircleImageView
 
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:src="@drawable/img_leijijinchang" />
-
+                android:src="@drawable/img_leijijinchang" />-->
+            <com.cn.danceland.myapplication.view.StepArcView
+                android:id="@+id/sav_step"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

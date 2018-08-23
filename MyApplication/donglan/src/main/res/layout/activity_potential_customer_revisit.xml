@@ -28,6 +28,46 @@
             android:textColor="@color/color_white"
             android:textSize="18sp" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edit_search_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/img_search" />
+
+        <EditText
+            android:id="@+id/et_phone"
+            style="@style/EtStyle"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:hint="请输入、姓名手机号、会员号"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1" />
+
+        <ImageButton
+            android:id="@+id/iv_del"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/img_del"
+            android:padding="20dp"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <net.lucode.hackware.magicindicator.MagicIndicator
         android:id="@+id/magic_indicator"
