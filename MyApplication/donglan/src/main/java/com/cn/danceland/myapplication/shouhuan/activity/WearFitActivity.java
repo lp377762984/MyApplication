@@ -229,7 +229,8 @@ public class WearFitActivity extends Activity {
                         startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
                         break;
                     case 4://健身计划
-                        startActivity(new Intent(WearFitActivity.this, WearFitFitnessPlanActivity.class));
+                        ToastUtils.showToastShort("功能正在开发中");
+//                        startActivity(new Intent(WearFitActivity.this, WearFitFitnessPlanActivity.class));
                         break;
                     case 5://查找手环
                         startActivityForResult(new Intent(WearFitActivity.this, DeviceScanActivity.class), REQUEST_SEARCH);

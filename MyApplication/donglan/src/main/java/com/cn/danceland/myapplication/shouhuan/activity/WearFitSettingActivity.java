@@ -114,8 +114,6 @@ public class WearFitSettingActivity extends Activity {
         initHost();
         initView();
         initData();
-
-
     }
 
     @Override
@@ -300,20 +298,19 @@ public class WearFitSettingActivity extends Activity {
         btn_jiebang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (MyApplication.mBluetoothConnected) {
-//                    try {
-//                        MyApplication.mBluetoothLeService.disconnect();
-//                        MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
-//                        SPUtils.setString(Constants.ADDRESS, "");
-//                        SPUtils.setString(Constants.NAME, "");
-//                    } catch (RemoteException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    startActivityForResult(new Intent(WearFitSettingActivity.this, WearFitEquipmentActivity.class), 2);
-//                }
-//                setData();//更改解绑连接状态 yxx
-                commandManager.getBatteryInfo();//充电  电量
+                if (MyApplication.mBluetoothConnected) {
+                    try {
+                        MyApplication.mBluetoothLeService.disconnect();
+                        MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
+                        SPUtils.setString(Constants.ADDRESS, "");
+                        SPUtils.setString(Constants.NAME, "");
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    startActivityForResult(new Intent(WearFitSettingActivity.this, WearFitEquipmentActivity.class), 2);
+                }
+                setData();//更改解绑连接状态 yxx
             }
         });
         //抬手亮屏开关

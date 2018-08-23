@@ -186,7 +186,7 @@ public class HorizontalPickerView extends View {
                 }
 
                 if (i != selectNum)
-                    canvas.drawText(strings.get(i), (i - selectNum) * anInt + getWidth() / 2 - textWidth / 2 + anOffset, getHeight() / 2 + textHeight / 2, textPaint);//画出每组文字
+                    canvas.drawText(strings.get(i), (i - selectNum) * anInt + getWidth() / 2 - textWidth / 2 + anOffset-0, getHeight() / 2 + textHeight / 2, textPaint);//画出每组文字
             }
         }
     }

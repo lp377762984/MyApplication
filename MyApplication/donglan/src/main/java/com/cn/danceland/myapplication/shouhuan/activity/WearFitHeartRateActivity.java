@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.ViewUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.HorizontalPickerView;
 import com.google.gson.Gson;
@@ -88,6 +90,8 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     private HorizontalPickerView picker;//水平选择器
     private View leftImageView;//选择器左箭头
     private View rightImageView;//选择器右箭头
+    private ImageView iv_triangle;//水平标尺 小三角
+    private ImageView iv_triangle_mark;//水平标尺
 
     private List<HeartRate> heartRates = new ArrayList<>();//心率数据 HeartRate
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
@@ -127,14 +131,13 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
         heart_abnormal_pro = (ProgressBar) findViewById(R.id.heart_abnormal_pro);//异常率进度条
         heart_average_tv = (TextView) findViewById(R.id.heart_average_tv);//平均心率
         picker = (HorizontalPickerView) findViewById(R.id.scrollPicker);//水平选择器
+        iv_triangle = (ImageView) findViewById(R.id.iv_triangle);//水平标尺 小三角
+        iv_triangle_mark = (ImageView) findViewById(R.id.iv_triangle_mark);//水平标尺
 
-        heart_success_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
-        heart_success_pro.setProgress(0);
-        heart_abnormal_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
-        heart_abnormal_pro.setProgress(0);
         day_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
         week_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
         month_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
+        setDefaultView();//默认数据
         initPickerDay();//默认日数据
 
         Calendar calendar = Calendar.getInstance();
@@ -194,6 +197,18 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                 return false;
             }
         });
+    }
+
+    //默认数据
+    private void setDefaultView() {
+        heart_success_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
+        heart_abnormal_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
+        heart_success_percentage_tv.setText(0 + context.getResources().getString(R.string.percentage_text));//达标
+        heart_success_pro.setProgress(0);
+        heart_abnormal_percentage_tv.setText(0 + context.getResources().getString(R.string.percentage_text));//异常
+        heart_abnormal_pro.setProgress(0);
+        heart_average_tv.setText(0 + "");//平均心率
+        ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);//默认值
     }
 
     @Override
@@ -716,34 +731,53 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
      * @param count    达标数
      */
     private void initHeartView(int sumcount, int count) {
-        int averageHeart = 0; //平均心率：全天总心率除总心率个数
-        for (int i = 0; i < heartRates.size(); i++) {
-            int hTemp = Integer.valueOf(heartRates.get(i).getHeartRate());
-            averageHeart += hTemp;
-        }
-        NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
-        numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
-        String successHeart = numberFormat.format((float) count / (float) sumcount * 100);//达标
-        String abnormalHeart = numberFormat.format((float) (sumcount - count) / (float) sumcount * 100);//异常
-
-        heart_success_count_tv.setText(count + context.getResources().getString(R.string.count_text));
-        heart_abnormal_count_tv.setText(sumcount - count + context.getResources().getString(R.string.count_text));
-        int successHeartInt = 0;
-        int abnormalHeartInt = 0;
-        if (StringUtils.isNumeric(successHeart)) {
-            successHeartInt = Integer.valueOf(successHeart);
-        }
-        heart_success_percentage_tv.setText(successHeartInt + context.getResources().getString(R.string.percentage_text));//达标
-        heart_success_pro.setProgress(Integer.valueOf(successHeartInt));
-        if (StringUtils.isNumeric(abnormalHeart)) {
-            abnormalHeartInt = Integer.valueOf(abnormalHeart);
-        }
-        heart_abnormal_percentage_tv.setText(abnormalHeartInt + context.getResources().getString(R.string.percentage_text));//异常
-        heart_abnormal_pro.setProgress(Integer.valueOf(abnormalHeartInt));
-        if (StringUtils.isNumeric(averageHeart + "")) {
-            if (averageHeart != 0) {
-                heart_average_tv.setText(averageHeart / heartRates.size() + "");//平均心率
+        if(heartRates!=null&&heartRates.size()!=0){
+            int averageHeart = 0; //平均心率：全天总心率除总心率个数
+            for (int i = 0; i < heartRates.size(); i++) {
+                int hTemp = Integer.valueOf(heartRates.get(i).getHeartRate());
+                averageHeart += hTemp;
             }
+            NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
+            numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
+            String successHeart = numberFormat.format((float) count / (float) sumcount * 100);//达标
+            String abnormalHeart = numberFormat.format((float) (sumcount - count) / (float) sumcount * 100);//异常
+
+            heart_success_count_tv.setText(count + context.getResources().getString(R.string.count_text));
+            heart_abnormal_count_tv.setText(sumcount - count + context.getResources().getString(R.string.count_text));
+            int successHeartInt = 0;
+            int abnormalHeartInt = 0;
+            if (StringUtils.isNumeric(successHeart)) {
+                successHeartInt = Integer.valueOf(successHeart);
+            }
+            heart_success_percentage_tv.setText(successHeartInt + context.getResources().getString(R.string.percentage_text));//达标
+            heart_success_pro.setProgress(Integer.valueOf(successHeartInt));
+            if (StringUtils.isNumeric(abnormalHeart)) {
+                abnormalHeartInt = Integer.valueOf(abnormalHeart);
+            }
+            heart_abnormal_percentage_tv.setText(abnormalHeartInt + context.getResources().getString(R.string.percentage_text));//异常
+            heart_abnormal_pro.setProgress(Integer.valueOf(abnormalHeartInt));
+
+            if (StringUtils.isNumeric(averageHeart + "")) {
+                if (averageHeart != 0) {
+                    int avg = averageHeart / heartRates.size();
+                    heart_average_tv.setText(avg + "");//平均心率
+                    final int finalAvg = avg;
+                    iv_triangle_mark.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int viewWidth = iv_triangle_mark.getWidth(); // 获取宽度
+                            ViewUtils.setMargins(iv_triangle, (viewWidth / 180) * finalAvg, 0, 0, 0);
+                            LogUtil.i("标尺--" + (viewWidth / 180) * finalAvg + "-宽-" + viewWidth);
+                        }
+                    });
+                }else{
+                    ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);//默认值
+                }
+            }else{
+                ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);//默认值
+            }
+        }else{//默认数据
+            setDefaultView();//默认数据
         }
     }
 

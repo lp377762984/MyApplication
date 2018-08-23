@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -26,17 +28,21 @@ import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepListBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepResultBean;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.ViewUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.HorizontalPickerView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +79,8 @@ public class WearFitFatigueActivity extends Activity {
     private HorizontalPickerView picker;//水平选择器
     private TextView fatigue_average_tv;//平均值
     private TextView fatigue_analysis_tv;//偏劳分析
+    private ImageView iv_triangle;//水平标尺 小三角
+    private ImageView iv_triangle_mark;//水平标尺
 
     private ArrayList<String> pickerList = new ArrayList<>();//选择器数据
     private List<PointValue> mPointValues = new ArrayList<PointValue>();//折线数据list
@@ -110,6 +118,8 @@ public class WearFitFatigueActivity extends Activity {
         picker = (HorizontalPickerView) findViewById(R.id.scrollPicker);//水平选择器
         fatigue_average_tv = (TextView) findViewById(R.id.fatigue_average_tv);//平均疲劳
         fatigue_analysis_tv = (TextView) findViewById(R.id.fatigue_analysis_tv);//疲劳分析
+        iv_triangle = (ImageView) findViewById(R.id.iv_triangle);//水平标尺 小三角
+        iv_triangle_mark = (ImageView) findViewById(R.id.iv_triangle_mark);//水平标尺
 
         day_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
         week_checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -169,6 +179,7 @@ public class WearFitFatigueActivity extends Activity {
         });
         initPickerDay();//默认日数据
         defaultQueryStepByDay();
+
     }
 
     CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -389,8 +400,19 @@ public class WearFitFatigueActivity extends Activity {
             }
             avg = sum / wearFitDataBeanList.size();
             fatigue_average_tv.setText(avg + "");
+
+            final int finalAvg = avg;
+            iv_triangle_mark.post(new Runnable() {
+                @Override
+                public void run() {
+                    int viewWidth = iv_triangle_mark.getWidth(); // 获取宽度
+                    ViewUtils.setMargins(iv_triangle, (viewWidth / 180) * finalAvg, 0, 0, 0);
+                    LogUtil.i("标尺--" + (viewWidth / 180) * finalAvg + "-宽-" + viewWidth);
+                }
+            });
         } else {
             fatigue_average_tv.setText(context.getResources().getString(R.string.sleep_line_text));
+            ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);
         }
         String str = "状态良好";
         if (avg < 35) {
@@ -468,7 +490,7 @@ public class WearFitFatigueActivity extends Activity {
          */
         Viewport v = new Viewport(lineChart.getMaximumViewport());
         v.bottom = 0;
-        v.top = 210;
+        v.top = 220;
         lineChart.setMaximumViewport(v);//固定Y轴的范围,如果没有这个,Y轴的范围会根据数据的最大值和最小值决定
         v.left = 0;
         v.right = 7;
@@ -558,7 +580,6 @@ public class WearFitFatigueActivity extends Activity {
             }
         }
         picker.setData(pickerList);
-//        LogUtil.i("/"+pickerList.size()/2+"%"+pickerList.size()%2+"aa"+(pickerList.size()-pickerList.size()%2)/2);
         picker.setSelectNum(pickerList.size() - 1);//时间选择器偏移
     }
 
