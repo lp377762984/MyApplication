@@ -11,7 +11,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +35,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.PotentialUpcomingMatterFragment;
 import com.cn.danceland.myapplication.fragment.RevisitListFragment;
 import com.cn.danceland.myapplication.fragment.RevisiterRecordAllFragment;
@@ -76,17 +81,22 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
     private ViewPager mViewPager;
     public String[] TITLES = new String[]{"最近维护", "回访记录", "未处理待办事项"};
-    public  String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
+    public String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
 
     private int untreated_num = 0;
     private ListPopup listPopup;
     private Gson gson = new Gson();
     private int current_page = 0;
+    private int current_item1 = 0;
+    private int current_item2 = 0;
+    private int current_item3 = 0;
     private SimplePagerTitleView simplePagerTitleView;
     private BadgePagerTitleView badgePagerTitleView;
     private MyListPopupViewAdapter myListPopupViewAdapter;
     private String auth;
+    private EditText et_searchInfo;
+    private ImageView iv_del;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,13 +154,55 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
     private void initView() {
 
-        TextView tv_tiltle=findViewById(R.id.tv_tiltle);
+        TextView tv_tiltle = findViewById(R.id.tv_tiltle);
         auth = getIntent().getStringExtra("auth");
-        if (TextUtils.equals(auth,"2")){
+        if (TextUtils.equals(auth, "2")) {
             tv_tiltle.setText("会员管理");
         }
         findViewById(R.id.iv_back).setOnClickListener(this);
+        et_searchInfo = findViewById(R.id.et_phone);
 
+        iv_del = findViewById(R.id.iv_del);
+
+        et_searchInfo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+//
+            }
+
+            //监听edit
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!TextUtils.isEmpty(et_searchInfo.getText().toString().trim())) {
+                    iv_del.setVisibility(View.VISIBLE);
+
+
+                    searshInfo();
+
+
+                } else {
+                    iv_del.setVisibility(View.GONE);
+                    searshInfo();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        iv_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_searchInfo.setText(null);
+
+                //  searshInfo();
+
+
+            }
+        });
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
@@ -165,6 +217,10 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
             @Override
             public void onPageSelected(int position) {
                 current_page = position;
+
+                searshInfo();
+
+
             }
 
             @Override
@@ -176,7 +232,39 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     }
 
 
-    CommonNavigatorAdapter commonNavigatorAdapter=new CommonNavigatorAdapter() {
+    private void searshInfo() {
+        if (current_page == 2) {
+            if (current_item3 == 0) {//查询未处理
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
+            } else if (current_item3 == 1) {//查询已处理
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
+            } else {//查询全部
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
+            }
+
+        }
+        if (current_page == 1) {
+            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 210));
+        }
+        if (current_page == 0) {
+
+            if (current_item1 == 0) {//最近
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
+            } else if (current_item1 == 1) {//最晚
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
+            } else if (current_item1 == 2) {//健身指数
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
+            } else if (current_item1 == 3) {//关注程度
+                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
+            }
+
+
+        }
+
+
+    }
+
+    CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
         @Override
         public int getCount() {
             return TITLES == null ? 0 : TITLES.length;
@@ -195,17 +283,17 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                 @Override
                 public void onClick(View v) {
 
-                    if (index == 0 ) {
+                    if (index == 0) {
 
-                        listPopup=new ListPopup(PotentialCustomerRevisitActivity.this);
+                        listPopup = new ListPopup(PotentialCustomerRevisitActivity.this);
                         myListPopupViewAdapter.setData(LIST_TYPE);
                         listPopup.showPopupWindow(v);
                     }
 
 
-                    if (index == 2 ) {
+                    if (index == 2) {
 
-                        listPopup=new ListPopup(PotentialCustomerRevisitActivity.this);
+                        listPopup = new ListPopup(PotentialCustomerRevisitActivity.this);
                         myListPopupViewAdapter.setData(UPCOMING_CONDITION);
                         listPopup.showPopupWindow(v);
                     }
@@ -244,7 +332,7 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
         @Override
         public IPagerIndicator getIndicator(Context context) {
             LinePagerIndicator indicator = new LinePagerIndicator(context);
-           // indicator.setColors(Color.parseColor("#40c4ff"));
+            // indicator.setColors(Color.parseColor("#40c4ff"));
             indicator.setColors(getResources().getColor(R.color.color_dl_yellow));
             return indicator;
         }
@@ -318,8 +406,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
 
     class StrBean {
         public String page;
-        public String auth ;
-        public String status="0" ;
+        public String auth;
+        public String status = "0";
 
         // public String member_id;
     }
@@ -371,11 +459,11 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     public void find_upcoming_list() throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.auth=auth;
+        strBean.auth = auth;
         //   strBean.page = pageCount - 1 + "";
         //  strBean.member_id = id;
         String s = gson.toJson(strBean);
-LogUtil.i(s.toString());
+        LogUtil.i(s.toString());
         JSONObject jsonObject = new JSONObject(s.toString());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_NOT_UPCOMINGMATTER, jsonObject, new Response.Listener<JSONObject>() {
@@ -468,7 +556,7 @@ LogUtil.i(s.toString());
         public View initAnimaView() {
 
 
-           // return findViewById(R.id.popup_contianer);
+            // return findViewById(R.id.popup_contianer);
             return null;
         }
 
@@ -480,37 +568,46 @@ LogUtil.i(s.toString());
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (current_page == 2) {
-                            if (i == 0) {//查询未处理
-                                EventBus.getDefault().post(new IntEvent(0, 152));
-                                TITLES[2]="未处理待办事项";
-                            } else if (i == 1) {//查询已处理
-                                TITLES[2]="已处理待办事项";
-                                EventBus.getDefault().post(new IntEvent(0, 153));
-                            } else {//查询全部
-                                TITLES[2]="全部待办事项";
-                                EventBus.getDefault().post(new IntEvent(0, 154));
-                            }
 
-                        }
-                        if (current_page==0){
+                        if (current_page == 0) {
 
                             if (i == 0) {//最近
-                                EventBus.getDefault().post(new IntEvent(0, 162));
-                                TITLES[0]="最近维护";
-                            } else if (i == 1) {//最晚
-                                EventBus.getDefault().post(new IntEvent(0, 163));
-                                TITLES[0]="最晚维护";
-                            } else if (i==2){//健身指数
-                                TITLES[0]="健身指数";
-                                EventBus.getDefault().post(new IntEvent(0, 164));
-                            } else if (i==3){//关注程度
-                                TITLES[0]="关注程度";
-                                EventBus.getDefault().post(new IntEvent(0, 165));
-                            }
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
 
+                                TITLES[0] = "最近维护";
+                            } else if (i == 1) {//最晚
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
+                                TITLES[0] = "最晚维护";
+                            } else if (i == 2) {//健身指数
+                                TITLES[0] = "健身指数";
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
+                            } else if (i == 3) {//关注程度
+                                TITLES[0] = "关注程度";
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
+                            }
+                            current_item1 = i;
 
                         }
+                        if (current_page == 2) {
+                            current_item3 = i;
+                            if (i == 0) {//查询未处理
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
+                                TITLES[2] = "未处理待办事项";
+
+                            } else if (i == 1) {//查询已处理
+                                TITLES[2] = "已处理待办事项";
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
+                            } else {//查询全部
+                                TITLES[2] = "全部待办事项";
+                                EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
+                            }
+
+                        }
+                        if (current_page == 1) {
+                            current_item2 = 0;
+                            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 210));
+                        }
+
                         commonNavigatorAdapter.notifyDataSetChanged();
 
 

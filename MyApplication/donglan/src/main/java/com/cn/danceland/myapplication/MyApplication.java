@@ -10,7 +10,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.StrictMode;
@@ -65,6 +67,16 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private static RequestQueue requestQueue;
     public static Context applicationContext;
     private static MyApplication instance;
+
+    //获取到主线程的handler
+    private static Handler mMainThreadHandler = null;
+    //获取到主线程的looper
+    private static Looper mMainThreadLooper = null;
+    //获取到主线程
+    private static Thread mMainThead = null;
+    //获取到主线程的id
+    private static int mMainTheadId ;
+
     //public LocationService locationClient;
     private DaoMaster.DevOpenHelper donglan, message, heartRate,wearFitSleep,wearFitStep;
     private SQLiteDatabase db, messagedb, heartRatedb,wearFitSleepdb,wearFitStepdb;
@@ -107,6 +119,15 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 //        locationClient = new LocationService(getApplicationContext());
 //        SDKInitializer.initialize(getApplicationContext());
         applicationContext = this;
+
+        this.mMainThreadHandler = new Handler();
+        this.mMainThreadLooper = getMainLooper();
+        this.mMainThead = Thread.currentThread();
+        //android.os.Process.myUid()获取到用户id
+        //android.os.Process.myPid();//获取到进程id
+        //android.os.Process.myTid()获取到调用线程的id
+        this.mMainTheadId = android.os.Process.myTid();//主線程id
+
         instance = this;
         setUpDb();
         // 注册push服务，注册成功后会向DemoMessageReceiver发送广播
@@ -467,5 +488,17 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         TIMManager.getInstance().setUserConfig(userConfig);
     }
 
+    public static Handler getMainThreadHandler(){
+        return mMainThreadHandler;
+    }
+    public static Looper getMainThreadLooper(){
+        return mMainThreadLooper;
+    }
+    public static Thread getMainThread(){
+        return mMainThead;
+    }
+    public static int getMainThreadId(){
+        return mMainTheadId;
+    }
 
 }

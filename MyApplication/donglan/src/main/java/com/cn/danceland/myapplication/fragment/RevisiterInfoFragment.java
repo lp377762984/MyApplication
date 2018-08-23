@@ -121,11 +121,12 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         }
         tv_phone.setText(info.getPhone_no());
 
-        if (TextUtils.isEmpty(info.getNick_name())) {
-            tv_name.setText(info.getCname());
-        } else {
-            tv_name.setText(info.getCname() + "(" + info.getNick_name() + ")");
-        }
+//        if (TextUtils.isEmpty(info.getNick_name())) {
+//            tv_name.setText(info.getCname());
+//        } else {
+//            tv_name.setText(info.getCname() + "(" + info.getNick_name() + ")");
+//        }
+        tv_name.setText(info.getCname());
         if (info.getLast_time()!=null){
             tv_lasttime.setText("最后维护时间：" + info.getLast_time());
         }else {

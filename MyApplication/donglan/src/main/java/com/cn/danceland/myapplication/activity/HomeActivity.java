@@ -18,8 +18,12 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -93,8 +97,8 @@ import cn.jzvd.JZVideoPlayer;
 public class HomeActivity extends FragmentActivity implements View.OnClickListener {
 
 
-    private Button[] mTabs;
-
+    private TextView[] mTabs;
+    private ImageView[] mmTabsImgs;
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
@@ -118,6 +122,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         //不处理崩溃时页面保存信息
         // super.onSaveInstanceState(outState);
     }
+
+
+
 
     //even事件处理
     @Subscribe
@@ -148,6 +155,56 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         JZVideoPlayer.releaseAllVideos();
     }
 
+
+    private AnimationSet mAnimationSet;
+
+    private void buildAnima() {
+        ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(100);
+     //   mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setFillAfter(true);
+        ScaleAnimation mScaleAnimation1 = new ScaleAnimation(1.5f, 0.8f, 1.5f, 0.8f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(100);
+        mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+    //    mScaleAnimation.setFillAfter(true);
+        ScaleAnimation mScaleAnimation2 = new ScaleAnimation(0.8f, 1f, 0.8f, 1f, Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(100);
+    //    mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setFillAfter(true);
+
+//        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
+//        mAlphaAnimation.setDuration(300);
+//        mAlphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+//        mAlphaAnimation.setFillAfter(false);
+
+        mAnimationSet = new AnimationSet(true);
+        mAnimationSet.setDuration(300);
+        mAnimationSet.addAnimation(mScaleAnimation);
+        mAnimationSet.addAnimation(mScaleAnimation1);
+        mAnimationSet.addAnimation(mScaleAnimation2);
+     //   mAnimationSet.addAnimation(mAlphaAnimation);
+        mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,10 +213,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         //    requestPermissions();//请求权限
         instance = this;
         initView();
-        // registerBroadcastReceiver();//注册环信监听
         checkUpdate();
 
-
+        buildAnima();
         homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
 
@@ -530,16 +586,31 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     private void initView() {
 
-        mTabs = new Button[4];
-        mTabs[0] = (Button) findViewById(R.id.btn_home);
-        mTabs[1] = (Button) findViewById(R.id.btn_shop);
-        mTabs[2] = (Button) findViewById(R.id.btn_discover);
-        mTabs[3] = (Button) findViewById(R.id.btn_me);
-        for (int i = 0; i < mTabs.length; i++) {
-            mTabs[i].setOnClickListener(this);
-        }
+        mTabs = new TextView[4];
+        mTabs[0] = findViewById(R.id.tv_home);
+        mTabs[1] =  findViewById(R.id.tv_shop);
+        mTabs[2] =  findViewById(R.id.tv_discover);
+        mTabs[3] =  findViewById(R.id.tv_me);
+        mmTabsImgs=new ImageView[4];
+        mmTabsImgs[0] = findViewById(R.id.iv_home);
+        mmTabsImgs[1] =  findViewById(R.id.iv_shop);
+        mmTabsImgs[2] =  findViewById(R.id.iv_discover);
+        mmTabsImgs[3] =  findViewById(R.id.iv_me);
+
+//        for (int i = 0; i < mTabs.length; i++) {
+//            mTabs[i].setOnClickListener(this);
+//            mmTabsImgs[i].setOnClickListener(this);
+//
+//        }
+        findViewById(R.id.ll_home).setOnClickListener(this);
+        findViewById(R.id.ll_shop).setOnClickListener(this);
+        findViewById(R.id.ll_discover).setOnClickListener(this);
+        findViewById(R.id.ll_me).setOnClickListener(this);
+
+
         // 默认首页
         mTabs[0].setSelected(true);
+        mmTabsImgs[0].setSelected(true);
 
 
         SharedPreferences bus_type = getSharedPreferences("bus_type", MODE_PRIVATE);
@@ -682,6 +753,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             //mTabs[1].setSelected(false);
             // set current tab selected
             mTabs[1].setSelected(true);
+            mmTabsImgs[1].setSelected(true);
         }
     }
 
@@ -689,19 +761,34 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.btn_home:
+            case R.id.ll_home:
+                mmTabsImgs[0].clearAnimation();
+                mmTabsImgs[0].startAnimation(mAnimationSet);
+             //   mAnimationSet.start();
                 index = 0;
                 break;
 
-            case R.id.btn_shop:
+            case R.id.ll_shop:
                 index = 1;
+                mmTabsImgs[1].clearAnimation();
+                mmTabsImgs[1].startAnimation(mAnimationSet);
                 break;
-            case R.id.btn_discover:
+            case R.id.ll_discover:
+                LogUtil.i("ll_discover");
                 index = 2;
+                mmTabsImgs[2].clearAnimation();
+                mmTabsImgs[2].startAnimation(mAnimationSet);
                 break;
-            case R.id.btn_me:
+            case R.id.ll_me:
                 index = 3;
+                mmTabsImgs[3].clearAnimation();
+                mmTabsImgs[3].startAnimation(mAnimationSet);
                 break;
+
+
+
+
+
         }
         //判断当前页
         if (currentTabIndex != index) {
@@ -714,8 +801,10 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             trx.show(fragments[index]).commit();
         }
         mTabs[currentTabIndex].setSelected(false);
+        mmTabsImgs[currentTabIndex].setSelected(false);
         // set current tab selected
         mTabs[index].setSelected(true);
+        mmTabsImgs[index].setSelected(true);
         currentTabIndex = index;
 
 

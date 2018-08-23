@@ -19,7 +19,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetRevisiterRecordListBean;
-import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -62,6 +62,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
     private String auth;
     private TextView tv_error;
     private ImageView imageView;
+    private String searchInfo;
 
     @Override
     public View initViews() {
@@ -69,7 +70,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
 
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
@@ -96,12 +97,13 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
 
     @Override
-    public void onEventMainThread(IntEvent event) {
+    public void onEventMainThread(StringEvent event) {
         switch (event.getEventCode()) {
 
 
             case 210://刷新页面
                 mCurrentPage = 1;
+                searchInfo=event.getMsg();
                 try {
                     find_record_list(auth, mCurrentPage);
                 } catch (JSONException e) {
@@ -223,10 +225,10 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
     class StrBean {
         public String page;
-        public String auth ;
-       // public String member_id;
-        public String operate_id
-                ;
+        public String auth;
+        // public String member_id;
+        public String operate_id;
+        public String searchInfo;
     }
 
 
@@ -242,7 +244,8 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
         StrBean strBean = new StrBean();
         strBean.page = pageCount - 1 + "";
         strBean.auth = auth;
-        strBean.operate_id= ((Data)DataInfoCache.loadOneCache(Constants.MY_INFO)).getEmployee().getId()+"";
+        strBean.searchInfo = searchInfo;
+        strBean.operate_id = ((Data) DataInfoCache.loadOneCache(Constants.MY_INFO)).getEmployee().getId() + "";
         String s = gson.toJson(strBean);
         LogUtil.i(s);
         JSONObject jsonObject = new JSONObject(s.toString());
@@ -289,7 +292,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-              //  ToastUtils.showToastShort(volleyError.toString());
+                //  ToastUtils.showToastShort(volleyError.toString());
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }
@@ -298,7 +301,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-           //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
+                //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -371,9 +374,9 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
                 vh.tv_time.setVisibility(View.GONE);
             }
             vh.tv_content.setText(datalist.get(position).getContent());
-        //    LogUtil.i(      TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
+            //    LogUtil.i(      TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
 
-            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
+            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(), "yyyy-MM-dd HH:mm:ss") + "", "yy-MM-dd HH:mm"));
             vh.tv_member.setText(datalist.get(position).getMember_no());
             vh.tv_username.setText(datalist.get(position).getMember_name());
             return convertView;

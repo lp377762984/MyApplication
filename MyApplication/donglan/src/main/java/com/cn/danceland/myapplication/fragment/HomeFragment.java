@@ -45,6 +45,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NumberAnimTextView;
+import com.cn.danceland.myapplication.view.StepArcView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -107,7 +108,7 @@ public class HomeFragment extends BaseFragment {
                         }
                     });
                     mMZBanner.start();
-
+                    stepArcView.setCurrentCount(1000,1000);
 
                     break;
                 case 2:
@@ -180,13 +181,14 @@ public class HomeFragment extends BaseFragment {
     }
 
     private TopNewsAdapter topNewsAdapter;
-
+    private   StepArcView stepArcView;
     //初始化banner
     private View initPMHeadView() {
         View v = View.inflate(mActivity, R.layout.headview_paiming, null);
         LinearLayout ll_paiming = v.findViewById(R.id.ll_paiming);
         LinearLayout ll_riji = v.findViewById(R.id.ll_riji);
         natv_number = v.findViewById(R.id.natv_number);
+        stepArcView = v.findViewById(R.id.sav_step);
 
 
         ll_paiming.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +214,8 @@ public class HomeFragment extends BaseFragment {
         ll_riji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+          //      startActivity(new Intent(mActivity, TestActivity.class));
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
             }
         });
@@ -332,6 +336,7 @@ public class HomeFragment extends BaseFragment {
             findNews(mCurrentPage);
             findImageNews();
             findPaiming();
+
             return null;
         }
 
@@ -530,10 +535,9 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void findNews(int page) {
+
         String params = page + "";
-
         String url = Constants.FIND_NEWS_URL + params;
-
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
 

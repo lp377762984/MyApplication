@@ -1,8 +1,7 @@
 package com.cn.danceland.myapplication.utils;
-
 import com.cn.danceland.myapplication.MyApplication;
 
-public class Constants {
+public class Constants  {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
     public static final int MAX_FRIEND_COUNT = 900;//最大好友数量
 
@@ -14,19 +13,19 @@ public class Constants {
         return PLATFORM;
     }
 
-    //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-//   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+  //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
+  // public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-    // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-    public static String HOST = "http://192.168.1.66:8003/";//佳楠
+  // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
+  //  public static String HOST = "http://192.168.1.66:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
-    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+   // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
 //     public static final String HOST = "http://192.168.1.55:8003/";//老高
-    //   public static final String HOST = "http://118.190.201.15:6003/";//
-    //  public static final String HOST = " http://192.168.1.96:8003/";//
+ //   public static final String HOST = "http://118.190.201.15:6003/";//
+   //  public static final String HOST = " http://192.168.1.96:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
-    //public static  String HOST = "http://192.168.1.122:8003/";//超哥
+     public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
@@ -189,6 +188,7 @@ public class Constants {
 
     public static final String ISLOGINED = "islogined";//是否登录
     public static final String MY_USERID = "my_userid";//我的ID
+
     public static final String MY_MEMBER_ID = "my_member_id";//我的member_ID
 
     public static final String MY_DYN = "my_nyn";//我的动态数

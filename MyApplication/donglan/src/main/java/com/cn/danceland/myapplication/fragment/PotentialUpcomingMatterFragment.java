@@ -24,6 +24,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUpcomingMaterListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -64,11 +65,12 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
     private Gson gson = new Gson();
     private int mCurrentPage = 1;//起始请求页
     private boolean isEnd = false;
-  //  private String id;
-    private String done="0";//0是未办，1是已办
-    private String auth="1";
+    //  private String id;
+    private String done = "0";//0是未办，1是已办
+    private String auth = "1";
     private TextView tv_error;
     private ImageView imageView;
+    private String searchInfo;
 
     @Override
     public View initViews() {
@@ -76,7 +78,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         View v = View.inflate(mActivity, R.layout.fragment_upcoming_matter_list, null);
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(pullToRefresh);
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error5);
@@ -99,7 +101,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
             }
         });
         init_pullToRefresh();
-     //   id = getArguments().getString("id");
+        //   id = getArguments().getString("id");
 
         return v;
     }
@@ -118,42 +120,45 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onEventMainThread(IntEvent event) {
+    public void onEventMainThread(StringEvent event) {
 
         switch (event.getEventCode()) {
 
             case 151://刷新页面
+                searchInfo=event.getMsg();
                 mCurrentPage = 1;
                 try {
-                    find_upcoming_list(auth, mCurrentPage,done);
+                    find_upcoming_list(auth, mCurrentPage, done);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case 152://未办
-
+                searchInfo=event.getMsg();
                 mCurrentPage = 1;
-                done="0";
+                done = "0";
                 try {
-                    find_upcoming_list(auth, mCurrentPage,done);
+                    find_upcoming_list(auth, mCurrentPage, done);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case 153://已完成
                 mCurrentPage = 1;
-                done="1";
+                searchInfo=event.getMsg();
+                done = "1";
                 try {
-                    find_upcoming_list(auth, mCurrentPage,done);
+                    find_upcoming_list(auth, mCurrentPage, done);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case 154://全部
+                searchInfo=event.getMsg();
                 mCurrentPage = 1;
-                done=null;
+                done = null;
                 try {
-                    find_upcoming_list(auth, mCurrentPage,done);
+                    find_upcoming_list(auth, mCurrentPage, done);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -168,9 +173,9 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
     @Override
     public void initDta() {
         mCurrentPage = 1;
-      //  status=null;
+        //  status=null;
         try {
-            find_upcoming_list(auth, mCurrentPage,done);
+            find_upcoming_list(auth, mCurrentPage, done);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -226,7 +231,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
             init_pullToRefresh();
             mCurrentPage = 1;
             try {
-                find_upcoming_list(auth, mCurrentPage,done);
+                find_upcoming_list(auth, mCurrentPage, done);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -276,9 +281,10 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
     class StrBean {
         public String page;
-       public String auth ;
+        public String auth;
         public String member_id;
         public String status;
+        public String searchInfo;
     }
 
 
@@ -293,6 +299,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         StrBean strBean = new StrBean();
         strBean.page = pageCount - 1 + "";
         strBean.auth = auth;
+        strBean.searchInfo = searchInfo;
         if (!TextUtils.isEmpty(done)) {
             strBean.status = done;
         }
@@ -540,7 +547,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         customizeDialog.setTitle("填写待办结果");
         customizeDialog.setView(dialogView);
         final ContainsEmojiEditText edit_text = dialogView.findViewById(R.id.edit_text);
-      //  edit_text.setText(datalist.get(pos).getContent());
+        //  edit_text.setText(datalist.get(pos).getContent());
         customizeDialog.setPositiveButton("确定",
                 new DialogInterface.OnClickListener() {
                     @Override

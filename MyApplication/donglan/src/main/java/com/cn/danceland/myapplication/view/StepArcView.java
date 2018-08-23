@@ -125,7 +125,7 @@ public class StepArcView extends View {
     private void drawArcYellow(Canvas canvas, RectF rectF) {
         Paint paint = new Paint();
         /** 默认画笔颜色，黄色 */
-        paint.setColor(getResources().getColor(R.color.dl_light_gery));
+        paint.setColor(getResources().getColor(R.color.color_dl_yellow));
         /** 结合处为圆弧*/
         paint.setStrokeJoin(Paint.Join.ROUND);
         /** 设置画笔的样式 Paint.Cap.Round ,Cap.SQUARE等分别为圆形、方形*/
@@ -167,7 +167,7 @@ public class StepArcView extends View {
          * 【第三个参数】：渐变的颜色数组
          * 【第四个参数】：渐变的颜色数组对应的相对位置
          */
-        paintCurrent.setShader(new SweepGradient(centerX, centerX, new int[]{getResources().getColor(R.color.color_dl_yellow), getResources().getColor(R.color.color_dl_yellow)}, null));
+        paintCurrent.setShader(new SweepGradient(centerX, centerX, new int[]{getResources().getColor(R.color.dl_light_gery), getResources().getColor(R.color.dl_light_gery)}, null));
         canvas.drawArc(rectF, startAngle, currentAngleLength, false, paintCurrent);
     }
 
