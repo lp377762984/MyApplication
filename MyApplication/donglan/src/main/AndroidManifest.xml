@@ -241,6 +241,8 @@
         <activity android:name=".im.ui.GroupListActivity" />
         <activity android:name=".im.ui.ChooseFriendActivity" />
         <activity android:name=".im.ui.GroupMemberActivity" />
+
+
         <activity
             android:name=".im.ui.customview.DialogActivity"
             android:theme="@android:style/Theme.Dialog" />
@@ -319,6 +321,9 @@
         </activity>
         <activity
             android:name=".activity.RecommendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TestActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ShopListActivity"

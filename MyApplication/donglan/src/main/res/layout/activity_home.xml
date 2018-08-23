@@ -18,30 +18,37 @@
         tools:ignore="DisableBaselineAlignment">
 
 
-        <RelativeLayout
-            android:id="@+id/btn_container_myjob"
+        <LinearLayout
+            android:id="@+id/ll_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_home"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:layout_marginTop="2dp"
+                android:id="@+id/iv_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tab_home_bg_selecter" />
+
+            <TextView
+                android:id="@+id/tv_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@null"
-                android:drawableTop="@drawable/tab_home_bg_selecter"
-                android:onClick="onTabClicked"
                 android:paddingBottom="2dip"
-                android:paddingTop="7dip"
+                android:paddingTop="2dip"
                 android:scaleType="matrix"
                 android:text="主页"
                 android:textColor="@drawable/home_botton_text_color"
                 android:textSize="12sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/btn_container_conversation"
+            android:id="@+id/ll_shop"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -56,65 +63,97 @@
                 android:src="@drawable/point1"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btn_shop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:drawableTop="@drawable/tab_shop_bg_selecter"
-                android:onClick="onTabClicked"
-                android:paddingBottom="2dip"
-                android:paddingTop="7dip"
-                android:scaleType="matrix"
-                android:text="门店"
-                android:textColor="@drawable/home_botton_text_color"
-                android:textSize="12sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/iv_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/btn_home"
+                    android:src="@drawable/tab_shop_bg_selecter" />
+
+
+                <TextView
+                    android:id="@+id/tv_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:paddingBottom="2dip"
+                    android:paddingTop="2dip"
+                    android:scaleType="matrix"
+                    android:text="门店"
+                    android:textColor="@drawable/home_botton_text_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
 
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:id="@+id/btn_container_address_list"
+        <LinearLayout
+            android:id="@+id/ll_discover"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_discover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:layout_marginTop="2dp"
+                android:id="@+id/iv_discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_home"
+                android:src="@drawable/tab_discover_bg_selecter" />
+
+            <TextView
+                android:id="@+id/tv_discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@null"
-                android:drawableTop="@drawable/tab_discover_bg_selecter"
-                android:onClick="onTabClicked"
                 android:paddingBottom="2dip"
-                android:paddingTop="7dip"
+                android:paddingTop="2dip"
                 android:scaleType="matrix"
                 android:text="发现"
                 android:textColor="@drawable/home_botton_text_color"
                 android:textSize="12sp" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/btn_container_setting"
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_me"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_me"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/iv_me"
+                android:layout_marginTop="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btn_home"
+                android:src="@drawable/tab_me_bg_selecter" />
+
+            <TextView
+                android:id="@+id/tv_me"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@null"
-                android:drawableTop="@drawable/tab_me_bg_selecter"
-                android:onClick="onTabClicked"
                 android:paddingBottom="2dip"
-                android:paddingTop="7dip"
+                android:paddingTop="2dip"
                 android:scaleType="matrix"
                 android:text="我的"
                 android:textColor="@drawable/home_botton_text_color"
                 android:textSize="12sp" />
-        </RelativeLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <RelativeLayout
