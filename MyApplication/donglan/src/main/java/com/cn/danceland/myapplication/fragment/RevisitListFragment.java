@@ -32,7 +32,7 @@ import com.cn.danceland.myapplication.activity.AddPotentialActivity;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
-import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.model.FriendProfile;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.ui.ChatActivity;
@@ -104,7 +104,7 @@ public class RevisitListFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onEventMainThread(IntEvent event) {
+    public void onEventMainThread(StringEvent event) {
 
         switch (event.getEventCode()) {
 
@@ -123,6 +123,7 @@ public class RevisitListFragment extends BaseFragment {
                 StrBean.Order order = new StrBean.Order();
                 order.setLast_time("desc");//最近维护
                 strBean.setOrder(order);
+                strBean.searchInfo=event.getMsg();
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
                 } catch (JSONException e) {
@@ -132,6 +133,7 @@ public class RevisitListFragment extends BaseFragment {
             case 163://最晚维护
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
+                strBean.searchInfo=event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order1 = new StrBean.Order();
                 order1.setLast_time("asc");
@@ -145,6 +147,7 @@ public class RevisitListFragment extends BaseFragment {
             case 164://健身指数
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
+                strBean.searchInfo=event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order2 = new StrBean.Order();
                 order2.setLast_time("desc");
@@ -159,6 +162,7 @@ public class RevisitListFragment extends BaseFragment {
                 break;
             case 165://关注程度
                 strBean = new StrBean(auth);
+                strBean.searchInfo=event.getMsg();
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order3 = new StrBean.Order();
@@ -374,6 +378,8 @@ public class RevisitListFragment extends BaseFragment {
 
         public String page;
         public String auth;
+        public String searchInfo;
+
         public Order order;
 
         @Override
@@ -501,12 +507,12 @@ public class RevisitListFragment extends BaseFragment {
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
-            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
-                vh.tv_name.setText(datalist.get(position).getCname());
-            } else {
-                vh.tv_name.setText(datalist.get(position).getCname() + "(" + datalist.get(position).getNick_name() + ")");
-            }
-
+//            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
+//                vh.tv_name.setText(datalist.get(position).getCname());
+//            } else {
+//                vh.tv_name.setText(datalist.get(position).getCname() + "(" + datalist.get(position).getNick_name() + ")");
+//            }
+            vh.tv_name.setText(datalist.get(position).getCname());
             if (TextUtils.equals(datalist.get(position).getGender(), "1")) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex1);
             }

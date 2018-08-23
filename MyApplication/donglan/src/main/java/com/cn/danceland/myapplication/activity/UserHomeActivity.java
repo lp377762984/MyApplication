@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -43,6 +43,8 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
+import com.cn.danceland.myapplication.view.LoadingPager;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -69,13 +71,13 @@ import static com.cn.danceland.myapplication.R.id.tv_nickname;
  */
 
 
-public class UserHomeActivity extends Activity {
+public class UserHomeActivity extends BaseActivity {
     private PullToRefreshListView pullToRefresh;
     //  private List<PullBean> data = new ArrayList<PullBean>();
     public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
-    ProgressDialog dialog;
+   ProgressDialog dialog;
     private int mCurrentPage = 0;//当前请求页
     private String userId;
     private boolean isdyn = false;
@@ -111,6 +113,25 @@ public class UserHomeActivity extends Activity {
 
         initView();
         initData();
+
+    }
+
+    @Override
+    protected View createSuccessView() {
+
+        View inflate = UIUtils.inflate(R.layout.activity_user_home);
+
+
+        return inflate;
+
+
+    }
+
+    @Override
+    protected LoadingPager.LoadResult load() {
+   //     initData();
+        SystemClock.sleep(2000);
+        return LoadingPager.LoadResult.SUCCESS;
 
     }
 
@@ -341,7 +362,7 @@ public class UserHomeActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {      //判断标志位
                 case 1:
-                    dialog.dismiss();
+                   // dialog.dismiss();
                     myDynListviewAdater.notifyDataSetChanged();
                     pullToRefresh.onRefreshComplete();
 
@@ -349,7 +370,7 @@ public class UserHomeActivity extends Activity {
                 case 2:
                     //    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
                     setHeadViewData(userInfo);
-                    dialog.dismiss();
+                 //   dialog.dismiss();
 
                     if (isdyn) {//跳转到动态的那行
 
@@ -479,7 +500,7 @@ public class UserHomeActivity extends Activity {
     }
 
     private void initData() {
-        dialog.show();
+      //  dialog.show();
         findSelfDT();
         queryUserInfo(userId);
     }
