@@ -401,9 +401,6 @@ public class WearFitActivity extends Activity {
 //                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
 
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
-//                if (datas.get(4) == 0x92 && datas.size() == 17) {//不知道是啥  首次进入“我的手环”连接手环后会走
-//                    initHeartData();//请求心率数据
-//                }
                 //心率传感器
                 if (datas.get(4) == 0XB4) {//[171, 0, 4, 255, 180, 128, 1]
                     Integer integer = datas.get(6);
@@ -425,7 +422,7 @@ public class WearFitActivity extends Activity {
                     HeartRate heartRate = new HeartRate();
                     heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
                     heartRate.setHeartRate(datas.get(11));
-                    heartRateHelper.insert(heartRate);
+                    heartRateHelper.insert(heartRate);//心率
 
                     Calendar calendar = Calendar.getInstance();
                     Date nowTime = new Date(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
@@ -448,13 +445,7 @@ public class WearFitActivity extends Activity {
                     sleepBean.setState(datas.get(11) + "");//11位state
                     sleepBean.setContinuoustime(datas.get(12) * 256 + datas.get(13));//睡了多久 12位*256+13位
                     LogUtil.i("sleepBean" + sleepBean + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(sleepBean.getTimestamp())).toString());
-                    sleepHelper.insert(sleepBean);
-                }
-                if (datas.get(4) == 0x51 && datas.get(5) == 17) {
-//                    LogUtil.i(datas.toString());
-                }
-                if (datas.get(4) == 0x51 && datas.get(5) == 8) {
-//                    LogUtil.i(datas.toString());
+                    sleepHelper.insert(sleepBean);//睡眠
                 }
                 //拉取计步数据
                 if (datas.get(4) == 0x51 && datas.size() == 20) {
@@ -530,9 +521,6 @@ public class WearFitActivity extends Activity {
                     itemBeans.get(2).text2 = fatigue + "";//item 疲劳
                     adapter.notifyDataSetChanged();
                 }
-                if (datas.get(4) == 0x51) {//首页数据
-//                    LogUtil.i(datas.toString());
-                }
             }
         }
     };
@@ -556,22 +544,19 @@ public class WearFitActivity extends Activity {
     int heartRateLast = 0;//最后心率值
 
     private void initHeartData() {
-        heartRateHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 7);
         LogUtil.i("获取这个之后的心率数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);
     }
 
     private void initSleepData() {
-        sleepHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 7);
         LogUtil.i("获取这个之后的睡眠数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncSleepData(time);
     }
 
     private void initStepGaugeData() {
-        stepHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 7);
         LogUtil.i("获取这个之后的计步数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);//整点计步
     }

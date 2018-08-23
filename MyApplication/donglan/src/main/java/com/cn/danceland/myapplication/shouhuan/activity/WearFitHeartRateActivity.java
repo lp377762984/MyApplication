@@ -157,8 +157,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                         lastData = picker.getSelectedString();//第一次赋值
                     }
                     if (!lastData.equals(lableText)) {//最后一次和本次滚动的值不相等请求
-                        heartRates.clear();//心率数据 HeartRate
-                        mPointValues.clear();
+                        setDefaultView();
                         String[] temp = null;
                         switch (lableType) {//切换标签 1天  2周  3月
                             case 1:
@@ -201,6 +200,12 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
 
     //默认数据
     private void setDefaultView() {
+        heartRates.clear();//心率数据 HeartRate
+        mPointValues.clear();
+        getAxisXLables();//获取x轴的标注
+        getAxisYLables();//获取y轴的标注
+        getAxisPoints();//获取坐标点
+        initLineChart();//初始化
         heart_success_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
         heart_abnormal_count_tv.setText(0 + context.getResources().getString(R.string.count_text));
         heart_success_percentage_tv.setText(0 + context.getResources().getString(R.string.percentage_text));//达标
@@ -256,6 +261,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     };
 
     private void getData() {
+        setDefaultView();
         String[] temp = null;
         switch (lableType) {//切换标签 1天  2周  3月
             case 1:
@@ -731,7 +737,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
      * @param count    达标数
      */
     private void initHeartView(int sumcount, int count) {
-        if(heartRates!=null&&heartRates.size()!=0){
+        if (heartRates != null && heartRates.size() != 0) {
             int averageHeart = 0; //平均心率：全天总心率除总心率个数
             for (int i = 0; i < heartRates.size(); i++) {
                 int hTemp = Integer.valueOf(heartRates.get(i).getHeartRate());
@@ -770,13 +776,13 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                             LogUtil.i("标尺--" + (viewWidth / 180) * finalAvg + "-宽-" + viewWidth);
                         }
                     });
-                }else{
+                } else {
                     ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);//默认值
                 }
-            }else{
+            } else {
                 ViewUtils.setMargins(iv_triangle, 0, 0, 0, 0);//默认值
             }
-        }else{//默认数据
+        } else {//默认数据
             setDefaultView();//默认数据
         }
     }
