@@ -226,7 +226,11 @@ public class WearFitActivity extends Activity {
                         startActivity(new Intent(WearFitActivity.this, WearFitFatigueActivity.class));
                         break;
                     case 3://摇摇拍照
-                        startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
+                        if (MyApplication.mBluetoothConnected) {
+                            startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
+                        } else {
+                            Toast.makeText(WearFitActivity.this, "手环未绑定", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case 4://健身计划
                         ToastUtils.showToastShort("功能正在开发中");
@@ -250,7 +254,7 @@ public class WearFitActivity extends Activity {
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);//动岚个人资料
         if (DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING) != null) {
             wearFitUser = (WearFitUser) DataInfoCache.loadOneCache(Constants.MY_WEAR_FIT_SETTING);//手环设置
-        }else{
+        } else {
             wearFitUser = new WearFitUser();
             //------同步动岚的个人信息--开始------
             if ("2".equals(infoData.getPerson().getGender())) {
@@ -459,7 +463,7 @@ public class WearFitActivity extends Activity {
                     wearFitStepBean.setStep(step);
                     wearFitStepBean.setCal(cal);
                     int fatigue = 0;
-                    int hour=datas.get(9);
+                    int hour = datas.get(9);
                     if (hour >= 6 && hour < 11) {
                         fatigue = 0;
                     } else if (hour >= 11 && hour < 18) {
@@ -488,8 +492,8 @@ public class WearFitActivity extends Activity {
                     NumberFormat numberFormat = NumberFormat.getInstance();// 创建一个数值格式化对象
                     numberFormat.setMaximumFractionDigits(0);// 设置精确到小数点后2位
                     String targetStr = numberFormat.format((float) step / (float) 8000 * 100);//达标
-                    float kmf= (float) 50 * (float) step / (float) 100000.00;//100步长  1000km
-                    if(wearFitUser!=null){
+                    float kmf = (float) 50 * (float) step / (float) 100000.00;//100步长  1000km
+                    if (wearFitUser != null) {
                         targetStr = numberFormat.format((float) step / (float) wearFitUser.getGold_steps() * 100);//达标
                         kmf = (float) wearFitUser.getStepLength() * (float) step / (float) 100000.00;//100步长  1000km
                     }

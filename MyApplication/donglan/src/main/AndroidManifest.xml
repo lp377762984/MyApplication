@@ -715,6 +715,7 @@
         <!--摇摇拍照-->
         <activity
             android:name=".shouhuan.activity.WearFitCameraActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <!--疲劳-->
         <activity
