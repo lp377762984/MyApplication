@@ -576,8 +576,18 @@ public class WearFitCameraActivity extends Activity {
         if (cameraDevice != null) {
             stopCamera();
         }
-        unregisterReceiver(mGattUpdateReceiver);
         commandManager.setSharkTakePhoto(0);//摇摇拍照指令 0关  1开
+        unregisterReceiver(mGattUpdateReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cameraDevice != null) {
+            stopCamera();
+        }
+        commandManager.setSharkTakePhoto(0);//摇摇拍照指令 0关  1开
+        unregisterReceiver(mGattUpdateReceiver);
     }
 
     private IntentFilter makeGattUpdateIntentFilter() {
@@ -602,7 +612,6 @@ public class WearFitCameraActivity extends Activity {
                 //测量心率
                 if (datas.get(4) == 0x79 && datas.size() == 7) {//[171, 0, 4, 255, 121, 128, 1]
                     LogUtil.i(datas.toString());
-
                     takePicture();//拍照
                 }
             }
