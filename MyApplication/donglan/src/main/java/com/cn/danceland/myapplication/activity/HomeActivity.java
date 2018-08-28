@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -39,18 +41,29 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.db.HeartRate;
+import com.cn.danceland.myapplication.db.HeartRateHelper;
+import com.cn.danceland.myapplication.db.WearFitSleepBean;
+import com.cn.danceland.myapplication.db.WearFitSleepHelper;
+import com.cn.danceland.myapplication.db.WearFitStepBean;
+import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
+import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
+import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
+import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.HttpUtils;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsManager;
 import com.cn.danceland.myapplication.utils.runtimepermissions.PermissionsResultAction;
@@ -88,13 +101,15 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 
-public class HomeActivity extends FragmentActivity implements View.OnClickListener {
+public class HomeActivity extends FragmentActivity implements View.OnClickListener{
 
 
     private TextView[] mTabs;
@@ -116,6 +131,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     private ConversationPresenter presenter;
     private ImageView msgUnread;
+
+    private CommandManager commandManager;//手环
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -153,8 +170,17 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onPause() {
         super.onPause();
         JZVideoPlayer.releaseAllVideos();
+
+        unregisterReceiver(mGattUpdateReceiver);//手环
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //EMClient.getInstance().chatManager().addMessageListener(messageListener);
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());//手环
+      initConnWearFit();
+    }
 
     private AnimationSet mAnimationSet;
 
@@ -324,8 +350,35 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         if (SPUtils.getBoolean(Constants.UPDATE_MIPUSH_CONFIG, false)) {
             setMipushId();
         }
-    }
 
+        commandManager = CommandManager.getInstance(this);//手环
+        initConnWearFit();
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //有按下时
+                break;
+            case MotionEvent.ACTION_UP:
+                //抬起时
+                LogUtil.i("---ACTION_UP-----");
+                if (!isSendWearFit) {
+                    isSendWearFit = true;
+
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+                            initWearFitData();
+//                        }
+//                    }).start();
+
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+
+    }
 
     public void initTimUser() {
         //基本用户配置
@@ -860,13 +913,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //EMClient.getInstance().chatManager().addMessageListener(messageListener);
-    }
-
-
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
 
@@ -956,4 +1002,145 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         };
         MyApplication.getHttpQueues().add(request);
     }
+
+    private IntentFilter makeGattUpdateIntentFilter() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
+        return intentFilter;
+    }
+
+    //连接手环
+    private void initConnWearFit() {
+        String  address1 = SPUtils.getString(Constants.ADDRESS, "");
+        if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1)) {
+            try {
+                if (MyApplication.mBluetoothLeService.connect(address1)) {
+                    LogUtil.i("正在连接...");
+                } else {
+                    ToastUtils.showToastShort("连接失败");
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+            MyApplication.isBluetoothConnecting = true;
+            invalidateOptionsMenu();
+        }
+    }
+
+    private void initWearFitData() {
+        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
+        LogUtil.i("获取这个之后的手环数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
+        commandManager.setSyncData(time, time);//心率  计步
+        commandManager.setSyncSleepData(time);//睡眠
+        commandManager.setTimeSync();//同步时间给手环
+    }
+
+    private HeartRateHelper heartRateHelper = new HeartRateHelper();//手环 心率
+    private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();//手环 睡眠
+    private WearFitStepHelper stepHelper = new WearFitStepHelper();//手环 计步
+    private boolean isSendWearFit = false;//是否拉取手环数据  首次触摸加载
+    //接收蓝牙状态改变的广播
+    private BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                MyApplication.mBluetoothConnected = true;
+                MyApplication.isBluetoothConnecting = false;
+                invalidateOptionsMenu();//更新菜单栏
+                LogUtil.i("连接成功...");
+                isSendWearFit = false;
+//                ToastUtils.showToastShort("连接成功");
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                MyApplication.mBluetoothConnected = false;
+                //todo 更改界面ui
+                invalidateOptionsMenu();//更新菜单栏
+                try {
+                    MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+//                ToastUtils.showToastShort("已断开");
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                final byte[] txValue = intent
+                        .getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
+                List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
+                LogUtil.i("接收的数据：" +datas.toString());
+                //心率传感器
+                if (datas.get(4) == 0XB4) {//[171, 0, 4, 255, 180, 128, 1]
+                    Integer integer = datas.get(6);
+                    if (integer == 0) {
+                        Toast.makeText(context, "手环通信不正常", Toast.LENGTH_SHORT).show();
+                    } else if (integer == 1) {
+                        Toast.makeText(context, "手环通信正常", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //拉取心率数据
+                if (datas.get(4) == 0x51 && datas.size() == 13) {//[171, 0, 10, 255, 81, 17, 18, 5, 19, 4, 35, 62, 62]
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
+                    HeartRate heartRate = new HeartRate();
+                    heartRate.setDate(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    heartRate.setHeartRate(datas.get(11));
+                    heartRateHelper.insert(heartRate);//心率
+                    SharedPreferences bus_type = getSharedPreferences("wear_fit_home_data", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = bus_type.edit();
+                    edit.putInt("heart_rate",  datas.get(11));//item 心率
+                    edit.apply();
+                }
+                //拉取睡眠数据
+                if (datas.get(4) == 0x52 && datas.size() == 14) {//[171, 0, 11, 255, 82, 128, 18, 7, 31, 0, 49, 2, 0, 29]  11位state 12位*256+13位
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + datas.get(10) + ":" + "00";
+                    WearFitSleepBean sleepBean = new WearFitSleepBean();
+                    sleepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    sleepBean.setState(datas.get(11) + "");//11位state
+                    sleepBean.setContinuoustime(datas.get(12) * 256 + datas.get(13));//睡了多久 12位*256+13位
+                    sleepHelper.insert(sleepBean);//睡眠
+                }
+                //拉取计步数据
+                if (datas.get(4) == 0x51 && datas.size() == 20) {
+                    String date = "20" + datas.get(6) + "-" + datas.get(7) + "-" + datas.get(8) + " " + datas.get(9) + ":" + "00" + ":" + "00";
+                    int step = datas.get(10) * 256 * 256 + datas.get(11) * 256 + datas.get(12);
+                    int cal = datas.get(13) * 256 * 256 + datas.get(14) * 256 + datas.get(15);
+                    WearFitStepBean wearFitStepBean = new WearFitStepBean();
+                    wearFitStepBean.setTimestamp(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
+                    wearFitStepBean.setStep(step);
+                    wearFitStepBean.setCal(cal);
+                    int fatigue = 0;
+                    int hour = datas.get(9);
+                    if (hour >= 6 && hour < 11) {
+                        fatigue = 0;
+                    } else if (hour >= 11 && hour < 18) {
+                        fatigue = 10;
+                    } else if (hour >= 18 && hour < 24) {
+                        fatigue = 20;
+                    } else {
+                        fatigue = 30;
+                    }
+                    fatigue = (int) (fatigue + Math.sqrt(step) / 2);
+                    wearFitStepBean.setFatigue(fatigue);//疲劳
+                    stepHelper.insert(wearFitStepBean);// 计步
+                }
+                if (datas.get(4) == 0x51 && datas.size() == 17) {//首页数据
+                    int step = (datas.get(6) << 16) + (datas.get(7) << 8) + datas.get(8);//计步
+                    int cal = (datas.get(9) << 16) + (datas.get(10) << 8) + datas.get(11);//卡路里
+                    int ligthSleep = datas.get(12) * 60 + datas.get(13);//浅睡
+                    int deepSleep = datas.get(14) * 60 + datas.get(15);//深睡
+                    int wakeupTime = datas.get(16);//醒来次数
+
+                    SharedPreferences bus_type = getSharedPreferences("wear_fit_home_data", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = bus_type.edit();
+                    edit.putInt( "step", step);
+                    edit.putInt("kcal", cal);
+//                    edit.putInt("heart_rate",  datas.get(11));//item 心率  上面有心率
+                    edit.putInt("sleep", deepSleep + ligthSleep);//item 睡眠
+                    edit.apply();
+                }
+            }
+        }
+    };
+
 }
