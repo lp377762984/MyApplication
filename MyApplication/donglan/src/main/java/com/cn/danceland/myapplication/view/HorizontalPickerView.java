@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -13,10 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -54,6 +49,7 @@ public class HorizontalPickerView extends View {
     private int textHeight = 0;
     private int centerTextHeight = 0;
 
+    private boolean isScroll = false;
 
     public HorizontalPickerView(Context context) {
         this(context, null);
@@ -124,6 +120,7 @@ public class HorizontalPickerView extends View {
                             anOffset = 0;
                             selectNum = selectNum - 1;
                             downX = scrollX;
+                            isScroll = true;
                         }
                     }
                 } else {
@@ -133,6 +130,7 @@ public class HorizontalPickerView extends View {
                             anOffset = 0;
                             selectNum = selectNum + 1;
                             downX = scrollX;
+                            isScroll = true;
                         }
                     }
                 }
@@ -162,11 +160,11 @@ public class HorizontalPickerView extends View {
         }
         if (selectNum >= 0 && selectNum <= strings.size() - 1) {//加个保护；防止越界
 
-            String s = strings.get(selectNum);//得到被选中的文字
+            String selectText = strings.get(selectNum);//得到被选中的文字
             /**
              * 得到被选中文字 绘制时所需要的宽高
              */
-            selectedPaint.getTextBounds(s, 0, s.length(), rect);
+            selectedPaint.getTextBounds(selectText, 0, selectText.length(), rect);
             //3从矩形区域中读出文本内容的宽高
             int centerTextWidth = rect.width();
             centerTextHeight = rect.height();
@@ -184,9 +182,18 @@ public class HorizontalPickerView extends View {
                     textPaint.getTextBounds(strings.get(0), 0, strings.get(0).length(), rect);
                     textHeight = rect.height();
                 }
-
-                if (i != selectNum)
-                    canvas.drawText(strings.get(i), (i - selectNum) * anInt + getWidth() / 2 - textWidth / 2 + anOffset-0, getHeight() / 2 + textHeight / 2, textPaint);//画出每组文字
+                float num =0;
+                if (!isScroll) {
+                    LogUtil.i("****");
+                    num = ((i - selectNum) * anInt + getWidth() / 2 - textWidth / 2 + anOffset - 60);
+                } else {
+                    LogUtil.i("&&&&");
+                    num = ((i - selectNum) * anInt + getWidth() / 2 - textWidth / 2 + anOffset - 0);
+                }
+                if (i != selectNum) {
+                    LogUtil.i("--" + strings.get(i) + "--" + num);
+                    canvas.drawText(strings.get(i), num, getHeight() / 2 + textHeight / 2, textPaint);//画出每组文字
+                }
             }
         }
     }

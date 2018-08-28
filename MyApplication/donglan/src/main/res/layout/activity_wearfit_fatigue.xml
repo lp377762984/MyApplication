@@ -92,9 +92,9 @@
                     android:background="@color/white"
                     app:HorizontalselectedViewSeesize="5"
                     app:HorizontalselectedViewSelectedTextColor="@color/color_dl_yellow"
-                    app:HorizontalselectedViewSelectedTextSize="38"
+                    app:HorizontalselectedViewSelectedTextSize="40"
                     app:HorizontalselectedViewTextColor="@color/colorGray8"
-                    app:HorizontalselectedViewTextSize="38" />
+                    app:HorizontalselectedViewTextSize="40" />
 
                 <TextView
                     android:id="@+id/iv_right"
