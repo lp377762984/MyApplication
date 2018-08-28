@@ -1057,7 +1057,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //                ToastUtils.showToastShort("连接成功");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;
-                //todo 更改界面ui
                 invalidateOptionsMenu();//更新菜单栏
                 try {
                     MyApplication.mBluetoothLeService.close();//断开更彻底(没有这一句，在某些机型，重连会连不上)
