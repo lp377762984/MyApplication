@@ -36,7 +36,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
     public static final int MSG_CLOCK_WEEKDAY_DATA = 0;
     private Context context;
     private LoopView lp_hour, lp_minute;
-    private String shour = "0", sminute = "0";
+    private String shour = "00", sminute = "00";
     private ArrayList<String> hourList;
     private ArrayList<String> minuteList;
     private Button btn_save;

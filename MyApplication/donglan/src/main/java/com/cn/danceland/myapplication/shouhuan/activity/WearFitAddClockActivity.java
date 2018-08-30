@@ -71,7 +71,11 @@ public class WearFitAddClockActivity extends Activity {
                 if (localClockList.size() >= 8) {
                     Toast.makeText(WearFitAddClockActivity.this, "闹钟设置最多不超过八个", Toast.LENGTH_SHORT).show();
                 } else {
-                    startActivity(new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class));
+                    Intent intent = new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class);
+                        intent.putExtra("hour", "00");
+                        intent.putExtra("minute", "00");
+                    startActivity(intent);
+//                    startActivity(new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class));
 //                startActivityForResult(new Intent(WearFitAddClockActivity.this,WearFitClockSettingActivity.class),3);
                 }
             }
