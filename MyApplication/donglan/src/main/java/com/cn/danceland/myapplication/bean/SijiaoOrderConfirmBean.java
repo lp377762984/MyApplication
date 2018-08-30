@@ -19,6 +19,15 @@ public class SijiaoOrderConfirmBean implements Serializable{
     private String receive;
     private String product_type;
     private String product_name;
+    private String employee_id;
+
+    public String getSell_id() {
+        return employee_id;
+    }
+
+    public void setSell_id(String sell_id) {
+        this.employee_id = sell_id;
+    }
 
     public String getProduct_type() {
         return product_type;
@@ -113,7 +122,15 @@ public class SijiaoOrderConfirmBean implements Serializable{
         private String end_date;
         private Integer time_length;
         private String store_type_id;
+        private String sell_id;
 
+        public String getSell_id() {
+            return sell_id;
+        }
+
+        public void setSell_id(String sell_id) {
+            this.sell_id = sell_id;
+        }
 
         public String getStore_type_id() {
             return store_type_id;

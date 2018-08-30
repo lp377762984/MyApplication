@@ -480,7 +480,7 @@ public class LoginActivity extends Activity implements OnClickListener {
                         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(LoginActivity.this,LoginBindActivity.class));
+                                startActivity(new Intent(LoginActivity.this,LoginBindActivity.class).putExtra("phone",mEtPhone.getText().toString()));
                             }
                         });
                         builder.show();

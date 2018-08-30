@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -333,10 +335,16 @@ public class AttentionFragment extends BaseFragment {
                 // TODO Auto-generated method stub
 
                 JZVideoPlayer.releaseAllVideos();
-                //   new FinishRefresh().execute();
-                //  myDynListviewAdater.notifyDataSetChanged();
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
-                new DownRefresh().execute();
+
+
 
 
             }
@@ -346,8 +354,14 @@ public class AttentionFragment extends BaseFragment {
                     PullToRefreshBase<ListView> refreshView) {
                 // TODO Auto-generated method stub
 
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
-                new UpRefresh().execute();
             }
         });
 

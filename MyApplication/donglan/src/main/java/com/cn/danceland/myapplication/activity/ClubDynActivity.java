@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by shy on 2018/3/21 09:49
@@ -93,12 +95,19 @@ public class ClubDynActivity extends Activity {
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
 
 
+
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
 
-                new DownRefresh().execute();
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
 
             }
@@ -106,9 +115,15 @@ public class ClubDynActivity extends Activity {
             @Override
             public void onPullUpToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
 
-                new UpRefresh().execute();
             }
         });
         // pullToRefresh.setVisibility(View.GONE);

@@ -83,10 +83,17 @@ public class LoginBindActivity extends Activity implements View.OnClickListener 
     }
 
     private void initView() {
+        String phone=getIntent().getStringExtra("phone");
 
         mTvGetsms = findViewById(R.id.tv_getsms);
         mTvGetsms.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
+        if (!TextUtils.isEmpty(phone)){
+            mEtPhone.setText(phone);
+            mEtPhone.setClickable(false);
+            mEtPhone.setFocusable(false);
+        }
+
         mEtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

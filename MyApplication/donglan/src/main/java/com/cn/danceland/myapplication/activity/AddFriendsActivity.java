@@ -9,11 +9,15 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -28,8 +32,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
-import com.cn.danceland.myapplication.bean.SearchMember;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -41,8 +44,12 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.cn.danceland.myapplication.R.id.ll_result;
 
 /**
  * Created by shy on 2017/10/30 09:32
@@ -54,18 +61,22 @@ import java.util.Map;
 public class AddFriendsActivity extends Activity implements View.OnClickListener {
     EditText mEtPhone;
     private ImageButton iv_del;
-    private LinearLayout ll_result;
+    //   private LinearLayout ll_result;
     private LinearLayout ll_search;
     private TextView tv_search;
     private TextView tv_nickname;
     private ImageView iv_avatar;
     private TextView tv_guanzhu;
-    private TextView tv_result_null,tv_title;
-    private RequsetUserDynInfoBean userInfo;
+    private TextView tv_title;
+   // private RequsetUserDynInfoBean userInfo;
+    private List<RequsetFindUserBean.Data> dataList = new ArrayList<>();
+
     private String from;
     int memberId;
     int personId;
     String member_no;
+    private ListView listView;
+    private MyListAatapter myListAatapter = new MyListAatapter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,13 +86,39 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
         from = getIntent().getStringExtra("from");
         iv_del = findViewById(R.id.iv_del);
         ll_search = findViewById(R.id.ll_search);
-        ll_result = findViewById(R.id.ll_result);
+        listView = findViewById(R.id.listview);
+        listView.setAdapter(myListAatapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if ("体测".equals(from)) {
+                    if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
+                        Intent intent = new Intent(AddFriendsActivity.this, BodyBaseActivity.class);
+                        intent.putExtra("id", dataList.get(position).getPerson_id());
+                        intent.putExtra("memberId", dataList.get(position).getId());
+                        intent.putExtra("member_no", dataList.get(position).getMember_no());
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(AddFriendsActivity.this, ReadyTestActivity.class);
+                        intent.putExtra("id", dataList.get(position).getPerson_id());
+                        intent.putExtra("memberId", dataList.get(position).getId());
+                        intent.putExtra("member_no", dataList.get(position).getMember_no());
+                        startActivity(intent);
+                    }
+
+                    //finish();
+                } else {
+                    startActivity(new Intent(AddFriendsActivity.this, UserSelfHomeActivity.class).putExtra("id", dataList.get(position).getId()));
+                }
+            }
+        });
+        //ll_result = findViewById(ll_result);
         tv_search = findViewById(R.id.tv_search);
         mEtPhone = findViewById(R.id.et_phone);
-        tv_nickname = findViewById(R.id.tv_nickname);
-        iv_avatar = findViewById(R.id.iv_avatar);
-        iv_avatar.setOnClickListener(this);
-        ll_result.setOnClickListener(this);
+//        tv_nickname = findViewById(R.id.tv_nickname);
+//        iv_avatar = findViewById(R.id.iv_avatar);
+//        iv_avatar.setOnClickListener(this);
+        //   ll_result.setOnClickListener(this);
 //        iv_avatar.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -92,21 +129,21 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
 
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
         tv_title = findViewById(R.id.tv_title);
-        if("体测".equals(from)){
-            tv_guanzhu.setVisibility(View.GONE);
+        if ("体测".equals(from)) {
+//            tv_guanzhu.setVisibility(View.GONE);
             tv_title.setText("搜索会员");
         }
-        findViewById(R.id.tv_guanzhu).setOnClickListener(this);
-        tv_result_null = findViewById(R.id.tv_result_null);
+//        findViewById(R.id.tv_guanzhu).setOnClickListener(this);
+        //  tv_result_null = findViewById(R.id.tv_result_null);
         setListener();
 
         mEtPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    if("体测".equals(from)){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if ("体测".equals(from)) {
                         searchMember(mEtPhone.getText().toString().trim());
-                    }else{
+                    } else {
                         findUser(mEtPhone.getText().toString().trim());
                     }
 
@@ -126,8 +163,8 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                ll_result.setVisibility(View.GONE);
-                tv_result_null.setVisibility(View.GONE);
+//                ll_result.setVisibility(View.GONE);
+//                tv_result_null.setVisibility(View.GONE);
             }
 
             //监听edit
@@ -159,45 +196,50 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.iv_del:
                 mEtPhone.setText("");
+                if ("体测".equals(from)) {
+                    searchMember(mEtPhone.getText().toString().trim());
+                } else {
+                    findUser(mEtPhone.getText().toString().trim());
+                }
                 break;
             case R.id.iv_back://返回
                 finish();
                 break;
             case R.id.tv_guanzhu://加关注
-                if (!userInfo.getData().getIs_follow()) {//如果未加关注
-                    addGuanzhu(userInfo.getData().getPerson().getId(),true);
-                }
+//                if (!userInfo.getData().getIs_follow()) {//如果未加关注
+//                    addGuanzhu(userInfo.getData().getPerson().getId(), true);
+//                }
 
                 break;
             case R.id.ll_search://搜索
 
-                if("体测".equals(from)){
+                if ("体测".equals(from)) {
                     searchMember(mEtPhone.getText().toString().trim());
-                }else{
+                } else {
                     findUser(mEtPhone.getText().toString().trim());
                 }
                 // ToastUtils.showToastShort(mEtPhone.getText().toString());
 
                 break;
-            case R.id.ll_result:
-                if("体测".equals(from)){
-                    if("true".equals(getIntent().getStringExtra("isAnalysis"))){
+            case ll_result:
+                if ("体测".equals(from)) {
+                    if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
                         Intent intent = new Intent(AddFriendsActivity.this, BodyBaseActivity.class);
-                        intent.putExtra("id",personId+"");
-                        intent.putExtra("memberId",memberId+"");
-                        intent.putExtra("member_no",member_no);
+                        intent.putExtra("id", personId + "");
+                        intent.putExtra("memberId", memberId + "");
+                        intent.putExtra("member_no", member_no);
                         startActivity(intent);
-                    }else{
-                        Intent intent = new Intent(AddFriendsActivity.this,ReadyTestActivity.class);
-                        intent.putExtra("id",personId+"");
-                        intent.putExtra("memberId",memberId+"");
-                        intent.putExtra("member_no",member_no);
+                    } else {
+                        Intent intent = new Intent(AddFriendsActivity.this, ReadyTestActivity.class);
+                        intent.putExtra("id", personId + "");
+                        intent.putExtra("memberId", memberId + "");
+                        intent.putExtra("member_no", member_no);
                         startActivity(intent);
                     }
 
                     //finish();
-                }else{
-                    startActivity(new Intent(AddFriendsActivity.this,UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
+                } else {
+                 //   startActivity(new Intent(AddFriendsActivity.this, UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
                 }
                 break;
             default:
@@ -206,15 +248,11 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     }
 
 
-
-
-
     class StrBean1 {
         public boolean is_follower;
         public String user_id;
 
     }
-
 
 
     /**
@@ -225,12 +263,12 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
      */
     private void addGuanzhu(final String id, final boolean b) {
 
-        StrBean1 strBean1=new StrBean1();
-        strBean1.is_follower=b;
-        strBean1.user_id=id;
+        StrBean1 strBean1 = new StrBean1();
+        strBean1.is_follower = b;
+        strBean1.user_id = id;
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
 
             @Override
@@ -288,32 +326,34 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     }
 
 
-
-
-
-
-    private void searchMember(final String phone){
+    private void searchMember(final String phone) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDMEMBER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 Gson gson = new Gson();
-                SearchMember searchMember = gson.fromJson(s, SearchMember.class);
-                SearchMember.Data data = searchMember.getData();
-                if(data!=null){
-                    memberId = data.getId();
-                    personId = data.getPerson_id();
-                    member_no = data.getMember_no();
+//                SearchMember searchMember = gson.fromJson(s, SearchMember.class);
+//                SearchMember.Data data = searchMember.getData();
+//                if (data != null) {
+//                    memberId = data.getId();
+//                    personId = data.getPerson_id();
+//                    member_no = data.getMember_no();
+//                }
+
+
+
+                RequsetFindUserBean infoBean = gson.fromJson(s, RequsetFindUserBean.class);
+
+                if (infoBean.getSuccess()) {
+                    dataList=infoBean.getData();
+                    myListAatapter.notifyDataSetChanged();
+
+
                 }
-                if (searchMember.getSuccess() && searchMember.getData() != null) {
-                    ll_result.setVisibility(View.VISIBLE);
-                    tv_nickname.setText(searchMember.getData().getNick_name());
-                    RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-                    Glide.with(AddFriendsActivity.this).load(searchMember.getData().getSelf_avatar_path()).apply(options).into(iv_avatar);
-                } else {
-                    ToastUtils.showToastShort("找不到用户");
-                    tv_result_null.setVisibility(View.VISIBLE);
-                }
+
+
+
 
             }
         }, new Response.ErrorListener() {
@@ -321,11 +361,11 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("phone",phone);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("phone", phone);
                 return map;
             }
 
@@ -357,37 +397,41 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
+                RequsetFindUserBean infoBean = gson.fromJson(s, RequsetFindUserBean.class);
 
-                userInfo = new RequsetUserDynInfoBean();
-                userInfo = gson.fromJson(s, RequsetUserDynInfoBean.class);
-
-                if (userInfo.getSuccess() && userInfo.getData() != null) {
-                    tv_guanzhu.setVisibility(View.VISIBLE);
-                    ll_result.setVisibility(View.VISIBLE);
-                    tv_nickname.setText(userInfo.getData().getPerson().getNick_name());
-                    RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-                    Glide.with(AddFriendsActivity.this).load(userInfo.getData().getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
-                    if (userInfo.getData().getIs_follow()) {
-                        tv_guanzhu.setText("已关注");
-                    }else {
-                        tv_guanzhu.setText("+关注");
-                    }
-                    if (TextUtils.equals(userInfo.getData().getPerson().getId(),SPUtils.getString(Constants.MY_USERID,null))){
-
-                        tv_guanzhu.setText("");
-
-                    }
-
-                } else {
-                    ToastUtils.showToastShort(userInfo.getErrorMsg());
-                    tv_result_null.setVisibility(View.VISIBLE);
+                if (infoBean.getSuccess()) {
+                    dataList=infoBean.getData();
+                    myListAatapter.notifyDataSetChanged();
                 }
+
+
+//                if (userInfo.getSuccess() && userInfo.getData() != null) {
+//                    tv_guanzhu.setVisibility(View.VISIBLE);
+//                    //     ll_result.setVisibility(View.VISIBLE);
+//                    tv_nickname.setText(userInfo.getData().getPerson().getNick_name());
+//                    RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+//                    Glide.with(AddFriendsActivity.this).load(userInfo.getData().getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
+////                    if (userInfo.getData().getIs_follow()) {
+////                        tv_guanzhu.setText("已关注");
+////                    }else {
+////                        tv_guanzhu.setText("+关注");
+////                    }
+////                    if (TextUtils.equals(userInfo.getData().getPerson().getId(),SPUtils.getString(Constants.MY_USERID,null))){
+////
+////                        tv_guanzhu.setText("");
+////
+////                    }
+//
+//                } else {
+//                    ToastUtils.showToastShort(userInfo.getErrorMsg());
+//                    //  tv_result_null.setVisibility(View.VISIBLE);
+//                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
+                LogUtil.i(volleyError.toString() + volleyError.networkResponse.statusCode);
 
             }
 
@@ -420,4 +464,70 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
     }
 
 
+    class MyListAatapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return dataList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup viewGroup) {
+            ViewHolder vh = null;
+            if (convertView == null) {
+
+                vh = new ViewHolder();
+
+                convertView = View.inflate(AddFriendsActivity.this, R.layout.listview_item_finduser, null);
+                vh.iv_avatar = convertView.findViewById(R.id.iv_avatar);
+
+                vh.tv_name = convertView.findViewById(R.id.tv_nickname);
+
+
+                convertView.setTag(vh);
+
+            } else {
+
+                vh = (ViewHolder) convertView.getTag();
+
+            }
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+
+            if ("体测".equals(from)){
+                vh.tv_name.setText(dataList.get(position).getCname());
+                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_path() ).apply(options).into(vh.iv_avatar);
+            }else {
+                vh.tv_name.setText(dataList.get(position).getNick_name());
+                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
+            }
+
+
+
+            return convertView;
+
+        }
+
+
+    }
+}
+
+class ViewHolder {
+    public ImageView iv_avatar;
+    public ImageView iv_callphone;
+    public TextView tv_name;
+    public ImageView iv_sex;
+    public TextView tv_lasttime;
+    public LinearLayout ll_item;
+    public ImageView iv_hx_msg;
 }

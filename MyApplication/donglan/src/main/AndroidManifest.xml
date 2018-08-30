@@ -527,6 +527,9 @@
             android:name=".activity.MyOrderActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.HuiYuanTuiJianActivty"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.MyDepositListActivity"
             android:screenOrientation="portrait" />
         <activity

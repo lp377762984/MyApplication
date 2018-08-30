@@ -119,7 +119,7 @@ public class Data implements Serializable {
 
         private String id;
         private int person_id;
-        private int admin_emp_id;
+        private String admin_emp_id;
         private int teach_emp_id;
         private int branch_id;
         private int enabled;
@@ -296,11 +296,11 @@ public class Data implements Serializable {
             return person_id;
         }
 
-        public void setAdmin_emp_id(int admin_emp_id) {
+        public void setAdmin_emp_id(String admin_emp_id) {
             this.admin_emp_id = admin_emp_id;
         }
 
-        public int getAdmin_emp_id() {
+        public String getAdmin_emp_id() {
             return admin_emp_id;
         }
 

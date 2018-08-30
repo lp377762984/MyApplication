@@ -1,13 +1,20 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.alipay.sdk.app.EnvUtils;
@@ -17,10 +24,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
 import com.cn.danceland.myapplication.bean.WeiXinBean;
@@ -49,9 +58,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import razerdp.basepopup.BasePopupWindow;
 
 /**
  * Created by feng on 2018/3/14.
@@ -71,7 +83,7 @@ public class SellStoreCardActivity extends Activity {
     DongLanTitleView storecard_title;
     String zhifu;
     public static final int SDK_PAY_FLAG = 0x1001;
-
+    private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -123,6 +135,7 @@ public class SellStoreCardActivity extends Activity {
 
         }
     };
+    private SijiaoOrderConfirmBean sijiaoOrderConfirmBean;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -211,16 +224,53 @@ public class SellStoreCardActivity extends Activity {
     }
 
     private void initHost() {
+        sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
         request = new StoreTypeRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         cardid = (StoreType) getIntent().getSerializableExtra("item");
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         initWechat();
+        findConsultant(info.getPerson().getDefault_branch());
+//        LogUtil.i(info.toString());
+//        LogUtil.i(info.getMember().getAuth());
+//        LogUtil.i(info.getMember().getAdmin_emp_id() + "");
+//        LogUtil.i(info.getMember().getFinal_admin_id());
+
+        if (TextUtils.equals(info.getMember().getAuth(), "1")) {
+            if (!TextUtils.isEmpty(info.getMember().getAdmin_emp_id())) {
+                sijiaoOrderConfirmBean.setSell_id(info.getMember().getAdmin_emp_id());
+            } else {
+
+                findViewById(R.id.ll_huiji).setVisibility(View.VISIBLE);
+            }
+
+        }
+        if (TextUtils.equals(info.getMember().getAuth(), "2")) {
+            if (!TextUtils.isEmpty(info.getMember().getFinal_admin_id())) {
+                sijiaoOrderConfirmBean.setSell_id(info.getMember().getFinal_admin_id());
+            } else {
+                findViewById(R.id.ll_huiji).setVisibility(View.VISIBLE);
+            }
+
+        }
+
+
     }
 
-    private void initView() {
+    private ListPopup listPopup;
+    private TextView tv_counselor;
 
+    private void initView() {
+        myPopupListAdapter = new MyPopupListAdapter(this);
+        listPopup = new ListPopup(this);
+        tv_counselor = findViewById(R.id.tv_counselor);
+        findViewById(R.id.ll_counselor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listPopup.showPopupWindow();
+            }
+        });
         storecard_title = findViewById(R.id.store_title);
         storecard_title.setTitle("充值");
         btn_weixin = findViewById(R.id.btn_weixin);
@@ -311,7 +361,7 @@ public class SellStoreCardActivity extends Activity {
 
     private void confirmOrder(String price) {
 
-        SijiaoOrderConfirmBean sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
+
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝
         sijiaoOrderConfirmBean.setPlatform(1);
@@ -320,13 +370,19 @@ public class SellStoreCardActivity extends Activity {
         extends_params.setStore_type_id(cardid.getId() + "");
         extends_params.setFace(cardid.getFace() + "");
         extends_params.setGiving(cardid.getGiving() + "");
+        extends_params.setSell_id(sijiaoOrderConfirmBean.getSell_id());
         sijiaoOrderConfirmBean.setReceive(price);
         sijiaoOrderConfirmBean.setPrice(price);
         sijiaoOrderConfirmBean.setProduct_type("储值卡充值");
         sijiaoOrderConfirmBean.setProduct_name("");
         sijiaoOrderConfirmBean.setExtends_params(extends_params);
         String s = gson.toJson(sijiaoOrderConfirmBean);
+        LogUtil.i(s);
 
+        if (TextUtils.isEmpty(sijiaoOrderConfirmBean.getSell_id())) {
+            ToastUtils.showToastShort("请选择一位会籍顾问");
+            return;
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
             @Override
@@ -416,59 +472,156 @@ public class SellStoreCardActivity extends Activity {
         api.sendReq(req);
     }
 
-//    /**
-//     * 支付宝支付
-//     */
-//    private void alipay(String id) {
-//        PayBean payBean = new PayBean();
-//        payBean.id = id;
-//        payBean.order_no = 12345 + "";
-//        payBean.price = cardid.getFace();
-//        payBean.bus_type = 16;
-//        payBean.member_id = info.getMember().getId();
-//
-//        String str = gson.toJson(payBean);
-//
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = new JSONObject(str);
-//            LogUtil.i(jsonObject.toString());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                LogUtil.i(jsonObject.toString());
-//                RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
-//                if (requestSimpleBean.getSuccess()) {
-//                    ToastUtils.showToastShort("支付成功");
-//                    finish();
-//                } else {
-//                    ToastUtils.showToastShort("支付失败");
-//                }
-//
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//
-//                ToastUtils.showToastShort(volleyError.toString());
-//
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-//                return map;
-//            }
-//        };
-//        MyApplication.getHttpQueues().add(stringRequest);
-//
-//    }
+
+    private MyPopupListAdapter myPopupListAdapter;
+
+    class ListPopup extends BasePopupWindow {
+
+
+        Context context;
+
+        public ListPopup(Context context) {
+            super(context);
+            ListView popup_list = (ListView) findViewById(R.id.popup_list);
+            popup_list.setAdapter(myPopupListAdapter);
+            this.context = context;
+        }
+
+        @Override
+        protected Animation initShowAnimation() {
+            return null;
+        }
+
+        @Override
+        public View getClickToDismissView() {
+            return getPopupWindowView();
+        }
+
+        @Override
+        public View onCreatePopupView() {
+
+            //  popupView=View.inflate(context,R.layout.popup_list_consultant,null);
+            return createPopupById(R.layout.popup_list_consultant);
+
+        }
+
+        @Override
+        public View initAnimaView() {
+            return null;
+        }
+    }
+
+
+    class MyPopupListAdapter extends BaseAdapter {
+        private Context context;
+
+        public MyPopupListAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return consultantListInfo.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return i;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup viewGroup) {
+            //     LogUtil.i("asdasdjalsdllasjdlk");
+            ViewHolder vh = null;
+            if (convertView == null) {
+                vh = new ViewHolder();
+                convertView = View.inflate(context, R.layout.listview_item_list_consultant, null);
+                vh.mTextView = (TextView) convertView.findViewById(R.id.item_tx);
+                convertView.setTag(vh);
+            } else {
+                vh = (ViewHolder) convertView.getTag();
+            }
+            vh.mTextView.setText(consultantListInfo.get(position).getCname());
+
+            vh.mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    //  consultantInfo = consultantListInfo.get(position);
+                    sijiaoOrderConfirmBean.setSell_id(consultantListInfo.get(position).getId() + "");
+                    tv_counselor.setText(consultantListInfo.get(position).getCname());
+                    tv_counselor.setTextColor(Color.BLACK);
+                    listPopup.dismiss();
+                }
+            });
+
+            return convertView;
+
+        }
+
+
+        class ViewHolder {
+            public TextView mTextView;
+        }
+    }
+
+    /**
+     * 查找会籍顾问
+     */
+    private void findConsultant(final String branchId) {
+
+
+        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
+                if (requestConsultantInfoBean.getSuccess()) {
+                    consultantListInfo = requestConsultantInfoBean.getData();
+                    //  LogUtil.i(consultantListInfo.toString());
+                    myPopupListAdapter.notifyDataSetChanged();
+
+                } else {
+                    ToastUtils.showToastShort(requestConsultantInfoBean.getErrorMsg());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort(volleyError.toString());
+            }
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("branch_id", branchId);
+                return map;
+
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+
+    }
+
 
     class PayBean {
         public String id;

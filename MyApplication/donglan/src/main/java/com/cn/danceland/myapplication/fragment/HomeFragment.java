@@ -58,6 +58,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class HomeFragment extends BaseFragment {
@@ -108,7 +110,7 @@ public class HomeFragment extends BaseFragment {
                         }
                     });
                     mMZBanner.start();
-                    stepArcView.setCurrentCount(1000,1000);
+                    stepArcView.setCurrentCount(1000, 1000);
 
                     break;
                 case 2:
@@ -157,7 +159,13 @@ public class HomeFragment extends BaseFragment {
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
 
-                new DownRefresh().execute();
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
 
             }
@@ -165,9 +173,15 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
 
-                new UpRefresh().execute();
             }
         });
         // pullToRefresh.setVisibility(View.GONE);
@@ -181,7 +195,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     private TopNewsAdapter topNewsAdapter;
-    private   StepArcView stepArcView;
+    private StepArcView stepArcView;
+
     //初始化banner
     private View initPMHeadView() {
         View v = View.inflate(mActivity, R.layout.headview_paiming, null);
@@ -199,11 +214,11 @@ public class HomeFragment extends BaseFragment {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
-                if (data.getMember()==null||TextUtils.equals(data.getMember().getAuth(), "1")) {
+                if (data.getMember() == null || TextUtils.equals(data.getMember().getAuth(), "1")) {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
-                if (myPaiMingBean ==null) {
+                if (myPaiMingBean == null) {
                     ToastUtils.showToastShort("您还没有参加健身运动");
                     return;
                 }
@@ -215,7 +230,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-          //      startActivity(new Intent(mActivity, TestActivity.class));
+                //      startActivity(new Intent(mActivity, TestActivity.class));
                 startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
             }
         });
@@ -330,6 +345,8 @@ public class HomeFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             //  findSelectionDyn_Down(1);
+
+
             init();
             mCurrentPage = 0;
             isEnd = false;

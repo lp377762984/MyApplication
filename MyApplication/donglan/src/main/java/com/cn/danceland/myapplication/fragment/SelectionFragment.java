@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -337,17 +339,28 @@ public class SelectionFragment extends BaseFragment {
             public void onPullDownToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
                 JZVideoPlayer.releaseAllVideos();
-                new DownRefresh().execute();
-
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
             }
 
             @Override
             public void onPullUpToRefresh(
                     PullToRefreshBase<ListView> refreshView) {
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
 
 
-                new UpRefresh().execute();
             }
         });
 

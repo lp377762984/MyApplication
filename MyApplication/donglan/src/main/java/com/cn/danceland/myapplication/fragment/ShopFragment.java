@@ -14,6 +14,12 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -44,6 +50,7 @@ import com.cn.danceland.myapplication.activity.ClubDynActivity;
 import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
+import com.cn.danceland.myapplication.activity.HuiYuanTuiJianActivty;
 import com.cn.danceland.myapplication.activity.LoginNumberActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
@@ -102,7 +109,7 @@ public class ShopFragment extends BaseFragment {
     ImageButton ibtn_call, ibtn_gps;
     List<MenusBean.Data> data;
     LinearLayout ll_top;
-    TextView tv_shopname,tv_role;
+    TextView tv_shopname, tv_role;
     View v;
     ArrayList<String> roleList;
     ArrayAdapter arrayAdapter;
@@ -113,7 +120,7 @@ public class ShopFragment extends BaseFragment {
     ArrayList<String> drawableArrayList;
     PopupWindow popupWindow;
     RelativeLayout rl_role;
-    ImageView down_img,up_img;
+    ImageView down_img, up_img;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,11 +165,11 @@ public class ShopFragment extends BaseFragment {
         rl_role.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(popupWindow.isShowing()){
+                if (popupWindow.isShowing()) {
                     dismissPop();
                     up_img.setVisibility(View.GONE);
                     down_img.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     showPop();
                     up_img.setVisibility(View.VISIBLE);
                     down_img.setVisibility(View.GONE);
@@ -170,10 +177,10 @@ public class ShopFragment extends BaseFragment {
             }
         });
         //setSpinner();
-        if(roleList!=null&&roleList.size()>0){
+        if (roleList != null && roleList.size() > 0) {
             tv_role.setText(roleList.get(0));
             role = roleList.get(0);
-            SPUtils.setString("role_type",roleMap.get(role));
+            SPUtils.setString("role_type", roleMap.get(role));
         }
 
         gson = new Gson();
@@ -201,7 +208,7 @@ public class ShopFragment extends BaseFragment {
         return v;
     }
 
-    private void setPop(){
+    private void setPop() {
 
         View inflate = LayoutInflater.from(mActivity).inflate(R.layout.shop_pop, null);
 
@@ -215,7 +222,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 role = roleList.get(position);
-                SPUtils.setString("role_type",roleMap.get(role));
+                SPUtils.setString("role_type", roleMap.get(role));
                 tv_role.setText(role);
                 initData();
                 dismissPop();
@@ -226,19 +233,21 @@ public class ShopFragment extends BaseFragment {
 
 
     }
-    private void showPop(){
+
+    private void showPop() {
         popupWindow.showAsDropDown(tv_role);
     }
-    private  void dismissPop(){
+
+    private void dismissPop() {
         popupWindow.dismiss();
     }
 
 
-    private class PopAdapter extends BaseAdapter{
+    private class PopAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return roleList ==null? 0:roleList.size();
+            return roleList == null ? 0 : roleList.size();
         }
 
         @Override
@@ -287,7 +296,7 @@ public class ShopFragment extends BaseFragment {
 //                startActivity(intent);
             }
         });
-        if(drawableArrayList!=null&&drawableArrayList.size()==0){
+        if (drawableArrayList != null && drawableArrayList.size() == 0) {
             drawableArrayList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
 //        drawableArrayList.add(R.drawable.img_man);
 //        drawableArrayList.add(R.drawable.img_man);
@@ -307,10 +316,11 @@ public class ShopFragment extends BaseFragment {
 
     public static class BannerViewHolder implements MZViewHolder<String> {
         private ImageView mImageView;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
@@ -345,6 +355,12 @@ public class ShopFragment extends BaseFragment {
 
     public void refresh() {
         if (myAdapter != null) {
+            TranslateAnimation animation = new TranslateAnimation(0, -5, 0, 0);
+            animation.setInterpolator(new OvershootInterpolator());
+            animation.setDuration(100);
+            animation.setRepeatCount(3);
+            animation.setRepeatMode(Animation.REVERSE);
+            mGridView.startAnimation(animation);
             myAdapter.notifyDataSetChanged();
             //     LogUtil.i("刷新");
         }
@@ -402,17 +418,17 @@ public class ShopFragment extends BaseFragment {
         }
     }
 
-    private void getBanner(final String branchId){
+    private void getBanner(final String branchId) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
-                if(branchBannerBean!=null){
+                if (branchBannerBean != null) {
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
-                    if(data!=null){
-                        for(int i = 0;i<data.size();i++){
+                    if (data != null) {
+                        for (int i = 0; i < data.size(); i++) {
                             drawableArrayList.add(data.get(i).getImg_url());
                         }
                         setBannner();
@@ -422,14 +438,14 @@ public class ShopFragment extends BaseFragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<>();
-                map.put("branchId",branchId);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branchId", branchId);
                 return map;
             }
 
@@ -621,8 +637,8 @@ public class ShopFragment extends BaseFragment {
             setPop();
             //setSpinner();
             initData();
-        }else{
-            SPUtils.setString("role",role);
+        } else {
+            SPUtils.setString("role", role);
             dismissPop();
             up_img.setVisibility(View.GONE);
             down_img.setVisibility(View.VISIBLE);
@@ -667,8 +683,8 @@ public class ShopFragment extends BaseFragment {
                 intent1.putExtra("weidu", weidu);
                 intent1.putExtra("shopJingdu", shopJingdu);
                 intent1.putExtra("shopWeidu", shopWeidu);
-                intent1.putExtra("branchID",branchId);
-                intent1.putStringArrayListExtra("imgList",drawableArrayList);
+                intent1.putExtra("branchID", branchId);
+                intent1.putStringArrayListExtra("imgList", drawableArrayList);
                 startActivity(intent1);
                 break;
             default:
@@ -778,6 +794,9 @@ public class ShopFragment extends BaseFragment {
                     case 25://推荐好友
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
+                    case 17://会员推荐
+                        startActivity(new Intent(mActivity, HuiYuanTuiJianActivty.class));
+                        break;
                     case 18://意见反馈
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
@@ -814,24 +833,24 @@ public class ShopFragment extends BaseFragment {
                         ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 23://会籍报表
-                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","1"));
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "1"));
                         break;
                     case 24://全店报表
-                        startActivity(new Intent(mActivity, AllReportActivity.class).putExtra("role_type",role).putExtra("target_role_type","4"));
+                        startActivity(new Intent(mActivity, AllReportActivity.class).putExtra("role_type", role).putExtra("target_role_type", "4"));
                         break;
                     case 26://体测分析
-                        startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from","体测").putExtra("isAnalysis","true"));
+                        startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from", "体测").putExtra("isAnalysis", "true"));
                         break;
                     case 28:
-                        startActivity(new Intent(mActivity,ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","3"));
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "3"));
                         break;
                     case 29://私信
-                      startActivity(new Intent(mActivity, ConversationActivity.class));
-                    //  startActivity(new Intent(mActivity, TXIMHomeActivity.class));
-                      //  ToastUtils.showToastShort("功能正在开发中");
+                        startActivity(new Intent(mActivity, ConversationActivity.class));
+                        //  startActivity(new Intent(mActivity, TXIMHomeActivity.class));
+                        //  ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 30://教练报表
-                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type",role).putExtra("target_role_type","2"));
+                        startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "2"));
                         break;
                     case 31://我的私教
                         startActivity(new Intent(mActivity, MySijiaoActivity.class));
@@ -852,10 +871,10 @@ public class ShopFragment extends BaseFragment {
 
                         break;
                     case 35://动态码
-                        startActivity(new Intent(mActivity,LoginNumberActivity.class));
+                        startActivity(new Intent(mActivity, LoginNumberActivity.class));
                         break;
                     case 36://
-                        startActivity(new Intent(mActivity,MyContactsActivity.class));
+                        startActivity(new Intent(mActivity, MyContactsActivity.class));
                         break;
                     default:
                         break;
@@ -951,22 +970,50 @@ public class ShopFragment extends BaseFragment {
             view = View.inflate(mActivity, R.layout.gridview_item_shop, null);
             TextView tv_dcs = view.findViewById(R.id.tv_dcs);
             ImageView ibtn = view.findViewById(R.id.ibtn);
+            RelativeLayout rl_item = view.findViewById(R.id.rl_item);
+
             TextView unread_msg_number = view.findViewById(R.id.unread_msg_number);
             if (menuList.get(i).getId() == 29) {
 
-                long TotalUnreadNum=((HomeActivity)mActivity).getTotalUnreadNum();
+                long TotalUnreadNum = ((HomeActivity) mActivity).getTotalUnreadNum();
                 if (TotalUnreadNum == 0) {
                     unread_msg_number.setVisibility(View.GONE);
                 } else {
                     unread_msg_number.setVisibility(View.VISIBLE);
-                    if (TotalUnreadNum>99){
+                    if (TotalUnreadNum > 99) {
                         unread_msg_number.setText("99+");
-                    }else {
+                    } else {
                         unread_msg_number.setText(TotalUnreadNum + "");
                     }
 
                 }
             }
+
+            //由小变大
+            Animation scaleAnim = new ScaleAnimation(0.9f, 1.1f, 0.9f, 1.1f);
+            //从左向右
+            Animation rotateAnim = new RotateAnimation(-5, 5, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+            scaleAnim.setDuration(300);
+            rotateAnim.setDuration(300 / 5);
+            rotateAnim.setRepeatMode(Animation.REVERSE);
+            rotateAnim.setRepeatCount(5);
+
+            AnimationSet smallAnimationSet = new AnimationSet(false);
+            smallAnimationSet.addAnimation(scaleAnim);
+            smallAnimationSet.addAnimation(rotateAnim);
+
+
+
+//            TranslateAnimation animation = new TranslateAnimation(0, -10, 0, 0);
+//            animation.setInterpolator(new OvershootInterpolator());
+//            animation.setDuration(150);
+//            animation.setRepeatCount(3);
+//            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+//            animation.setRepeatMode(Animation.REVERSE);
+
+            rl_item.startAnimation(smallAnimationSet);
+            tv_dcs.startAnimation(smallAnimationSet);
 
 
             tv_dcs.setText(menuList.get(i).getName());

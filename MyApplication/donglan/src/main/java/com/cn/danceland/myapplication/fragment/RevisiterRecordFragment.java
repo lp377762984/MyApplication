@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.cn.danceland.myapplication.R.id.tv_lasttime;
 import static com.cn.danceland.myapplication.R.id.tv_name;
@@ -77,12 +79,27 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new DownRefresh().execute();
+
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
+
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new UpRefresh().execute();
+
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
             }
         });
         init_pullToRefresh();

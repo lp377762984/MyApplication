@@ -7,42 +7,48 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_gery">
+        android:background="@color/dl_gery"
+
+        >
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:onClick="back"
-            android:paddingLeft="15dp"
+           android:padding="10dp"
             android:src="@drawable/img_back" />
 
         <TextView
+            android:id="@+id/tv_tiltle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="我的订单"
+            android:text="会员推荐"
             android:textColor="@color/color_white"
             android:textSize="18sp"
-
             />
     </RelativeLayout>
-
     <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/black"
+        android:divider="@color/color_bg_line"
         android:dividerHeight="1px"
         android:fadingEdge="none"
-        android:headerDividersEnabled="false"
         android:scrollingCache="false"
         ptr:ptrDrawable="@drawable/listview_loading_anim"
         ptr:ptrHeaderBackground="#00000000"
         ptr:ptrHeaderTextColor="#999999"
         ptr:ptrRefreshableViewBackground="#00000000"
-        ptr:ptrScrollingWhileRefreshingEnabled="true" />
+        ptr:ptrScrollingWhileRefreshingEnabled="true"
+        />
+    <include layout="@layout/no_info_layout"
+        android:id="@+id/rl_no_info"
+        android:visibility="gone"
+
+        />
 </LinearLayout>

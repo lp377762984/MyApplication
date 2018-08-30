@@ -59,6 +59,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.jzvd.JZVideoPlayer;
 
@@ -168,7 +170,17 @@ public class UserHomeActivity extends BaseActivity {
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new FinishRefresh().execute();
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        new FinishRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
+
+
+
+
             }
         });
         pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {

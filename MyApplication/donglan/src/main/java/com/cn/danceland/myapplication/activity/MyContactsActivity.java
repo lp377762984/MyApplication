@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -29,7 +30,6 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.imsdk.ext.sns.TIMAddFriendRequest;
@@ -52,7 +52,6 @@ import java.util.Map;
 
 
 public class MyContactsActivity extends Activity {
-    private PullToRefreshListView pullToRefresh;
     private ListView listView;
     private List<MyContactsBean.Data> dataList = new ArrayList<>();
     private MyAdapter adapter;

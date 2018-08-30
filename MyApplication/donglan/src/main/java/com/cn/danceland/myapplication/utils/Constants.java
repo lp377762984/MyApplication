@@ -14,20 +14,20 @@ public class Constants  {
     }
 
   //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-  // public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+  //   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
   //  public static String HOST = "http://192.168.1.66:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-//     public static final String HOST = "http://192.168.1.55:8003/";//老高
+   public static final String HOST = "http://192.168.1.55:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
    //  public static final String HOST = " http://192.168.1.96:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
-     public static  String HOST = "http://192.168.1.122:8003/";//超哥
+  // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
-    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = true ;//是否是开发模式、连接阿里云必须改成false
 
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
@@ -86,7 +86,7 @@ public class Constants  {
 
     //体测上传图片
     public static final String BCAUPLOAD = HOST + "bcaAnalysis/uploadFile";//体测上传图片
-    public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone";//搜索好友
+    public static final String FIND_ADD_USER_USRL = HOST + "/appDynMsg/queryByPhone_V1_2";//搜索好友
     public static final String FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
     public static final String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
     public static final String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach";//查找教练
@@ -135,7 +135,7 @@ public class Constants  {
 
     public static final String FINDALLCARDS = HOST + "card/labels";//查找会员卡
     public static final String FIND_CARDS_BY_CARDTYPE = HOST + "card/types?labelId=";//查找会员卡
-    public static final String FINDMEMBER = HOST + "appBca/searchMember";//
+    public static final String FINDMEMBER = HOST + "appBca/searchMember_V1_2";//
 
     //订单相关
 
@@ -181,6 +181,7 @@ public class Constants  {
     public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
     public static final String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
+    public static final String INTRODUCE_QUERYPAGEBYEMPLOYEE       = HOST + "/introduce/queryPageByEmployee";//会员推荐
     public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐
     public static final String INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 

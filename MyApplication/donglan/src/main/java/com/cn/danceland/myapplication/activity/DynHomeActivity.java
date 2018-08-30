@@ -83,6 +83,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
@@ -323,11 +325,20 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 //    new FinishRefresh().execute();
-                if (!isEnd) {
-                    findCommentList(msgId, mCurrentPage);
-                } else {
-                    pullToRefresh.onRefreshComplete();
-                }
+                TimerTask task = new TimerTask(){
+                    public void run(){
+                        if (!isEnd) {
+                            findCommentList(msgId, mCurrentPage);
+                        } else {
+                            pullToRefresh.onRefreshComplete();
+                        }
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
+
+
+
 
 
             }

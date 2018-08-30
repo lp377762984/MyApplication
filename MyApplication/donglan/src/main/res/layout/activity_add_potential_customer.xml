@@ -598,6 +598,7 @@
 
                 android:layout_height="40dp"
                 android:background="#fff"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView

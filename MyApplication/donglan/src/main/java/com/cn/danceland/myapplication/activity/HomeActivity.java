@@ -19,8 +19,10 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -94,6 +96,8 @@ import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 
+import static android.view.animation.Animation.REVERSE;
+
 public class HomeActivity extends FragmentActivity implements View.OnClickListener {
 
 
@@ -116,6 +120,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     private ConversationPresenter presenter;
     private ImageView msgUnread;
+    private Animation animation;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -159,21 +164,28 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private AnimationSet mAnimationSet;
 
     private void buildAnima() {
-        ScaleAnimation mScaleAnimation = new ScaleAnimation(1f, 1.5f, 1f, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f,
+        //加载动画资源
+        animation = AnimationUtils.loadAnimation(this, R.anim.tab_anim);
+
+
+        ScaleAnimation mScaleAnimation = new ScaleAnimation(0.8f, 1.4f, 0.8f, 1.4f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(100);
-     //   mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation.setDuration(300);
+       mScaleAnimation.setInterpolator(new AccelerateInterpolator());
         mScaleAnimation.setFillAfter(true);
+        mScaleAnimation.setRepeatCount(1);
+        mScaleAnimation.setRepeatMode(REVERSE);
+
         ScaleAnimation mScaleAnimation1 = new ScaleAnimation(1.5f, 0.8f, 1.5f, 0.8f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(100);
-        mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        mScaleAnimation1.setDuration(1000);
+        mScaleAnimation1.setInterpolator(new AccelerateDecelerateInterpolator());
     //    mScaleAnimation.setFillAfter(true);
-        ScaleAnimation mScaleAnimation2 = new ScaleAnimation(0.8f, 1f, 0.8f, 1f, Animation.RELATIVE_TO_SELF, 0.5f,
+        ScaleAnimation mScaleAnimation2 = new ScaleAnimation(0.8f, 1.2f, 0.8f, 1.2f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(100);
+        mScaleAnimation2.setDuration(1000);
     //    mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        mScaleAnimation.setFillAfter(true);
+        mScaleAnimation2.setFillAfter(true);
 
 //        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
 //        mAlphaAnimation.setDuration(300);
@@ -181,10 +193,13 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 //        mAlphaAnimation.setFillAfter(false);
 
         mAnimationSet = new AnimationSet(true);
-        mAnimationSet.setDuration(300);
+
+
         mAnimationSet.addAnimation(mScaleAnimation);
-        mAnimationSet.addAnimation(mScaleAnimation1);
-        mAnimationSet.addAnimation(mScaleAnimation2);
+//        mAnimationSet.addAnimation(mScaleAnimation1);
+//        mAnimationSet.addAnimation(mScaleAnimation2);
+        mAnimationSet.setRepeatCount(1);
+        mAnimationSet.setRepeatMode(REVERSE);
      //   mAnimationSet.addAnimation(mAlphaAnimation);
         mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -762,7 +777,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
         switch (view.getId()) {
             case R.id.ll_home:
-                mmTabsImgs[0].clearAnimation();
+
+                //开启动画
                 mmTabsImgs[0].startAnimation(mAnimationSet);
              //   mAnimationSet.start();
                 index = 0;
@@ -770,18 +786,19 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
             case R.id.ll_shop:
                 index = 1;
-                mmTabsImgs[1].clearAnimation();
+
+
                 mmTabsImgs[1].startAnimation(mAnimationSet);
                 break;
             case R.id.ll_discover:
                 LogUtil.i("ll_discover");
                 index = 2;
-                mmTabsImgs[2].clearAnimation();
+
                 mmTabsImgs[2].startAnimation(mAnimationSet);
                 break;
             case R.id.ll_me:
                 index = 3;
-                mmTabsImgs[3].clearAnimation();
+
                 mmTabsImgs[3].startAnimation(mAnimationSet);
                 break;
 
@@ -799,12 +816,17 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 trx.add(R.id.fragment_container, fragments[index], FRAGMENT_TAG[index]);
             }
             trx.show(fragments[index]).commit();
+
+            mTabs[currentTabIndex].setSelected(false);
+            mmTabsImgs[currentTabIndex].setSelected(false);
+            mTabs[index].setSelected(true);
+            mmTabsImgs[index].setSelected(true);
+        }else {
+
         }
-        mTabs[currentTabIndex].setSelected(false);
-        mmTabsImgs[currentTabIndex].setSelected(false);
+
         // set current tab selected
-        mTabs[index].setSelected(true);
-        mmTabsImgs[index].setSelected(true);
+
         currentTabIndex = index;
 
 
