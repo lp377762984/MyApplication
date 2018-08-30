@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" filepath="$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/RxTools-library/RxTools-library.iml" filepath="$PROJECT_DIR$/RxTools-library/RxTools-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SwitchLayout-master/SwitchLayout-master.iml" filepath="$PROJECT_DIR$/SwitchLayout-master/SwitchLayout-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/TXapp/TXapp.iml" filepath="$PROJECT_DIR$/TXapp/TXapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/donglan/donglan.iml" filepath="$PROJECT_DIR$/donglan/donglan.iml" />
       <module fileurl="file://$PROJECT_DIR$/easeui/easeui.iml" filepath="$PROJECT_DIR$/easeui/easeui.iml" />
@@ -16,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/jiaozivideoplayerLibrary/jiaozivideoplayerLibrary.iml" filepath="$PROJECT_DIR$/jiaozivideoplayerLibrary/jiaozivideoplayerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/presentation/presentation.iml" filepath="$PROJECT_DIR$/presentation/presentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdk/sdk.iml" filepath="$PROJECT_DIR$/sdk/sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/switchlayout/switchlayout.iml" filepath="$PROJECT_DIR$/switchlayout/switchlayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/tlslibrary/tlslibrary.iml" filepath="$PROJECT_DIR$/tlslibrary/tlslibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
     </modules>

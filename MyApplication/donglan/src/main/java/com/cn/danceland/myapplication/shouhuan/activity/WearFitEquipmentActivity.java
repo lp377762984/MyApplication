@@ -16,21 +16,14 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.db.HeartRateHelper;
-import com.cn.danceland.myapplication.db.WearFitSleepHelper;
-import com.cn.danceland.myapplication.db.WearFitStepHelper;
-import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +43,6 @@ public class WearFitEquipmentActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wearfitequipment);
-        commandManager = CommandManager.getInstance(this);
         initView();
     }
 
@@ -156,7 +148,6 @@ public class WearFitEquipmentActivity extends Activity {
                 invalidateOptionsMenu();//更新菜单栏
                 ToastUtils.showToastShort("连接成功");
                 progressDialog.dismiss();
-                initWearFitData();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;
                 //todo 更改界面ui
@@ -196,20 +187,4 @@ public class WearFitEquipmentActivity extends Activity {
         }
     };
 
-    private CommandManager commandManager;
-    private HeartRateHelper heartRateHelper = new HeartRateHelper();
-    private WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
-    private WearFitStepHelper stepHelper = new WearFitStepHelper();
-
-    private void initWearFitData() {
-        heartRateHelper.deleteAll();//删除所有的   因为本地只留七天
-        sleepHelper.deleteAll();//删除所有的   因为本地只留七天
-        stepHelper.deleteAll();//删除所有的   因为本地只留七天
-        long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
-        LogUtil.i("获取这个之后的心率数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
-        commandManager.setSyncData(time, time);
-        commandManager.setSyncSleepData(time);
-        commandManager.setSyncData(time, time);
-        commandManager.setTimeSync();
-    }
 }
