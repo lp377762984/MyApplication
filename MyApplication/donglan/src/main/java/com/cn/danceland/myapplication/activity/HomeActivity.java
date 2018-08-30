@@ -14,7 +14,6 @@ import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -913,68 +912,62 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     }
 
 
-    private void refreshUIWithMessage() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                // refresh unread count
-                //updateUnreadLabel();
-
-                // refresh conversation list
-                if (shopFragment != null) {
-                    shopFragment.refresh();
-                }
-
-            }
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //EMClient.getInstance().chatManager().addMessageListener(messageListener);
-    }
-
-
-    private BroadcastReceiver broadcastReceiver;
-    private LocalBroadcastManager broadcastManager;
-
-    private void registerBroadcastReceiver() {
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.ACTION_CONTACT_CHANAGED);
-        intentFilter.addAction(Constants.ACTION_GROUP_CHANAGED);
-        broadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                LogUtil.i("收到广播");
-                //  updateUnreadLabel();
-                //   updateUnreadAddressLable();
-
-                // refresh conversation list
-                if (shopFragment != null) {
-                    shopFragment.refresh();
-                }
-
-//                else if (currentTabIndex == 1) {
-//                    if(contactListFragment != null) {
-//                        contactListFragment.refresh();
-//                    }
+//    private void refreshUIWithMessage() {
+//        runOnUiThread(new Runnable() {
+//            public void run() {
+//                // refresh unread count
+//                //updateUnreadLabel();
+//
+//                // refresh conversation list
+//                if (shopFragment != null) {
+//                    shopFragment.refresh();
 //                }
-//                String action = intent.getAction();
-//                if(action.equals(Constants.ACTION_GROUP_CHANAGED)){
-//                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
-//                        GroupsActivity.instance.onResume();
-//                    }
-//                }
-            }
-        };
-        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
-    }
+//
+//            }
+//        });
+//    }
 
-    private void unregisterBroadcastReceiver() {
-        broadcastManager.unregisterReceiver(broadcastReceiver);
-    }
+
+//    private BroadcastReceiver broadcastReceiver;
+//    private LocalBroadcastManager broadcastManager;
+////
+//    private void registerBroadcastReceiver() {
+//        broadcastManager = LocalBroadcastManager.getInstance(this);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(Constants.ACTION_CONTACT_CHANAGED);
+//        intentFilter.addAction(Constants.ACTION_GROUP_CHANAGED);
+//        broadcastReceiver = new BroadcastReceiver() {
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                LogUtil.i("收到广播");
+//                //  updateUnreadLabel();
+//                //   updateUnreadAddressLable();
+//
+//                // refresh conversation list
+//                if (shopFragment != null) {
+//                    shopFragment.refresh();
+//                }
+//
+////                else if (currentTabIndex == 1) {
+////                    if(contactListFragment != null) {
+////                        contactListFragment.refresh();
+////                    }
+////                }
+////                String action = intent.getAction();
+////                if(action.equals(Constants.ACTION_GROUP_CHANAGED)){
+////                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
+////                        GroupsActivity.instance.onResume();
+////                    }
+////                }
+//            }
+//        };
+//        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+//    }
+//
+//    private void unregisterBroadcastReceiver() {
+//        broadcastManager.unregisterReceiver(broadcastReceiver);
+//    }
 
     /**
      * 设置mipusid
