@@ -376,17 +376,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case MotionEvent.ACTION_UP:
                 //抬起时
-                LogUtil.i("---ACTION_UP-----");
                 if (!isSendWearFit) {
                     isSendWearFit = true;
-
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-                            initWearFitData();
-//                        }
-//                    }).start();
-
+                    initWearFitData();
                 }
                 break;
         }
