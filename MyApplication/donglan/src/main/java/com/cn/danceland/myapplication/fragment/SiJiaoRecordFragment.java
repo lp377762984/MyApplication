@@ -314,7 +314,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 viewHolder.course_type.setText("小团体");
 //                String time1 = TimeUtils.timeStamp2Date(list.get(position).getd + "", null);
             } else {
-                viewHolder.course_type.setText("一对一");
+                viewHolder.course_type.setText("单人私教");
             }
 
 

@@ -180,7 +180,7 @@ public class MySendCardFragment extends BaseFragment {
             }
             viewHolder.tv_phone.setText("好友电话："+mCardList.get(i).getPhone_no());
             viewHolder.tv_order_name.setText("好友姓名："+mCardList.get(i).getMember_name());
-            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            RequestOptions options=new RequestOptions().placeholder(R.drawable.sijiao_card);
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }

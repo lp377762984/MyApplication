@@ -377,7 +377,7 @@ public class SiJiaoFragment extends BaseFragment {
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
-                viewHolder.sijiao_fangshi.setText("一对一");
+                viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
                 viewHolder.sijiao_fangshi.setText("小团体");
             } else {
@@ -517,7 +517,7 @@ public class SiJiaoFragment extends BaseFragment {
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
-                viewHolder.sijiao_fangshi.setText("一对一");
+                viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
 
                 viewHolder.sijiao_fangshi.setText("小团体");

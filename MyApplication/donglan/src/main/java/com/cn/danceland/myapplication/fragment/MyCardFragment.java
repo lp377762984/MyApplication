@@ -245,7 +245,7 @@ public class MyCardFragment extends BaseFragment {
                     startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                 }
             });
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card);
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }

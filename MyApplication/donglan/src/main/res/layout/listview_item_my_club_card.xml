@@ -19,7 +19,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/img_club_card" />
+            android:src="@drawable/sijiao_card" />
 
         <LinearLayout
             android:layout_width="match_parent"

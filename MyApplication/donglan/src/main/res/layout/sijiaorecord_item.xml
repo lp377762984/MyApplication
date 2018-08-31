@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#c0c0c0"
-                android:text="一对一"
+                android:text="单人私教"
                 android:textSize="12sp"
                 android:layout_weight="1"
                 android:gravity="bottom"

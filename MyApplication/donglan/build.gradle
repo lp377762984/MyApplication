@@ -103,7 +103,10 @@ android {
         compile 'com.ms-square:expandableTextView:0.1.4'
         compile 'com.github.dfqin:grantor:2.1.0'
 
-
+//        compile 'com.android.support:support-compat:25.1.1'
+//        compile 'com.daimajia.easing:library:2.0@aar'
+//        compile 'com.daimajia.androidanimations:library:2.3@aar'
+      //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
     }
 }
 

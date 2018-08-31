@@ -177,7 +177,7 @@ public class SellCardActivity extends Activity implements View.OnClickListener {
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            RequestOptions options=new RequestOptions().placeholder(R.drawable.img_club_card);
+            RequestOptions options=new RequestOptions().placeholder(R.drawable.sijiao_card);
             Glide.with(SellCardActivity.this).load(sellCardsInfoBean.getData().get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
 
 

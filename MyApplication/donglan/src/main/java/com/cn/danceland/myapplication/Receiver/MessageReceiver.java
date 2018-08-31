@@ -77,7 +77,7 @@ public class MessageReceiver extends PushMessageReceiver {
             }
             else if("7".equals(type)){
                 LogUtil.i("一对一入场");
-                EventBus.getDefault().post(new StringEvent("一对一私教入场成功",6881));
+                EventBus.getDefault().post(new StringEvent("单人私教入场成功",6881));
              //   ToastUtils.showToastShort("一对一私教入场成功");
             }
             else if("8".equals(type)){

@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+//
 
 /**
  * Created by shy on 2017/11/29 13:19
@@ -21,7 +22,7 @@ import com.cn.danceland.myapplication.R;
  */
 
 
-public class NewsDetailsActivity extends Activity implements View.OnClickListener {
+public class NewsDetailsActivity extends Activity implements View.OnClickListener{
     private String mUrl;
     private ProgressBar mProgress;
     private WebView mWebView;
@@ -30,11 +31,22 @@ public class NewsDetailsActivity extends Activity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_news_detail);
-
+        View view = View.inflate(this, R.layout.activity_news_detail, null);
+        setContentView(view);
+//        YoYo.with(Techniques.BounceIn)
+//                .duration(1000)
+//                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+//                //  .repeat(5)
+//                .playOn(view);
         initView();
         initData();
+    //    setEnterSwichLayout();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+       // setExitSwichLayout();
     }
 
     private void initView() {
@@ -120,4 +132,18 @@ public class NewsDetailsActivity extends Activity implements View.OnClickListene
         }
 
     }
+
+//    @Override
+//    public void setEnterSwichLayout() {
+//        SwitchLayout.RotateCenterIn(this, false, null);
+//
+//    }
+//
+//    @Override
+//    public void setExitSwichLayout() {
+//
+//                SwitchLayout.RotateCenterOut(this, true, null);
+//
+//
+//    }
 }

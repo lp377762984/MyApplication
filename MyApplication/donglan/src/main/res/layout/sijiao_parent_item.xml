@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/sijiao_title"
                 android:layout_centerHorizontal="true"
-                android:text="一对一"
+                android:text="单人私教"
                 android:textColor="#c0c0c0"
                 android:textSize="12sp" />
 

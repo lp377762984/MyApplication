@@ -145,7 +145,7 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
             String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date(), "yyyy-MM-dd");
             tv_youxiaoqi.setText("有效期: "+dataList.get(position).getTime_length()+"天");
             if(dataList.get(position).getCourse_category()==1){
-                tv_category.setText("一对一");
+                tv_category.setText("单人私教");
             }else if(dataList.get(position).getCourse_category()==2){
                 tv_category.setText("小团课");
             }

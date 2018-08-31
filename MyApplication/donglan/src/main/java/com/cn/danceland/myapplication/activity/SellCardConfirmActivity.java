@@ -154,7 +154,7 @@ public class SellCardConfirmActivity extends Activity implements View.OnClickLis
         TextView tv_cardname1 = findViewById(R.id.tv_cardname1);
         tv_shuoming = findViewById(R.id.tv_shuoming);
         XCRoundRectImageView iv_card = findViewById(R.id.iv_card);
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_club_card);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card);
         Glide.with(SellCardConfirmActivity.this).load(CardsInfo.getImg_url()).apply(options).into(iv_card);
 
         if (CardsInfo.getCharge_mode() == 1) {//计时卡

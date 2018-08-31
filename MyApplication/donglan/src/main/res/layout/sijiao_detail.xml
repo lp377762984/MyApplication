@@ -95,7 +95,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    android:text="一对一"
+                    android:text="单人私教"
                     android:textColor="#c0c0c0"
                     android:textSize="12sp"
 

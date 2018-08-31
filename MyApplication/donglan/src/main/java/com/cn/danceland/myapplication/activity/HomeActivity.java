@@ -248,8 +248,12 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EventBus.getDefault().register(this);
-        setContentView(R.layout.activity_home);
+        View view=View.inflate(this,R.layout.activity_home,null);
+        setContentView(view);
+
+
         //    requestPermissions();//请求权限
         instance = this;
         initView();

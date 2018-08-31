@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.ForOtherListBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -155,7 +154,7 @@ public class MySiJiaoFragment extends BaseFragment {
             String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date()+"", "yyyy-MM-dd");
             tv_youxiaoqi.setText("有效期: "+start_date+" 至 "+end_date);
             if(dataList.get(position).getCourse_category()==1){
-                tv_category.setText("一对一");
+                tv_category.setText("单人私教");
             }else if(dataList.get(position).getCourse_category()==2){
                 tv_category.setText("小团课");
             }

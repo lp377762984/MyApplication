@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="一对一"
+                        android:text="单人私教"
                         android:textColor="@color/white"
                         android:layout_marginTop="5dp"
                         />
@@ -95,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="一对一"
+                        android:text="单人私教"
                         android:textColor="@color/white"
                         android:layout_marginTop="2dp"
                         />
@@ -104,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="一对一"
+                        android:text="单人私教"
                         android:textColor="@color/white"
                         android:layout_marginTop="2dp"
                         />

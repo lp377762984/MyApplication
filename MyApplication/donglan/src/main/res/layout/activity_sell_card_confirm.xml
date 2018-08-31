@@ -52,7 +52,7 @@
                 android:layout_height="187dp"
 
                 android:layout_gravity="center"
-                android:src="@drawable/img_club_card" />
+                android:src="@drawable/sijiao_card" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
