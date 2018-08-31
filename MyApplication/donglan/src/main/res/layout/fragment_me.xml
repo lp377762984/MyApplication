@@ -7,9 +7,9 @@
     <com.cn.danceland.myapplication.view.HeadZoomScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,8 +21,7 @@
                 android:layout_height="240dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:scaleType="centerCrop"
-               />
+                android:scaleType="centerCrop" />
 
             <ImageView
 
@@ -70,10 +69,10 @@
                 android:layout_height="60dp"
 
 
-                android:background="@drawable/img_bg_juxing"
-                android:orientation="horizontal"
                 android:layout_alignBottom="@+id/line11"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/img_bg_juxing"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/ll_my_dyn"
@@ -100,9 +99,9 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
                         android:text="0"
-                        android:textStyle="bold"
                         android:textColor="@color/color_dl_yellow"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -136,8 +135,9 @@
 
 
                 </LinearLayout>
+
                 <LinearLayout
-                  android:id="@+id/ll_my_fans"
+                    android:id="@+id/ll_my_fans"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -160,9 +160,9 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         android:text="0"
-                        android:textStyle="bold"
                         android:textColor="@color/color_dl_yellow"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
 
                 </LinearLayout>
@@ -171,19 +171,25 @@
 
             <LinearLayout
                 android:id="@+id/ll_02"
-                android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_top_bg"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="50dp"
+                android:clickable="true"
                 android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:background="@color/color_bg_line" />
+
                 <LinearLayout
                     android:id="@+id/ll_my_shouhuan"
-
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-
                     android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
@@ -208,17 +214,71 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-
                         android:layout_marginRight="25dp"
                         android:src="@drawable/img_arrow_r" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:background="@color/color_bg_line" />
+
+                <LinearLayout
+                    android:id="@+id/ll_my_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_setting_item_selector"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="25dp"
+                        android:src="@drawable/img_my_data" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="体测数据"
+                        android:textColor="@color/color_content_text"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="25dp"
+                        android:src="@drawable/img_arrow_r" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:background="@color/color_bg_line" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_bg_line" />
+
                 <LinearLayout
                     android:id="@+id/ll_my_msg"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:background="@drawable/bg_setting_item_selector"
                     android:clickable="true"
                     android:gravity="center_vertical"
-                    android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -233,9 +293,9 @@
                         android:id="@+id/tv_message"
                         android:layout_width="0dp"
                         android:layout_height="30dp"
-                        android:gravity="center_vertical"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
+                        android:gravity="center_vertical"
                         android:text="我的通知"
                         android:textColor="@color/color_content_text"
                         android:textSize="15sp" />
@@ -255,11 +315,13 @@
                     android:layout_below="@id/ll_setting"
                     android:layout_centerVertical="true"
                     android:background="@color/color_bg_line" />
+
                 <LinearLayout
                     android:id="@+id/ll_03"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:id="@+id/ll_my_shop"
                         android:layout_width="match_parent"
@@ -300,6 +362,7 @@
                     android:layout_below="@id/ll_setting"
                     android:layout_centerVertical="true"
                     android:background="@color/color_bg_line" />
+
                 <LinearLayout
                     android:id="@+id/ll_my_xiaofei"
                     android:layout_width="match_parent"
@@ -329,16 +392,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-
                         android:layout_marginRight="25dp"
                         android:src="@drawable/img_arrow_r" />
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/ll_my_data"
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:background="@color/color_bg_line" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="10dp"
+                    android:background="@color/color_bg_line" />
+
+                <LinearLayout
+                    android:id="@+id/ll_consult"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-
                     android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
@@ -347,7 +423,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/img_my_data" />
+                        android:src="@drawable/img_consult" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -355,7 +431,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
-                        android:text="体测数据"
+                        android:text="我想咨询"
                         android:textColor="@color/color_content_text"
                         android:textSize="15sp" />
 
@@ -363,10 +439,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-
                         android:layout_marginRight="25dp"
                         android:src="@drawable/img_arrow_r" />
                 </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -374,15 +450,57 @@
                     android:layout_centerVertical="true"
                     android:background="@color/color_bg_line" />
 
+                <LinearLayout
+                    android:id="@+id/ll_recommend"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_setting_item_selector"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="25dp"
+                        android:src="@drawable/img_recommend" />
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="我想推荐"
+                        android:textColor="@color/color_content_text"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="25dp"
+                        android:src="@drawable/img_arrow_r" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:background="@color/color_bg_line" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_below="@id/ll_setting"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/color_bg_line" />
 
                 <LinearLayout
                     android:id="@+id/ll_setting"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-
                     android:background="@drawable/bg_setting_item_selector"
                     android:orientation="horizontal">
 
@@ -407,11 +525,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-
                         android:layout_marginRight="25dp"
                         android:src="@drawable/img_arrow_r" />
                 </LinearLayout>
-
 
                 <View
                     android:layout_width="match_parent"

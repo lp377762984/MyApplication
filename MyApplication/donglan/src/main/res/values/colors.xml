@@ -80,6 +80,10 @@
     <color name="colorGray9">#666666</color>
     <!--gray10-->
     <color name="colorGray10">#cecece</color>
+    <!--gray10-->
+    <color name="colorGray11">#979797</color>
+    <!--gray10-->
+    <color name="colorGray12">#8f8f8f</color>
 
     <color name="c1">#0ACCAC</color>
     <color name="c2">#222b48</color>

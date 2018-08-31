@@ -1,7 +1,5 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +20,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -32,15 +29,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.shouhuan.adapter.StepAdapter;
 import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepLastBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepMorePostBean;
-import com.cn.danceland.myapplication.shouhuan.bean.SleepResultBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepLastBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepListBean;
