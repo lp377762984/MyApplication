@@ -14,11 +14,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.ConsultListActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
 import com.cn.danceland.myapplication.activity.MyConsumeActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.MyShopActivity;
+import com.cn.danceland.myapplication.activity.RecommendListActivity;
 import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
@@ -83,6 +85,8 @@ public class MeFragment extends BaseFragment {
         v.findViewById(R.id.iv_top_bg).setOnClickListener(this);
         v.findViewById(R.id.ll_my_xiaofei).setOnClickListener(this);
         v.findViewById(R.id.ll_my_shouhuan).setOnClickListener(this);
+        v.findViewById(R.id.ll_consult).setOnClickListener(this);//我想咨询
+        v.findViewById(R.id.ll_recommend).setOnClickListener(this);//我想推荐
 
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
@@ -286,6 +290,12 @@ public class MeFragment extends BaseFragment {
                     ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
                 }
 
+                break;
+            case R.id.ll_consult://我想咨询
+                    startActivity(new Intent(mActivity, ConsultListActivity.class));
+                break;
+            case R.id.ll_recommend://我想推荐
+                    startActivity(new Intent(mActivity, RecommendListActivity.class));
                 break;
             default:
                 break;

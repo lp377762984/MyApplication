@@ -1,8 +1,7 @@
 package com.cn.danceland.myapplication.utils;
-
 import com.cn.danceland.myapplication.MyApplication;
 
-public class Constants {
+public class Constants  {
     public static final String PLATFORM = "1";//平台1：安卓，2：IOS,3：浏览器
     public static final int MAX_FRIEND_COUNT = 900;//最大好友数量
 
@@ -14,19 +13,19 @@ public class Constants {
         return PLATFORM;
     }
 
-    //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
-    //   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
+  //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
+  //   public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
     //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
     // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
-    // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
-    //  public static String HOST = "http://192.168.1.66:8003/";//佳楠
-    public static final String HOST = " http://192.168.1.117:8003/";//
-    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-//   public static final String HOST = "http://192.168.1.55:8003/";//老高
-    //   public static final String HOST = "http://118.190.201.15:6003/";//
-    //  public static final String HOST = " http://192.168.1.96:8003/";//
+  // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
+  //  public static String HOST = "http://192.168.1.66:8003/";//佳楠
+    //public static final String HOST = " http://192.168.1.117:8003/";//
+   // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+   public static final String HOST = "http://192.168.1.55:8003/";//老高
+ //   public static final String HOST = "http://118.190.201.15:6003/";//
+   //  public static final String HOST = " http://192.168.1.96:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
-//   public static  String HOST = "http://192.168.1.123:8003/";//超哥
+  // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
@@ -182,7 +181,7 @@ public class Constants {
     public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
     public static final String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
-    public static final String INTRODUCE_QUERYPAGEBYEMPLOYEE = HOST + "/introduce/queryPageByEmployee";//会员推荐
+    public static final String INTRODUCE_QUERYPAGEBYEMPLOYEE       = HOST + "/introduce/queryPageByEmployee";//会员推荐
     public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐
     public static final String INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 
@@ -265,7 +264,15 @@ public class Constants {
     public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条计步数据
     public static final String QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG = HOST + "/personStep/findFatigueAvg";//根据条件查询疲劳每日平均数
 
-    //环信相关
+ //咨询 推荐
+    public static final String QUERY_MY_CONSULT = HOST + "/consultation/queryMyConsultations";//获取我的咨询
+    public static final String QUERY_SAVE_CONSULT = HOST + "/consultation/saveConsultation";//新增[咨询记录表]
+    public static final String QUERY_MY_RECOMMEND= HOST + "/consultation/queryMyReferrals";//获取我的推荐
+    public static final String QUERY_SAVE_RECOMMEND = HOST + "/consultation/saveReferral";//新增我的推荐记录
+
+
+
+ //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
     public static final String CHAT_ROOM = "item_chatroom";

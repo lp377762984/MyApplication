@@ -472,13 +472,15 @@ public class WearFitSettingActivity extends Activity {
                                 });
                         break;
                     case R.id.restore_layout://恢复出厂设置
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(context);
+                        final AlertDialog.Builder builder2 = new AlertDialog.Builder(context);
                         builder2.setTitle("警告");
                         builder2.setMessage("确定要恢复出厂设置吗?");
+                        final AlertDialog alertDialog = builder2.show();
                         builder2.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                dia.dismiss();
+
+                                alertDialog.dismiss();
                             }
                         });
                         builder2.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -486,7 +488,6 @@ public class WearFitSettingActivity extends Activity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 commandManager.setClearData();
                                 commandManager.Shutdown();
-
                             }
                         });
                         builder2.show();

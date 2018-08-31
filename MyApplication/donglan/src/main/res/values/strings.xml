@@ -867,4 +867,32 @@
     <string name="fatigue_measure_instructions_hint_text">1.测量请在静止状态下戴紧手环，紧贴皮肤不漏光\n2.应用进入后台，可能会测量失败\n3.实时测量在离开页面会停止测量\n4.实时测量每5分钟接收一次数据，开始一段时间收到0的次数较多</string>
 
     <string name="link_bracelet_text">连接手环</string>
+
+    <!--咨询 推荐-->
+    <string name="consult_text">我想咨询</string>
+    <string name="consult_list_text">咨询列表</string>
+    <string name="consult_state_in_text">咨询中</string>
+    <string name="consult_state_succeed_text">咨询成功</string>
+    <string name="consult_state_fails_text">咨询失败</string>
+    <string name="consult_gym_join_text">健身房加盟</string>
+    <string name="consult_gym_teamwork_text">健身房合作</string>
+    <string name="consult_gym_admin_text">健身房管理</string>
+    <string name="consult_join_type_text">合作类型</string>
+    <string name="consult_buy_type_text">购买类型</string>
+    <string name="consult_train_type_text">学习类型</string>
+
+    <string name="recommend_text">我想推荐</string>
+    <string name="recommend_list_text">推荐列表</string>
+    <string name="recommend_data_text">推荐资料</string>
+    <string name="name_text">姓名</string>
+    <string name="name_hint_text">请输入姓名</string>
+    <string name="tel_hint_text">请输入手机</string>
+    <string name="remark_hint_text">请输入备注</string>
+    <string name="sex_text">性别</string>
+    <string name="tel_text">手机</string>
+    <string name="remark_text">备注</string>
+
+    <string name="recommend_state_in_text">推广中</string>
+    <string name="recommend_state_succeed_text">推广成功</string>
+    <string name="recommend_state_fails_text">推广失败</string>
 </resources>

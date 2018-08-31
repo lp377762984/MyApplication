@@ -748,6 +748,24 @@
         <activity
             android:name=".shouhuan.activity.WearFitFatigueMeasureActivity"
             android:screenOrientation="portrait" />
+        <!--我想咨询-->
+        <activity
+            android:name=".activity.ConsultListActivity"
+            android:screenOrientation="portrait" />
+        <!--我想推荐-->
+        <activity
+            android:name=".activity.RecommendListActivity"
+            android:screenOrientation="portrait" />
+        <!--新增推荐-->
+        <activity
+            android:name=".activity.AddConsultOrRecommendActivity"
+            android:screenOrientation="portrait" />
+
+        <!--AlertDialog  有×的-->
+        <activity
+            android:name=".activity.AlertDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyle"/>
 
         <receiver
             android:name=".Receiver.MessageReceiver"
