@@ -573,11 +573,6 @@ public class WearFitCameraActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (cameraDevice != null) {
-            stopCamera();
-        }
-        commandManager.setSharkTakePhoto(0);//摇摇拍照指令 0关  1开
-        unregisterReceiver(mGattUpdateReceiver);
     }
 
     @Override
@@ -587,7 +582,11 @@ public class WearFitCameraActivity extends Activity {
             stopCamera();
         }
         commandManager.setSharkTakePhoto(0);//摇摇拍照指令 0关  1开
-        unregisterReceiver(mGattUpdateReceiver);
+        try {
+            unregisterReceiver(mGattUpdateReceiver);
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
     }
 
     private IntentFilter makeGattUpdateIntentFilter() {
