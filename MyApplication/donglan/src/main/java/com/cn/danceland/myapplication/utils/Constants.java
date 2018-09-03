@@ -21,9 +21,9 @@ public class Constants  {
   //  public static String HOST = "http://192.168.1.66:8003/";//佳楠
     //public static final String HOST = " http://192.168.1.117:8003/";//
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-   public static final String HOST = "http://192.168.1.55:8003/";//老高
+//   public static final String HOST = "http://192.168.1.66:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
-   //  public static final String HOST = " http://192.168.1.96:8003/";//
+     public static final String HOST = " http://192.168.1.115:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
   // public static  String HOST = "http://192.168.1.122:8003/";//超哥
 
@@ -68,7 +68,7 @@ public class Constants  {
     public static final String BRANCH = HOST + "branch";//获取门店列表
     public static final String JOINBRANCH = HOST + "branch/join";//加入或者取消门店
     public static final String GETMENUS = HOST + "appRoleFunction/getMenus";//获取菜单权限
-    public static final String GETYUANGONGMENUS = HOST + "appMenuFunction/queryEmpFunctions";//获取员工菜单权限
+    public static final String GETYUANGONGMENUS = HOST + "appMenuFunction/queryByRoleIdEmpFuncV2";//获取员工菜单权限
     public static final String GETHUIYUANMENUS = HOST + "appMenuFunction/queryMemFunctions";//获取会员菜单权限
     public static final String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
     public static final String SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
