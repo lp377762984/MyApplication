@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -129,7 +127,7 @@ public class WearFitActivity extends Activity {
         tv_km = findViewById(R.id.tv_km);
         progressb_target = findViewById(R.id.progressb_target);
         setListener();
-
+        heartRateLast = wear_fit_home_data.getInt("heart_rate", 0);
         initChildView(wear_fit_home_data.getInt("step", 0)
                 , wear_fit_home_data.getInt("kcal", 0)
                 , wear_fit_home_data.getInt("heart_rate", 0)
@@ -478,14 +476,16 @@ public class WearFitActivity extends Activity {
                     Calendar calendar = Calendar.getInstance();
                     Date nowTime = new Date(TimeUtils.date2TimeStamp(date, "yyyy-MM-dd HH:mm:ss"));
                     Date endTime = new Date(calendar.getTimeInMillis());
-                    calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) - 15);
+                    calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) - 8);
                     Date startTime = new Date(calendar.getTimeInMillis());
 
-//                    if (TimeUtils.isEffectiveDate(nowTime, startTime, endTime)) {//十五分钟之内  暂时不用 高威2018.8.27
-                    heartRateLast = datas.get(11);
-                    itemBeans.get(0).text2 = heartRateLast + "";//item 心率
-                    adapter.notifyDataSetChanged();
-//                    }
+                    if (TimeUtils.isEffectiveDate(nowTime, startTime, endTime)) {//八分钟之内  暂时不用 高威2018.8.27
+                        heartRateLast = datas.get(11);
+                        if (datas.get(11) != 0) {
+                            itemBeans.get(0).text2 = heartRateLast + "";//item 心率
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
                 }
                 //拉取睡眠数据
                 if (datas.get(4) == 0x52 && datas.size() == 14) {//[171, 0, 11, 255, 82, 128, 18, 7, 31, 0, 49, 2, 0, 29]  11位state 12位*256+13位
@@ -532,7 +532,6 @@ public class WearFitActivity extends Activity {
                     int ligthSleep = datas.get(12) * 60 + datas.get(13);//浅睡
                     int deepSleep = datas.get(14) * 60 + datas.get(15);//深睡
                     int wakeupTime = datas.get(16);//醒来次数
-
                     initChildView(step, cal, heartRateLast, deepSleep + ligthSleep);
                 }
             }
@@ -541,6 +540,17 @@ public class WearFitActivity extends Activity {
     int heartRateLast = 0;//最后心率值
 
     private void initHeartData() {
+        //显示本地数据库最后一条心率
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        List<HeartRate> heartRates = heartRateHelper.queryByDay(TimeUtils.date2TimeStamp(year + "-" + month + "-" + day, "yyyy-MM-dd"));//获取本地数据库心率
+        if (heartRates != null && heartRates.size() != 0) {
+            heartRateLast = heartRates.get(heartRates.size() - 1).getHeartRate();
+            itemBeans.get(0).text2 = heartRateLast + "";//item 心率
+            adapter.notifyDataSetChanged();
+        }
         long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
         LogUtil.i("获取这个之后的心率数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);
