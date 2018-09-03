@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +122,7 @@ public class ShopFragment extends BaseFragment {
     PopupWindow popupWindow;
     RelativeLayout rl_role;
     ImageView down_img, up_img;
+    private String role_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +151,7 @@ public class ShopFragment extends BaseFragment {
         v = View.inflate(mActivity, R.layout.fragment_shop, null);
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-
+LogUtil.i(info.getRoles().toString());
         roleList = new ArrayList<String>();
         shop_banner = v.findViewById(R.id.shop_banner);
         tv_role = v.findViewById(R.id.tv_role);
@@ -500,8 +502,23 @@ public class ShopFragment extends BaseFragment {
         RolesBean rolesBean = new RolesBean();
         if (role != null) {
             if (!"准会员".equals(role) && !"会员".equals(role)) {
+
+
+
+
+                id = roleMap.get(role);
                 rolesBean.setRole_type(roleMap.get(role));
                 //id = roleMap.get(role);
+
+                role_id = null;
+                for(int i = 0;i < info.getRoles().size();i++){
+                    LogUtil.i(id+"----"+info.getRoles().get(i).getRole_type()+"");
+                    if (TextUtils.equals(id,info.getRoles().get(i).getRole_type()+"")){
+                        rolesBean.setId(info.getRoles().get(i).getId());
+                    }
+                }
+
+
                 url = Constants.GETYUANGONGMENUS;
                 String s = gson.toJson(rolesBean);
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
@@ -539,8 +556,14 @@ public class ShopFragment extends BaseFragment {
                 MyApplication.getHttpQueues().add(jsonObjectRequest);
 
             } else {
+
+
+
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;
+
+
+
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
@@ -569,6 +592,8 @@ public class ShopFragment extends BaseFragment {
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String, String> map = new HashMap<>();
                         map.put("role_type", id);
+                      //  map.put("id", role_id);
+                        LogUtil.i(map.toString());
                         return map;
                     }
 

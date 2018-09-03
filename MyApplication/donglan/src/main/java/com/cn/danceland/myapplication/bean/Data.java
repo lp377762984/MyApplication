@@ -1362,6 +1362,19 @@ public class Data implements Serializable {
         private String remark;
         private String department_name;
 
+        @Override
+        public String toString() {
+            return "Roles{" +
+                    "id=" + id +
+                    ", department_id=" + department_id +
+                    ", name='" + name + '\'' +
+                    ", role_type=" + role_type +
+                    ", delete_remark='" + delete_remark + '\'' +
+                    ", remark='" + remark + '\'' +
+                    ", department_name='" + department_name + '\'' +
+                    '}';
+        }
+
         public void setId(int id) {
             this.id = id;
         }
