@@ -388,7 +388,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
 
-                //环信登录
+
                 if (loginInfoBean.getSuccess()) {
 
                     SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
@@ -420,6 +420,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
+                LogUtil.i(volleyError.toString());
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
 
             }
@@ -431,6 +432,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 map.put("terminal", "1");
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
                 return map;
             }
         };

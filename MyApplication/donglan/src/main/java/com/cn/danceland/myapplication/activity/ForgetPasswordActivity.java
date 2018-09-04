@@ -313,11 +313,7 @@ public class ForgetPasswordActivity extends Activity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 
-                LogUtil.i(volleyError.toString() + "Error: " + volleyError
-                        + ">>" + volleyError.networkResponse.statusCode
-                        + ">>" + volleyError.networkResponse.data
-                        + ">>" + volleyError.getCause()
-                        + ">>" + volleyError.getMessage());
+                LogUtil.i(volleyError.toString());
             }
         }) {
             @Override

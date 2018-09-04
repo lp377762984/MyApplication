@@ -14,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -395,7 +394,9 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                 long lastTime = 0;
                 if (heartRateLastBean != null) {
                     lastDateTime = heartRateLastBean.getData();//服务器最后心率
-                    lastTime = lastDateTime.getTimestamp();
+                    if(lastDateTime!=null) {
+                        lastTime = lastDateTime.getTimestamp();
+                    }
                 }
                 queryAllHeartByDay(lastTime);
             }

@@ -585,7 +585,7 @@ public class WearFitCameraActivity extends Activity {
         try {
             unregisterReceiver(mGattUpdateReceiver);
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

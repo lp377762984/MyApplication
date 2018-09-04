@@ -171,19 +171,33 @@ public class WearFitSettingActivity extends Activity {
         builder = new AlertDialog.Builder(this);
 
         //------同步动岚的个人信息--开始------
+        if (infoData != null) {
+            if (infoData.getPerson() != null) {
+
+            }
+        }
         if ("2".equals(infoData.getPerson().getGender())) {
             wearFitUser.setSex(2);//性别
         } else {
             wearFitUser.setSex(1);
         }
-        if (infoData.getPerson().getHeight() != null) {//身高  "170.0"
-            String hStr = infoData.getPerson().getHeight().substring(0, infoData.getPerson().getHeight().indexOf("."));
+        LogUtil.i("infoData.getPerson().getHeight()" + infoData.getPerson().getHeight());
+        if (infoData.getPerson().getHeight() != null && infoData.getPerson().getHeight().length() > 0) {//身高  "170.0"
+            int idx = infoData.getPerson().getHeight().indexOf(".");
+            String hStr = 173 + "";
+            if (idx > 0) {
+                hStr = infoData.getPerson().getHeight().substring(0, idx);
+            }
             wearFitUser.setHeight(Integer.valueOf(hStr));
         } else {
             wearFitUser.setHeight(173);//手环默认
         }
-        if (infoData.getPerson().getWeight() != null) {
-            String wStr = infoData.getPerson().getWeight().substring(0, infoData.getPerson().getWeight().indexOf("."));
+        if (infoData.getPerson().getWeight() != null && infoData.getPerson().getWeight().length() > 0) {
+            int idx = infoData.getPerson().getWeight().indexOf(".");
+            String wStr = 65 + "";
+            if (idx > 0) {
+                wStr = infoData.getPerson().getWeight().substring(0, idx);
+            }
             wearFitUser.setWeight(Integer.valueOf(wStr));
         } else {
             wearFitUser.setWeight(65);//手环默认
@@ -651,6 +665,8 @@ public class WearFitSettingActivity extends Activity {
                 MyApplication.mBluetoothConnected = true;
                 MyApplication.isBluetoothConnecting = false;
                 ToastUtils.showToastShort("连接成功");
+                SPUtils.setString(Constants.ADDRESS, address);
+                SPUtils.setString(Constants.NAME, name);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
 //                MyApplication.mBluetoothConnected = false;
                 try {

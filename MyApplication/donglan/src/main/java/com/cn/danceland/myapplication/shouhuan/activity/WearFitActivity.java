@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
@@ -8,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +112,7 @@ public class WearFitActivity extends Activity {
             itemBeans.add(itemBean);
         }
         address1 = SPUtils.getString(Constants.ADDRESS, "");
-
+        LogUtil.i("ADDRESS2----" + address1);
         wear_fit_home_data = getSharedPreferences("wear_fit_home_data", MODE_PRIVATE);
     }
 
@@ -139,8 +142,9 @@ public class WearFitActivity extends Activity {
                 startActivity(new Intent(WearFitActivity.this, WearFitStepActivity.class));//计步
             }
         });
-        if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1)) {
+        if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1) && address1.length() > 0) {
             try {
+                LogUtil.i("ADDRESS1----" + address1);
                 if (MyApplication.mBluetoothLeService.connect(address1)) {
                     //tv_status.setText(name+"--"+address);
                     //ToastUtils.showToastShort("正在连接...");
@@ -250,7 +254,7 @@ public class WearFitActivity extends Activity {
             tv_connect.setText("还未绑定手环，点击绑定");
         }
     }
-
+    private final int RESULT_CODE_CAMERA = 1;//判断是否有拍照权限的标识码
     private void setListener() {
 
         tv_connect.setOnClickListener(new View.OnClickListener() {
@@ -277,11 +281,24 @@ public class WearFitActivity extends Activity {
                         startActivity(new Intent(WearFitActivity.this, WearFitFatigueActivity.class));
                         break;
                     case 3://摇摇拍照
+
                         if (MyApplication.mBluetoothConnected) {
-                            startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
+                            try {
+                                if (ActivityCompat.checkSelfPermission(WearFitActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                    //提示用户开户权限
+                                    String[] perms = {"android.permission.CAMERA"};
+                                    ActivityCompat.requestPermissions(WearFitActivity.this, perms, RESULT_CODE_CAMERA);
+
+                                }else{
+                                    startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         } else {
                             Toast.makeText(WearFitActivity.this, "手环未绑定", Toast.LENGTH_SHORT).show();
                         }
+
                         break;
                     case 4://健身计划
                         ToastUtils.showToastShort("功能正在开发中");
@@ -297,6 +314,22 @@ public class WearFitActivity extends Activity {
             }
         });
     }
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults) {
+        switch (permsRequestCode) {
+            case RESULT_CODE_CAMERA:
+                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (cameraAccepted) {
+                    //授权成功之后，调用系统相机进行拍照操作等
+                        startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
+                } else {
+                    //用户授权拒绝之后，友情提示一下就可以了
+                    Toast.makeText(WearFitActivity.this, "请开启应用拍照权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
 
     private Data infoData;
     private WearFitUser wearFitUser;
@@ -313,14 +346,22 @@ public class WearFitActivity extends Activity {
             } else {
                 wearFitUser.setSex(1);
             }
-            if (infoData.getPerson().getHeight() != null) {//身高  "170.0"
-                String hStr = infoData.getPerson().getHeight().substring(0, infoData.getPerson().getHeight().indexOf("."));
+            if (infoData.getPerson().getHeight() != null && infoData.getPerson().getHeight().length() > 0) {//身高  "170.0"
+                int idx = infoData.getPerson().getHeight().indexOf(".");
+                String hStr = 173 + "";
+                if (idx > 0) {
+                    hStr = infoData.getPerson().getHeight().substring(0, idx);
+                }
                 wearFitUser.setHeight(Integer.valueOf(hStr));
             } else {
                 wearFitUser.setHeight(173);//手环默认
             }
-            if (infoData.getPerson().getWeight() != null) {
-                String wStr = infoData.getPerson().getWeight().substring(0, infoData.getPerson().getWeight().indexOf("."));
+            if (infoData.getPerson().getWeight() != null && infoData.getPerson().getWeight().length() > 0) {
+                int idx = infoData.getPerson().getWeight().indexOf(".");
+                String wStr = 65 + "";
+                if (idx > 0) {
+                    wStr = infoData.getPerson().getWeight().substring(0, idx);
+                }
                 wearFitUser.setWeight(Integer.valueOf(wStr));
             } else {
                 wearFitUser.setWeight(65);//手环默认
@@ -375,6 +416,7 @@ public class WearFitActivity extends Activity {
             name = data.getStringExtra(Constants.NAME);
             SPUtils.setString(Constants.ADDRESS, address);
             SPUtils.setString(Constants.NAME, name);
+            address1 = SPUtils.getString(Constants.ADDRESS, "");
             if (!TextUtils.isEmpty(address)) {
 
                 try {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -27,6 +28,9 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
+import com.cn.danceland.myapplication.db.HeartRateHelper;
+import com.cn.danceland.myapplication.db.WearFitSleepHelper;
+import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.model.GroupInfo;
@@ -496,6 +500,25 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                     startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
                     SPUtils.setBoolean(Constants.ISLOGINED, false);
+                    //清空手环数据-- 开始
+                    if (MyApplication.mBluetoothConnected) {
+                        try {
+                            MyApplication.mBluetoothLeService.disconnect();
+                            MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
+                            SPUtils.setString(Constants.ADDRESS, "");
+                            SPUtils.setString(Constants.NAME, "");
+                            HeartRateHelper heartRateHelper = new HeartRateHelper();
+                            WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
+                            WearFitStepHelper stepHelper = new WearFitStepHelper();
+                            heartRateHelper.deleteAll();
+                            sleepHelper.deleteAll();
+                            stepHelper.deleteAll();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    //清空手环数据-- 结束
+
                     //退出主页面
                     HomeActivity.instance.finish();
                     finish();

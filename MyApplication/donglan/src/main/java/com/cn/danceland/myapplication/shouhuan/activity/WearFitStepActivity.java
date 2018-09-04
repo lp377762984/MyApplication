@@ -813,6 +813,7 @@ public class WearFitStepActivity extends Activity {
                 if (lastDateTime != null) {
                     lastTime = lastDateTime.getTimestamp();
                 }
+
                 queryAllSleepByDay(lastTime);
             }
         }, new Response.ErrorListener() {

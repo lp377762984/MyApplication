@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -137,6 +138,8 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private Animation animation;
 
     private CommandManager commandManager;//手环
+    private ProgressDialog progressDialog;
+    private String  address1="";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -182,8 +185,9 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     protected void onResume() {
         super.onResume();
         //EMClient.getInstance().chatManager().addMessageListener(messageListener);
+        address1 = SPUtils.getString(Constants.ADDRESS, "");
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());//手环
-      initConnWearFit();
+        initConnWearFit();
     }
 
     private AnimationSet mAnimationSet;
@@ -370,6 +374,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
 
         commandManager = CommandManager.getInstance(this);//手环
+        progressDialog = new ProgressDialog(this);
         initConnWearFit();
     }
     @Override
@@ -1025,11 +1030,15 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     //连接手环
     private void initConnWearFit() {
-        String  address1 = SPUtils.getString(Constants.ADDRESS, "");
-        if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1)) {
+        address1 = SPUtils.getString(Constants.ADDRESS, "");
+        LogUtil.i("ADDRESS"+address1);
+
+        if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1) && address1.length() > 0) {
             try {
                 if (MyApplication.mBluetoothLeService.connect(address1)) {
                     LogUtil.i("正在连接...");
+                    progressDialog.setMessage("正在连接...");
+                    progressDialog.show();
                 } else {
                     ToastUtils.showToastShort("连接失败");
                 }
@@ -1059,12 +1068,15 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+
+
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = true;
                 MyApplication.isBluetoothConnecting = false;
                 invalidateOptionsMenu();//更新菜单栏
                 LogUtil.i("连接成功...");
                 isSendWearFit = false;
+                progressDialog.dismiss();
 //                ToastUtils.showToastShort("连接成功");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;

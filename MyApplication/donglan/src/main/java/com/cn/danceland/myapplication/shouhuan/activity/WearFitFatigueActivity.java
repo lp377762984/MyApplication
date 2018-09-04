@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
@@ -28,11 +27,9 @@ import com.cn.danceland.myapplication.shouhuan.bean.HeartRatePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepListBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepResultBean;
-import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.ViewUtils;
@@ -42,7 +39,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -352,7 +348,11 @@ public class WearFitFatigueActivity extends Activity {
                             WearFitStepBean wfsb = new WearFitStepBean();
                             wfsb.setTimestamp(data.get(i).getTimestamp());
                             if (data.get(i).getFatigue() != null) {
-                                String hStr = data.get(i).getFatigue().substring(0, data.get(i).getFatigue().indexOf("."));
+                                int idx = data.get(i).getFatigue().indexOf(".");
+                                String hStr = 65 + "";
+                                if (idx > 0) {
+                                    hStr = data.get(i).getFatigue().substring(0, idx);
+                                }
                                 wfsb.setFatigue(Integer.valueOf(hStr));
                             } else {
                                 wfsb.setFatigue(0);
