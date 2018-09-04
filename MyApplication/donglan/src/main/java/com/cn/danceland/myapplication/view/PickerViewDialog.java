@@ -3,19 +3,12 @@ package com.cn.danceland.myapplication.view;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.Spannable;
-import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.MainActivity;
 import com.cn.danceland.myapplication.shouhuan.chart.DensityUtil;
 
 import java.util.ArrayList;
@@ -65,8 +58,8 @@ public class PickerViewDialog extends Dialog {
         pickerView.setOnSelectListener(new PickerView.onSelectListener() {
             @Override
             public void onSelect(String text) {
-                Toast.makeText(context, "选择了 " + text + " 分",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "选择了 " + text + " 分",
+//                        Toast.LENGTH_SHORT).show();
                 listener.getPickerSelect(text);
             }
         });
