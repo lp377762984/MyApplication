@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +35,7 @@ import java.util.List;
  */
 
 public class WearFitEquipmentActivity extends Activity {
+    private static final int GPS_REQUEST_CODE = 2;
     private static final int REQUEST_SEARCH = 1;
     private TextView tv_status;
     private String address;
@@ -74,13 +79,62 @@ public class WearFitEquipmentActivity extends Activity {
                     }
 
                 } else {
-                    Intent intent = new Intent(WearFitEquipmentActivity.this, DeviceScanActivity.class);
-                    startActivityForResult(intent, REQUEST_SEARCH);
+                    openGPSSettings();
+//                    Intent intent = new Intent(WearFitEquipmentActivity.this, DeviceScanActivity.class);
+//                    startActivityForResult(intent, REQUEST_SEARCH);
                 }
             }
         });
     }
+    /**
+     * 检测GPS是否打开
+     *
+     * @return
+     */
+    private boolean checkGPSIsOpen() {
+        boolean isOpen;
+        LocationManager locationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+        isOpen = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        return isOpen;
+    }
 
+    /**
+     * 跳转GPS设置
+     */
+    private void openGPSSettings() {
+        if (checkGPSIsOpen()) {
+            Intent intent = new Intent(WearFitEquipmentActivity.this, DeviceScanActivity.class);
+            startActivityForResult(intent, REQUEST_SEARCH);
+        } else {
+            //没有打开则弹出对话框
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.notifyTitle)
+                    .setMessage(R.string.gpsNotifyMsg)
+                    // 拒绝, 退出应用
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+
+                    .setPositiveButton(R.string.setting,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //跳转GPS设置界面
+                                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                    startActivityForResult(intent, GPS_REQUEST_CODE);
+                                }
+                            })
+
+                    .setCancelable(false)
+                    .show();
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

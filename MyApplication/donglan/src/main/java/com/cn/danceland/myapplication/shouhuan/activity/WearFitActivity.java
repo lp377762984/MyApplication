@@ -6,14 +6,18 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +67,7 @@ import java.util.List;
  * Created by feng on 2018/6/19.
  */
 public class WearFitActivity extends Activity {
+    private static final int GPS_REQUEST_CODE = 2;
     private static final int REQUEST_SEARCH = 1;
     private static final int MSG_REFRESH_DATA = 0;//请求数据  心率  睡眠
     private TextView tv_connect;
@@ -288,7 +293,6 @@ public class WearFitActivity extends Activity {
                                     //提示用户开户权限
                                     String[] perms = {"android.permission.CAMERA"};
                                     ActivityCompat.requestPermissions(WearFitActivity.this, perms, RESULT_CODE_CAMERA);
-
                                 }else{
                                     startActivity(new Intent(WearFitActivity.this, WearFitCameraActivity.class));
                                 }
@@ -305,7 +309,8 @@ public class WearFitActivity extends Activity {
 //                        startActivity(new Intent(WearFitActivity.this, WearFitFitnessPlanActivity.class));
                         break;
                     case 5://查找手环
-                        startActivityForResult(new Intent(WearFitActivity.this, DeviceScanActivity.class), REQUEST_SEARCH);
+                        openGPSSettings();
+//                        startActivityForResult(new Intent(WearFitActivity.this, DeviceScanActivity.class), REQUEST_SEARCH);
                         break;
                     case 6://设置
                         startActivity(new Intent(WearFitActivity.this, WearFitSettingActivity.class));
@@ -330,7 +335,54 @@ public class WearFitActivity extends Activity {
         }
     }
 
+    /**
+     * 检测GPS是否打开
+     *
+     * @return
+     */
+    private boolean checkGPSIsOpen() {
+        boolean isOpen;
+        LocationManager locationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+        isOpen = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        return isOpen;
+    }
 
+    /**
+     * 跳转GPS设置
+     */
+    private void openGPSSettings() {
+        if (checkGPSIsOpen()) {
+            startActivityForResult(new Intent(WearFitActivity.this, DeviceScanActivity.class), REQUEST_SEARCH);
+        } else {
+            //没有打开则弹出对话框
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.notifyTitle)
+                    .setMessage(R.string.gpsNotifyMsg)
+                    // 拒绝, 退出应用
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            })
+
+                    .setPositiveButton(R.string.setting,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //跳转GPS设置界面
+                                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                    startActivityForResult(intent, GPS_REQUEST_CODE);
+                                }
+                            })
+
+                    .setCancelable(false)
+                    .show();
+
+        }
+    }
     private Data infoData;
     private WearFitUser wearFitUser;
 
@@ -411,6 +463,10 @@ public class WearFitActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GPS_REQUEST_CODE) {
+            //做需要做的事情，比如再次检测是否打开GPS了 或者定位
+            openGPSSettings();
+        }
         if (requestCode == REQUEST_SEARCH && resultCode == RESULT_OK) {
             address = data.getStringExtra(Constants.ADDRESS);
             name = data.getStringExtra(Constants.NAME);

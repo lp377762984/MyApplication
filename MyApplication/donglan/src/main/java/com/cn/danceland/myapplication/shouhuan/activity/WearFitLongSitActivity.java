@@ -6,19 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.ClockBean;
-import com.cn.danceland.myapplication.db.HeartRate;
-import com.cn.danceland.myapplication.db.WearFitSleepBean;
 import com.cn.danceland.myapplication.shouhuan.bean.LongSit;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
@@ -26,7 +20,6 @@ import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -34,8 +27,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,6 +123,7 @@ public class WearFitLongSitActivity extends Activity {
         rightTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ToastUtils.showToastShort("保存成功");
                 if ("久坐提醒".equals(from)) {
                     SPUtils.setString("LongSit", gson.toJson(longSit));
                     commandManager.sendLongSit(longSit);
@@ -139,7 +131,7 @@ public class WearFitLongSitActivity extends Activity {
                     SPUtils.setString("IgnoreLongSit", gson.toJson(longSit));
                     commandManager.sendIgnoreAction(longSit);
                 }
-                Toast.makeText(WearFitLongSitActivity.this, "保存成功", Toast.LENGTH_SHORT);
+
             }
         });
     }

@@ -113,6 +113,7 @@ public class WearFitCameraActivity extends Activity {
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LogUtil.i("111");
                 takePicture();
             }
         });
@@ -606,8 +607,9 @@ public class WearFitCameraActivity extends Activity {
             if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 final byte[] txValue = intent
                         .getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
-//                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
+                LogUtil.i("接收的数据：" + DataHandlerUtils.bytesToHexStr(txValue));
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
+                LogUtil.i("111");
                 //测量心率
                 if (datas.get(4) == 0x79 && datas.size() == 7) {//[171, 0, 4, 255, 121, 128, 1]
                     LogUtil.i(datas.toString());

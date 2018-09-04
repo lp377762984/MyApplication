@@ -14,14 +14,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.TimeUtils;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
-import com.necer.ncalendar.adapter.WeekAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +56,12 @@ public class WearFitClockWeekdayActivity extends Activity {
             public void onClick(View view) {
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append("");
-                for (int i = 0; i < weekdayList.size(); i++) {
-                    stringBuffer.append(weekdayList.get(i) + "&");
+                if(stringBuffer.length()>0){
+                    for (int i = 0; i < weekdayList.size(); i++) {
+                        stringBuffer.append(weekdayList.get(i) + "&");
+                    }
+                    stringBuffer.deleteCharAt(stringBuffer.length() - 1);
                 }
-                stringBuffer.deleteCharAt(stringBuffer.length() - 1);
                 LogUtil.i("选中了" + stringBuffer.toString());
                 Intent intent = new Intent();
                 intent.putExtra("weekdays", stringBuffer.toString());
