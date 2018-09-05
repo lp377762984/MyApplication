@@ -27,6 +27,8 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -153,25 +155,31 @@ public class AlertDialogActivity extends Activity {
                             postConsultData();
                         }
                     } else {
-
-                        if (!TextUtils.isEmpty(name_ev.getText().toString())) {
-                            if (!TextUtils.isEmpty(tel_ev.getText().toString())) {
-                                if (!TextUtils.isEmpty(remark_ev.getText().toString())) {
-                                    //判断电话号码是否合法
-                                    if (!PhoneFormatCheckUtils.isPhoneLegal(tel_ev.getText().toString())) {
-                                        Toast.makeText(context, "电话号码有误，请重新输入", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        postRecommendData();
-                                    }
-                                } else {
-                                    Toast.makeText(context, context.getResources().getString(R.string.remark_hint_text), Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(context, context.getResources().getString(R.string.tel_hint_text), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(context, context.getResources().getString(R.string.name_hint_text), Toast.LENGTH_SHORT).show();
+                        if (TextUtils.isEmpty(name_ev.getText().toString())) {//姓名不能空
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.name_hint_text));
+                            return;
                         }
+                        if (StringUtils.isAllNumeric(name_ev.getText().toString())) {//姓名不能全数字
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.name_no_numeric_text));
+                            return;
+                        }
+                        if (StringUtils.isFirstNumeric(name_ev.getText().toString())) {//姓名不能以数字开头
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.name_no_numeric_first_text));
+                            return;
+                        }
+                        if (TextUtils.isEmpty(tel_ev.getText().toString())) {//电话不能空
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.tel_hint_text));
+                            return;
+                        }
+                        if (!PhoneFormatCheckUtils.isPhoneLegal(tel_ev.getText().toString())) {//判断电话号码是否合法
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.tel_error_hint_text));
+                            return;
+                        }
+                        if (TextUtils.isEmpty(remark_ev.getText().toString())) {//备注不能空
+                            ToastUtils.showToastShort(context.getResources().getString(R.string.remark_hint_text));
+                            return;
+                        }
+                        postRecommendData();
                     }
                 case R.id.close_img:
                     AlertDialogActivity.this.finish();
