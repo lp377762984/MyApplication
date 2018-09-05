@@ -885,8 +885,11 @@
     <string name="recommend_list_text">推荐列表</string>
     <string name="recommend_data_text">推荐资料</string>
     <string name="name_text">姓名</string>
+    <string name="name_no_numeric_text">姓名不能全是数字</string>
+    <string name="name_no_numeric_first_text">姓名不能以数字开头</string>
     <string name="name_hint_text">请输入姓名</string>
     <string name="tel_hint_text">请输入手机</string>
+    <string name="tel_error_hint_text">电话号码有误，请重新输入</string>
     <string name="remark_hint_text">请输入备注</string>
     <string name="sex_text">性别</string>
     <string name="tel_text">手机</string>
