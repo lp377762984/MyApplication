@@ -160,6 +160,7 @@ public class ShopListFragment extends BaseFragment {
                                 intent.putExtra("shopJingdu", itemsList.get(0).getLng() + "");
                                 intent.putExtra("jingdu", jingdu);
                                 intent.putExtra("weidu", weidu);
+                                intent.putExtra("shopname",itemsList.get(0).getName());
                                 startActivity(intent);
                             }
                         });
@@ -334,6 +335,7 @@ public class ShopListFragment extends BaseFragment {
                         intent.putExtra("shopJingdu", itemsArrayList.get(position).getLng() + "");
                         intent.putExtra("jingdu", jingdu);
                         intent.putExtra("weidu", weidu);
+                        intent.putExtra("shopname",itemsList.get(position).getName());
                         startActivity(intent);
                     }
                 }

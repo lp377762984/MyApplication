@@ -699,6 +699,7 @@ LogUtil.i(info.getRoles().toString());
                 intent.putExtra("weidu", weidu);
                 intent.putExtra("shopJingdu", shopJingdu);
                 intent.putExtra("shopWeidu", shopWeidu);
+                intent.putExtra("shopname",tv_shopname.getText().toString());
                 startActivity(intent);
 
                 break;

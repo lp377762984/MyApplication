@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -77,7 +76,7 @@ public class ShopDetailedActivity extends Activity{
     ImageView down_img,up_img;
     ArrayList<String> imgList;
     MZBannerView shop_banner;
-
+    private String shopname;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -257,6 +256,7 @@ public class ShopDetailedActivity extends Activity{
                 intent.putExtra("shopWeidu",shopWeidu);
                 intent.putExtra("jingdu",jingdu);
                 intent.putExtra("weidu",weidu);
+                intent.putExtra("shopname",shopname);
                 startActivity(intent);
             }
         });
@@ -553,6 +553,8 @@ public class ShopDetailedActivity extends Activity{
                     }
 
                     store_name.setText(data.getName());
+
+                    shopname=data.getName();
                     tv_adress.setText(data.getAddress());
                     tv_detail.setText(data.getDescription());
                     phoneNo = data.getTelphone();
