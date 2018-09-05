@@ -1,37 +1,28 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.baidu.location.Address;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.geocode.GeoCodeOption;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
-import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiIndoorResult;
-import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRouteLine;
@@ -49,14 +40,13 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.baidu.mapapi.utils.DistanceUtil;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.DrivingRouteOverlay;
-import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MassTransitRouteOverlay;
 import com.cn.danceland.myapplication.utils.WalkingRouteOverlay;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +79,7 @@ public class MapActivity extends Activity {
     List<List<MassTransitRouteLine.TransitStep>> allSteps;
     TextView tv_station;
     String linesInfo;
-
+    private String shopname;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +100,7 @@ public class MapActivity extends Activity {
             myLatitude = Double.valueOf(extras.getString("weidu"));
             latitude = Double.valueOf(extras.getString("shopWeidu"));
             longitude = Double.valueOf(extras.getString("shopJingdu"));
+            shopname=extras.getString("shopname");
         }
 
         startlatLng = new LatLng(myLatitude,myLongitude);
@@ -173,6 +164,9 @@ public class MapActivity extends Activity {
         tv_car = findViewById(R.id.tv_car);
 
        tv_station = findViewById(R.id.tv_station);
+        Button btn_daohang = findViewById(R.id.btn_daohang);
+
+        btn_daohang.setOnClickListener(onclick);
 
     }
 
@@ -215,10 +209,106 @@ public class MapActivity extends Activity {
                     showColor("car");
                     drive();
                     break;
+                case R.id.btn_daohang:
+
+
+                    showDaoHang(latitude,longitude,shopname);
+
+
+                    break;
 
             }
         }
     };
+
+    private void showDaoHang(final double mLatitude ,final double mLongitude ,final String mAreaName) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(MapActivity.this);
+        builder.setItems(new String[]{"百度地图","高德地图"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which){
+                case 0:
+
+                    if (isAvilible(MapActivity.this, "com.baidu.BaiduMap")) {// 传入指定应用包名
+
+                        try {
+                            Intent intent = Intent.getIntent("intent://map/direction?destination=latlng:"
+                                    + mLatitude + ","
+                                    + mLongitude + "|name:"+mAreaName + // 终点
+                                    "&mode=driving&" + // 导航路线方式
+                                    "region=北京" + //
+                                    "&src=新疆和田#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+                            MapActivity.this.startActivity(intent); // 启动调用
+                        } catch (URISyntaxException e) {
+                            LogUtil.e( e.getMessage());
+                        }
+                    } else {// 未安装
+                        Toast.makeText(MapActivity.this, "您尚未安装百度地图", Toast.LENGTH_LONG)
+                                .show();
+                        Uri uri = Uri
+                                .parse("market://details?id=com.baidu.BaiduMap");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        MapActivity.this.startActivity(intent);
+                    }
+                break;
+                case 1:
+                    if (isAvilible(MapActivity.this, "com.autonavi.minimap")) {
+                        try {
+                            Intent intent = Intent.getIntent("androidamap://navi?sourceApplication=新疆和田&poiname="+mAreaName+"&lat="
+                                    + mLatitude
+                                    + "&lon="
+                                    + mLongitude + "&dev=0");
+                            MapActivity.this.startActivity(intent);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(MapActivity.this, "您尚未安装高德地图", Toast.LENGTH_LONG)
+                                .show();
+                        Uri uri = Uri
+                                .parse("market://details?id=com.autonavi.minimap");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        MapActivity.this.startActivity(intent);
+                    }
+                break;
+                default:
+                break;
+                }
+
+
+            }
+        });
+
+        builder.create().show();
+
+    }
+
+    /*
+	 * 检查手机上是否安装了指定的软件
+	 *
+	 * @param context
+	 *
+	 * @param packageName：应用包名
+	 *
+	 * @return
+	 */
+    public static boolean isAvilible(Context context, String packageName) {
+        // 获取packagemanager
+        final PackageManager packageManager = context.getPackageManager();
+        // 获取所有已安装程序的包信息
+        List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
+        // 用于存储所有已安装程序的包名
+        List<String> packageNames = new ArrayList<String>();
+        // 从pinfo中将包名字逐一取出，压入pName list中
+        if (packageInfos != null) {
+            for (int i = 0; i < packageInfos.size(); i++) {
+                String packName = packageInfos.get(i).packageName;
+                packageNames.add(packName);
+            }
+        }
+        // 判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
+        return packageNames.contains(packageName);
+    }
 
     /**
      * 获取缩放级别
