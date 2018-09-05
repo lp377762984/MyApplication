@@ -78,16 +78,18 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     />
+
                 <TextView
+                    android:id="@+id/textView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/color_dl_yellow"
-                    android:text="今日"
-                    android:textSize="14sp"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    />
+                    android:text="当日"
+                    android:textColor="@color/color_dl_yellow"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,6 +109,7 @@
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
@@ -159,16 +162,18 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     />
+
                 <TextView
+                    android:id="@+id/textView16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/color_dl_yellow"
-                    android:text="今日"
-                    android:textSize="14sp"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    />
+                    android:text="当日"
+                    android:textColor="@color/color_dl_yellow"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -188,6 +193,7 @@
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
@@ -244,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/color_dl_yellow"
-                    android:text="今日"
+                    android:text="当日"
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -268,6 +274,7 @@
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
@@ -324,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/color_dl_yellow"
-                    android:text="今日"
+                    android:text="当日"
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -348,6 +355,7 @@
                     android:textSize="14sp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
