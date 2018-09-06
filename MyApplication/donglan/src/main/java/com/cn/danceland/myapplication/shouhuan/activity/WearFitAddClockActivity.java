@@ -72,8 +72,8 @@ public class WearFitAddClockActivity extends Activity {
                     Toast.makeText(WearFitAddClockActivity.this, "闹钟设置最多不超过八个", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class);
-                        intent.putExtra("hour", "00");
-                        intent.putExtra("minute", "00");
+                    intent.putExtra("hour", "00");
+                    intent.putExtra("minute", "00");
                     startActivity(intent);
 //                    startActivity(new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class));
 //                startActivityForResult(new Intent(WearFitAddClockActivity.this,WearFitClockSettingActivity.class),3);
@@ -93,12 +93,23 @@ public class WearFitAddClockActivity extends Activity {
                 if (localClockList.get(i).getHour() == 0) {
                     intent.putExtra("hour", "00");
                 } else {
-                    intent.putExtra("hour", localClockList.get(i).getHour() + "");
+                    String hour = localClockList.get(i).getHour() + "";
+                    if (hour.length() == 1) {
+                        intent.putExtra("hour", "0" + localClockList.get(i).getHour() + "");
+                    } else {
+                        intent.putExtra("hour", localClockList.get(i).getHour() + "");
+                    }
                 }
+
                 if (localClockList.get(i).getMinute() == 0) {
                     intent.putExtra("minute", "00");
                 } else {
-                    intent.putExtra("minute", localClockList.get(i).getMinute() + "");
+                    String minute = localClockList.get(i).getMinute() + "";
+                    if (minute.length() == 1) {
+                        intent.putExtra("minute", "0" + localClockList.get(i).getMinute() + "");
+                    } else {
+                        intent.putExtra("minute", localClockList.get(i).getMinute() + "");
+                    }
                 }
                 intent.putExtra("clock_id", i);
                 startActivity(intent);
@@ -162,7 +173,11 @@ public class WearFitAddClockActivity extends Activity {
 
             View inflate = LayoutInflater.from(WearFitAddClockActivity.this).inflate(R.layout.item_clock, null);
             TextView tv_time = inflate.findViewById(R.id.tv_time);
-            tv_time.setText(localClockList.get(i).getTime());
+            String repeat = "";
+            if (localClockList.get(i).getRepeat() != null) {
+                repeat = "（" + localClockList.get(i).getRepeat() + "）";
+            }
+            tv_time.setText(localClockList.get(i).getTime() + repeat);
             Switch btn_switch = inflate.findViewById(R.id.btn_switch);//闹钟id开关，最多开8个
             if (localClockList.get(i).getOffOn() == 1) {//0关1开
                 btn_switch.setChecked(true);
@@ -185,5 +200,25 @@ public class WearFitAddClockActivity extends Activity {
             });
             return inflate;
         }
+    }
+
+    public static boolean isListEqual(List list1, List list2) {
+        if (list1 == list2)
+            return true;
+        if (list1 == null && list2 == null)
+            return true;
+        if (list1 == null || list2 == null)
+            return false;
+        if (list1.size() != list2.size())
+            return false;
+        for (Object o : list1) {
+            if (!list2.contains(o))
+                return false;
+        }
+        for (Object o : list2) {
+            if (!list1.contains(o))
+                return false;
+        }
+        return true;
     }
 }

@@ -507,6 +507,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
                             SPUtils.setString(Constants.ADDRESS, "");
                             SPUtils.setString(Constants.NAME, "");
+                            SPUtils.setString("ClockList", "");//闹钟
                             HeartRateHelper heartRateHelper = new HeartRateHelper();
                             WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
                             WearFitStepHelper stepHelper = new WearFitStepHelper();

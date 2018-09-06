@@ -52,6 +52,9 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
     private int clock_id = -1;
     private String hour;
     private String minute;
+    private String repeatStr = "只提醒一次";//重复 只提醒一次  每天 周一至周五  自定义
+
+    StringBuffer stringBuffer = new StringBuffer();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
         hour = getIntent().getStringExtra("hour");
         minute = getIntent().getStringExtra("minute");
         clock_id = getIntent().getIntExtra("clock_id", -1);
+        LogUtil.i("hour" + hour);
+        LogUtil.i("minute" + minute);
         initView();
     }
 
@@ -78,9 +83,59 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
         btn_meitian = findViewById(R.id.btn_meitian);
         btn_gongzuori = findViewById(R.id.btn_gongzuori);
         btn_zidingyi = findViewById(R.id.btn_zidingyi);
+        getHistory();
         initLoopData();
         setClickListener();
+        initRepeatView();
+    }
 
+    private void initRepeatView() {
+        String clockList = SPUtils.getString("ClockList", "");
+        List<ClockBean> lastList=new ArrayList<>();
+        if (!StringUtils.isNullorEmpty(clockList)) {
+            Type listType = new TypeToken<List<ClockBean>>() {
+            }.getType();
+            List<ClockBean> clockBeans = gson.fromJson(clockList, listType);
+            lastList.addAll(clockBeans);
+        }
+
+        weekdayList=lastList.get(clock_id).getWeekday();
+        stringBuffer.append("");
+        LogUtil.i("lastList"+weekdayList.size());
+        if(stringBuffer.length()>0){
+            for (int i = 0; i < weekdayList.size(); i++) {
+                stringBuffer.append(weekdayList.get(i) + "&");
+            }
+            stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+        }
+        repeatStr= localClockList.get(clock_id).getRepeat();
+        switch (repeatStr) {
+            case "只提醒一次":
+                btn_yici.setChecked(true);
+                btn_meitian.setChecked(false);
+                btn_gongzuori.setChecked(false);
+                btn_zidingyi.setChecked(false);
+                break;
+            case "每天":
+                btn_yici.setChecked(false);
+                btn_meitian.setChecked(true);
+                btn_gongzuori.setChecked(false);
+                btn_zidingyi.setChecked(false);
+                break;
+            case "周一至周五":
+                btn_yici.setChecked(false);
+                btn_meitian.setChecked(false);
+                btn_gongzuori.setChecked(true);
+                btn_zidingyi.setChecked(false);
+                break;
+            case "自定义":
+                btn_yici.setChecked(false);
+                btn_meitian.setChecked(false);
+                btn_gongzuori.setChecked(false);
+                btn_zidingyi.setChecked(true);
+                repeatStr = "自定义";
+                break;
+        }
     }
 
     private void setClickListener() {
@@ -125,7 +180,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
         lp_hour.setItemsVisibleCount(7);
         lp_minute.setItemsVisibleCount(7);
         for (int i = 0; i < hourList.size(); i++) {
-            if (hour !=null && hourList.get(i).equals(hour)) {
+            if (hour != null && hourList.get(i).equals(hour)) {
                 lp_hour.setInitPosition(i);
                 shour = hour;
 
@@ -178,14 +233,16 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                 if (localClockList.size() >= 8) {
                     Toast.makeText(context, "闹钟设置最多不超过八个", Toast.LENGTH_SHORT).show();
                 } else {
-                    getHistory();
+
                     LogUtil.i("本地闹钟有：" + localClockList.size() + "个");
                     ClockBean clockBean = new ClockBean();
                     clockBean.setHour(Integer.valueOf(shour));//小时
                     clockBean.setMinute(Integer.valueOf(sminute));//分钟
                     clockBean.setOffOn(1);//0关1开
                     clockBean.setTime(shour + ":" + sminute);
+                    clockBean.setRepeat(repeatStr);
                     clockBean.setWeekday(weekdayList);//周几 0 1 2 3 4 5 6
+                    LogUtil.i("11111--"+weekdayList.size());
                     if (clock_id != -1) {//-1添加   否则修改
                         clockBean.setId(clock_id);//时钟ID 最多8个
                         localClockList.set(clock_id, clockBean);
@@ -202,7 +259,6 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                         }
                     }
                     finish();
-
                 }
                 break;
             case R.id.ll_yici:
@@ -213,6 +269,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                 weekdayList.clear();
                 Calendar calendar = Calendar.getInstance();
                 weekdayList.add(calendar.get(Calendar.DAY_OF_WEEK) - 1);
+                repeatStr = "只提醒一次";
                 break;
             case R.id.ll_meitian:
                 btn_yici.setChecked(false);
@@ -227,6 +284,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                 weekdayList.add(4);
                 weekdayList.add(5);
                 weekdayList.add(6);
+                repeatStr = "每天";
                 break;
             case R.id.ll_gongzuori:
                 btn_yici.setChecked(false);
@@ -239,14 +297,19 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                 weekdayList.add(3);
                 weekdayList.add(4);
                 weekdayList.add(5);
+                repeatStr = "周一至周五";
                 break;
             case R.id.ll_zidingyi:
                 btn_yici.setChecked(false);
                 btn_meitian.setChecked(false);
                 btn_gongzuori.setChecked(false);
                 btn_zidingyi.setChecked(true);
-                startActivityForResult(new Intent(context, WearFitClockWeekdayActivity.class), MSG_CLOCK_WEEKDAY_DATA);
+                Intent intent=new Intent(context, WearFitClockWeekdayActivity.class);
+                intent.putExtra("weekdays", stringBuffer.toString());
+
+                startActivityForResult(intent, MSG_CLOCK_WEEKDAY_DATA);
                 weekdayList.clear();
+                repeatStr = "自定义";
                 break;
         }
     }

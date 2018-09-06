@@ -34,6 +34,7 @@ public class WearFitClockWeekdayActivity extends Activity {
     private WeekAdapter weekAdapter;
     private List<String> weekdayList;
     private String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+    private String lastSelete = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +42,22 @@ public class WearFitClockWeekdayActivity extends Activity {
         setContentView(R.layout.activity_addclock);
         context = this;
         initView();
+
+    }
+
+    private void initData() {
+        String lastSelete = getIntent().getStringExtra("weekdays");
+        LogUtil.i("lastSelete----" +lastSelete + "----");
+        if (lastSelete != null && lastSelete.length() != 0) {
+            String[] weekdaysA = lastSelete.split("&");
+            if (weekdaysA != null)
+                for (int i = 0; i < weekdaysA.length; i++) {
+                    LogUtil.i("i----" + weekdaysA[i] + "----" + i);
+                    int week = Integer.valueOf(weekdaysA[i].toString());
+                    weekdayList.add(week + "");
+                }
+        }
+        weekAdapter.notifyDataSetChanged();
     }
 
     private void initView() {
@@ -56,10 +73,11 @@ public class WearFitClockWeekdayActivity extends Activity {
             public void onClick(View view) {
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append("");
-                if(stringBuffer.length()>0){
-                    for (int i = 0; i < weekdayList.size(); i++) {
-                        stringBuffer.append(weekdayList.get(i) + "&");
-                    }
+
+                for (int i = 0; i < weekdayList.size(); i++) {
+                    stringBuffer.append(weekdayList.get(i) + "&");
+                }
+                if (stringBuffer.length() > 0) {
                     stringBuffer.deleteCharAt(stringBuffer.length() - 1);
                 }
                 LogUtil.i("选中了" + stringBuffer.toString());
@@ -69,6 +87,7 @@ public class WearFitClockWeekdayActivity extends Activity {
                 finish();
             }
         });
+        initData();
     }
 
     private class WeekAdapter extends BaseAdapter {
@@ -98,13 +117,24 @@ public class WearFitClockWeekdayActivity extends Activity {
             btn_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                     if (b) {
                         weekdayList.add(i + "");
+                        LogUtil.i("点击--" + b);
                     } else {
                         weekdayList.remove(i + "");
+                        LogUtil.i("点击--" + b);
                     }
                 }
             });
+            if (lastSelete != null && lastSelete.length() > 0) {
+                for (int y = 0; y < weekdayList.size(); y++) {
+                    LogUtil.i("weekdayList.get(y)"+weekdayList.get(y));
+                    if (weekdayList.get(y).equals(i + "")) {
+                        btn_check.setChecked(true);
+                    }
+                }
+            }
             return inflate;
         }
     }
