@@ -27,21 +27,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="今日"
+            android:text="当日"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
             />
-        <TextView
-            android:id="@+id/tv_thisMonth"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="本月"
-            android:textSize="14sp"
-            android:layout_gravity="center"
             android:gravity="center"
-            />
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_thisMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本月"
+                android:maxLength="7"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/tv_thisMonthUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本月"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tv_total"
             android:layout_width="match_parent"
@@ -51,6 +68,7 @@
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:visibility="gone"
             />
 
     </LinearLayout>

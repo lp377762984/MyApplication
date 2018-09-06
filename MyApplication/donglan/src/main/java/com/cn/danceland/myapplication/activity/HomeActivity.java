@@ -2,7 +2,6 @@ package com.cn.danceland.myapplication.activity;
 
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -138,7 +137,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
     private Animation animation;
 
     private CommandManager commandManager;//手环
-    private ProgressDialog progressDialog;
     private String  address1="";
 
     @Override
@@ -374,7 +372,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
         }
 
         commandManager = CommandManager.getInstance(this);//手环
-        progressDialog = new ProgressDialog(this);
         initConnWearFit();
     }
     @Override
@@ -1037,8 +1034,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
             try {
                 if (MyApplication.mBluetoothLeService.connect(address1)) {
                     LogUtil.i("正在连接...");
-                    progressDialog.setMessage("正在连接...");
-                    progressDialog.show();
                 } else {
                     ToastUtils.showToastShort("连接失败");
                 }
@@ -1076,7 +1071,6 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
                 invalidateOptionsMenu();//更新菜单栏
                 LogUtil.i("连接成功...");
                 isSendWearFit = false;
-                progressDialog.dismiss();
 //                ToastUtils.showToastShort("连接成功");
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 MyApplication.mBluetoothConnected = false;

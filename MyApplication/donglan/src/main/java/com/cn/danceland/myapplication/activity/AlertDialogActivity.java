@@ -94,10 +94,19 @@ public class AlertDialogActivity extends Activity {
 
         if (!TextUtils.isEmpty(type) && type.equals("1")) {
             dialog_title_tv.setText(context.getResources().getString(R.string.consult_join_type_text));//加盟 合作类型
+            gym_join_tv .setText(context.getString(R.string.consult_gym_join_text));
+            gym_jteamwork_tv .setText(context.getString(R.string.consult_gym_teamwork_text));
+            gym_admin_tv .setText(context.getString(R.string.consult_gym_admin_text));
         } else if (!TextUtils.isEmpty(type) && type.equals("3")) {
             dialog_title_tv.setText(context.getResources().getString(R.string.consult_buy_type_text));//购买
+            gym_join_tv .setText(context.getString(R.string.consult_buy_join_text));
+            gym_jteamwork_tv .setText(context.getString(R.string.consult_buy_teamwork_text));
+            gym_admin_tv .setText(context.getString(R.string.consult_buy_admin_text));
         } else if (!TextUtils.isEmpty(type) && type.equals("2")) {
             dialog_title_tv.setText(context.getResources().getString(R.string.consult_train_type_text));//培训
+            gym_join_tv .setText(context.getString(R.string.consult_train_join_text));
+            gym_jteamwork_tv .setText(context.getString(R.string.consult_train_teamwork_text));
+            gym_admin_tv .setText(context.getString(R.string.consult_train_admin_text));
         }
         LogUtil.i("type" + type);
 

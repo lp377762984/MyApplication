@@ -13,6 +13,15 @@ public class ClockBean implements Serializable {
     private int minute;//分钟
     private int id;//时钟ID 最多8个
     private List<Integer> weekday;//周日-周六 0 1 2 3 4 5 6
+    private String repeat;//重复 只提醒一次  每天 周一至周五  自定义
+
+    public String getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(String repeat) {
+        this.repeat = repeat;
+    }
 
     public String getTime() {
         return time;

@@ -877,6 +877,12 @@
     <string name="consult_gym_join_text">健身房加盟</string>
     <string name="consult_gym_teamwork_text">健身房合作</string>
     <string name="consult_gym_admin_text">健身房管理</string>
+    <string name="consult_buy_join_text">团队版(限免)</string>
+    <string name="consult_buy_teamwork_text">企业版</string>
+    <string name="consult_buy_admin_text">旗舰版</string>
+    <string name="consult_train_join_text">私教培训</string>
+    <string name="consult_train_teamwork_text">操课培训</string>
+    <string name="consult_train_admin_text">全能培训</string>
     <string name="consult_join_type_text">合作类型</string>
     <string name="consult_buy_type_text">购买类型</string>
     <string name="consult_train_type_text">学习类型</string>

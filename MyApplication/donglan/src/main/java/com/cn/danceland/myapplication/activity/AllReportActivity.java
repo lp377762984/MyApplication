@@ -274,12 +274,14 @@ public class AllReportActivity extends Activity {
             TextView tv_today = inflate.findViewById(R.id.tv_today);
             TextView tv_thisMonth = inflate.findViewById(R.id.tv_thisMonth);
             TextView tv_total = inflate.findViewById(R.id.tv_total);
+            TextView tv_thisMonthUnit = inflate.findViewById(R.id.tv_thisMonthUnit);
             ReportResultBean.Data data = dataList.get(position);
             tv_name.setText(data.getTitle());
             tv_today.setText(data.getToday()+data.getUnit());
-            tv_thisMonth.setText(data.getEndOfToDay()+data.getUnit());
+            tv_thisMonth.setText(data.getEndOfToDay());
             tv_total.setText(data.getAllOfMonth()+data.getUnit());
-
+            tv_thisMonthUnit.setVisibility(View.VISIBLE);
+            tv_thisMonthUnit.setText(data.getUnit());
             return inflate;
         }
     }
