@@ -86,6 +86,11 @@ public class WearFitLongSitActivity extends Activity {
                 Type listType = new TypeToken<LongSit>() {
                 }.getType();
                 longSit = gson.fromJson(longSitGson, listType);
+                if(longSit.getOn()==1){//开
+                    sw_jiuzuo.setChecked(true);
+                }else{
+                    sw_jiuzuo.setChecked(false);
+                }
             }
         } else if ("勿扰模式".equals(from)) {
             String longSitGson = SPUtils.getString("IgnoreLongSit", "");
@@ -93,6 +98,11 @@ public class WearFitLongSitActivity extends Activity {
                 Type listType = new TypeToken<LongSit>() {
                 }.getType();
                 longSit = gson.fromJson(longSitGson, listType);
+                if(longSit.getOn()==1){//开
+                    sw_jiuzuo.setChecked(true);
+                }else{
+                    sw_jiuzuo.setChecked(false);
+                }
             }
         }
     }

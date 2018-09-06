@@ -35,7 +35,7 @@ public class WearFitClockWeekdayActivity extends Activity {
     private List<String> weekdayList;
     private String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
     private String lastSelete = "";
-
+    private List<String> lastList=new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,15 +46,13 @@ public class WearFitClockWeekdayActivity extends Activity {
     }
 
     private void initData() {
-        String lastSelete = getIntent().getStringExtra("weekdays");
-        LogUtil.i("lastSelete----" +lastSelete + "----");
+        lastSelete = getIntent().getStringExtra("weekdays");
         if (lastSelete != null && lastSelete.length() != 0) {
             String[] weekdaysA = lastSelete.split("&");
             if (weekdaysA != null)
                 for (int i = 0; i < weekdaysA.length; i++) {
-                    LogUtil.i("i----" + weekdaysA[i] + "----" + i);
                     int week = Integer.valueOf(weekdaysA[i].toString());
-                    weekdayList.add(week + "");
+                    lastList.add(week + "");
                 }
         }
         weekAdapter.notifyDataSetChanged();
@@ -120,21 +118,19 @@ public class WearFitClockWeekdayActivity extends Activity {
 
                     if (b) {
                         weekdayList.add(i + "");
-                        LogUtil.i("点击--" + b);
                     } else {
                         weekdayList.remove(i + "");
-                        LogUtil.i("点击--" + b);
                     }
                 }
             });
-            if (lastSelete != null && lastSelete.length() > 0) {
-                for (int y = 0; y < weekdayList.size(); y++) {
-                    LogUtil.i("weekdayList.get(y)"+weekdayList.get(y));
-                    if (weekdayList.get(y).equals(i + "")) {
-                        btn_check.setChecked(true);
-                    }
-                }
-            }
+//            if (lastSelete != null && lastSelete.length() > 0) {
+//                for (int y = 0; y < lastList.size(); y++) {
+//                    LogUtil.i("weekdayList.get(y)"+lastList.get(y));
+//                    if (lastList.get(y).equals(i + "")) {
+//                        btn_check.setChecked(true);
+//                    }
+//                }
+//            }
             return inflate;
         }
     }
