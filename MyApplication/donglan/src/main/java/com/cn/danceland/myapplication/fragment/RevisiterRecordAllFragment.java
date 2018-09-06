@@ -19,6 +19,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetRevisiterRecordListBean;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -31,6 +32,7 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -278,6 +280,13 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
 
                 if (potentialListBean.getSuccess()) {
+
+                    if (potentialListBean.getData() != null) {
+                        EventBus.getDefault().post(new IntEvent(potentialListBean.getData().getTotalElements(), 162));
+                    }
+
+
+
                     if (potentialListBean.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
                         isEnd = true;

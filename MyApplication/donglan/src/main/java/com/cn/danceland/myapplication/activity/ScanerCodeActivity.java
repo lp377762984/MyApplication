@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -9,11 +10,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
-import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.vondear.rxtools.activity.ActivityScanerCode;
 
@@ -42,13 +42,19 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequsetSimpleBean requsetSimpleBean=new Gson().fromJson(s,RequsetSimpleBean.class);
-                if (requsetSimpleBean.isSuccess()){
-                    ToastUtils.showToastShort("入场成功");
-                    finish();
+                RequestSimpleBean requsetSimpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
+                if (requsetSimpleBean.getSuccess()){
+                 if (TextUtils.equals(requsetSimpleBean.getCode(),"1")){
+                     showResultDialog("入场成功");
+                 }else {
+
+                     showResultDialog("入场失败");
+                 }
+
                 }else {
-                    ToastUtils.showToastShort("入场失败");
-                    finish();
+
+                    showResultDialog("入场失败");
+
                 }
 
 
@@ -94,6 +100,30 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             public void onClick(DialogInterface dialogInterface, int i) {
                 scan_qrcode(result);
 
+            }
+        });
+        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        dialog.show();
+    }
+
+    /**
+     * 显示结果对话
+     */
+    private void showResultDialog(final String result) {
+        final AlertDialog.Builder dialog =
+                new AlertDialog.Builder(this);
+        //   dialog.setTitle("提示");
+        dialog.setMessage(result);
+        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                finish();
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

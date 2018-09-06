@@ -681,6 +681,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:text="健身指数："
                     android:textColor="#333333" />
 
@@ -692,7 +693,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    app:srb_clearRatingEnabled="true"
+                    android:layout_marginRight="10dp"
                     app:srb_clickable="true"
                     app:srb_drawableEmpty="@drawable/empty"
                     app:srb_drawableFilled="@drawable/filled"
@@ -721,6 +722,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:text="关注程度："
                     android:textColor="#333333" />
 
@@ -730,6 +732,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
                     app:srb_clearRatingEnabled="true"
                     app:srb_clickable="true"
                     app:srb_drawableEmpty="@drawable/img_xin_sr1"

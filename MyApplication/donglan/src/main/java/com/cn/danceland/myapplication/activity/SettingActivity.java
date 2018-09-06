@@ -133,11 +133,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         zoneCode = mInfo.getPerson().getZone_code();
         zoneArr = new ArrayList<Donglan>();
+        LogUtil.i(zoneCode);
         if (zoneCode != null && !"".equals(zoneCode)) {
             if (zoneCode.contains(".0")) {
                 zoneArr = dbData.queryCityValue(zoneCode);
+                LogUtil.i(zoneArr.size() + "" + dbData);
             } else {
                 zoneArr = dbData.queryCityValue(zoneCode + ".0");
+                LogUtil.i(zoneArr.size() + "");
             }
         }
     }
@@ -279,7 +282,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 showName(1);
                 break;
             case R.id.ll_blacklist:
-                    startActivity(new Intent(SettingActivity.this,BlackListActivity.class));
+                startActivity(new Intent(SettingActivity.this, BlackListActivity.class));
                 break;
             default:
                 break;

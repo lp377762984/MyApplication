@@ -32,6 +32,7 @@ import com.cn.danceland.myapplication.activity.AddPotentialActivity;
 import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
 import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.model.FriendProfile;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
@@ -125,7 +126,7 @@ public class RevisitListFragment extends BaseFragment {
                 StrBean.Order order = new StrBean.Order();
                 order.setLast_time("desc");//最近维护
                 strBean.setOrder(order);
-                strBean.searchInfo=event.getMsg();
+                strBean.searchInfo = event.getMsg();
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
                 } catch (JSONException e) {
@@ -135,7 +136,7 @@ public class RevisitListFragment extends BaseFragment {
             case 163://最晚维护
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
-                strBean.searchInfo=event.getMsg();
+                strBean.searchInfo = event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order1 = new StrBean.Order();
                 order1.setLast_time("asc");
@@ -149,7 +150,7 @@ public class RevisitListFragment extends BaseFragment {
             case 164://健身指数
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
-                strBean.searchInfo=event.getMsg();
+                strBean.searchInfo = event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order2 = new StrBean.Order();
                 order2.setLast_time("desc");
@@ -164,7 +165,7 @@ public class RevisitListFragment extends BaseFragment {
                 break;
             case 165://关注程度
                 strBean = new StrBean(auth);
-                strBean.searchInfo=event.getMsg();
+                strBean.searchInfo = event.getMsg();
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order3 = new StrBean.Order();
@@ -207,8 +208,8 @@ public class RevisitListFragment extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         new DownRefresh().execute();
                     }
                 };
@@ -220,8 +221,8 @@ public class RevisitListFragment extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         new UpRefresh().execute();
                     }
                 };
@@ -297,7 +298,7 @@ public class RevisitListFragment extends BaseFragment {
     }
 
 
-    public void addUsers(final int position,String user) {
+    public void addUsers(final int position, String user) {
         //创建请求列表
         List<TIMAddFriendRequest> reqList = new ArrayList<TIMAddFriendRequest>();
 
@@ -305,9 +306,8 @@ public class RevisitListFragment extends BaseFragment {
         TIMAddFriendRequest req = new TIMAddFriendRequest(user);
         req.setAddrSource("");
         req.setAddWording("add me");
-        req.setRemark(System.currentTimeMillis()+"");
+        req.setRemark(System.currentTimeMillis() + "");
         reqList.add(req);
-
 
 
 //申请添加好友
@@ -316,29 +316,30 @@ public class RevisitListFragment extends BaseFragment {
             public void onError(int code, String desc) {
                 //错误码 code 和错误描述 desc，可用于定位请求失败原因
                 //错误码 code 列表请参见错误码表
-                LogUtil.i( "addFriend failed: 添加好友好友失败" + code + " desc");
-                switch(code){
-                case 6011:
-                    ToastUtils.showToastShort("用户不在线");
-                break;
-                case 6200:
-                    ToastUtils.showToastShort("请查看网络连接");
-                break;
-                default:
-                    ToastUtils.showToastShort("请稍后重试");
-                break;
+                LogUtil.i("addFriend failed: 添加好友好友失败" + code + " desc");
+                switch (code) {
+                    case 6011:
+                        ToastUtils.showToastShort("用户不在线");
+                        break;
+                    case 6200:
+                        ToastUtils.showToastShort("请查看网络连接");
+                        break;
+                    default:
+                        ToastUtils.showToastShort("请稍后重试");
+                        break;
                 }
             }
+
             @Override
             public void onSuccess(List<TIMFriendResult> result) {
-                LogUtil.i( "addFriend succ添加好友成功");
+                LogUtil.i("addFriend succ添加好友成功");
                 if (Constants.DEV_CONFIG) {
-                    ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                    ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "", datalist.get(position).getNick_name());
                 } else {
-                    ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                    ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "", datalist.get(position).getNick_name());
                 }
                 for (TIMFriendResult res : result) {
-                    LogUtil.i( "identifier: " + res.getIdentifer() + " status: " + res.getStatus());
+                    LogUtil.i("identifier: " + res.getIdentifer() + " status: " + res.getStatus());
                 }
             }
         });
@@ -578,17 +579,17 @@ public class RevisitListFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
 
-                    if (TextUtils.isEmpty(datalist.get(position).getNick_name())){
+                    if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
                         ToastUtils.showToastShort("该用户不在线");
                         return;
                     }
 
                     if (Constants.DEV_CONFIG) {
-                        addUsers(position,"dev" + datalist.get(position).getMember_no());
+                        addUsers(position, "dev" + datalist.get(position).getMember_no());
 //                        presenter.addFriend("dev" + datalist.get(position).getMember_no(), time + "", getString(R.string.default_group_name), null);
 //                        ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "");
                     } else {
-                        addUsers(position,datalist.get(position).getMember_no());
+                        addUsers(position, datalist.get(position).getMember_no());
 
                     }
 
@@ -673,9 +674,9 @@ public class RevisitListFragment extends BaseFragment {
                 @Override
                 public void onSuccess(List<TIMFriendResult> timFriendResults) {
                     if (Constants.DEV_CONFIG) {
-                        ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                        ChatActivity.navToChat(mActivity, "dev" + datalist.get(position).getMember_no(), TIMConversationType.C2C, "", datalist.get(position).getNick_name());
                     } else {
-                        ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "",datalist.get(position).getNick_name());
+                        ChatActivity.navToChat(mActivity, datalist.get(position).getMember_no(), TIMConversationType.C2C, "", datalist.get(position).getNick_name());
                     }
 
 
@@ -816,6 +817,12 @@ public class RevisitListFragment extends BaseFragment {
 
 
                 if (potentialListBean.getSuccess()) {
+
+
+                    if (potentialListBean.getData() != null) {
+                        EventBus.getDefault().post(new IntEvent(potentialListBean.getData().getTotalElements(), 161));
+                    }
+
                     if (potentialListBean.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
                         isEnd = true;
