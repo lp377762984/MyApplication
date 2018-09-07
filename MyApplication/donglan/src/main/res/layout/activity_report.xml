@@ -280,15 +280,14 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_meet"
+                    <EditText
+                        android:id="@+id/et_meet"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        />
+                        android:paddingRight="2dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -304,8 +303,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_clean"
+                    <EditText
+                        android:id="@+id/et_clean"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -328,8 +327,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_item_placement"
+                    <EditText
+                        android:id="@+id/et_item_placement"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -352,8 +351,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_body_build"
+                    <EditText
+                        android:id="@+id/et_body_build"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -376,8 +375,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_sport_device"
+                    <EditText
+                        android:id="@+id/et_sport_device"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -400,8 +399,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_group_course"
+                    <EditText
+                        android:id="@+id/et_group_course"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -424,8 +423,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_course"
+                    <EditText
+                        android:id="@+id/et_course"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -448,8 +447,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_power"
+                    <EditText
+                        android:id="@+id/et_power"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -472,8 +471,8 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         />
-                    <TextView
-                        android:id="@+id/tv_door"
+                    <EditText
+                        android:id="@+id/et_door"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"
@@ -496,8 +495,8 @@
                         android:layout_weight="3"
                         android:gravity="center_horizontal"
                         />
-                    <TextView
-                        android:id="@+id/tv_remark"
+                    <EditText
+                        android:id="@+id/et_remark"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/rect_body"

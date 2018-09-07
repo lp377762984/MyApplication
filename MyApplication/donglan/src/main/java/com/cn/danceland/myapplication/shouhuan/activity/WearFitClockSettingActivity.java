@@ -84,7 +84,10 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
         getHistory();
         initLoopData();
         setClickListener();
-        initRepeatView();
+        LogUtil.i("clock_id" + clock_id);
+        if (clock_id != (-1)) {//-1添加   否则修改
+            initRepeatView();
+        }
     }
 
     private void initRepeatView() {
@@ -96,7 +99,6 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
             List<ClockBean> clockBeans = gson.fromJson(clockList, listType);
             lastList.addAll(clockBeans);
         }
-
         weekdayList = lastList.get(clock_id).getWeekday();
         stringBuffer.append("");
 
@@ -240,7 +242,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                     clockBean.setTime(shour + ":" + sminute);
                     clockBean.setRepeat(repeatStr);
                     clockBean.setWeekday(weekdayList);//周几 0 1 2 3 4 5 6
-                    if (clock_id != -1) {//-1添加   否则修改
+                    if (clock_id != (-1)) {//-1添加   否则修改
                         clockBean.setId(clock_id);//时钟ID 最多8个
                         localClockList.set(clock_id, clockBean);
                     } else {

@@ -25,6 +25,8 @@ import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -37,12 +39,15 @@ public class WearFitAddClockActivity extends Activity {
 
     private TextView addclock_title;
     private TextView rightTv;
-    private ListView lv_clock;
+    private PullToRefreshListView lv_clock;
     private List<ClockBean> localClockList;
     private Gson gson;
     private ClockAdapter clockAdapter;
     private ImageView donglan_back;
     private CommandManager commandManager;
+
+    private TextView tv_error;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +66,17 @@ public class WearFitAddClockActivity extends Activity {
         rightTv.setVisibility(View.VISIBLE);
         rightTv.setText("添加");
         lv_clock = findViewById(R.id.lv_clock);
+
+        View listEmptyView = findViewById(R.id.rl_error);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error5);
+        tv_error.setText("没有数据");
+        lv_clock.getRefreshableView().setEmptyView(listEmptyView);
+        lv_clock.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
+        //设置下拉刷新模式both是支持下拉和上拉
+        lv_clock.setMode(PullToRefreshBase.Mode.DISABLED);//DISABLED和普通listView一样用
+
         localClockList = new ArrayList<ClockBean>();
         clockAdapter = new ClockAdapter();
         lv_clock.setAdapter(clockAdapter);

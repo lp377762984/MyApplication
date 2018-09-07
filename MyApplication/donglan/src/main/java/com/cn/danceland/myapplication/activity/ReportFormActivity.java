@@ -10,12 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,7 +48,6 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,29 +261,29 @@ public class ReportFormActivity extends Activity {
         initScoreData(selectDate, role, target_role_type, emp_id);
         initReportData(selectDate, emp_id);
 
-        tv_meet = findViewById(R.id.tv_meet);
-        tv_clean = findViewById(R.id.tv_clean);
-        tv_item_placement = findViewById(R.id.tv_item_placement);
-        tv_body_build = findViewById(R.id.tv_body_build);
-        tv_sport_device = findViewById(R.id.tv_sport_device);
-        tv_group_course = findViewById(R.id.tv_group_course);
-        tv_course = findViewById(R.id.tv_course);
-        tv_power = findViewById(R.id.tv_power);
-        tv_door = findViewById(R.id.tv_door);
-        tv_remark = findViewById(R.id.tv_remark);
+        tv_meet = findViewById(R.id.et_meet);
+        tv_clean = findViewById(R.id.et_clean);
+        tv_item_placement = findViewById(R.id.et_item_placement);
+        tv_body_build = findViewById(R.id.et_body_build);
+        tv_sport_device = findViewById(R.id.et_sport_device);
+        tv_group_course = findViewById(R.id.et_group_course);
+        tv_course = findViewById(R.id.et_course);
+        tv_power = findViewById(R.id.et_power);
+        tv_door = findViewById(R.id.et_door);
+        tv_remark = findViewById(R.id.et_remark);
 
         btn_commit = findViewById(R.id.btn_commit);
 
-        tv_meet.setOnClickListener(onClickListener);
-        tv_clean.setOnClickListener(onClickListener);
-        tv_item_placement.setOnClickListener(onClickListener);
-        tv_body_build.setOnClickListener(onClickListener);
-        tv_sport_device.setOnClickListener(onClickListener);
-        tv_group_course.setOnClickListener(onClickListener);
-        tv_course.setOnClickListener(onClickListener);
-        tv_power.setOnClickListener(onClickListener);
-        tv_door.setOnClickListener(onClickListener);
-        tv_remark.setOnClickListener(onClickListener);
+//        tv_meet.setOnClickListener(onClickListener);
+//        tv_clean.setOnClickListener(onClickListener);
+//        tv_item_placement.setOnClickListener(onClickListener);
+//        tv_body_build.setOnClickListener(onClickListener);
+//        tv_sport_device.setOnClickListener(onClickListener);
+//        tv_group_course.setOnClickListener(onClickListener);
+//        tv_course.setOnClickListener(onClickListener);
+//        tv_power.setOnClickListener(onClickListener);
+//        tv_door.setOnClickListener(onClickListener);
+//        tv_remark.setOnClickListener(onClickListener);
 
         btn_commit.setOnClickListener(onClickListener);
 
@@ -297,57 +297,57 @@ public class ReportFormActivity extends Activity {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
                 if (reportCommitResultBean != null && reportCommitResultBean.getData() != null) {
                     ReportCommitResultBean.Data data = reportCommitResultBean.getData();
-                    if(StringUtils.isNullorEmpty(data.getMeet())){
-                        tv_meet.setText("未填写");
-                    }else{
-                        tv_meet.setText(data.getMeet() + "");
-                    }
-
-                    if(StringUtils.isNullorEmpty(data.getClean())){
-                        tv_clean.setText("未填写");
-                    }else{
-                        tv_clean.setText(data.getClean() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getItem_placement())){
-                        tv_item_placement.setText("未填写");
-                    }else{
-                        tv_item_placement.setText(data.getItem_placement() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getBody_build())){
-                        tv_body_build.setText("未填写");
-                    }else{
-                        tv_body_build.setText(data.getBody_build() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getSport_device())){
-                        tv_sport_device.setText("未填写");
-                    }else{
-                        tv_sport_device.setText(data.getSport_device() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getGroup_course())){
-                        tv_group_course.setText("未填写");
-                    }else{
-                        tv_group_course.setText(data.getGroup_course() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getCourse())){
-                        tv_course.setText("未填写");
-                    }else{
-                        tv_course.setText(data.getCourse() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getPower())){
-                        tv_power.setText("未填写");
-                    }else{
-                        tv_power.setText(data.getPower() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getDoor())){
-                        tv_door.setText("未填写");
-                    }else{
-                        tv_door.setText(data.getDoor() + "");
-                    }
-                    if(StringUtils.isNullorEmpty(data.getRemark())){
-                        tv_remark.setText("未填写");
-                    }else{
-                        tv_remark.setText(data.getRemark() + "");
-                    }
+//                    if (StringUtils.isNullorEmpty(data.getMeet())) {
+//                        tv_meet.setText("未填写");
+//                    } else {
+//                        tv_meet.setText(data.getMeet() + "");
+//                    }
+//
+//                    if (StringUtils.isNullorEmpty(data.getClean())) {
+//                        tv_clean.setText("未填写");
+//                    } else {
+//                        tv_clean.setText(data.getClean() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getItem_placement())) {
+//                        tv_item_placement.setText("未填写");
+//                    } else {
+//                        tv_item_placement.setText(data.getItem_placement() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getBody_build())) {
+//                        tv_body_build.setText("未填写");
+//                    } else {
+//                        tv_body_build.setText(data.getBody_build() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getSport_device())) {
+//                        tv_sport_device.setText("未填写");
+//                    } else {
+//                        tv_sport_device.setText(data.getSport_device() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getGroup_course())) {
+//                        tv_group_course.setText("未填写");
+//                    } else {
+//                        tv_group_course.setText(data.getGroup_course() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getCourse())) {
+//                        tv_course.setText("未填写");
+//                    } else {
+//                        tv_course.setText(data.getCourse() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getPower())) {
+//                        tv_power.setText("未填写");
+//                    } else {
+//                        tv_power.setText(data.getPower() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getDoor())) {
+//                        tv_door.setText("未填写");
+//                    } else {
+//                        tv_door.setText(data.getDoor() + "");
+//                    }
+//                    if (StringUtils.isNullorEmpty(data.getRemark())) {
+//                        tv_remark.setText("未填写");
+//                    } else {
+//                        tv_remark.setText(data.getRemark() + "");
+//                    }
                     clickAble = true;
                 }
                 if (!nowDate.equals(selectDate) || clickAble) {
@@ -398,37 +398,74 @@ public class ReportFormActivity extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.tv_meet:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_meet", str_meet).putExtra("id", 11), 11);
-                    break;
-                case R.id.tv_clean:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_clean", str_clean).putExtra("id", 12), 12);
-                    break;
-                case R.id.tv_item_placement:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_item_placement", str_item_placement).putExtra("id", 13), 13);
-                    break;
-                case R.id.tv_body_build:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_body_build", str_body_build).putExtra("id", 14), 14);
-                    break;
-                case R.id.tv_sport_device:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_sport_device", str_sport_device).putExtra("id", 15), 15);
-                    break;
-                case R.id.tv_group_course:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_group_course", str_group_course).putExtra("id", 16), 16);
-                    break;
-                case R.id.tv_course:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_course", str_course).putExtra("id", 17), 17);
-                    break;
-                case R.id.tv_power:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_power", str_power).putExtra("id", 18), 18);
-                    break;
-                case R.id.tv_door:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_door", str_door).putExtra("id", 19), 19);
-                    break;
-                case R.id.tv_remark:
-                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_remark", str_remark).putExtra("id", 20), 20);
-                    break;
+//                case R.id.tv_meet:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_meet", str_meet).putExtra("id", 11), 11);
+//                    break;
+//                case R.id.tv_clean:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_clean", str_clean).putExtra("id", 12), 12);
+//                    break;
+//                case R.id.tv_item_placement:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_item_placement", str_item_placement).putExtra("id", 13), 13);
+//                    break;
+//                case R.id.tv_body_build:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_body_build", str_body_build).putExtra("id", 14), 14);
+//                    break;
+//                case R.id.tv_sport_device:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_sport_device", str_sport_device).putExtra("id", 15), 15);
+//                    break;
+//                case R.id.tv_group_course:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_group_course", str_group_course).putExtra("id", 16), 16);
+//                    break;
+//                case R.id.tv_course:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_course", str_course).putExtra("id", 17), 17);
+//                    break;
+//                case R.id.tv_power:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_power", str_power).putExtra("id", 18), 18);
+//                    break;
+//                case R.id.tv_door:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_door", str_door).putExtra("id", 19), 19);
+//                    break;
+//                case R.id.tv_remark:
+//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_remark", str_remark).putExtra("id", 20), 20);
+//                    break;
                 case R.id.btn_commit:
+                    if (TextUtils.isEmpty(tv_meet.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_clean.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_item_placement.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_body_build.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_sport_device.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_group_course.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_power.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_door.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(tv_remark.getText().toString())) {//不能空
+                        ToastUtils.showToastShort("请填写完整");
+                        return;
+                    }
+                    clickAble = true;
                     showAleart();
                     break;
             }
@@ -452,7 +489,7 @@ public class ReportFormActivity extends Activity {
     }
 
     boolean clickAble;//提交后不可点击
-    TextView tv_meet, tv_clean, tv_item_placement, tv_body_build, tv_sport_device, tv_group_course, tv_course, tv_power, tv_door, tv_remark;
+    EditText tv_meet, tv_clean, tv_item_placement, tv_body_build, tv_sport_device, tv_group_course, tv_course, tv_power, tv_door, tv_remark;
 
     private void commit() {
         ReportCommitBean reportCommitBean = new ReportCommitBean();
@@ -475,16 +512,16 @@ public class ReportFormActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
                 if (jsonObject.toString().contains("true")) {
                     clickAble = true;
-                    tv_meet.setClickable(false);
-                    tv_clean.setClickable(false);
-                    tv_item_placement.setClickable(false);
-                    tv_body_build.setClickable(false);
-                    tv_sport_device.setClickable(false);
-                    tv_group_course.setClickable(false);
-                    tv_course.setClickable(false);
-                    tv_power.setClickable(false);
-                    tv_door.setClickable(false);
-                    tv_remark.setClickable(false);
+//                    tv_meet.setClickable(false);
+//                    tv_clean.setClickable(false);
+//                    tv_item_placement.setClickable(false);
+//                    tv_body_build.setClickable(false);
+//                    tv_sport_device.setClickable(false);
+//                    tv_group_course.setClickable(false);
+//                    tv_course.setClickable(false);
+//                    tv_power.setClickable(false);
+//                    tv_door.setClickable(false);
+//                    tv_remark.setClickable(false);
                     btn_commit.setClickable(false);
                     ToastUtils.showToastShort("提交成功");
                 }
@@ -549,7 +586,7 @@ public class ReportFormActivity extends Activity {
 
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
         customDatePicker.setGoneHourAndMinute();
-        customDatePicker.setMax((time.month + 1),time.monthDay);
+        customDatePicker.setMax((time.month + 1), time.monthDay);
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
@@ -594,14 +631,14 @@ public class ReportFormActivity extends Activity {
             branch_id = myInfo.getPerson().getDefault_branch();
         }
 
-        if((time.month + 1)<10 && time.monthDay>=10){
-            nowDate = time.year+"-0"+(time.month + 1)+"-"+ time.monthDay;
-        }else if(time.monthDay<10 && (time.month + 1)>=10){
-            nowDate = time.year+"-"+(time.month + 1)+"-0"+ time.monthDay;
-        }else if(time.monthDay<10 && (time.month + 1)<10){
-            nowDate = time.year+"-0"+(time.month + 1)+"-0"+ time.monthDay;
-        }else{
-            nowDate = time.year+"-"+(time.month + 1)+"-"+ time.monthDay;
+        if ((time.month + 1) < 10 && time.monthDay >= 10) {
+            nowDate = time.year + "-0" + (time.month + 1) + "-" + time.monthDay;
+        } else if (time.monthDay < 10 && (time.month + 1) >= 10) {
+            nowDate = time.year + "-" + (time.month + 1) + "-0" + time.monthDay;
+        } else if (time.monthDay < 10 && (time.month + 1) < 10) {
+            nowDate = time.year + "-0" + (time.month + 1) + "-0" + time.monthDay;
+        } else {
+            nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;
         }
 
         //nowDate = time.year + "-" + (time.month + 1) + "-" + time.monthDay;
@@ -617,12 +654,12 @@ public class ReportFormActivity extends Activity {
                 RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
                 if (requestConsultantInfoBean != null) {
                     List<RequestConsultantInfoBean.Data> data = requestConsultantInfoBean.getData();
-                    if (data != null && data.size()>0) {
+                    if (data != null && data.size() > 0) {
                         report_rv.setAdapter(new MyRecyclerViewAdapter(data));
-                    }else{
+                    } else {
                         report_rv.setVisibility(View.GONE);
                     }
-                }else{
+                } else {
                     report_rv.setVisibility(View.GONE);
                 }
 
