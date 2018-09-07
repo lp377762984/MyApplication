@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -46,9 +47,9 @@ public class MySendCardFragment extends BaseFragment {
 
     @Override
     public View initViews() {
-        View v=View.inflate(mActivity, R.layout.fragment_my_card,null);
+        View v = View.inflate(mActivity, R.layout.fragment_my_card, null);
         mListView = v.findViewById(R.id.listview);
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
         iv_error.setImageResource(R.drawable.img_error3);
@@ -56,9 +57,10 @@ public class MySendCardFragment extends BaseFragment {
         mListView.setEmptyView(listEmptyView);
         myListViewAdapter = new MyListViewAdapter();
         mListView.setAdapter(myListViewAdapter);
-        return  v;
+        return v;
 
     }
+
     @Override
     public void onClick(View view) {
 
@@ -107,7 +109,6 @@ public class MySendCardFragment extends BaseFragment {
     }
 
 
-
     class MyListViewAdapter extends BaseAdapter
 
     {
@@ -133,6 +134,7 @@ public class MySendCardFragment extends BaseFragment {
             ViewHolder viewHolder = null;
             if (view == null) {
                 viewHolder = new ViewHolder();
+
                 view = View.inflate(mActivity, R.layout.listview_item_my_send_club_card, null);
                 viewHolder.tv_name = view.findViewById(R.id.tv_cardname);
                 viewHolder.tv_number = view.findViewById(R.id.tv_number);
@@ -178,9 +180,16 @@ public class MySendCardFragment extends BaseFragment {
 
                 viewHolder.tv_time.setText(b[0] + "到期");
             }
-            viewHolder.tv_phone.setText("好友电话："+mCardList.get(i).getPhone_no());
-            viewHolder.tv_order_name.setText("好友姓名："+mCardList.get(i).getMember_name());
-            RequestOptions options=new RequestOptions().placeholder(R.drawable.sijiao_card);
+            viewHolder.tv_phone.setText("好友电话：" + mCardList.get(i).getPhone_no());
+            viewHolder.tv_order_name.setText("好友姓名：" + mCardList.get(i).getMember_name());
+
+
+            //设置图片圆角角度
+            RoundedCorners roundedCorners = new RoundedCorners(6);
+//通过RequestOptions扩展功能
+            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300).placeholder(R.drawable.sijiao_card);
+
+
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
         }
@@ -190,8 +199,8 @@ public class MySendCardFragment extends BaseFragment {
             TextView tv_number;
             TextView tv_time;
             TextView tv_cardtype;
-            TextView   tv_order_name;
-            TextView    tv_phone;
+            TextView tv_order_name;
+            TextView tv_phone;
             ImageView iv_card;
         }
 

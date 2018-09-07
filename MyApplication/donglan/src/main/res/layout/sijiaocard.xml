@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <RelativeLayout
@@ -15,80 +15,44 @@
             android:layout_height="93dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp">
-            <com.cn.danceland.myapplication.view.XCRoundRectImageView
+
+            <ImageView
                 android:id="@+id/card_img_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/sijiao_card"
-                />
+                android:scaleType="centerCrop"
+                android:src="@drawable/sijiao_card" />
 
             <!--<TextView-->
-                <!--android:id="@+id/sijiao_amount"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="30dp"-->
-                <!--android:layout_gravity="bottom"-->
-                <!--android:background="@drawable/shape_corner"-->
-                <!--android:textSize="14sp"-->
-                <!--android:paddingLeft="5dp"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:textColor="@color/white"-->
-                <!--/>-->
+            <!--android:id="@+id/sijiao_amount"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="@drawable/shape_corner"-->
+            <!--android:textSize="14sp"-->
+            <!--android:paddingLeft="5dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:textColor="@color/white"-->
+            <!--/>-->
 
         </FrameLayout>
 
 
         <RelativeLayout
             android:id="@+id/rl_tv"
-            android:layout_toRightOf="@+id/card_img"
-            android:layout_alignTop="@+id/card_img"
             android:layout_width="wrap_content"
             android:layout_height="130dp"
+            android:layout_alignTop="@+id/card_img"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            >
+            android:layout_toRightOf="@+id/card_img">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical">
-                    <TextView
-                        android:id="@+id/sijiao_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="私教名称："
-                        android:textSize="16sp"
-                        android:layout_weight="1"
-                        android:textColor="@color/black"
-                        />
-                    <TextView
-                        android:id="@+id/sijiao_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="费用："
-                        android:textSize="14sp"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        />
-                </LinearLayout>
-
-
-                <TextView
-                    android:id="@+id/sijiao_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="课程类型："
-                    android:textSize="14sp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    />
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -96,40 +60,72 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/sijiao_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="私教名称："
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/sijiao_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="费用："
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/sijiao_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="课程类型："
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/sijiao_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:text="节数"
                         android:layout_weight="1"
-                        />
+                        android:text="节数"
+                        android:textSize="14sp" />
 
                     <RelativeLayout
+                        style="@style/BtnCommitStyle"
                         android:layout_width="50dp"
                         android:layout_height="30dp"
-                        style="@style/BtnCommitStyle"
-                        android:gravity="center"
-                        android:layout_weight="1"
                         android:layout_marginRight="10dp"
-                        >
+                        android:layout_weight="1"
+                        android:gravity="center">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="购买"
-                            android:textColor="@color/white"
-                            />
+                            android:textColor="@color/white" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
 
 
-
-
             </LinearLayout>
         </RelativeLayout>
-
 
 
     </RelativeLayout>

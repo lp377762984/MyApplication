@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,9 +23,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.JsonBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
@@ -38,10 +43,10 @@ import com.cn.danceland.myapplication.im.model.UserInfo;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataCleanManager;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GetJsonDataUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.CustomLocationPicker;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
@@ -50,6 +55,7 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,7 +74,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private TextView tv_phone, tv_weixin, tv_email;
     private Data mInfo;
     private String myCity, myProvince;
-
+    private static final int MSG_LOAD_DATA = 0x0001;
+    private static final int MSG_LOAD_SUCCESS = 0x0012;
+    private static final int MSG_LOAD_FAILED = 0x0013;
     DBData dbData;
     String zoneCode, mZoneCode;
 
@@ -77,8 +85,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     String location;
     List<Donglan> cityList;
     ArrayList<String> proList;
+    String zone = null;
     static String emailFormat = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
-
+    private boolean isLoaded = false;
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
@@ -90,12 +99,82 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 case 0x02:
                     // dialog.dismiss();
                     break;
+
+
+                case MSG_LOAD_SUCCESS:
+                    // Toast.makeText(SettingActivity.this, "Parse Succeed", Toast.LENGTH_SHORT).show();
+                    isLoaded = true;
+
+                    LogUtil.i("修改，地区");
+
+                    if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
+                        Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
+                        for (int i = 0; options1Items.size() > i; i++) {
+                            if ((int)(zonecode/1000)==(int)(options1Items.get(i).getValue()/1000)){
+                                LogUtil.i(zone);
+                                zone=options1Items.get(i).getLabel();
+                                if (options1Items.get(i).getChildren()!=null) {
+                                    for(int j = 0;j<options1Items.get(i).getChildren().size();j++){
+                                        if (options1Items.get(i).getChildren().get(j)!=null&&zonecode==(options1Items.get(i).getChildren().get(j).getValue())){
+                                            zone=options1Items.get(i).getLabel()+options1Items.get(i).getChildren().get(j).getLabel();
+                                            LogUtil.i(zone);
+                                        }
+
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    tx_location.setText(zone);
+
+
+
+
+                    break;
+
+                case MSG_LOAD_FAILED:
+                    //     Toast.makeText(SettingActivity.this, "Parse Failed", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1223:
+                    LogUtil.i("修改，地区");
+
+                    if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
+                        Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
+                        for (int i = 0; options1Items.size() > i; i++) {
+                            if ((int)(zonecode/1000)==(int)(options1Items.get(i).getValue()/1000)){
+                               LogUtil.i(zone);
+                                zone=options1Items.get(i).getLabel();
+                                if (options1Items.get(i).getChildren()!=null) {
+                                    for(int j = 0;j<options1Items.get(i).getChildren().size();j++){
+                                        if (options1Items.get(i).getChildren().get(j)!=null&&zonecode==(options1Items.get(i).getChildren().get(j).getValue())){
+                                            zone=options1Items.get(i).getLabel()+options1Items.get(i).getChildren().get(j).getLabel();
+                                            LogUtil.i(zone);
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    tx_location.setText(zone);
+
+                    break;
+
+
             }
         }
 
         ;
     };
     private TextView tv_cache;
+    private Thread thread;
 
     @Override
 
@@ -180,12 +259,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             tv_email.setText("未绑定");
         }
 
-        if (zoneArr.size() > 0) {
-            tx_location.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
-            myCity = zoneArr.get(0).getCity();
-            myProvince = dbData.queryCity(myCity).get(0).getProvince();
-            zoneArr.clear();
-        }
+//        if (zoneArr.size() > 0) {
+//            tx_location.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
+//            myCity = zoneArr.get(0).getCity();
+//            myProvince = dbData.queryCity(myCity).get(0).getProvince();
+//            zoneArr.clear();
+//        }
 
         location = tx_location.getText().toString();
 
@@ -212,6 +291,20 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         }
 
 
+        if (thread == null) {//如果已创建就不再重新创建子线程了
+
+
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // 子线程中解析省市区数据
+                    initJsonData();
+                }
+            });
+            thread.start();
+        }
+
+
     }
 
     @Override
@@ -235,29 +328,34 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             case R.id.ll_setting_location://设置位置
                 //showLocation();
 
-                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this, myCity, myProvince);
-                customLocationPicker.setDialogOnClickListener(new CustomLocationPicker.OnClickEnter() {
-                    @Override
-                    public void onClick() {
-                        String city = customLocationPicker.getCity();
-                        myCity = city;
-                        myProvince = dbData.queryCity(city).get(0).getProvince();
-                        mZoneCode = dbData.queryCity(city).get(0).getCityValue();
-                        tx_location.setText(customLocationPicker.getZone());
+//                final CustomLocationPicker customLocationPicker = new CustomLocationPicker(this, myCity, myProvince);
+//                customLocationPicker.setDialogOnClickListener(new CustomLocationPicker.OnClickEnter() {
+//                    @Override
+//                    public void onClick() {
+//                        String city = customLocationPicker.getCity();
+//                        myCity = city;
+//                        myProvince = dbData.queryCity(city).get(0).getProvince();
+//                        mZoneCode = dbData.queryCity(city).get(0).getCityValue();
+//                        tx_location.setText(customLocationPicker.getZone());
+//
+//                        mInfo.getPerson().setZone_code(mZoneCode);
+//                        DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//
+//                        if (mZoneCode.contains(".0")) {
+//                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode.replace(".0", ""));
+//                        } else {
+//                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode);
+//                        }
+//
+//                    }
+//                });
+//                customLocationPicker.showLocation();
 
-                        mInfo.getPerson().setZone_code(mZoneCode);
-                        DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
-
-                        if (mZoneCode.contains(".0")) {
-                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode.replace(".0", ""));
-                        } else {
-                            commitSelf(Constants.MODIFY_ZONE, "zoneCode", mZoneCode);
-                        }
-
-                    }
-                });
-                customLocationPicker.showLocation();
-
+                if (isLoaded) {
+                    showPickerView();
+                } else {
+                    Toast.makeText(SettingActivity.this, "Please waiting until the data is parsed", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.ll_about_us://关于我们
                 showAboutUs();
@@ -342,6 +440,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
+                    if (TextUtils.equals("zoneCode", mapkey)) {
+                        mInfo.getPerson().setZone_code(mapvalue);
+                        DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                        Message message=Message.obtain();
+                        message.what=1223;
+                        handler.sendMessage(message);
+                    }
                     ToastUtils.showToastShort("修改成功！");
                 } else {
                     ToastUtils.showToastShort("修改失败！");
@@ -598,7 +703,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     }
 
-//    private void logouthx() {
+    //    private void logouthx() {
 //        EMClient.getInstance().logout(true, new EMCallBack() {
 //
 //            @Override
@@ -626,6 +731,131 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 //                LogUtil.i("环信退出登录失败");
 //            }
 //        });
+    private ArrayList<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<Long> zonecode1 = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<Long>> zonecode2 = new ArrayList<>();
+    //  private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
+    private void showPickerView() {// 弹出选择器
+
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                String tx = options1Items.get(options1).getLabel() + options2Items.get(options1).get(options2);
+
+
+            //    ToastUtils.showToastShort(tx + zonecode2.get(options1).get(options2));
+
+
+                commitSelf(Constants.MODIFY_ZONE, "zoneCode", zonecode2.get(options1).get(options2) + "");
+            }
+        })
+
+                .setTitleText("城市选择")
+                .setDividerColor(Color.BLACK)
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .build();
+
+//        pvOptions.setPicker(options1Items);//一级选择器
+        pvOptions.setPicker(options1Items, options2Items);//二级选择器
+        //     pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show();
+    }
+
+    private void initJsonData() {//解析数据
+
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         *
+         * */
+        String JsonData = new GetJsonDataUtil().getJson(this, "address.json");//获取assets目录下的json文件数据
+
+        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+
+        /**
+         * 添加省份数据
+         *
+         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
+         * PickerView会通过getPickerViewText方法获取字符串显示出来。
+         */
+        options1Items = jsonBean;
+        //    LogUtil.i(jsonBean.toString());
+        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
+            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<Long> CityListcode = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+            zonecode1.add(jsonBean.get(i).getValue());
+
+//
+            //        LogUtil.i(CityList.toString());
+
+            for (int c = 0; c < jsonBean.get(i).getChildren().size(); c++) {//遍历该省份的所有城市
+                //     LogUtil.i(jsonBean.get(i).getChildren().toString());
+                if (jsonBean.get(i).getChildren() != null && jsonBean.get(i).getChildren().get(c) != null) {
+                    String CityName = jsonBean.get(i).getChildren().get(c).getLabel();
+                    CityList.add(CityName);//添加城市
+                    CityListcode.add(jsonBean.get(i).getChildren().get(c).getValue());
+
+                    //        LogUtil.i(CityList.toString());
+
+//                    ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+//
+//                    //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+//                    if (jsonBean.get(i).getChildren().get(c).getChildren() == null
+//                            || jsonBean.get(i).getChildren().get(c).getChildren().size() == 0) {
+//                        City_AreaList.add("");
+//                    } else {
+//                        for (int j = 0; j < jsonBean.get(i).getChildren().get(c).getChildren().size(); j++) {
+//                            if (jsonBean.get(i).getChildren()!=null){
+//                                City_AreaList.add(jsonBean.get(i).getChildren().get(c).getChildren().get(j).getLabel());
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                    Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+//                    LogUtil.i(Province_AreaList.toString());
+
+                }
+
+
+            }
+
+            /**
+             * 添加城市数据
+             */
+            options2Items.add(CityList);
+            zonecode2.add(CityListcode);
+//            /**
+//             * 添加地区数据
+//             */
+//            options3Items.add(Province_AreaList);
+        }
+
+        handler.sendEmptyMessage(MSG_LOAD_SUCCESS);
+
+    }
+
+
+    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            handler.sendEmptyMessage(MSG_LOAD_FAILED);
+        }
+        return detail;
+    }
 
 }

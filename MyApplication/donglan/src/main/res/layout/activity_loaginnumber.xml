@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_number"
         android:layout_centerHorizontal="true"
-        android:text="登录网址 http://md.dljsgw.com"
+        android:text="登录网址 https://md.dljsgw.com"
         android:layout_marginTop="20dp"
         android:textSize="16sp"
         android:textColor="#666666"/>
