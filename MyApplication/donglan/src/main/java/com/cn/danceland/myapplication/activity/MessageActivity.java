@@ -21,7 +21,8 @@ import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.CommentFragment;
+import com.cn.danceland.myapplication.fragment.NoticeFragment;
+import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -41,7 +42,9 @@ public class MessageActivity extends FragmentActivity {
     ImageView im_back;
     TabLayout tablayout;
     FragmentManager fragmentManager;
-    CommentFragment commentFragment;
+    //CommentFragment commentFragment;//不用了
+    NoticeFragment noticeFragment;//yxx 通知
+    SystemMessageFragment systemMessageFragment;//yxx 系统消息
     TabItem tab1;
     TabItem tab2;
     TabItem tab3;
@@ -167,30 +170,37 @@ public class MessageActivity extends FragmentActivity {
 
     public void showFragment(String str) {
         fragmentManager = getSupportFragmentManager();
-        commentFragment = new CommentFragment();
-
+//        commentFragment = new CommentFragment();
+        noticeFragment = new NoticeFragment();
+        systemMessageFragment = new SystemMessageFragment();
 
 
         Bundle bundle = new Bundle();
         bundle.putString("type", str);
-        commentFragment.setArguments(bundle);
+//        commentFragment.setArguments(bundle);
+        noticeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        if (TextUtils.equals(str, "5")) {
-            LogUtil.i("显示对话列表");
+        LogUtil.i("str"+str);
+        if (TextUtils.equals(str, "1")) {
+            fragmentTransaction.replace(R.id.message_fragment, noticeFragment).commit();
+        }else{
+            fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
+        }
+//        if (TextUtils.equals(str, "5")) {
+//            LogUtil.i("显示对话列表");
     //        fragmentTransaction
 //                    .replace(R.id.message_fragment, myConversationListFragment)
 ////                    .add(R.id.message_fragment, myConversationListFragment)
 ////                    .show(myConversationListFragment)
 //                    .commit();
-        } else {
-            fragmentTransaction.replace(R.id.message_fragment, commentFragment);
-            fragmentTransaction.commit();
+
 //            fragmentTransaction
 //                    .add(R.id.message_fragment, commentFragment)
 //                    .show(commentFragment)
 //                    .commit();
-        }
+//        }
+        //            fragmentTransaction.replace(R.id.message_fragment, commentFragment);
+
     }
 
     @Override
