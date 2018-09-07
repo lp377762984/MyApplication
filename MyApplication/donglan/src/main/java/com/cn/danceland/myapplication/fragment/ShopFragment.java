@@ -59,6 +59,7 @@ import com.cn.danceland.myapplication.activity.MyContactsActivity;
 import com.cn.danceland.myapplication.activity.MyDepositListActivity;
 import com.cn.danceland.myapplication.activity.MyOrderActivity;
 import com.cn.danceland.myapplication.activity.MySijiaoActivity;
+import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.ReportFormActivity;
@@ -125,6 +126,8 @@ public class ShopFragment extends BaseFragment {
     ImageView down_img, up_img;
     private String role_id;
 
+    private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +155,7 @@ public class ShopFragment extends BaseFragment {
         v = View.inflate(mActivity, R.layout.fragment_shop, null);
 
         info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-LogUtil.i(info.getRoles().toString());
+        LogUtil.i(info.getRoles().toString());
         roleList = new ArrayList<String>();
         shop_banner = v.findViewById(R.id.shop_banner);
         tv_role = v.findViewById(R.id.tv_role);
@@ -305,6 +308,10 @@ LogUtil.i(info.getRoles().toString());
         shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
+                startActivity(new Intent(mActivity, NewsDetailsActivity.class)
+                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title",  backBannerList.get(i).getTitle()));
+
+
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
 //                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");
 //                intent.putExtra("shopJingdu", itemsList.get(0).getLng() + "");
@@ -316,6 +323,9 @@ LogUtil.i(info.getRoles().toString());
         });
         if (drawableArrayList != null && drawableArrayList.size() == 0) {
             drawableArrayList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            BranchBannerBean.Data bbb = new BranchBannerBean.Data();
+            bbb.setImg_url("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            backBannerList.add(bbb);
 //        drawableArrayList.add(R.drawable.img_man);
 //        drawableArrayList.add(R.drawable.img_man);
         }
@@ -441,13 +451,15 @@ LogUtil.i(info.getRoles().toString());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-
+                drawableArrayList.clear();
+                backBannerList.clear();
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
                 if (branchBannerBean != null) {
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
                             drawableArrayList.add(data.get(i).getImg_url());
+                            backBannerList.add(data.get(i));
                         }
                         setBannner();
                     }
@@ -520,16 +532,14 @@ LogUtil.i(info.getRoles().toString());
             if (!"准会员".equals(role) && !"会员".equals(role)) {
 
 
-
-
                 id = roleMap.get(role);
                 rolesBean.setRole_type(roleMap.get(role));
                 //id = roleMap.get(role);
 
                 role_id = null;
-                for(int i = 0;i < info.getRoles().size();i++){
-                    LogUtil.i(id+"----"+info.getRoles().get(i).getRole_type()+"");
-                    if (TextUtils.equals(id,info.getRoles().get(i).getRole_type()+"")){
+                for (int i = 0; i < info.getRoles().size(); i++) {
+                    LogUtil.i(id + "----" + info.getRoles().get(i).getRole_type() + "");
+                    if (TextUtils.equals(id, info.getRoles().get(i).getRole_type() + "")) {
                         rolesBean.setId(info.getRoles().get(i).getId());
                     }
                 }
@@ -574,10 +584,8 @@ LogUtil.i(info.getRoles().toString());
             } else {
 
 
-
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;
-
 
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -608,7 +616,7 @@ LogUtil.i(info.getRoles().toString());
                     protected Map<String, String> getParams() throws AuthFailureError {
                         HashMap<String, String> map = new HashMap<>();
                         map.put("role_type", id);
-                      //  map.put("id", role_id);
+                        //  map.put("id", role_id);
                         LogUtil.i(map.toString());
                         return map;
                     }
@@ -715,7 +723,7 @@ LogUtil.i(info.getRoles().toString());
                 intent.putExtra("weidu", weidu);
                 intent.putExtra("shopJingdu", shopJingdu);
                 intent.putExtra("shopWeidu", shopWeidu);
-                intent.putExtra("shopname",tv_shopname.getText().toString());
+                intent.putExtra("shopname", tv_shopname.getText().toString());
                 startActivity(intent);
 
                 break;
@@ -726,7 +734,9 @@ LogUtil.i(info.getRoles().toString());
                 intent1.putExtra("shopJingdu", shopJingdu);
                 intent1.putExtra("shopWeidu", shopWeidu);
                 intent1.putExtra("branchID", branchId);
-                intent1.putStringArrayListExtra("imgList", drawableArrayList);
+                Bundle b = new Bundle();
+                b.putSerializable("backBannerList", backBannerList);
+                intent1.putExtras(b);
                 startActivity(intent1);
                 break;
             default:
@@ -1044,7 +1054,6 @@ LogUtil.i(info.getRoles().toString());
             AnimationSet smallAnimationSet = new AnimationSet(false);
             smallAnimationSet.addAnimation(scaleAnim);
             smallAnimationSet.addAnimation(rotateAnim);
-
 
 
 //            TranslateAnimation animation = new TranslateAnimation(0, -10, 0, 0);

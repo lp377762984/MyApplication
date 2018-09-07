@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
@@ -61,22 +62,24 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2017/11/29.
  */
 
-public class ShopDetailedActivity extends Activity{
-    Button bt_back,join_button;
+public class ShopDetailedActivity extends Activity {
+    Button bt_back, join_button;
     RequestQueue requestQueue;
     Gson gson;
-    TextView tv_adress,tv_time,store_name;
+    TextView tv_adress, tv_time, store_name;
     ExpandableTextView tv_detail;
     String phoneNo;
-    ImageView detail_phone,detail_adress,img_01,img_02,img_kechenganpai;
-    String jingdu,weidu,shopJingdu,shopWeidu,branchID,myBranchId;
+    ImageView detail_phone, detail_adress, img_01, img_02, img_kechenganpai;
+    String jingdu, weidu, shopJingdu, shopWeidu, branchID, myBranchId;
     RelativeLayout s_button;
     Data myInfo;
-    ExpandableListView jiaolian_grid,huiji_grid;
-    ImageView down_img,up_img;
-    ArrayList<String> imgList;
+    ExpandableListView jiaolian_grid, huiji_grid;
+    ImageView down_img, up_img;
+    ArrayList<String> imgList=new ArrayList<>();
+    ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();//回传过来的bannerlist
     MZBannerView shop_banner;
     private String shopname;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,14 +91,20 @@ public class ShopDetailedActivity extends Activity{
     private void initHost() {
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        myInfo = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
+        myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         jingdu = getIntent().getStringExtra("jingdu");
         weidu = getIntent().getStringExtra("weidu");
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
-        imgList = getIntent().getStringArrayListExtra("imgList");
+//        imgList = getIntent().getStringArrayListExtra("imgList");
+        backBannerList = (ArrayList<BranchBannerBean.Data>) getIntent().getSerializableExtra("backBannerList");
+        if (backBannerList != null && backBannerList.size() > 0) {
+            for (int i = 0; i < backBannerList.size(); i++) {
+                imgList.add(backBannerList.get(i).getImg_url());
+            }
+        }
         //myBranchId = myInfo.getPerson().getDefault_branch();
         isJoinBranch(branchID);
 
@@ -106,10 +115,10 @@ public class ShopDetailedActivity extends Activity{
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-            LogUtil.i(s);
-                if(s.contains("1")){
+                LogUtil.i(s);
+                if (s.contains("1")) {
                     s_button.setVisibility(View.GONE);
-                }else{
+                } else {
                     s_button.setVisibility(View.VISIBLE);
                 }
 
@@ -119,19 +128,19 @@ public class ShopDetailedActivity extends Activity{
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("branchId",branchId);
+                map.put("branchId", branchId);
 
                 return map;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -145,7 +154,7 @@ public class ShopDetailedActivity extends Activity{
         img_kechenganpai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
+                startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class));
             }
         });
         jiaolian_grid = findViewById(R.id.jiaolian_grid);
@@ -159,10 +168,10 @@ public class ShopDetailedActivity extends Activity{
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 down_img = v.findViewById(R.id.down_img);
                 up_img = v.findViewById(R.id.up_img);
-                if(down_img.getVisibility()==View.GONE){
+                if (down_img.getVisibility() == View.GONE) {
                     down_img.setVisibility(View.VISIBLE);
                     up_img.setVisibility(View.GONE);
-                }else{
+                } else {
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
                 }
@@ -175,10 +184,10 @@ public class ShopDetailedActivity extends Activity{
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 down_img = v.findViewById(R.id.down_img);
                 up_img = v.findViewById(R.id.up_img);
-                if(down_img.getVisibility()==View.GONE){
+                if (down_img.getVisibility() == View.GONE) {
                     down_img.setVisibility(View.VISIBLE);
                     up_img.setVisibility(View.GONE);
-                }else{
+                } else {
                     down_img.setVisibility(View.GONE);
                     up_img.setVisibility(View.VISIBLE);
                 }
@@ -200,7 +209,7 @@ public class ShopDetailedActivity extends Activity{
                 startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", imgList.get(0)));
             }
         });
-        if(imgList!=null&&imgList.size()>0){
+        if (imgList != null && imgList.size() > 0) {
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_01);
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_02);
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_kechenganpai);
@@ -209,7 +218,7 @@ public class ShopDetailedActivity extends Activity{
 
         tv_adress = findViewById(R.id.tv_adress);
         tv_time = findViewById(R.id.tv_time);
-        tv_detail= findViewById(R.id.tv_detail);
+        tv_detail = findViewById(R.id.tv_detail);
         store_name = findViewById(R.id.store_name);
         detail_phone = findViewById(R.id.detail_phone);
         detail_adress = findViewById(R.id.detail_adress);
@@ -252,11 +261,11 @@ public class ShopDetailedActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                intent.putExtra("shopJingdu",shopJingdu);
-                intent.putExtra("shopWeidu",shopWeidu);
-                intent.putExtra("jingdu",jingdu);
-                intent.putExtra("weidu",weidu);
-                intent.putExtra("shopname",shopname);
+                intent.putExtra("shopJingdu", shopJingdu);
+                intent.putExtra("shopWeidu", shopWeidu);
+                intent.putExtra("jingdu", jingdu);
+                intent.putExtra("weidu", weidu);
+                intent.putExtra("shopname", shopname);
                 startActivity(intent);
             }
         });
@@ -296,11 +305,15 @@ public class ShopDetailedActivity extends Activity{
         getJiaolian(branchID);
         getHuiJi(branchID);
     }
+
     private void setBannner() {
 
         shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
+                startActivity(new Intent(ShopDetailedActivity.this, NewsDetailsActivity.class)
+                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title",  backBannerList.get(i).getTitle()));
+
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
 //                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");
 //                intent.putExtra("shopJingdu", itemsList.get(0).getLng() + "");
@@ -310,8 +323,11 @@ public class ShopDetailedActivity extends Activity{
 //                startActivity(intent);
             }
         });
-        if(imgList!=null&&imgList.size()==0){
+        if (imgList != null && imgList.size() == 0) {
             imgList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            BranchBannerBean.Data bbb = new BranchBannerBean.Data();
+            bbb.setImg_url("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            backBannerList.add(bbb);
 //        drawableArrayList.add(R.drawable.img_man);
 //        drawableArrayList.add(R.drawable.img_man);
         }
@@ -330,10 +346,11 @@ public class ShopDetailedActivity extends Activity{
 
     public static class BannerViewHolder implements MZViewHolder<String> {
         private ImageView mImageView;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
@@ -346,36 +363,36 @@ public class ShopDetailedActivity extends Activity{
         }
     }
 
-    private void join(final String shopID){
+    private void join(final String shopID) {
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                if(s.contains("true")){
+                if (s.contains("true")) {
                     reloadInfo();
-                }else{
+                } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf",volleyError.toString());
+                LogUtil.e("zzf", volleyError.toString());
                 ToastUtils.showToastShort("加入失败！请检查网络！");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("branchId",shopID);
-                map.put("join","true");
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("branchId", shopID);
+                map.put("join", "true");
                 return map;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };
@@ -424,26 +441,26 @@ public class ShopDetailedActivity extends Activity{
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void getHuiJi(final String shopID){
+    private void getHuiJi(final String shopID) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf",s);
+                LogUtil.e("zzf", s);
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
-                if(shopJiaoLianBean!=null){
+                if (shopJiaoLianBean != null) {
                     List<ShopJiaoLianBean.Data> huijiList = shopJiaoLianBean.getData();
                     ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
-                    if(huijiList!=null&&huijiList.size()>6){
-                        for(int i=6;i<huijiList.size();i++){
+                    if (huijiList != null && huijiList.size() > 6) {
+                        for (int i = 6; i < huijiList.size(); i++) {
                             objects.add(huijiList.get(i));
                         }
 
                     }
-                    if(huijiList!=null&&huijiList.size()==0){
+                    if (huijiList != null && huijiList.size() == 0) {
                         huiji_grid.setVisibility(View.GONE);
                     }
-                    huiji_grid.setAdapter(new MyAdapter(huijiList,objects));
-                }else{
+                    huiji_grid.setAdapter(new MyAdapter(huijiList, objects));
+                } else {
                     huiji_grid.setVisibility(View.GONE);
                 }
             }
@@ -452,12 +469,12 @@ public class ShopDetailedActivity extends Activity{
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("branch_id",shopID);
+                map.put("branch_id", shopID);
 
                 return map;
             }
@@ -475,29 +492,29 @@ public class ShopDetailedActivity extends Activity{
 
     }
 
-    private void getJiaolian(final String shopID){
+    private void getJiaolian(final String shopID) {
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_JIAOLIAN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf",s);
+                LogUtil.e("zzf", s);
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
-                if(shopJiaoLianBean!=null){
+                if (shopJiaoLianBean != null) {
 
                     List<ShopJiaoLianBean.Data> jiaolianList = shopJiaoLianBean.getData();
                     ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
-                    if(jiaolianList!=null&&jiaolianList.size()>6){
-                        for(int i=6;i<jiaolianList.size();i++){
+                    if (jiaolianList != null && jiaolianList.size() > 6) {
+                        for (int i = 6; i < jiaolianList.size(); i++) {
                             objects.add(jiaolianList.get(i));
                         }
 
                     }
-                    if(jiaolianList!=null&&jiaolianList.size()==0){
+                    if (jiaolianList != null && jiaolianList.size() == 0) {
                         jiaolian_grid.setVisibility(View.GONE);
                     }
-                    jiaolian_grid.setAdapter(new MyAdapter(jiaolianList,objects));
-                }else{
+                    jiaolian_grid.setAdapter(new MyAdapter(jiaolianList, objects));
+                } else {
                     jiaolian_grid.setVisibility(View.GONE);
                 }
             }
@@ -506,13 +523,13 @@ public class ShopDetailedActivity extends Activity{
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("branch_id",shopID);
+                map.put("branch_id", shopID);
 
                 return map;
             }
@@ -532,21 +549,21 @@ public class ShopDetailedActivity extends Activity{
 
     }
 
-    private void getShopDetail(){
+    private void getShopDetail() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/"+branchID, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + branchID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
                 ShopDetailBean.DataBean data = shopDetailBean.getData();
-                if (data!=null){
+                if (data != null) {
                     List<String> photo_url = data.getPhoto_url();
-                    if(photo_url!=null){
-                        if(photo_url.size() == 1){
+                    if (photo_url != null) {
+                        if (photo_url.size() == 1) {
                             Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
                         }
-                        if(photo_url.size() == 2){
+                        if (photo_url.size() == 2) {
                             Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
                             Glide.with(ShopDetailedActivity.this).load(photo_url.get(1)).into(img_02);
                         }
@@ -554,11 +571,11 @@ public class ShopDetailedActivity extends Activity{
 
                     store_name.setText(data.getName());
 
-                    shopname=data.getName();
+                    shopname = data.getName();
                     tv_adress.setText(data.getAddress());
                     tv_detail.setText(data.getDescription());
                     phoneNo = data.getTelphone();
-                    branchID = data.getBranch_id()+"";
+                    branchID = data.getBranch_id() + "";
                 }
 
             }
@@ -567,11 +584,11 @@ public class ShopDetailedActivity extends Activity{
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
                 return map;
             }
@@ -601,6 +618,7 @@ public class ShopDetailedActivity extends Activity{
         });
         dialog.show();
     }
+
     /**
      * 调用拨号功能
      *
@@ -618,7 +636,7 @@ public class ShopDetailedActivity extends Activity{
         List<ShopJiaoLianBean.Data> jiaolianList;
         List<ShopJiaoLianBean.Data> childList;
 
-        MyAdapter(List<ShopJiaoLianBean.Data> jiaolianList,List<ShopJiaoLianBean.Data> childList){
+        MyAdapter(List<ShopJiaoLianBean.Data> jiaolianList, List<ShopJiaoLianBean.Data> childList) {
             this.jiaolianList = jiaolianList;
             this.childList = childList;
         }
@@ -630,9 +648,9 @@ public class ShopDetailedActivity extends Activity{
 
         @Override
         public int getChildrenCount(int groupPosition) {
-            if(jiaolianList.size()>6){
+            if (jiaolianList.size() > 6) {
                 return 1;
-            }else {
+            } else {
                 return 0;
             }
         }
@@ -665,39 +683,39 @@ public class ShopDetailedActivity extends Activity{
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-            if(convertView==null){
-                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_parent,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_parent, null);
             }
 
-            CircleImageView[] circleImageViews = {convertView.findViewById(R.id.circle_1),convertView.findViewById(R.id.circle_2),convertView.findViewById(R.id.circle_3)
-            ,convertView.findViewById(R.id.circle_4),convertView.findViewById(R.id.circle_5),convertView.findViewById(R.id.circle_6)};
+            CircleImageView[] circleImageViews = {convertView.findViewById(R.id.circle_1), convertView.findViewById(R.id.circle_2), convertView.findViewById(R.id.circle_3)
+                    , convertView.findViewById(R.id.circle_4), convertView.findViewById(R.id.circle_5), convertView.findViewById(R.id.circle_6)};
 
-            if(jiaolianList.size()<=6){
-                for(int i=0;i<jiaolianList.size();i++){
+            if (jiaolianList.size() <= 6) {
+                for (int i = 0; i < jiaolianList.size(); i++) {
                     circleImageViews[i].setVisibility(View.VISIBLE);
                     final int finalI = i;
                     circleImageViews[i].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                                    .putExtra("person_id",jiaolianList.get(finalI).getPerson_id()+"")
-                                    .putExtra("employee_id",jiaolianList.get(finalI).getId()+"")
-                                    .putExtra("branch_id",jiaolianList.get(finalI).getBranch_id()+""));
+                                    .putExtra("person_id", jiaolianList.get(finalI).getPerson_id() + "")
+                                    .putExtra("employee_id", jiaolianList.get(finalI).getId() + "")
+                                    .putExtra("branch_id", jiaolianList.get(finalI).getBranch_id() + ""));
                         }
                     });
-                    if("".equals(jiaolianList.get(i).getSelf_avatar_path())||jiaolianList.get(i).getSelf_avatar_path()==null){
+                    if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
                         Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    }else{
+                    } else {
                         Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
                     }
 
                 }
-            }else if(jiaolianList.size()>6){
-                for(int i=0;i<6;i++){
+            } else if (jiaolianList.size() > 6) {
+                for (int i = 0; i < 6; i++) {
                     circleImageViews[i].setVisibility(View.VISIBLE);
-                    if("".equals(jiaolianList.get(i).getSelf_avatar_path())||jiaolianList.get(i).getSelf_avatar_path()==null){
+                    if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
                         Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    }else{
+                    } else {
                         Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
                     }
                 }
@@ -709,8 +727,8 @@ public class ShopDetailedActivity extends Activity{
         @Override
         public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            if(convertView==null){
-                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child,null);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child, null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
             grid_view.setAdapter(new MyGridAdapter(childList));
@@ -718,9 +736,9 @@ public class ShopDetailedActivity extends Activity{
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                            .putExtra("person_id",childList.get(childPosition).getPerson_id()+"")
-                            .putExtra("employee_id",childList.get(childPosition).getId()+"")
-                            .putExtra("branch_id",childList.get(childPosition).getBranch_id()+""));
+                            .putExtra("person_id", childList.get(childPosition).getPerson_id() + "")
+                            .putExtra("employee_id", childList.get(childPosition).getId() + "")
+                            .putExtra("branch_id", childList.get(childPosition).getBranch_id() + ""));
                 }
             });
 
@@ -738,7 +756,7 @@ public class ShopDetailedActivity extends Activity{
 
         List<ShopJiaoLianBean.Data> gridViewList;
 
-        MyGridAdapter(List<ShopJiaoLianBean.Data> gridViewList){
+        MyGridAdapter(List<ShopJiaoLianBean.Data> gridViewList) {
             this.gridViewList = gridViewList;
         }
 
@@ -761,9 +779,9 @@ public class ShopDetailedActivity extends Activity{
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_grid_item, null);
             CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            if("".equals(gridViewList.get(position).getSelf_avatar_path())||gridViewList.get(position).getSelf_avatar_path()==null){
+            if ("".equals(gridViewList.get(position).getSelf_avatar_path()) || gridViewList.get(position).getSelf_avatar_path() == null) {
                 Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
-            }else{
+            } else {
                 Glide.with(ShopDetailedActivity.this).load(gridViewList.get(position).getSelf_avatar_path()).into(circle_item);
             }
 

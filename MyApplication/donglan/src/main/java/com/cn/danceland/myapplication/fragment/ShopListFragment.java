@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,9 @@ public class ShopListFragment extends BaseFragment {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
+    private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
+
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.shoplist_fragment, null);
@@ -214,10 +218,12 @@ public class ShopListFragment extends BaseFragment {
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
                 if (branchBannerBean != null) {
                     drawableArrayList.clear();
+                    backBannerList.clear();
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
                             drawableArrayList.add(data.get(i).getImg_url());
+                            backBannerList.add(data.get(i));
                         }
                         setBannner();
                     }
@@ -350,7 +356,10 @@ public class ShopListFragment extends BaseFragment {
                     intent.putExtra("jingdu", jingdu);
                     intent.putExtra("weidu", weidu);
                     intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
-                    intent.putStringArrayListExtra("imgList", drawableArrayList);
+                    Bundle b = new Bundle();
+                    b.putSerializable("backBannerList", backBannerList);
+                    intent.putExtras(b);
+//                    intent.putStringArrayListExtra("imgList", drawableArrayList);
                     startActivityForResult(intent, 111);
                 }
             });
@@ -414,12 +423,18 @@ public class ShopListFragment extends BaseFragment {
                 intent.putExtra("jingdu", jingdu);
                 intent.putExtra("weidu", weidu);
                 intent.putExtra("branchID", itemsList.get(0).getBranch_id() + "");
-                intent.putStringArrayListExtra("imgList", drawableArrayList);
+                Bundle b = new Bundle();
+                b.putSerializable("backBannerList", backBannerList);
+                intent.putExtras(b);
+//                intent.putStringArrayListExtra("imgList", drawableArrayList);
                 startActivityForResult(intent, 111);
             }
         });
         if (drawableArrayList != null && drawableArrayList.size() == 0) {
             drawableArrayList.add("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            BranchBannerBean.Data bbb = new BranchBannerBean.Data();
+            bbb.setImg_url("http://i3.hoopchina.com.cn/blogfile/201403/31/BbsImg139626653396762_620*413.jpg");
+            backBannerList.add(bbb);
         }
         // 设置数据
         shop_banner.setPages(drawableArrayList, new MZHolderCreator<BannerViewHolder>() {

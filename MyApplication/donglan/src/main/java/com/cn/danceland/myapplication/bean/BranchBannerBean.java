@@ -42,7 +42,7 @@ public class BranchBannerBean implements Serializable {
     }
 
 
-    public class Data implements Serializable{
+    public static class Data implements Serializable{
 
         private int branch_id;
         private int id;
