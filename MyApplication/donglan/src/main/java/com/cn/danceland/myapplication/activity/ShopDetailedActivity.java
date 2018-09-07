@@ -101,6 +101,8 @@ public class ShopDetailedActivity extends Activity{
 
     }
 
+    private  boolean isjion=false;
+
     private void isJoinBranch(final String branchId) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
@@ -108,8 +110,10 @@ public class ShopDetailedActivity extends Activity{
             public void onResponse(String s) {
             LogUtil.i(s);
                 if(s.contains("1")){
+                    isjion=true;
                     s_button.setVisibility(View.GONE);
                 }else{
+                    isjion=false;
                     s_button.setVisibility(View.VISIBLE);
                 }
 
@@ -145,7 +149,12 @@ public class ShopDetailedActivity extends Activity{
         img_kechenganpai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
+                if (isjion==true){
+                    startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
+                }else {
+                    ToastUtils.showToastShort("清闲");
+                }
+
             }
         });
         jiaolian_grid = findViewById(R.id.jiaolian_grid);
@@ -203,7 +212,7 @@ public class ShopDetailedActivity extends Activity{
         if(imgList!=null&&imgList.size()>0){
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_01);
             Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_02);
-            Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_kechenganpai);
+            Glide.with(ShopDetailedActivity.this).load("http://img.dljsgw.com/app_dir/default_course.png").into(img_kechenganpai);
         }
 
 
