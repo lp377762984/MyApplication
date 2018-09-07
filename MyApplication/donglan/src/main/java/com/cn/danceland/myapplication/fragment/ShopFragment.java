@@ -110,6 +110,7 @@ public class ShopFragment extends BaseFragment {
     ImageButton ibtn_call, ibtn_gps;
     List<MenusBean.Data> data;
     LinearLayout ll_top;
+    LinearLayout shop_layout;
     TextView tv_shopname, tv_role;
     View v;
     ArrayList<String> roleList;
@@ -156,6 +157,8 @@ LogUtil.i(info.getRoles().toString());
         shop_banner = v.findViewById(R.id.shop_banner);
         tv_role = v.findViewById(R.id.tv_role);
 
+        shop_layout = v.findViewById(R.id.shop_layout);
+
         rl_role = v.findViewById(R.id.rl_role);
         down_img = v.findViewById(R.id.down_img);
         up_img = v.findViewById(R.id.up_img);
@@ -178,6 +181,18 @@ LogUtil.i(info.getRoles().toString());
                 }
             }
         });
+//        shop_layout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LogUtil.i("shop_layout11");
+//                if (popupWindow.isShowing()) {
+//                    LogUtil.i("shop_layout22");
+//                    dismissPop();
+//                    up_img.setVisibility(View.GONE);
+//                    down_img.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
         //setSpinner();
         if (roleList != null && roleList.size() > 0) {
             tv_role.setText(roleList.get(0));
@@ -217,6 +232,7 @@ LogUtil.i(info.getRoles().toString());
         popupWindow = new PopupWindow(inflate);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);  //设置点击屏幕其它地方弹出框消失
 
         ListView pop_lv = inflate.findViewById(R.id.pop_lv);
         pop_lv.setAdapter(new PopAdapter());

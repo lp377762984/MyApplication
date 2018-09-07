@@ -334,11 +334,12 @@
                     />
                 <LinearLayout
                     android:id="@+id/ll_image"
-                    android:layout_below="@+id/rl_shopImage"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="100dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tv_detail"
+                    android:layout_toEndOf="@+id/tv_detail">
 
                     <ImageView
                         android:id="@+id/img_01"
@@ -347,7 +348,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:scaleType="fitXY"
                         />
                     <ImageView
                         android:id="@+id/img_02"
@@ -355,8 +355,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:scaleType="fitXY"/>
+                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
