@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,35 +103,6 @@ public class WearFitAddClockActivity extends Activity {
                 finish();
             }
         });
-        lv_clock.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class);
-                if (localClockList.get(i).getHour() == 0) {
-                    intent.putExtra("hour", "00");
-                } else {
-                    String hour = localClockList.get(i).getHour() + "";
-                    if (hour.length() == 1) {
-                        intent.putExtra("hour", "0" + localClockList.get(i).getHour() + "");
-                    } else {
-                        intent.putExtra("hour", localClockList.get(i).getHour() + "");
-                    }
-                }
-
-                if (localClockList.get(i).getMinute() == 0) {
-                    intent.putExtra("minute", "00");
-                } else {
-                    String minute = localClockList.get(i).getMinute() + "";
-                    if (minute.length() == 1) {
-                        intent.putExtra("minute", "0" + localClockList.get(i).getMinute() + "");
-                    } else {
-                        intent.putExtra("minute", localClockList.get(i).getMinute() + "");
-                    }
-                }
-                intent.putExtra("clock_id", i);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -189,12 +161,13 @@ public class WearFitAddClockActivity extends Activity {
 
             View inflate = LayoutInflater.from(WearFitAddClockActivity.this).inflate(R.layout.item_clock, null);
             TextView tv_time = inflate.findViewById(R.id.tv_time);
+            Switch btn_switch = inflate.findViewById(R.id.btn_switch);//闹钟id开关，最多开8个
+            RelativeLayout item_layout = inflate.findViewById(R.id.item_layout);//item 后续用来点击,因为setOnItemClickListener 返回的游标有问题！
             String repeat = "";
             if (localClockList.get(i).getRepeat() != null) {
                 repeat = "（" + localClockList.get(i).getRepeat() + "）";
             }
             tv_time.setText(localClockList.get(i).getTime() + repeat);
-            Switch btn_switch = inflate.findViewById(R.id.btn_switch);//闹钟id开关，最多开8个
             if (localClockList.get(i).getOffOn() == 1) {//0关1开
                 btn_switch.setChecked(true);
             } else {
@@ -214,6 +187,37 @@ public class WearFitAddClockActivity extends Activity {
                     getData();
                 }
             });
+            item_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WearFitAddClockActivity.this, WearFitClockSettingActivity.class);
+//                    LogUtil.i("iii+"+i+"--size--"+localClockList.size());
+                    if (localClockList.get(i).getHour() == 0) {
+                        intent.putExtra("hour", "00");
+                    } else {
+                        String hour = localClockList.get(i).getHour() + "";
+                        if (hour.length() == 1) {
+                            intent.putExtra("hour", "0" + localClockList.get(i).getHour() + "");
+                        } else {
+                            intent.putExtra("hour", localClockList.get(i).getHour() + "");
+                        }
+                    }
+
+                    if (localClockList.get(i).getMinute() == 0) {
+                        intent.putExtra("minute", "00");
+                    } else {
+                        String minute = localClockList.get(i).getMinute() + "";
+                        if (minute.length() == 1) {
+                            intent.putExtra("minute", "0" + localClockList.get(i).getMinute() + "");
+                        } else {
+                            intent.putExtra("minute", localClockList.get(i).getMinute() + "");
+                        }
+                    }
+                    intent.putExtra("clock_id", i);
+                    startActivity(intent);
+                }
+            });
+
             return inflate;
         }
     }
