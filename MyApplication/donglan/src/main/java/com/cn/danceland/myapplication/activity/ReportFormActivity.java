@@ -273,7 +273,6 @@ public class ReportFormActivity extends Activity {
         tv_remark = findViewById(R.id.et_remark);
 
         btn_commit = findViewById(R.id.btn_commit);
-
 //        tv_meet.setOnClickListener(onClickListener);
 //        tv_clean.setOnClickListener(onClickListener);
 //        tv_item_placement.setOnClickListener(onClickListener);
@@ -361,7 +360,7 @@ public class ReportFormActivity extends Activity {
                     tv_power.setClickable(false);
                     tv_door.setClickable(false);
                     tv_remark.setClickable(false);
-                    btn_commit.setClickable(false);
+//                    btn_commit.setClickable(false);
                 }
             }
         }, new Response.ErrorListener() {
@@ -429,44 +428,43 @@ public class ReportFormActivity extends Activity {
 //                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_remark", str_remark).putExtra("id", 20), 20);
 //                    break;
                 case R.id.btn_commit:
-                    if (TextUtils.isEmpty(tv_meet.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    boolean isPost=true;
+                    if (!TextUtils.isEmpty(tv_meet.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_clean.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_clean.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_item_placement.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_item_placement.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_body_build.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_body_build.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_sport_device.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_sport_device.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_group_course.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_group_course.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_power.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_power.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_door.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_door.getText().toString())) {//不能空
+                        isPost=false;
                     }
-                    if (TextUtils.isEmpty(tv_remark.getText().toString())) {//不能空
-                        ToastUtils.showToastShort("请填写完整");
-                        return;
+                    if (!TextUtils.isEmpty(tv_remark.getText().toString())) {//不能空
+                        isPost=false;
                     }
                     clickAble = true;
-                    showAleart();
+                    LogUtil.i("--00--");
+                    if(!isPost){
+                        LogUtil.i("--11--");
+                        showAleart();
+                    }else{
+                        LogUtil.i("--22--");
+                        ToastUtils.showToastShort("请填写完整");
+                    }
                     break;
             }
         }
@@ -512,16 +510,16 @@ public class ReportFormActivity extends Activity {
             public void onResponse(JSONObject jsonObject) {
                 if (jsonObject.toString().contains("true")) {
                     clickAble = true;
-//                    tv_meet.setClickable(false);
-//                    tv_clean.setClickable(false);
-//                    tv_item_placement.setClickable(false);
-//                    tv_body_build.setClickable(false);
-//                    tv_sport_device.setClickable(false);
-//                    tv_group_course.setClickable(false);
-//                    tv_course.setClickable(false);
-//                    tv_power.setClickable(false);
-//                    tv_door.setClickable(false);
-//                    tv_remark.setClickable(false);
+                    tv_meet.setFocusable(false);
+                    tv_clean.setFocusable(false);
+                    tv_item_placement.setFocusable(false);
+                    tv_body_build.setFocusable(false);
+                    tv_sport_device.setFocusable(false);
+                    tv_group_course.setFocusable(false);
+                    tv_course.setFocusable(false);
+                    tv_power.setFocusable(false);
+                    tv_door.setFocusable(false);
+                    tv_remark.setFocusable(false);
                     btn_commit.setClickable(false);
                     ToastUtils.showToastShort("提交成功");
                 }
