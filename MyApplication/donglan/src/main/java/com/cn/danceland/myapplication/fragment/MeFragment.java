@@ -264,7 +264,7 @@ public class MeFragment extends BaseFragment {
                 Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.ll_my_shop:
+            case R.id.ll_my_shop://我的门店
                 mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 LogUtil.i(mInfo.getPerson().getDefault_branch());
                 if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){

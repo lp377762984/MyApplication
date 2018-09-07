@@ -181,7 +181,6 @@ public class WearFitSettingActivity extends Activity {
         } else {
             wearFitUser.setSex(1);
         }
-        LogUtil.i("infoData.getPerson().getHeight()" + infoData.getPerson().getHeight());
         if (infoData.getPerson().getHeight() != null && infoData.getPerson().getHeight().length() > 0) {//身高  "170.0"
             int idx = infoData.getPerson().getHeight().indexOf(".");
             String hStr = 173 + "";
@@ -432,10 +431,24 @@ public class WearFitSettingActivity extends Activity {
                         startActivity(new Intent(WearFitSettingActivity.this, WearFitAddClockActivity.class));
                         break;
                     case R.id.rl_rushui:
-                        showTimeSelect("入睡时间");
+                        int hourStrTemp = 0;
+                        int minuteStrTemp = 0;
+                        String[] times = tv_rushui.getText().toString().split("\\:");
+                        if (times != null && times.length > 1) {
+                            hourStrTemp = Integer.valueOf(times[0]);
+                            minuteStrTemp = Integer.valueOf(times[1]);
+                        }
+                        showTimeSelect("入睡时间", hourStrTemp, minuteStrTemp);
                         break;
                     case R.id.rl_wake:
-                        showTimeSelect("醒来时间");
+                        hourStrTemp = 0;
+                        minuteStrTemp = 0;
+                        times = tv_wake.getText().toString().split("\\:");
+                        if (times != null && times.length > 1) {
+                            hourStrTemp = Integer.valueOf(times[0]);
+                            minuteStrTemp = Integer.valueOf(times[1]);
+                        }
+                        showTimeSelect("醒来时间", hourStrTemp, minuteStrTemp);
                         break;
                     case R.id.rl_jiuzuo://久坐
                         startActivity(new Intent(WearFitSettingActivity.this, WearFitLongSitActivity.class).putExtra("from", "久坐提醒"));
@@ -507,9 +520,7 @@ public class WearFitSettingActivity extends Activity {
                         builder2.show();
                         break;
                     case R.id.firmware_update_layout://固件升级
-                        //TODO
-                        //TODO
-                        //TODO
+                        //TODO 没给这个接口
                         break;
                 }
             } else {
@@ -576,29 +587,40 @@ public class WearFitSettingActivity extends Activity {
         }
     }
 
-    private void showTimeSelect(final String str) {
+    private void showTimeSelect(final String str, int lookHour, int lookMinute) {
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
         customDatePicker.setGoneYearAndMounth();
-        customDatePicker.showWindow();
+        customDatePicker.showWindow(lookHour, lookMinute);
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getTime();
+                String hourStr = customDatePicker.getHour();
+                String minuteStr = customDatePicker.getMinute();
                 if ("入睡时间".equals(str)) {
-                    tv_rushui.setText(dateString);
-                    String[] startTime = dateString.split(":");
-                    if (startTime != null && startTime.length > 2) {
-                        sleepTime.setStartHour(Integer.valueOf(startTime[0]));
-                        sleepTime.setStartMinute(Integer.valueOf(startTime[1]));
-                    }
+                    tv_rushui.setText(hourStr + ":" + minuteStr);
+                    sleepTime.setStartHour(Integer.valueOf(hourStr));
+                    sleepTime.setStartMinute(Integer.valueOf(minuteStr));
                 } else if ("醒来时间".equals(str)) {
-                    tv_wake.setText(dateString);
-                    String[] endTime = dateString.split(":");
-                    if (endTime != null && endTime.length > 2) {
-                        sleepTime.setEndHour(Integer.valueOf(endTime[0]));
-                        sleepTime.setEndMinute(Integer.valueOf(endTime[1]));
-                    }
+                    tv_wake.setText(hourStr + ":" + minuteStr);
+                    sleepTime.setStartHour(Integer.valueOf(hourStr));
+                    sleepTime.setStartMinute(Integer.valueOf(minuteStr));
                 }
+//                String dateString = customDatePicker.getTime();
+//                if ("入睡时间".equals(str)) {
+//                    tv_rushui.setText(dateString);
+//                    String[] startTime = dateString.split("\\:");
+//                    if (startTime != null && startTime.length > 2) {
+//                        sleepTime.setStartHour(Integer.valueOf(startTime[0]));
+//                        sleepTime.setStartMinute(Integer.valueOf(startTime[1]));
+//                    }
+//                } else if ("醒来时间".equals(str)) {
+//                    tv_wake.setText(dateString);
+//                    String[] endTime = dateString.split("\\:");
+//                    if (endTime != null && endTime.length > 2) {
+//                        sleepTime.setEndHour(Integer.valueOf(endTime[0]));
+//                        sleepTime.setEndMinute(Integer.valueOf(endTime[1]));
+//                    }
+//                }
                 sleepTime.setOn(1);
                 SPUtils.setString("SleepTimeLongSit", gson.toJson(sleepTime));
                 commandManager.sendSleepTime(sleepTime);

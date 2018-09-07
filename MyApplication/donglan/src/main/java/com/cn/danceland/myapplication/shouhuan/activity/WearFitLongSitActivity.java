@@ -86,6 +86,11 @@ public class WearFitLongSitActivity extends Activity {
                 Type listType = new TypeToken<LongSit>() {
                 }.getType();
                 longSit = gson.fromJson(longSitGson, listType);
+                if(longSit.getOn()==1){//开
+                    sw_jiuzuo.setChecked(true);
+                }else{
+                    sw_jiuzuo.setChecked(false);
+                }
             }
         } else if ("勿扰模式".equals(from)) {
             String longSitGson = SPUtils.getString("IgnoreLongSit", "");
@@ -93,6 +98,11 @@ public class WearFitLongSitActivity extends Activity {
                 Type listType = new TypeToken<LongSit>() {
                 }.getType();
                 longSit = gson.fromJson(longSitGson, listType);
+                if(longSit.getOn()==1){//开
+                    sw_jiuzuo.setChecked(true);
+                }else{
+                    sw_jiuzuo.setChecked(false);
+                }
             }
         }
     }
@@ -137,29 +147,33 @@ public class WearFitLongSitActivity extends Activity {
     }
 
     private void showTimeSelect(final String str) {
+        int hourStrTemp = 0;
+        int minuteStrTemp = 0;
+        String[] times = tv_start.getText().toString().split("\\:");
+        if ("结束时间".equals(str)) {
+            times = tv_end.getText().toString().split("\\:");
+        }
+        if (times != null && times.length > 1) {
+            hourStrTemp = Integer.valueOf(times[0]);
+            minuteStrTemp = Integer.valueOf(times[1]);
+        }
         final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
         customDatePicker.setGoneYearAndMounth();
-        customDatePicker.showWindow();
+        customDatePicker.showWindow(hourStrTemp,minuteStrTemp);
         customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getTime();
+                String hourStr = customDatePicker.getHour();
+                String minuteStr = customDatePicker.getMinute();
                 if ("开始时间".equals(str)) {
-                    tv_start.setText(dateString);
-                    String[] startTime = dateString.split(":");
-                    if (startTime != null && startTime.length > 2) {
-                        longSit.setStartHour(Integer.valueOf(startTime[0]));
-                        longSit.setStartMinute(Integer.valueOf(startTime[1]));
-                    }
+                    tv_start.setText(hourStr + ":" + minuteStr);
+                    longSit.setStartHour(Integer.valueOf(hourStr));
+                    longSit.setStartMinute(Integer.valueOf(minuteStr));
                 } else if ("结束时间".equals(str)) {
-                    tv_end.setText(dateString);
-                    String[] endTime = dateString.split(":");
-                    if (endTime != null && endTime.length > 2) {
-                        longSit.setEndHour(Integer.valueOf(endTime[0]));
-                        longSit.setEndMinute(Integer.valueOf(endTime[1]));
-                    }
+                    tv_end.setText(hourStr + ":" + minuteStr);
+                    longSit.setStartHour(Integer.valueOf(hourStr));
+                    longSit.setStartMinute(Integer.valueOf(minuteStr));
                 }
-
             }
         });
 

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -18,7 +17,6 @@ import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.weigan.loopview.LoopView;
@@ -86,29 +84,31 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
         getHistory();
         initLoopData();
         setClickListener();
-        initRepeatView();
+        LogUtil.i("clock_id" + clock_id);
+        if (clock_id != (-1)) {//-1添加   否则修改
+            initRepeatView();
+        }
     }
 
     private void initRepeatView() {
         String clockList = SPUtils.getString("ClockList", "");
-        List<ClockBean> lastList=new ArrayList<>();
+        List<ClockBean> lastList = new ArrayList<>();
         if (!StringUtils.isNullorEmpty(clockList)) {
             Type listType = new TypeToken<List<ClockBean>>() {
             }.getType();
             List<ClockBean> clockBeans = gson.fromJson(clockList, listType);
             lastList.addAll(clockBeans);
         }
-
-        weekdayList=lastList.get(clock_id).getWeekday();
+        weekdayList = lastList.get(clock_id).getWeekday();
         stringBuffer.append("");
-        LogUtil.i("lastList"+weekdayList.size());
-        if(stringBuffer.length()>0){
-            for (int i = 0; i < weekdayList.size(); i++) {
-                stringBuffer.append(weekdayList.get(i) + "&");
-            }
+
+        for (int i = 0; i < weekdayList.size(); i++) {
+            stringBuffer.append(weekdayList.get(i) + "&");
+        }
+        if (stringBuffer.length() > 0) {
             stringBuffer.deleteCharAt(stringBuffer.length() - 1);
         }
-        repeatStr= localClockList.get(clock_id).getRepeat();
+        repeatStr = localClockList.get(clock_id).getRepeat();
         switch (repeatStr) {
             case "只提醒一次":
                 btn_yici.setChecked(true);
@@ -242,8 +242,7 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                     clockBean.setTime(shour + ":" + sminute);
                     clockBean.setRepeat(repeatStr);
                     clockBean.setWeekday(weekdayList);//周几 0 1 2 3 4 5 6
-                    LogUtil.i("11111--"+weekdayList.size());
-                    if (clock_id != -1) {//-1添加   否则修改
+                    if (clock_id != (-1)) {//-1添加   否则修改
                         clockBean.setId(clock_id);//时钟ID 最多8个
                         localClockList.set(clock_id, clockBean);
                     } else {
@@ -304,9 +303,8 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
                 btn_meitian.setChecked(false);
                 btn_gongzuori.setChecked(false);
                 btn_zidingyi.setChecked(true);
-                Intent intent=new Intent(context, WearFitClockWeekdayActivity.class);
+                Intent intent = new Intent(context, WearFitClockWeekdayActivity.class);
                 intent.putExtra("weekdays", stringBuffer.toString());
-
                 startActivityForResult(intent, MSG_CLOCK_WEEKDAY_DATA);
                 weekdayList.clear();
                 repeatStr = "自定义";
@@ -322,12 +320,11 @@ public class WearFitClockSettingActivity extends Activity implements View.OnClic
             if (weekdays != null && weekdays.length() != 0) {
                 String[] weekdaysA = weekdays.split("&");
                 if (weekdaysA != null)
-                    for (int i = 0; i < weekdaysA.length; i++) {
-                        LogUtil.i("i----" + weekdaysA[i] + "----" + i);
-
-                        int week = Integer.valueOf(weekdaysA[i].toString());
-                        weekdayList.add(week);
-                    }
+                    weekdayList.clear();
+                for (int i = 0; i < weekdaysA.length; i++) {
+                    int week = Integer.valueOf(weekdaysA[i].toString());
+                    weekdayList.add(week);
+                }
             }
         }
     }

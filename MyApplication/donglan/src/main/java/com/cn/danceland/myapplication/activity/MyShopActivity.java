@@ -33,6 +33,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,9 +55,12 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
 
     private MyListViewAdapter listViewAdapter;
     private List<MyJionShopList.Data> data = new ArrayList<>();
-    private ListView lv_myshop;
+    private PullToRefreshListView lv_myshop;
     private String defaultshopId;
     private Data userInfo;
+
+    private TextView tv_error;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +76,17 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(tv_shoplist).setOnClickListener(this);
         lv_myshop = findViewById(R.id.lv_myshop);
+
+        View listEmptyView = findViewById(R.id.rl_no_info);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error5);
+        tv_error.setText("没有数据");
+        lv_myshop.getRefreshableView().setEmptyView(listEmptyView);
+        lv_myshop.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
+        //设置下拉刷新模式both是支持下拉和上拉
+        lv_myshop.setMode(PullToRefreshBase.Mode.DISABLED);//DISABLED和普通listView一样用
+
         listViewAdapter = new MyListViewAdapter();
         lv_myshop.setAdapter(listViewAdapter);
 

@@ -25,7 +25,7 @@ public class Constants  {
  //   public static final String HOST = "http://118.190.201.15:6003/";//
 //     public static final String HOST = " http://192.168.1.115:8003/";//
     //public static final String HOST = "http://192.168.1.123:8003/";//老高
-  // public static  String HOST = "http://192.168.1.122:8003/";//超哥
+//   public static  String HOST = "http://192.168.1.122:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -271,7 +271,8 @@ public class Constants  {
     public static final String QUERY_MY_RECOMMEND= HOST + "/consultation/queryMyReferrals";//获取我的推荐
     public static final String QUERY_SAVE_RECOMMEND = HOST + "/consultation/saveReferral";//新增我的推荐记录
 
-
+  //我的通知-通知
+  public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
 
  //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
