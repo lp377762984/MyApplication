@@ -2,6 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tv_time"
@@ -24,4 +28,5 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:focusable="false" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 会籍报表
  * Created by feng on 2018/4/24.
  */
 
@@ -67,7 +68,6 @@ public class ReportFormActivity extends Activity {
     TextView tv_date;
     RelativeLayout btn_date;
     Button btn_all;
-    String str_meet, str_clean, str_item_placement, str_body_build, str_sport_device, str_group_course, str_course, str_power, str_door, str_remark;
     Data myInfo;
     String target_role_type;//要查询什么报表
     String branch_id;
@@ -79,6 +79,108 @@ public class ReportFormActivity extends Activity {
         setContentView(R.layout.activity_report);
         initHost();
         initView();
+        initData();
+    }
+
+    private void initData() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
+                if (reportCommitResultBean != null && reportCommitResultBean.getData() != null) {
+                    LogUtil.i("onResponse" + s);
+                    ReportCommitResultBean.Data data = reportCommitResultBean.getData();
+                    boolean isEditor = false;
+                    if (!StringUtils.isNullorEmpty(data.getMeet())) {
+                        tv_meet.setText(data.getMeet() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getClean())) {
+                        tv_clean.setText(data.getClean() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getItem_placement())) {
+                        tv_item_placement.setText(data.getItem_placement() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getBody_build())) {
+                        tv_body_build.setText(data.getBody_build() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getSport_device())) {
+                        tv_sport_device.setText(data.getSport_device() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getGroup_course())) {
+                        tv_group_course.setText(data.getGroup_course() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getCourse())) {
+                        tv_course.setText(data.getCourse() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getPower())) {
+                        tv_power.setText(data.getPower() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getDoor())) {
+                        tv_door.setText(data.getDoor() + "");
+                        isEditor = true;
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getRemark())) {
+                        tv_remark.setText(data.getRemark() + "");
+                        isEditor = true;
+                    }
+                    if (isEditor) {//有值  不让编辑
+                        tv_meet.setFocusable(false);
+                        tv_clean.setFocusable(false);
+                        tv_item_placement.setFocusable(false);
+                        tv_body_build.setFocusable(false);
+                        tv_sport_device.setFocusable(false);
+                        tv_group_course.setFocusable(false);
+                        tv_course.setFocusable(false);
+                        tv_power.setFocusable(false);
+                        tv_door.setFocusable(false);
+                        tv_remark.setFocusable(false);
+                        tv_meet.setLongClickable(false);
+                        tv_clean.setLongClickable(false);
+                        tv_item_placement.setLongClickable(false);
+                        tv_body_build.setLongClickable(false);
+                        tv_sport_device.setLongClickable(false);
+                        tv_group_course.setLongClickable(false);
+                        tv_course.setLongClickable(false);
+                        tv_power.setLongClickable(false);
+                        tv_door.setLongClickable(false);
+                        tv_remark.setLongClickable(false);
+                        btn_commit.setClickable(false);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("employee_id", emp_id);
+                map.put("date", selectDate);
+
+                return map;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
+                return map;
+            }
+
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     //业务报表
@@ -289,77 +391,67 @@ public class ReportFormActivity extends Activity {
     }
 
     private void initReportData(final String selectDate, final String emp_id) {
-
+//不知道代码具体想干嘛，这里应该有坑
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
                 if (reportCommitResultBean != null && reportCommitResultBean.getData() != null) {
+                    LogUtil.i("onResponse" + s);
                     ReportCommitResultBean.Data data = reportCommitResultBean.getData();
-//                    if (StringUtils.isNullorEmpty(data.getMeet())) {
-//                        tv_meet.setText("未填写");
-//                    } else {
-//                        tv_meet.setText(data.getMeet() + "");
-//                    }
-//
-//                    if (StringUtils.isNullorEmpty(data.getClean())) {
-//                        tv_clean.setText("未填写");
-//                    } else {
-//                        tv_clean.setText(data.getClean() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getItem_placement())) {
-//                        tv_item_placement.setText("未填写");
-//                    } else {
-//                        tv_item_placement.setText(data.getItem_placement() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getBody_build())) {
-//                        tv_body_build.setText("未填写");
-//                    } else {
-//                        tv_body_build.setText(data.getBody_build() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getSport_device())) {
-//                        tv_sport_device.setText("未填写");
-//                    } else {
-//                        tv_sport_device.setText(data.getSport_device() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getGroup_course())) {
-//                        tv_group_course.setText("未填写");
-//                    } else {
-//                        tv_group_course.setText(data.getGroup_course() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getCourse())) {
-//                        tv_course.setText("未填写");
-//                    } else {
-//                        tv_course.setText(data.getCourse() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getPower())) {
-//                        tv_power.setText("未填写");
-//                    } else {
-//                        tv_power.setText(data.getPower() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getDoor())) {
-//                        tv_door.setText("未填写");
-//                    } else {
-//                        tv_door.setText(data.getDoor() + "");
-//                    }
-//                    if (StringUtils.isNullorEmpty(data.getRemark())) {
-//                        tv_remark.setText("未填写");
-//                    } else {
-//                        tv_remark.setText(data.getRemark() + "");
-//                    }
+                    if (!StringUtils.isNullorEmpty(data.getMeet())) {
+                        tv_meet.setText(data.getMeet() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getClean())) {
+                        tv_clean.setText(data.getClean() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getItem_placement())) {
+                        tv_item_placement.setText(data.getItem_placement() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getBody_build())) {
+                        tv_body_build.setText(data.getBody_build() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getSport_device())) {
+                        tv_sport_device.setText(data.getSport_device() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getGroup_course())) {
+                        tv_group_course.setText(data.getGroup_course() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getCourse())) {
+                        tv_course.setText(data.getCourse() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getPower())) {
+                        tv_power.setText(data.getPower() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getDoor())) {
+                        tv_door.setText(data.getDoor() + "");
+                    }
+                    if (!StringUtils.isNullorEmpty(data.getRemark())) {
+                        tv_remark.setText(data.getRemark() + "");
+                    }
                     clickAble = true;
                 }
                 if (!nowDate.equals(selectDate) || clickAble) {
-                    tv_meet.setClickable(false);
-                    tv_clean.setClickable(false);
-                    tv_item_placement.setClickable(false);
-                    tv_body_build.setClickable(false);
-                    tv_sport_device.setClickable(false);
-                    tv_group_course.setClickable(false);
-                    tv_course.setClickable(false);
-                    tv_power.setClickable(false);
-                    tv_door.setClickable(false);
-                    tv_remark.setClickable(false);
+//                    tv_meet.setFocusable(false);
+//                    tv_clean.setFocusable(false);
+//                    tv_item_placement.setFocusable(false);
+//                    tv_body_build.setFocusable(false);
+//                    tv_sport_device.setFocusable(false);
+//                    tv_group_course.setFocusable(false);
+//                    tv_course.setFocusable(false);
+//                    tv_power.setFocusable(false);
+//                    tv_door.setFocusable(false);
+//                    tv_remark.setFocusable(false);
+//                    tv_meet.setLongClickable(false);
+//                    tv_clean.setLongClickable(false);
+//                    tv_item_placement.setLongClickable(false);
+//                    tv_body_build.setLongClickable(false);
+//                    tv_sport_device.setLongClickable(false);
+//                    tv_group_course.setLongClickable(false);
+//                    tv_course.setLongClickable(false);
+//                    tv_power.setLongClickable(false);
+//                    tv_door.setLongClickable(false);
+//                    tv_remark.setLongClickable(false);
 //                    btn_commit.setClickable(false);
                 }
             }
@@ -397,74 +489,44 @@ public class ReportFormActivity extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-//                case R.id.tv_meet:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_meet", str_meet).putExtra("id", 11), 11);
-//                    break;
-//                case R.id.tv_clean:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_clean", str_clean).putExtra("id", 12), 12);
-//                    break;
-//                case R.id.tv_item_placement:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_item_placement", str_item_placement).putExtra("id", 13), 13);
-//                    break;
-//                case R.id.tv_body_build:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_body_build", str_body_build).putExtra("id", 14), 14);
-//                    break;
-//                case R.id.tv_sport_device:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_sport_device", str_sport_device).putExtra("id", 15), 15);
-//                    break;
-//                case R.id.tv_group_course:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_group_course", str_group_course).putExtra("id", 16), 16);
-//                    break;
-//                case R.id.tv_course:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_course", str_course).putExtra("id", 17), 17);
-//                    break;
-//                case R.id.tv_power:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_power", str_power).putExtra("id", 18), 18);
-//                    break;
-//                case R.id.tv_door:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_door", str_door).putExtra("id", 19), 19);
-//                    break;
-//                case R.id.tv_remark:
-//                    startActivityForResult(new Intent(ReportFormActivity.this, ReportEditActivity.class).putExtra("str_remark", str_remark).putExtra("id", 20), 20);
-//                    break;
                 case R.id.btn_commit:
-                    boolean isPost=true;
+                    boolean isPost = true;
                     if (!TextUtils.isEmpty(tv_meet.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_clean.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_item_placement.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_body_build.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_sport_device.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_group_course.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_course.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_power.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_door.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     if (!TextUtils.isEmpty(tv_remark.getText().toString())) {//不能空
-                        isPost=false;
+                        isPost = false;
                     }
                     clickAble = true;
                     LogUtil.i("--00--");
-                    if(!isPost){
+                    if (!isPost) {
                         LogUtil.i("--11--");
                         showAleart();
-                    }else{
+                    } else {
                         LogUtil.i("--22--");
                         ToastUtils.showToastShort("请填写完整");
                     }
@@ -494,20 +556,20 @@ public class ReportFormActivity extends Activity {
 
     private void commit() {
         ReportCommitBean reportCommitBean = new ReportCommitBean();
-        reportCommitBean.setMeet(str_meet);
-        reportCommitBean.setClean(str_clean);
-        reportCommitBean.setItem_placement(str_item_placement);
-        reportCommitBean.setBody_build(str_body_build);
-        reportCommitBean.setSport_device(str_sport_device);
-        reportCommitBean.setGroup_course(str_group_course);
-        reportCommitBean.setCourse(str_course);
-        reportCommitBean.setPower(str_power);
-        reportCommitBean.setDoor(str_door);
-        reportCommitBean.setRemark(str_remark);
+        reportCommitBean.setMeet(tv_meet.getText().toString());
+        reportCommitBean.setClean(tv_clean.getText().toString());
+        reportCommitBean.setItem_placement(tv_item_placement.getText().toString());
+        reportCommitBean.setBody_build(tv_body_build.getText().toString());
+        reportCommitBean.setSport_device(tv_sport_device.getText().toString());
+        reportCommitBean.setGroup_course(tv_group_course.getText().toString());
+        reportCommitBean.setCourse(tv_course.getText().toString());
+        reportCommitBean.setPower(tv_power.getText().toString());
+        reportCommitBean.setDoor(tv_door.getText().toString());
+        reportCommitBean.setRemark(tv_remark.getText().toString());
         //reportCommitBean.setDate(nowDate);
 
         String s = gson.toJson(reportCommitBean);
-
+        LogUtil.i("tojson--" + s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.SAVEREPORT, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -523,6 +585,16 @@ public class ReportFormActivity extends Activity {
                     tv_power.setFocusable(false);
                     tv_door.setFocusable(false);
                     tv_remark.setFocusable(false);
+                    tv_meet.setLongClickable(false);
+                    tv_clean.setLongClickable(false);
+                    tv_item_placement.setLongClickable(false);
+                    tv_body_build.setLongClickable(false);
+                    tv_sport_device.setLongClickable(false);
+                    tv_group_course.setLongClickable(false);
+                    tv_course.setLongClickable(false);
+                    tv_power.setLongClickable(false);
+                    tv_door.setLongClickable(false);
+                    tv_remark.setLongClickable(false);
                     btn_commit.setClickable(false);
                     ToastUtils.showToastShort("提交成功");
                 }
@@ -547,40 +619,6 @@ public class ReportFormActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 1) {
-            String tv = data.getStringExtra("tv");
-            if (requestCode == 11) {
-                str_meet = tv;
-                tv_meet.setText(str_meet);
-            } else if (requestCode == 12) {
-                str_clean = tv;
-                tv_clean.setText(str_clean);
-            } else if (requestCode == 13) {
-                str_item_placement = tv;
-                tv_item_placement.setText(str_item_placement);
-            } else if (requestCode == 14) {
-                str_body_build = tv;
-                tv_body_build.setText(str_body_build);
-            } else if (requestCode == 15) {
-                str_sport_device = tv;
-                tv_sport_device.setText(str_sport_device);
-            } else if (requestCode == 16) {
-                str_group_course = tv;
-                tv_group_course.setText(str_group_course);
-            } else if (requestCode == 17) {
-                str_course = tv;
-                tv_course.setText(str_course);
-            } else if (requestCode == 18) {
-                str_power = tv;
-                tv_power.setText(str_power);
-            } else if (requestCode == 19) {
-                str_door = tv;
-                tv_door.setText(str_door);
-            } else if (requestCode == 20) {
-                str_remark = tv;
-                tv_remark.setText(str_remark);
-            }
-        }
     }
 
     private void showDate() {
