@@ -447,6 +447,9 @@ public class ReportFormActivity extends Activity {
                     if (!TextUtils.isEmpty(tv_group_course.getText().toString())) {//不能空
                         isPost=false;
                     }
+                    if (!TextUtils.isEmpty(tv_course.getText().toString())) {//不能空
+                        isPost=false;
+                    }
                     if (!TextUtils.isEmpty(tv_power.getText().toString())) {//不能空
                         isPost=false;
                     }

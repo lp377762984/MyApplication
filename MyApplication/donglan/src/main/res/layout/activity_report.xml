@@ -287,6 +287,8 @@
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
+                        android:hint="请填写今日会议"
+                        android:textSize="14sp"
                         android:paddingRight="2dp"/>
                 </LinearLayout>
 
@@ -311,6 +313,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写卫生打扫"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -335,6 +339,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写物品摆放"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -359,6 +365,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写健身器械"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -383,6 +391,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写场地设备"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -407,6 +417,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写团课上课"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -430,6 +442,8 @@
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
+                        android:hint="请填写私教上课"
+                        android:textSize="14sp"
                         android:paddingRight="2dp"
                         />
                 </LinearLayout>
@@ -455,6 +469,8 @@
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
+                        android:hint="请填写关闭水电"
+                        android:textSize="14sp"
                         />
                 </LinearLayout>
 
@@ -478,6 +494,8 @@
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
+                        android:hint="请填写关闭门窗"
+                        android:textSize="14sp"
                         android:paddingRight="2dp"
                         />
                 </LinearLayout>
@@ -502,6 +520,9 @@
                         android:background="@drawable/rect_body"
                         android:layout_weight="1"
                         android:paddingLeft="2dp"
+                        android:hint="请填写备注"
+                        android:textSize="14sp"
+                        android:gravity="top|left"
                         android:paddingRight="2dp"
                         />
                 </LinearLayout>
