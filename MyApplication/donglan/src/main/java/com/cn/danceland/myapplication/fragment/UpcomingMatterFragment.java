@@ -324,6 +324,10 @@ public class UpcomingMatterFragment extends BaseFragment {
 
 
                 if (potentialListBean.getSuccess()) {
+
+
+
+
                     if (potentialListBean.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
                         isEnd = true;

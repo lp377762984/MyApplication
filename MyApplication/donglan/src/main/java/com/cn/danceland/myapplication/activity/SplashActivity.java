@@ -74,10 +74,12 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         super.onStart();
         LogUtil.i(AppUtils.getDeviceId(this));
         new Thread(new Runnable() {
-            public void run() {
-                if (!SPUtils.getBoolean("iscopy", false)) {
-                    copyDb();
 
+            public void run() {
+                LogUtil.i(SPUtils.getBoolean("iscopy", false)+"");
+                if (!SPUtils.getBoolean("iscopy", false)) {
+
+                    copyDb();
                 }
                 //判断是否登录
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
@@ -134,6 +136,10 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
 
             if (bl) {
                 SPUtils.setBoolean("iscopy", bl);
+                LogUtil.i("拷贝成功");
+            }else {
+                SPUtils.setBoolean("iscopy", false);
+                LogUtil.i("拷贝不成功");
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
@@ -260,6 +261,15 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("姓名必须填写");
                     return;
                 }
+                if (StringUtils.isAllNumeric(et_name.getText().toString())) {//姓名不能全数字
+                    ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_text));
+                    return;
+                }
+                if (StringUtils.isFirstNumeric(et_name.getText().toString())) {//姓名不能以数字开头
+                    ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_first_text));
+                    return;
+                }
+
                 if (!TextUtils.isEmpty(et_email.getText().toString())) {
                     if (et_email.getText().toString().matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")) {
 

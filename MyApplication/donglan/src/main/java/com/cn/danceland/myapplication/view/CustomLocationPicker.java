@@ -10,6 +10,7 @@ import android.view.View;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
@@ -64,6 +65,7 @@ public class CustomLocationPicker extends AlertDialog {
     public void initLocationData() {
 
         cityList = dbData.getCityList();
+        LogUtil.i(cityList.size()+"");
         //省份列表
         proList = new ArrayList<String>();
         if (cityList != null && cityList.size() > 0) {
@@ -98,6 +100,7 @@ public class CustomLocationPicker extends AlertDialog {
         if(StringUtils.isNullorEmpty(myCity) || StringUtils.isNullorEmpty(myProvince)){
             lp_province.setInitPosition(0);
             lp_city.setInitPosition(0);
+            LogUtil.i(proList.toString());
             province = proList.get(0);
             setLp_city();
             city = cityList1.get(0);

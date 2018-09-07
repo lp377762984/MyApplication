@@ -18,15 +18,30 @@
             android:onClick="back"
             android:padding="10dp"
             android:src="@drawable/img_back" />
-        <TextView
-            android:id="@+id/tv_tiltle"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="潜客管理"
-            android:textColor="@color/color_white"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_tiltle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="潜客管理"
+                android:textColor="@color/color_white"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/tv_tiltle_num"
+                android:layout_width="wrap_content"
+                android:textColor="@color/color_white"
+                android:textSize="18sp"
+                android:text=""
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_phone"

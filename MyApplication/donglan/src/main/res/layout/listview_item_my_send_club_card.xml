@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
-        <com.cn.danceland.myapplication.view.XCRoundRectImageView
+        <ImageView
             android:id="@+id/iv_card"
             android:layout_width="145dp"
             android:layout_height="93dp"

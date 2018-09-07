@@ -98,6 +98,8 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
     private String auth;
     private EditText et_searchInfo;
     private ImageView iv_del;
+    private TextView tv_tiltle_num;
+    int num1,num2,num3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -146,16 +148,61 @@ public class PotentialCustomerRevisitActivity extends FragmentActivity implement
                     e.printStackTrace();
                 }
                 break;
+            case 161:
+                num1=event.getMsg();
+
+           settitlenum();
+
+                break;
+            case 162:
+                num2=event.getMsg();
+
+                settitlenum();
+
+                break;
+            case 163:
+                num3=event.getMsg();
+
+                settitlenum();
+
+                break;
             default:
                 break;
         }
 
     }
 
+    private void settitlenum() {
+
+
+        if (current_page==0){
+            if (num1>0){
+                tv_tiltle_num.setText("("+num1+")");
+            }else {
+                tv_tiltle_num.setText("");
+            }
+        }
+        if (current_page==1){
+            if (num2>0){
+                tv_tiltle_num.setText("("+num2+")");
+            }else {
+                tv_tiltle_num.setText("");
+            }
+        }
+        if (current_page==2){
+            if (num3>0){
+                tv_tiltle_num.setText("("+num3+")");
+            }else {
+                tv_tiltle_num.setText("");
+            }
+        }
+    }
+
 
     private void initView() {
 
         TextView tv_tiltle = findViewById(R.id.tv_tiltle);
+        tv_tiltle_num = findViewById(R.id.tv_tiltle_num);
         auth = getIntent().getStringExtra("auth");
         if (TextUtils.equals(auth, "2")) {
             tv_tiltle.setText("会员管理");

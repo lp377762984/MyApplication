@@ -160,6 +160,7 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
                     LogUtil.i("收到消息" + msg);
                     RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                     Glide.with(this).load(msg).apply(options).into(iv_avatar);
+                    userInfo.getPerson().setSelf_avatar_path(msg);
 
                     break;
                 case 100:
@@ -324,7 +325,11 @@ public class UserSelfHomeActivity extends Activity implements View.OnClickListen
 
                 switch (which) {
                     case 0:
-
+                        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                       if (TextUtils.equals(data.getPerson().getId(),userid)){
+                            ToastUtils.showToastShort("不能将本人加入黑名单");
+                        return;
+                       }
                         addBlack(userid);
 
                         break;

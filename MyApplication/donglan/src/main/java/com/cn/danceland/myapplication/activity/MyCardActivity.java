@@ -116,8 +116,9 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
                 ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
-                colorTransitionPagerTitleView.setNormalColor(Color.GRAY);
-                colorTransitionPagerTitleView.setSelectedColor(Color.BLACK);
+
+                colorTransitionPagerTitleView.setNormalColor(Color.BLACK);
+                colorTransitionPagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));
                 colorTransitionPagerTitleView.setText(mTitleDataList[index]);
                 colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -138,7 +139,7 @@ public class MyCardActivity extends FragmentActivity implements View.OnClickList
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
                 //  indicator.setColors(Color.parseColor("#40c4ff"));
-                indicator.setColors(Color.parseColor("#5e6379"));
+                indicator.setColors(getResources().getColor(R.color.color_dl_yellow));
                 return indicator;
             }
 

@@ -10,8 +10,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -38,14 +36,12 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +64,7 @@ public class SellSiJiaoConfirmActivity extends Activity {
     TextView tv_shuoming;
     Float deposit_course_min,deposit_course_max;
     String deposit_days;
-    XCRoundRectImageView xc_img;
+   ImageView xc_img;
     private TextView tv_branch_name;
     private TextView tv_course_name;
     private TextView tv_category;

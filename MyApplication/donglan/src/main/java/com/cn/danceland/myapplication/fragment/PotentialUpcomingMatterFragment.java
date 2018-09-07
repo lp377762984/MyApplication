@@ -335,6 +335,11 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
 
                 if (potentialListBean.getSuccess()) {
+
+                    if (potentialListBean.getData() != null) {
+                        EventBus.getDefault().post(new IntEvent(potentialListBean.getData().getTotalElements(), 163));
+                    }
+
                     if (potentialListBean.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
                         isEnd = true;

@@ -148,6 +148,9 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         if (!TextUtils.isEmpty(info.getFollow_level())) {
             sr_follow_level.setRating(Integer.parseInt(info.getFollow_level()));
         }
+        if (!TextUtils.isEmpty(info.getTeach_name())){
+            tv_teach_name.setText(info.getTeach_name());
+        }
 
 
         tv_card_type.setText(info.getCard_type());
@@ -280,6 +283,8 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         et_height = findViewById(R.id.et_height);
         et_weight = findViewById(R.id.et_weight);
         tv_teach_name = findViewById(R.id.tv_teach_name);
+
+
         tv_teach_name.setOnClickListener(this);
         tv_admin_name = findViewById(R.id.tv_admin_name);
         tv_admin_name.setOnClickListener(this);
