@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.tencent.qcloud.ui.CircleImageView;
 
 import org.json.JSONObject;
@@ -35,19 +38,32 @@ import java.util.Map;
 
 
 public class BlackListActivity extends Activity {
-
-
-    ListView listView;
+    PullToRefreshListView listView;
     DongLanTitleView dongLanTitleView;
     List<BlackListBean.Data> dataList = new ArrayList<>();
     MyAdapter myAdapter;
+
+    private TextView tv_error;
+    private ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_black_list1);
-        listView = (ListView) findViewById(R.id.list);
+        listView = (PullToRefreshListView) findViewById(R.id.list);
         dongLanTitleView = findViewById(R.id.dl_title);
         dongLanTitleView.setTitle("黑名单");
+
+        View listEmptyView = findViewById(R.id.rl_no_info);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        imageView = listEmptyView.findViewById(R.id.iv_error);
+        imageView.setImageResource(R.drawable.img_error5);
+        tv_error.setText("没有数据");
+        listView.getRefreshableView().setEmptyView(listEmptyView);
+        listView.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
+        //设置下拉刷新模式both是支持下拉和上拉
+        listView.setMode(PullToRefreshBase.Mode.DISABLED);//DISABLED和普通listView一样用
+
         findBlack();
         myAdapter=new MyAdapter();
         listView.setAdapter(myAdapter);
