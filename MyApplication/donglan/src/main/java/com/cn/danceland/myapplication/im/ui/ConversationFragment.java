@@ -77,6 +77,12 @@ public class ConversationFragment extends Fragment implements ConversationView,F
             view = inflater.inflate(R.layout.fragment_conversation, container, false);
             listView = (ListView) view.findViewById(R.id.list);
             TemplateTitle    TT_title = (TemplateTitle) view.findViewById(R.id.TT_title);
+            TT_title.setBackListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
             TT_title.setMoreTextContext("群组");
             TT_title.setMoreTextAction(new View.OnClickListener() {
                 @Override

@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -93,8 +92,10 @@ public class MyShopActivity extends Activity implements View.OnClickListener {
         lv_myshop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (!TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
-                    showMYDialog(i);
+                LogUtil.i(i+"!!!!!!!!");
+                LogUtil.i(defaultshopId+"-------"+data.get(i-1).getBranch_id());
+                if (!TextUtils.equals(defaultshopId, data.get(i-1).getBranch_id())) {
+                    showMYDialog(i-1);
                 }
 
             }

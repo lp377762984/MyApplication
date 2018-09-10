@@ -313,7 +313,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     cb_alipay.setChecked(false);
                     cb_wechat.setChecked(false);
                     pay_way = 5;
-                    if (pay_price>chuzhika){
+                    if (pay_price > chuzhika) {
                         ToastUtils.showToastShort("储值卡余额不足");
                         cb_chuzhjika.setChecked(false);
                         pay_way = 2;
@@ -501,20 +501,21 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         MyApplication.getHttpQueues().add(request);
     }
 
-   private float chuzhika=0;
-    private void getStoreCard(){
+    private float chuzhika = 0;
+
+    private void getStoreCard() {
         StoreAccountRequest request = new StoreAccountRequest();
         StoreAccountCond cond = new StoreAccountCond();
         // TODO 准备查询条件
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
-                LogUtil.e("zzf",json.toString());
+                LogUtil.e("zzf", json.toString());
                 DLResult<StoreAccount> result = gson.fromJson(json.toString(), new TypeToken<DLResult<StoreAccount>>() {
                 }.getType());
-                if(result!=null && result.getData()!=null){
+                if (result != null && result.getData() != null) {
                     StoreAccount data = result.getData();
                     float balance = data.getRemain() + data.getGiving();
-                    chuzhika=balance;
+                    chuzhika = balance;
 //                    if("0".equals(type)){
 //                        if(balance<(price-deposit)){
 //                            isStoreCard = false;
@@ -524,8 +525,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 //                    }else{
 //                        isStoreCard =false;
 //                    }
-                }else {
-                 //   isStoreCard = false;
+                } else {
+                    //   isStoreCard = false;
                 }
             }
         });
@@ -798,7 +799,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
      * @param id
      */
     private void chuzhika(String id) {
-        unpaidOrder=id;
+        unpaidOrder = id;
         PayBean payBean = new PayBean();
 
         payBean.id = id;
@@ -814,11 +815,10 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     ToastUtils.showToastShort("支付成功");
                     finish();
                 } else {
-                    if (TextUtils.equals(requestSimpleBean.getCode(),"-5")||TextUtils.equals(requestSimpleBean.getCode(),"-6")||TextUtils.equals(requestSimpleBean.getCode(),"-7")||TextUtils.equals(requestSimpleBean.getCode(),"-8"))
-                    {
+                    if (TextUtils.equals(requestSimpleBean.getCode(), "-5") || TextUtils.equals(requestSimpleBean.getCode(), "-6") || TextUtils.equals(requestSimpleBean.getCode(), "-7") || TextUtils.equals(requestSimpleBean.getCode(), "-8")) {
                         ToastUtils.showToastShort("储值卡余额不足");
                         btn_repay.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         ToastUtils.showToastShort("支付异常");
                     }
 
@@ -829,8 +829,8 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("支付失败");
 
             }
         }) {
@@ -894,14 +894,14 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     deposit_price = data.getFloatExtra("dingjin", 0);
                     if (deposit_price != 0f) {
 
-                        if (total_price > deposit_price){
+                        if (total_price > deposit_price) {
                             depositId = data.getStringExtra("id");
                             //        LogUtil.i(depositId);
                             tv_dingjin.setText("- " + PriceUtils.formatPrice2String(deposit_price));
 
                             pay_price = total_price - deposit_price;
                             tv_pay_price.setText(PriceUtils.formatPrice2String(pay_price));
-                        }else {
+                        } else {
                             ToastUtils.showToastShort("定金金额必须小于商品金额");
                             depositId = "";
                             tv_dingjin.setText("未使用");
@@ -1022,9 +1022,9 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     }
                     protocol_params.card_type_name = CardsInfo.getName();
                     protocol_params.order_price = pay_price + "";
-                    if (CardsInfo.getRemark()==null){
+                    if (CardsInfo.getRemark() == null) {
                         protocol_params.card_remark = "";
-                    }else {
+                    } else {
                         protocol_params.card_remark = CardsInfo.getRemark();
                     }
 
@@ -1079,7 +1079,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
 
-                    if (pay_price-0.01F<0){
+                    if (pay_price - 0.01F < 0) {
                         ToastUtils.showToastLong("订单金额不能小于0.01元");
                         break;
                     }
@@ -1109,7 +1109,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     extendsParams.setAdmin_emp_name(consultantInfo.getCname());
                     extendsParams.setDeposit_type("1");//定金类型
                     newOrderInfoBean.setProduct_type("会籍卡定金");
-                        newOrderInfoBean.setProduct_name("");
+                    newOrderInfoBean.setProduct_name("");
 
                     if (isme) {
                         newOrderInfoBean.setFor_other(0);
@@ -1140,7 +1140,7 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     Gson gson = new Gson();
                     strBean = gson.toJson(newOrderInfoBean);
                     LogUtil.i(strBean.toString());
-                    if (pay_price<0.01F){
+                    if (pay_price < 0.01F) {
                         ToastUtils.showToastLong("订单金额不能小于0.01元");
                         return;
                     }
