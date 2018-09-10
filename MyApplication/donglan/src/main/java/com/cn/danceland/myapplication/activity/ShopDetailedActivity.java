@@ -32,7 +32,6 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
@@ -62,11 +61,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2017/11/29.
  */
 
-public class ShopDetailedActivity extends Activity {
-    Button bt_back, join_button;
+public class ShopDetailedActivity extends Activity{
+    Button bt_back,join_button;
     RequestQueue requestQueue;
     Gson gson;
-    TextView tv_adress, tv_time, store_name;
+    TextView tv_adress,tv_time,store_name;
     ExpandableTextView tv_detail;
     String phoneNo;
     ImageView detail_phone, detail_adress, img_01, img_02, img_kechenganpai;
@@ -273,11 +272,11 @@ public class ShopDetailedActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                intent.putExtra("shopJingdu", shopJingdu);
-                intent.putExtra("shopWeidu", shopWeidu);
-                intent.putExtra("jingdu", jingdu);
-                intent.putExtra("weidu", weidu);
-                intent.putExtra("shopname", shopname);
+                intent.putExtra("shopJingdu",shopJingdu);
+                intent.putExtra("shopWeidu",shopWeidu);
+                intent.putExtra("jingdu",jingdu);
+                intent.putExtra("weidu",weidu);
+                intent.putExtra("shopname",shopname);
                 startActivity(intent);
             }
         });
@@ -402,9 +401,9 @@ public class ShopDetailedActivity extends Activity {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
+                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
                 return map;
             }
         };
@@ -453,7 +452,7 @@ public class ShopDetailedActivity extends Activity {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void getHuiJi(final String shopID) {
+    private void getHuiJi(final String shopID){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -486,7 +485,7 @@ public class ShopDetailedActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("branch_id", shopID);
+                map.put("branch_id",shopID);
 
                 return map;
             }
@@ -541,7 +540,7 @@ public class ShopDetailedActivity extends Activity {
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 HashMap<String, String> map = new HashMap<>();
-                map.put("branch_id", shopID);
+                map.put("branch_id",shopID);
 
                 return map;
             }
@@ -717,17 +716,17 @@ public class ShopDetailedActivity extends Activity {
                     });
                     if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
                         Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    } else {
+                    }else{
                         Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
                     }
 
                 }
-            } else if (jiaolianList.size() > 6) {
-                for (int i = 0; i < 6; i++) {
+            }else if(jiaolianList.size()>6){
+                for(int i=0;i<6;i++){
                     circleImageViews[i].setVisibility(View.VISIBLE);
-                    if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
+                    if("".equals(jiaolianList.get(i).getSelf_avatar_path())||jiaolianList.get(i).getSelf_avatar_path()==null){
                         Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    } else {
+                    }else{
                         Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
                     }
                 }
@@ -739,8 +738,8 @@ public class ShopDetailedActivity extends Activity {
         @Override
         public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            if (convertView == null) {
-                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child, null);
+            if(convertView==null){
+                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child,null);
             }
             CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
             grid_view.setAdapter(new MyGridAdapter(childList));
@@ -748,9 +747,9 @@ public class ShopDetailedActivity extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                            .putExtra("person_id", childList.get(childPosition).getPerson_id() + "")
-                            .putExtra("employee_id", childList.get(childPosition).getId() + "")
-                            .putExtra("branch_id", childList.get(childPosition).getBranch_id() + ""));
+                            .putExtra("person_id",childList.get(childPosition).getPerson_id()+"")
+                            .putExtra("employee_id",childList.get(childPosition).getId()+"")
+                            .putExtra("branch_id",childList.get(childPosition).getBranch_id()+""));
                 }
             });
 
@@ -768,7 +767,7 @@ public class ShopDetailedActivity extends Activity {
 
         List<ShopJiaoLianBean.Data> gridViewList;
 
-        MyGridAdapter(List<ShopJiaoLianBean.Data> gridViewList) {
+        MyGridAdapter(List<ShopJiaoLianBean.Data> gridViewList){
             this.gridViewList = gridViewList;
         }
 
@@ -791,9 +790,9 @@ public class ShopDetailedActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_grid_item, null);
             CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            if ("".equals(gridViewList.get(position).getSelf_avatar_path()) || gridViewList.get(position).getSelf_avatar_path() == null) {
+            if("".equals(gridViewList.get(position).getSelf_avatar_path())||gridViewList.get(position).getSelf_avatar_path()==null){
                 Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
-            } else {
+            }else{
                 Glide.with(ShopDetailedActivity.this).load(gridViewList.get(position).getSelf_avatar_path()).into(circle_item);
             }
 
