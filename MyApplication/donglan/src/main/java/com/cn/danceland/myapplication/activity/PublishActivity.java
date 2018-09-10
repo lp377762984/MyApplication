@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -58,6 +59,8 @@ import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.PicassoEngine;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -216,19 +219,19 @@ public class PublishActivity extends Activity {
     public void getPic() {
         int m = SPUtils.getInt("imgN", 0);
         if (m <= 9) {
-//            Matisse.from(PublishActivity.this)
-//                    .choose(MimeType.allOf()) // 选择 mime 的类型
-//                    .countable(true)
-////                .capture(true)
-////                .captureStrategy(
-////                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
-//                    .maxSelectable(9 - m) // 图片选择的最多数量
-//                    .theme(R.style.imgsStyle)
-//                    //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
-//                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-//                    .thumbnailScale(0.85f) // 缩略图的比例
-//                    .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
-//                    .forResult(100); // 设置作为标记的请求码
+            Matisse.from(PublishActivity.this)
+                    .choose(MimeType.allOf()) // 选择 mime 的类型
+                    .countable(true)
+//                .capture(true)
+//                .captureStrategy(
+//                        new CaptureStrategy(true, "com.cn.danceland.myapplication.fileprovider"))
+                    .maxSelectable(9 - m) // 图片选择的最多数量
+                    .theme(R.style.imgsStyle)
+                    //.gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+                    .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                    .thumbnailScale(0.85f) // 缩略图的比例
+                    .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
+                    .forResult(100); // 设置作为标记的请求码
 
             // 进入相册 以下是例子：用不到的api可以不写
 //            PictureSelector.create(PublishActivity.this)
