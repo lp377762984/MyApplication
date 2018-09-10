@@ -107,7 +107,7 @@ android {
 //        compile 'com.daimajia.easing:library:2.0@aar'
 //        compile 'com.daimajia.androidanimations:library:2.3@aar'
       //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
-        compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
+      //  compile 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     }
 }
 

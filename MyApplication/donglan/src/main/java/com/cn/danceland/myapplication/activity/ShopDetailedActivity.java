@@ -32,6 +32,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
@@ -117,16 +118,16 @@ public class ShopDetailedActivity extends Activity{
             @Override
             public void onResponse(String s) {
             LogUtil.i(s);
-                if(s.contains("1")){
-                    isjion=true;
-                LogUtil.i(s);
-                if (s.contains("1")) {
-                    s_button.setVisibility(View.GONE);
-                }else{
-                    isjion=false;
-                } else {
-                    s_button.setVisibility(View.VISIBLE);
-                }
+//                if(s.contains("1")){
+//                    isjion=true;
+//                LogUtil.i(s);
+//                if (s.contains("1")) {
+//                    s_button.setVisibility(View.GONE);
+//                }else{
+//                    isjion=false;
+//                } else {
+//                    s_button.setVisibility(View.VISIBLE);
+//                }
 
             }
         }, new Response.ErrorListener() {
