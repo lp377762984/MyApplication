@@ -76,11 +76,11 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
         new Thread(new Runnable() {
 
             public void run() {
-                LogUtil.i(SPUtils.getBoolean("iscopy", false)+"");
-                if (!SPUtils.getBoolean("iscopy", false)) {
-
-                    copyDb();
-                }
+//                LogUtil.i(SPUtils.getBoolean("iscopy", false)+"");
+//                if (!SPUtils.getBoolean("iscopy", false)) {
+//
+//                    copyDb();
+//                }
                 //判断是否登录
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
 

@@ -118,14 +118,15 @@ public class ShopDetailedActivity extends Activity {
             @Override
             public void onResponse(String s) {
             LogUtil.i(s);
-                if(s.contains("1")){
-                    isjion=true;
-                LogUtil.i(s);
+
+
                 if (s.contains("1")) {
+                    LogUtil.i(s);
                     s_button.setVisibility(View.GONE);
+                    isjion=true;
                 }else{
                     isjion=false;
-                } else {
+
                     s_button.setVisibility(View.VISIBLE);
                 }
 
@@ -164,7 +165,7 @@ public class ShopDetailedActivity extends Activity {
                 if (isjion==true){
                     startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
                 }else {
-                    ToastUtils.showToastShort("清闲");
+                    ToastUtils.showToastShort("请先加入门店");
                 }
 
             }
