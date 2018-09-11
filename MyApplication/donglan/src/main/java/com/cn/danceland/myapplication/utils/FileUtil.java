@@ -15,6 +15,8 @@ import android.text.TextUtils;
 import com.qiniu.pili.droid.shortvideo.PLShortVideoTranscoder;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.DecimalFormat;
 
 import static com.qiniu.pili.droid.shortvideo.PLErrorCode.ERROR_LOW_MEMORY;
@@ -116,6 +118,26 @@ public class FileUtil {
     };
 
     /**
+     * 根据流获取指定文件大小
+     *
+     * @param f
+     * @return
+     * @throws Exception
+     */
+    public static long getFileSize(File file) throws Exception {
+        long size = 0;
+        if (file.exists()) {
+            FileInputStream fis = null;
+            fis = new FileInputStream(file);
+            size = fis.available();
+        } else {
+            file.createNewFile();
+            LogUtil.e("文件不存在!");
+        }
+        return size;
+    }
+
+    /**
      * 返回byte的数据大小对应的文本
      *
      * @param size
@@ -140,7 +162,6 @@ public class FileUtil {
         } else {
             return "size: error";
         }
-
     }
 
     /**

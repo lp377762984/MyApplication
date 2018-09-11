@@ -147,6 +147,12 @@ public class PublishActivity extends Activity {
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
                     PublishBean bean = new PublishBean();
+                    LogUtil.i("stringstatus--" + stringstatus);
+                    LogUtil.i("picPath--" + picPath);
+                    LogUtil.i("vedioPath--" + vedioPath);
+                    LogUtil.i("location--" + location);
+
+                    bean.setContent("");
                     if (!"".equals(stringstatus)) {
                         bean.setContent(stringstatus);
                     }
@@ -353,30 +359,11 @@ public class PublishActivity extends Activity {
 
                         }
                     } else {
-                        LogUtil.i("videoPath" + videoPath);
-                        LogUtil.i("picFile" + picFile);
+                        LogUtil.i("videoPath11--" + videoPath);
+                        LogUtil.i("picFile11--" + picFile);
                         if (videoPath != null && !"".equals(videoPath)) {
                             videoFile = new File(videoPath);
-                            if (picFile != null) {
-                                MultipartRequestParams params = new MultipartRequestParams();
-                                params.put("file", picFile);
-                                MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String s) {
-                                        HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                                        if (headImageBean != null && headImageBean.getData() != null) {
-                                            picUrl = headImageBean.getData().getImgUrl();
-                                            picPath = headImageBean.getData().getImgPath();
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError volleyError) {
 
-                                    }
-                                });
-                                MyApplication.getHttpQueues().add(request);
-                            }
                             if (videoFile != null) {
                                 new Thread(new Runnable() {
                                     @Override
@@ -389,9 +376,35 @@ public class PublishActivity extends Activity {
                                             if (videoBean != null && videoBean.getData() != null) {
                                                 vedioUrl = videoBean.getData().getImgUrl();
                                                 vedioPath = videoBean.getData().getImgPath();
-                                                Message message = new Message();
-                                                message.what = 1;
-                                                handler.sendMessage(message);
+                                                LogUtil.i("提交视频 vedioUrl--" + vedioUrl);
+                                                LogUtil.i("提交视频 vedioPath--" + vedioPath);
+                                                if (picFile != null) {
+                                                    MultipartRequestParams params = new MultipartRequestParams();
+                                                    params.put("file", picFile);
+                                                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADTH, new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String s) {
+                                                            HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
+                                                            if (headImageBean != null && headImageBean.getData() != null) {
+                                                                picUrl = headImageBean.getData().getImgUrl();
+                                                                picPath = headImageBean.getData().getImgPath();
+                                                                LogUtil.i("提交图片 picUrl--" + picUrl);
+                                                                LogUtil.i("提交图片 picPath--" + picPath);
+
+                                                                Message message = new Message();
+                                                                message.what = 1;
+                                                                handler.sendMessage(message);
+                                                            }
+                                                        }
+                                                    }, new Response.ErrorListener() {
+                                                        @Override
+                                                        public void onErrorResponse(VolleyError volleyError) {
+
+                                                        }
+                                                    });
+                                                    MyApplication.getHttpQueues().add(request);
+                                                }
+
                                             }
                                         } catch (IOException e) {
                                             e.printStackTrace();
@@ -429,8 +442,8 @@ public class PublishActivity extends Activity {
         }
     };
 
-    private void showListDialog() {
-        final String[] items = {"拍摄", "从相册选择", "视频"};
+    private void showListDialog( String[] items) {
+
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -694,7 +707,7 @@ public class PublishActivity extends Activity {
 //                String path = cursor.getString(1); // 视频文件路径
                 String name = cursor.getString(2); // 视频文件名
 //                String createDate = cursor.getString(3); // 视频创建时间
-//                String size = cursor.getString(5); // 视频大小
+                String size = cursor.getString(5); // 视频大小
 
                 isPhoto = "1";
                 videoPath = FileUtil.getFileAbsolutePath(PublishActivity.this, uri);
@@ -705,26 +718,41 @@ public class PublishActivity extends Activity {
                 }
                 arrayList.clear();
                 if (videoPath != null) {
-                    SPUtils.setInt("imgN", 100);
+
                     MediaMetadataRetriever media = new MediaMetadataRetriever();
                     media.setDataSource(videoPath);
+                    Bitmap frameAtTime = media.getFrameAtTime();
+                    picFile = saveBitmapFile(frameAtTime);
                     String duration = media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
-                    LogUtil.i("-----" + "时间=" + duration);
-
+                    LogUtil.i("-----" + "时长=" + duration);
                     if (duration != null && duration.length() > 0) {
                         long durationL = Long.valueOf(duration);
-                        if (durationL < (60 * 1000)) {//视频不能超过60秒
+                        if (durationL < (60 * 1000) ) {//视频不能超过60秒  5M
+
                             String savePath = Environment.getExternalStorageDirectory().getPath()
                                     + "/donglan/camera/vedio/" + name;//压缩后的视频地址
-                            Bitmap frameAtTime = media.getFrameAtTime();
-                            FileUtil.compressVideoResouce(PublishActivity.this, videoPath, savePath);//压缩视频
 
-//                            MediaMetadataRetriever media2 = new MediaMetadataRetriever();
-//                            media2.setDataSource(savePath);
-//                            Bitmap frameAtTime2 = media2.getFrameAtTime();
-                            picFile = saveBitmapFile(frameAtTime);
-                            arrayList.add(savePath);
-                            grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
+                            FileUtil.compressVideoResouce(PublishActivity.this, videoPath, savePath);//压缩视频
+                            File file = new File(savePath);
+                            long length = file.length();
+                            try {
+                                LogUtil.i("视频大小121--"+FileUtil.getDataSize(Long.valueOf(size)));
+                                LogUtil.i("视频大小"+FileUtil.getDataSize(FileUtil.getFileSize(file))+"--"+FileUtil.getFileSize(file));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (length < (5 * 1024 * 1024 )) {
+                                SPUtils.setInt("imgN", 100);
+                                List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
+                                thumbnailList.add(frameAtTime);
+                                SmallGridAdapter smallGridAdapter = new SmallGridAdapter(PublishActivity.this, arrayList);
+                                smallGridAdapter.setData(thumbnailList);
+                                arrayList.add(savePath);
+                                grid_view.setAdapter(smallGridAdapter);
+                            } else {
+                                ToastUtils.showToastShort("文件过大");
+                            }
+
                         } else {
                             ToastUtils.showToastShort("文件过大");
                         }
@@ -776,8 +804,12 @@ public class PublishActivity extends Activity {
                 media.setDataSource(videoPath);
                 Bitmap frameAtTime = media.getFrameAtTime();
                 picFile = saveBitmapFile(frameAtTime);
+                List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
+                thumbnailList.add(frameAtTime);
+                SmallGridAdapter smallGridAdapter = new SmallGridAdapter(PublishActivity.this, arrayList);
+                smallGridAdapter.setData(thumbnailList);
                 arrayList.add(picFile.getAbsolutePath());
-                grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
+                grid_view.setAdapter(smallGridAdapter);
 //                videoimg.setBackground(new BitmapDrawable(frameAtTime));
 //                //publish_photo.setVisibility(View.GONE);
 //                videoimg.setVisibility(View.VISIBLE);
@@ -810,6 +842,7 @@ public class PublishActivity extends Activity {
         LayoutInflater mInflater;
         Context context;
         List<String> arrayLists;
+        List<Bitmap> thumbnailList;//缩略图绝对路径
         int imgN;
 
         SmallGridAdapter(Context context, List<String> asList) {
@@ -819,6 +852,14 @@ public class PublishActivity extends Activity {
             mInflater = LayoutInflater.from(context);
         }
 
+        /**
+         * 缩略图绝对路径
+         *
+         * @param thumbnailList
+         */
+        public void setData(List<Bitmap> thumbnailList) {
+            this.thumbnailList = thumbnailList;
+        }
 
         @Override
         public int getCount() {
@@ -870,7 +911,7 @@ public class PublishActivity extends Activity {
                 } else {
                     if (position < arrayLists.size()) {
                         LogUtil.i("--&&---path=" + arrayLists.get(position));
-                        Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
+                        Glide.with(context).load(thumbnailList.get(0)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
                         viewHolder.rl_item.setVisibility(View.GONE);
@@ -881,15 +922,18 @@ public class PublishActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     if (imgN != 100) { //100是视频
+
                         if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
 
                             //有权限
                             if (imgN <= 9) {
                                 if (position <= arrayLists.size()) {
                                     if ("0".equals(isPhoto)) {
-                                        showListDialog();
+                                        final String[] dialogitems = {"拍摄", "从相册选择"};
+                                        showListDialog(dialogitems);
                                     } else {
-                                        showListDialog();
+                                        final String[] dialogitems = {"拍摄", "从相册选择", "视频"};
+                                        showListDialog(dialogitems);
                                     }
                                 }
                             } else {
@@ -901,13 +945,16 @@ public class PublishActivity extends Activity {
                             PermissionsUtil.requestPermission(PublishActivity.this, new PermissionListener() {
                                 @Override
                                 public void permissionGranted(@NonNull String[] permissions) {
+
                                     //用户授予了权限
                                     if (imgN <= 9) {
                                         if (position <= arrayLists.size()) {
                                             if ("0".equals(isPhoto)) {
-                                                showListDialog();
+                                                final String[] dialogitems = {"拍摄", "从相册选择"};
+                                                showListDialog(dialogitems);
                                             } else {
-                                                showListDialog();
+                                                final String[] dialogitems = {"拍摄", "从相册选择", "视频"};
+                                                showListDialog(dialogitems);
                                             }
                                         }
                                     } else {
