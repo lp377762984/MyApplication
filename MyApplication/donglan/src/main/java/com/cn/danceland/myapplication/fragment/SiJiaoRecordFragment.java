@@ -323,9 +323,43 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if (list.get(position).getStatus() == 1) {
                     if (list.get(position).getAppointment_type() == 2) {
                         viewHolder.rl_button_tv.setText("等待确认");
+
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                         viewHolder.rl_button_tv.setTextColor(Color.parseColor("#FFFFFF"));
                         viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                        viewHolder.rl_button_tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (role != null && !"".equals(role)) {
+                                    if (list.get(position).getStatus() == 1 || list.get(position).getStatus() == 2) {
+                                        if (list.get(position).getAppointment_type() == 1) {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if (list.get(position).getAppointment_type() == 2) {
+                                            showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        }
+                                    }
+                                } else {
+                                    if (list.get(position).getStatus() == 1) {
+                                        if (list.get(position).getAppointment_type() == 2) {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if (list.get(position).getAppointment_type() == 1) {
+                                            showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if ("2".equals(list.get(position).getCategory())) {
+                                            showCancelGroup(list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv, viewHolder.rl_qiandao);
+                                        }
+                                    }
+
+                                    if (list.get(position).getStatus() == 2 && !"2".equals(list.get(position).getCategory())) {
+                                        if ("1".equals(list.get(position).getCategory())) {
+                                            showCancel();
+                                        } else {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
                     } else {
                         viewHolder.rl_button_tv.setText("取消预约");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
@@ -338,8 +372,45 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if (list.get(position).getStatus() == 1) {
                     if (list.get(position).getAppointment_type() == 1) {
                         viewHolder.rl_button_tv.setText("等待确认");
+                        viewHolder.rl_button_tv.setClickable(false);
+                        viewHolder.rl_button_tv.setFocusable(false);
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                         viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                        viewHolder.rl_button_tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (role != null && !"".equals(role)) {
+                                    if (list.get(position).getStatus() == 1 || list.get(position).getStatus() == 2) {
+                                        if (list.get(position).getAppointment_type() == 1) {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if (list.get(position).getAppointment_type() == 2) {
+                                            showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        }
+                                    }
+                                } else {
+                                    if (list.get(position).getStatus() == 1) {
+                                        if (list.get(position).getAppointment_type() == 2) {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if (list.get(position).getAppointment_type() == 1) {
+                                            showDialog(true, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        } else if ("2".equals(list.get(position).getCategory())) {
+                                            showCancelGroup(list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv, viewHolder.rl_qiandao);
+                                        }
+                                    }
+
+                                    if (list.get(position).getStatus() == 2 && !"2".equals(list.get(position).getCategory())) {
+                                        if ("1".equals(list.get(position).getCategory())) {
+                                            showCancel();
+                                        } else {
+                                            showDialog(false, list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+
+
                     } else {
                         viewHolder.rl_button_tv.setText("取消预约");
                         viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
@@ -403,6 +474,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                 if (list.get(position).getStatus() == 2) {
                     viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
                     viewHolder.rl_button_tv.setText("已确认未签到");
+                    viewHolder.rl_button.setClickable(false);
                     viewHolder.rl_button_tv.setClickable(false);
                     viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                     viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));

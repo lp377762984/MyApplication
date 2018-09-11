@@ -57,6 +57,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -1072,7 +1073,22 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
                     if (!isme && TextUtils.isEmpty(et_grant_phone.getText().toString().trim())) {
                         ToastUtils.showToastLong("请输入好友手机号");
                         break;
+
+
                     }
+                    if (!isme){
+                        if (StringUtils.isFirstNumeric(et_grant_phone.getText().toString())) {//姓名不能以数字开头
+                            ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_first_text));
+                            return;
+                        }
+                        if (StringUtils.isAllNumeric(et_grant_phone.getText().toString())) {//姓名不能全数字
+                            ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_text));
+                            return;
+                        }
+
+
+                    }
+
                     newOrderInfoBean.setExtends_params(extendsParams);
                     newOrderInfoBean.setProtocol_params(protocol_params);
                     Gson gson = new Gson();

@@ -44,7 +44,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 LogUtil.i(s);
                 RequestSimpleBean requsetSimpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()){
-                 if (TextUtils.equals(requsetSimpleBean.getCode(),"1")){
+                 if (TextUtils.equals(requsetSimpleBean.getCode(),"0")){
                      showResultDialog("入场成功");
                  }else {
 
