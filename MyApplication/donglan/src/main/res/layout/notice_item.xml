@@ -47,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="动岚系统消息"
+                android:layout_weight="1"
                 android:textColor="@color/colorGray6"
                 android:textSize="13sp" />
 
@@ -54,7 +55,6 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="right"
                 android:text="未读"
                 android:textColor="@color/red"
