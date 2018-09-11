@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -38,6 +41,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Encoder;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
@@ -48,13 +52,18 @@ import com.cn.danceland.myapplication.bean.VideoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.FileUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -75,6 +84,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.JZVideoPlayer;
+import cn.jzvd.JZVideoPlayerStandard;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -84,6 +95,7 @@ import top.zibin.luban.OnCompressListener;
  */
 
 public class PublishActivity extends Activity {
+    private static final int SELECT_VIDEO = 1010;
     TextView publish_cancel;
     TextView publish_ok;
     hani.momanii.supernova_emoji_library.Helper.EmojiconEditText publish_status;
@@ -114,7 +126,9 @@ public class PublishActivity extends Activity {
     public static Handler handler;
     ArrayList<String> arrImgUrl, arrImgPath;
     Uri uri;
-//    private List<LocalMedia> selectList = new ArrayList<>();
+    //    private List<LocalMedia> selectList = new ArrayList<>();
+    private boolean selectVideo = false;
+    private JZVideoPlayerStandard videoplayer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -213,7 +227,7 @@ public class PublishActivity extends Activity {
                 getPic();
             }
         });
-
+        videoplayer = findViewById(R.id.videoplayer);
     }
 
     public void getPic() {
@@ -233,7 +247,7 @@ public class PublishActivity extends Activity {
                     .imageEngine(new PicassoEngine()) // 使用的图片加载引擎
                     .forResult(100); // 设置作为标记的请求码
 
-            // 进入相册 以下是例子：用不到的api可以不写
+            ////   进入相册 以下是例子：用不到的api可以不写
 //            PictureSelector.create(PublishActivity.this)
 //                    .openGallery(PictureMimeType.ofAll())//全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
 ////                    .theme()//主题样式(不设置为默认样式) 也可参考demo values/styles下 例如：R.style.picture.white.style
@@ -339,7 +353,8 @@ public class PublishActivity extends Activity {
 
                         }
                     } else {
-
+                        LogUtil.i("videoPath" + videoPath);
+                        LogUtil.i("picFile" + picFile);
                         if (videoPath != null && !"".equals(videoPath)) {
                             videoFile = new File(videoPath);
                             if (picFile != null) {
@@ -415,7 +430,7 @@ public class PublishActivity extends Activity {
     };
 
     private void showListDialog() {
-        final String[] items = {"拍摄", "从相册选择"};
+        final String[] items = {"拍摄", "从相册选择", "视频"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
@@ -429,17 +444,25 @@ public class PublishActivity extends Activity {
                     } else {
                         ToastUtils.showToastShort("最多选择9张图片");
                     }
-                } else {
+                } else if (which == 1) {//图片
                     if ("1".equals(isPhoto)) {
                         arrayList.clear();
                     }
                     isPhoto = "0";
                     getPic();
+                } else {//视频
+                    if (arrayList.size() <= 0) {
+                        Intent intent = new Intent();
+                        intent.setType("video/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(intent, SELECT_VIDEO);
+                    }
                 }
             }
         });
         listDialog.show();
     }
+
 
     private void showCamera() {
 // 指定相机拍摄照片保存地址
@@ -663,6 +686,60 @@ public class PublishActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_VIDEO) {
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                cursor.moveToFirst();
+//                String path = cursor.getString(1); // 视频文件路径
+                String name = cursor.getString(2); // 视频文件名
+//                String createDate = cursor.getString(3); // 视频创建时间
+//                String size = cursor.getString(5); // 视频大小
+
+                isPhoto = "1";
+                videoPath = FileUtil.getFileAbsolutePath(PublishActivity.this, uri);
+                if (Build.VERSION.SDK_INT >= 19) {
+                    videoPath = FileUtil.getFileAbsolutePath(PublishActivity.this, uri);
+                } else {
+                    videoPath = FileUtil.getPath(PublishActivity.this, uri);
+                }
+                arrayList.clear();
+                if (videoPath != null) {
+                    SPUtils.setInt("imgN", 100);
+                    MediaMetadataRetriever media = new MediaMetadataRetriever();
+                    media.setDataSource(videoPath);
+                    String duration = media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
+                    LogUtil.i("-----" + "时间=" + duration);
+
+                    if (duration != null && duration.length() > 0) {
+                        long durationL = Long.valueOf(duration);
+                        if (durationL < (60 * 1000)) {//视频不能超过60秒
+                            String savePath = Environment.getExternalStorageDirectory().getPath()
+                                    + "/donglan/camera/vedio/" + name;//压缩后的视频地址
+                            Bitmap frameAtTime = media.getFrameAtTime();
+                            FileUtil.compressVideoResouce(PublishActivity.this, videoPath, savePath);//压缩视频
+
+//                            MediaMetadataRetriever media2 = new MediaMetadataRetriever();
+//                            media2.setDataSource(savePath);
+//                            Bitmap frameAtTime2 = media2.getFrameAtTime();
+                            picFile = saveBitmapFile(frameAtTime);
+                            arrayList.add(savePath);
+                            grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
+                        } else {
+                            ToastUtils.showToastShort("文件过大");
+                        }
+                    } else {
+                        ToastUtils.showToastShort("文件过大");
+                    }
+
+//                videoimg.setBackground(new BitmapDrawable(frameAtTime));
+//                //publish_photo.setVisibility(View.GONE);
+//                videoimg.setVisibility(View.VISIBLE);
+                } else {
+                    ToastUtils.showToastShort("未获取到文件，请重新选择");
+                }
+            }
+        }
         if (requestCode == 100 && resultCode == RESULT_OK) {
             if (data != null) {
 //                arrayList = data.getStringArrayListExtra("arrPath");
@@ -676,7 +753,6 @@ public class PublishActivity extends Activity {
                     SPUtils.setInt("imgN", arrayList.size() + SPUtils.getInt("imgN", 0));
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
-
             }
         } else if (resultCode == 99) {
             isPhoto = "0";
@@ -692,6 +768,8 @@ public class PublishActivity extends Activity {
         } else if (resultCode == 111) {
             isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
+
+            LogUtil.i("接收的地址" + vedioPath);
             arrayList.clear();
             if (videoPath != null) {
                 MediaMetadataRetriever media = new MediaMetadataRetriever();
@@ -704,24 +782,7 @@ public class PublishActivity extends Activity {
 //                //publish_photo.setVisibility(View.GONE);
 //                videoimg.setVisibility(View.VISIBLE);
             }
-
         }
-//
-//        else if (resultCode == PictureConfig.CHOOSE_REQUEST) {
-//            // 图片选择结果回调
-//            selectList = PictureSelector.obtainMultipleResult(data);
-//            // 例如 LocalMedia 里面返回三种path
-//            // 1.media.getPath(); 为原图path
-//            // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-//            // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-//            // 如果裁剪并压缩了，已取压缩路径为准，因为是先裁剪后压缩的
-//            for (LocalMedia media : selectList) {
-//                LogUtil.i("图片-----》", media.getPath());
-//            }
-//            adapter.setList(selectList);
-//            adapter.notifyDataSetChanged();
-//        }
-
     }
 
     public File saveBitmapFile(Bitmap bitmap) {
@@ -784,6 +845,7 @@ public class PublishActivity extends Activity {
                 viewHolder.rl_item = convertView.findViewById(R.id.rl_item);
                 viewHolder.pl_sta = convertView.findViewById(R.id.pl_sta);
                 viewHolder.item_select = convertView.findViewById(R.id.item_select);
+//                viewHolder.videoplayer = convertView.findViewById(R.id.videoplayer);
                 viewHolder.item_select.setVisibility(View.GONE);
                 convertView.setTag(viewHolder);
             } else {
@@ -795,6 +857,7 @@ public class PublishActivity extends Activity {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
+                        LogUtil.i("--&&---imagepath=" + arrayLists.get(position));
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -806,6 +869,7 @@ public class PublishActivity extends Activity {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
+                        LogUtil.i("--&&---path=" + arrayLists.get(position));
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -816,46 +880,52 @@ public class PublishActivity extends Activity {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
-                        //有权限
-                        if (imgN <= 9) {
-                            if (position <= arrayLists.size()) {
-                                if ("0".equals(isPhoto)) {
-                                    showListDialog();
-                                } else {
-                                    showListDialog();
-                                }
-                            }
-                        } else {
-                            ToastUtils.showToastShort("最多选择9张图片");
-                        }
-                    } else {
-                        PermissionsUtil.requestPermission(PublishActivity.this, new PermissionListener() {
-                            @Override
-                            public void permissionGranted(@NonNull String[] permissions) {
-                                //用户授予了权限
-                                if (imgN <= 9) {
-                                    if (position <= arrayLists.size()) {
-                                        if ("0".equals(isPhoto)) {
-                                            showListDialog();
-                                        } else {
-                                            showListDialog();
-                                        }
+                    if (imgN != 100) { //100是视频
+                        if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
+
+                            //有权限
+                            if (imgN <= 9) {
+                                if (position <= arrayLists.size()) {
+                                    if ("0".equals(isPhoto)) {
+                                        showListDialog();
+                                    } else {
+                                        showListDialog();
                                     }
-                                } else {
+                                }
+                            } else {
+                                if (imgN != 100) {//100是视频
                                     ToastUtils.showToastShort("最多选择9张图片");
                                 }
                             }
+                        } else {
+                            PermissionsUtil.requestPermission(PublishActivity.this, new PermissionListener() {
+                                @Override
+                                public void permissionGranted(@NonNull String[] permissions) {
+                                    //用户授予了权限
+                                    if (imgN <= 9) {
+                                        if (position <= arrayLists.size()) {
+                                            if ("0".equals(isPhoto)) {
+                                                showListDialog();
+                                            } else {
+                                                showListDialog();
+                                            }
+                                        }
+                                    } else {
+                                        ToastUtils.showToastShort("最多选择9张图片");
+                                    }
+                                }
 
-                            @Override
-                            public void permissionDenied(@NonNull String[] permissions) {
-                                //用户拒绝了申请
-                                ToastUtils.showToastShort("没有权限");
-                            }
-                        }, new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, false, null);
+                                @Override
+                                public void permissionDenied(@NonNull String[] permissions) {
+                                    //用户拒绝了申请
+                                    ToastUtils.showToastShort("没有权限");
+                                }
+                            }, new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, false, null);
+                        }
                     }
                 }
             });
+//            }
 
 
             return convertView;
@@ -866,6 +936,7 @@ public class PublishActivity extends Activity {
         ImageView img, item_select;
         TextView pl_sta;
         RelativeLayout rl_item;
+//        JZVideoPlayerStandard videoplayer;
     }
 
 }

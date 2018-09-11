@@ -167,7 +167,7 @@ public class WearFitActivity extends Activity {
 
         } else {
             rl_connect.setVisibility(View.VISIBLE);
-            tv_connect.setText("还未绑定手环，点击绑定");
+            tv_connect.setText("还未绑定手环，点击绑定>>");
         }
         initHeartData();//心率
         initSleepData();//睡眠
@@ -256,7 +256,7 @@ public class WearFitActivity extends Activity {
             rl_connect.setVisibility(View.GONE);
         } else {
             rl_connect.setVisibility(View.VISIBLE);
-            tv_connect.setText("还未绑定手环，点击绑定");
+            tv_connect.setText("还未绑定手环，点击绑定>>");
         }
     }
     private final int RESULT_CODE_CAMERA = 1;//判断是否有拍照权限的标识码
@@ -546,7 +546,7 @@ public class WearFitActivity extends Activity {
                     e.printStackTrace();
                 }
                 ToastUtils.showToastShort("已断开");
-                tv_connect.setText("还未绑定手环，点击绑定");
+                tv_connect.setText("还未绑定手环，点击绑定>>");
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
                 final byte[] txValue = intent

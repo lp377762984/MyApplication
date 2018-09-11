@@ -18,6 +18,7 @@ import com.cjt2325.cameralibrary.listener.ClickListener;
 import com.cjt2325.cameralibrary.listener.ErrorListener;
 import com.cjt2325.cameralibrary.listener.JCameraListener;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -81,7 +82,7 @@ public class ShowCameraActivity extends Activity {
 
 //        //设置视频保存路径
         jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/vedio/");
+                + "/donglan/camera/vedio");
 
         if("0".equals(isPhoto)){
             //只能拍照
@@ -125,6 +126,7 @@ public class ShowCameraActivity extends Activity {
             public void recordSuccess(String url, Bitmap firstFrame) {
                 Intent intent = new Intent();
                 intent.putExtra("videoPath", url);
+                LogUtil.i("fasong的地址"+url);
                 setResult(111, intent);
                 finish();
 
