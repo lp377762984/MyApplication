@@ -19,7 +19,7 @@ public class Constants  {
   // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
-    //public static final String HOST = " http://192.168.1.117:8003/";//
+//    public static final String HOST = " http://192.168.1.117:8003/";//
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
 //   public static final String HOST = "http://192.168.1.66:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
@@ -300,4 +300,7 @@ public class Constants  {
     public final static String EXTRA_SEND_DATA_TO_BLE = "EXTRA_SEND_DATA_TO_BLE";
     public final static String ADDRESS = "address";//手环
     public final static String NAME = "name";
+    public final static String MY_TXIM_ADMIN = "my_txim_admin";
+
+
 }

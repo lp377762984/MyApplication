@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
@@ -181,12 +182,26 @@ public class RecommendFragment extends BaseFragment {
                         ToastUtils.showToastShort("请填写电话");
                         return;
                     }
+
+                    if (StringUtils.isFirstNumeric(et_name.getText().toString())) {//姓名不能以数字开头
+                        ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_first_text));
+                        return;
+                    }
+                    if (StringUtils.isAllNumeric(et_name.getText().toString())) {//姓名不能全数字
+                        ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_text));
+                        return;
+                    }
+
                     strBean.name = et_name.getText().toString();
                     strBean.phone_no = et_phone.getText().toString();
 
                     if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())){
                         ToastUtils.showToastShort("输入电话不合法请重新输入");
                     }else {
+
+
+
+
                         introduce_save(strBean);
                         dialog.dismiss();
                     }

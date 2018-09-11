@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
+import com.cn.danceland.myapplication.im.model.FriendshipInfo;
+import com.cn.danceland.myapplication.im.model.GroupInfo;
 import com.cn.danceland.myapplication.im.model.UserInfo;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -253,6 +255,15 @@ public class SplashActivity extends FragmentActivity implements TIMCallBack {
                 break;
             case 6200:
                 Toast.makeText(this, getString(R.string.login_error_timeout), Toast.LENGTH_SHORT).show();
+                navToLogin();
+                break;
+            case 70013:
+                TlsBusiness.logout(UserInfo.getInstance().getId());
+                UserInfo.getInstance().setId(null);
+                MessageEvent.getInstance().clear();
+                FriendshipInfo.getInstance().clear();
+                GroupInfo.getInstance().clear();
+
                 navToLogin();
                 break;
             default:

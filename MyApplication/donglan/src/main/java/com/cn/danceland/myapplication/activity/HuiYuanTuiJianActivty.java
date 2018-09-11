@@ -166,11 +166,12 @@ public class HuiYuanTuiJianActivty extends Activity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-        case R.id.iv_back:
-        break;
-        default:
-        break;
+        switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            default:
+                break;
         }
 
     }
