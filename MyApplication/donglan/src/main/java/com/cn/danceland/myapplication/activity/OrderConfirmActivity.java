@@ -1077,11 +1077,11 @@ public class OrderConfirmActivity extends Activity implements View.OnClickListen
 
                     }
                     if (!isme){
-                        if (StringUtils.isFirstNumeric(et_grant_phone.getText().toString())) {//姓名不能以数字开头
+                        if (StringUtils.isFirstNumeric(et_grant_name.getText().toString())) {//姓名不能以数字开头
                             ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_first_text));
                             return;
                         }
-                        if (StringUtils.isAllNumeric(et_grant_phone.getText().toString())) {//姓名不能全数字
+                        if (StringUtils.isAllNumeric(et_grant_name.getText().toString())) {//姓名不能全数字
                             ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_text));
                             return;
                         }

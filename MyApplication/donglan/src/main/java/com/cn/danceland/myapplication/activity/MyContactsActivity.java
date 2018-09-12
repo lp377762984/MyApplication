@@ -55,6 +55,8 @@ public class MyContactsActivity extends Activity {
     private ListView listView;
     private List<MyContactsBean.Data> dataList = new ArrayList<>();
     private MyAdapter adapter;
+    private TextView tv_error;
+    private ImageView iv_error;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +80,15 @@ public class MyContactsActivity extends Activity {
         });
         listView = (ListView) findViewById(R.id.list);
         adapter = new MyAdapter();
+
+        View listEmptyView = findViewById(R.id.rl_no_info);
+        tv_error = listEmptyView.findViewById(R.id.tv_error);
+        iv_error = listEmptyView.findViewById(R.id.iv_error);
+        iv_error.setImageResource(R.drawable.img_error14);
+        tv_error.setText("您没有联系人");
+        listView.setEmptyView(listEmptyView);
+
+
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -153,6 +164,8 @@ public class MyContactsActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
+                iv_error.setImageResource(R.drawable.img_error7);
+                tv_error.setText("网络异常");
             }
         }) {
             @Override

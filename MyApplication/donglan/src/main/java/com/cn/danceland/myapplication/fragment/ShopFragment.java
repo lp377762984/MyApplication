@@ -925,7 +925,7 @@ public class ShopFragment extends BaseFragment {
                     case 35://动态码
                         startActivity(new Intent(mActivity, LoginNumberActivity.class));
                         break;
-                    case 36://
+                    case 36://联系人
                         startActivity(new Intent(mActivity, MyContactsActivity.class));
                         break;
                     default:

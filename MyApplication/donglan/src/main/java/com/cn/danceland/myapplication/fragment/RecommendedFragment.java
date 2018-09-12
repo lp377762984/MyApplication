@@ -166,6 +166,8 @@ public class RecommendedFragment extends BaseFragment {
 
                 iv_sex.setImageResource(R.drawable.img_sex2);
             }
+
+
             if (dataList.get(i).getStatus() == 0) {
                 tv_status.setVisibility(View.VISIBLE);
             } else if (dataList.get(i).getStatus() == 1) {
@@ -173,6 +175,14 @@ public class RecommendedFragment extends BaseFragment {
             } else if (dataList.get(i).getStatus() == 2) {
 
             }
+            for (int j = 0; j < dataList.size(); j++) {
+                if (dataList.get(j).getStatus() == 2) {
+                    tv_status.setVisibility(View.INVISIBLE);
+
+                }
+
+            }
+
 
             final Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
             tv_status.setOnClickListener(new View.OnClickListener() {

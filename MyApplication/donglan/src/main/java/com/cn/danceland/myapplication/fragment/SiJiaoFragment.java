@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -376,6 +377,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
+            LogUtil.i("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
@@ -516,6 +518,8 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
+            viewHolder.sijiao_date.setTextColor(Color.GRAY);
+
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
@@ -556,6 +560,29 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_detail.setVisibility(View.GONE);
             } else if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_detail.setVisibility(View.VISIBLE);
+            }
+
+            if (System.currentTimeMillis()>list.get(groupPosition).getEnd_date()){
+                viewHolder.sijiao_date.setText("课时已过期，无法预约");
+                viewHolder.sijiao_date.setTextColor(Color.RED);
+                viewHolder.sijiao_yuyue.setVisibility(View.GONE);
+                viewHolder.sijiao_detail.setVisibility(View.GONE);
+            }
+
+            if (list.get(groupPosition).getDelete_remark()==1){
+                viewHolder.sijiao_date.setText("课程已失效");
+                viewHolder.sijiao_date.setTextColor(Color.RED);
+                viewHolder.sijiao_yuyue.setVisibility(View.GONE);
+                viewHolder.sijiao_detail.setVisibility(View.GONE);
+
+            }
+
+            if (list.get(groupPosition).getSurplus_count()<1){
+                viewHolder.sijiao_date.setText("课程已完成");
+                viewHolder.sijiao_date.setTextColor(Color.RED);
+                viewHolder.sijiao_yuyue.setVisibility(View.GONE);
+                viewHolder.sijiao_detail.setVisibility(View.GONE);
+
             }
 
             return convertView;
