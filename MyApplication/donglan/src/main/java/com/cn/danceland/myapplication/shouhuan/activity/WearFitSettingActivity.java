@@ -247,9 +247,24 @@ public class WearFitSettingActivity extends Activity {
             btn_buchang_left.setChecked(false);
             btn_buchang_right.setChecked(true);
         }
-
-        tv_rushui.setText(wearFitUser.getSleepHour() + ":" + wearFitUser.getSleepMinutes());//入睡
-        tv_wake.setText(wearFitUser.getWakeUpHour() + ":" + wearFitUser.getWakeUpMinutes());//醒来
+        String sleepHourStr = "00";
+        String sleepMinutesStr = "00";
+        String wakeUpHourStr = "00";
+        String wakeUpMinutesStr = "00";
+        if (wearFitUser.getSleepHour() != 0 && (wearFitUser.getSleepHour() >= 0 && wearFitUser.getSleepHour() < 10)) {
+            sleepHourStr = "0" + wearFitUser.getSleepHour();
+        }
+        if (wearFitUser.getSleepMinutes() != 0 && (wearFitUser.getSleepMinutes() >= 0 && wearFitUser.getSleepMinutes() < 10)) {
+            sleepMinutesStr = "0" + wearFitUser.getSleepMinutes();
+        }
+        if (wearFitUser.getWakeUpHour() != 0 && (wearFitUser.getWakeUpHour() >= 0 && wearFitUser.getWakeUpHour() < 10)) {
+            wakeUpHourStr = "0" + wearFitUser.getWakeUpHour();
+        }
+        if (wearFitUser.getWakeUpMinutes() != 0 && (wearFitUser.getWakeUpMinutes() >= 0 && wearFitUser.getWakeUpMinutes() < 10)) {
+            wakeUpMinutesStr = "0" + wearFitUser.getWakeUpMinutes();
+        }
+        tv_rushui.setText(sleepHourStr + ":" + sleepMinutesStr);//入睡
+        tv_wake.setText(wakeUpHourStr  + ":" +wakeUpMinutesStr);//醒来
 
         if (wearFitUser.getCallsAlerts() != 1) {//来电提醒 0关  1开
             wearFitUser.setCallsAlerts(0);
@@ -306,7 +321,8 @@ public class WearFitSettingActivity extends Activity {
         btn_juli_left.setOnCheckedChangeListener(juliListener);
         btn_juli_right.setOnCheckedChangeListener(juliListener);
         btn_buchang_left.setOnCheckedChangeListener(buchangListener);
-        btn_buchang_left.setOnCheckedChangeListener(buchangListener);
+        btn_buchang_right.setOnCheckedChangeListener(buchangListener);
+        rl_buchang.setOnClickListener(onClickListener);
 
         btn_jiebang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -469,6 +485,19 @@ public class WearFitSettingActivity extends Activity {
                         });
                         dialog.show();
                         break;
+                    case R.id.rl_buchang://步长
+                        dialog = new PickerViewDialog(context, new PickerViewDialog.PickerListener() {
+                            @Override
+                            public void getPickerSelect(String text) {
+                                tv_buchang.setText(text);
+                                int stepLength = Integer.valueOf(text);
+                                wearFitUser.setStepLength(stepLength);
+                                DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
+                                commandManager.personalData(wearFitUser);
+                            }
+                        });
+                        dialog.show();
+                        break;
                     case R.id.clear_phone_layout://清除手机数据
                         showDialogToApp("清除机数据", "清除手机数据后，手机的所有历史数据将被清除，若手环有数据，重连刷新仍会同步过来，是否确认清除？", "确定", "取消"
                                 , new DialogInterface.OnClickListener() {
@@ -600,29 +629,18 @@ public class WearFitSettingActivity extends Activity {
                     tv_rushui.setText(hourStr + ":" + minuteStr);
                     sleepTime.setStartHour(Integer.valueOf(hourStr));
                     sleepTime.setStartMinute(Integer.valueOf(minuteStr));
+                    wearFitUser.setSleepHour(Integer.valueOf(hourStr));
+                    wearFitUser.setSleepMinutes(Integer.valueOf(minuteStr));
                 } else if ("醒来时间".equals(str)) {
                     tv_wake.setText(hourStr + ":" + minuteStr);
-                    sleepTime.setStartHour(Integer.valueOf(hourStr));
-                    sleepTime.setStartMinute(Integer.valueOf(minuteStr));
+                    sleepTime.setEndHour(Integer.valueOf(hourStr));
+                    sleepTime.setEndMinute(Integer.valueOf(minuteStr));
+                    wearFitUser.setWakeUpHour(Integer.valueOf(hourStr));
+                    wearFitUser.setWakeUpMinutes(Integer.valueOf(minuteStr));
                 }
-//                String dateString = customDatePicker.getTime();
-//                if ("入睡时间".equals(str)) {
-//                    tv_rushui.setText(dateString);
-//                    String[] startTime = dateString.split("\\:");
-//                    if (startTime != null && startTime.length > 2) {
-//                        sleepTime.setStartHour(Integer.valueOf(startTime[0]));
-//                        sleepTime.setStartMinute(Integer.valueOf(startTime[1]));
-//                    }
-//                } else if ("醒来时间".equals(str)) {
-//                    tv_wake.setText(dateString);
-//                    String[] endTime = dateString.split("\\:");
-//                    if (endTime != null && endTime.length > 2) {
-//                        sleepTime.setEndHour(Integer.valueOf(endTime[0]));
-//                        sleepTime.setEndMinute(Integer.valueOf(endTime[1]));
-//                    }
-//                }
                 sleepTime.setOn(1);
                 SPUtils.setString("SleepTimeLongSit", gson.toJson(sleepTime));
+                DataInfoCache.saveOneCache(wearFitUser, Constants.MY_WEAR_FIT_SETTING);//新增缓存 手环设置
                 commandManager.sendSleepTime(sleepTime);
             }
         });
