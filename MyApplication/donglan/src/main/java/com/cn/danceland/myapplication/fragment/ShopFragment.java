@@ -882,7 +882,8 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
                     case 22://我要培训
-                        ToastUtils.showToastShort("功能正在开发中");
+                        startActivity(new Intent(mActivity, NewsDetailsActivity.class)
+                                .putExtra("url", "http://jiaolian.danceland.com.cn/").putExtra("title", "动岚健身学院"));
                         break;
                     case 23://会籍报表
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "1"));
