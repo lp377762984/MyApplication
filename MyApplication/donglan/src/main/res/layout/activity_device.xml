@@ -9,10 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ImageView
+        android:id="@+id/img_shouhuan"
+        android:layout_below="@+id/wearfitequipment_title"
+        android:layout_width="175dp"
+        android:layout_height="166dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/shouhuan_top"
+        />
+
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:dividerHeight="1dp"
         android:divider="@color/color_bg_mianlayout">
 
