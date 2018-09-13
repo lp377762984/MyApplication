@@ -117,6 +117,7 @@
             android:paddingRight="10dp"
             android:gravity="top"
             android:paddingTop="5dp"
+            android:maxLength="50"
             android:hint="请将您的意见和建议告诉我们吧~~"
             />
 
