@@ -93,7 +93,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if ("体测".equals(from)) {
                     if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
-                        Intent intent = new Intent(AddFriendsActivity.this, BodyBaseActivity.class);
+                        Intent intent = new Intent(AddFriendsActivity.this, FitnessTestNoticeActivity.class);
                         intent.putExtra("id", dataList.get(position).getPerson_id());
                         intent.putExtra("memberId", dataList.get(position).getId());
                         intent.putExtra("member_no", dataList.get(position).getMember_no());

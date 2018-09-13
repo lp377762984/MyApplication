@@ -7,18 +7,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_gery"
-
-        >
+        android:background="@color/dl_gery" >
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:onClick="back"
-            android:padding="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="30dp"
             android:src="@drawable/img_back" />
 
         <TextView
@@ -101,13 +100,13 @@
 
                     <LinearLayout
                         android:id="@+id/ll_sixin"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="30dp"
+                        android:orientation="vertical"
 
-                        android:orientation="vertical">
+                        android:visibility="gone">
 
                         <ImageView
 

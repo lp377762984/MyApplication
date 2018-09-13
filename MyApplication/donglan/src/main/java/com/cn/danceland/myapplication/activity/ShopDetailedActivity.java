@@ -63,7 +63,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class ShopDetailedActivity extends Activity {
-    Button bt_back, join_button;
+    Button  join_button;
+    ImageView bt_back;
     RequestQueue requestQueue;
     Gson gson;
     TextView tv_adress, tv_time, store_name;
@@ -240,7 +241,7 @@ public class ShopDetailedActivity extends Activity {
 
 //        join_button = findViewById(R.id.join_button);
 
-        bt_back = findViewById(R.id.bt_back);
+        bt_back = findViewById(R.id.iv_back);
         bt_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

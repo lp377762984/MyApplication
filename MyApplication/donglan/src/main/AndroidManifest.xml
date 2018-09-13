@@ -763,9 +763,14 @@
 
         <!--AlertDialog  有×的-->
         <activity
-            android:name=".activity.AlertDialogActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/DialogStyle"/>
+        android:name=".activity.AlertDialogActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/DialogStyle"/>
+
+        <!--体测分析-注意事项-->
+        <activity
+            android:name=".activity.FitnessTestNoticeActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".Receiver.MessageReceiver"

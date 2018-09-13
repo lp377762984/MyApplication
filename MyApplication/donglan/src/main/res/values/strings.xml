@@ -912,4 +912,6 @@
 
     <string name="add_video_error_gif">添加失败</string>
 
+    <string name="matters_needing_attention_text">注意事项</string>
+
 </resources>

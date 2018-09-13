@@ -24,8 +24,8 @@ public class Constants  {
 //   public static final String HOST = "http://192.168.1.66:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
 //     public static final String HOST = " http://192.168.1.66:8003/";//
-    //public static final String HOST = "http://192.168.1.123:8003/";//老高
-  public static  String HOST = "http://192.168.1.168:8003/";//超哥
+    public static final String HOST = "http://192.168.1.222:8003/";//老高
+//  public static  String HOST = "http://192.168.1.168:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -262,7 +262,7 @@ public class Constants  {
     public static final String QUERY_WEAR_FIT_STEP_SAVE = HOST + "/personStep/save";//新增[人员计步数据]
     public static final String QUERY_WEAR_FIT_STEP_FANDLAST = HOST + "/personStep/findLast";//根据条件查询最后一条计步数据
     public static final String QUERY_WEAR_FIT_STEP_LIST = HOST + "/personStep/queryList";//按条件查询不分页[人员计步数据]列表
-    public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条计步数据
+    public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条数据
     public static final String QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG = HOST + "/personStep/findFatigueAvg";//根据条件查询疲劳每日平均数
 
  //咨询 推荐
@@ -273,6 +273,10 @@ public class Constants  {
 
   //我的通知-通知
   public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
+
+  //体测分析-体测须知
+  public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
+
 
  //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";

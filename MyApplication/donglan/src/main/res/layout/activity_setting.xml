@@ -14,11 +14,12 @@
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="30dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:onClick="back"
-           android:padding="10dp"
+           android:paddingLeft="15dp"
             android:src="@drawable/img_back" />
 
         <TextView
@@ -103,6 +104,17 @@
                     android:layout_height="40dp"
                     android:background="@drawable/bg_setting_item_selector">
 
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="会员号"
+                        android:textColor="@color/colorGray9"
+                        android:textSize="15sp" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,22 +124,13 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
-                        android:layout_weight="1"
-                        android:text="会员号"
-                        android:textColor="@color/color_content_text"
-                        android:textSize="15sp" />
-
-                    <TextView
                         android:id="@+id/tv_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
                         android:text="未设置"
+                        android:textColor="@color/color_dl_yellow"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -161,7 +164,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="手机号"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <TextView
@@ -170,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
+                        android:textColor="@color/color_dl_yellow"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -189,6 +193,17 @@
                     android:layout_height="40dp"
                     android:background="@drawable/bg_setting_item_selector">
 
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:text="微信号"
+                        android:textColor="@color/colorGray9"
+                        android:textSize="15sp" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -198,22 +213,13 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
-                        android:layout_weight="1"
-                        android:text="微信号"
-                        android:textColor="@color/color_content_text"
-                        android:textSize="15sp" />
-
-                    <TextView
                         android:id="@+id/tv_weixin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
                         android:textSize="12sp"
+                        android:textColor="@color/color_dl_yellow"
                         android:text="未绑定"/>
                 </LinearLayout>
 
@@ -248,7 +254,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="邮箱号"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <TextView
@@ -258,6 +264,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
                         android:textSize="12sp"
+                        android:textColor="@color/color_dl_yellow"
                         android:text="未绑定"/>
                 </LinearLayout>
 
@@ -292,7 +299,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="地区"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <TextView
@@ -302,6 +309,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="25dp"
                         android:text="请选择"
+                        android:textColor="@color/color_dl_yellow"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -328,7 +336,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="黑名单"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -370,7 +378,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
                         android:text="关于我们"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -411,7 +419,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="15dp"
                         android:text="清除缓存"
-                        android:textColor="@color/color_content_text"
+                        android:textColor="@color/colorGray9"
                         android:textSize="15sp" />
 
                     <TextView
@@ -419,8 +427,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:gravity="right"
                         android:layout_weight="1"
+                        android:textColor="@color/color_dl_yellow"
                         android:text="0.0KB" />
 
                     <ImageView

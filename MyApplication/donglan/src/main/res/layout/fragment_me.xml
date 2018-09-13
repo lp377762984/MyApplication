@@ -4,12 +4,31 @@
     android:layout_height="match_parent"
     android:background="@color/color_bg_mianlayout">
 
+    <RelativeLayout
+        android:id="@+id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            android:text="我的"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
     <com.cn.danceland.myapplication.view.HeadZoomScrollView
+        android:layout_marginTop="45dp"
+        android:layout_alignTop="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,13 +37,14 @@
             <ImageView
                 android:id="@+id/iv_top_bg"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="200dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop" />
 
-            <ImageView
 
+
+            <ImageView
                 android:id="@+id/iv_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,9 +59,18 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/ll_01"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="30dp"
                 android:textColor="#333"
+                android:text="faejfi wef"
                 android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="82dp"
+                android:layout_height="82dp"
+                android:layout_above="@id/tv_nick_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_orange_round" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_avatar"
@@ -51,7 +80,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/img_my_avatar" />
-
 
             <View
                 android:id="@+id/line11"
@@ -67,8 +95,6 @@
                 android:id="@+id/ll_01"
                 android:layout_width="325dp"
                 android:layout_height="60dp"
-
-
                 android:layout_alignBottom="@+id/line11"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/img_bg_juxing"

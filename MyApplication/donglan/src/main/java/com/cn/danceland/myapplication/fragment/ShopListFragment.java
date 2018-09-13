@@ -68,6 +68,8 @@ public class ShopListFragment extends BaseFragment {
     ImageView iv_error;
     TextView tv_error;
 
+    private TextView tv_detail;//新增详情布局
+
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
 
     @Override
@@ -77,6 +79,7 @@ public class ShopListFragment extends BaseFragment {
         shop_banner = headView.findViewById(R.id.shop_banner);
         tv_shopname = headView.findViewById(R.id.tv_shopname);
         tv_shopAddress = headView.findViewById(R.id.tv_shopAddress);
+        tv_detail = headView.findViewById(R.id.tv_detail);
         ibtn_gps = headView.findViewById(R.id.ibtn_gps);
         ibtn_call = headView.findViewById(R.id.ibtn_call);
         drawableArrayList = new ArrayList<>();
@@ -153,6 +156,7 @@ public class ShopListFragment extends BaseFragment {
                         }else{
                             tv_shopAddress.setText("距我 "+i1+" m");
                         }
+                        tv_detail.setVisibility(View.VISIBLE);
                         //tv_shopAddress.setText(itemsList.get(0).getAddress());
                         getBanner(itemsList.get(0).getBranch_id() + "");
 

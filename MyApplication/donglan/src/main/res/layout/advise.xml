@@ -12,10 +12,11 @@
         <ImageView
             android:id="@+id/feed_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="30dp"
             android:src="@drawable/img_back"
             android:layout_centerVertical="true"
-            android:paddingLeft="20dp"
+            android:paddingLeft="15dp"
             />
 
         <TextView
@@ -117,6 +118,7 @@
             android:paddingRight="10dp"
             android:gravity="top"
             android:paddingTop="5dp"
+            android:maxLength="100"
             android:hint="请将您的意见和建议告诉我们吧~~"
             />
 

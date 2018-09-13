@@ -12,10 +12,11 @@
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="30dp"
             android:src="@drawable/img_back"
             android:layout_centerVertical="true"
-            android:padding="10dp"
+            android:paddingLeft="15dp"
             />
         <TextView
             style="@style/TextViewTitileStyle"

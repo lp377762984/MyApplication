@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/shouhuan_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:listSelector="@color/transparent"
+        android:paddingLeft="@dimen/default_margin_edge_d"
+        android:paddingRight="@dimen/default_margin_edge_d"/>
+
+    <Button
+        android:id="@+id/btn_start"
+        style="@style/BtnCommitStyle"
+        android:layout_below="@+id/wangji"
+        android:layout_marginTop="10dp"
+        android:text="开始体测" />
+</LinearLayout>
