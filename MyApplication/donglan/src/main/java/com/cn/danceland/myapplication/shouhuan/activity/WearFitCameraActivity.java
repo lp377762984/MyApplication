@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.shouhuan.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +41,8 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
@@ -48,6 +51,7 @@ import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,6 +87,17 @@ public class WearFitCameraActivity extends Activity {
     private int height = 0, width = 0;
     private Size previewSize;
     private ImageView imagev;
+
+    private ImageReader saveImageReader;
+    byte[] saveImageData;
+    private ImageButton reTakePhoto;
+    private ImageButton surePhoto;
+    private ImageButton closePhoto;
+    private ImageView confirm_iv;
+    private RelativeLayout confirm_layout;
+    private RelativeLayout camera_layout;
+    private ProgressDialog dialog;
+
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
     static {
@@ -109,11 +124,56 @@ public class WearFitCameraActivity extends Activity {
         backBtn = (ImageButton) findViewById(R.id.backBtn);
         cameraSwap = (ImageButton) findViewById(R.id.cameraSwap);
 
+        reTakePhoto = (ImageButton) findViewById(R.id.reTakePhoto);
+        surePhoto = (ImageButton) findViewById(R.id.surePhoto);
+        closePhoto = (ImageButton) findViewById(R.id.closePhoto);
+        confirm_iv = (ImageView) findViewById(R.id.confirm_iv);
+        confirm_layout = (RelativeLayout) findViewById(R.id.confirm_layout);
+        camera_layout = (RelativeLayout) findViewById(R.id.camera_layout);
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("正在加载……");
+
+        //重新拍照
+        reTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirm_layout.setVisibility(View.GONE);
+                camera_layout.setVisibility(View.VISIBLE);
+                if (cameraDevice != null) {
+                    stopCamera();
+                }
+                startCamera();
+            }
+        });
+
+        //确定保存拍照
+        surePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(saveImageData!=null){
+                    dialog.show();
+                    reTakePhoto.setFocusable(false);
+                    surePhoto.setFocusable(false);
+                    closePhoto .setFocusable(false);
+                    saveImage();
+                    finish();
+                }
+            }
+        });
+
+        //关闭此页面
+        closePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         //拍照
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtil.i("111");
                 takePicture();
             }
         });
@@ -432,58 +492,60 @@ public class WearFitCameraActivity extends Activity {
         // 当照片数据可用时激发该方法
         @Override
         public void onImageAvailable(ImageReader reader) {
-
-            //先验证手机是否有sdcard
-            String status = Environment.getExternalStorageState();
-            if (!status.equals(Environment.MEDIA_MOUNTED)) {
-                Toast.makeText(getApplicationContext(), "你的sd卡不可用。", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            saveImageReader = reader;
+//            //先验证手机是否有sdcard
+//            String status = Environment.getExternalStorageState();
+//            if (!status.equals(Environment.MEDIA_MOUNTED)) {
+//                Toast.makeText(getApplicationContext(), "你的sd卡不可用。", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             // 获取捕获的照片数据
             Image image = reader.acquireNextImage();
             ByteBuffer buffer = image.getPlanes()[0].getBuffer();
             byte[] data = new byte[buffer.remaining()];
             buffer.get(data);
-
-            //手机拍照都是存到这个路径
-//            String filePath = AppUtils.getDiskCachePath(context) + "/";
-            //系统相册目录
-            String galleryPath = Environment.getExternalStorageDirectory()
-                    + File.separator + Environment.DIRECTORY_DCIM
-                    + File.separator + "Camera" + File.separator;
-            String picturePath = System.currentTimeMillis() + ".jpg";
-            File file = new File(galleryPath, picturePath);
-            try {
-                //存到本地相册
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(data);
-                fileOutputStream.close();
-
+            saveImageData = data;
+//
+//            //手机拍照都是存到这个路径
+////            String filePath = AppUtils.getDiskCachePath(context) + "/";
+//            //系统相册目录
+//            String  galleryPath = Environment.getExternalStorageDirectory()
+//                    + File.separator + Environment.DIRECTORY_DCIM
+//                    + File.separator + "Camera" + File.separator;
+//            String picturePath = System.currentTimeMillis() + ".jpg";
+//            File file = new File(galleryPath, picturePath);
+//            try {
+//                //存到本地相册
+//                FileOutputStream fileOutputStream = new FileOutputStream(file);
+//                fileOutputStream.write(data);
+//                fileOutputStream.close();
+//
                 //显示图片
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-                imagev.setImageBitmap(bitmap);
-
-                //通知相册更新
-                MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                        bitmap, picturePath, null);
-                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                Uri uri = Uri.fromFile(file);
-                intent.setData(uri);
-                context.sendBroadcast(intent);
+                confirm_iv.setImageBitmap(UIUtils.rotateBitmap(bitmap,90));//旋转90并且赋值
 //
-                ToastUtils.showToastShort("图片保存成功");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                image.close();
-            }
-
+                confirm_layout.setVisibility(View.VISIBLE);
+                camera_layout.setVisibility(View.GONE);
+//
+//                //通知相册更新
+//                MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                        bitmap, picturePath, null);
+//                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                Uri uri = Uri.fromFile(file);
+//                intent.setData(uri);
+//                context.sendBroadcast(intent);
+//
+//                ToastUtils.showToastShort("图片保存成功");
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                image.close();
+//            }
         }
-
     };
 
     @Override
@@ -524,44 +586,50 @@ public class WearFitCameraActivity extends Activity {
             cameraDevice.close();
             cameraDevice = null;
         }
-
-    }
-    //-------------------------------------------------------------------------------------
-
-    public void photoGraph() {
-
-//        // 指定相机拍摄照片保存地址
-//        String state = Environment.getExternalStorageState();
-//        if (state.equals(Environment.MEDIA_MOUNTED)) {
-//            cameraPath =  AppUtils.getDiskCachePath(context)+ "/" + System.currentTimeMillis() + ".png";
-//            Intent intent = new Intent();
-//            // 指定开启系统相机的Action
-//            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-//            String out_file_path =  AppUtils.getDiskCachePath(context)+ "/";
-//            File dir = new File(out_file_path);
-//            if (!dir.exists()) {
-//                dir.mkdirs();
-//            } // 把文件地址转换成Uri格式
-//            if (PictureUtil.getSDKV() < 24) {
-//                uri = Uri.fromFile(new File(cameraPath));
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//                startActivityForResult(intent, CAMERA_REQUEST_CODE);
-//            } else {
-//                // 设置系统相机拍摄照片完成后图片文件的存放地址
-//                ContentValues contentValues = new ContentValues(1);
-//                contentValues.put(MediaStore.Images.Media.DATA, cameraPath);
-//                uri = getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//                startActivityForResult(intent, CAMERA_REQUEST_CODE);
-//            }
-//            //uri = Uri.fromFile(new File(cameraPath));
-//
-//        } else {
-//            Toast.makeText(getApplicationContext(), "请确认已经插入SD卡",
-//                    Toast.LENGTH_LONG).show();
-//        }
     }
 
+    private void saveImage() {
+        //先验证手机是否有sdcard
+        String status = Environment.getExternalStorageState();
+        if (!status.equals(Environment.MEDIA_MOUNTED)) {
+            Toast.makeText(getApplicationContext(), "你的sd卡不可用。", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //系统相册目录
+        String galleryPath = Environment.getExternalStorageDirectory()
+                + File.separator + Environment.DIRECTORY_DCIM
+                + File.separator + "Camera" + File.separator;
+        String picturePath = System.currentTimeMillis() + ".jpg";
+        File file = new File(galleryPath, picturePath);
+        try {
+            //存到本地相册
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(saveImageData);
+            fileOutputStream.close();
+
+            //显示图片
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap bitmap = BitmapFactory.decodeByteArray(saveImageData, 0, saveImageData.length, options);
+
+            //通知相册更新
+            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    bitmap, picturePath, null);
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.fromFile(file);
+            intent.setData(uri);
+            context.sendBroadcast(intent);
+            reTakePhoto.setFocusable(true);
+            surePhoto.setFocusable(true);
+            closePhoto .setFocusable(true);
+            dialog.dismiss();
+            ToastUtils.showToastShort("图片保存成功");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onResume() {
