@@ -44,6 +44,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.LoadingPager;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -149,7 +150,11 @@ public class UserHomeActivity extends BaseActivity {
 
     private void initView() {
 
-
+        DongLanTitleView titleView=findViewById(R.id.title);
+        titleView.setTitle("动态");
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("title"))){
+            titleView.setTitle(getIntent().getStringExtra("title"));
+        }
         pullToRefresh = findViewById(R.id.pullToRefresh);
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
@@ -159,7 +164,7 @@ public class UserHomeActivity extends BaseActivity {
         myDynListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
-        pullToRefresh.getRefreshableView().addHeaderView(initHeadview(userInfo));
+  //      pullToRefresh.getRefreshableView().addHeaderView(initHeadview(userInfo));
 
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
@@ -381,7 +386,7 @@ public class UserHomeActivity extends BaseActivity {
                     break;
                 case 2:
                     //    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
-                    setHeadViewData(userInfo);
+             //       setHeadViewData(userInfo);
                  //   dialog.dismiss();
 
                     if (isdyn) {//跳转到动态的那行

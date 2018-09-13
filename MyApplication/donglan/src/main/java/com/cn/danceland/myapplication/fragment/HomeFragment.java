@@ -231,7 +231,7 @@ public class HomeFragment extends BaseFragment {
             public void onClick(View view) {
 
                 //      startActivity(new Intent(mActivity, TestActivity.class));
-                startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
+                startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true).putExtra("title","健身日记"));
             }
         });
 

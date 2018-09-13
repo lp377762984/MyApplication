@@ -9,7 +9,7 @@ package com.cn.danceland.myapplication.bean;
 public class RequestCommitCommentBean {
     private boolean success;
     private String errorMsg;
-    private String code;
+    private int code;
     private RequstCommentInfoBean.Content data;
 
     public boolean isSuccess() {
@@ -28,11 +28,11 @@ public class RequestCommitCommentBean {
         this.errorMsg = errorMsg;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

@@ -10,7 +10,6 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,7 +40,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Encoder;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
@@ -56,14 +54,10 @@ import com.cn.danceland.myapplication.utils.FileUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -84,7 +78,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -526,7 +519,12 @@ public class PublishActivity extends Activity {
                     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                     //finish();
                 } else {
-                    ToastUtils.showToastShort("发布失败！请检查网络连接");
+                    if (rootBean.code==1){
+                        ToastUtils.showToastShort(rootBean.errorMsg);
+                    }else {
+                        ToastUtils.showToastShort("发布失败！请检查网络连接");
+                    }
+
                 }
             }
         }, new Response.ErrorListener() {

@@ -19,7 +19,7 @@ public class Constants  {
   // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
-//    public static final String HOST = " http://192.168.1.117:8003/";//
+//    public static final String HOST = " http://192.168.1.116:8003/";//
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
 //   public static final String HOST = "http://192.168.1.66:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
@@ -296,6 +296,24 @@ public class Constants  {
     public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
     public static final int QR_MAPPING_COURSE_ENTER = 11; //私教入场
     public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
+
+
+  public static final int ROLE_ID_HUIJIGUWEN = 1;//会籍顾问
+  public static final int ROLE_ID_JIAOLIAN = 2;//教练
+  public static final int ROLE_ID_QIANTAI = 3;//前台
+  public static final int ROLE_ID_DIANZHANG = 4;//店长
+  public static final int ROLE_ID_HUIJIZHUGUANG = 5;//会籍主管
+  public static final int ROLE_ID_JIAOLIANZHUGUAN = 6;//教练主管
+  public static final int ROLE_ID_QIANTAIZHUGUAN = 7;//前台主管
+  public static final int ROLE_ID_CHUNA= 9;//出纳
+  public static final int ROLE_ID_SHOUYIN = 10;//收银
+  public static final int ROLE_ID_JIANZHIJIAOLIAN = 11;//兼职教练
+  public static final int ROLE_ID_QIANKE = 666;//潜客
+  public static final int ROLE_ID_HUIYUAN= 888;//会员
+
+
+
+    public final static String ROLE_ID = "ROLE_ID";
 
     public final static String EXTRA_SEND_DATA_TO_BLE = "EXTRA_SEND_DATA_TO_BLE";
     public final static String ADDRESS = "address";//手环

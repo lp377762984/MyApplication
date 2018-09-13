@@ -6,6 +6,7 @@ package com.cn.danceland.myapplication.bean;
 
 public class RootBean {
     public String success;
+    public int code;
     public String errorMsg;
     public String data;
 

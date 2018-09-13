@@ -195,6 +195,26 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
         Time time = new Time();
         time.setToNow();
         year = time.year;
+
+
+        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIGUWEN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIZHUGUANG) {
+            potentialInfo.setAdmin_emp_id(data.getEmployee().getId() + "");
+            potentialInfo.setAdmin_name(data.getEmployee().getCname());
+            tv_admin_name.setText(data.getEmployee().getCname());
+            tv_admin_name.setClickable(false);
+            tv_admin_name.setFocusable(false);
+
+        }
+        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIAN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIANZHUGUAN){
+            potentialInfo.setTeach_emp_id(data.getEmployee().getId() + "");
+            potentialInfo.setAdmin_name(data.getEmployee().getCname());
+            tv_teach_name.setText(data.getEmployee().getCname());
+            tv_teach_name.setClickable(false);
+            tv_teach_name.setClickable(false);
+
+        }
+
+
     }
 
 
@@ -249,7 +269,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                     ToastUtils.showToastShort("手机号码必须填写");
                     return;
                 }
-                if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())){
+                if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())) {
                     ToastUtils.showToastShort("请填写正确的手机号");
                 }
                 potentialInfo.setPhone_no(et_phone.getText().toString());
@@ -312,14 +332,13 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
                 potentialInfo.setNationality(et_nationality.getText().toString().trim());
                 potentialInfo.setPlatform("6");
 
-                potentialInfo.setAdmin_emp_id(data.getEmployee().getId()+"");
-                potentialInfo.setAdmin_name(data.getEmployee().getCname());
+
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());
-                if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())) {
-                    ToastUtils.showToastShort("必须添加潜客会籍");
-                    return;
-                }
+//                if (TextUtils.isEmpty(potentialInfo.getAdmin_emp_id())) {
+//                    ToastUtils.showToastShort("必须添加潜客会籍");
+//                    return;
+//                }
                 try {
                     add_potential(gson.toJson(potentialInfo).toString());
                 } catch (JSONException e) {

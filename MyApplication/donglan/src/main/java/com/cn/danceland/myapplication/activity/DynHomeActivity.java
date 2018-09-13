@@ -1103,7 +1103,12 @@ public class DynHomeActivity extends FragmentActivity implements View.OnClickLis
                 //    slideFromBottomPopup.dismiss();
 
                 }else {
-                    ToastUtils.showToastShort("评论失败");
+                    if (requestCommitCommentBean.getCode()==1){
+                        ToastUtils.showToastShort(requestCommitCommentBean.getErrorMsg());
+                    }else {
+                        ToastUtils.showToastShort("评论失败");
+                    }
+
                 }
 
 

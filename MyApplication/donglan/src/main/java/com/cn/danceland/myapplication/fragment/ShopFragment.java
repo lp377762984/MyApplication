@@ -309,7 +309,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public void onPageClick(View view, int i) {
                 startActivity(new Intent(mActivity, NewsDetailsActivity.class)
-                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title",  backBannerList.get(i).getTitle()));
+                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title", backBannerList.get(i).getTitle()));
 
 
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
@@ -547,11 +547,18 @@ public class ShopFragment extends BaseFragment {
 
                 url = Constants.GETYUANGONGMENUS;
                 String s = gson.toJson(rolesBean);
+                LogUtil.i(s);
+                LogUtil.i(roleMap.get(role));
+
+                SPUtils.setInt(Constants.ROLE_ID, Integer.valueOf(roleMap.get(role)));//保存当前使用角色
+
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtil.e("zzf", jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
+
+
                             MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
                             data = menusBean.getData();
                             if (data != null) {
@@ -586,7 +593,11 @@ public class ShopFragment extends BaseFragment {
 
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;
-
+                if (Integer.valueOf(id)==1){
+                    SPUtils.setInt(Constants.ROLE_ID,Constants.ROLE_ID_QIANKE);
+                }else {
+                    SPUtils.setInt(Constants.ROLE_ID,Constants.ROLE_ID_HUIYUAN);
+                }
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override

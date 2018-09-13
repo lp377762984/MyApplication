@@ -215,6 +215,25 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         }
         tv_birthday.setText(info.getBirthday());
 
+        tv_admin_name.setText(data.getEmployee().getCname());
+        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIGUWEN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIZHUGUANG) {
+            info.setAdmin_emp_id(data.getEmployee().getId() + "");
+            info.setAdmin_name(data.getEmployee().getCname());
+            tv_admin_name.setText(data.getEmployee().getCname());
+            tv_admin_name.setClickable(false);
+            tv_admin_name.setFocusable(false);
+
+        }
+        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIAN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIANZHUGUAN){
+            info.setTeach_emp_id(data.getEmployee().getId() + "");
+            info.setAdmin_name(data.getEmployee().getCname());
+            tv_teach_name.setText(data.getEmployee().getCname());
+            tv_teach_name.setClickable(false);
+            tv_teach_name.setClickable(false);
+
+        }
+
+
     }
 
 
