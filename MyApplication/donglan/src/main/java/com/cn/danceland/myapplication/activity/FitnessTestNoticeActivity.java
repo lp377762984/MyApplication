@@ -160,6 +160,7 @@ public class FitnessTestNoticeActivity extends Activity {
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
+            vh.options_layout.removeAllViews();
             vh.title_tv.setText( dataList.get(position).getOrder_no() + "." + dataList.get(position).getCentent());
             for (int i = 0; i < dataList.get(position).getOptions().size(); i++) {
                 TextView textView = new TextView(context);
