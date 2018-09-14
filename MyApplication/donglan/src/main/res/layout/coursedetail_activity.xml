@@ -48,10 +48,13 @@
 
                 <TextView
                     android:id="@+id/course_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="课程名称"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textSize="18sp"
                     android:textColor="@color/black"
                     />
