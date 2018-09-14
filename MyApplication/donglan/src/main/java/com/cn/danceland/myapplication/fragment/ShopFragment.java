@@ -138,6 +138,7 @@ public class ShopFragment extends BaseFragment {
 
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
     private boolean isPermission;
+    private TextView tv_detail;//新增详情布局
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,7 @@ public class ShopFragment extends BaseFragment {
         rl_role = v.findViewById(R.id.rl_role);
         down_img = v.findViewById(R.id.down_img);
         up_img = v.findViewById(R.id.up_img);
-
+        tv_detail = v.findViewById(R.id.tv_detail);
 
         setMap();
         addRoles();
@@ -517,19 +518,7 @@ public class ShopFragment extends BaseFragment {
                     shopJingdu = data.getLng() + "";
                     PhoneNo = data.getTelphone();
 
-
-
-//                        try {
-//                            if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                                //提示用户开户权限
-//                                String[] perms = {"android.permission.CAMERA"};
-//                                ActivityCompat.requestPermissions(mActivity, perms, RESULT_CODE_CAMERA);
-//                            }else{
-//                                startActivity(new Intent(mActivity, WearFitCameraActivity.class));
-//                            }
-//                        }catch (Exception e){
-//                            e.printStackTrace();
-//                        }
+                    tv_detail.setVisibility(View.VISIBLE);
                     if (isPermission) {
                         LogUtil.i("data.getLat()"+data.getLat());
                         LogUtil.i("data.getLng()"+data.getLng());
@@ -542,7 +531,6 @@ public class ShopFragment extends BaseFragment {
                         tv_distance_km.setVisibility(View.GONE);
                     }
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1156,9 +1144,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
                 return map;
             }
 
