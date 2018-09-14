@@ -109,9 +109,9 @@ public class MyProActivity extends Activity {
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity, hobby, rl_jianjie;
+    RelativeLayout headimage,  sex, height, weight, rl_zone, rl_phone, identity,  rl_jianjie;
     TextView text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
-    EmojiconTextView text_name;
+    EditText text_name,tv_hobby;
     View contentView;
     PopupWindow mPopWindow;
     ListView list_height;
@@ -127,7 +127,7 @@ public class MyProActivity extends Activity {
     View inflate;
     AlertDialog.Builder alertdialog;
     LoopView loopview;
-    TextView tv_start, over_time, tv_hobby, tv_sign;
+    TextView tv_start, over_time,  tv_sign;
 
     private Handler handler = new Handler() {
         @Override
@@ -188,7 +188,7 @@ public class MyProActivity extends Activity {
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
         headimage = findViewById(R.id.head_image);
-        name = findViewById(R.id.name);
+//        name = findViewById(R.id.name);
         sex = findViewById(R.id.sex);
         back = findViewById(R.id.back);
         height = findViewById(R.id.height);
@@ -232,7 +232,7 @@ public class MyProActivity extends Activity {
             text_sex.setText("女");
         }
 
-        hobby = findViewById(R.id.hobby);
+//        hobby = findViewById(R.id.hobby);
         rl_jianjie = findViewById(R.id.rl_jianjie);
 
 
@@ -269,8 +269,8 @@ public class MyProActivity extends Activity {
 
     public void setClick() {
         headimage.setOnClickListener(onClickListener);
-        name.setOnClickListener(onClickListener);
-        hobby.setOnClickListener(onClickListener);
+//        name.setOnClickListener(onClickListener);
+//        hobby.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
         cancel.setOnClickListener(onClickListener);
         photo_album.setOnClickListener(onClickListener);
@@ -353,9 +353,7 @@ public class MyProActivity extends Activity {
                     showWH(x);
                     //selecttitle.setText("选择体重");
                     break;
-                case R.id.hobby:
-                    showHobby( infoData.getPerson().getHobby());
-                    break;
+//                case R.id.hobby:
 
 //                case R.id.over:
 //                    if (x == 0) {
@@ -371,10 +369,10 @@ public class MyProActivity extends Activity {
 //                case R.id.cancel_action:
 //                    dismissWindow();
 //                    break;
-                case R.id.name: {
-                    showName(0, infoData.getPerson().getNick_name());
-                }
-                break;
+//                case R.id.name: {
+//                    showName(0, infoData.getPerson().getNick_name());
+//                }
+//                break;
                 case R.id.sex: {
                     flag = 1;
                     dismissWindow();
