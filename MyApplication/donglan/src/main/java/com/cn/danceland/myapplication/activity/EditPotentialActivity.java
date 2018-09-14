@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -148,7 +149,7 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         if (!TextUtils.isEmpty(info.getFollow_level())) {
             sr_follow_level.setRating(Integer.parseInt(info.getFollow_level()));
         }
-        if (!TextUtils.isEmpty(info.getTeach_name())){
+        if (!TextUtils.isEmpty(info.getTeach_name())) {
             tv_teach_name.setText(info.getTeach_name());
         }
 
@@ -216,7 +217,14 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
         tv_birthday.setText(info.getBirthday());
 
         tv_admin_name.setText(data.getEmployee().getCname());
-        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIGUWEN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIZHUGUANG) {
+        tv_admin_name.setClickable(false);
+        tv_admin_name.setTextColor(Color.GRAY);
+        tv_teach_name.setTextColor(Color.GRAY);
+        tv_admin_name.setFocusable(false);
+        tv_teach_name.setClickable(false);
+        tv_teach_name.setClickable(false);
+        et_phone.setTextColor(Color.GRAY);
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
             info.setAdmin_emp_id(data.getEmployee().getId() + "");
             info.setAdmin_name(data.getEmployee().getCname());
             tv_admin_name.setText(data.getEmployee().getCname());
@@ -224,13 +232,25 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
             tv_admin_name.setFocusable(false);
 
         }
-        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIAN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIANZHUGUAN){
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
             info.setTeach_emp_id(data.getEmployee().getId() + "");
             info.setAdmin_name(data.getEmployee().getCname());
             tv_teach_name.setText(data.getEmployee().getCname());
             tv_teach_name.setClickable(false);
             tv_teach_name.setClickable(false);
 
+        }
+
+        if (TextUtils.equals(info.getAuth(), "2")) {
+
+            et_name.setFocusable(false);
+            tv_sex.setClickable(false);
+            tv_certificate_type.setClickable(false);
+            et_certificate_no.setFocusable(false);
+            et_name.setTextColor(Color.GRAY);
+            tv_sex.setTextColor(Color.GRAY);
+            tv_certificate_type.setTextColor(Color.GRAY);
+            et_certificate_no.setTextColor(Color.GRAY);
         }
 
 
@@ -334,11 +354,11 @@ public class EditPotentialActivity extends Activity implements OnClickListener {
 
             case R.id.tv_teach_name://选择潜客教练
                 jiaolian_type = 1;
-                 findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.tv_admin_name://选择潜客会籍
                 jiaolian_type = 2;
-                     findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
+                findConsultant(data.getPerson().getDefault_branch(), jiaolian_type);
                 break;
             case R.id.et_certificate_type://证件类型
                 showCertificate_type();

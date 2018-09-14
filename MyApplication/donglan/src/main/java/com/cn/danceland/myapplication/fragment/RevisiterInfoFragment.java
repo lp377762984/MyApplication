@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -32,6 +33,7 @@ import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -105,12 +107,14 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private TextView tv_final_admin_name;
     private LinearLayout ll_final_admin;
     private LinearLayout ll_admin;
+    private LinearLayout ll_tuijianren;
 
     public void setview() {
         if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-            String S = info.getSelf_avatar_url();
-            //    Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
+            String S = info.getSelf_avatar_path();
+               Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
         }
 
         if (TextUtils.equals(info.getGender(), "1")) {
@@ -254,6 +258,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         if (TextUtils.equals(info.getAuth(), "2")) {
         ll_final_admin.setVisibility(View.VISIBLE);
             ll_admin.setVisibility(View.GONE);
+            ll_tuijianren.setVisibility(View.VISIBLE);
         }
 
 
@@ -312,6 +317,8 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_final_teach_name = v.findViewById(R.id.tv_final_teach_name);
         tv_final_admin_name = v.findViewById(R.id.tv_final_admin_name);
         ll_final_admin = v.findViewById(R.id.ll_final_admin);
+        ll_tuijianren = v.findViewById(R.id.ll_tuijianren);
+
         ll_admin = v.findViewById(R.id.ll_admin);
 
         v.findViewById(R.id.iv_more).setOnClickListener(this);

@@ -39,6 +39,7 @@ import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.ui.ChatActivity;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -523,8 +524,13 @@ public class RevisitListFragment extends BaseFragment {
                 vh = (ViewHolder) convertView.getTag();
 
             }
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-            Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
+
+
+            //第一个是上下文，第二个是圆角的弧度
+            RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1)
+                    ;
+
+            Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_path()).apply(options).into(vh.iv_avatar);
 //            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
 //                vh.tv_name.setText(datalist.get(position).getCname());
 //            } else {

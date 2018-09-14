@@ -21,7 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -30,6 +29,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.FindSiJiaoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
@@ -220,11 +220,16 @@ public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollL
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+//
+////设置图片圆角角度
+//            RoundedCorners roundedCorners = new RoundedCorners(20);
+////通过RequestOptions扩展功能
+//            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300);
 
-//设置图片圆角角度
-            RoundedCorners roundedCorners = new RoundedCorners(20);
-//通过RequestOptions扩展功能
-            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300);
+            //第一个是上下文，第二个是圆角的弧度
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(BuySiJiaoActivity.this,10));
+
 
             Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).apply(options).into(viewHolder.card_img_1);
             viewHolder.sijiao_name.setText(contentList.get(position).getName());

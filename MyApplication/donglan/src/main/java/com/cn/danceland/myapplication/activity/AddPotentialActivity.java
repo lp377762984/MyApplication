@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -203,6 +204,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             tv_admin_name.setText(data.getEmployee().getCname());
             tv_admin_name.setClickable(false);
             tv_admin_name.setFocusable(false);
+            tv_admin_name.setTextColor(Color.GRAY);
 
         }
         if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIAN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIANZHUGUAN){
@@ -211,7 +213,7 @@ public class AddPotentialActivity extends Activity implements OnClickListener {
             tv_teach_name.setText(data.getEmployee().getCname());
             tv_teach_name.setClickable(false);
             tv_teach_name.setClickable(false);
-
+            tv_teach_name.setTextColor(Color.GRAY);
         }
 
 

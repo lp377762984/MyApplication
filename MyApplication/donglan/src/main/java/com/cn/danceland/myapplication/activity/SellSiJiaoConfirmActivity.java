@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -33,6 +34,7 @@ import com.cn.danceland.myapplication.bean.explain.ExplainCond;
 import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -225,7 +227,11 @@ public class SellSiJiaoConfirmActivity extends Activity {
         tv_price = findViewById(R.id.tv_price);
 
         if (itemContent!=null){
-            Glide.with(this).load(itemContent.getImg_url()).into(xc_img);
+            //第一个是上下文，第二个是圆角的弧度
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(SellSiJiaoConfirmActivity.this,10));
+
+            Glide.with(this).load(itemContent.getImg_url()).apply(options).into(xc_img);
             tv_branch_name.setText(itemContent.getBranch_name());
             tv_course_name.setText(itemContent.getName());
             tv_category.setText(itemContent.getCourse_category_name());

@@ -14,12 +14,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSendCardBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
@@ -184,11 +184,12 @@ public class MySendCardFragment extends BaseFragment {
             viewHolder.tv_order_name.setText("好友姓名：" + mCardList.get(i).getMember_name());
 
 
-            //设置图片圆角角度
-            RoundedCorners roundedCorners = new RoundedCorners(6);
-//通过RequestOptions扩展功能
-            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300).placeholder(R.drawable.sijiao_card);
-
+//            //设置图片圆角角度
+//           RoundedCorners roundedCorners = new RoundedCorners(6);
+////通过RequestOptions扩展功能
+//            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300).placeholder(R.drawable.sijiao_card);
+            //第一个是上下文，第二个是圆角的弧度
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,10));
 
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
