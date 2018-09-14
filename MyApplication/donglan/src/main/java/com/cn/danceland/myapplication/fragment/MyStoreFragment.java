@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -116,9 +117,8 @@ public class MyStoreFragment extends BaseFragment {
                     if(data.getRemain() == 0 &&data.getGiving()==0){
                         card_jine.setText("￥ 0");
                     }else{
-                        card_jine.setText("￥ "+(data.getRemain()+data.getGiving()));
+                        card_jine.setText("￥ "+new DecimalFormat("0.00").format((data.getRemain()+data.getGiving())));
                     }
-
                 }else{
                     card_jine.setText("￥ 0");
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");

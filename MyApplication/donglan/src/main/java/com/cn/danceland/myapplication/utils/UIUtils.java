@@ -1,12 +1,10 @@
 package com.cn.danceland.myapplication.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -196,4 +194,34 @@ public class UIUtils {
 		origin.recycle();
 		return newBM;
 	}
+
+	private static double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+
+	private static double EARTH_RADIUS = 6378.137;//通过经纬度获取距离(单位：米)
+	/**
+	 * 通过经纬度获取距离(单位：米)
+	 *
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * @return 距离
+	 */
+	public static double getDistance(double lat1, double lng1, double lat2,
+									 double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000d) / 10000d;
+		s = s * 1000;
+		return s;
+	}
+
 }
