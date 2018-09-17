@@ -101,6 +101,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -525,7 +527,10 @@ public class ShopFragment extends BaseFragment {
                         LogUtil.i("getLngAndLat(mActivity).getLat()"+getLngAndLat(mActivity).getLat());
                         LogUtil.i("getLngAndLat(mActivity).getLng()"+getLngAndLat(mActivity).getLng());
                         double distanceKm= UIUtils.getDistance(data.getLat(),data.getLng(),getLngAndLat(mActivity).getLat(),getLngAndLat(mActivity).getLng());
-                        tv_distance_km.setText((distanceKm/1000)+"km");
+                        double dis=distanceKm/1000;
+                        NumberFormat nf = new DecimalFormat("##.#");
+                        String str = nf.format(dis);
+                        tv_distance_km.setText("距我"+str+"km");
                         tv_distance_km.setVisibility(View.VISIBLE);
                     }else{
                         tv_distance_km.setVisibility(View.GONE);
