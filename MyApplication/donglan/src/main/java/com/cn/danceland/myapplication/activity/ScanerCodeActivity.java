@@ -48,12 +48,12 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                      showResultDialog("入场成功");
                  }else {
 
-                     showResultDialog("入场失败");
+                     showResultDialog(requsetSimpleBean.getErrorMsg());
                  }
 
                 }else {
 
-                    showResultDialog("入场失败");
+                    showResultDialog(requsetSimpleBean.getErrorMsg());
 
                 }
 
@@ -63,6 +63,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
+                showResultDialog("入场失败:请查看网络连接");
             }
         }) {
             @Override
