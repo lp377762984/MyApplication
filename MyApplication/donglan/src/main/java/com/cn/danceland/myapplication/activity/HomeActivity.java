@@ -1048,7 +1048,7 @@ public class HomeActivity extends FragmentActivity implements View.OnClickListen
 
     private void initWearFitData() {
         long time = TimeUtils.getPeriodTopDate(new SimpleDateFormat("yyyy-MM-dd"), 6);
-        LogUtil.i("获取这个之后的手环数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
+//        LogUtil.i("获取这个之后的手环数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time)));
         commandManager.setSyncData(time, time);//心率  计步
         commandManager.setSyncSleepData(time);//睡眠
         commandManager.setTimeSync();//同步时间给手环
