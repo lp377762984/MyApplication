@@ -6,9 +6,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -32,6 +37,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -76,11 +82,14 @@ import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.ui.ConversationActivity;
+import com.cn.danceland.myapplication.shouhuan.activity.WearFitActivity;
+import com.cn.danceland.myapplication.shouhuan.activity.WearFitCameraActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -125,8 +134,11 @@ public class ShopFragment extends BaseFragment {
     RelativeLayout rl_role;
     ImageView down_img, up_img;
     private String role_id;
+    private TextView tv_distance_km;
 
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
+    private boolean isPermission;
+    private TextView tv_detail;//新增详情布局
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,7 +177,7 @@ public class ShopFragment extends BaseFragment {
         rl_role = v.findViewById(R.id.rl_role);
         down_img = v.findViewById(R.id.down_img);
         up_img = v.findViewById(R.id.up_img);
-
+        tv_detail = v.findViewById(R.id.tv_detail);
 
         setMap();
         addRoles();
@@ -211,6 +223,7 @@ public class ShopFragment extends BaseFragment {
 
         ll_top = v.findViewById(R.id.ll_top);
         tv_shopname = v.findViewById(R.id.tv_shopname);
+        tv_distance_km = v.findViewById(R.id.tv_distance_km);
         drawableArrayList = new ArrayList<>();
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
         //storelist = v.findViewById(R.id.storelist);
@@ -301,6 +314,7 @@ public class ShopFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         shop_banner.start();
+        permissions();
     }
 
     private void setBannner() {
@@ -489,7 +503,8 @@ public class ShopFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
-
+    private static final int BAIDU_READ_PHONE_STATE = 100;//定位权限请求
+    private static final int PRIVATE_CODE = 1315;//开启GPS权限
     private void getShop(String shopID) {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + shopID, new Response.Listener<String>() {
             @Override
@@ -502,8 +517,20 @@ public class ShopFragment extends BaseFragment {
                     shopWeidu = data.getLat() + "";
                     shopJingdu = data.getLng() + "";
                     PhoneNo = data.getTelphone();
-                }
 
+                    tv_detail.setVisibility(View.VISIBLE);
+                    if (isPermission) {
+                        LogUtil.i("data.getLat()"+data.getLat());
+                        LogUtil.i("data.getLng()"+data.getLng());
+                        LogUtil.i("getLngAndLat(mActivity).getLat()"+getLngAndLat(mActivity).getLat());
+                        LogUtil.i("getLngAndLat(mActivity).getLng()"+getLngAndLat(mActivity).getLng());
+                        double distanceKm= UIUtils.getDistance(data.getLat(),data.getLng(),getLngAndLat(mActivity).getLat(),getLngAndLat(mActivity).getLng());
+                        tv_distance_km.setText((distanceKm/1000)+"km");
+                        tv_distance_km.setVisibility(View.VISIBLE);
+                    }else{
+                        tv_distance_km.setVisibility(View.GONE);
+                    }
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1117,9 +1144,7 @@ public class ShopFragment extends BaseFragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
-
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
                 return map;
             }
 
@@ -1127,5 +1152,103 @@ public class ShopFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(request);
     }
 
+    /**
+     * 获取经纬度
+     *
+     * @param context
+     * @return
+     */
+    private ShopDetailBean.DataBean getLngAndLat(Context context) {
+        double latitude = 0.0;
+        double longitude = 0.0;
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {  //从gps获取经纬度
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            } else {//当GPS信号弱没获取到位置的时候又从网络获取
+                return getLngAndLatWithNetwork(context);
+            }
+        } else {//从网络获取经纬度
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+        }
+        ShopDetailBean.DataBean sdbean=new ShopDetailBean.DataBean();
+        sdbean.setLat(latitude);
+        sdbean.setLng(longitude);
+        return sdbean;
+    }
+
+    //从网络获取经纬度
+    public ShopDetailBean.DataBean getLngAndLatWithNetwork(Context context) {
+        double latitude = 0.0;
+        double longitude = 0.0;
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        ShopDetailBean.DataBean sdbean=new ShopDetailBean.DataBean();
+        sdbean.setLat(latitude);
+        sdbean.setLng(longitude);
+        return sdbean;
+    }
+
+    LocationListener locationListener = new LocationListener() {
+
+        // Provider的状态在可用、暂时不可用和无服务三个状态直接切换时触发此函数
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        // Provider被enable时触发此函数，比如GPS被打开
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        // Provider被disable时触发此函数，比如GPS被关闭
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+
+        //当坐标改变时触发此函数，如果Provider传进相同的坐标，它就不会被触发
+        @Override
+        public void onLocationChanged(Location location) {
+        }
+    };
+
+    public void permissions() {
+        PermissionsUtil.TipInfo tip = new PermissionsUtil.TipInfo("注意:", "未授予位置和文件权限，应用将无法使用", "不了，谢谢", "打开权限");
+        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION)) {
+            //有权限
+            isPermission = true;
+        } else {
+            PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                @Override
+                public void permissionGranted(@NonNull String[] permissions) {
+                    //用户授予了权限
+                    isPermission = true;
+                }
+
+                @Override
+                public void permissionDenied(@NonNull String[] permissions) {
+                    //用户拒绝了申请
+                    isPermission = false;
+
+                }
+            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION}, true, tip);
+        }
+
+    }
 
 }

@@ -39,6 +39,27 @@
                 android:text=""
                 android:textColor="#fff"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="详情"
+                android:textColor="@color/color_dl_yellow"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_distance_km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="距我 "
+                android:textColor="#fff"
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/ibtn_gps"

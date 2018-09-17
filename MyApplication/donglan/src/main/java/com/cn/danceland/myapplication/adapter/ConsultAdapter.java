@@ -73,13 +73,13 @@ public class ConsultAdapter extends BaseAdapter {
 //        viewHolder.first_reply_tv.setText(new SimpleDateFormat("HH:mm").format(new Date(datas.get(i).getEndTime())).toString());//暂时没有此处
         switch (datas.get(i).getType()) {
             case "1"://加盟
-                viewHolder.consult_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_join));
+                viewHolder.consult_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_join));
                 break;
             case "2"://培训
-                viewHolder.consult_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_train));
+                viewHolder.consult_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_train));
                 break;
             case "3"://购买
-                viewHolder.consult_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_buy));
+                viewHolder.consult_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_buy));
                 break;
         }
         switch (datas.get(i).getStatus()) {
