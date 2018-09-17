@@ -24,8 +24,8 @@ public class Constants  {
 //   public static final String HOST = "http://192.168.1.66:8003/";//老高
  //   public static final String HOST = "http://118.190.201.15:6003/";//
 //     public static final String HOST = " http://192.168.1.66:8003/";//
-    public static final String HOST = "http://192.168.1.222:8003/";//老高
-//  public static  String HOST = "http://192.168.1.168:8003/";//超哥
+//    public static final String HOST = "http://192.168.1.222:8003/";//老高
+  public static  String HOST = "http://192.168.1.168:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -37,15 +37,15 @@ public class Constants  {
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
     public static final String REGISTER_AGREEMENT_URL = "http://img.dljsgw.com/protocol/app_register_protocol.html";//注册用户协议
 
+  public static final String LOGIN_URL = HOST + "person/login ";//登录
+  public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
+  public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
+  public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
 
-    public static final String LOGIN_URL = HOST + "person/login ";//登录
-    public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
-    public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
-    public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
 
-    //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
+  //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
     public static final String SET_BASE_USERINFO_URL = HOST + "user/updateBase";//设置用户基本资料
-    public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
+  public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
     public static final String LOGIN_BY_PHONE_URL = HOST + "/person/loginNoPwd";//短信登录
     public static final String FIND_PHONE_URL = HOST + "/person/queryPhone";//查询手机号是否存在
     public static final String BIND_DEVICE_NOPWD_URL = HOST + "/person/bindDeviceNoPwd";//绑定新设备

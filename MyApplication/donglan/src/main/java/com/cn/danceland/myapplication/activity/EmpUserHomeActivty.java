@@ -369,6 +369,7 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
         pingjiaBean.employee_id = employee_id;
         pingjiaBean.page = "0";
         pingjiaBean.size = "3";
+        LogUtil.i(gson.toJson(pingjiaBean));
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "/evaluate/queryPage", gson.toJson(pingjiaBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -427,6 +428,7 @@ public class EmpUserHomeActivty extends Activity implements View.OnClickListener
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("employeeId", employeeId);
                 map.put("branchId", branchId);
+                LogUtil.i(map.toString());
                 return map;
             }
 

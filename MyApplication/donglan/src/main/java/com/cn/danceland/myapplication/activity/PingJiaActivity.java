@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,16 +13,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.EvaluateInfoBean;
-import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.PingJiaCon;
 import com.cn.danceland.myapplication.bean.PingJiaResultBean;
-import com.cn.danceland.myapplication.bean.RootBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -34,15 +29,9 @@ import com.google.gson.Gson;
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -108,6 +97,14 @@ public class PingJiaActivity extends Activity {
             tv_status.setText("已评价");
             //查询评价记录
             getPingJiaData(evaluate_id);
+            jiaolian_ratingbar.setFocusable(false);
+            jiaolian_ratingbar.setClickable(false);
+            kecheng_ratingbar.setFocusable(false);
+            kecheng_ratingbar.setClickable(false);
+            changdi_ratingbar.setFocusable(false);
+            changdi_ratingbar.setClickable(false);
+            my_pingjia.setFocusable(false);
+
         }else{
             tv_time.setText(currentTime);
             ll_commmit.setVisibility(View.VISIBLE);
