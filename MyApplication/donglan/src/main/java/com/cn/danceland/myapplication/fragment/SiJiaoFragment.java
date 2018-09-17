@@ -221,9 +221,14 @@ public class SiJiaoFragment extends BaseFragment {
         }
 
         siJiaoYuYueConBean.setCourse_date_lt(System.currentTimeMillis());
-        siJiaoYuYueConBean.setId(courseid);
-        String s = gson.toJson(siJiaoYuYueConBean);
 
+
+        //siJiaoYuYueConBean.setId(courseid);
+        siJiaoYuYueConBean.setMember_course_id(courseid);
+
+
+        String s = gson.toJson(siJiaoYuYueConBean);
+        LogUtil.i(s);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {

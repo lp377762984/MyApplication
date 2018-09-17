@@ -15,7 +15,7 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingRight="30dp"
+            android:paddingRight="15dp"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:onClick="back"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+
             android:layout_toRightOf="@id/iv_back"
             android:text="关闭"
             android:textColor="#fff"
