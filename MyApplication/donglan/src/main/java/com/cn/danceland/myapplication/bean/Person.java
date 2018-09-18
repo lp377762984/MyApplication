@@ -63,8 +63,8 @@ public class Person  implements Serializable {
     private String cname;
     private String member_no;
     private String phone_no;
-    private String gender;
     private String nick_name;
+    private String gender;
     private String height;
     private String weight;
     private String birthday;
