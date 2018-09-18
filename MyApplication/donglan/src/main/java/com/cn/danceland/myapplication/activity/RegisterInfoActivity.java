@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -240,6 +241,24 @@ public class RegisterInfoActivity extends Activity {
         text_female = findViewById(R.id.text_female);
         button = findViewById(R.id.button);
         text_name = findViewById(R.id.text_name);
+        if (TextUtils.isEmpty(mData.getPerson().getNick_name())){
+
+            text_name.setText(mData.getPerson().getNick_name());
+
+        }
+        if (TextUtils.equals(mData.getPerson().getGender(),"1")){
+            text_male.setBackgroundResource(R.drawable.male_blue);
+            text_female.setBackgroundResource(R.drawable.female_gray);
+            strSex = "男";
+            gender = "1";
+        }
+        if (TextUtils.equals(mData.getPerson().getGender(),"2")){
+            text_male.setBackgroundResource(R.drawable.male_gray);
+            text_female.setBackgroundResource(R.drawable.female_blue);
+            strSex = "女";
+            gender = "2";
+        }
+
     }
 
     public void setClick() {

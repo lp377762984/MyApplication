@@ -656,14 +656,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 return map;
             }
 
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                Map<String, String> map = new HashMap<String, String>();
-//
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-//                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-//                return map;
-//            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
+                return map;
+            }
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
