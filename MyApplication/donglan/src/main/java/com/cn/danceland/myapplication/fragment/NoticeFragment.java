@@ -192,9 +192,9 @@ public class NoticeFragment extends BaseFragment {
     public void find_all_data(final int pageCount) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.page = pageCount - 1 + "";
+        strBean.page = pageCount+ "";
         String s = gson.toJson(strBean);
-
+        LogUtil.i("gson-"+s);
         JSONObject jsonObject = new JSONObject(s.toString());
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
@@ -238,7 +238,7 @@ public class NoticeFragment extends BaseFragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
+                LogUtil.i("MY_TOKEN-"+SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
             }
         };

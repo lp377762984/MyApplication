@@ -190,7 +190,7 @@ public class SystemMessageFragment extends BaseFragment {
     public void find_all_data(final int pageCount) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.page = pageCount - 1 + "";
+        strBean.page = pageCount  + "";
         String s = gson.toJson(strBean);
 
         JSONObject jsonObject = new JSONObject(s.toString());
