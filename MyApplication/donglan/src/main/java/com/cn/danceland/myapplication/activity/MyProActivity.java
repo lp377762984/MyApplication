@@ -102,16 +102,16 @@ public class MyProActivity extends Activity {
 //    public static String SAVED_IMAGE_DIR_PATH =
 //            Environment.getExternalStorageDirectory().getPath()
 //                    + "/donglan/camera/";// 拍照路径
-   // public String SAVED_IMAGE_DIR_PATH = AppUtils.getDiskCachePath(MyProActivity.this)+ "/";// 拍照路径
+    // public String SAVED_IMAGE_DIR_PATH = AppUtils.getDiskCachePath(MyProActivity.this)+ "/";// 拍照路径
 
     String cameraPath, gemder, nickName, selfAvatarPath, strHeight, strWeight, iden;
     Data infoData;
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout headimage,  sex, height, weight, rl_zone, rl_phone, identity,  rl_jianjie;
+    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity, hobby, rl_jianjie;
     TextView text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
-    EditText text_name,tv_hobby;
+    EmojiconTextView text_name;
     View contentView;
     PopupWindow mPopWindow;
     ListView list_height;
@@ -127,7 +127,7 @@ public class MyProActivity extends Activity {
     View inflate;
     AlertDialog.Builder alertdialog;
     LoopView loopview;
-    TextView tv_start, over_time,  tv_sign;
+    TextView tv_start, over_time, tv_hobby, tv_sign;
 
     private Handler handler = new Handler() {
         @Override
@@ -188,7 +188,7 @@ public class MyProActivity extends Activity {
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
         headimage = findViewById(R.id.head_image);
-//        name = findViewById(R.id.name);
+        name = findViewById(R.id.name);
         sex = findViewById(R.id.sex);
         back = findViewById(R.id.back);
         height = findViewById(R.id.height);
@@ -217,15 +217,17 @@ public class MyProActivity extends Activity {
             tv_weight.setText(infoData.getPerson().getWeight() + " kg");
         }
 
-        if (infoData.getPerson().getHobby() != null) {
+        if (infoData.getPerson().getHobby() != null&&infoData.getPerson().getHobby().length()>0) {
             tv_hobby.setText(infoData.getPerson().getHobby());
+        }else{
+            tv_hobby.setText("未填写");
         }
 
         if (infoData.getPerson().getSign() != null&&infoData.getPerson().getSign().length()>0) {
             tv_sign.setText(infoData.getPerson().getSign());
-        }else{
-            tv_sign.setText("暂无介绍");
-        }
+            }else{
+                tv_sign.setText("暂无介绍");
+            }
 
 
         if ("1".equals(infoData.getPerson().getGender())) {
@@ -234,11 +236,13 @@ public class MyProActivity extends Activity {
             text_sex.setText("女");
         }
 
-//        hobby = findViewById(R.id.hobby);
+        hobby = findViewById(R.id.hobby);
         rl_jianjie = findViewById(R.id.rl_jianjie);
-
-
-        text_name.setText(infoData.getPerson().getNick_name());
+        if (infoData.getPerson().getNick_name() != null&&infoData.getPerson().getNick_name().length()>0) {
+            text_name.setText(infoData.getPerson().getNick_name());
+        }else{
+            text_name.setText("未填写");
+        }
 
         headView = LayoutInflater.from(MyProActivity.this).inflate(R.layout.head_image_popwindow, null);
 
@@ -271,8 +275,8 @@ public class MyProActivity extends Activity {
 
     public void setClick() {
         headimage.setOnClickListener(onClickListener);
-//        name.setOnClickListener(onClickListener);
-//        hobby.setOnClickListener(onClickListener);
+        name.setOnClickListener(onClickListener);
+        hobby.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
         cancel.setOnClickListener(onClickListener);
         photo_album.setOnClickListener(onClickListener);
@@ -355,7 +359,9 @@ public class MyProActivity extends Activity {
                     showWH(x);
                     //selecttitle.setText("选择体重");
                     break;
-//                case R.id.hobby:
+                case R.id.hobby:
+                    showHobby( infoData.getPerson().getHobby());
+                    break;
 
 //                case R.id.over:
 //                    if (x == 0) {
@@ -371,10 +377,10 @@ public class MyProActivity extends Activity {
 //                case R.id.cancel_action:
 //                    dismissWindow();
 //                    break;
-//                case R.id.name: {
-//                    showName(0, infoData.getPerson().getNick_name());
-//                }
-//                break;
+                case R.id.name: {
+                    showName(0, infoData.getPerson().getNick_name());
+                }
+                break;
                 case R.id.sex: {
                     flag = 1;
                     dismissWindow();
@@ -1001,7 +1007,7 @@ public class MyProActivity extends Activity {
                                 public void onError(int code, String desc) {
                                     //错误码 code 和错误描述 desc，可用于定位请求失败原因
                                     //错误码 code 列表请参见错误码表
-                                   LogUtil.i("modifyProfile failed: " + code + " desc" + desc);
+                                    LogUtil.i("modifyProfile failed: " + code + " desc" + desc);
                                 }
 
                                 @Override
@@ -1033,6 +1039,7 @@ public class MyProActivity extends Activity {
                 tv_sign.setText("暂无介绍");
             }
         }
+
     }
 
 

@@ -72,17 +72,17 @@
             android:text="昵称"
             android:textSize="15sp"
             />
-        <EditText
+        <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
-            android:hint="未填写"
+            android:text="未填写"
             android:textSize="13sp"
             android:textColor="@color/color_dl_yellow"
-            android:background="@null"/>
+            />
     </RelativeLayout>
 
     <RelativeLayout
@@ -127,17 +127,16 @@
     android:layout_centerVertical="true"
     android:layout_marginLeft="30dp"
     />
-        <EditText
+        <TextView
             android:id="@+id/tv_hobby"
             android:layout_width="wrap_content"
-            android:hint="未填写"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="30dp"
+            android:text="未填写"
             android:layout_centerVertical="true"
             android:textColor="@color/color_dl_yellow"
-            android:textSize="13sp"
-            android:background="@null"/>
+            />
     </RelativeLayout>
 
     <RelativeLayout
