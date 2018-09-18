@@ -350,7 +350,7 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_shengyu = convertView.findViewById(R.id.sijiao_shengyu);
                 viewHolder.sijiao_date = convertView.findViewById(R.id.sijiao_date);
                 viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
-
+                viewHolder.sijiao_detail=convertView.findViewById(R.id.sijiao_detail);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -382,7 +382,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
-            LogUtil.i("有效期：" + startTime + "至" + endTime);
+       //     LogUtil.i("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
@@ -396,6 +396,21 @@ public class SiJiaoFragment extends BaseFragment {
             } else {
                 viewHolder.sijiao_jiaolian.setVisibility(View.GONE);
             }
+            viewHolder.sijiao_detail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                //    LogUtil.i("role"+role+"/n" +list.get(groupPosition).toString());
+                    if (list.get(groupPosition).getCourse_category() == 1) {
+                        startActivity(new Intent(mActivity, CourseDetailActivity.class).
+                                putExtra("item", list.get(groupPosition)).
+                                putExtra("startTime", startTime).
+                                putExtra("endTime", endTime)
+                                .putExtra("role", role)
+                                .putExtra("auth", auth));
+                    }
+                }
+            });
 
             return convertView;
         }
@@ -543,6 +558,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_detail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    LogUtil.i("!!!!!!"+list.get(groupPosition).toString());
                     if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, CourseDetailActivity.class).
                                 putExtra("item", list.get(groupPosition)).
@@ -702,7 +718,7 @@ public class SiJiaoFragment extends BaseFragment {
                 public void onClick(View v) {
                     if (list.get(position).getStatus() == 4) {
                         if ("2".equals(course_category)) {
-                            startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record", list.get(position)));
+                            startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record_id", list.get(position).getId()+""));
                         } else {
                             startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item", list.get(position)).
                                     putExtra("course_category", course_category).putExtra("evaluate_id", list.get(position).getEvaluate_id()));
@@ -758,7 +774,7 @@ public class SiJiaoFragment extends BaseFragment {
 
             if ("2".equals(course_category)) {
 
-                viewHolder1.tv_pingfen.setText("查看详情");
+           //     viewHolder1.tv_pingfen.setText("查看详情");
 
             }
 
@@ -768,7 +784,7 @@ public class SiJiaoFragment extends BaseFragment {
                 public void onClick(View v) {
                     //if(list.get(position).getStatus()==4){
                     if ("2".equals(course_category)) {
-                        startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record", list.get(position)));
+                        //startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record_id", list.get(position).getId()+""));
                     }
                 }
             });

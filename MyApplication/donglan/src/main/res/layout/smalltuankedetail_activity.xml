@@ -249,11 +249,12 @@
 
                 <ImageView
                     android:id="@+id/pic_01"
-                    android:layout_marginLeft="1dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1" />
+
                 <ImageView
                     android:id="@+id/pic_02"
                     android:layout_width="match_parent"

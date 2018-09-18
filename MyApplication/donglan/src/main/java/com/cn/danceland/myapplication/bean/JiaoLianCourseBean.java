@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,6 +13,16 @@ public class JiaoLianCourseBean implements Serializable {
     private Data data;
     private String errorMsg;
     private boolean success;
+
+    @Override
+    public String toString() {
+        return "JiaoLianCourseBean{" +
+                "code=" + code +
+                ", data=" + data +
+                ", errorMsg='" + errorMsg + '\'' +
+                ", success=" + success +
+                '}';
+    }
 
     public void setCode(int code) {
         this.code = code;
@@ -48,7 +57,7 @@ public class JiaoLianCourseBean implements Serializable {
     }
 
     public class Content implements Serializable {
-
+        private String course_type_describe;
         private int branch_id;
         private int count;
         private int course_category;
@@ -69,6 +78,41 @@ public class JiaoLianCourseBean implements Serializable {
         private int time_length;
         private String self_avatar_path;
         private String img_url;
+
+        @Override
+        public String toString() {
+            return "Content{" +
+                    "course_type_describe='" + course_type_describe + '\'' +
+                    ", branch_id=" + branch_id +
+                    ", count=" + count +
+                    ", course_category=" + course_category +
+                    ", course_type_id=" + course_type_id +
+                    ", course_type_name='" + course_type_name + '\'' +
+                    ", delete_remark='" + delete_remark + '\'' +
+                    ", employee_id=" + employee_id +
+                    ", employee_name='" + employee_name + '\'' +
+                    ", end_date=" + end_date +
+                    ", id=" + id +
+                    ", member_id=" + member_id +
+                    ", member_name='" + member_name + '\'' +
+                    ", member_no='" + member_no + '\'' +
+                    ", price=" + price +
+                    ", real_price=" + real_price +
+                    ", start_date=" + start_date +
+                    ", surplus_count=" + surplus_count +
+                    ", time_length=" + time_length +
+                    ", self_avatar_path='" + self_avatar_path + '\'' +
+                    ", img_url='" + img_url + '\'' +
+                    '}';
+        }
+
+        public String getCourse_type_describe() {
+            return course_type_describe;
+        }
+
+        public void setCourse_type_describe(String course_type_describe) {
+            this.course_type_describe = course_type_describe;
+        }
 
         public String getImg_url() {
             return img_url;

@@ -67,6 +67,11 @@ public class GroupRecordBean implements Serializable {
         private String status;
         private String employee_name;
 
+
+
+
+
+
         public long getStart_time() {
             return start_time;
         }

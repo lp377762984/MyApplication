@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -36,7 +35,6 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
@@ -162,11 +160,13 @@ public class CourseDetailActivity extends Activity {
             emp_id = item1.getEmployee_id() + "";
             courseTypeId = item1.getCourse_type_id() + "";
             branchId = item1.getBranch_id() + "";
+            LogUtil.i(item1.toString());
         } else {
             item = (MyCourseBean.Data) getIntent().getSerializableExtra("item");
             emp_id = item.getEmployee_id() + "";
             courseTypeId = item.getCourse_type_id() + "";
             branchId = item.getBranch_id() + "";
+            LogUtil.i(item.toString());
         }
 
 
@@ -331,6 +331,18 @@ public class CourseDetailActivity extends Activity {
             }
         });
 
+        if (role != null) {
+
+            tv_content.setText(item1.getCourse_type_describe());
+
+        } else {
+
+            tv_content.setText(item.getCourse_type_describe());
+        }
+
+
+
+
         setclick();
 
         initData();
@@ -370,7 +382,16 @@ public class CourseDetailActivity extends Activity {
     private void getPeople() {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
+
+        if (role != null) {
+
+            siJiaoYuYueConBean.setCourse_type_id(item1.getCourse_type_id());
+
+        } else {
+
+            siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
+        }
+
 
         siJiaoYuYueConBean.setPage(0);
         siJiaoYuYueConBean.setSize(6);

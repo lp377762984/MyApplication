@@ -28,7 +28,6 @@ import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
-import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -78,7 +77,8 @@ public class SmallTuankeDetailActivity extends Activity {
     ImageView pic_01,pic_02,pic_03;
     int member_course_id;
     String yuyueStartTime;
-    SiJiaoRecordBean.Content record;
+    //SiJiaoRecordBean.Content record;
+    String record_id;
     String emp_id,room_id,courseTypeId,branchId;
 
     @Override
@@ -166,7 +166,8 @@ public class SmallTuankeDetailActivity extends Activity {
         role = getIntent().getStringExtra("role");
         auth = getIntent().getStringExtra("auth");
 
-        record = (SiJiaoRecordBean.Content)getIntent().getSerializableExtra("record");
+       // record = (SiJiaoRecordBean.Content)getIntent().getSerializableExtra("record");
+        record_id=getIntent().getStringExtra("record_id");
 //        if(role!=null){
 //            item1 = (JiaoLianCourseBean.Content)getIntent().getSerializableExtra("item");
 //        }else{
@@ -224,6 +225,7 @@ public class SmallTuankeDetailActivity extends Activity {
         });
         tv_status = findViewById(R.id.tv_status);
 
+        tv_content.setText(item.getCourse_describe());
 
         setclick();
 
@@ -258,7 +260,7 @@ public class SmallTuankeDetailActivity extends Activity {
                 if(item!=null){
                     map.put("id",item.getId()+"");
                 }else{
-                    map.put("id",record.getId()+"");
+                    map.put("id",record_id);
                 }
 
                 return map;
@@ -281,7 +283,8 @@ public class SmallTuankeDetailActivity extends Activity {
         course_name.setText(detailData.getCourse_type_name());
         course_length.setText("上课时间:"+TimeUtils.timeStamp2Date(detailData.getCourse_date(),"yyyy-MM-dd")+" "+TimeUtils.MinuteToTime(detailData.getStart_time())
         +"-"+TimeUtils.MinuteToTime(detailData.getEnd_time()));
-        course_place.setText("上课场馆:"+detailData.getRoom_name());
+        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        course_place.setText("上课场馆:"+data.getMember().getBranch_name());
         course_room.setText("上课场地:"+detailData.getRoom_name());
         Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCover_img_url()).into(course_img);
         if(detailData.getEmployee_avatar_path()==null||detailData.getEmployee_avatar_path().equals("")){
@@ -443,7 +446,7 @@ public class SmallTuankeDetailActivity extends Activity {
             siJiaoYuYueConBean.setPage(0);
             siJiaoYuYueConBean.setSize(6);
         }else{
-            siJiaoYuYueConBean.setGroup_course_id(record.getId());
+            siJiaoYuYueConBean.setGroup_course_id(Integer.valueOf(record_id));
             url = Constants.FINDGROUPCOURSEAPPOINTPERSON;
             siJiaoYuYueConBean.setDate(yuyueStartTime);
         }
