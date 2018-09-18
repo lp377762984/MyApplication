@@ -221,7 +221,7 @@ public class MyProActivity extends Activity {
             tv_hobby.setText(infoData.getPerson().getHobby());
         }
 
-        if (infoData.getPerson().getSign() != null) {
+        if (infoData.getPerson().getSign() != null&&infoData.getPerson().getSign().length()>0) {
             tv_sign.setText(infoData.getPerson().getSign());
         }else{
             tv_sign.setText("暂无介绍");
