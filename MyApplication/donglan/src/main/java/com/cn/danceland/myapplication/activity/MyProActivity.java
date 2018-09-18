@@ -226,7 +226,7 @@ public class MyProActivity extends Activity {
         if (infoData.getPerson().getSign() != null&&infoData.getPerson().getSign().length()>0) {
             tv_sign.setText(infoData.getPerson().getSign());
             }else{
-                tv_sign.setText("暂无介绍");
+                tv_sign.setText("未填写");
             }
 
 
@@ -1036,7 +1036,7 @@ public class MyProActivity extends Activity {
             if(sign!=null&&sign.length()>0){
                 tv_sign.setText(sign);
             }else{
-                tv_sign.setText("暂无介绍");
+                tv_sign.setText("未填写");
             }
         }
 
