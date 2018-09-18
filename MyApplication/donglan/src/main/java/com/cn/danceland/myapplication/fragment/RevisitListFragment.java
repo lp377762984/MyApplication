@@ -527,10 +527,10 @@ public class RevisitListFragment extends BaseFragment {
 
 
             //第一个是上下文，第二个是圆角的弧度
-            RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1)
-                    ;
+            RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(mActivity, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
 
-            Glide.with(mActivity).load(datalist.get(position).getSelf_avatar_path()).apply(options).into(vh.iv_avatar);
+
+            Glide.with(mActivity).load(datalist.get(position).getAvatar_url()).apply(options).into(vh.iv_avatar);
 //            if (TextUtils.isEmpty(datalist.get(position).getNick_name())) {
 //                vh.tv_name.setText(datalist.get(position).getCname());
 //            } else {

@@ -506,7 +506,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
 
             if ("体测".equals(from)){
                 vh.tv_name.setText(dataList.get(position).getCname());
-                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_path() ).apply(options).into(vh.iv_avatar);
+                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getAvatar_url() ).apply(options).into(vh.iv_avatar);
             }else {
                 vh.tv_name.setText(dataList.get(position).getNick_name());
                 Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);

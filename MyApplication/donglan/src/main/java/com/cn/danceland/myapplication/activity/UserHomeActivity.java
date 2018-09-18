@@ -200,7 +200,7 @@ public class UserHomeActivity extends BaseActivity {
                 //   LogUtil.i("firstVisibleItem="+firstVisibleItem+"visibleItemCount="+visibleItemCount+"totalItemCount="+totalItemCount);
 
 
-                JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 2);
+                JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
             }
         });
 
