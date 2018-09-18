@@ -95,7 +95,7 @@ public class Constants  {
     public static final String FIND_CLUBDYNAMIC_URL = HOST + "/clubDynamic/queryPage";//会所动态
 
     public static final String CHANGE_CURRENT_SHOP_URL = HOST + "branch/changeCurrentBranch";//更换默认店
-    public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//加关注
+    public static final String ADD_GUANZHU = HOST + "appUserFollow/saveUserFollower";//
     public static final String ADD_ZAN_URL = HOST + "appPraise/giveThumbs";//点赞
     public static final String ADD_BLACKLIST_URL = HOST + "/blackList/save";//添加黑名单
     public static final String FIND_BLACKLIST_URL = HOST + "/blackList/queryList";//查询黑名单

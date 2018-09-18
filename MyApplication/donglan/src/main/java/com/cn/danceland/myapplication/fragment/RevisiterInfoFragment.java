@@ -113,7 +113,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
             RequestOptions options = new RequestOptions()
                     .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
-            String S = info.getSelf_avatar_path();
+            String S = info.getAvatar_url();
                Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
         }
 

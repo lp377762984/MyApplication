@@ -141,6 +141,7 @@ public class ShopFragment extends BaseFragment {
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
     private boolean isPermission;
     private TextView tv_detail;//新增详情布局
+    private TextView tv_dcs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1040,10 +1041,14 @@ public class ShopFragment extends BaseFragment {
 
         List<MenusBean.Data> menuList;
 
+
         MyAdapter(List<MenusBean.Data> list) {
             menuList = list;
         }
 
+//        public void setAnim(){
+//
+//        }
 
         @Override
         public int getCount() {
