@@ -21,6 +21,21 @@ public class BcaQuestion {
 	private Long branch_id;// 门店
 	private List<BcaOption> options;
 
+
+	@Override
+	public String toString() {
+		return "BcaQuestion{" +
+				"id=" + id +
+				", centent='" + centent + '\'' +
+				", order_no=" + order_no +
+				", enabled=" + enabled +
+				", type=" + type +
+				", test_content='" + test_content + '\'' +
+				", branch_id=" + branch_id +
+				", options=" + options +
+				'}';
+	}
+
 	public List<BcaOption> getOptions() {
 		return options;
 	}

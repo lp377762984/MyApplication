@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 体能测试
  * Created by feng on 2018/4/8.
  */
 
@@ -86,6 +87,7 @@ public class PhysicalTestActivity extends Activity {
         list = new ArrayList<>();
 
         resultList = (List<BcaResult>) getIntent().getSerializableExtra("resultList");
+
         if (resultList == null) {
             resultList = new ArrayList<>();
         }
@@ -216,6 +218,8 @@ public class PhysicalTestActivity extends Activity {
             rg_result.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    LogUtil.i("Checked"+group.getCheckedRadioButtonId());
+                    LogUtil.i("list.get(position).getOptions().size()--"+list.get(position).getOptions().size());
                     switch (group.getCheckedRadioButtonId()) {
                         case R.id.rb_result_01:
                             if (list.get(position).getOptions() != null && list.get(position).getOptions().size() == 3) {
@@ -242,6 +246,9 @@ public class PhysicalTestActivity extends Activity {
             bt_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    LogUtil.i("list-"+list.toString());
+                    LogUtil.i("list-"+list.size());
+                    LogUtil.i("select"+select);
                     if (select != null) {
                         BcaResult bcaResult = new BcaResult();
                         bcaResult.setQuestion_id(list.get(position).getId());
