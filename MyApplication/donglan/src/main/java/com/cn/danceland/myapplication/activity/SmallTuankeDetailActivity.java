@@ -284,6 +284,7 @@ public class SmallTuankeDetailActivity extends Activity {
         course_length.setText("上课时间:"+TimeUtils.timeStamp2Date(detailData.getCourse_date(),"yyyy-MM-dd")+" "+TimeUtils.MinuteToTime(detailData.getStart_time())
         +"-"+TimeUtils.MinuteToTime(detailData.getEnd_time()));
         Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+   //     LogUtil.i(data.getMember().getBranch_name());
         course_place.setText("上课场馆:"+data.getMember().getBranch_name());
         course_room.setText("上课场地:"+detailData.getRoom_name());
         Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCover_img_url()).into(course_img);
