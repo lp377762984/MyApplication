@@ -51,6 +51,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.cn.danceland.myapplication.R.id.course_place;
+
 /**
  * Created by feng on 2018/1/12.
  */
@@ -128,7 +130,7 @@ public class TuanKeDetailActivity extends Activity {
         kecheng_img =  findViewById(R.id.course_img);
         kecheng_name = findViewById(R.id.course_name);
         kecheng_time = findViewById(R.id.course_length);
-        kecheng_place = findViewById(R.id.course_place);
+        kecheng_place = findViewById(course_place);
         kecheng_room = findViewById(R.id.course_room);
         tv_jieshao = findViewById(R.id.tv_content);
         course_type = findViewById(R.id.course_type);
@@ -161,6 +163,9 @@ public class TuanKeDetailActivity extends Activity {
                 return false;
             }
         });
+
+
+
 
         if(groupId!=999){
             getData(groupId);
@@ -259,7 +264,9 @@ public class TuanKeDetailActivity extends Activity {
             endTime = detailData.getEnd_time()/60+":"+detailData.getEnd_time()%60;
         }
         kecheng_time.setText("上课时间:"+startTime+"-"+endTime);
-        kecheng_place.setText("上课场馆:"+detailData.getBranch_name());
+        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+    //    LogUtil.i(data.getMember().getBranch_name());
+        kecheng_place.setText("上课场馆:"+data.getMember().getBranch_name());
         kecheng_room.setText("上课场地:"+detailData.getRoom_name());
         kecheng_name.setText(detailData.getCourse_type_name());
         tv_jieshao.setText(detailData.getCourse_describe());

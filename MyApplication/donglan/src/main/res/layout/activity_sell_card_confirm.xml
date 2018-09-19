@@ -488,21 +488,22 @@
         android:layout_height="2dp"
         android:layout_marginLeft="10dp"
         android:background="@color/color_dl_yellow" />
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
     <TextView
         android:id="@+id/tv_shuoming"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
         android:text=""
         android:textColor="#333"
         android:textSize="12sp" />
+</ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <Button
             android:id="@+id/btn_commit"
@@ -511,7 +512,7 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="30dp"
             android:text="购买" />
-    </LinearLayout>
+
 
 
     <Button
