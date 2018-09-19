@@ -263,18 +263,6 @@ public class BodyZongHeActivity extends Activity {
                             if (headImageBean != null && headImageBean.getData() != null) {
                                 String imgPath = headImageBean.getData().getImgPath();
                                 String imgUrl = headImageBean.getData().getImgUrl();
-//                                        if ("1".equals(num)) {
-//                                            numMap.put(1,imgPath);
-//                                        } else if ("2".equals(num)) {
-//                                            numMap.put(2,imgPath);
-//                                        } else if ("3".equals(num)) {
-//                                            numMap.put(3, imgPath);
-//                                        }
-//                                        rl_01.setClickable(true);
-//                                        rl_02.setClickable(true);
-//                                        rl_03.setClickable(true);
-//                                        LogUtil.i("2num-" + num);
-//                                        LogUtil.i("2numMap.size()-" + numMap.size());
                                 Message message = new Message();
                                 message.what = MSG_REFRESH_DATA;
                                 message.obj = imgPath;
@@ -282,11 +270,13 @@ public class BodyZongHeActivity extends Activity {
                                 ToastUtils.showToastShort("上传图片成功！");
                             } else {
                                 ToastUtils.showToastShort("上传图片失败！请重新拍照！");
+                                isClick=true;
                             }
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
+                            isClick=true;
                         }
                     }
                     );
