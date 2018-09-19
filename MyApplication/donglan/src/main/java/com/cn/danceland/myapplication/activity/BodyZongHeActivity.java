@@ -2,14 +2,12 @@ package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Looper;
+import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
@@ -32,9 +29,7 @@ import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisRequest;
 import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -46,11 +41,9 @@ import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +53,7 @@ import java.util.List;
  */
 
 public class BodyZongHeActivity extends Activity {
-
+    private static final int MSG_REFRESH_DATA = 0;//刷新数据
     RelativeLayout rl_01, rl_02, rl_03;
     Uri uri;
     String cameraPath;
@@ -75,8 +68,7 @@ public class BodyZongHeActivity extends Activity {
     List<BcaResult> resultList;
     EditText et_content;
     Button btn_commit;
-    ProgressDialog progressDialog;
-
+    private boolean isClick = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +92,6 @@ public class BodyZongHeActivity extends Activity {
     }
 
     private void initView() {
-
         body_zonghe_title = findViewById(R.id.body_zonghe_title);
         body_zonghe_title.setTitle("综合评价");
         et_content = findViewById(R.id.et_content);
@@ -128,33 +119,39 @@ public class BodyZongHeActivity extends Activity {
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.rl_01:
-                    num = "1";
-                    getPermission();
-                    break;
-                case R.id.rl_02:
-                    num = "2";
-                    getPermission();
-                    break;
-                case R.id.rl_03:
-                    num = "3";
-                    getPermission();
-                    break;
-                case R.id.btn_commit:
-                    if (numMap.size() != 3) {
-                        ToastUtils.showToastShort("请拍照完成后提交！");
-                    } else {
-                        save();
-                    }
-                    break;
+            LogUtil.i("num-" + num);
+            LogUtil.i("numMap.size()-" + numMap.size());
+            if (isClick) {
+                switch (v.getId()) {
+                    case R.id.rl_01:
+                        num = "1";
+                        getPermission();
+                        break;
+                    case R.id.rl_02:
+                        num = "2";
+                        getPermission();
+                        break;
+                    case R.id.rl_03:
+                        num = "3";
+                        getPermission();
+                        break;
+                    case R.id.btn_commit:
+                        if (numMap.size() != 3) {
+                            ToastUtils.showToastShort("请拍照完成后提交！");
+                        } else {
+                            save();
+                        }
+                        break;
+                }
+            }else{
+                ToastUtils.showToastShort("正在提交，请稍后...");
             }
-
         }
     };
 
     private void getPermission() {
         if (PermissionsUtil.hasPermission(BodyZongHeActivity.this, Manifest.permission.CAMERA)) {
+            isClick=false;
             //有权限
             takePhoto();
         } else {
@@ -239,9 +236,7 @@ public class BodyZongHeActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
-                MultipartRequestParams params = new MultipartRequestParams();
                 if (cameraPath != null) {
-
                     if ("1".equals(num)) {
                         rl_01.setVisibility(View.GONE);
                         img_01.setVisibility(View.VISIBLE);
@@ -255,8 +250,8 @@ public class BodyZongHeActivity extends Activity {
                         img_03.setVisibility(View.VISIBLE);
                         Glide.with(BodyZongHeActivity.this).load(uri).into(img_03);
                     }
-
                     //上传图片
+                    MultipartRequestParams params = new MultipartRequestParams();
                     File file = new File(cameraPath);
                     params.put("file", file);
 
@@ -268,13 +263,22 @@ public class BodyZongHeActivity extends Activity {
                             if (headImageBean != null && headImageBean.getData() != null) {
                                 String imgPath = headImageBean.getData().getImgPath();
                                 String imgUrl = headImageBean.getData().getImgUrl();
-                                if ("1".equals(num)) {
-                                    numMap.put(1, imgPath);
-                                } else if ("2".equals(num)) {
-                                    numMap.put(2, imgPath);
-                                } else if ("3".equals(num)) {
-                                    numMap.put(3, imgPath);
-                                }
+//                                        if ("1".equals(num)) {
+//                                            numMap.put(1,imgPath);
+//                                        } else if ("2".equals(num)) {
+//                                            numMap.put(2,imgPath);
+//                                        } else if ("3".equals(num)) {
+//                                            numMap.put(3, imgPath);
+//                                        }
+//                                        rl_01.setClickable(true);
+//                                        rl_02.setClickable(true);
+//                                        rl_03.setClickable(true);
+//                                        LogUtil.i("2num-" + num);
+//                                        LogUtil.i("2numMap.size()-" + numMap.size());
+                                Message message = new Message();
+                                message.what = MSG_REFRESH_DATA;
+                                message.obj = imgPath;
+                                handler.sendMessage(message);
                                 ToastUtils.showToastShort("上传图片成功！");
                             } else {
                                 ToastUtils.showToastShort("上传图片失败！请重新拍照！");
@@ -288,10 +292,32 @@ public class BodyZongHeActivity extends Activity {
                     );
 
                     MyApplication.getHttpQueues().add(request);
-
                 }
-
             }
+        } else {
+            isClick=true;
         }
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message message) {
+            switch (message.what) {
+                case MSG_REFRESH_DATA:
+                    isClick=true;
+                    if ("1".equals(num)) {
+                        numMap.put(1, (String) message.obj);
+                    } else if ("2".equals(num)) {
+                        numMap.put(2, (String) message.obj);
+                    } else if ("3".equals(num)) {
+                        numMap.put(3, (String) message.obj);
+                    }
+                    LogUtil.i("2num-" + num);
+                    LogUtil.i("2numMap.size()-" + numMap.size());
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }
