@@ -183,6 +183,7 @@ public class BodyZongHeActivity extends Activity {
         bcaAnalysis.setSide_path(numMap.get(2));//侧面照
         bcaAnalysis.setBehind_path(numMap.get(3));//背面照
         bcaAnalysis.setResult(resultList);
+
         if (et_content.getText() != null) {
             bcaAnalysis.setContent(et_content.getText().toString());
         }

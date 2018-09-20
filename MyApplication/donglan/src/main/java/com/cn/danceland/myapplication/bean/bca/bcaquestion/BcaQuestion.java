@@ -22,20 +22,6 @@ public class BcaQuestion {
 	private List<BcaOption> options;
 
 
-	@Override
-	public String toString() {
-		return "BcaQuestion{" +
-				"id=" + id +
-				", centent='" + centent + '\'' +
-				", order_no=" + order_no +
-				", enabled=" + enabled +
-				", type=" + type +
-				", test_content='" + test_content + '\'' +
-				", branch_id=" + branch_id +
-				", options=" + options +
-				'}';
-	}
-
 	public List<BcaOption> getOptions() {
 		return options;
 	}
@@ -86,5 +72,19 @@ public class BcaQuestion {
 	}
 	public void setBranch_id(Long branch_id) {
 		this.branch_id = branch_id;
+	}
+
+	@Override
+	public String toString() {
+		return "BcaQuestion{" +
+				"id=" + id +
+				", centent='" + centent + '\'' +
+				", order_no=" + order_no +
+				", enabled=" + enabled +
+				", type=" + type +
+				", test_content='" + test_content + '\'' +
+				", branch_id=" + branch_id +
+				", options=" + options +
+				'}';
 	}
 }

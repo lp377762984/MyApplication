@@ -12,6 +12,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.google.gson.Gson;
 
 import com.cn.danceland.myapplication.MyApplication;
@@ -37,6 +38,7 @@ public class BcaAnalysisRequest {
 		JSONObject json = null;
 		try {
 			json = new JSONObject(new Gson().toJson(bcaAnalysis));
+			LogUtil.i("体测提交参数"+json.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

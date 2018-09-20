@@ -134,4 +134,25 @@ public class BcaAnalysis {
 	public void setMember_id(Long member_id) {
 		this.member_id = member_id;
 	}
+
+	@Override
+	public String toString() {
+		return "BcaAnalysis{" +
+				"id=" + id +
+				", member_no='" + member_no + '\'' +
+				", teach_id=" + teach_id +
+				", test_time=" + test_time +
+				", branch_id=" + branch_id +
+				", frontal_path='" + frontal_path + '\'' +
+				", side_path='" + side_path + '\'' +
+				", behind_path='" + behind_path + '\'' +
+				", member_id=" + member_id +
+				", result=" + result +
+				", qList=" + qList +
+				", content='" + content + '\'' +
+				", frontal_url='" + frontal_url + '\'' +
+				", side_url='" + side_url + '\'' +
+				", behind_url='" + behind_url + '\'' +
+				'}';
+	}
 }
