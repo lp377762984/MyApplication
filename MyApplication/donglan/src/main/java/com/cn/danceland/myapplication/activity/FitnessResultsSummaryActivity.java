@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.FitnessResultsSummaryAdapter;
@@ -43,7 +43,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by yxx on 2018-09-20.
  */
 
-public class FitnessResultsSummaryActivity extends Activity {
+public class FitnessResultsSummaryActivity extends BaseActivity {
     private Context context;
     private CircleImageView iv_avatar;//头像
     private TextView name_tv;//姓名
@@ -71,6 +71,7 @@ public class FitnessResultsSummaryActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fitness_results_summary);
+        AppManager.getAppManager().addActivity(this);
         context = this;
         requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
 
@@ -106,7 +107,24 @@ public class FitnessResultsSummaryActivity extends Activity {
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //关闭前面的页面   mmp 太多了点
+//                AppManager.getAppManager().finishActivity(
+//                        AddFriendsActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        FitnessTestNoticeActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyBaseActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyDeatilActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        PhysicalTestActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyWeiDuActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyTiXingActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyZongHeActivity.class);
+                AppManager.getAppManager().finishAllActivity();
             }
         });
     }
@@ -121,9 +139,9 @@ public class FitnessResultsSummaryActivity extends Activity {
                 LogUtil.i("Response--" + s);
                 FitnessResultsSummaryBean responseBean = new Gson().fromJson(s, FitnessResultsSummaryBean.class);
                 List<FitnessResultsSummaryBean.QuestionTypes> data = responseBean.getData().getQuestionTypes();
-                String frontal_path = responseBean.getData().getFrontal_path();// 正面照
-                String side_path = responseBean.getData().getSide_path();// 侧面照
-                String behind_path = responseBean.getData().getBehind_path();// 背后照
+                String frontal_path =responseBean.getData().getFrontal_url();// 正面照
+                String side_path =responseBean.getData().getSide_url();// 侧面照
+                String behind_path = responseBean.getData().getBehind_url();// 背后照
                 String content = responseBean.getData().getContent();//综合评价
                 if (data != null && data.size() != 0) {
                     LogUtil.i("data.size()" + data.size());
@@ -151,6 +169,7 @@ public class FitnessResultsSummaryActivity extends Activity {
                         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                         if (requsetInfo.getAvatar_url() != null && requsetInfo.getAvatar_url().length() > 0) {//头像
                             Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options).into(iv_avatar);
+
                         }
                         if (frontal_path != null && frontal_path.length() > 0) {
                             Glide.with(context).load(frontal_path).apply(options).into(frontal_iv);

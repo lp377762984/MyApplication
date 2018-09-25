@@ -18,7 +18,7 @@ public class Constants  {
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-    public static final String HOST = "http://192.168.1.110:8003/";//老高
+    public static final String HOST = "http://192.168.1.114:8003/";//老高
 //  public static  String HOST = "http://192.168.1.168:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 

@@ -15,6 +15,10 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -181,5 +185,46 @@ public  class PictureUtil {
             cursor.close();
         }
         return filePath;
+    }
+
+    /**
+     * 本地文件压缩后显示
+     */
+    public static Bitmap FileCompressToBitmap(String path) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inJustDecodeBounds = true;
+        File file = new File(path);
+        BitmapFactory.decodeFile(path, opts);
+        int inSampleSize = 2;
+        if (file.length() > 120 * 1024) {
+            inSampleSize = 4;
+        }
+        opts.inSampleSize = inSampleSize;
+        opts.inJustDecodeBounds = false;
+        try {
+            Bitmap orginalBitmap = BitmapFactory.decodeFile(path, opts);
+            return orginalBitmap;
+        } catch (OutOfMemoryError err) {
+            err.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 把batmap 转file
+     * @param bitmap
+     * @param filepath
+     */
+    public static File SaveBitmapFile(Bitmap bitmap, String filepath){
+        File file=new File(filepath);//将要保存图片的路径
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

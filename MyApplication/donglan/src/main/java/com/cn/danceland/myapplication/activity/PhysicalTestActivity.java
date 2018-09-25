@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.PhysicalTestBean;
@@ -60,6 +61,7 @@ public class PhysicalTestActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_physicaltest);
+        AppManager.getAppManager().addActivity(this);
         initHost();
         initView();
         queryList();

@@ -43,9 +43,9 @@ public class FitnessResultsSummaryBean {
         private Long teach_id;// 体测分析教练
         private String test_time;// 体测分析时间
         private Long branch_id;// 门店
-        private String frontal_path;// 正面照
-        private String side_path;// 侧面照
-        private String behind_path;// 背后照
+        private String frontal_url;// 正面照
+        private String side_url;// 侧面照
+        private String behind_url;// 背后照
         private Long member_id;// 会员ID
 
         private String content;//综合评价
@@ -91,28 +91,28 @@ public class FitnessResultsSummaryBean {
             this.branch_id = branch_id;
         }
 
-        public String getFrontal_path() {
-            return frontal_path;
+        public String getFrontal_url() {
+            return frontal_url;
         }
 
-        public void setFrontal_path(String frontal_path) {
-            this.frontal_path = frontal_path;
+        public void setFrontal_url(String frontal_url) {
+            this.frontal_url = frontal_url;
         }
 
-        public String getSide_path() {
-            return side_path;
+        public String getSide_url() {
+            return side_url;
         }
 
-        public void setSide_path(String side_path) {
-            this.side_path = side_path;
+        public void setSide_url(String side_url) {
+            this.side_url = side_url;
         }
 
-        public String getBehind_path() {
-            return behind_path;
+        public String getBehind_url() {
+            return behind_url;
         }
 
-        public void setBehind_path(String behind_path) {
-            this.behind_path = behind_path;
+        public void setBehind_url(String behind_url) {
+            this.behind_url = behind_url;
         }
 
         public Long getMember_id() {
@@ -146,11 +146,11 @@ public class FitnessResultsSummaryBean {
                     "id=" + id +
                     ", member_no='" + member_no + '\'' +
                     ", teach_id=" + teach_id +
-                    ", test_time=" + test_time +
+                    ", test_time='" + test_time + '\'' +
                     ", branch_id=" + branch_id +
-                    ", frontal_path='" + frontal_path + '\'' +
-                    ", side_path='" + side_path + '\'' +
-                    ", behind_path='" + behind_path + '\'' +
+                    ", frontal_url='" + frontal_url + '\'' +
+                    ", side_url='" + side_url + '\'' +
+                    ", behind_url='" + behind_url + '\'' +
                     ", member_id=" + member_id +
                     ", content='" + content + '\'' +
                     ", questionTypes=" + questionTypes +
