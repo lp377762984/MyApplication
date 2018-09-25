@@ -12,6 +12,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.google.gson.Gson;
 
 import com.cn.danceland.myapplication.MyApplication;
@@ -109,6 +110,7 @@ public class BcaQuestionRequest {
 		JSONObject json = null;
 		try {
 			json = new JSONObject(new Gson().toJson(cond));
+			LogUtil.i(json.toString());
 		} catch (JSONException e) {
 			// LogUtil.i(bcaQuestion.toString());
 			e.printStackTrace();

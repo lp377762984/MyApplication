@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class RequsetFindUserBean {
         return data;
     }
 
-    public class Data {
+    public class Data implements Serializable {
 
         private String id;
         private String person_id;

@@ -15,20 +15,14 @@ public class Constants  {
 
   //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
 //    public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
-  //public static final String HOST = "http://192.168.1.115:8003/";//老高服务器地址
-  // public static final String HOST = "http://192.168.1.130:8003/";//超哥服务器地址
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
-//    public static final String HOST = " http://192.168.1.116:8003/";//
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-//   public static final String HOST = "http://192.168.1.66:8003/";//老高
- //   public static final String HOST = "http://118.190.201.15:6003/";//
-//     public static final String HOST = " http://192.168.1.66:8003/";//
-//    public static final String HOST = "http://192.168.1.222:8003/";//老高
+    public static final String HOST = "http://192.168.1.110:8003/";//老高
 //  public static  String HOST = "http://192.168.1.168:8003/";//超哥
-   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
+//   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
-    public static final boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
+    public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
 
     public static final String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
@@ -276,6 +270,9 @@ public class Constants  {
 
   //体测分析-体测须知
   public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
+
+  //体测分析-结果汇总
+  public static final String QUERY_BCAQUESTION_FIND_RECENTLY= HOST + "/bcaAnalysis/findRecently";//查询最近一次[体测分析]记录
 
 
  //环信相关

@@ -675,6 +675,11 @@ public class TimeUtils {
         return days;
     }
 
+    /**
+     * 根据Birthday算年龄
+     * @param date
+     * @return
+     */
     public static int getAgeFromBirthTime(Date date) {
         // 得到当前时间的年、月、日
         if (date != null) {

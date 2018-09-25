@@ -35,6 +35,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
@@ -47,6 +48,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.NoScrollListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -68,14 +70,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BodyBaseActivity extends Activity {
 
-    ListView lv_bodybase;
+    NoScrollListView listView;
     View hearerView;
     private BcaQuestionRequest request;
     private Gson gson;
     List<BcaQuestion> list;
     BodyBaseAdapter bodyBaseAdapter;
     Data myInfo;
-    View footView;
     CustomGridView gv_bodybase;
     BodyBaseGridAdapter bodyBaseGridAdapter;
     DongLanTitleView rl_bodybase_title;
@@ -83,9 +84,10 @@ public class BodyBaseActivity extends Activity {
     List<BcaResult> resultList;
     EditText editText;
     Long que_id;
-    String personId,memberId,member_no;
     CircleImageView circle_image;
     TextView tv_nick_name,tv_male_age,tv_phone;
+
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,16 +106,13 @@ public class BodyBaseActivity extends Activity {
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
         myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        personId = getIntent().getStringExtra("id");
-        memberId = getIntent().getStringExtra("memberId");
-        member_no = getIntent().getStringExtra("member_no");
-
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
     }
 
 
     private void initHeaderData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + personId, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + requsetInfo.getPerson_id(), new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
@@ -154,16 +153,14 @@ public class BodyBaseActivity extends Activity {
 
     private void initView() {
 
-        lv_bodybase = findViewById(R.id.lv_bodybase);
+        listView = findViewById(R.id.lv_bodybase);
 
         hearerView = View.inflate(BodyBaseActivity.this, R.layout.bodybase_header, null);
 
-        footView = View.inflate(BodyBaseActivity.this, R.layout.commit_button, null);
-
-        lv_bodybase.addHeaderView(hearerView);
+        listView.addHeaderView(hearerView);
 
         bodyBaseAdapter = new BodyBaseAdapter();
-        lv_bodybase.setAdapter(bodyBaseAdapter);
+        listView.setAdapter(bodyBaseAdapter);
 
         circle_image = hearerView.findViewById(R.id.circle_image);
         tv_nick_name = hearerView.findViewById(R.id.tv_nick_name);
@@ -175,7 +172,7 @@ public class BodyBaseActivity extends Activity {
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
         rl_bodybase_title.setTitle("身体基本情况");
 
-        body_button = footView.findViewById(R.id.body_button);
+        body_button = findViewById(R.id.body_button);
         body_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +187,10 @@ public class BodyBaseActivity extends Activity {
                 deleteEqualsItem();
                 LogUtil.e("zzf",resultList.toString());
 
-                startActivity(new Intent(BodyBaseActivity.this,BodyDeatilActivity.class).putExtra("resultList",(Serializable) resultList));
+                startActivity(new Intent(BodyBaseActivity.this,BodyDeatilActivity.class)
+                        .putExtra("resultList",(Serializable) resultList)
+                        .putExtra("requsetInfo", requsetInfo)
+                       );
             }
         });
 
@@ -212,7 +212,6 @@ public class BodyBaseActivity extends Activity {
                 if (result.isSuccess()) {
                     list = result.getData();
                     bodyBaseAdapter.notifyDataSetChanged();
-                    lv_bodybase.addFooterView(footView);
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }

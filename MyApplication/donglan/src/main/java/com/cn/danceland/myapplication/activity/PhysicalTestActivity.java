@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.PhysicalTestBean;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionRequest;
@@ -61,7 +63,7 @@ public class PhysicalTestActivity extends Activity {
     TextView tv_zhubiaoti;
     Long select;
     List<BcaResult> resultList;
-
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +77,6 @@ public class PhysicalTestActivity extends Activity {
     private void initViewPager() {
 
         if (list != null) {
-
             vp_physical.setAdapter(new PhysicalPagerAdapter(viewList, list));
         }
 
@@ -87,6 +88,7 @@ public class PhysicalTestActivity extends Activity {
         list = new ArrayList<>();
 
         resultList = (List<BcaResult>) getIntent().getSerializableExtra("resultList");
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
 
         if (resultList == null) {
             resultList = new ArrayList<>();
@@ -215,27 +217,53 @@ public class PhysicalTestActivity extends Activity {
             }
 
             RadioGroup rg_result = v.findViewById(R.id.rg_result);
+            RadioButton rb_result_01 = v.findViewById(R.id.rb_result_01);
+            RadioButton rb_result_02 = v.findViewById(R.id.rb_result_02);
+            RadioButton rb_result_03 = v.findViewById(R.id.rb_result_03);
+            if(list.get(position).getOptions().size()>=3){
+                rb_result_01.setVisibility(View.VISIBLE);
+                rb_result_02.setVisibility(View.VISIBLE);
+                rb_result_03.setVisibility(View.VISIBLE);
+                rb_result_01.setText(list.get(position).getOptions().get(0).getTitle());
+                rb_result_02.setText(list.get(position).getOptions().get(1).getTitle());
+                rb_result_03.setText(list.get(position).getOptions().get(2).getTitle());
+            }else if(list.get(position).getOptions().size()==2){
+                rb_result_01.setVisibility(View.VISIBLE);
+                rb_result_02.setVisibility(View.VISIBLE);
+                rb_result_01.setText(list.get(position).getOptions().get(0).getTitle());
+                rb_result_02.setText(list.get(position).getOptions().get(1).getTitle());
+                rb_result_03.setVisibility(View.GONE);
+            }else if(list.get(position).getOptions().size()==1){
+                rb_result_01.setVisibility(View.VISIBLE);
+                rb_result_02.setVisibility(View.GONE);
+                rb_result_03.setVisibility(View.GONE);
+                rb_result_01.setText(list.get(position).getOptions().get(0).getTitle());
+            }else {
+                rb_result_01.setVisibility(View.GONE);
+                rb_result_02.setVisibility(View.GONE);
+                rb_result_03.setVisibility(View.GONE);
+            }
             rg_result.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                    LogUtil.i("Checked"+group.getCheckedRadioButtonId());
-//                    LogUtil.i("list.get(position).getOptions().size()--"+list.get(position).getOptions().size());
+                    LogUtil.i("Checked--"+group.getCheckedRadioButtonId());
+                    LogUtil.i("position--"+position);
+                    LogUtil.i("list.get(position).getOptions().size()--"+list.get(position).getOptions().size());
                     switch (group.getCheckedRadioButtonId()) {
                         case R.id.rb_result_01:
-                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() == 3) {
+//                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() >= 3) {
                                 select = list.get(position).getOptions().get(0).getId();
-                            }
-
+//                            }
                             break;
                         case R.id.rb_result_02:
-                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() == 3) {
+//                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() >= 3) {
                                 select = list.get(position).getOptions().get(1).getId();
-                            }
+//                            }
                             break;
                         case R.id.rb_result_03:
-                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() == 3) {
+//                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() >= 3) {
                                 select = list.get(position).getOptions().get(2).getId();
-                            }
+//                            }
                             break;
                     }
                 }
@@ -246,22 +274,22 @@ public class PhysicalTestActivity extends Activity {
             bt_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    LogUtil.i("list-"+list.toString());
-//                    LogUtil.i("list-"+list.size());
-//                    LogUtil.i("select"+select);
+                    LogUtil.i("list-"+list.toString());
+                    LogUtil.i("list-"+list.size());
+                    LogUtil.i("select"+select);
                     if (select != null) {
                         BcaResult bcaResult = new BcaResult();
                         bcaResult.setQuestion_id(list.get(position).getId());
                         bcaResult.setOpt_id(select);
                         resultList.add(bcaResult);
+                    }
                         if (position < viewList.size() - 1) {
                             vp_physical.setCurrentItem(position + 1);
                         } else {
-                            startActivity(new Intent(PhysicalTestActivity.this, BodyWeiDuActivity.class).putExtra("resultList", (Serializable) resultList));
+                            startActivity(new Intent(PhysicalTestActivity.this, BodyWeiDuActivity.class)
+                                    .putExtra("resultList", (Serializable) resultList)
+                                    .putExtra("requsetInfo", requsetInfo));
                         }
-                    } else {
-                        ToastUtils.showToastShort("请选择后提交！");
-                    }
 
                     select = null;
                 }

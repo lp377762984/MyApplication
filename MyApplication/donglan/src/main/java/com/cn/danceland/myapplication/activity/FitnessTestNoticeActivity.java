@@ -23,6 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BCAQuestionBean;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -52,9 +53,7 @@ public class FitnessTestNoticeActivity extends Activity {
     private ListAdapter adapter;
 
     private List<BCAQuestionBean.Data> dataList = new ArrayList<>();
-    private String personId;
-    private String memberId;
-    private String member_no;
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
 
     @Override
@@ -67,9 +66,7 @@ public class FitnessTestNoticeActivity extends Activity {
     }
 
     private void initHost() {
-        personId = getIntent().getStringExtra("id");
-        memberId = getIntent().getStringExtra("memberId");
-        member_no = getIntent().getStringExtra("member_no");
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
     }
 
     private void initView() {
@@ -83,9 +80,7 @@ public class FitnessTestNoticeActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, BodyBaseActivity.class);
-                intent.putExtra("id", personId);
-                intent.putExtra("memberId", memberId);
-                intent.putExtra("member_no", member_no);
+                intent.putExtra("requsetInfo", requsetInfo);
                 startActivity(intent);
             }
         });

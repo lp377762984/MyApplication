@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <!--<RelativeLayout-->
-        <!--android:id="@+id/rl_bodybase_title"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:background="@color/dl_gery">-->
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/img_back"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:paddingLeft="15dp"-->
-            <!--/>-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="身体基本情况"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="18sp"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--/>-->
+    <!--android:id="@+id/rl_bodybase_title"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="45dp"-->
+    <!--android:background="@color/dl_gery">-->
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/img_back"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--/>-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="身体基本情况"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="18sp"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--/>-->
 
 
     <!--</RelativeLayout>-->
@@ -29,17 +31,38 @@
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/rl_bodybase_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" />
 
-    </com.cn.danceland.myapplication.view.DongLanTitleView>
-
-    <ListView
-        android:id="@+id/lv_bodybase"
-        android:layout_below="@+id/rl_bodybase_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <com.cn.danceland.myapplication.view.NoScrollListView
+                android:id="@+id/lv_bodybase"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="13dp"
+                android:background="@color/white"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:listSelector="@color/transparent"
+                android:paddingLeft="@dimen/default_margin_edge_d"
+                android:paddingRight="@dimen/default_margin_edge_d" />
 
-</RelativeLayout>
+            <Button
+                android:id="@+id/body_button"
+                style="@style/BtnCommitStyle"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:text="下一步"
+                android:textColor="@color/white"
+                android:textSize="18sp"></Button>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

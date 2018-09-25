@@ -94,9 +94,7 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
                 if ("体测".equals(from)) {
                     if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
                         Intent intent = new Intent(AddFriendsActivity.this, FitnessTestNoticeActivity.class);
-                        intent.putExtra("id", dataList.get(position).getPerson_id());
-                        intent.putExtra("memberId", dataList.get(position).getId());
-                        intent.putExtra("member_no", dataList.get(position).getMember_no());
+                        intent.putExtra("requsetInfo", dataList.get(position));
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(AddFriendsActivity.this, ReadyTestActivity.class);

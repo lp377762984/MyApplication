@@ -772,6 +772,11 @@
             android:name=".activity.FitnessTestNoticeActivity"
             android:screenOrientation="portrait" />
 
+        <!--体测分析-结果汇总-->
+        <activity
+            android:name=".activity.FitnessResultsSummaryActivity"
+            android:screenOrientation="portrait" />
+
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true"

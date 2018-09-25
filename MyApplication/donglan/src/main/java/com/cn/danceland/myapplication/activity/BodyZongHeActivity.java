@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,6 +27,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisRequest;
 import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
@@ -69,6 +71,7 @@ public class BodyZongHeActivity extends Activity {
     EditText et_content;
     Button btn_commit;
     private boolean isClick = true;
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +82,9 @@ public class BodyZongHeActivity extends Activity {
     }
 
     private void initHost() {
-
         resultList = (List<BcaResult>) getIntent().getSerializableExtra("resultList");
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
+
         if (resultList == null) {
             resultList = new ArrayList<>();
         }
@@ -143,15 +147,15 @@ public class BodyZongHeActivity extends Activity {
                         }
                         break;
                 }
-            }else{
-                ToastUtils.showToastShort("正在提交，请稍后...");
+            } else {
+                ToastUtils.showToastShort("正在提交图片，请稍后...");
             }
         }
     };
 
     private void getPermission() {
         if (PermissionsUtil.hasPermission(BodyZongHeActivity.this, Manifest.permission.CAMERA)) {
-            isClick=false;
+            isClick = false;
             //有权限
             takePhoto();
         } else {
@@ -177,13 +181,12 @@ public class BodyZongHeActivity extends Activity {
     public void save() {
         BcaAnalysis bcaAnalysis = new BcaAnalysis();
         BcaAnalysisRequest request = new BcaAnalysisRequest();
-        bcaAnalysis.setMember_id((long) 4);
-        bcaAnalysis.setMember_no(10000008 + "");
+        bcaAnalysis.setMember_id(Long.valueOf(requsetInfo.getId()));
+        bcaAnalysis.setMember_no(requsetInfo.getMember_no());
         bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
         bcaAnalysis.setSide_path(numMap.get(2));//侧面照
         bcaAnalysis.setBehind_path(numMap.get(3));//背面照
         bcaAnalysis.setResult(resultList);
-
         if (et_content.getText() != null) {
             bcaAnalysis.setContent(et_content.getText().toString());
         }
@@ -193,6 +196,8 @@ public class BodyZongHeActivity extends Activity {
                 }.getType());
                 if (result.isSuccess()) {
                     ToastUtils.showToastShort("提交成功！");
+                    startActivity(new Intent(BodyZongHeActivity.this, FitnessResultsSummaryActivity.class)
+                            .putExtra("requsetInfo", requsetInfo));
                 } else {
                     ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
                 }
@@ -255,11 +260,13 @@ public class BodyZongHeActivity extends Activity {
                     MultipartRequestParams params = new MultipartRequestParams();
                     File file = new File(cameraPath);
                     params.put("file", file);
+                    LogUtil.i("上传图片参数--" + params.toString());
 
                     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String s) {
+                            LogUtil.i("上传图片接收--" + s.toString());
                             HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                             if (headImageBean != null && headImageBean.getData() != null) {
                                 String imgPath = headImageBean.getData().getImgPath();
@@ -269,24 +276,31 @@ public class BodyZongHeActivity extends Activity {
                                 message.obj = imgPath;
                                 handler.sendMessage(message);
                                 ToastUtils.showToastShort("上传图片成功！");
+                                LogUtil.i("上传图片成功");
                             } else {
+                                LogUtil.i("上传图片失败");
                                 ToastUtils.showToastShort("上传图片失败！请重新拍照！");
-                                isClick=true;
+                                isClick = true;
                             }
+
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            isClick=true;
+                            isClick = true;
+                            ToastUtils.showToastShort("上传图片失败！请重新拍照！");
+                            LogUtil.i("上传图片失败--" + volleyError.toString());
                         }
                     }
                     );
-
+                    request.setRetryPolicy(new DefaultRetryPolicy(30000,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     MyApplication.getHttpQueues().add(request);
                 }
             }
         } else {
-            isClick=true;
+            isClick = true;
         }
     }
 
@@ -295,7 +309,7 @@ public class BodyZongHeActivity extends Activity {
         public void handleMessage(Message message) {
             switch (message.what) {
                 case MSG_REFRESH_DATA:
-                    isClick=true;
+                    isClick = true;
                     if ("1".equals(num)) {
                         numMap.put(1, (String) message.obj);
                     } else if ("2".equals(num)) {
