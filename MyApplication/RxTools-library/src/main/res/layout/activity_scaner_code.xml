@@ -29,6 +29,7 @@
             android:src="@drawable/s_light"/>
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/top_openpicture"
             android:layout_width="40dp"
             android:layout_height="40dp"

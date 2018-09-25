@@ -81,4 +81,16 @@ public class BcaResult implements Serializable{
 		result = 31 * result + (branch_id != null ? branch_id.hashCode() : 0);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "BcaResult{" +
+				"id=" + id +
+				", a_id=" + a_id +
+				", question_id=" + question_id +
+				", opt_id=" + opt_id +
+				", content='" + content + '\'' +
+				", branch_id=" + branch_id +
+				'}';
+	}
 }

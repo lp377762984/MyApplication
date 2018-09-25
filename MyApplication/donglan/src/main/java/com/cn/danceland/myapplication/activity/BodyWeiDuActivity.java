@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
@@ -25,6 +26,7 @@ import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.NoScrollListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -42,8 +44,7 @@ import java.util.List;
 public class BodyWeiDuActivity extends BaseActivity {
 
     DongLanTitleView rl_bodybase_title;
-    ListView lv_bodybase;
-    View footView;
+    NoScrollListView listView;
     private BcaQuestionRequest request;
     private Gson gson;
     List<BcaQuestion> list;
@@ -54,6 +55,8 @@ public class BodyWeiDuActivity extends BaseActivity {
     List<BcaResult> resultList;
     EditText editText;
     Long que_id;
+
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +73,8 @@ public class BodyWeiDuActivity extends BaseActivity {
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
         resultList = (List<BcaResult>)getIntent().getSerializableExtra("resultList");
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
+
         if(resultList==null){
             resultList = new ArrayList<>();
         }
@@ -79,15 +84,14 @@ public class BodyWeiDuActivity extends BaseActivity {
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
         rl_bodybase_title.setTitle("身体围度");
-        lv_bodybase = findViewById(R.id.lv_bodybase);
-        footView = View.inflate(BodyWeiDuActivity.this, R.layout.commit_button, null);
+        listView = findViewById(R.id.lv_bodybase);
 
         bodyBaseAdapter = new BodyBaseAdapter();
-        lv_bodybase.setAdapter(bodyBaseAdapter);
+        listView.setAdapter(bodyBaseAdapter);
 
 
 
-        body_button = footView.findViewById(R.id.body_button);
+        body_button = findViewById(R.id.body_button);
         body_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +103,9 @@ public class BodyWeiDuActivity extends BaseActivity {
                     resultList.add(bcaResult);
                 }
                 deleteEqualsItem();
-                startActivity(new Intent(BodyWeiDuActivity.this,BodyTiXingActivity.class).putExtra("resultList",(Serializable) resultList));
+                startActivity(new Intent(BodyWeiDuActivity.this,BodyTiXingActivity.class)
+                        .putExtra("resultList",(Serializable) resultList)
+                        .putExtra("requsetInfo", requsetInfo));
             }
         });
 
@@ -120,7 +126,6 @@ public class BodyWeiDuActivity extends BaseActivity {
                     list = result.getData();
                     if(list!=null && list.size()>0){
                         bodyBaseAdapter.notifyDataSetChanged();
-                        lv_bodybase.addFooterView(footView);
                     }
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");

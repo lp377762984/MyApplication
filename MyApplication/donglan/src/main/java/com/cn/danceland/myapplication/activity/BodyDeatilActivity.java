@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaoption.BcaOption;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestion;
 import com.cn.danceland.myapplication.bean.bca.bcaquestion.BcaQuestionCond;
@@ -25,6 +26,7 @@ import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.NoScrollListView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -42,8 +44,7 @@ import java.util.List;
 public class BodyDeatilActivity extends BaseActivity {
 
     DongLanTitleView rl_bodybase_title;
-    ListView lv_bodybase;
-    View footView;
+    NoScrollListView listView;
     private BcaQuestionRequest request;
     private Gson gson;
     List<BcaQuestion> list;
@@ -54,6 +55,7 @@ public class BodyDeatilActivity extends BaseActivity {
     List<BcaResult> resultList;
     EditText editText;
     Long que_id;
+    private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,8 +71,9 @@ public class BodyDeatilActivity extends BaseActivity {
         request = new BcaQuestionRequest();
         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         list = new ArrayList<>();
-        resultList = (List<BcaResult>)getIntent().getSerializableExtra("resultList");
-        if(resultList==null){
+        resultList = (List<BcaResult>) getIntent().getSerializableExtra("resultList");
+        requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
+        if (resultList == null) {
             resultList = new ArrayList<>();
         }
     }
@@ -79,27 +82,26 @@ public class BodyDeatilActivity extends BaseActivity {
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
         rl_bodybase_title.setTitle("身体详细情况");
-        lv_bodybase = findViewById(R.id.lv_bodybase);
-        footView = View.inflate(BodyDeatilActivity.this, R.layout.commit_button, null);
+        listView = findViewById(R.id.lv_bodybase);
 
         bodyBaseAdapter = new BodyBaseAdapter();
-        lv_bodybase.setAdapter(bodyBaseAdapter);
+        listView.setAdapter(bodyBaseAdapter);
 
-
-
-        body_button = footView.findViewById(R.id.body_button);
+        body_button = findViewById(R.id.body_button);
         body_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText!=null){
+                if (editText != null) {
                     BcaResult bcaResult = new BcaResult();
                     bcaResult.setQuestion_id(que_id);
                     bcaResult.setContent(editText.getText().toString());
-                    bcaResult.setOpt_id((Long)editText.getTag());
+                    bcaResult.setOpt_id((Long) editText.getTag());
                     resultList.add(bcaResult);
                 }
                 deleteEqualsItem();
-                startActivity(new Intent(BodyDeatilActivity.this,PhysicalTestActivity.class).putExtra("resultList",(Serializable) resultList));
+                startActivity(new Intent(BodyDeatilActivity.this, PhysicalTestActivity.class)
+                        .putExtra("resultList", (Serializable) resultList)
+                        .putExtra("requsetInfo", requsetInfo));
             }
         });
 
@@ -119,11 +121,9 @@ public class BodyDeatilActivity extends BaseActivity {
                 list.clear();
                 if (result.isSuccess()) {
                     list = result.getData();
-                    if(list != null && list.size()>0){
+                    if (list != null && list.size() > 0) {
                         bodyBaseAdapter.notifyDataSetChanged();
-                        lv_bodybase.addFooterView(footView);
                     }
-
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }
@@ -132,7 +132,7 @@ public class BodyDeatilActivity extends BaseActivity {
     }
 
 
-    private class BodyBaseAdapter extends BaseAdapter{
+    private class BodyBaseAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -158,47 +158,47 @@ public class BodyDeatilActivity extends BaseActivity {
             gv_bodybase = view.findViewById(R.id.gv_bodybase);
 
             TextView tv_tigan = view.findViewById(R.id.tv_tigan);
-            tv_tigan.setText(list.get(pos).getOrder_no()+". "+list.get(pos).getCentent());
+            tv_tigan.setText(list.get(pos).getOrder_no() + ". " + list.get(pos).getCentent());
 
             List<BcaOption> options = list.get(pos).getOptions();
             List<BcaOption> options1 = new ArrayList<>();
             List<String> editList = new ArrayList<>();
             ArrayList<Long> options2 = new ArrayList<>();
-            if(options!=null){
-                for(int i = 0;i<options.size();i++){
+            if (options != null) {
+                for (int i = 0; i < options.size(); i++) {
                     String type = options.get(i).getType().toString();
-                    if("1".equals(type)){
+                    if ("1".equals(type)) {
                         options1.add(options.get(i));
                     }
-                    if("2".equals(type)){
+                    if ("2".equals(type)) {
                         editList.add(options.get(i).getTitle());
                         options2.add(options.get(i).getId());
                     }
                 }
             }
-            for(int n  = 0;n<editList.size();n++){
+            for (int n = 0; n < editList.size(); n++) {
                 final EditText editText = new EditText(BodyDeatilActivity.this);
                 editText.setBackgroundResource(R.drawable.rect_body);
                 editText.setHint(editList.get(n));
                 editText.setHintTextColor(Color.parseColor("#dcdcdc"));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
-                lp.setMargins(0,15,0,0);
+                lp.setMargins(0, 15, 0, 0);
                 editText.setLayoutParams(lp);
                 editText.setMaxLines(1);
                 editText.setTag(options2.get(n));
                 editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if(!hasFocus){
+                        if (!hasFocus) {
                             BcaResult bcaResult = new BcaResult();
                             bcaResult.setQuestion_id(list.get(pos).getId());
                             bcaResult.setContent(editText.getText().toString());
-                            bcaResult.setOpt_id((Long)editText.getTag());
+                            bcaResult.setOpt_id((Long) editText.getTag());
                             resultList.add(bcaResult);
                             //deleteEqualsItem();
-                        }else{
-                            setEditText(editText,list.get(pos).getId());
+                        } else {
+                            setEditText(editText, list.get(pos).getId());
                         }
                     }
                 });
@@ -206,22 +206,22 @@ public class BodyDeatilActivity extends BaseActivity {
             }
 
 
-            bodyBaseGridAdapter = new BodyBaseGridAdapter(options1,list.get(pos).getId());
+            bodyBaseGridAdapter = new BodyBaseGridAdapter(options1, list.get(pos).getId());
             gv_bodybase.setAdapter(bodyBaseGridAdapter);
 
             return view;
         }
     }
 
-    private void setEditText(EditText editText,Long id){
+    private void setEditText(EditText editText, Long id) {
         this.editText = editText;
         this.que_id = id;
     }
 
-    private void deleteEqualsItem(){
-        for(int i = 0;i<resultList.size();i++){
-            for(int j = i+1;j<resultList.size();j++){
-                if(resultList.get(i).equals(resultList.get(j))){
+    private void deleteEqualsItem() {
+        for (int i = 0; i < resultList.size(); i++) {
+            for (int j = i + 1; j < resultList.size(); j++) {
+                if (resultList.get(i).equals(resultList.get(j))) {
                     resultList.remove(i);
                     i--;
                     break;
@@ -231,14 +231,14 @@ public class BodyDeatilActivity extends BaseActivity {
     }
 
 
-    private class BodyBaseGridAdapter extends BaseAdapter{
+    private class BodyBaseGridAdapter extends BaseAdapter {
 
 
         Long que_id;
 
         List<BcaOption> options;
 
-        BodyBaseGridAdapter(List<BcaOption> options,Long que_id){
+        BodyBaseGridAdapter(List<BcaOption> options, Long que_id) {
             this.options = options;
             this.que_id = que_id;
         }
@@ -267,10 +267,10 @@ public class BodyDeatilActivity extends BaseActivity {
             rb_grid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(rb_grid.isChecked()){
+                    if (rb_grid.isChecked()) {
                         BcaResult bcaResult = new BcaResult();
-                        bcaResult.setOpt_id(Long.valueOf(position+""));
-                        bcaResult.setQuestion_id(Long.valueOf(que_id+""));
+                        bcaResult.setOpt_id(Long.valueOf(position + ""));
+                        bcaResult.setQuestion_id(Long.valueOf(que_id + ""));
                         resultList.add(bcaResult);
                         //deleteEqualsItem();
                     }
