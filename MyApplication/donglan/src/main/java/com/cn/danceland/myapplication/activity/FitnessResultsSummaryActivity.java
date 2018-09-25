@@ -149,6 +149,9 @@ public class FitnessResultsSummaryActivity extends Activity {
                     }
                     if (context != null) {//设置图片
                         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                        if (requsetInfo.getAvatar_url() != null && requsetInfo.getAvatar_url().length() > 0) {//头像
+                            Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options).into(iv_avatar);
+                        }
                         if (frontal_path != null && frontal_path.length() > 0) {
                             Glide.with(context).load(frontal_path).apply(options).into(frontal_iv);
                         }
