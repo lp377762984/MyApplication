@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +15,7 @@ import com.vondear.rxtools.activity.ActivityScanerCode;
  */
 
 
-public class QRCodeActivity extends Activity implements View.OnClickListener{
+public class QRCodeActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

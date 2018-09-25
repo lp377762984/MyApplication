@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -43,9 +42,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
-import com.cn.danceland.myapplication.view.LoadingPager;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -119,24 +116,24 @@ public class UserHomeActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected View createSuccessView() {
-
-        View inflate = UIUtils.inflate(R.layout.activity_user_home);
-
-
-        return inflate;
-
-
-    }
-
-    @Override
-    protected LoadingPager.LoadResult load() {
-   //     initData();
-        SystemClock.sleep(2000);
-        return LoadingPager.LoadResult.SUCCESS;
-
-    }
+//    @Override
+//    protected View createSuccessView() {
+//
+//        View inflate = UIUtils.inflate(R.layout.activity_user_home);
+//
+//
+//        return inflate;
+//
+//
+//    }
+//
+//    @Override
+//    protected LoadingPager.LoadResult load() {
+//   //     initData();
+//        SystemClock.sleep(2000);
+//        return LoadingPager.LoadResult.SUCCESS;
+//
+//    }
 
     @Override
     protected void onDestroy() {

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
@@ -47,7 +46,7 @@ import lecho.lib.hellocharts.view.PieChartView;
  * Created by feng on 2017/12/27.
  */
 
-public class FitnessTestActivity extends Activity {
+public class FitnessTestActivity extends BaseActivity {
     PieChartView pie_chart;
     PieChartData pieChardata;
     RelativeLayout rl_age;

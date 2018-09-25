@@ -1,11 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,7 +19,6 @@ import com.cn.danceland.myapplication.bean.feedback.FeedBack;
 import com.cn.danceland.myapplication.bean.feedback.FeedBackRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
@@ -30,13 +27,11 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
-import java.util.Date;
-
 /**
  * Created by feng on 2018/3/13.
  */
 
-public class AdviseActivity extends Activity {
+public class AdviseActivity extends BaseActivity {
 
     RadioGroup advise_rg;
     private FeedBackRequest request;

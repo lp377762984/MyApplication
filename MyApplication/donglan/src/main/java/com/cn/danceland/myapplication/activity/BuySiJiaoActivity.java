@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -45,7 +44,7 @@ import java.util.Map;
  * Created by feng on 2018/1/15.
  */
 
-public class BuySiJiaoActivity extends Activity implements AbsListView.OnScrollListener {
+public class BuySiJiaoActivity extends BaseActivity implements AbsListView.OnScrollListener {
     ListView lv_sijiaocard;
     ImageView buy_img;
     Gson gson;

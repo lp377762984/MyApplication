@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -37,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2018/1/31.
  */
 
-public class CabinetActivity extends Activity {
+public class CabinetActivity extends BaseActivity {
 
     ListView cabinet_lv;
     ImageView cabinet_back;

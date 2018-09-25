@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,7 +37,7 @@ import java.util.Map;
 
 import static com.android.volley.Request.Method.GET;
 
-public class ResetPhoneActivity extends Activity implements View.OnClickListener {
+public class ResetPhoneActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTvGetsms;
     private EditText mEtSms;
     private String smsCode = "";

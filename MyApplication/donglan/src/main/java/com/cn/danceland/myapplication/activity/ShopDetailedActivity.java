@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,7 +61,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2017/11/29.
  */
 
-public class ShopDetailedActivity extends Activity {
+public class ShopDetailedActivity extends BaseActivity {
     Button  join_button;
     ImageView bt_back;
     RequestQueue requestQueue;

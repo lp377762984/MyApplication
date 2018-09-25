@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,7 +52,7 @@ import java.util.Map;
  * Created by feng on 2018/1/15.
  */
 
-public class SellSiJiaoConfirmActivity extends Activity {
+public class SellSiJiaoConfirmActivity extends BaseActivity {
     int state=999;
 
     RelativeLayout rl_buy;

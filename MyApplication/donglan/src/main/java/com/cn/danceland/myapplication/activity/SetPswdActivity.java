@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -31,7 +30,7 @@ import java.util.Map;
  */
 
 
-public class SetPswdActivity extends Activity implements View.OnClickListener {
+public class SetPswdActivity extends BaseActivity implements View.OnClickListener {
     private String id;
     private EditText mEtPsw;
     private EditText mEtConfirmPsd;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -29,7 +28,7 @@ import java.io.IOException;
  * Created by feng on 2018/1/26.
  */
 
-public class ShowCameraActivity extends Activity {
+public class ShowCameraActivity extends BaseActivity {
 
     JCameraView jCameraView;
     CaptureLayout capture_layout;

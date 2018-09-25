@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,7 +35,7 @@ import java.util.Map;
  * Created by feng on 2018/1/2.
  */
 
-public class EquipmentActivity extends Activity {
+public class EquipmentActivity extends BaseActivity {
     ImageView equ_back;
     ListView lv_equ;
     Data info;

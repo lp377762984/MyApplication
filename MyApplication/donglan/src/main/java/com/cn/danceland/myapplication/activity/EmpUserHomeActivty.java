@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -61,7 +60,7 @@ import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.positio
  */
 
 
-public class EmpUserHomeActivty extends Activity implements View.OnClickListener {
+public class EmpUserHomeActivty extends BaseActivity implements View.OnClickListener {
     private ImageView iv_avatar;
     private TextView tv_nick_name;
 

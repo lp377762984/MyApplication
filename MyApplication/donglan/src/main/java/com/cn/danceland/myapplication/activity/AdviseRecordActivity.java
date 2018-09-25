@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +22,6 @@ import com.cn.danceland.myapplication.bean.feedback.FeedBackCond;
 import com.cn.danceland.myapplication.bean.feedback.FeedBackRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -38,7 +36,7 @@ import java.util.List;
  * Created by feng on 2018/3/26.
  */
 
-public class AdviseRecordActivity extends Activity {
+public class AdviseRecordActivity extends BaseActivity {
 
     ListView advise_record_lv;
     private FeedBackRequest request;

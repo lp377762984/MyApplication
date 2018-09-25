@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -51,7 +50,7 @@ import java.util.Map;
  */
 
 
-public class MyContactsActivity extends Activity {
+public class MyContactsActivity extends BaseActivity {
     private ListView listView;
     private List<MyContactsBean.Data> dataList = new ArrayList<>();
     private MyAdapter adapter;

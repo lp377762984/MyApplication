@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -50,7 +49,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 
-public class AddUpcomingMatterActivity extends Activity implements View.OnClickListener {
+public class AddUpcomingMatterActivity extends BaseActivity implements View.OnClickListener {
     private TextView tv_type;
     private ContainsEmojiEditText et_content;
     private Gson gson = new Gson();

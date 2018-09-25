@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,7 +37,7 @@ import java.util.List;
  * Created by feng on 2018/3/16.
  */
 
-public class XiaoFeiRecordActivity extends Activity {
+public class XiaoFeiRecordActivity extends BaseActivity {
 
     ListView lv_xiaofei;
     private StoreBillRequest request;

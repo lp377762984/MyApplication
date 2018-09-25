@@ -1,10 +1,8 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -30,7 +28,7 @@ import java.util.TimerTask;
  * Created by feng on 2018/5/17.
  */
 
-public class LoginNumberActivity extends Activity {
+public class LoginNumberActivity extends BaseActivity {
     Timer timer;
     TextView tv_number,tv_update;
     int m,time = 60;

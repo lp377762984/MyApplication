@@ -1,12 +1,10 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.StringUtils;
@@ -17,7 +15,7 @@ import com.cn.danceland.myapplication.view.DongLanTitleView;
  * Created by feng on 2018/4/26.
  */
 
-public class ReportEditActivity extends Activity {
+public class ReportEditActivity extends BaseActivity {
 
     DongLanTitleView editpro_title;
     ContainsEmojiEditText et_edit;

@@ -1,12 +1,10 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,7 +13,6 @@ import android.view.View;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.ForOtherSiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.MySiJiaoFragment;
-import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -34,7 +31,7 @@ import java.util.List;
  * Created by feng on 2018/4/16.
  */
 
-public class MySijiaoActivity extends FragmentActivity {
+public class MySijiaoActivity extends BaseActivity {
 
     DongLanTitleView activity_mysijiao_title;
     MagicIndicator magicIndicator;

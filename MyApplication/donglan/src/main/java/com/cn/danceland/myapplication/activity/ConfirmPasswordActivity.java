@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,7 +23,7 @@ import static com.cn.danceland.myapplication.R.id.iv_back;
  */
 
 
-public class ConfirmPasswordActivity extends Activity implements View.OnClickListener {
+public class ConfirmPasswordActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText et_password;
     private TextView tv_phone;

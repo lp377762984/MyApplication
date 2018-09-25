@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,7 +34,7 @@ import java.util.Map;
  * Created by feng on 2018/1/8.
  */
 
-public class FitnessHistoryActivity extends Activity {
+public class FitnessHistoryActivity extends BaseActivity {
     ListView lv_history;
     Gson gson;
     String member_no;

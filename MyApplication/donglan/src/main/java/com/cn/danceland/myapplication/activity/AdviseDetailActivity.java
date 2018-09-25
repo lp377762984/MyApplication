@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -22,7 +21,7 @@ import com.google.gson.reflect.TypeToken;
  * Created by feng on 2018/3/26.
  */
 
-public class AdviseDetailActivity extends Activity {
+public class AdviseDetailActivity extends BaseActivity {
 
     TextView tv_type,fankui_time,huifu_time,tv_status,tv_fankui,tv_huifu;
     private FeedBackRequest request;

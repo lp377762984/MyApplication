@@ -1,59 +1,24 @@
 package com.cn.danceland.myapplication.activity;
 
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.support.v4.app.FragmentActivity;
 
-import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.UIUtils;
-import com.cn.danceland.myapplication.view.LoadingPager;
+import com.umeng.analytics.MobclickAgent;
 
-/**
- * @author wang
- * @version ����ʱ�䣺2015��7��8�� ����11:31:11 ��˵��
- */
-public abstract class BaseActivity extends Activity {
-	public LoadingPager loadingPage;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		loadingPage = new LoadingPager(UIUtils.getContext(),
-				R.layout.loadpage_loading, R.layout.loadpage_error,
-				R.layout.loadpage_empty) {
-			@Override
-			protected LoadResult load() {
-				return BaseActivity.this.load();
-			}
-			@Override
-			protected View createSuccessView() {
-				return BaseActivity.this.createSuccessView();
-			}
-		};
-		loadingPage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				loadingPage.show();
-			}
-		});
-		loadingPage.show();
-		setContentView(loadingPage);
-	}
+public class BaseActivity extends FragmentActivity {
 
-	/**
-	 * ˢ��ҳ�湤��
-	 * 
-	 * @return
-	 */
-	protected abstract View createSuccessView();
+    // BaseActivity中统一调用MobclickAgent 类的 onResume/onPause 接口
+    // 子类中无需再调用
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 基础指标统计，不能遗漏
+    }
 
-	/**
-	 * ��������� ��ȡ��ǰ״̬
-	 * 
-	 */
-	protected abstract LoadingPager.LoadResult load();
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 基础指标统计，不能遗漏
+    }
 }

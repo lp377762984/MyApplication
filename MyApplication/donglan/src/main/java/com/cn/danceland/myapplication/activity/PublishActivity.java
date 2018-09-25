@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -87,7 +86,7 @@ import top.zibin.luban.OnCompressListener;
  * 发布动态
  */
 
-public class PublishActivity extends Activity {
+public class PublishActivity extends BaseActivity {
     private static final int SELECT_VIDEO = 1010;
     TextView publish_cancel;
     TextView publish_ok;

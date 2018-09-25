@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import com.cn.danceland.myapplication.view.DongLanTitleView;
  * Created by ${yxx} on 2018/8/30.
  */
 
-public class AddConsultOrRecommendActivity extends Activity {
+public class AddConsultOrRecommendActivity extends BaseActivity {
     private Context context;
     private DongLanTitleView title;//title
     private ImageView item_join_layout;//加盟

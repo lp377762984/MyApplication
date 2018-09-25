@@ -1,9 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.PictureUtil;
 
 import java.util.ArrayList;
 
@@ -30,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 健身达人页
  */
 
-public class FitnessManActivity extends Activity {
+public class FitnessManActivity extends BaseActivity {
 
     RecyclerView fitness_recycle;
     ImageView fitness_back;

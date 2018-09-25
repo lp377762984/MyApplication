@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,7 +56,7 @@ import static com.cn.danceland.myapplication.R.id.course_place;
  * Created by feng on 2018/1/12.
  */
 
-public class TuanKeDetailActivity extends Activity {
+public class TuanKeDetailActivity extends BaseActivity {
     ImageView kecheng_img,img_1,img_2,img_3,tuanke_back,down_img,up_img;
     NestedExpandaleListView kecheng_ex;
     int groupId;

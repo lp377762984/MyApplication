@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,7 +46,7 @@ import java.util.Map;
  * Created by shy on 2017/9/22.
  */
 
-public class LoginBindActivity extends Activity implements View.OnClickListener {
+public class LoginBindActivity extends BaseActivity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;

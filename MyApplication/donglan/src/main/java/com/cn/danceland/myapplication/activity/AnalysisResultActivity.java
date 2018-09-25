@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -31,7 +30,7 @@ import java.util.List;
  * Created by feng on 2018/4/20.
  */
 
-public class AnalysisResultActivity extends Activity {
+public class AnalysisResultActivity extends BaseActivity {
 
     DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;

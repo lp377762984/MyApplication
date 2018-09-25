@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -12,7 +11,7 @@ import com.cn.danceland.myapplication.R;
  */
 
 
-public class CommentActivity extends Activity {
+public class CommentActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

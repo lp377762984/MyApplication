@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +48,7 @@ import java.util.TimerTask;
  */
 
 
-public class UserListActivity extends Activity implements View.OnClickListener {
+public class UserListActivity extends BaseActivity implements View.OnClickListener {
 
     private PullToRefreshListView pullToRefresh;
     List<RequsetUserListBean.Data.Content> data = new ArrayList<RequsetUserListBean.Data.Content>();

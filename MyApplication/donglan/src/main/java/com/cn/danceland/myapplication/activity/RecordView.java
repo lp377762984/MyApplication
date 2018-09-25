@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +29,7 @@ import java.util.TimerTask;
  * Created by feng on 2017/11/17.
  */
 
-public class RecordView extends Activity implements SurfaceHolder.Callback{
+public class RecordView extends BaseActivity implements SurfaceHolder.Callback{
     SurfaceHolder mSurfaceHolder;
     SurfaceView sView;
     Camera camera;

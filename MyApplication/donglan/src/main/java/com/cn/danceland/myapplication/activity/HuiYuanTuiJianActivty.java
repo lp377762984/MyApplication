@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -56,7 +55,7 @@ import java.util.TimerTask;
  */
 
 
-public class HuiYuanTuiJianActivty extends Activity implements View.OnClickListener {
+public class HuiYuanTuiJianActivty extends BaseActivity implements View.OnClickListener {
 
     private PullToRefreshListView pullToRefresh;
     List<RequsetHYTJBean.Content> datalist = new ArrayList<RequsetHYTJBean.Content>();

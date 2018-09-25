@@ -99,7 +99,7 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
  */
 
 
-public class DynHomeActivity extends FragmentActivity implements View.OnClickListener {
+public class DynHomeActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView pullToRefresh;
     private List<RequstCommentInfoBean.Content> data = new ArrayList<RequstCommentInfoBean.Content>();
     private RequstCommentInfoBean commentInfoBean;

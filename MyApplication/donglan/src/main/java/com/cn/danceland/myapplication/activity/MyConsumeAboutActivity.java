@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,7 +37,7 @@ import java.util.Map;
  * Created by feng on 2018/5/9.
  */
 
-public class MyConsumeAboutActivity extends Activity {
+public class MyConsumeAboutActivity extends BaseActivity {
 
     Gson gson;
     String root_opt_no;

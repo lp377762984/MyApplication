@@ -58,7 +58,7 @@ import static com.cn.danceland.myapplication.R.id.tv_cardtype;
  */
 
 
-public class SellCardActivity extends Activity implements View.OnClickListener {
+public class SellCardActivity extends BaseActivity implements View.OnClickListener {
 
 
     private ImageView iv_fenlie;

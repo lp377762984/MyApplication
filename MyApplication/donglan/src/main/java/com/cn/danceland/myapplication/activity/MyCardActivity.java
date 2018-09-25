@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -37,7 +36,7 @@ import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
  */
 
 
-public class MyCardActivity extends FragmentActivity implements View.OnClickListener {
+public class MyCardActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
 

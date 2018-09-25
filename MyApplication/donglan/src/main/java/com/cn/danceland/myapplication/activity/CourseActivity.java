@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.Time;
@@ -55,7 +54,7 @@ import java.util.Map;
  * Created by feng on 2018/1/11.
  */
 
-public class CourseActivity extends FragmentActivity {
+public class CourseActivity extends BaseActivity {
     FragmentManager fragmentManager;
     TuanKeFragment tuanKeFragment;
     SiJiaoRecordFragment siJiaoRecordFragment;

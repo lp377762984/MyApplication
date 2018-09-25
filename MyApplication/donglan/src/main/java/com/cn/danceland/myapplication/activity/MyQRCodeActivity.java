@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
  */
 
 
-public class MyQRCodeActivity extends Activity {
+public class MyQRCodeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

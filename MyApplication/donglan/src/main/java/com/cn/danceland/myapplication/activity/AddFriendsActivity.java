@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -58,7 +57,7 @@ import static com.cn.danceland.myapplication.R.id.ll_result;
  */
 
 
-public class AddFriendsActivity extends Activity implements View.OnClickListener {
+public class AddFriendsActivity extends BaseActivity implements View.OnClickListener {
     EditText mEtPhone;
     private ImageButton iv_del;
     //   private LinearLayout ll_result;
@@ -520,14 +519,15 @@ public class AddFriendsActivity extends Activity implements View.OnClickListener
 
 
     }
+    class ViewHolder {
+        public ImageView iv_avatar;
+        public ImageView iv_callphone;
+        public TextView tv_name;
+        public ImageView iv_sex;
+        public TextView tv_lasttime;
+        public LinearLayout ll_item;
+        public ImageView iv_hx_msg;
+    }
 }
 
-class ViewHolder {
-    public ImageView iv_avatar;
-    public ImageView iv_callphone;
-    public TextView tv_name;
-    public ImageView iv_sex;
-    public TextView tv_lasttime;
-    public LinearLayout ll_item;
-    public ImageView iv_hx_msg;
-}
+

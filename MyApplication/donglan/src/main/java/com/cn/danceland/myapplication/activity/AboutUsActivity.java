@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -16,7 +15,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
  * Created by feng on 2017/11/13.
  */
 
-public class AboutUsActivity extends Activity {
+public class AboutUsActivity extends BaseActivity {
 
     ImageView about_back,about_logo;
     TextView about_verson;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -40,7 +39,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2018/3/19.
  */
 
-public class PingJiaActivity extends Activity {
+public class PingJiaActivity extends BaseActivity {
 
     CircleImageView img_user;
     TextView tv_user,tv_role,tv_status,tv_time;

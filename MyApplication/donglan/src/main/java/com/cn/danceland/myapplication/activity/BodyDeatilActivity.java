@@ -1,13 +1,11 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -41,7 +39,7 @@ import java.util.List;
  * Created by feng on 2018/4/8.
  */
 
-public class BodyDeatilActivity extends Activity {
+public class BodyDeatilActivity extends BaseActivity {
 
     DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;

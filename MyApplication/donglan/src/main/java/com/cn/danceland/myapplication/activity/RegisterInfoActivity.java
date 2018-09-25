@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,7 +52,7 @@ import java.util.Map;
  * Created by feng on 2017/9/28.
  */
 
-public class RegisterInfoActivity extends Activity {
+public class RegisterInfoActivity extends BaseActivity {
 
     String strSex = "1", strBirthday = "1990-12-10", strHeight = "170", strWeight = "55";
     TextView text_birthday, text_height, text_name, text_male, text_female, text_weight,

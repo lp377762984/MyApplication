@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,7 +47,7 @@ import static com.cn.danceland.myapplication.R.id.tv_shoplist;
  */
 
 
-public class MyShopActivity extends Activity implements View.OnClickListener {
+public class MyShopActivity extends BaseActivity implements View.OnClickListener {
 
     //   @BindView(R.id.lv_myshop)  ListView lv_myshop;
 

@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,7 +71,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends BaseActivity implements OnClickListener {
 
 
     private EditText mEtPhone;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -40,7 +39,7 @@ import java.util.Map;
  */
 
 
-public class OrderDetailsActivity extends Activity implements View.OnClickListener {
+public class OrderDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private RequestOrderListBean.Data.Content orderInfo;
     private OrderExtendsInfoBean orderExtendsInfo;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +19,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -31,7 +29,7 @@ import java.util.ArrayList;
  * Created by feng on 2017/10/27.
  */
 
-public class LocationActivity extends Activity {
+public class LocationActivity extends BaseActivity {
 
     public LocationService mLocationClient;
     LocationClientOption option;

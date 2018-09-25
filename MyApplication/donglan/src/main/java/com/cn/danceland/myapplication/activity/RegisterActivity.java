@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,7 +51,7 @@ import java.util.Map;
  * Created by 64456 on 2017/9/22.
  */
 
-public class RegisterActivity extends Activity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;

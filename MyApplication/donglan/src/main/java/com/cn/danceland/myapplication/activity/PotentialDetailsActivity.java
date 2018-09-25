@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -78,7 +77,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 
-public class PotentialDetailsActivity extends FragmentActivity implements View.OnClickListener {
+public class PotentialDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
     public  String[] TITLES = new String[]{"详细资料", "回访记录", "未处理待办事项"};

@@ -1,17 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,7 +33,7 @@ import java.util.List;
  * Created by feng on 2018/3/14.
  */
 
-public class StoreCardActivity extends FragmentActivity {
+public class StoreCardActivity extends BaseActivity {
 
     TabLayout tl;
     //MagicIndicator magic_indicator;

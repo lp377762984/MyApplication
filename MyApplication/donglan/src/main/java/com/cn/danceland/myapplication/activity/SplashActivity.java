@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
@@ -47,7 +46,7 @@ import tencent.tls.platform.TLSHelper;
 /**
  * 开屏页
  */
-public class SplashActivity extends FragmentActivity implements TIMCallBack {
+public class SplashActivity extends BaseActivity implements TIMCallBack {
 
     private static final int sleepTime = 2000;
     private SplashPresenter presenter;

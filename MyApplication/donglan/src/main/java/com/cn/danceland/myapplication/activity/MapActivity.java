@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,7 +53,7 @@ import java.util.List;
  * Created by feng on 2017/11/1.
  */
 
-public class MapActivity extends Activity {
+public class MapActivity extends BaseActivity {
     MapView mapview;
     PoiSearch poiSearch;
     GeoCoder geoCoder;

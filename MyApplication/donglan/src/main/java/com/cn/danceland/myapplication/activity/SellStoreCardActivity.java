@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -69,7 +68,7 @@ import razerdp.basepopup.BasePopupWindow;
  * Created by feng on 2018/3/14.
  */
 
-public class SellStoreCardActivity extends Activity {
+public class SellStoreCardActivity extends BaseActivity {
     private String unpaidOrder;
     StoreType cardid;
     LinearLayout ll_zhifu, btn_repay;

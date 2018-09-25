@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -22,7 +21,7 @@ import com.cn.danceland.myapplication.R;
  */
 
 
-public class NewsDetailsActivity extends Activity implements View.OnClickListener{
+public class NewsDetailsActivity extends BaseActivity implements View.OnClickListener{
     private String mUrl;
     private ProgressBar mProgress;
     private WebView mWebView;

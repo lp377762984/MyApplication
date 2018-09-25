@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -33,7 +32,7 @@ import org.greenrobot.eventbus.EventBus;
  * Created by feng on 2017/12/11.
  */
 
-public class MessageActivity extends FragmentActivity {
+public class MessageActivity extends BaseActivity {
     int pinglunNum;
     int dianzanNum;
     int fansNum;

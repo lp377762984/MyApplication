@@ -1,12 +1,10 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -37,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BlackListActivity extends Activity {
+public class BlackListActivity extends BaseActivity {
     PullToRefreshListView listView;
     DongLanTitleView dongLanTitleView;
     List<BlackListBean.Data> dataList = new ArrayList<>();

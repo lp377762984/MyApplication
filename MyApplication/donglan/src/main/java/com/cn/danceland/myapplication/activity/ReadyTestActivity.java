@@ -1,17 +1,13 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,14 +28,12 @@ import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -53,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2018/1/2.
  */
 
-public class ReadyTestActivity extends Activity {
+public class ReadyTestActivity extends BaseActivity {
     String id;
     CircleImageView circleimage;
     TextView nicheng,tv_phone,tv_gray,tv_blue,tv_female_gray,tv_female_blue;

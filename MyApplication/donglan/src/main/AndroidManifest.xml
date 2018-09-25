@@ -836,7 +836,8 @@
         <!--android:resource="@xml/filepaths" />-->
         <!--</provider>-->
 
-
+        <meta-data android:value="5ba1ee11f1f5569f370000f7" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="wandoujia" android:name="UMENG_CHANNEL"/>
     </application>
 
 

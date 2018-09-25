@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +39,7 @@ import java.util.List;
  * Created by feng on 2018/4/12.
  */
 
-public class BodyWeiDuActivity extends Activity {
+public class BodyWeiDuActivity extends BaseActivity {
 
     DongLanTitleView rl_bodybase_title;
     ListView lv_bodybase;

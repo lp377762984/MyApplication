@@ -89,7 +89,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 @RuntimePermissions
-public class OrderConfirmActivity extends Activity implements View.OnClickListener {
+public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     private RequestSellCardsInfoBean.Data CardsInfo;
     private boolean isme;//是否是本人购买
     private int product_type;//1是卡，2是定金，3是私教，4是其他

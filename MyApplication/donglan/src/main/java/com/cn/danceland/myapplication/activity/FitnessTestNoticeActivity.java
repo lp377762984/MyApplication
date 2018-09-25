@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -43,7 +41,7 @@ import java.util.Map;
  * Created by yxx on 2018-09-13.
  */
 
-public class FitnessTestNoticeActivity extends Activity {
+public class FitnessTestNoticeActivity extends BaseActivity {
     private Context context;
     private DongLanTitleView title;//数据title
     private ListView listView;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -70,7 +69,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 
-public class EditPotentialActivity extends Activity implements OnClickListener {
+public class EditPotentialActivity extends BaseActivity implements OnClickListener {
 
     public static final int REGISTER_CHANNEL = 1;//客户来源
     public static final int VISIT_TYPE = 9;//回访方式

@@ -52,7 +52,7 @@ import java.util.List;
  * Created by feng on 2018/4/12.
  */
 
-public class BodyZongHeActivity extends Activity {
+public class BodyZongHeActivity extends BaseActivity {
     private static final int MSG_REFRESH_DATA = 0;//刷新数据
     RelativeLayout rl_01, rl_02, rl_03;
     Uri uri;

@@ -108,6 +108,10 @@ android {
 //        compile 'com.daimajia.androidanimations:library:2.3@aar'
       //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
         compile files('libs/pldroid-shortvideo-1.14.0.jar')//七牛短视频  发布动态用到压缩视频
+
+
+            compile 'com.umeng.sdk:common:latest.integration'//友盟统计
+            compile 'com.umeng.sdk:analytics:latest.integration'//友盟统计
     }
 }
 

@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -56,7 +55,7 @@ import java.util.Map;
  * Created by feng on 2018/6/6.
  */
 
-public class TimeTableActivity extends Activity {
+public class TimeTableActivity extends BaseActivity {
 
 
     private MyListView lv_timetable;

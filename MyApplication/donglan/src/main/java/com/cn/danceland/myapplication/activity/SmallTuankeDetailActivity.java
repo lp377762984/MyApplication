@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,7 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2018/3/30.
  */
 
-public class SmallTuankeDetailActivity extends Activity {
+public class SmallTuankeDetailActivity extends BaseActivity {
 
     String startTime,endTime,startTimeTv,endTimeTv;
     Data data;

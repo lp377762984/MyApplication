@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -64,7 +63,7 @@ import java.util.Map;
  * Created by shy on 2017/9/22.
  */
 
-public class LoginSMSActivity extends Activity implements View.OnClickListener {
+public class LoginSMSActivity extends BaseActivity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms;
     private EditText mEtSms;

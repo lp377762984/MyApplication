@@ -1,16 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.RectF;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
-import com.cn.danceland.myapplication.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
 //import lecho.lib.hellocharts.model.PieChartData;
 //import lecho.lib.hellocharts.model.SliceValue;
 //import lecho.lib.hellocharts.view.PieChartView;
@@ -19,7 +8,7 @@ import java.util.List;
  * Created by 64456 on 2017/9/21.
  */
 
-public class ChartActivity extends Activity {
+public class ChartActivity extends BaseActivity {
 //    private PieChartView pie_chart;
 //    @Override
 //    protected void onCreate(@Nullable Bundle savedInstanceState) {

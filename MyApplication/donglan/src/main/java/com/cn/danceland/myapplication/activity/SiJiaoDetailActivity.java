@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,7 +53,7 @@ import java.util.Map;
  * Created by feng on 2018/1/13.
  */
 
-public class SiJiaoDetailActivity extends Activity {
+public class SiJiaoDetailActivity extends BaseActivity {
     //ArrayList<Integer> arrPositionF, arrPositionS;
     ArrayList<Integer> arrStatusF, arrStatusS;
     //HashMap<Integer, Integer> arrPosition, arrStatus;

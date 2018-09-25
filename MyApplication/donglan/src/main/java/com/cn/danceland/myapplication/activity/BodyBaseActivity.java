@@ -66,7 +66,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by feng on 2018/3/29.
  */
 
-public class BodyBaseActivity extends Activity {
+public class BodyBaseActivity extends BaseActivity {
 
     ListView lv_bodybase;
     View hearerView;

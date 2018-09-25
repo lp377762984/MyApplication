@@ -89,7 +89,7 @@ import razerdp.basepopup.BasePopupWindow;
  * Created by feng on 2018/1/15.
  */
 
-public class SiJiaoOrderActivity extends Activity {
+public class SiJiaoOrderActivity extends BaseActivity {
     private String unpaidOrder;
     private static final int PICK_CONTACT = 0;
     String type;

@@ -77,7 +77,7 @@ import static android.R.attr.value;
  */
 
 
-public class SellCardConfirmActivity extends Activity implements View.OnClickListener {
+public class SellCardConfirmActivity extends BaseActivity implements View.OnClickListener {
 
     private LinearLayout ll_phone;
     private EditText et_name;

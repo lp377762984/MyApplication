@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +35,7 @@ import java.util.Map;
  * Created by feng on 2018/4/24.
  */
 
-public class AllReportActivity extends Activity {
+public class AllReportActivity extends BaseActivity {
 
     MyListView mv_01,mv_02,mv_03,mv_04;
     String role,target_role_type;

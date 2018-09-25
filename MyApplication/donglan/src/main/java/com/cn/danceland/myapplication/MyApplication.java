@@ -53,6 +53,8 @@ import com.tencent.imsdk.ext.sns.TIMFriendshipProxyListener;
 import com.tencent.imsdk.ext.sns.TIMUserConfigSnsExt;
 import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.tencent.qcloud.sdk.Constant;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.List;
@@ -190,6 +192,27 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         });
         initTXIM();
     }
+
+  private void   initYouMeng(){
+      /*
+     * 初始化common库
+     * 参数1:上下文，不能为空
+     * 参数2:【友盟+】 AppKey(第一步从官网获取到的)
+     * 参数3:【友盟+】 Channel（多渠道打包时用的到）
+     * 参数4:设备类型，UMConfigure.DEVICE_TYPE_PHONE为手机、UMConfigure.DEVICE_TYPE_BOX为盒子，默认为手机
+     * 参数5:Push推送业务的secret,需要集成Push功能时必须传入Push的secret，否则传空。
+     */
+      UMConfigure.init(this, "5ba1ee11f1f5569f370000f7", "wandoujia", UMConfigure.DEVICE_TYPE_PHONE, null);
+      MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+
+      //禁止默认的页面统计功能，这样将不会再自动统计Activity页面。（包含Activity、Fragment或View的应用）
+      MobclickAgent.openActivityDurationTrack(false);
+
+      // 打开统计SDK调试模式（上线时记得关闭）
+      UMConfigure.setLogEnabled(true);
+
+
+  }
 
     @Override
     protected void attachBaseContext(Context base) {

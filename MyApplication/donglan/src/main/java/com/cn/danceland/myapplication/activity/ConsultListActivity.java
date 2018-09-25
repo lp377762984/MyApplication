@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -40,7 +39,7 @@ import java.util.Map;
  * Created by ${yxx} on 2018/8/30.
  */
 
-public class ConsultListActivity extends Activity {
+public class ConsultListActivity extends BaseActivity {
     private final int RESULT_DIALOG = 1;
     private Context context;
     private DongLanTitleView title;//title

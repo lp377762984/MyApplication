@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -59,7 +58,7 @@ import java.util.Map;
  * Created by feng on 2018/5/2.
  */
 
-public class MyConsumeActivity extends Activity implements AbsListView.OnScrollListener{
+public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScrollListener{
     private String unpaidOrder;
     DongLanTitleView consume_title;
     ListView lv_consume;

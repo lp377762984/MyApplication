@@ -1,11 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -23,7 +21,6 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.TestingBean;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
 
@@ -37,7 +34,7 @@ import java.util.TimerTask;
  * Created by feng on 2018/1/3.
  */
 
-public class TestingActivity extends Activity {
+public class TestingActivity extends BaseActivity {
     ImageView test_saomiao;
     Timer timer;
     Task task;

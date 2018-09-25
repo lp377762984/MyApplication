@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,7 +41,7 @@ import java.util.TimerTask;
  */
 
 
-public class ClubDynActivity extends Activity {
+public class ClubDynActivity extends BaseActivity {
 
     private PullToRefreshListView pullToRefresh;
     private ProgressDialog dialog;

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,6 +44,7 @@ import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -57,7 +57,7 @@ import java.util.Map;
  * Created by feng on 2018/4/24.
  */
 
-public class ReportFormActivity extends Activity {
+public class ReportFormActivity extends BaseActivity {
     MyListView report_mv, report_mv_02;
     String role_type, role, emp_id;
     DongLanTitleView report_title;
@@ -81,6 +81,21 @@ public class ReportFormActivity extends Activity {
         initView();
         initData();
     }
+
+    // BaseActivity中统一调用MobclickAgent 类的 onResume/onPause 接口
+    // 子类中无需再调用
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this); // 基础指标统计，不能遗漏
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this); // 基础指标统计，不能遗漏
+    }
+
 
     private void initData() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {

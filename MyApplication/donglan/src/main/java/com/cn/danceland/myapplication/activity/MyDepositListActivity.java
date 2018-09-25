@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -43,7 +42,7 @@ import java.util.Map;
  */
 
 
-public class MyDepositListActivity extends Activity implements View.OnClickListener {
+public class MyDepositListActivity extends BaseActivity implements View.OnClickListener {
 
 
     private ListView listView;

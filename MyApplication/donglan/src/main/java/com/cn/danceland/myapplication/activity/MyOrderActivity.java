@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,7 +54,7 @@ import static com.cn.danceland.myapplication.R.id.tv_product_type;
  */
 
 
-public class MyOrderActivity extends Activity implements View.OnClickListener {
+public class MyOrderActivity extends BaseActivity implements View.OnClickListener {
 
     private PullToRefreshListView mListView;
     private List<RequestOrderListBean.Data.Content> datalist = new ArrayList<>();

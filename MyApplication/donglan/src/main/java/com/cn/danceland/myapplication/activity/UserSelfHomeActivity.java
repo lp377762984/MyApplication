@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
  */
 
 
-public class UserSelfHomeActivity extends Activity implements View.OnClickListener {
+public class UserSelfHomeActivity extends BaseActivity implements View.OnClickListener {
     private RequsetUserDynInfoBean.Data userInfo;
     private TextView tv_dyn;
     private TextView tv_gauzhu_num, tv_message, tv_guanzhu;

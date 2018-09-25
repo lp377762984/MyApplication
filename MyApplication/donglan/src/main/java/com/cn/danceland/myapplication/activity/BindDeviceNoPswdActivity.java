@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -48,7 +47,7 @@ import java.util.Map;
  */
 
 
-public class BindDeviceNoPswdActivity extends Activity implements View.OnClickListener {
+public class BindDeviceNoPswdActivity extends BaseActivity implements View.OnClickListener {
     private Spinner mSpinner;
     private TextView mTvGetsms, tv_sex, tv_zhengjian;
     private EditText mEtSms, et_zhengjian;

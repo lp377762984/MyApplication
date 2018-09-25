@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +45,7 @@ import java.util.Map;
  */
 
 
-public class PaiMingActivity extends Activity {
+public class PaiMingActivity extends BaseActivity {
 
     private PullToRefreshListView pullToRefresh;
     MyUserListviewAdapter myUserListviewAdapter;

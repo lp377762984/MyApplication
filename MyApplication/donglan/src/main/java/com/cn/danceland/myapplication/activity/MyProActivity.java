@@ -86,7 +86,7 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
  * Created by feng on 2017/10/10.
  */
 
-public class MyProActivity extends Activity {
+public class MyProActivity extends BaseActivity {
     CircleImageView circleImageView;
     MyAdapter arrayAdapter;
 

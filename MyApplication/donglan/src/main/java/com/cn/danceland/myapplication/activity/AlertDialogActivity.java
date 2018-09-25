@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ import java.util.Map;
  * Created by ${yxx} on 2018/8/31.
  */
 
-public class AlertDialogActivity extends Activity {
+public class AlertDialogActivity extends BaseActivity {
     private Context context;
     private TextView dialog_title_tv;
     private TextView gym_join_tv;

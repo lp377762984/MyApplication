@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.ListView;
@@ -11,7 +10,7 @@ import com.cn.danceland.myapplication.R;
  * Created by feng on 2018/3/30.
  */
 
-public class BodyDetailActivity extends Activity {
+public class BodyDetailActivity extends BaseActivity {
 
 
     ListView lv_bodybase;
