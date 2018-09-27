@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
@@ -77,6 +79,7 @@ public class BodyZongHeActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bodyzonghe);
+        AppManager.getAppManager().addActivity(this);
         initHost();
         initView();
     }
@@ -180,7 +183,7 @@ public class BodyZongHeActivity extends BaseActivity {
      **/
     public void save() {
         BcaAnalysis bcaAnalysis = new BcaAnalysis();
-        BcaAnalysisRequest request = new BcaAnalysisRequest();
+        final BcaAnalysisRequest request = new BcaAnalysisRequest();
         bcaAnalysis.setMember_id(Long.valueOf(requsetInfo.getId()));
         bcaAnalysis.setMember_no(requsetInfo.getMember_no());
         bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
@@ -192,12 +195,14 @@ public class BodyZongHeActivity extends BaseActivity {
         }
         request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
-                DLResult<Integer> result = gson.fromJson(json.toString(), new TypeToken<DLResult<Integer>>() {
+                DLResult<String> result = gson.fromJson(json.toString(), new TypeToken<DLResult<String>>() {
                 }.getType());
                 if (result.isSuccess()) {
+                    LogUtil.i(""+json.toString());
                     ToastUtils.showToastShort("提交成功！");
                     startActivity(new Intent(BodyZongHeActivity.this, FitnessResultsSummaryActivity.class)
-                            .putExtra("requsetInfo", requsetInfo));
+                            .putExtra("requsetInfo", requsetInfo)
+                    .putExtra("saveId",result.getData()));
                 } else {
                     ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
                 }
@@ -243,6 +248,8 @@ public class BodyZongHeActivity extends BaseActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1) {
                 if (cameraPath != null) {
+                    Bitmap bitmap = PictureUtil.FileCompressToBitmap(cameraPath);//压缩
+
                     if ("1".equals(num)) {
                         rl_01.setVisibility(View.GONE);
                         img_01.setVisibility(View.VISIBLE);
@@ -258,8 +265,11 @@ public class BodyZongHeActivity extends BaseActivity {
                     }
                     //上传图片
                     MultipartRequestParams params = new MultipartRequestParams();
-                    File file = new File(cameraPath);
+//                    File file = new File(cameraPath);
+                    File file = PictureUtil.SaveBitmapFile(bitmap, cameraPath);
+
                     params.put("file", file);
+                    LogUtil.i("上传图片大小--" + file.length());
                     LogUtil.i("上传图片参数--" + params.toString());
 
                     MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {

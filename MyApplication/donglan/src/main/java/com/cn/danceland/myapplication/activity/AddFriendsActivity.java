@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
@@ -81,7 +82,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
-
+        AppManager.getAppManager().addActivity(this);
         from = getIntent().getStringExtra("from");
         iv_del = findViewById(R.id.iv_del);
         ll_search = findViewById(R.id.ll_search);
@@ -92,7 +93,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if ("体测".equals(from)) {
                     if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
-                        Intent intent = new Intent(AddFriendsActivity.this, FitnessTestNoticeActivity.class);
+                        Intent intent = new Intent(AddFriendsActivity.this, FitnessTestSearchResultActivity.class);
                         intent.putExtra("requsetInfo", dataList.get(position));
                         startActivity(intent);
                     } else {

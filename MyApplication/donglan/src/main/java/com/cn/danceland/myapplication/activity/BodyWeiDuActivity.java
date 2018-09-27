@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
@@ -62,6 +62,7 @@ public class BodyWeiDuActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bodybase);
+        AppManager.getAppManager().addActivity(this);
         initHost();
         initView();
         queryList();

@@ -10,9 +10,7 @@
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </com.cn.danceland.myapplication.view.DongLanTitleView>
+        android:layout_height="wrap_content"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -205,6 +203,7 @@
                     android:id="@+id/frontal_iv"
                     android:layout_width="316dp"
                     android:layout_height="400dp"
+                    android:src="@drawable/img_donglan_loading"
                     android:layout_gravity="center_horizontal" />
 
                 <TextView
@@ -221,6 +220,7 @@
                     android:id="@+id/side_iv"
                     android:layout_width="316dp"
                     android:layout_height="400dp"
+                    android:src="@drawable/img_donglan_loading"
                     android:layout_gravity="center_horizontal" />
 
                 <TextView
@@ -237,6 +237,7 @@
                     android:id="@+id/behind_iv"
                     android:layout_width="316dp"
                     android:layout_height="400dp"
+                    android:src="@drawable/img_donglan_loading"
                     android:layout_gravity="center_horizontal" />
             </LinearLayout>
 
@@ -245,6 +246,7 @@
                 style="@style/BtnCommitStyle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"

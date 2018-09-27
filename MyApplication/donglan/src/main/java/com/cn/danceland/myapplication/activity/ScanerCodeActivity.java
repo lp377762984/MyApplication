@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
@@ -34,8 +35,9 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     @Override
     public void do_result(String result) {
         LogUtil.i(result);
-
-        showConfirmDialog(result);
+        startActivity(new Intent(ScanerCodeActivity.this, ScanerCodeDetailActivity.class).putExtra("message", result));
+        finish();
+//        showConfirmDialog(result);
     }
 
     // BaseActivity中统一调用MobclickAgent 类的 onResume/onPause 接口
@@ -57,16 +59,16 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestSimpleBean requsetSimpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
-                if (requsetSimpleBean.getSuccess()){
-                 if (TextUtils.equals(requsetSimpleBean.getCode(),"0")){
-                     showResultDialog("入场成功");
-                 }else {
+                RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
+                if (requsetSimpleBean.getSuccess()) {
+                    if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
+                        showResultDialog("入场成功");
+                    } else {
 
-                     showResultDialog(requsetSimpleBean.getErrorMsg());
-                 }
+                        showResultDialog(requsetSimpleBean.getErrorMsg());
+                    }
 
-                }else {
+                } else {
 
                     showResultDialog(requsetSimpleBean.getErrorMsg());
 
@@ -85,7 +87,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i( SPUtils.getString(Constants.MY_TOKEN, ""));
+                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
                 return map;
 
             }

@@ -175,13 +175,6 @@ public class Constants  {
     public static final String FIND_NOT_UPCOMINGMATTER = HOST + "/api/work/queryWorkCount";//查询未处理待办
     public static final String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
 
-
-
-    public static final String YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务
-
-
-
-
     public static final String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
     public static final String INTRODUCE_QUERYPAGEBYEMPLOYEE       = HOST + "/introduce/queryPageByEmployee";//会员推荐
     public static final String INTRODUCE_CONFIRM = HOST + "/introduce/confirm";//提交推荐

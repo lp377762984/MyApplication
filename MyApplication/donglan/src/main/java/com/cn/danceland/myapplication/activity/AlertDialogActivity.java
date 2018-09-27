@@ -66,7 +66,7 @@ public class AlertDialogActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_teamwork_type);
+        setContentView(R.layout.activity_teamwork_type);
         context = this;
         type = getIntent().getStringExtra("type");
         from = getIntent().getStringExtra("from");
@@ -83,7 +83,6 @@ public class AlertDialogActivity extends BaseActivity {
         gym_admin_tv = findViewById(R.id.gym_admin_tv);
         btn_consult = findViewById(R.id.btn_consult);
         close_img = findViewById(R.id.close_img);
-
 
         text_male = findViewById(R.id.text_male);
         text_female = findViewById(R.id.text_female);

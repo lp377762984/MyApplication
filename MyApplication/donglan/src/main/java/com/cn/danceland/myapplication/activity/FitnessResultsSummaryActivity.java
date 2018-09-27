@@ -1,9 +1,9 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.FitnessResultsSummaryAdapter;
@@ -27,6 +28,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
 import com.google.gson.Gson;
 
@@ -43,7 +45,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by yxx on 2018-09-20.
  */
 
-public class FitnessResultsSummaryActivity extends Activity {
+public class FitnessResultsSummaryActivity extends BaseActivity {
     private Context context;
     private CircleImageView iv_avatar;//头像
     private TextView name_tv;//姓名
@@ -59,6 +61,7 @@ public class FitnessResultsSummaryActivity extends Activity {
     private ImageView behind_iv;//背后照
     private NoScrollListView listview;//listview
     private Button ok_btn;//完成
+    private DongLanTitleView title;//数据title
 
     private FitnessResultsSummaryAdapter adapter;//adapter
 
@@ -66,13 +69,16 @@ public class FitnessResultsSummaryActivity extends Activity {
     private List<FitnessResultsSummaryBean.QuestionTypes> questionTypesList;
 
     private Data infoData;
+    private String saveId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fitness_results_summary);
+        AppManager.getAppManager().addActivity(this);
         context = this;
         requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
+        saveId = getIntent().getStringExtra("saveId");//保存后返回的id
 
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);//动岚个人资料
 
@@ -80,6 +86,8 @@ public class FitnessResultsSummaryActivity extends Activity {
     }
 
     private void initView() {
+        title = findViewById(R.id.title);
+        title.setTitle("结果汇总");
         iv_avatar = findViewById(R.id.iv_avatar);
         name_tv = findViewById(R.id.name_tv);
         sex_tv = findViewById(R.id.sex_tv);
@@ -100,13 +108,30 @@ public class FitnessResultsSummaryActivity extends Activity {
         adapter = new FitnessResultsSummaryAdapter(context, questionTypesList);
         listview.setAdapter(adapter);
         LogUtil.i("MY_TOKEN--" + SPUtils.getString(Constants.MY_TOKEN, ""));
-        LogUtil.i("memberId--" + requsetInfo.getId());
+        LogUtil.i("saveId--" + saveId);
         queryData();
 
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //关闭前面的页面   mmp 太多了点 后面肯定会用   预留吧
+//                AppManager.getAppManager().finishActivity(
+//                        AddFriendsActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        FitnessTestNoticeActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyBaseActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyDeatilActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        PhysicalTestActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyWeiDuActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyTiXingActivity.class);
+//                AppManager.getAppManager().finishActivity(
+//                        BodyZongHeActivity.class);
+                AppManager.getAppManager().finishAllActivity();
             }
         });
     }
@@ -115,21 +140,27 @@ public class FitnessResultsSummaryActivity extends Activity {
      * 查询数据
      */
     private void queryData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_RECENTLY + "?member_id=" + requsetInfo.getId(), new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("Response--" + s);
                 FitnessResultsSummaryBean responseBean = new Gson().fromJson(s, FitnessResultsSummaryBean.class);
                 List<FitnessResultsSummaryBean.QuestionTypes> data = responseBean.getData().getQuestionTypes();
-                String frontal_path = responseBean.getData().getFrontal_path();// 正面照
-                String side_path = responseBean.getData().getSide_path();// 侧面照
-                String behind_path = responseBean.getData().getBehind_path();// 背后照
+                String frontal_path =responseBean.getData().getFrontal_url();// 正面照
+                String side_path =responseBean.getData().getSide_url();// 侧面照
+                String behind_path = responseBean.getData().getBehind_url();// 背后照
                 String content = responseBean.getData().getContent();//综合评价
                 if (data != null && data.size() != 0) {
                     LogUtil.i("data.size()" + data.size());
                     questionTypesList.clear();
                     name_tv.setText(requsetInfo.getCname() + "");//姓名
-                    sex_tv.setText(requsetInfo.getGender() + "");//性别
+                    if (requsetInfo.getGender()==1) {
+                        sex_tv.setText("男");//性别
+                    } else if (requsetInfo.getGender()==2) {
+                        sex_tv.setText("女");//性别
+                    } else {
+                        sex_tv.setText("未设置");//性别
+                    }
                     if (requsetInfo.getBirthday() != null) {
                         int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(requsetInfo.getBirthday(), "yyyy-MM-dd")));
                         age_tv.setText(age + "岁");//年龄
@@ -148,9 +179,11 @@ public class FitnessResultsSummaryActivity extends Activity {
                         content_tv.setVisibility(View.GONE);
                     }
                     if (context != null) {//设置图片
-                        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_donglan_loading);
+                        RequestOptions options2 = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                         if (requsetInfo.getAvatar_url() != null && requsetInfo.getAvatar_url().length() > 0) {//头像
-                            Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options).into(iv_avatar);
+                            Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options2).into(iv_avatar);
+
                         }
                         if (frontal_path != null && frontal_path.length() > 0) {
                             Glide.with(context).load(frontal_path).apply(options).into(frontal_iv);
@@ -186,6 +219,7 @@ public class FitnessResultsSummaryActivity extends Activity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
+                map.put("id", saveId);
                 return map;
             }
 

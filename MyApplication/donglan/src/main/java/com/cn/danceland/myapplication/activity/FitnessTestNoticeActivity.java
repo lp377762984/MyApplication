@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BCAQuestionBean;
@@ -57,6 +58,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppManager.getAppManager().addActivity(this);
         setContentView(R.layout.activity_fitness_test_notice);
         context = this;
         initHost();
@@ -68,7 +70,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
     }
 
     private void initView() {
-        title = findViewById(R.id.shouhuan_title);
+        title = findViewById(R.id.title);
         title.setTitle(context.getResources().getString(R.string.matters_needing_attention_text));
         listView = findViewById(R.id.listView);
         btn_start = findViewById(R.id.btn_start);
