@@ -186,7 +186,11 @@ public class ScanerCodeDetailActivity extends BaseActivity {
                         cardid_tv.setText(memberData.getCard_no());
                         effective_date_tv.setText(TimeUtils.timeStamp2Date(memberData.getOpen_date() + "", "yyyy.MM.dd")
                                 + "-" + TimeUtils.timeStamp2Date(memberData.getEnd_date() + "", "yyyy.MM.dd"));
-                        sum_tv.setText(memberData.getTotal_count() + "次");
+                        if(memberData.getTotal_count()!=null&&memberData.getTotal_count().length()>0){
+                            sum_tv.setText(memberData.getTotal_count() + "次");
+                        }else{
+                            sum_tv.setText("无");
+                        }
                         if ((memberData.getHand_card_code() != null && memberData.getHand_card_code().length() > 0)
                                 && (memberData.getHand_card_area() != null && memberData.getHand_card_area().length() > 0)) {//已连接手牌
                             hand_tv.setText(memberData.getHand_card_area() + "-" + memberData.getHand_card_code());

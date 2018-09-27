@@ -18,8 +18,8 @@ public class Constants  {
   // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-    public static final String HOST = "http://192.168.1.114:8003/";//老高
-//  public static  String HOST = "http://192.168.1.168:8003/";//超哥
+//    public static final String HOST = "http://192.168.1.114:8003/";//老高
+  public static  String HOST = "http://192.168.1.168:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -302,7 +302,7 @@ public class Constants  {
     public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
 
 
-    public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
+    public static final int QR_MAPPING_CARD_ENTER = 13; //刷卡入场
     public static final int QR_MAPPING_COURSE_ENTER = 11; //私教入场
     public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
 
