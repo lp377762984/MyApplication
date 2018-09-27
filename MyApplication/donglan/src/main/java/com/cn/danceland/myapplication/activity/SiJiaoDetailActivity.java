@@ -577,6 +577,19 @@ public class SiJiaoDetailActivity extends BaseActivity {
         siJiaoYuYueConBean.setStart_time(startM);
         siJiaoYuYueConBean.setEnd_time(endM);
 
+        if (data.getBranch().getOpen_time()!=null&&startM<data.getBranch().getOpen_time()){
+            ToastUtils.showToastShort("预约时间超出营业时间");
+            return;
+
+        }
+
+
+        if (data.getBranch().getClose_time()!=null&&endM>data.getBranch().getClose_time()){
+            ToastUtils.showToastShort("预约时间超出营业时间");
+            return;
+
+        }
+
         siJiaoYuYueConBean.setWeek(Integer.valueOf(TimeUtils.dateToWeek(TimeUtils.timeStamp2Date(startTime, "yyyy-MM-dd"))));
 
         String s = gson.toJson(siJiaoYuYueConBean);

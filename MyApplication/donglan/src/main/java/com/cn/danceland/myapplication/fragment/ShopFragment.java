@@ -74,6 +74,7 @@ import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.YeWuActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
@@ -588,7 +589,7 @@ public class ShopFragment extends BaseFragment {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        LogUtil.e("zzf", jsonObject.toString());
+                        LogUtil.i( jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
 
 
@@ -651,8 +652,8 @@ public class ShopFragment extends BaseFragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        ToastUtils.showToastShort("请查看网络连接");
-                        LogUtil.e("zzf", volleyError.toString());
+                       // ToastUtils.showToastShort("请查看网络连接");
+                        LogUtil.i( volleyError.toString());
                     }
                 }) {
 
@@ -878,6 +879,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 14://会员维护
                         startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth", "2"));
+
                         //  startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 15://待办事项
@@ -972,6 +974,9 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 36://联系人
                         startActivity(new Intent(mActivity, MyContactsActivity.class));
+                        break;
+                    case 37://会员业务
+                        startActivity(new Intent(mActivity, YeWuActivity.class).putExtra("auth", "2"));
                         break;
                     default:
                         break;

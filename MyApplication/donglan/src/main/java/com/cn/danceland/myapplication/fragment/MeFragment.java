@@ -25,6 +25,7 @@ import com.cn.danceland.myapplication.activity.SettingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.UserListActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
+import com.cn.danceland.myapplication.activity.YeWuActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -239,6 +240,9 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, SettingActivity.class));
                 break;
             case R.id.iv_edit://编辑资料页面
+
+
+
                 Intent intent = new Intent(mActivity, MyProActivity.class);
                 startActivityForResult(intent, 119);
                 //  startActivity(intent);

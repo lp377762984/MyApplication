@@ -27,7 +27,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="潜客详情"
+            android:text="会员业务"
             android:textColor="@color/color_white"
             android:textSize="18sp" />
     </RelativeLayout>

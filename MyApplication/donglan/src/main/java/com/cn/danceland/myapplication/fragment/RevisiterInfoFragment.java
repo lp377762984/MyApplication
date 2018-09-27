@@ -281,6 +281,9 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_revisiter_details, null);
+        if (TextUtils.equals("true",getArguments().getString("isyewu"))){
+            v.findViewById(R.id.iv_more).setVisibility(View.INVISIBLE);
+        }
         iv_avatar = v.findViewById(R.id.iv_avatar);
         iv_callphone = v.findViewById(R.id.iv_callphone);
         iv_send_msg = v.findViewById(R.id.iv_send_msg);
