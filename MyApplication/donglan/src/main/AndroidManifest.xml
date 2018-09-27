@@ -767,6 +767,12 @@
         android:screenOrientation="portrait"
         android:theme="@style/DialogStyle"/>
 
+        <!--ListViewAlertDialog  有×的-->
+        <activity
+        android:name=".activity.AlertDialogToListActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/DialogStyle"/>
+
         <!--体测分析-注意事项-->
         <activity
             android:name=".activity.FitnessTestNoticeActivity"
@@ -775,6 +781,21 @@
         <!--体测分析-结果汇总-->
         <activity
             android:name=".activity.FitnessResultsSummaryActivity"
+            android:screenOrientation="portrait" />
+
+        <!--扫码入场-详情-->
+        <activity
+            android:name=".activity.ScanerCodeDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <!--体测分析-搜索结果-->
+        <activity
+            android:name=".activity.FitnessTestSearchResultActivity"
+            android:screenOrientation="portrait" />
+
+        <!--体测分析-历史记录-->
+        <activity
+            android:name=".activity.FitnessTestHistoryActivity"
             android:screenOrientation="portrait" />
 
         <receiver

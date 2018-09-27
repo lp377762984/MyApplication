@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
 import com.google.gson.Gson;
 
@@ -59,6 +61,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
     private ImageView behind_iv;//背后照
     private NoScrollListView listview;//listview
     private Button ok_btn;//完成
+    private DongLanTitleView title;//数据title
 
     private FitnessResultsSummaryAdapter adapter;//adapter
 
@@ -66,6 +69,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
     private List<FitnessResultsSummaryBean.QuestionTypes> questionTypesList;
 
     private Data infoData;
+    private String saveId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
         AppManager.getAppManager().addActivity(this);
         context = this;
         requsetInfo = (RequsetFindUserBean.Data) getIntent().getSerializableExtra("requsetInfo");//前面搜索到的对象
+        saveId = getIntent().getStringExtra("saveId");//保存后返回的id
 
         infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);//动岚个人资料
 
@@ -81,6 +86,8 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
     }
 
     private void initView() {
+        title = findViewById(R.id.title);
+        title.setTitle("结果汇总");
         iv_avatar = findViewById(R.id.iv_avatar);
         name_tv = findViewById(R.id.name_tv);
         sex_tv = findViewById(R.id.sex_tv);
@@ -101,13 +108,13 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
         adapter = new FitnessResultsSummaryAdapter(context, questionTypesList);
         listview.setAdapter(adapter);
         LogUtil.i("MY_TOKEN--" + SPUtils.getString(Constants.MY_TOKEN, ""));
-        LogUtil.i("memberId--" + requsetInfo.getId());
+        LogUtil.i("saveId--" + saveId);
         queryData();
 
         ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //关闭前面的页面   mmp 太多了点
+                //关闭前面的页面   mmp 太多了点 后面肯定会用   预留吧
 //                AppManager.getAppManager().finishActivity(
 //                        AddFriendsActivity.class);
 //                AppManager.getAppManager().finishActivity(
@@ -133,7 +140,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
      * 查询数据
      */
     private void queryData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_RECENTLY + "?member_id=" + requsetInfo.getId(), new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("Response--" + s);
@@ -147,7 +154,13 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                     LogUtil.i("data.size()" + data.size());
                     questionTypesList.clear();
                     name_tv.setText(requsetInfo.getCname() + "");//姓名
-                    sex_tv.setText(requsetInfo.getGender() + "");//性别
+                    if (requsetInfo.getGender()==1) {
+                        sex_tv.setText("男");//性别
+                    } else if (requsetInfo.getGender()==2) {
+                        sex_tv.setText("女");//性别
+                    } else {
+                        sex_tv.setText("未设置");//性别
+                    }
                     if (requsetInfo.getBirthday() != null) {
                         int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(requsetInfo.getBirthday(), "yyyy-MM-dd")));
                         age_tv.setText(age + "岁");//年龄
@@ -166,9 +179,10 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                         content_tv.setVisibility(View.GONE);
                     }
                     if (context != null) {//设置图片
-                        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+                        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_donglan_loading);
+                        RequestOptions options2 = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                         if (requsetInfo.getAvatar_url() != null && requsetInfo.getAvatar_url().length() > 0) {//头像
-                            Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options).into(iv_avatar);
+                            Glide.with(context).load(requsetInfo.getAvatar_url()).apply(options2).into(iv_avatar);
 
                         }
                         if (frontal_path != null && frontal_path.length() > 0) {
@@ -205,6 +219,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
+                map.put("id", saveId);
                 return map;
             }
 

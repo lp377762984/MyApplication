@@ -93,7 +93,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if ("体测".equals(from)) {
                     if ("true".equals(getIntent().getStringExtra("isAnalysis"))) {
-                        Intent intent = new Intent(AddFriendsActivity.this, FitnessTestNoticeActivity.class);
+                        Intent intent = new Intent(AddFriendsActivity.this, FitnessTestSearchResultActivity.class);
                         intent.putExtra("requsetInfo", dataList.get(position));
                         startActivity(intent);
                     } else {

@@ -183,7 +183,7 @@ public class BodyZongHeActivity extends BaseActivity {
      **/
     public void save() {
         BcaAnalysis bcaAnalysis = new BcaAnalysis();
-        BcaAnalysisRequest request = new BcaAnalysisRequest();
+        final BcaAnalysisRequest request = new BcaAnalysisRequest();
         bcaAnalysis.setMember_id(Long.valueOf(requsetInfo.getId()));
         bcaAnalysis.setMember_no(requsetInfo.getMember_no());
         bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
@@ -195,12 +195,14 @@ public class BodyZongHeActivity extends BaseActivity {
         }
         request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {
-                DLResult<Integer> result = gson.fromJson(json.toString(), new TypeToken<DLResult<Integer>>() {
+                DLResult<String> result = gson.fromJson(json.toString(), new TypeToken<DLResult<String>>() {
                 }.getType());
                 if (result.isSuccess()) {
+                    LogUtil.i(""+json.toString());
                     ToastUtils.showToastShort("提交成功！");
                     startActivity(new Intent(BodyZongHeActivity.this, FitnessResultsSummaryActivity.class)
-                            .putExtra("requsetInfo", requsetInfo));
+                            .putExtra("requsetInfo", requsetInfo)
+                    .putExtra("saveId",result.getData()));
                 } else {
                     ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
                 }

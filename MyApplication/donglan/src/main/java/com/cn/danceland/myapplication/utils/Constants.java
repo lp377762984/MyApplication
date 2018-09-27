@@ -265,15 +265,23 @@ public class Constants  {
     public static final String QUERY_MY_RECOMMEND= HOST + "/consultation/queryMyReferrals";//获取我的推荐
     public static final String QUERY_SAVE_RECOMMEND = HOST + "/consultation/saveReferral";//新增我的推荐记录
 
-  //我的通知-通知
-  public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
+    //我的通知-通知
+    public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
 
-  //体测分析-体测须知
-  public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
+    //体测分析-体测须知
+    public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
 
-  //体测分析-结果汇总
-  public static final String QUERY_BCAQUESTION_FIND_RECENTLY= HOST + "/bcaAnalysis/findRecently";//查询最近一次[体测分析]记录
+    //体测分析-结果汇总
+    public static final String QUERY_BCAQUESTION_FIND_BYID= HOST + "/bcaAnalysis/findById";//按主键查单条[体测分析]记录
 
+    //扫码入场-手牌列表
+    public static final String QUERY_HAND_CARD= HOST + "/handCard/queryHandCard";//查询当前可用的手牌列表
+
+    //扫码入场-手牌列表
+    public static final String SEND_CARD_ENTER= HOST + "/cardenter/cardEnter";//确认入场或确认离场接口
+
+    //体测分析-历史记录
+    public static final String QUERY_FITNESS_LIST= HOST + "/bcaAnalysis/queryPage";//按条件查询不分页[体测分析]列表
 
  //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";

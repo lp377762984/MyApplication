@@ -70,7 +70,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
     }
 
     private void initView() {
-        title = findViewById(R.id.shouhuan_title);
+        title = findViewById(R.id.title);
         title.setTitle(context.getResources().getString(R.string.matters_needing_attention_text));
         listView = findViewById(R.id.listView);
         btn_start = findViewById(R.id.btn_start);
