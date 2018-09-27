@@ -77,7 +77,8 @@ public class ScanerCodeDetailActivity extends BaseActivity {
         message = getIntent().getStringExtra("message");
         String[] resultA = message.toString().split("\\,");
         if (resultA != null && resultA.length > 1) {
-            qrcode = "1,1,13," + resultA[resultA.length - 1];
+            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(resultA[resultA.length - 1]);
+            qrcode = data.toString();
             codeId = resultA[resultA.length - 1];
         }
         LogUtil.i("qrcode--" + qrcode);
