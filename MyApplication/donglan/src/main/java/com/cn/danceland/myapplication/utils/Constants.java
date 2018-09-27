@@ -13,13 +13,13 @@ public class Constants  {
         return PLATFORM;
     }
 
-  //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
+    //  public static final String HOST = "http://192.168.1.96:8003/";//服务器地址
 //    public static  String HOST = "http://wx.dljsgw.com/";//阿里云服务器地址
-  // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
+    // public static final String HOST = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST = "http://192.168.1.66:8003/";//佳楠
-   // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
-    public static final String HOST = "http://192.168.1.114:8003/";//老高
-//  public static  String HOST = "http://192.168.1.168:8003/";//超哥
+    // public static final String HOST = "http://39.104.188.91:6003/";// 测试地址
+//    public static final String HOST = "http://192.168.1.114:8003/";//老高
+    public static  String HOST = "http://192.168.1.168:8003/";//超哥
 //   public static  String HOST = "http://39.104.188.91:6003/";//审核服务器
 
     public static final boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
@@ -31,15 +31,15 @@ public class Constants  {
     public static final String REGISTER_URL = HOST + "person/register";//注册用户
     public static final String REGISTER_AGREEMENT_URL = "http://img.dljsgw.com/protocol/app_register_protocol.html";//注册用户协议
 
-  public static final String LOGIN_URL = HOST + "person/login ";//登录
-  public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
-  public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
-  public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
+    public static final String LOGIN_URL = HOST + "person/login ";//登录
+    public static final String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
+    public static final String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
+    public static final String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
 
 
-  //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
+    //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
     public static final String SET_BASE_USERINFO_URL = HOST + "user/updateBase";//设置用户基本资料
-  public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
+    public static final String RESET_USERINFO_URL = HOST + "user/changeUserInformation";//重置用户资料
     public static final String LOGIN_BY_PHONE_URL = HOST + "/person/loginNoPwd";//短信登录
     public static final String FIND_PHONE_URL = HOST + "/person/queryPhone";//查询手机号是否存在
     public static final String BIND_DEVICE_NOPWD_URL = HOST + "/person/bindDeviceNoPwd";//绑定新设备
@@ -243,6 +243,9 @@ public class Constants  {
     public static final String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
     public static final String QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
 
+
+
+    public static final String YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务
     //手环相关
     public static final String QUERY_WEAR_FIT_HEART_RATE_LIST = HOST + "/personHeartRate/queryList";//按条件查询不分页[人员心率数据]列表
     public static final String QUERY_WEAR_FIT_HEART_RATE_FANDLAST = HOST + "/personHeartRate/findLast";//根据条件查询最后一条心率数据
@@ -259,23 +262,31 @@ public class Constants  {
     public static final String QUERY_WEAR_FIT_STEP_FINDMAX = HOST + "/personStep/findMax";//按条件查询每天最后一条数据
     public static final String QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG = HOST + "/personStep/findFatigueAvg";//根据条件查询疲劳每日平均数
 
- //咨询 推荐
+    //咨询 推荐
     public static final String QUERY_MY_CONSULT = HOST + "/consultation/queryMyConsultations";//获取我的咨询
     public static final String QUERY_SAVE_CONSULT = HOST + "/consultation/saveConsultation";//新增[咨询记录表]
     public static final String QUERY_MY_RECOMMEND= HOST + "/consultation/queryMyReferrals";//获取我的推荐
     public static final String QUERY_SAVE_RECOMMEND = HOST + "/consultation/saveReferral";//新增我的推荐记录
 
-  //我的通知-通知
-  public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
+    //我的通知-通知
+    public static final String QUERY_QUERY_PAGE= HOST + "/pushRecord/queryPage";// 按条件查询分页[消息推送记录]列表
 
-  //体测分析-体测须知
-  public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
+    //体测分析-体测须知
+    public static final String QUERY_BCAQUESTION_LIST= HOST + "/bcaQuestion/queryList";//按条件查询不分页[问题题干]列表
 
-  //体测分析-结果汇总
-  public static final String QUERY_BCAQUESTION_FIND_RECENTLY= HOST + "/bcaAnalysis/findRecently";//查询最近一次[体测分析]记录
+    //体测分析-结果汇总
+    public static final String QUERY_BCAQUESTION_FIND_BYID= HOST + "/bcaAnalysis/findById";//按主键查单条[体测分析]记录
 
+    //扫码入场-手牌列表
+    public static final String QUERY_HAND_CARD= HOST + "/handCard/queryHandCard";//查询当前可用的手牌列表
 
- //环信相关
+    //扫码入场-手牌列表
+    public static final String SEND_CARD_ENTER= HOST + "/cardenter/cardEnter";//确认入场或确认离场接口
+
+    //体测分析-历史记录
+    public static final String QUERY_FITNESS_LIST= HOST + "/bcaAnalysis/queryPage";//按条件查询不分页[体测分析]列表
+
+    //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
     public static final String CHAT_ROOM = "item_chatroom";
@@ -294,23 +305,23 @@ public class Constants  {
     public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
 
 
-    public static final int QR_MAPPING_CARD_ENTER = 10; //刷卡入场
+    public static final int QR_MAPPING_CARD_ENTER = 13; //刷卡入场
     public static final int QR_MAPPING_COURSE_ENTER = 11; //私教入场
     public static final int QR_MAPPING_GROUP_COURSE_ENTER = 12;//小团课入场
 
 
-  public static final int ROLE_ID_HUIJIGUWEN = 1;//会籍顾问
-  public static final int ROLE_ID_JIAOLIAN = 2;//教练
-  public static final int ROLE_ID_QIANTAI = 3;//前台
-  public static final int ROLE_ID_DIANZHANG = 4;//店长
-  public static final int ROLE_ID_HUIJIZHUGUANG = 5;//会籍主管
-  public static final int ROLE_ID_JIAOLIANZHUGUAN = 6;//教练主管
-  public static final int ROLE_ID_QIANTAIZHUGUAN = 7;//前台主管
-  public static final int ROLE_ID_CHUNA= 9;//出纳
-  public static final int ROLE_ID_SHOUYIN = 10;//收银
-  public static final int ROLE_ID_JIANZHIJIAOLIAN = 11;//兼职教练
-  public static final int ROLE_ID_QIANKE = 666;//潜客
-  public static final int ROLE_ID_HUIYUAN= 888;//会员
+    public static final int ROLE_ID_HUIJIGUWEN = 1;//会籍顾问
+    public static final int ROLE_ID_JIAOLIAN = 2;//教练
+    public static final int ROLE_ID_QIANTAI = 3;//前台
+    public static final int ROLE_ID_DIANZHANG = 4;//店长
+    public static final int ROLE_ID_HUIJIZHUGUANG = 5;//会籍主管
+    public static final int ROLE_ID_JIAOLIANZHUGUAN = 6;//教练主管
+    public static final int ROLE_ID_QIANTAIZHUGUAN = 7;//前台主管
+    public static final int ROLE_ID_CHUNA= 9;//出纳
+    public static final int ROLE_ID_SHOUYIN = 10;//收银
+    public static final int ROLE_ID_JIANZHIJIAOLIAN = 11;//兼职教练
+    public static final int ROLE_ID_QIANKE = 666;//潜客
+    public static final int ROLE_ID_HUIYUAN= 888;//会员
 
 
 
