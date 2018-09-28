@@ -1455,6 +1455,9 @@ public class Data implements Serializable {
         //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
         private String create_time;// 创建时间
         private String creator;// 创建人
+        private Long open_time ;//营业时间
+        private Long close_time ;//营业时间
+
 
         //此处可添加查询显示辅助字段
 
@@ -1485,11 +1488,29 @@ public class Data implements Serializable {
                     ", remark='" + remark + '\'' +
                     ", create_time='" + create_time + '\'' +
                     ", creator='" + creator + '\'' +
+                    ", open_time=" + open_time +
+                    ", close_time=" + close_time +
                     ", logo_url='" + logo_url + '\'' +
                     ", league_name='" + league_name + '\'' +
                     ", create_name='" + create_name + '\'' +
                     ", photo_url=" + photo_url +
                     '}';
+        }
+
+        public Long getOpen_time() {
+            return open_time;
+        }
+
+        public void setOpen_time(Long open_time) {
+            this.open_time = open_time;
+        }
+
+        public Long getClose_time() {
+            return close_time;
+        }
+
+        public void setClose_time(Long close_time) {
+            this.close_time = close_time;
         }
 
         public String getBranch_id() {

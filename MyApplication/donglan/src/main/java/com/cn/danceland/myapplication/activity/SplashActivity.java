@@ -189,13 +189,13 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
             @Override
             public void onUserSigExpired() {
                 //票据过期，需要重新登录
-                new NotifyDialog().show(getString(R.string.tls_expire), getSupportFragmentManager(), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                            logout();
-                        LogUtil.i("过期");
-                    }
-                });
+//                new NotifyDialog().show(getString(R.string.tls_expire), getSupportFragmentManager(), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+////                            logout();
+//                        LogUtil.i("过期");
+//                    }
+//                });
 
             }
         })
@@ -248,7 +248,7 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
                 dialog.show(getString(R.string.kick_logout), getSupportFragmentManager(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        navToHome();
+                        navToLogin();
                     }
                 });
                 break;
