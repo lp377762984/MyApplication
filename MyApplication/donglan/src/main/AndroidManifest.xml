@@ -871,9 +871,9 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5ba1ee11f1f5569f370000f7" />
-  <!--      <meta-data
+    <!--   <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="wandoujia" />-->
+            android:value="1" />-->
     </application>
 
 

@@ -114,6 +114,31 @@ public class MessageReceiver extends PushMessageReceiver {
         }
     }
 
+    @Override
+    public void onNotificationMessageClicked(Context context, MiPushMessage miPushMessage) {
+        super.onNotificationMessageClicked(context, miPushMessage);
+
+
+
+//        Log.e(TAG,"onNotificationMessageClicked is called. " + message.toString());
+//        Log.e(TAG, getSimpleDate() + " " + message.getContent());
+//
+//        if (!TextUtils.isEmpty(message.getTopic())) {
+//            mTopic = message.getTopic();
+//        } else if (!TextUtils.isEmpty(message.getAlias())) {
+//            mAlias = message.getAlias();
+//        }
+////        MiPushClient.clearNotification(context);
+//
+//        Log.e(TAG, "regId: " + mRegId + " | topic: " + mTopic + " | alias: " + mAlias
+//                + " | account: " + mAccount + " | starttime: " + mStartTime + " | endtime: " + mEndTime);
+//        Intent i = new Intent();
+//        i.setClassName("com.tencent.qcloud.timchat", "com.tencent.qcloud.timchat.ui.SplashActivity");
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(i);
+
+    }
+
     private void reloadInfo() {
         StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override

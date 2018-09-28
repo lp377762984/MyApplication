@@ -61,6 +61,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.HttpUtils;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -570,11 +571,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private void checkUpdate() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.CHECKUPDATE, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.CHECKUPDATE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
-                LogUtil.i(s);
+                LogUtil.i("!!!!!!!!!!!!!!!!!!!"+s);
                 CheckUpdateBean checkUpdateBean = new Gson().fromJson(s, CheckUpdateBean.class);
                 if (checkUpdateBean != null && checkUpdateBean.getData() != null) {
                     String status = checkUpdateBean.getData().getStatus();
@@ -599,12 +600,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

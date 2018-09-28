@@ -4,6 +4,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,7 +27,14 @@ public class MyStringRequest extends StringRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
+        Map<String, String> map = new HashMap<String, String>();
 
-        return super.getHeaders();
+        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+        map.put("version", Constants.getVersion());
+        map.put("platform", Constants.getPlatform());
+        map.put("channel", AppUtils.getChannelName());
+
+        return map;
+
     }
 }
