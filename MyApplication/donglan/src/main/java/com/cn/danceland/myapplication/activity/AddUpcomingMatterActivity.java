@@ -11,11 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
@@ -24,6 +22,7 @@ import com.cn.danceland.myapplication.bean.RequsetUpcomingMaterParamBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
@@ -36,9 +35,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import razerdp.basepopup.BasePopupWindow;
 
@@ -236,7 +233,7 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
 
         JSONObject jsonObject = new JSONObject(data);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.ADD_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -254,18 +251,8 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.networkResponse.statusCode + "");
-          //      ToastUtils.showToastShort(volleyError.toString());
-
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
@@ -284,7 +271,7 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
             e.printStackTrace();
         }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER_PARAM, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER_PARAM, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -304,18 +291,8 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
                 //  ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
-
     }
 
 

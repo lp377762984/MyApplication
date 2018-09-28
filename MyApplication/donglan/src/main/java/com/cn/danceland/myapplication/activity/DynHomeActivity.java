@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,8 +34,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -64,6 +61,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ScreenUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -402,7 +400,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         juBaoBean.member_id = msgId;
         juBaoBean.type = type + "";
         juBaoBean.content = content;
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 RequsetSimpleBean simpleBean = new Gson().fromJson(jsonObject.toString(), RequsetSimpleBean.class);
@@ -418,17 +416,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请查看网络连接");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
-
-
     }
 
     @Override
@@ -816,7 +805,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         strBean.reply_msg_id = msgId;
         strBean.size = 20;
 
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_COMMENT_LIST, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -848,7 +837,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         setEnd();
                     }
 
-
                     mCurrentPage = mCurrentPage + 1;//下次从第二页请求
                 } else {
                     ToastUtils.showToastShort(commentInfoBean.getErrorMsg());
@@ -859,18 +847,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-        };
-
-
+        });
         MyApplication.getHttpQueues().add(jsonRequest);
 
     }
@@ -948,7 +925,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         strBean.msg_id = msgId;
 
         // dialog.show();
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
@@ -962,14 +939,11 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 //     LogUtil.i(UserListBean.toString());
                 if (UserListBean.getSuccess()) {
 
-
                     if (zanUserList.size() > 0) {
-
 
                         mRecylerViewAdapter.setData(zanUserList, msgId);
 
                         mRecylerViewAdapter.notifyDataSetChanged();
-
 
                     } else {
                         // ToastUtils.showToastShort("没有点赞数据");
@@ -986,16 +960,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-        };
+        });
 //
 //        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ZAN_USER_LIST_MSG_5, new Response.Listener<String>() {
 //            @Override
@@ -1081,7 +1046,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         replyBean.content = content;
         LogUtil.i(new Gson().toJson(replyBean));
 
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
 
@@ -1137,19 +1102,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-        };
-
-
-//
+        });
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 
@@ -1171,7 +1124,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         replyBean.parent_id = parentId;
         LogUtil.i(new Gson().toJson(replyBean));
 
-        JsonRequest jsonRequest = new JsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.SEND_COMMENT_REPLY, new Gson().toJson(replyBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -1192,8 +1145,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestCommitCommentBean.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -1201,18 +1152,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 dialog.dismiss();
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-        };
-
-
+        });
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 
@@ -1240,7 +1180,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         strBeanZan.is_praise = isPraise;
 
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Gson().toJson(strBeanZan), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_ZAN_URL, new Gson().toJson(strBeanZan), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -1249,7 +1189,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
 
                 if (requestInfoBean.getSuccess()) {
-
 
                     if (requstOneDynInfoBean.getData().getPraise()) {//如果已点赞
                         requstOneDynInfoBean.getData().setPraise(false);
@@ -1274,30 +1213,16 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         msg.obj = oneDynInfo;
                         handler.dispatchMessage(msg);
                     }
-
-
                 } else {
                     ToastUtils.showToastShort("点赞失败");
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                //       LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
-
+        });
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
@@ -1321,7 +1246,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         strBeanGaunZhu.user_id = id;
         strBeanGaunZhu.is_follower = b;
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBeanGaunZhu), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBeanGaunZhu), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -1343,18 +1268,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请查看网络连接");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
-
+        });
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
@@ -1363,7 +1277,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
     }
 
     private void showListDialog() {

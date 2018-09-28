@@ -6,14 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -37,13 +35,11 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -83,11 +79,10 @@ import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.ui.ConversationActivity;
-import com.cn.danceland.myapplication.shouhuan.activity.WearFitActivity;
-import com.cn.danceland.myapplication.shouhuan.activity.WearFitCameraActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
@@ -586,12 +581,11 @@ public class ShopFragment extends BaseFragment {
 
                 SPUtils.setInt(Constants.ROLE_ID, Integer.valueOf(roleMap.get(role)));//保存当前使用角色
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
+                MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtil.i( jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
-
 
                             MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
                             data = menusBean.getData();
@@ -610,20 +604,9 @@ public class ShopFragment extends BaseFragment {
                         ToastUtils.showToastShort("请查看网络连接");
                         LogUtil.e("zzf", volleyError.toString());
                     }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                        return map;
-                    }
-
-                };
-
+                });
                 MyApplication.getHttpQueues().add(jsonObjectRequest);
-
             } else {
-
 
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;

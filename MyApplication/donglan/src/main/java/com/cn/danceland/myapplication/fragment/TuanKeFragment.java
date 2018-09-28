@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -27,8 +25,8 @@ import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -38,9 +36,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/1/11.
@@ -157,7 +153,7 @@ public class TuanKeFragment extends BaseFragment {
                 return;
             }
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
+            MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     if (jsonObject.toString().contains("true")) {
@@ -178,19 +174,10 @@ public class TuanKeFragment extends BaseFragment {
                 public void onErrorResponse(VolleyError volleyError) {
                     ToastUtils.showToastShort("预约失败！请重新预约！");
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                    return map;
-                }
-            };
-
+            });
             MyApplication.getHttpQueues().add(jsonObjectRequest);
         }
     }
-
 
     public void refresh(String from, String startTime, String endTime, int course_type_id, int member_course_id) {
         this.member_course_id = member_course_id;
@@ -214,7 +201,7 @@ public class TuanKeFragment extends BaseFragment {
             url = Constants.FreeCourse;//免费团课
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 KeChengBiaoBean keChengBiaoBean = gson.fromJson(jsonObject.toString(), KeChengBiaoBean.class);
@@ -236,17 +223,9 @@ public class TuanKeFragment extends BaseFragment {
                 tv_error.setText("网络异常");
                 Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
-
 
     private class MyAdapter extends BaseAdapter {
 

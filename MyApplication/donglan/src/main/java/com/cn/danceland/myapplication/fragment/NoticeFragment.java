@@ -10,18 +10,16 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -32,9 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -103,8 +99,6 @@ public class NoticeFragment extends BaseFragment {
 
         init_pullToRefresh();
 
-        LogUtil.i("UMENG_CHANNEL--"+ Utils.getChannelName(context));
-        ToastUtils.showToastLong("UMENG_CHANNEL--"+ Utils.getChannelName(context));
         return v;
     }
 
@@ -200,7 +194,7 @@ public class NoticeFragment extends BaseFragment {
         LogUtil.i("gson-"+s);
         JSONObject jsonObject = new JSONObject(s.toString());
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -236,15 +230,7 @@ public class NoticeFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i("MY_TOKEN-"+SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
     }
 

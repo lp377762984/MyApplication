@@ -13,11 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -32,7 +30,7 @@ import com.cn.danceland.myapplication.fragment.TuanKeRecordFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -45,9 +43,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -139,7 +135,7 @@ public class CourseActivity extends BaseActivity {
 
         final String s = gson.toJson(siJiaoYuYueConBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf",jsonObject.toString());
@@ -165,24 +161,13 @@ public class CourseActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
-
     private void getGroupData(String s) {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 //if("2".equals(course_category)){
@@ -205,20 +190,8 @@ public class CourseActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf",volleyError.toString());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                LogUtil.e("zzf",SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
-
     }
 
 
@@ -281,7 +254,7 @@ public class CourseActivity extends BaseActivity {
 
         String s = gson.toJson(siJiaoYuYueConBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf",jsonObject.toString());
@@ -295,7 +268,6 @@ public class CourseActivity extends BaseActivity {
                             yuyueTimeList.add(s1);
                         }
                     }
-
                 }
                 setPoint();
             }
@@ -304,20 +276,9 @@ public class CourseActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("获取记录失败！");
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
-
     }
-
-
 
     private void initView() {
         rl_tuanke_record = findViewById(R.id.rl_tuanke_record);

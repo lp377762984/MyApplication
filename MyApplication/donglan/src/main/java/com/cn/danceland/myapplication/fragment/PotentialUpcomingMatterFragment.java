@@ -14,11 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
@@ -27,7 +25,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
@@ -41,9 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -324,15 +320,13 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
         JSONObject jsonObject = new JSONObject(s.toString());
         LogUtil.i(s.toString());
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
                 RequsetUpcomingMaterListBean potentialListBean = new RequsetUpcomingMaterListBean();
                 potentialListBean = gson.fromJson(jsonObject.toString(), RequsetUpcomingMaterListBean.class);
-
                 myListAatapter.notifyDataSetChanged();
-
 
                 if (potentialListBean.getSuccess()) {
 
@@ -360,37 +354,22 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
                         myListAatapter.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     }
-
                 } else {
                     ToastUtils.showToastLong(potentialListBean.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
-
     private void change_done(RequsetUpcomingMaterListBean.Data.Content s) {
-
 
         JSONObject jsonObject = null;
         try {
@@ -400,7 +379,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
             e.printStackTrace();
         }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.PUT, Constants.UPDATE_MATTER_STATUS, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.PUT, Constants.UPDATE_MATTER_STATUS, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -412,29 +391,15 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
                 } else {
 
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 ToastUtils.showToastShort(volleyError.toString());
-
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
-
     }
-
 
     class MyListAatapter extends BaseAdapter {
 

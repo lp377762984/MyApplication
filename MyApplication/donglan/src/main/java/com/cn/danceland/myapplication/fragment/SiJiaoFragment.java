@@ -12,12 +12,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -36,9 +34,9 @@ import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -46,9 +44,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/1/12.
@@ -149,7 +145,7 @@ public class SiJiaoFragment extends BaseFragment {
             }
             String s = gson.toJson(myCourseConBean);
             JSONObject jsonObject = new JSONObject(s);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+            MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
                     LogUtil.e("zzf", jsonObject.toString());
@@ -161,9 +157,7 @@ public class SiJiaoFragment extends BaseFragment {
                             if (jiaolianContent != null) {
                                 ex_lv.setAdapter(new JiaoLianAdapter(jiaolianContent));
                             }
-
                         }
-
                     } else {
                         MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
                         if (myCourseBean != null) {
@@ -184,24 +178,13 @@ public class SiJiaoFragment extends BaseFragment {
                     tv_error.setText("网络异常");
                     Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                    return map;
-                }
-            };
+            });
             jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2000,
                     2,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
             MyApplication.getHttpQueues().add(jsonObjectRequest);
         }
-
-
     }
-
 
     private void getChildData(Integer courseid, final String course_category) {
 
@@ -229,7 +212,7 @@ public class SiJiaoFragment extends BaseFragment {
 
         String s = gson.toJson(siJiaoYuYueConBean);
         LogUtil.i(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if ("2".equals(course_category)) {
@@ -269,28 +252,14 @@ public class SiJiaoFragment extends BaseFragment {
                         }
                     }
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
-
     }
 
     private class JiaoLianAdapter extends BaseExpandableListAdapter {

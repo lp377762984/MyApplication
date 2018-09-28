@@ -34,7 +34,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -55,6 +54,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
@@ -474,7 +474,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         DepositPrarmsBean prarmsBean = new DepositPrarmsBean();
         prarmsBean.param_key = "deposit_days";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -490,15 +490,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                //         LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
 
@@ -542,7 +534,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         DepositPrarmsBean prarmsBean = new DepositPrarmsBean();
         prarmsBean.param_key = "deposit_price";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -565,15 +557,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                //         LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
 
@@ -615,7 +599,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
         JSONObject jsonObject = new JSONObject(str);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -648,17 +632,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     /**
@@ -671,7 +646,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
         JSONObject jsonObject = new JSONObject(str);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -695,8 +670,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                     if (requestOrderInfoBean.getData().getPayWay() == 5) {
                         chuzhika(requestOrderInfoBean.getData().getPay_params());
                     }
-
-
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
                 }
@@ -709,15 +682,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                //   LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
@@ -807,7 +772,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         String str = gson.toJson(payBean);
 
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -822,10 +787,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                     } else {
                         ToastUtils.showToastShort("支付异常");
                     }
-
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -834,16 +796,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort("支付失败");
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     @Override

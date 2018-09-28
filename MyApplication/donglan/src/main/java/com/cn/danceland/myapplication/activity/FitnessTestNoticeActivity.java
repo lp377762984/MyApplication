@@ -13,19 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.bean.BCAQuestionBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -33,9 +31,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 体测分析-注意事项
@@ -92,7 +88,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
         bean.setType("7");// 7：体测分析-体能须知
         LogUtil.i("请求后台心率" + bean.toString());
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_LIST
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_LIST
                 , new Gson().toJson(bean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -115,14 +111,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
 

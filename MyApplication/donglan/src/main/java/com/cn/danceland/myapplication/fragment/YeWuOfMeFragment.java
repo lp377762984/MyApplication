@@ -436,7 +436,7 @@ public class YeWuOfMeFragment extends BaseFragment {
             }
         };
 
-//        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
+//        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
 //            @Override
 //            public void onResponse(JSONObject jsonObject) {
 //                LogUtil.i(jsonObject.toString());

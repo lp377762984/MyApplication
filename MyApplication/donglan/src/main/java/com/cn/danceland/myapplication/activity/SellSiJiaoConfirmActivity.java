@@ -15,11 +15,9 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -35,7 +33,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,9 +42,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/1/15.
@@ -114,7 +110,7 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
         params.add("deposit_locker_max");
         strBean.setParam_keys(params);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -132,20 +128,9 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
                 LogUtil.i(volleyError.toString());
 
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
-
-
 
     /**
      * @方法说明:按条件查询说明须知列表

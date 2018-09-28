@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -29,7 +27,7 @@ import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomLine;
@@ -45,9 +43,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/1/13.
@@ -384,7 +380,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
         String s = gson.toJson(strBean);
         LogUtil.e("zzf", s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
@@ -407,7 +403,6 @@ public class SiJiaoDetailActivity extends BaseActivity {
                                 }
                             }
                         }
-
                     }
                     LogUtil.i(textPositionList.toString());
                 }
@@ -432,8 +427,6 @@ public class SiJiaoDetailActivity extends BaseActivity {
 //                    }
 //                }
                 getHistory();
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -441,17 +434,8 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 LogUtil.e("zzf", volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
 
@@ -482,7 +466,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
         String s = gson.toJson(strBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDAVAI, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
@@ -509,7 +493,6 @@ public class SiJiaoDetailActivity extends BaseActivity {
                     }
                 }
 
-
 //                SiJiaoRecordBean siJiaoRecordBean = gson.fromJson(jsonObject.toString(), SiJiaoRecordBean.class);
 //                if (siJiaoRecordBean != null) {
 //                    SiJiaoRecordBean.Data data = siJiaoRecordBean.getData();
@@ -534,7 +517,6 @@ public class SiJiaoDetailActivity extends BaseActivity {
 //                    }
 //                }
 
-
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
@@ -546,18 +528,8 @@ public class SiJiaoDetailActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
 
@@ -594,7 +566,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
         String s = gson.toJson(siJiaoYuYueConBean);
         LogUtil.i(s);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COURSEAPPOIN, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COURSEAPPOIN, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -634,16 +606,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 LogUtil.e("zzf", volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 }

@@ -23,7 +23,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -40,6 +39,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -787,9 +787,7 @@ public class UserHomeActivity extends BaseActivity {
         strBean1.is_follower=b;
         strBean1.user_id=id;
 
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
-
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -816,34 +814,15 @@ public class UserHomeActivity extends BaseActivity {
                     } else {
                         ToastUtils.showToastShort("取消关注失败");
                     }
-
-
                 }
-
             }
-
-
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(final VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
                 ToastUtils.showToastShort("请查看网络连接");
             }
-
-        }
-        ) {
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        });
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
         // 设置超时时间

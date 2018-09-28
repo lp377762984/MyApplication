@@ -19,11 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -41,7 +39,7 @@ import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -65,7 +63,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -809,8 +806,7 @@ public class RevisitListFragment extends BaseFragment {
 
         LogUtil.i(s.toString());
         JSONObject jsonObject = new JSONObject(s.toString());
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_POTENTIAL_LIST, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_POTENTIAL_LIST, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -821,9 +817,7 @@ public class RevisitListFragment extends BaseFragment {
                 //  datalist = potentialListBean.getData().getContent();
                 myListAatapter.notifyDataSetChanged();
 
-
                 if (potentialListBean.getSuccess()) {
-
 
                     if (potentialListBean.getData() != null) {
                         EventBus.getDefault().post(new IntEvent(potentialListBean.getData().getTotalElements(), 161));
@@ -853,8 +847,6 @@ public class RevisitListFragment extends BaseFragment {
                 } else {
                     ToastUtils.showToastLong(potentialListBean.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -864,16 +856,7 @@ public class RevisitListFragment extends BaseFragment {
                 tv_error.setText("网络异常");
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 }

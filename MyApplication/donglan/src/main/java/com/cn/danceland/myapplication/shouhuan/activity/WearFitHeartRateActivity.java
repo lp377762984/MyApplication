@@ -19,7 +19,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -34,6 +33,7 @@ import com.cn.danceland.myapplication.shouhuan.bean.HeartRateViewPostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -477,7 +477,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
     }
 
     private void postHeart(List<HeartRateResultBean> postHeartList) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_SAVE
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_SAVE
                 , new Gson().toJson(postHeartList), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -493,14 +493,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -517,7 +510,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
         weekPostBean.setTimestamp_lt(timestamp_lt);
         LogUtil.i("请求后台心率" + weekPostBean.toString());
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDAVG
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDAVG
                 , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -556,14 +549,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
     }
 
@@ -590,7 +576,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
             heartRatePostBean.setDay(day);
             LogUtil.i("请求后台心率" + heartRatePostBean.toString());
             //获取后台数据
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_LIST
+            MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_LIST
                     , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
@@ -629,14 +615,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                     ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                     LogUtil.e("onErrorResponse", volleyError.toString());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                    return map;
-                }
-            };
+            }) ;
             MyApplication.getHttpQueues().add(request);
         }
     }
@@ -677,7 +656,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
         bean.setTimestamp_gt(timeToMin1);
         bean.setTimestamp_lt(timeToMin2);
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDRATE
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_HEART_RATE_FANDRATE
                 , new Gson().toJson(bean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -704,14 +683,7 @@ public class WearFitHeartRateActivity extends Activity implements View.OnClickLi
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
     }
 

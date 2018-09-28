@@ -14,11 +14,9 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -27,8 +25,8 @@ import com.cn.danceland.myapplication.bean.RequstRecommendBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -38,9 +36,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by shy on 2018/3/14 10:39
@@ -235,7 +231,7 @@ public class RecommendFragment extends BaseFragment {
 
 //        JSONObject jsonObject = new JSONObject(s.toString());
         LogUtil.i(gson.toJson(strBean));
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.INTRODUCE_SAVE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.INTRODUCE_SAVE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -247,26 +243,15 @@ public class RecommendFragment extends BaseFragment {
                 }else {
                     ToastUtils.showToastShort("推荐失败"+requsetSimpleBean.getErrorMsg());
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
                 ToastUtils.showToastShort(volleyError.toString());
-
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-              //  LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     /**
@@ -283,7 +268,7 @@ public class RecommendFragment extends BaseFragment {
 
 //        JSONObject jsonObject = new JSONObject(s.toString());
         LogUtil.i(gson.toJson(strBean));
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.INTRODUCE_QUERYLIST, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.INTRODUCE_QUERYLIST, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -300,17 +285,8 @@ public class RecommendFragment extends BaseFragment {
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     class  Myadapter extends BaseAdapter{

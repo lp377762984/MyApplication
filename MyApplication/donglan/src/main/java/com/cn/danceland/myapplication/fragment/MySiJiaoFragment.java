@@ -8,12 +8,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -22,15 +20,13 @@ import com.cn.danceland.myapplication.bean.MyCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/4/18.
@@ -72,7 +68,7 @@ public class MySiJiaoFragment extends BaseFragment {
         myCourseConBean.setPageCount(30);
         String s = gson.toJson(myCourseConBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDMEMBERCOURSE, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDMEMBERCOURSE, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 MyCourseBean myCourseBean = gson.fromJson(jsonObject.toString(), MyCourseBean.class);
@@ -92,15 +88,7 @@ public class MySiJiaoFragment extends BaseFragment {
                 tv_error.setText("网络异常");
                 Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-
-        };
+        });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(2000,
                 2,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

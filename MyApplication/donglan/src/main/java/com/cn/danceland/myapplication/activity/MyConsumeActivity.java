@@ -20,11 +20,9 @@ import android.widget.TextView;
 
 import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -34,7 +32,7 @@ import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -50,7 +48,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -290,8 +287,7 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         myConsumeCon.setSize(15);
         String s = gson.toJson(myConsumeCon);
 
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -315,21 +311,9 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                 tv_error.setText("网络异常");
                 Glide.with(MyConsumeActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
-
-
 
     private void initHost() {
         gson = new Gson();

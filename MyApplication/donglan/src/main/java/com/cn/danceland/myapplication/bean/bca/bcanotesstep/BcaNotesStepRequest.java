@@ -1,23 +1,22 @@
 package com.cn.danceland.myapplication.bean.bca.bcanotesstep;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @友情提示: 请清理掉用不到的代码包括这段注释
@@ -40,17 +39,11 @@ public class BcaNotesStepRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/save", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaNotesStep/save", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
 
@@ -66,17 +59,11 @@ public class BcaNotesStepRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/update", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaNotesStep/update", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
 
@@ -110,20 +97,13 @@ public class BcaNotesStepRequest {
 		try {
 			json = new JSONObject(new Gson().toJson(cond));
 		} catch (JSONException e) {
-			// LogUtil.i(bcaNotesStep.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryList", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
 
@@ -140,17 +120,11 @@ public class BcaNotesStepRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryPage", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryPage", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
 
@@ -189,17 +163,11 @@ public class BcaNotesStepRequest {
 			// LogUtil.i(bcaNotesStep.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryCount", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaNotesStep/queryCount", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
 }
