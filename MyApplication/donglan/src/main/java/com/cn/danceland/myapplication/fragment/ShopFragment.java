@@ -6,14 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -37,7 +35,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -83,11 +80,10 @@ import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.ui.ConversationActivity;
-import com.cn.danceland.myapplication.shouhuan.activity.WearFitActivity;
-import com.cn.danceland.myapplication.shouhuan.activity.WearFitCameraActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
@@ -466,7 +462,7 @@ public class ShopFragment extends BaseFragment {
 
     private void getBanner(final String branchId) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 drawableArrayList.clear();
@@ -497,12 +493,7 @@ public class ShopFragment extends BaseFragment {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
@@ -510,7 +501,7 @@ public class ShopFragment extends BaseFragment {
     private static final int BAIDU_READ_PHONE_STATE = 100;//定位权限请求
     private static final int PRIVATE_CODE = 1315;//开启GPS权限
     private void getShop(String shopID) {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + shopID, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + shopID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -545,13 +536,7 @@ public class ShopFragment extends BaseFragment {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
@@ -633,7 +618,7 @@ public class ShopFragment extends BaseFragment {
                     SPUtils.setInt(Constants.ROLE_ID,Constants.ROLE_ID_HUIYUAN);
                 }
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String s) {
                         LogUtil.e("zzf", s);
@@ -666,12 +651,7 @@ public class ShopFragment extends BaseFragment {
                         return map;
                     }
 
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                        return map;
-                    }
+
                 };
                 MyApplication.getHttpQueues().add(stringRequest);
             }
@@ -998,7 +978,7 @@ public class ShopFragment extends BaseFragment {
     }
 
     private void join(final String shopID) {
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
@@ -1023,12 +1003,7 @@ public class ShopFragment extends BaseFragment {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -1129,7 +1104,7 @@ public class ShopFragment extends BaseFragment {
 
 
     private void reloadInfo() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -1156,12 +1131,7 @@ public class ShopFragment extends BaseFragment {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);

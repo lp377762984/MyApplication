@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
@@ -296,7 +297,7 @@ public class BindDeviceNoPswdActivity extends BaseActivity implements View.OnCli
     private void bindDevice() {
 
         String url = Constants.BIND_DEVICE_NOPWD_URL;
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

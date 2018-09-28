@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -32,6 +31,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -84,7 +84,7 @@ public class CourseDetailActivity extends BaseActivity {
 
     private void queryAverage() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERYAVERAGE, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERYAVERAGE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -133,14 +133,7 @@ public class CourseDetailActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

@@ -13,11 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -27,16 +25,14 @@ import com.cn.danceland.myapplication.bean.RequsetAllPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by shy on 2018/1/31 11:55
@@ -182,7 +178,7 @@ public class PaiMingActivity extends BaseActivity {
 
     private void findPaiming() {
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BRANCHRANKING, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_BRANCHRANKING, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -207,14 +203,7 @@ public class PaiMingActivity extends BaseActivity {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(request);
 

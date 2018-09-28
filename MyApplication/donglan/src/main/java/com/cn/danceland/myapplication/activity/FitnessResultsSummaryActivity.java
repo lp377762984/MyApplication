@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,19 +12,19 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.FitnessResultsSummaryAdapter;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.FitnessResultsSummaryBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -140,7 +139,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
      * 查询数据
      */
     private void queryData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID , new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("Response--" + s);
@@ -223,12 +222,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

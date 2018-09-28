@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -26,7 +24,7 @@ import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.ui.ChatActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMConversationType;
@@ -40,7 +38,6 @@ import com.tencent.qcloud.ui.CircleImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -151,7 +148,7 @@ public class MyContactsActivity extends BaseActivity {
     }
 
     private void findContacts() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.GET_CONTACTS, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.GET_CONTACTS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -167,12 +164,6 @@ public class MyContactsActivity extends BaseActivity {
                 tv_error.setText("网络异常");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
 
 
         };

@@ -14,7 +14,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.ConsultAdapter;
@@ -22,7 +21,7 @@ import com.cn.danceland.myapplication.bean.ConsultBean;
 import com.cn.danceland.myapplication.bean.ConsultDataBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -97,7 +96,7 @@ public class ConsultListActivity extends BaseActivity {
     }
 
     private void queryData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_MY_CONSULT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_MY_CONSULT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("返回的数据:" + s);
@@ -124,12 +123,7 @@ public class ConsultListActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

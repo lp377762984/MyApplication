@@ -23,11 +23,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -42,6 +40,7 @@ import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NumberAnimTextView;
@@ -55,9 +54,7 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -555,7 +552,7 @@ public class HomeFragment extends BaseFragment {
 
         String params = page + "";
         String url = Constants.FIND_NEWS_URL + params;
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
 
             @Override
@@ -603,14 +600,7 @@ public class HomeFragment extends BaseFragment {
 
         }
         ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findNews");
@@ -626,7 +616,7 @@ public class HomeFragment extends BaseFragment {
 
     private void findPaiming() {
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_MYRANKING_URL, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_MYRANKING_URL, new Response.Listener<String>() {
 
 
             @Override
@@ -656,14 +646,7 @@ public class HomeFragment extends BaseFragment {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(request);
 
@@ -672,7 +655,7 @@ public class HomeFragment extends BaseFragment {
     private void findImageNews() {
 
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_IMAGE_NEWS_URL, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_IMAGE_NEWS_URL, new Response.Listener<String>() {
 
 
             @Override
@@ -714,14 +697,7 @@ public class HomeFragment extends BaseFragment {
 
         }
         ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findImageNews");

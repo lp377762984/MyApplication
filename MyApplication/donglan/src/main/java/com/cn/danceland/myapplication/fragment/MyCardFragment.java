@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -24,14 +22,12 @@ import com.cn.danceland.myapplication.bean.RequestMyCardListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.cn.danceland.myapplication.R.id.tv_cardtype;
 
@@ -84,7 +80,7 @@ public class MyCardFragment extends BaseFragment {
      */
     private void findAllCard() {
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_ALL_MY_CARD_LIST, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_ALL_MY_CARD_LIST, new Response.Listener<String>() {
 
 
             @Override
@@ -104,12 +100,7 @@ public class MyCardFragment extends BaseFragment {
                 tv_error.setText("网络异常");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(request);
 

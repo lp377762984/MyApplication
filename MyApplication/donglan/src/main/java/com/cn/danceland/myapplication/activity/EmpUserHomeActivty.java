@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -34,6 +33,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -399,7 +399,7 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
     }
 
     private void queryPingfen(final String employeeId, final String branchId) {
-        final StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_PING_FEN, new Response.Listener<String>() {
+        final MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_PING_FEN, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -431,14 +431,7 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(request);
     }
@@ -453,7 +446,7 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
 
         String url = Constants.QUERY_USER_DYN_INFO_URL + params;
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
 
 
             @Override
@@ -499,14 +492,7 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
 
         }
         ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("queryUserInfo");

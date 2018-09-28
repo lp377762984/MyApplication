@@ -15,7 +15,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -29,7 +28,7 @@ import com.cn.danceland.myapplication.im.model.ProfileSummary;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMGroupMemberInfo;
 import com.tencent.imsdk.TIMValueCallBack;
@@ -159,7 +158,7 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
 
     private void getGroupMember(final String groupId1) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.GET_GROUP_MEMBERS, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.GET_GROUP_MEMBERS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -175,12 +174,6 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

@@ -24,7 +24,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -37,6 +36,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -98,7 +98,7 @@ public class ReportFormActivity extends BaseActivity {
 
 
     private void initData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
@@ -187,12 +187,7 @@ public class ReportFormActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(stringRequest);
@@ -202,7 +197,7 @@ public class ReportFormActivity extends BaseActivity {
     private void initBusData(final String date, final String current_role_type, final String employee_id) {
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BUSSTATISTICSREPORT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BUSSTATISTICSREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -233,12 +228,7 @@ public class ReportFormActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -248,7 +238,7 @@ public class ReportFormActivity extends BaseActivity {
     //业绩报表
     private void initScoreData(final String date, final String current_role_type, final String target_role_type, final String employee_id) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.SCORESTATISTICSREPORT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.SCORESTATISTICSREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -279,12 +269,7 @@ public class ReportFormActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -407,7 +392,7 @@ public class ReportFormActivity extends BaseActivity {
 
     private void initReportData(final String selectDate, final String emp_id) {
 //不知道代码具体想干嘛，这里应该有坑
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 ReportCommitResultBean reportCommitResultBean = gson.fromJson(s, ReportCommitResultBean.class);
@@ -486,12 +471,7 @@ public class ReportFormActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(stringRequest);
@@ -701,7 +681,7 @@ public class ReportFormActivity extends BaseActivity {
 
     private void getPeople() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -731,12 +711,7 @@ public class ReportFormActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

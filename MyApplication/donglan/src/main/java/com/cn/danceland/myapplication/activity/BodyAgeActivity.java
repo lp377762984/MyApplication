@@ -8,23 +8,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BodyAgeBean;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -59,7 +55,7 @@ public class BodyAgeActivity extends BaseActivity {
 
     private void initData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDBODYAGE, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDBODYAGE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 BodyAgeBean bodyAgeBean = gson.fromJson(s, BodyAgeBean.class);
@@ -81,14 +77,7 @@ public class BodyAgeActivity extends BaseActivity {
 
             }
         }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
 
-                HashMap<String,String> map = new HashMap<>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

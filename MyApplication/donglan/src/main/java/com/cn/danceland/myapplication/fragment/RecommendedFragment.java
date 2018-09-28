@@ -13,7 +13,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -22,6 +21,7 @@ import com.cn.danceland.myapplication.bean.RequstRecommendBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -90,7 +90,7 @@ public class RecommendedFragment extends BaseFragment {
 
 
     public void introduce_confirm(final String id) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.INTRODUCE_CONFIRM, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.INTRODUCE_CONFIRM, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -116,13 +116,7 @@ public class RecommendedFragment extends BaseFragment {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

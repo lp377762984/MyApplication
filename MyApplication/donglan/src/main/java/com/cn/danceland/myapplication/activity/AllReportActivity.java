@@ -14,14 +14,13 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ReportResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
@@ -135,7 +134,7 @@ public class AllReportActivity extends BaseActivity {
     //业绩报表
     private void initScoreData(final String date, final String current_role_type, final String target_role_type, final String employee_id) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.SCORESTATISTICSREPORT, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.SCORESTATISTICSREPORT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -165,12 +164,7 @@ public class AllReportActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -181,7 +175,7 @@ public class AllReportActivity extends BaseActivity {
         //业务报表
         private void initBusData(final String date, final String current_role_type, final String employee_id) {
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BUSSTATISTICSREPORT, new Response.Listener<String>() {
+            MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BUSSTATISTICSREPORT, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String s) {
                     LogUtil.i(s);
@@ -217,12 +211,7 @@ public class AllReportActivity extends BaseActivity {
                     return map;
                 }
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                    return map;
-                }
+
             };
 
             MyApplication.getHttpQueues().add(stringRequest);

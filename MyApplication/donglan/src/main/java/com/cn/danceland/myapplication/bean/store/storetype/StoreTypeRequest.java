@@ -5,26 +5,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.bumptech.glide.Glide;
-import com.cn.danceland.myapplication.R;
-import com.google.gson.Gson;
-
 import com.cn.danceland.myapplication.MyApplication;
+import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @友情提示: 请清理掉用不到的代码包括这段注释
@@ -92,18 +90,13 @@ public class StoreTypeRequest {
 	 * @方法说明:按主键删除储值卡类型
 	 **/
 	public void delete(Long id, Listener<String> listener) {
-		StringRequest request = new StringRequest(1, Constants.HOST + "storeType/delete?id=" + id, listener, new Response.ErrorListener() {
+		MyStringRequest request = new MyStringRequest(1, Constants.HOST + "storeType/delete?id=" + id, listener, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError volleyError) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
 		}) {
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
+
 		};
 		MyApplication.getHttpQueues().add(request);
 	}
@@ -170,18 +163,13 @@ public class StoreTypeRequest {
 	 * @方法说明:按主键查询储值卡类型单个数据
 	 **/
 	public void findById(Long id, Listener<String> listener) {
-		StringRequest request = new StringRequest(1, Constants.HOST + "storeType/findById?id=" + id, listener, new Response.ErrorListener() {
+		MyStringRequest request = new MyStringRequest(1, Constants.HOST + "storeType/findById?id=" + id, listener, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError volleyError) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
 		}) {
-			@Override
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
+
 		};
 		MyApplication.getHttpQueues().add(request);
 	}

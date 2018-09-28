@@ -1,7 +1,5 @@
 package com.cn.danceland.myapplication.shouhuan.activity;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -21,14 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.WearFitSleepBean;
@@ -47,6 +43,7 @@ import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -892,7 +889,7 @@ public class WearFitSleepActivity extends Activity {
 
     //服务器最后数据
     private void getLastData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FANDLAST, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FANDLAST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("服务器最后一条数据是" + s);
@@ -920,12 +917,7 @@ public class WearFitSleepActivity extends Activity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

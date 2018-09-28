@@ -11,13 +11,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
@@ -67,7 +66,7 @@ public class EditProActivity extends BaseActivity {
 
     public void commitSelf(String url, final String mapkey, final String mapvalue) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
@@ -93,13 +92,7 @@ public class EditProActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

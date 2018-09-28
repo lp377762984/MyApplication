@@ -26,7 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -40,7 +39,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -114,7 +113,7 @@ public class ShopDetailedActivity extends BaseActivity {
 
     private void isJoinBranch(final String branchId) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
             LogUtil.i(s);
@@ -145,12 +144,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
@@ -377,7 +371,7 @@ public class ShopDetailedActivity extends BaseActivity {
     }
 
     private void join(final String shopID) {
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.PUT, Constants.JOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
@@ -401,13 +395,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         requestQueue.add(stringRequest);
@@ -416,7 +404,7 @@ public class ShopDetailedActivity extends BaseActivity {
 
 
     private void reloadInfo() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -441,21 +429,14 @@ public class ShopDetailedActivity extends BaseActivity {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
 
         };
         MyApplication.getHttpQueues().add(request);
     }
 
     private void getHuiJi(final String shopID) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf", s);
@@ -492,13 +473,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
 
         };
         MyApplication.getHttpQueues().add(stringRequest);
@@ -508,7 +483,7 @@ public class ShopDetailedActivity extends BaseActivity {
     private void getJiaolian(final String shopID) {
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FIND_JIAOLIAN_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_JIAOLIAN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf", s);
@@ -547,13 +522,6 @@ public class ShopDetailedActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
 
 
         };
@@ -564,7 +532,7 @@ public class ShopDetailedActivity extends BaseActivity {
 
     private void getShopDetail() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + branchID, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + branchID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -598,13 +566,7 @@ public class ShopDetailedActivity extends BaseActivity {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
         requestQueue.add(stringRequest);
     }

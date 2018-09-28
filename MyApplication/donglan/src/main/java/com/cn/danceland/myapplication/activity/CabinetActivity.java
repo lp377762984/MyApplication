@@ -11,24 +11,20 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CabinetBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -79,7 +75,7 @@ public class CabinetActivity extends BaseActivity {
 
     private void getData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDMyLOCKERS, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDMyLOCKERS, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf", s);
@@ -97,14 +93,7 @@ public class CabinetActivity extends BaseActivity {
                 Glide.with(CabinetActivity.this).load(R.drawable.img_error7).into(iv_error);
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
+          
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

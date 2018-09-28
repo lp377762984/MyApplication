@@ -15,14 +15,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestMyYeWuBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
-import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -372,7 +370,7 @@ public class YeWuAllFragment extends BaseFragment {
 //        JSONObject jsonObject = new JSONObject(s.toString());
 //        LogUtil.i(s.toString());
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, YEWU_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, YEWU_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -417,13 +415,7 @@ public class YeWuAllFragment extends BaseFragment {
                 LogUtil.e(volleyError.toString());
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

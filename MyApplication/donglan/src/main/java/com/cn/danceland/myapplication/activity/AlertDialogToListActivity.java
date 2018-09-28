@@ -6,39 +6,25 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.ConsultBean;
-import com.cn.danceland.myapplication.bean.PostDataBean;
-import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.bean.RequestScanerCodeHandsBean;
-import com.cn.danceland.myapplication.bean.RequestSimpleBean;
-import com.cn.danceland.myapplication.fragment.NoticeFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.StringUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -46,7 +32,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -216,7 +201,7 @@ public class AlertDialogToListActivity extends BaseActivity {
      * @throws JSONException
      */
     public void find_all_data(final int pageCount) throws JSONException {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.QUERY_HAND_CARD, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HAND_CARD, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s.toString());
@@ -254,13 +239,7 @@ public class AlertDialogToListActivity extends BaseActivity {
                 ToastUtils.showToastShort(volleyError.toString());
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

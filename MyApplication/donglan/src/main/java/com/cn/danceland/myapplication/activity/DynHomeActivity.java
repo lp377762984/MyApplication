@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +36,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -64,6 +62,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.KeyBoardUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ScreenUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -879,7 +878,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private RequstOneDynInfoBean requstOneDynInfoBean;
 
     private void findOneDyn(final String msgId, final String userId) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ONE_DYN, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_ONE_DYN, new Response.Listener<String>() {
 
 
             @Override
@@ -921,13 +920,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);
@@ -1535,7 +1528,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
         String Params = Constants.DEL_DYN_MSG + "/" + msgId;
 
-        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+        final MyStringRequest request = new MyStringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -1566,13 +1559,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         }) {
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);

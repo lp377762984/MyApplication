@@ -12,7 +12,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -20,6 +19,7 @@ import com.cn.danceland.myapplication.bean.BlackListBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -103,7 +103,7 @@ public class BlackListActivity extends BaseActivity {
     }
     private void delBlack(final int pos) {
 
-        StringRequest request=new StringRequest(Request.Method.POST, Constants.DEL_BLACKLIST_URL, new Response.Listener<String>() {
+        MyStringRequest request=new MyStringRequest(Request.Method.POST, Constants.DEL_BLACKLIST_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 RequestSimpleBean simpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
@@ -120,15 +120,9 @@ public class BlackListActivity extends BaseActivity {
 
             }
         }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                //  LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
 
 
-            }
+
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

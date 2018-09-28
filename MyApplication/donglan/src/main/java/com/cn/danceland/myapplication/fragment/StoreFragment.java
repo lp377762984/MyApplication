@@ -1,40 +1,24 @@
 package com.cn.danceland.myapplication.fragment;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
-import com.baidu.mapapi.map.Text;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.LocationActivity;
-import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2017/11/6.
@@ -113,7 +97,7 @@ public class StoreFragment extends BaseFragment {
 
     }
     public void getData(){
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH+"/1/"+jingdu+"/"+weidu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf",s);
@@ -125,12 +109,7 @@ public class StoreFragment extends BaseFragment {
                 LogUtil.e("zzf",volleyError.toString());
             }
         }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
+
         };
 
         requestQueue.add(stringRequest);

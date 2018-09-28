@@ -32,7 +32,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
@@ -966,7 +965,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
      */
     private void setMipushId() {
 
-        StringRequest request = new StringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //   LogUtil.i(s);
@@ -998,14 +997,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(request);
     }

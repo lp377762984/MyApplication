@@ -14,15 +14,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
@@ -36,7 +34,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
@@ -48,9 +46,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -103,7 +99,7 @@ public class BodyBaseActivity extends BaseActivity {
 
     private void initHeaderData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + requsetInfo.getPerson_id(), new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + requsetInfo.getPerson_id(), new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
@@ -129,12 +125,7 @@ public class BodyBaseActivity extends BaseActivity {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
         }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

@@ -28,7 +28,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -50,6 +49,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -910,7 +910,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         String Params = Constants.DEL_DYN_MSG + "?msgId=" + msgId;
 
 
-        final StringRequest request = new StringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
+        final MyStringRequest request = new MyStringRequest(Request.Method.DELETE, Params, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -927,19 +927,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 } else {
                     ToastUtils.showToastShort("删除失败");
                 }
-//
-//                Gson gson = new Gson();
-//                 requestInfoBean = new RequestInfoBean();
-//                requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
-//                if (requestInfoBean.getSuccess()) {
-//                    ToastUtils.showToastShort("删除成功");
-//                    // data.remove(pos);
-//                    //   notifyDataSetChanged();
-//                    EventBus.getDefault().post(new StringEvent("", EventConstants.DEL_DYN));
-//                    EventBus.getDefault().post(new IntEvent(pos, EventConstants.DEL_DYN));
-//                } else {
-//                    ToastUtils.showToastShort("删除失败：" + requestInfoBean.getErrorMsg());
-//                }
 
 
             }
@@ -952,13 +939,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         }) {
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);

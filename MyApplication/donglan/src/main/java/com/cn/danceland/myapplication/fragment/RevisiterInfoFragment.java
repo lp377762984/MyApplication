@@ -17,11 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -35,15 +33,12 @@ import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.willy.ratingbar.ScaleRatingBar;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by shy on 2018/1/11 17:09
@@ -476,7 +471,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private void find_by_id_potential(String id) {
 
 
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL + id, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL + id, new Response.Listener<String>() {
 
 
             @Override
@@ -503,13 +498,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(request);
     }

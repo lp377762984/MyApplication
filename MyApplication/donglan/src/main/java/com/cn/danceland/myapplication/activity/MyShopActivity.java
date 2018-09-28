@@ -17,7 +17,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -28,7 +27,7 @@ import com.cn.danceland.myapplication.bean.RequestShopListInfo;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -175,7 +174,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 
 
     private void reloadInfo() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.RELOAD_LOGININFO, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -203,14 +202,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
 
         };
         MyApplication.getHttpQueues().add(request);
@@ -218,7 +210,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 
 
     private void findJoinSHOP() {
-        StringRequest request = new StringRequest(Request.Method.GET, Constants.FIND_JOIN_SHOP_URL, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_JOIN_SHOP_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -245,16 +237,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
             }
         }) {
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
 
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                LogUtil.i(token);
-                hm.put("Authorization", token);
-                return hm;
-
-            }
         };
         MyApplication.getHttpQueues().add(request);
     }
@@ -262,7 +245,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
     private void changeShop(final String BranchId) {
 
 
-        StringRequest stringRequest1 = new StringRequest(Request.Method.PUT, Constants.CHANGE_CURRENT_SHOP_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest1 = new MyStringRequest(Request.Method.PUT, Constants.CHANGE_CURRENT_SHOP_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -296,12 +279,6 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 return hashMap;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return hashMap;
-            }
         };
 
 

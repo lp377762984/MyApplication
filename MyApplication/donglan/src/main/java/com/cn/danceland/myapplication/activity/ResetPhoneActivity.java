@@ -25,8 +25,8 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -204,7 +204,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
 
     private void resetPhone() {
 
-        StringRequest jsonRequest = new StringRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
+        MyStringRequest jsonRequest = new MyStringRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -233,12 +233,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 ToastUtils.showToastShort("请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
+
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

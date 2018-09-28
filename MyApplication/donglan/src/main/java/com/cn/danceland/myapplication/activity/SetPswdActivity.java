@@ -11,13 +11,13 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -102,7 +102,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void resetPwd(final String id, final String pswd) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.RESET_PASSWORD_URL, new Response.Listener<String>() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.RESET_PASSWORD_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

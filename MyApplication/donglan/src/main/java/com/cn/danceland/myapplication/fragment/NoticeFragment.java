@@ -103,8 +103,7 @@ public class NoticeFragment extends BaseFragment {
 
         init_pullToRefresh();
 
-        LogUtil.i("UMENG_CHANNEL--"+ Utils.getChannelName(context));
-        ToastUtils.showToastLong("UMENG_CHANNEL--"+ Utils.getChannelName(context));
+
         return v;
     }
 

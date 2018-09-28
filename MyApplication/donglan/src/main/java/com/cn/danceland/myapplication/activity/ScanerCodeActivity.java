@@ -9,12 +9,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.activity.ActivityScanerCode;
@@ -55,7 +54,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     }
 
     private void scan_qrcode(final String result) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -83,14 +82,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 showResultDialog("入场失败:请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
 
-            }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

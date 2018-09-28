@@ -16,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -26,6 +25,7 @@ import com.cn.danceland.myapplication.bean.RequestScanerCodeIfHandBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -160,7 +160,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
      * 查询数据
      */
     private void queryData() {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -213,13 +213,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
 
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -243,7 +237,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
         }
         LogUtil.i("prarmsBean--" + prarmsBean.card_id);
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.SEND_CARD_ENTER, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SEND_CARD_ENTER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s.toString());
@@ -265,13 +259,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
                 showResultDialog("入场失败:请查看网络连接");
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {

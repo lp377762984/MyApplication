@@ -17,7 +17,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
@@ -31,6 +30,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -507,7 +507,7 @@ public class SelectionFragment extends BaseFragment {
     private void findPushUser() {
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_PUSH_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_PUSH_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
@@ -535,13 +535,7 @@ public class SelectionFragment extends BaseFragment {
 
             }
         }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("uid", SPUtils.getString(Constants.MY_USERID, null));//用户id
 
-                return map;
-            }
 
 
             @Override
@@ -563,7 +557,7 @@ public class SelectionFragment extends BaseFragment {
      * @param page
      */
     private void findSelectionDyn_Down(final int page) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -607,13 +601,6 @@ public class SelectionFragment extends BaseFragment {
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
 
         };
         MyApplication.getHttpQueues().add(request);
@@ -625,7 +612,7 @@ public class SelectionFragment extends BaseFragment {
      */
     private void findSelectionDyn_Up(final int page) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_JINGXUAN_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 pullToRefresh.onRefreshComplete();
@@ -679,13 +666,6 @@ public class SelectionFragment extends BaseFragment {
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
 
         };
         MyApplication.getHttpQueues().add(request);

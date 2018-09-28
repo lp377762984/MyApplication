@@ -18,7 +18,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.FitnessManActivity;
@@ -33,6 +32,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -515,7 +515,7 @@ public class AttentionFragment extends BaseFragment {
     private void findPushUser() {
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_PUSH_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_PUSH_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
@@ -551,13 +551,7 @@ public class AttentionFragment extends BaseFragment {
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);
@@ -570,7 +564,7 @@ public class AttentionFragment extends BaseFragment {
      * @param page
      */
     private void findSelectionDyn_Down(final int page) {
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_GUANZHU_DT_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_GUANZHU_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
@@ -642,13 +636,7 @@ public class AttentionFragment extends BaseFragment {
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);
@@ -660,7 +648,7 @@ public class AttentionFragment extends BaseFragment {
      */
     private void findSelectionDyn_Up(final int page) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_GUANZHU_DT_MSG, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_GUANZHU_DT_MSG, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 Gson gson = new Gson();
@@ -714,13 +702,7 @@ public class AttentionFragment extends BaseFragment {
             }
 
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
+
 
         };
         MyApplication.getHttpQueues().add(request);

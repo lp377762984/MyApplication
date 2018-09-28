@@ -12,7 +12,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -20,7 +19,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ForOtherListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
@@ -63,7 +62,7 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
 
     private void initData() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FOROTHERSIJIAOLIST, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FOROTHERSIJIAOLIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -90,12 +89,7 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

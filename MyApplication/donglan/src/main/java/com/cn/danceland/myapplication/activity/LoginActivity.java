@@ -24,7 +24,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -37,6 +36,8 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
@@ -436,7 +437,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private void login() {
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
@@ -530,7 +531,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         String url = Constants.QUERY_USER_DYN_INFO_URL + params;
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -560,14 +561,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
         }
         ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("queryUserInfo");
@@ -617,7 +610,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
      */
     private void setMipushId() {
 
-        StringRequest request = new StringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //   LogUtil.i(s);
@@ -647,14 +640,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-
-                return map;
-            }
         };
 
         // 将请求加入全局队列中

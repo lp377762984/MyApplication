@@ -21,7 +21,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
@@ -44,6 +43,7 @@ import com.cn.danceland.myapplication.utils.DataCleanManager;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.GetJsonDataUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -435,7 +435,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     public void commitSelf(String url, final String mapkey, final String mapvalue) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.contains("true")) {
@@ -464,13 +464,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
@@ -586,7 +580,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void logOut() {
 
         String url = Constants.LOGOUT_URL;
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -655,14 +649,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
 
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                return map;
-            }
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找

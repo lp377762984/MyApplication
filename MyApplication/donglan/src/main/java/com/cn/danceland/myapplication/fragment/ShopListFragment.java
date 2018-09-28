@@ -20,7 +20,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
@@ -34,7 +33,7 @@ import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -137,7 +136,7 @@ public class ShopListFragment extends BaseFragment {
     }
 
     public void getListData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.BRANCH + "/" + weidu + "/" + jingdu, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + weidu + "/" + jingdu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
@@ -200,12 +199,7 @@ public class ShopListFragment extends BaseFragment {
                 Glide.with(mActivity).load(R.drawable.img_error7).into(iv_error);
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -215,7 +209,7 @@ public class ShopListFragment extends BaseFragment {
 
     private void getBanner(final String branchId) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
@@ -247,12 +241,7 @@ public class ShopListFragment extends BaseFragment {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

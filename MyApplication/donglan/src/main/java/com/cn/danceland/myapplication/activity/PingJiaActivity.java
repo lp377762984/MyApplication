@@ -13,7 +13,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.PingJiaCon;
@@ -21,6 +20,7 @@ import com.cn.danceland.myapplication.bean.PingJiaResultBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -116,7 +116,7 @@ public class PingJiaActivity extends BaseActivity {
 
     private void getPingJiaData(final int evaluate_id) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.FINDPINGJIA+evaluate_id, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.FINDPINGJIA+evaluate_id, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 PingJiaResultBean pingJiaResultBean = gson.fromJson(s, PingJiaResultBean.class);
@@ -140,12 +140,7 @@ public class PingJiaActivity extends BaseActivity {
                 LogUtil.e("zzf",volleyError.toString());
             }
         }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
+
 
         };
 

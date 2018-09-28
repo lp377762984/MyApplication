@@ -25,18 +25,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -326,7 +326,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
     private void searchMember(final String phone) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDMEMBER, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDMEMBER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -367,12 +367,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
+
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -388,7 +383,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
     private void findUser(final String phone) {
 
 
-        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_ADD_USER_USRL, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_ADD_USER_USRL, new Response.Listener<String>() {
 
 
             @Override
@@ -401,29 +396,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                     dataList=infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
                 }
-
-
-//                if (userInfo.getSuccess() && userInfo.getData() != null) {
-//                    tv_guanzhu.setVisibility(View.VISIBLE);
-//                    //     ll_result.setVisibility(View.VISIBLE);
-//                    tv_nickname.setText(userInfo.getData().getPerson().getNick_name());
-//                    RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-//                    Glide.with(AddFriendsActivity.this).load(userInfo.getData().getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
-////                    if (userInfo.getData().getIs_follow()) {
-////                        tv_guanzhu.setText("已关注");
-////                    }else {
-////                        tv_guanzhu.setText("+关注");
-////                    }
-////                    if (TextUtils.equals(userInfo.getData().getPerson().getId(),SPUtils.getString(Constants.MY_USERID,null))){
-////
-////                        tv_guanzhu.setText("");
-////
-////                    }
-//
-//                } else {
-//                    ToastUtils.showToastShort(userInfo.getErrorMsg());
-//                    //  tv_result_null.setVisibility(View.VISIBLE);
-//                }
 
             }
         }, new Response.ErrorListener() {
@@ -442,15 +414,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                // LogUtil.i("Bearer+"+SPUtils.getString(Constants.MY_TOKEN,null));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findUser");

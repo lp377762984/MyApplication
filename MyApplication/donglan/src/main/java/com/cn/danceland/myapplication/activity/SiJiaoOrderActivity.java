@@ -36,7 +36,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -58,6 +57,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -285,7 +285,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
 
     private void getJiaoLian() {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.FINDCourseTypeEmployee, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDCourseTypeEmployee, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf", s);
@@ -309,13 +309,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                 return map;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
         };
 
         MyApplication.getHttpQueues().add(stringRequest);

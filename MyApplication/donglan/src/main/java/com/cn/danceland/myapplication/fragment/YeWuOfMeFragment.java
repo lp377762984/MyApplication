@@ -14,7 +14,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -23,7 +22,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -368,7 +367,7 @@ public class YeWuOfMeFragment extends BaseFragment {
 //        JSONObject jsonObject = new JSONObject(s.toString());
 //        LogUtil.i(s.toString());
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, YEWU_URL, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, YEWU_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -413,13 +412,7 @@ public class YeWuOfMeFragment extends BaseFragment {
                 LogUtil.e(volleyError.toString());
             }
         }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
 
-                return map;
-            }
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -436,65 +429,7 @@ public class YeWuOfMeFragment extends BaseFragment {
             }
         };
 
-//        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_UPCOMING_MATTER, jsonObject, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                LogUtil.i(jsonObject.toString());
-//                RequestMyYeWuBean potentialListBean = new RequestMyYeWuBean();
-//                potentialListBean = gson.fromJson(jsonObject.toString(), RequestMyYeWuBean.class);
-//
-//                myListAatapter.notifyDataSetChanged();
-//
-//
-//                if (potentialListBean.getSuccess()) {
-//
-//
-//
-//
-//                    if (potentialListBean.getData().getLast()) {
-//                        //    mCurrentPage = mCurrentPage + 1;
-//                        isEnd = true;
-//                        setEnd();
-//                    } else {
-//                        //  datalist.addAll( orderinfo.getData().getContent());
-//                        //  myListAatapter.notifyDataSetChanged();
-//                        isEnd = false;
-//                        init_pullToRefresh();
-//                    }
-//
-//                    if (mCurrentPage == 1) {
-//                        datalist = potentialListBean.getData().getContent();
-//                        myListAatapter.notifyDataSetChanged();
-//                        mCurrentPage = mCurrentPage + 1;
-//                    } else {
-//                        datalist.addAll(potentialListBean.getData().getContent());
-//                        myListAatapter.notifyDataSetChanged();
-//                        mCurrentPage = mCurrentPage + 1;
-//                    }
-//
-//                } else {
-//                    ToastUtils.showToastLong(potentialListBean.getErrorMsg());
-//                }
-//
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//
-//                //ToastUtils.showToastShort(volleyError.toString());
-//                imageView.setImageResource(R.drawable.img_error7);
-//                tv_error.setText("网络异常");
-//            }
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() throws AuthFailureError {
-//                HashMap<String, String> map = new HashMap<String, String>();
-//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-//
-//                return map;
-//            }
-//        };
+
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
