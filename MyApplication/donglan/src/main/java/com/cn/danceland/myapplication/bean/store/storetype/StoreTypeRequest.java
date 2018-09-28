@@ -10,10 +10,12 @@ import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -45,21 +47,13 @@ public class StoreTypeRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/save", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeType/save", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
-
-	
 
 	/**
 	 * @方法说明:修改储值卡类型
@@ -71,20 +65,13 @@ public class StoreTypeRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/update", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeType/update", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
 
 	/**
 	 * @方法说明:按主键删除储值卡类型
@@ -113,24 +100,16 @@ public class StoreTypeRequest {
 			// LogUtil.i(storeType.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/queryList", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeType/queryList", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				rl.setVisibility(View.VISIBLE);
 				img.setImageResource(R.drawable.img_error7);
 				tv.setText("网络异常");
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按条件查询储值卡类型分页列表
@@ -143,21 +122,13 @@ public class StoreTypeRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/queryPage", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeType/queryPage", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按主键查询储值卡类型单个数据
@@ -187,17 +158,11 @@ public class StoreTypeRequest {
 			// LogUtil.i(storeType.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeType/queryCount", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeType/queryCount", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
 }

@@ -356,16 +356,7 @@ public class YeWuOfMeFragment extends BaseFragment {
      */
     public void find_upcoming_list(final String id, final int pageCount, final String big_type) throws JSONException {
 
-//        StrBean strBean = new StrBean();
-//        strBean.page = pageCount - 1 + "";
-//        strBean.member_id = id;
-//        if (!TextUtils.isEmpty(done)) {
-//            strBean.status = done;
-//        }
-//        String s = gson.toJson(strBean);
-//
-//        JSONObject jsonObject = new JSONObject(s.toString());
-//        LogUtil.i(s.toString());
+
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, YEWU_URL, new Response.Listener<String>() {
             @Override

@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.PingJiaCon;
@@ -21,6 +22,7 @@ import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -207,7 +209,7 @@ public class PingJiaActivity extends BaseActivity {
 
         String s = gson.toJson(pingJiaCon);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.PINGJIA,s , new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.PINGJIA,s , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject.toString().contains("true")){
@@ -222,17 +224,8 @@ public class PingJiaActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf",volleyError.toString());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
 

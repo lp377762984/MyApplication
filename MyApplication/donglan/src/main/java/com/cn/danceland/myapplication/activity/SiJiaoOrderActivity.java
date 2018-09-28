@@ -36,6 +36,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -58,6 +59,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -767,8 +769,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
 
         String s = gson.toJson(sijiaoOrderConfirmBean);
 
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CARD_ORDER, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 //RequestOrderPayInfoBean requestOrderInfoBean = new RequestOrderPayInfoBean();
@@ -798,18 +799,8 @@ public class SiJiaoOrderActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
 
@@ -842,8 +833,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         commitDepositBean.setExtends_params(extends_params);
         String s = gson.toJson(commitDepositBean);
 
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_DEPOSIT, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -867,7 +857,6 @@ public class SiJiaoOrderActivity extends BaseActivity {
                 } else {
                     ToastUtils.showToastShort("订单提交失败");
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -876,16 +865,8 @@ public class SiJiaoOrderActivity extends BaseActivity {
                 LogUtil.i(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     /**
@@ -964,8 +945,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         payBean.id = id;
         String str = gson.toJson(payBean);
 
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -988,16 +968,8 @@ public class SiJiaoOrderActivity extends BaseActivity {
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
 

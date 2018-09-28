@@ -9,18 +9,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.ClubNewsListviewAdapter;
 import com.cn.danceland.myapplication.bean.RequsetClubDynBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -29,9 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -178,7 +174,7 @@ class StrBean{
             StrBean strBean=new StrBean();
         strBean.page=currentPage+"";
 
-        JsonObjectRequest request=new JsonObjectRequest(Request.Method.POST, Constants.FIND_CLUBDYNAMIC_URL, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request=new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_CLUBDYNAMIC_URL, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -205,21 +201,14 @@ class StrBean{
                         setEnd();
                     }else {
                         mCurrentPage = currentPage + 1;
-
                     }
 
 //                    if (data.size() > 0 && data.size() < 10) {
 //                        setEnd();
 //                    } else {
 //                        mCurrentPage = currentPage + 1;
-//
 //                    }
-
                 }
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -227,14 +216,7 @@ class StrBean{
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;}
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
 

@@ -14,11 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
@@ -29,7 +27,7 @@ import com.cn.danceland.myapplication.shouhuan.bean.StepListBean;
 import com.cn.danceland.myapplication.shouhuan.bean.StepResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.ViewUtils;
@@ -44,9 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.model.Axis;
@@ -271,7 +267,7 @@ public class WearFitFatigueActivity extends Activity {
             heartRatePostBean.setDay(day);
             LogUtil.i("请求后台数据" + heartRatePostBean.toString());
             //获取后台数据
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_LIST
+            MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_LIST
                     , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
@@ -309,14 +305,7 @@ public class WearFitFatigueActivity extends Activity {
                     ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                     LogUtil.e("onErrorResponse", volleyError.toString());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                    return map;
-                }
-            };
+            }) ;
             MyApplication.getHttpQueues().add(request);
         }
     }
@@ -334,7 +323,7 @@ public class WearFitFatigueActivity extends Activity {
         LogUtil.i("请求后台数据" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_STEP_FINDFATIGUE_AVG
                 , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -379,16 +368,8 @@ public class WearFitFatigueActivity extends Activity {
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
-
     }
 
     private void addChildLayout() {

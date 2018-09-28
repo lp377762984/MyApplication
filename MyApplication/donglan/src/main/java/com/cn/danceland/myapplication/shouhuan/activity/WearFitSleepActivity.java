@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.WearFitSleepBean;
@@ -43,6 +44,7 @@ import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
@@ -576,7 +578,7 @@ public class WearFitSleepActivity extends Activity {
             heartRatePostBean.setDay(day);
             LogUtil.i("请求后台心率" + heartRatePostBean.toString());
             //获取后台数据
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_LIST
+            MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_LIST
                     , new Gson().toJson(heartRatePostBean), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject jsonObject) {
@@ -644,7 +646,7 @@ public class WearFitSleepActivity extends Activity {
         LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FINDSUM
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FINDSUM
                 , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -980,7 +982,7 @@ public class WearFitSleepActivity extends Activity {
     }
 
     private void postHeart(List<SleepResultBean> postHeartList) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_SAVE
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_SAVE
                 , new Gson().toJson(postHeartList), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -996,14 +998,7 @@ public class WearFitSleepActivity extends Activity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 

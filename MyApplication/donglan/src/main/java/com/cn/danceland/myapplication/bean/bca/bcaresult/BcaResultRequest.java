@@ -5,9 +5,11 @@ import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -32,40 +34,25 @@ public class BcaResultRequest {
 	 * @方法说明:新增结果项
 	 **/
 	public void save(BcaResult bcaResult, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaResult/save", new Gson().toJson(bcaResult), listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaResult/save", new Gson().toJson(bcaResult), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
-	
 
 	/**
 	 * @方法说明:修改结果项
 	 **/
 	public void update(BcaResult bcaResult, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaResult/update", new Gson().toJson(bcaResult), listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaResult/update", new Gson().toJson(bcaResult), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
 
 	/**
 	 * @方法说明:按主键删除结果项
@@ -87,41 +74,25 @@ public class BcaResultRequest {
 	 * @方法说明:按条件查询结果项列表
 	 **/
 	public void queryList(BcaResultCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaResult/queryList", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaResult/queryList", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按条件查询结果项分页列表
 	 **/
 	public void queryPage(BcaResultCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaResult/queryPage", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaResult/queryPage", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按主键查询结果项单个数据
@@ -144,17 +115,11 @@ public class BcaResultRequest {
 	 * @方法说明:按条件查询结果项数据个数
 	 **/
 	public void queryCount(BcaResultCond cond, Listener<JSONObject> listener) {
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "bcaResult/queryCount", new Gson().toJson(cond), listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "bcaResult/queryCount", new Gson().toJson(cond), listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
 }

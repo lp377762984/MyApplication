@@ -13,27 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ConsultBean;
 import com.cn.danceland.myapplication.bean.PostDataBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * AlertDialog  有×的
@@ -210,7 +205,7 @@ public class AlertDialogActivity extends BaseActivity {
         consultBean.setType(type);
         consultBean.setSub_type(sub_type);
         LogUtil.i("提交参数：" + consultBean.toString());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_SAVE_CONSULT
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_SAVE_CONSULT
                 , new Gson().toJson(consultBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -237,14 +232,7 @@ public class AlertDialogActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -256,7 +244,7 @@ public class AlertDialogActivity extends BaseActivity {
         consultBean.setPhone_no(tel_ev.getText().toString());
         consultBean.setRemark(remark_ev.getText().toString());
         LogUtil.i("提交参数：" + consultBean.toString());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_SAVE_RECOMMEND
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_SAVE_RECOMMEND
                 , new Gson().toJson(consultBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -282,15 +270,7 @@ public class AlertDialogActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-//                LogUtil.i(""+ SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 }

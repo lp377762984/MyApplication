@@ -26,11 +26,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
@@ -41,7 +39,7 @@ import com.cn.danceland.myapplication.fragment.YeWuOfMeFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -63,9 +61,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import razerdp.basepopup.BasePopupWindow;
 
@@ -459,7 +454,7 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
 
         JSONObject jsonObject = new JSONObject(s.toString());
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_NOT_UPCOMINGMATTER, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_NOT_UPCOMINGMATTER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -475,29 +470,16 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
                     // initMagicIndicator1();
                     EventBus.getDefault().post(new IntEvent(requsetSimpleBean.data, 150));
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
-
 
     public class ListPopup extends BasePopupWindow {
         private Context context;

@@ -10,11 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -24,7 +22,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -37,9 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -268,8 +264,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
         String s = gson.toJson(strBean);
         LogUtil.i(s);
         JSONObject jsonObject = new JSONObject(s.toString());
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_VISIT_RECORD, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_VISIT_RECORD, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -278,14 +273,11 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
 
                 myListAatapter.notifyDataSetChanged();
 
-
                 if (potentialListBean.getSuccess()) {
 
                     if (potentialListBean.getData() != null) {
                         EventBus.getDefault().post(new IntEvent(potentialListBean.getData().getTotalElements(), 162));
                     }
-
-
 
                     if (potentialListBean.getData().getLast()) {
                         //    mCurrentPage = mCurrentPage + 1;
@@ -311,30 +303,16 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
                 } else {
                     ToastUtils.showToastLong(potentialListBean.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                //  ToastUtils.showToastShort(volleyError.toString());
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                //     LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
-
 
     class MyListAatapter extends BaseAdapter {
 

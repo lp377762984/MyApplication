@@ -11,12 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -28,6 +26,7 @@ import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -37,9 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -242,7 +239,7 @@ public class UserListviewAdapter extends BaseAdapter {
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
         LogUtil.i(gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 LogUtil.i(json.toString());
@@ -266,24 +263,14 @@ public class UserListviewAdapter extends BaseAdapter {
             public void onErrorResponse(VolleyError error) {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
+        });
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
         // 设置超时时间
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
     }
 
     class ViewHolder {

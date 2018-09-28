@@ -31,12 +31,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -51,6 +49,7 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.FileUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -508,7 +507,7 @@ public class PublishActivity extends BaseActivity {
 
         JSONObject jsonObject = new JSONObject(str);
         LogUtil.i(str);
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_DYN_MSG, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.SAVE_DYN_MSG, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -523,27 +522,16 @@ public class PublishActivity extends BaseActivity {
                     }else {
                         ToastUtils.showToastShort("发布失败！请检查网络连接");
                     }
-
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     int maptag = 0;

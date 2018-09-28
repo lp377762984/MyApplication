@@ -40,7 +40,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -83,6 +82,7 @@ import com.cn.danceland.myapplication.im.ui.ConversationActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -571,12 +571,11 @@ public class ShopFragment extends BaseFragment {
 
                 SPUtils.setInt(Constants.ROLE_ID, Integer.valueOf(roleMap.get(role)));//保存当前使用角色
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
+                MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtil.i( jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
-
 
                             MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
                             data = menusBean.getData();
@@ -595,20 +594,9 @@ public class ShopFragment extends BaseFragment {
                         ToastUtils.showToastShort("请查看网络连接");
                         LogUtil.e("zzf", volleyError.toString());
                     }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> map = new HashMap<String, String>();
-                        map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                        return map;
-                    }
-
-                };
-
+                });
                 MyApplication.getHttpQueues().add(jsonObjectRequest);
-
             } else {
-
 
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;

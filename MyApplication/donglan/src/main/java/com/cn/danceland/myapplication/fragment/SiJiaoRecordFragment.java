@@ -15,6 +15,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
@@ -28,6 +29,7 @@ import com.cn.danceland.myapplication.bean.YuYueResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -94,9 +96,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
     }
 
     private void getGroupData(String s) {
-
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 //if("2".equals(course_category)){
@@ -136,22 +136,9 @@ public class SiJiaoRecordFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
-
     }
-
 
     private void initData() {
 
@@ -171,7 +158,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
         //siJiaoYuYueConBean.setEmployee_id(32);
         final String s = gson.toJson(siJiaoYuYueConBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.e("zzf", jsonObject.toString());
@@ -198,19 +185,8 @@ public class SiJiaoRecordFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.e("zzf", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        }) ;
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
     private void initView() {

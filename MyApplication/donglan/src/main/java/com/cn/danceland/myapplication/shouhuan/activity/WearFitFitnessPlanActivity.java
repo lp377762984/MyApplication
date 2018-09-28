@@ -17,15 +17,12 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.WearFitSleepBean;
-import com.cn.danceland.myapplication.shouhuan.bean.MorePostBean;
 import com.cn.danceland.myapplication.shouhuan.bean.SleepBean;
 import com.cn.danceland.myapplication.shouhuan.bean.SleepListBean;
 import com.cn.danceland.myapplication.shouhuan.bean.SleepMorePostBean;
@@ -36,7 +33,7 @@ import com.cn.danceland.myapplication.shouhuan.chart.BarView;
 import com.cn.danceland.myapplication.shouhuan.chart.SourceEntity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -49,9 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 健身计划
@@ -236,7 +231,7 @@ public class WearFitFitnessPlanActivity extends Activity {
         LogUtil.i("请求后台心率" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_gt))) + "-"
                 + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(Long.valueOf(timestamp_lt))));
         //获取后台数据
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FINDSUM
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_WEAR_FIT_SLEEP_FINDSUM
                 , new Gson().toJson(weekPostBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -265,37 +260,6 @@ public class WearFitFitnessPlanActivity extends Activity {
                             source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
                             moreList.add(source);
                         }
-//                        while (moreList.size() != 7) {
-
-//                        for (int i = 0; i < list.size(); i++) {
-//                            if (i == 0) {
-//                                moreList.add(list.get(i));
-//                            }
-//                            boolean isAdd = false;
-//                            for (int j = 0; j < moreList.size(); j++) {
-//                                if (list.get(i).getSource().equals(moreList.get(j).getSource())) {
-//                                    isAdd = true;
-//
-//                                    SourceEntity.Source source = new SourceEntity.Source();
-//                                    source.setAwakeCount(0);//清醒
-//                                    int qianshui = moreList.get(j).getShallowCount() + list.get(i).getShallowCount();
-//                                    int shenshui = moreList.get(j).getDeepCount() + list.get(i).getDeepCount();
-//                                    if (list.get(i).getSource().equals("星期二")) {
-//                                        LogUtil.i("111****" + list.get(i).getSource() + moreList.get(j).getShallowCount() + "**" + list.get(i).getShallowCount());
-//                                        LogUtil.i("222****" + list.get(i).getSource() + moreList.get(j).getDeepCount() + "**" + list.get(i).getDeepCount());
-//                                    }
-//                                    source.setShallowCount(qianshui);//浅睡
-//                                    source.setDeepCount(shenshui);//深睡
-//                                    source.setScale(100);
-//                                    source.setSource(list.get(i).getSource());
-//                                    source.setAllCount(source.getAwakeCount() + source.getShallowCount() + source.getDeepCount());
-//                                    moreList.set(j, source);
-//                                }
-//                            }
-//                            if (!isAdd) {
-//                                moreList.add(list.get(i));
-//                            }
-//                        }
                     }
 
                     Message message = new Message();
@@ -317,14 +281,7 @@ public class WearFitFitnessPlanActivity extends Activity {
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
     }
 

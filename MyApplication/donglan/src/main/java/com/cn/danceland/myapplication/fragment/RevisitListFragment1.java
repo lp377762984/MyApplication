@@ -19,11 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -36,7 +34,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -54,9 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.cn.danceland.myapplication.R.id.tv_name;
 
@@ -655,11 +651,8 @@ public class RevisitListFragment1 extends BaseFragment {
      * @throws JSONException
      */
     public void find_potential_list(final String s) throws JSONException {
-
-
         JSONObject jsonObject = new JSONObject(s.toString());
-
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_POTENTIAL_LIST, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_POTENTIAL_LIST, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -669,7 +662,6 @@ public class RevisitListFragment1 extends BaseFragment {
                 //   LogUtil.i(potentialListBean.toString());
                 //  datalist = potentialListBean.getData().getContent();
                 myListAatapter.notifyDataSetChanged();
-
 
                 if (potentialListBean.getSuccess()) {
                     if (potentialListBean.getData().getLast()) {
@@ -692,12 +684,9 @@ public class RevisitListFragment1 extends BaseFragment {
                         myListAatapter.notifyDataSetChanged();
                         mCurrentPage = mCurrentPage + 1;
                     }
-
                 } else {
                     ToastUtils.showToastLong(potentialListBean.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -706,16 +695,7 @@ public class RevisitListFragment1 extends BaseFragment {
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 }

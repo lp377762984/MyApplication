@@ -8,11 +8,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.OrderExtendsInfoBean;
@@ -20,17 +18,14 @@ import com.cn.danceland.myapplication.bean.RequestOrderListBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by shy on 2017/12/29 15:39
@@ -318,7 +313,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
             e.printStackTrace();
         }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_WECHAT_PAY, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_WECHAT_PAY, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -332,28 +327,15 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                     btn_pay.setVisibility(View.GONE);
                 } else {
                     ToastUtils.showToastShort("支付失败");
-
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 ToastUtils.showToastShort(volleyError.toString());
-
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        }) ;
         //   MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
 
@@ -392,7 +374,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
             e.printStackTrace();
         }
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_ALIPAY, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -407,8 +389,6 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     ToastUtils.showToastShort("支付失败");
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -417,16 +397,8 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
 
@@ -436,7 +408,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
         requestBean.id = id;
         JSONObject jsonObject = new JSONObject(gson.toJson(requestBean).toString());
         LogUtil.i(jsonObject.toString());
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.CANSEL_ORDER, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.CANSEL_ORDER, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -460,16 +432,7 @@ public class OrderDetailsActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 }

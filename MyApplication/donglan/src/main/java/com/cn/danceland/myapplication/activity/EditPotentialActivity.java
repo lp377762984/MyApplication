@@ -26,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -39,6 +40,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -820,7 +822,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
 
         JSONObject jsonObject = new JSONObject(data);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.PUT, Constants.UPDATE_POTENTIAL, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.PUT, Constants.UPDATE_POTENTIAL, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -841,17 +843,8 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
     /**
@@ -913,7 +906,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
             strBean.branch_id = "0";
         }
         //      LogUtil.i( gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -939,15 +932,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-
-                return map;
-            }
-        };
+        });
 //        StringRequest request = new StringRequest(Request.Method.POST, Constants.FIND_BY_TYPE_CODE + codetype, new Response.Listener<String>() {
 //            @Override
 //            public void onResponse(String s) {

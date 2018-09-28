@@ -29,6 +29,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -49,6 +50,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -760,7 +762,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         juBaoBean.type = type + "";
         juBaoBean.content = content;
         LogUtil.i(new Gson().toJson(juBaoBean));
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.SAVE_REPORT, new Gson().toJson(juBaoBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -770,26 +772,15 @@ public class MyDynListviewAdater extends BaseAdapter {
                 } else {
                     ToastUtils.showToastShort("举报失败");
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请查看网络连接");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
-
-
     }
-
 
     /**
      * 点赞
@@ -805,7 +796,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
         LogUtil.i(gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.HOST + "appPraise/giveThumbs", jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.HOST + "appPraise/giveThumbs", jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 LogUtil.i(json.toString());
@@ -827,7 +818,6 @@ public class MyDynListviewAdater extends BaseAdapter {
                         ToastUtils.showToastShort("点赞成功");
                     }
 
-
                     notifyDataSetChanged();
 
                 } else {
@@ -839,22 +829,12 @@ public class MyDynListviewAdater extends BaseAdapter {
             public void onErrorResponse(VolleyError error) {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
+        });
         request.setTag("addzan");
         // 设置超时时间
         request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
     }
 
 
@@ -872,7 +852,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         Gson gson = new Gson();
         JSONObject jsonObject = new JSONObject(gson.toJson(strBean).toString());
         LogUtil.i(gson.toJson(strBean).toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 LogUtil.i(json.toString());
@@ -894,15 +874,7 @@ public class MyDynListviewAdater extends BaseAdapter {
             public void onErrorResponse(VolleyError error) {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
-
+        }) ;
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");
@@ -911,7 +883,6 @@ public class MyDynListviewAdater extends BaseAdapter {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
     }
 
     /**

@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -26,6 +27,7 @@ import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -124,7 +126,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
         StrBean prarmsBean = new StrBean();
         prarmsBean.param_key = "has_hand_card";
         //手牌  格式1，1,13，***
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, gson.toJson(prarmsBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -145,14 +147,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(request);
     }
 

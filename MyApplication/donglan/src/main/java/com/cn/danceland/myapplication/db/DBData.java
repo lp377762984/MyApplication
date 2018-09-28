@@ -2,29 +2,7 @@ package com.cn.danceland.myapplication.db;
 
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cn.danceland.myapplication.MyApplication;
-import com.cn.danceland.myapplication.bean.CityBean;
-import com.cn.danceland.myapplication.bean.RootBean;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.internal.Utils;
-
-import org.greenrobot.greendao.AbstractDaoMaster;
-import org.greenrobot.greendao.AbstractDaoSession;
-import org.greenrobot.greendao.identityscope.IdentityScopeType;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,11 +11,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 

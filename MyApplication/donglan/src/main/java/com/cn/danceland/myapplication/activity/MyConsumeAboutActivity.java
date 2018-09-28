@@ -9,11 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -21,7 +19,7 @@ import com.cn.danceland.myapplication.bean.MyConSumeBean;
 import com.cn.danceland.myapplication.bean.MyConsumeCon;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
@@ -29,9 +27,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by feng on 2018/5/9.
@@ -74,8 +70,7 @@ public class MyConsumeAboutActivity extends BaseActivity {
         myConsumeCon.setRoot_opt_no(root_opt_no);
         String s = gson.toJson(myConsumeCon);
 
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -91,18 +86,8 @@ public class MyConsumeAboutActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                return map;
-            }
-
-        };
-
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
     }
 
 

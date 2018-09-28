@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -27,6 +28,7 @@ import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomDatePicker;
@@ -220,7 +222,7 @@ public class ReadyTestActivity extends BaseActivity {
 
         String strbean = gson.toJson(readyTestBean);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.REAYTEST, strbean, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.REAYTEST, strbean, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 if(jsonObject.toString().contains("true")){
@@ -232,14 +234,7 @@ public class ReadyTestActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("Authorization",SPUtils.getString(Constants.MY_TOKEN,""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -258,7 +253,7 @@ public class ReadyTestActivity extends BaseActivity {
 
     private void initData() {
 
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + id, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.QUERY_USER_DYN_INFO_URL + id, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);

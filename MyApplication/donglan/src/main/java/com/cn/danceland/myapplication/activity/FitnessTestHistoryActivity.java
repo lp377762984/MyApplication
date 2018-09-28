@@ -18,6 +18,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -59,7 +60,6 @@ public class FitnessTestHistoryActivity extends BaseActivity {
     private TextView rightTv;
 
     private NoticeAdapter adapter;
-    private Gson gson = new Gson();
 
     private List<FitnessTestHistoryBean.Content> datalist = new ArrayList<>();
     private int mCurrentPage = 0;//起始请求页

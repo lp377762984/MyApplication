@@ -4,9 +4,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -39,21 +41,13 @@ public class StoreAccountRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/save", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeAccount/save", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
-	
 
 	/**
 	 * @方法说明:修改储值帐户
@@ -65,20 +59,13 @@ public class StoreAccountRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/update", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeAccount/update", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
-
 
 	/**
 	 * @方法说明:按主键删除储值帐户
@@ -107,21 +94,13 @@ public class StoreAccountRequest {
 			// LogUtil.i(storeAccount.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/findAccount ", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeAccount/findAccount ", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按条件查询储值帐户分页列表
@@ -134,21 +113,13 @@ public class StoreAccountRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/queryPage", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeAccount/queryPage", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		}) ;
 		MyApplication.getHttpQueues().add(request);
 	}
-
- 
 
 	/**
 	 * @方法说明:按主键查询储值帐户单个数据
@@ -178,17 +149,11 @@ public class StoreAccountRequest {
 			// LogUtil.i(storeAccount.toString());
 			e.printStackTrace();
 		}
-		JsonObjectRequest request = new JsonObjectRequest(1, Constants.HOST + "storeAccount/queryCount", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeAccount/queryCount", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
-		}) {
-			public Map<String, String> getHeaders() throws AuthFailureError {
-				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-				return map;
-			}
-		};
+		});
 		MyApplication.getHttpQueues().add(request);
 	}
 }

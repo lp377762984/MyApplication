@@ -33,6 +33,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -50,6 +51,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -353,7 +355,7 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
     }
 
     public void findParams(StrBean strBean) {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_PARAM_KEY, new Gson().toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -364,18 +366,8 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-
             }
-        }) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
     }
 

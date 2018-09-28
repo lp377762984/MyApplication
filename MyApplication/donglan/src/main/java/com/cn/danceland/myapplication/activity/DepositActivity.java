@@ -13,18 +13,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestDepositBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
@@ -32,9 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by shy on 2017/12/27 16:21
@@ -134,7 +130,7 @@ public class DepositActivity extends BaseActivity implements View.OnClickListene
 
         JSONObject jsonObject = new JSONObject(str);
 
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, Constants.FIND_ALL_DEPOSIT, jsonObject, new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_ALL_DEPOSIT, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -158,19 +154,9 @@ public class DepositActivity extends BaseActivity implements View.OnClickListene
                 tv_error.setText("网络异常");
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, ""));
-                LogUtil.i(SPUtils.getString(Constants.MY_TOKEN, "") + "====" + SPUtils.getString(Constants.MY_USERID, ""));
-                return map;
-            }
-        };
+        });
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
-
 
     class MyDepositListAdapter extends BaseAdapter {
         private Context context;
