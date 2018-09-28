@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.Utils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -102,6 +103,9 @@ public class NoticeFragment extends BaseFragment {
         });
 
         init_pullToRefresh();
+
+        LogUtil.i("UMENG_CHANNEL--"+ Utils.getChannelName(context));
+        ToastUtils.showToastLong("UMENG_CHANNEL--"+ Utils.getChannelName(context));
         return v;
     }
 
