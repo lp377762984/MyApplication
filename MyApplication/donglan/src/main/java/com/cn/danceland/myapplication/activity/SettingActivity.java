@@ -51,6 +51,7 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -601,6 +602,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
                     SPUtils.setBoolean(Constants.ISLOGINED, false);
+                    MiPushClient.clearNotification(MyApplication.getContext());//清除小米推送弹出的所有通知
+
                     //清空手环数据-- 开始
                     if (MyApplication.mBluetoothConnected) {
                         try {
