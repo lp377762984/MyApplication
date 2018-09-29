@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -131,7 +132,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 finish();
                 break;
             case 1011://登录
-              login();
+                login();
                 break;
 
             default:
@@ -230,7 +231,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
     public void permissions() {
         PermissionsUtil.TipInfo tip = new PermissionsUtil.TipInfo("注意:", "未授予位置和文件权限，应用将无法使用", "不了，谢谢", "打开权限");
-        if (PermissionsUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE)) {
+        if (PermissionsUtil.hasPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE)) {
             //有权限
             isPermission = true;
         } else {
@@ -247,7 +248,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     isPermission = false;
 
                 }
-            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE}, true, tip);
+            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE}, true, tip);
         }
 
     }
@@ -334,44 +335,40 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.logo:
                 // tlsService.initAccountLoginService();
-                //  showHostDialog();
+                if (Constants.DEV_CONFIG) {
+                    showHostDialog();
+                }
 
                 break;
             default:
                 break;
         }
     }
-//
-//    private final String[] HistList = new String[]{"http://192.168.1.117:8003/", "http://192.168.1.123:8003/", "http://192.168.1.122:8003/", "http://192.168.1.119:8003/", "http://wx.dljsgw.com/"};
-//    private final String[] HistListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器", "阿里云服务器"};
-//
-//    private void showHostDialog() {
-//        AlertDialog.Builder listDialog =
-//                new AlertDialog.Builder(this);
-//        listDialog.setTitle("请选择您要切换的服务器地址，阿里云环境无法使用沙箱版支付宝");
-//        listDialog.setItems(HistListName, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                // which 下标从0开始
-//                // ...To-do
-//                Toast.makeText(LoginActivity.this, "已切换" + which + HistListName[which], Toast.LENGTH_SHORT).show();
-//                motifyfiled(Constants.HOST, HistList[which]);
-//
-////                Constants.HOST = HistList[which];
-////                LogUtil.i(Constants.HOST);
-////                if (which == 4) {
-////                    Constants.DEV_CONFIG = false;
-////                } else {
-////                    Constants.DEV_CONFIG = true;
-////                }
-//
-//                LogUtil.i(Constants.HOST);
-//            }
-//        });
-//        listDialog.show();
-//
-//    }
-//
+
+    private final String[] HostList = new String[]{"http://192.168.1.114:8003/", "http://192.168.1.66:8003/", "http://192.168.1.168:8003/", "http://192.168.1.138:8003/"};
+    private final String[] HostListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器"};
+
+    private void showHostDialog() {
+
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        listDialog.setTitle("请选择您要切换的服务器地址");
+        listDialog.setItems(HostListName, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // which 下标从0开始
+                // ...To-do
+                Toast.makeText(LoginActivity.this, "已切换" + which + HostListName[which], Toast.LENGTH_SHORT).show();
+                Constants.HOST_SERVICE = HostList[which];
+                Constants.setHost(HostList[which]);
+                SPUtils.setString("hosturl", HostList[which]);
+                LogUtil.i(Constants.HOST);
+            }
+        });
+        listDialog.show();
+
+    }
+
 //    public void motifyfiled(String oldHost, String newHost) {
 //        String updateOldHost = newHost;
 //        Class clazz = null;
@@ -474,19 +471,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     ToastUtils.showToastShort("登录成功");
                     //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                 } else {
-                    if (loginInfoBean.getCode()==5) {
-                        AlertDialog.Builder builder=new AlertDialog.Builder(LoginActivity.this);
+                    if (loginInfoBean.getCode() == 5) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                         builder.setMessage("您未在此设备登录，请绑定设备");
                         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(LoginActivity.this,LoginBindActivity.class).putExtra("phone",mEtPhone.getText().toString()));
+                                startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
                             }
                         });
                         builder.show();
 
 
-                    }else {
+                    } else {
                         ToastUtils.showToastShort("用户名或密码错误");
                     }
 
@@ -609,7 +606,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
      * 设置mipusid
      */
     private void setMipushId() {
-
+        LogUtil.e(Constants.SET_MIPUSH_ID);
         MyStringRequest request = new MyStringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {

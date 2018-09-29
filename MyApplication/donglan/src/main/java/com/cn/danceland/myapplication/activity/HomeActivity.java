@@ -253,7 +253,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         View view=View.inflate(this,R.layout.activity_home,null);
         setContentView(view);
 
-
         //    requestPermissions();//请求权限
         instance = this;
         initView();

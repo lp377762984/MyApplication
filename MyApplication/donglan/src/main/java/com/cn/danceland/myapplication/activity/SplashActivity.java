@@ -4,12 +4,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
@@ -19,7 +26,9 @@ import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.google.gson.Gson;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMLogLevel;
@@ -39,8 +48,12 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.tencent.qcloud.ui.NotifyDialog;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import tencent.tls.platform.TLSHelper;
+
+import static com.android.volley.Request.Method.GET;
 
 
 /**
@@ -50,12 +63,39 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
 
     private static final int sleepTime = 2000;
     private SplashPresenter presenter;
+    private Handler mHander = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 100001:
 
+                    LogUtil.i(msg.getData().getString("apiurl", ""));
+                    if (!TextUtils.isEmpty(msg.getData().getString("apiurl", ""))) {
+                        Constants.setHost(msg.getData().getString("apiurl", ""));
+//                        Constants.setHost("http://192.168.1.66:8003/");
+                    }
+
+
+                    next();
+
+
+                    break;
+                case 100002:
+                    showdialog();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    };
+    private long start;
 
     @Override
     protected void onCreate(Bundle arg0) {
         setContentView(R.layout.activity_splash);
         super.onCreate(arg0);
+
 
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
         TextView versionText = (TextView) findViewById(R.id.tv_version);
@@ -67,6 +107,17 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
         animation.setDuration(1500);
         rootLayout.startAnimation(animation);
         init();
+        if (Constants.DEV_CONFIG) {
+
+            if (!TextUtils.isEmpty(SPUtils.getString("hosturl",null))){
+                Constants.setHost(SPUtils.getString("hosturl",null));
+            }
+            next();
+
+
+        } else {
+            sethost();
+        }
 
     }
 
@@ -74,18 +125,37 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
     protected void onStart() {
         super.onStart();
         LogUtil.i(AppUtils.getDeviceId(this));
+        start = System.currentTimeMillis();
+
+
+    }
+
+    public void copyDb() {
+
+        try {
+            boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this, R.raw.donglan, "/data/data/com.cn.danceland.myapplication/databases/", "donglan.db", false);
+
+            if (bl) {
+                SPUtils.setBoolean("iscopy", bl);
+                LogUtil.i("拷贝成功");
+            } else {
+                SPUtils.setBoolean("iscopy", false);
+                LogUtil.i("拷贝不成功");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void next() {
         new Thread(new Runnable() {
 
             public void run() {
-//                LogUtil.i(SPUtils.getBoolean("iscopy", false)+"");
-//                if (!SPUtils.getBoolean("iscopy", false)) {
-//
-//                    copyDb();
-//                }
+
                 //判断是否登录
                 if (SPUtils.getBoolean(Constants.ISLOGINED, false)) {
-
-                    long start = System.currentTimeMillis();
 
 
                     long costTime = System.currentTimeMillis() - start;
@@ -127,25 +197,6 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
                 }
             }
         }).start();
-
-    }
-
-    public void copyDb() {
-
-        try {
-            boolean bl = DBData.copyRawDBToApkDb(SplashActivity.this, R.raw.donglan, "/data/data/com.cn.danceland.myapplication/databases/", "donglan.db", false);
-
-            if (bl) {
-                SPUtils.setBoolean("iscopy", bl);
-                LogUtil.i("拷贝成功");
-            }else {
-                SPUtils.setBoolean("iscopy", false);
-                LogUtil.i("拷贝不成功");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void init() {
@@ -166,8 +217,8 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
         UserInfo.getInstance().setId(id);
         UserInfo.getInstance().setUserSig(TLSService.getInstance().getUserSig(id));
 
-           LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
-             LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
+        LogUtil.i(UserInfo.getInstance().getId() + UserInfo.getInstance().getUserSig());
+        LogUtil.i((UserInfo.getInstance().getId() != null && (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))) + "@@@@" + (UserInfo.getInstance().getId() + (!TLSService.getInstance().needLogin(UserInfo.getInstance().getId()))));
 //        LogUtil.i(UserInfo.getInstance().getId() + TLSService.getInstance().getLastUserInfo().accountType);
 //        presenter = new SplashPresenter(this);
 //        presenter.start();
@@ -317,5 +368,86 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
      */
 //    private String getVersion() {
 //        return "3.4";
-//    }
+//
+
+    public class APIUrlBean {
+
+        private String api_url;
+        private int status;
+
+        public void setApi_url(String api_url) {
+            this.api_url = api_url;
+        }
+
+        public String getApi_url() {
+            return api_url;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+    }
+
+    private void sethost() {
+
+        MyStringNoTokenRequest noTokenRequest = new MyStringNoTokenRequest(GET, Constants.HOST_SERVICE + "/httpDNS/ipaddr", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                APIUrlBean apiUrlBean = new Gson().fromJson(s, APIUrlBean.class);
+                Message message = Message.obtain();
+                message.what = 100001;
+                Bundle bundle = new Bundle();
+                bundle.putString("apiurl", apiUrlBean.getApi_url());
+                message.setData(bundle);
+                mHander.sendMessage(message);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+
+                Message message = Message.obtain();
+                message.what = 100002;
+                mHander.sendMessage(message);
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("platform", "1");
+                map.put("version", AppUtils.getVersionName(MyApplication.getContext()));
+
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(noTokenRequest);
+    }
+
+    private void showdialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("网络连接失败请重试");
+        builder.setPositiveButton("重试", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sethost();
+            }
+        });
+        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
 }
