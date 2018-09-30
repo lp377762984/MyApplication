@@ -25,7 +25,7 @@ public class Constants {
 
 
     public static String HOST = HOST_SERVICE;
-    public static boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
+    public static boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
 
     public static String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
