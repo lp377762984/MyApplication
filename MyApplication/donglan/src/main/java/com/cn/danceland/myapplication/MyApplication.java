@@ -26,6 +26,7 @@ import com.cn.danceland.myapplication.db.DaoMaster;
 import com.cn.danceland.myapplication.db.DaoSession;
 import com.cn.danceland.myapplication.im.utils.Foreground;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
+import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LocationService;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -190,7 +191,11 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
 
             }
         });
-        initTXIM();
+        initTXIM();//初始化腾讯IM
+        if (!Constants.DEV_CONFIG){
+            initYouMeng();//初始化友盟
+        }
+
     }
 
   private void   initYouMeng(){
@@ -202,14 +207,15 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
      * 参数4:设备类型，UMConfigure.DEVICE_TYPE_PHONE为手机、UMConfigure.DEVICE_TYPE_BOX为盒子，默认为手机
      * 参数5:Push推送业务的secret,需要集成Push功能时必须传入Push的secret，否则传空。
      */
-      UMConfigure.init(this, "5ba1ee11f1f5569f370000f7", "wandoujia", UMConfigure.DEVICE_TYPE_PHONE, null);
+      UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, null);
       MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
       //禁止默认的页面统计功能，这样将不会再自动统计Activity页面。（包含Activity、Fragment或View的应用）
       MobclickAgent.openActivityDurationTrack(false);
 
       // 打开统计SDK调试模式（上线时记得关闭）
-      UMConfigure.setLogEnabled(true);
+
+      UMConfigure.setLogEnabled(Constants.DEV_CONFIG);
 
 
   }
