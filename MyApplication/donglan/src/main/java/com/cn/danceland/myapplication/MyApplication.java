@@ -58,7 +58,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shy on 2017/9/30 09:27
@@ -70,7 +72,7 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     private static RequestQueue requestQueue;
     public static Context applicationContext;
     private static MyApplication instance;
-
+    public static Map<String,String> channelMap=new HashMap<>();
     //获取到主线程的handler
     private static Handler mMainThreadHandler = null;
     //获取到主线程的looper
@@ -117,6 +119,9 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
     @Override
     public void onCreate() {
         super.onCreate();
+
+initchannel();
+
         Foreground.init(this);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 //        locationClient = new LocationService(getApplicationContext());
@@ -197,8 +202,27 @@ public class MyApplication extends android.support.multidex.MultiDexApplication 
         }
 
     }
+public void initchannel(){
+    channelMap.put("guangwang","1");
+    channelMap.put("360","3");
+    channelMap.put("yingyongbao","4");
+    channelMap.put("91","5");
+    channelMap.put("wandoujia","6");
+    channelMap.put("androidmarket","7");
+    channelMap.put("baidu","8");
+    channelMap.put("sogou","9");
+    channelMap.put("uc","10");
+    channelMap.put("pp","11");
+    channelMap.put("vivo","12");
+    channelMap.put("xiaomi","13");
+    channelMap.put("meizu","14");
+    channelMap.put("huawei","15");
+    channelMap.put("lenovo","16");
 
-  private void   initYouMeng(){
+
+}
+
+    private void   initYouMeng(){
       /*
      * 初始化common库
      * 参数1:上下文，不能为空

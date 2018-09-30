@@ -15,9 +15,9 @@ public class Constants {
     }
 
     //  public static final String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
-   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
+//   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static final String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
-//    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//佳楠
+    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//佳楠
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
 //    public static final String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
 //        public static  String HOST_SERVICE = "http://192.168.1.168:8003/";//超哥

@@ -30,7 +30,7 @@ public class MyStringNoTokenRequest extends StringRequest {
         Map<String, String> map = new HashMap<String, String>();
         map.put("version", Constants.getVersion());
         map.put("platform", Constants.getPlatform());
-        map.put("channel", AppUtils.getChannelName());
+        map.put("channel", AppUtils.getChannelCode());
 
         return map;
 

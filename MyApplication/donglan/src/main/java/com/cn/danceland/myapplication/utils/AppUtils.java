@@ -27,6 +27,7 @@ import java.util.UUID;
  */
 public class AppUtils {
 
+
     private AppUtils() {
         /**cannot be instantiated **/
         throw new UnsupportedOperationException("cannot be instantiated");
@@ -39,8 +40,9 @@ public class AppUtils {
      * * @return 如果没有获取成功，那么返回值为空
      */
     public static String getChannelName() {
-        if (Constants.DEV_CONFIG){
-            return "0";
+
+        if (Constants.DEV_CONFIG) {
+            return "guangwang";
         }
 
         String channelName = null;
@@ -57,7 +59,22 @@ public class AppUtils {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
         return channelName;
+    }
+
+    /***
+     * 获取渠道编号
+     * @return
+     */
+    public static String getChannelCode(){
+        String code=null;
+        if (Constants.DEV_CONFIG){
+            return "1";
+        }
+        code=MyApplication.channelMap.get(getChannelName());
+
+        return code;
     }
 
     /**
@@ -207,12 +224,12 @@ public class AppUtils {
      */
     public static String getUUID(Context context) {
 
-        String uuid=SPUtils.getString("uuid",null);
+        String uuid = SPUtils.getString("uuid", null);
 
         if (TextUtils.isEmpty(uuid)) {
             uuid = UUID.randomUUID().toString();
 
-            SPUtils.setString("uuid",uuid);
+            SPUtils.setString("uuid", uuid);
         }
 
         return uuid;

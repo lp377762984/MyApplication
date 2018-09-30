@@ -14,10 +14,11 @@ import java.util.Map;
 
 
 public class MyStringRequest extends StringRequest {
-    public  Response.Listener<String> mListener;
+    public Response.Listener<String> mListener;
+
     public MyStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
         super(method, url, listener, errorListener);
-        this.mListener=listener;
+        this.mListener = listener;
 
     }
 
@@ -32,8 +33,7 @@ public class MyStringRequest extends StringRequest {
         map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
         map.put("version", Constants.getVersion());
         map.put("platform", Constants.getPlatform());
-        map.put("channel", AppUtils.getChannelName());
-
+        map.put("channel", AppUtils.getChannelCode());
         return map;
 
     }
