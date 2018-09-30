@@ -275,7 +275,8 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
         TIMManager.getInstance().setUserConfig(userConfig);
 
         LogUtil.i(UserInfo.getInstance().getId() + SPUtils.getString("sig", null));
-        LoginBusiness.loginIm(UserInfo.getInstance().getId(), SPUtils.getString("sig", null), this);
+//        LoginBusiness.loginIm(UserInfo.getInstance().getId(), SPUtils.getString("sig", null), this);
+        LoginBusiness.loginIm(SPUtils.getString(Constants.MY_TXIM_ADMIN,null), SPUtils.getString("sig", null), this);
 //        int sdkAppid = 开发者申请的SDK Appid;
 //Constants.DEV_CONFIG?"dev"+UserInfo.getInstance().getId():UserInfo.getInstance().getId()
 //

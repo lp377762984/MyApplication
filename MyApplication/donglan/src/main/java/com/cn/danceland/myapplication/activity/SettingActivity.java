@@ -590,43 +590,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
                 requestInfoBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestInfoBean.getSuccess()) {
-//                    //成功
-//                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
-//
-//                    SPUtils.setBoolean(Constants.ISLOGINED, false);
-//                    //退出主页面
-//                    TXIMHomeActivity.instance.finish();
-//                    finish();
-                    //   logouthx();
-                    logoutTXIM();
-                    startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
-                    SPUtils.setBoolean(Constants.ISLOGINED, false);
-                    MiPushClient.clearNotification(MyApplication.getContext());//清除小米推送弹出的所有通知
 
-                    //清空手环数据-- 开始
-                    if (MyApplication.mBluetoothConnected) {
-                        try {
-                            MyApplication.mBluetoothLeService.disconnect();
-                            MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
-                            SPUtils.setString(Constants.ADDRESS, "");
-                            SPUtils.setString(Constants.NAME, "");
-                            SPUtils.setString("ClockList", "");//闹钟
-                            HeartRateHelper heartRateHelper = new HeartRateHelper();
-                            WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
-                            WearFitStepHelper stepHelper = new WearFitStepHelper();
-                            heartRateHelper.deleteAll();
-                            sleepHelper.deleteAll();
-                            stepHelper.deleteAll();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    //清空手环数据-- 结束
-
-                    //退出主页面
-                    HomeActivity.instance.finish();
-                    finish();
 
                 } else {
                     //失败
@@ -637,7 +602,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort("请求失败，请查看网络连接");
+              LogUtil.e(volleyError.toString());
 
             }
         }) {
@@ -662,6 +627,41 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
+
+
+
+        logoutTXIM();
+        startActivity(new Intent(SettingActivity.this, LoginActivity.class));
+
+        SPUtils.setBoolean(Constants.ISLOGINED, false);
+        MiPushClient.clearNotification(MyApplication.getContext());//清除小米推送弹出的所有通知
+
+        //清空手环数据-- 开始
+        if (MyApplication.mBluetoothConnected) {
+            try {
+                MyApplication.mBluetoothLeService.disconnect();
+                MyApplication.mBluetoothConnected = false;//更改解绑连接状态 yxx
+                SPUtils.setString(Constants.ADDRESS, "");
+                SPUtils.setString(Constants.NAME, "");
+                SPUtils.setString("ClockList", "");//闹钟
+                HeartRateHelper heartRateHelper = new HeartRateHelper();
+                WearFitSleepHelper sleepHelper = new WearFitSleepHelper();
+                WearFitStepHelper stepHelper = new WearFitStepHelper();
+                heartRateHelper.deleteAll();
+                sleepHelper.deleteAll();
+                stepHelper.deleteAll();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        //清空手环数据-- 结束
+
+        //退出主页面
+        HomeActivity.instance.finish();
+
+
+
+
     }
 
     public void logoutTXIM() {
@@ -676,16 +676,21 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
             @Override
             public void onSuccess() {
-                LogUtil.i("退出IM");
-                TlsBusiness.logout(UserInfo.getInstance().getId());
-                UserInfo.getInstance().setId(null);
-                MessageEvent.getInstance().clear();
-                FriendshipInfo.getInstance().clear();
-                GroupInfo.getInstance().clear();
+//                LogUtil.i("退出IM");
+//                TlsBusiness.logout(UserInfo.getInstance().getId());
+//                UserInfo.getInstance().setId(null);
+//                MessageEvent.getInstance().clear();
+//                FriendshipInfo.getInstance().clear();
+//                GroupInfo.getInstance().clear();
             }
         });
-
-
+        SPUtils.setString(Constants.MY_TXIM_ADMIN,null);
+        TlsBusiness.logout(UserInfo.getInstance().getId());
+        UserInfo.getInstance().setId(null);
+        MessageEvent.getInstance().clear();
+        FriendshipInfo.getInstance().clear();
+        GroupInfo.getInstance().clear();
+        finish();
 //        Intent intent = new Intent(HomeActivity.this,SplashActivity.class);
 //        finish();
 //        startActivity(intent);

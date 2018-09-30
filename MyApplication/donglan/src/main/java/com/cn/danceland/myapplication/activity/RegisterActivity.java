@@ -455,6 +455,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
      * @param userSig
      */
     private void login_txim(final String identifier, final String userSig) {
+        SPUtils.setString(Constants.MY_TXIM_ADMIN,identifier);
         LogUtil.i(identifier + "/n" + userSig);
         // identifier为用户名，userSig 为用户登录凭证
         //     LogUtil.i("isServiceRunning  " + ServiceUtils.isServiceRunning(getApplicationContext(), "com.tencent.qalsdk.service.QalService"));
