@@ -19,6 +19,12 @@ android {
             keyAlias 'key0'
 
         }
+        debug {
+            storeFile file('D:/key.jks')
+            storePassword 'donglanyg'
+            keyAlias 'key0'
+            keyPassword 'donglanyg'
+        }
     }
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
@@ -117,13 +123,10 @@ android {
 
 
 dependencies {
-
     // compile 'io.github.rockerhieu:emojicon:1.4.2'
     compile 'com.danikula:videocache:2.7.0'
-
     //  compile 'com.sunfusheng:glideimageview:1.2.0'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
-
     //
     allprojects {
         repositories {
@@ -136,13 +139,10 @@ dependencies {
             maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
         }
     }
-
     //
     compile 'com.github.piasy:BigImageViewer:1.4.5'
-
     // load with glide
     compile 'com.github.piasy:GlideImageLoader:1.4.5'
-
     // progress pie indicator
     compile 'com.github.piasy:ProgressPieIndicator:1.4.5'
     compile 'com.github.razerdp:BasePopup:1.9.4'
@@ -158,42 +158,31 @@ dependencies {
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
     compile 'com.github.ome450901:SimpleRatingBar:1.3.6'
     compile 'com.github.hackware1993:MagicIndicator:1.5.0'
-
     //  compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'//系统bar颜色
     compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
-
     //banner
     compile project(':RxTools-library')
-
     // compile 'me.shaohui.advancedluban:library:1.3.5'
-
     //微信支付
-
     //   compile files('libs/BaiduLBS_Android.jar')
-
     //compile files('libs/MiPush_SDK_Client_3_5_1.jar')
     compile 'top.zibin:Luban:1.1.3'
-
     //    compile files('libs/bugly_2.4.0_imsdk_release.jar')
-
     //    compile files('libs/imsdk.jar')
-
     //    compile files('libs/imsdk_group_ext.jar')
-
     //    compile files('libs/imsdk_msg_ext.jar')
-
     //    compile files('libs/imsdk_sns_ext.jar')
-
     //    compile files('libs/mobilepb.jar')
-
     //    compile files('libs/qalsdk.jar')
-
     //    compile files('libs/soload.jar')
-
     //    compile files('libs/tls_sdk.jar')
-
     //  compile project(':presentation')
     compile project(':ui')
-
     //compile 'com.android.support:multidex:'
+    compile files('libs/umeng-share-core-6.9.3.jar')
+    compile files('libs/umeng-share-QQ-simplify-6.9.3.jar')
+    compile files('libs/umeng-share-wechat-simplify-6.9.3.jar')
+    compile files('libs/umeng-share-sina-simplify-6.9.3.jar')
+    compile files('libs/umeng-shareboard-widget-6.9.3.jar')
+    compile files('libs/umeng-sharetool-6.9.3.jar')
 }

@@ -59,6 +59,10 @@ import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
 import com.tencent.qcloud.sdk.Constant;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,6 +104,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private TLSService tlsService;
     private Button btn_login;
     private boolean isPermission;
+    private ImageView iv_login_wx;//第三方登录 微信
+    private ImageView iv_login_qq;//第三方登录 QQ
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +116,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         EventBus.getDefault().register(this);
 
         initTXIM();
-
 
         intView();
         dialog = new ProgressDialog(this);
@@ -134,12 +139,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             case 1011://登录
                 login();
                 break;
-
             default:
                 break;
         }
-
-
     }
 
     private void intView() {
@@ -161,7 +163,28 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         tlsService = TLSService.getInstance();
 //        tlsService.initAccountLoginService(this,mEtPhone,mEtPsw,btn_login);
 //        tlsService.init
+        iv_login_wx = findViewById(R.id.iv_login_wx);
+        iv_login_qq = findViewById(R.id.iv_login_qq);
+        iv_login_wx.setOnClickListener(this);
+        iv_login_qq.setOnClickListener(this);
 
+        isAvilible();//是否安装 显示隐藏按钮
+    }
+
+    /**
+     * 是否安装 显示隐藏按钮
+     */
+    private void isAvilible() {
+        if (AppUtils.isApplicationAvilible(LoginActivity.this, "com.tencent.mobileqq")) {//QQ 包名：com.tencent.mobileqq
+            iv_login_qq.setVisibility(View.VISIBLE);
+        } else {
+            iv_login_qq.setVisibility(View.GONE);
+        }
+        if (AppUtils.isApplicationAvilible(LoginActivity.this, "com.tencent.mm")) {//微信  包名：com.tencent.mm
+            iv_login_wx.setVisibility(View.VISIBLE);
+        } else {
+            iv_login_wx.setVisibility(View.GONE);
+        }
     }
 
     private void initTXIM() {
@@ -340,10 +363,164 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 }
 
                 break;
+            case R.id.iv_login_wx://第三方登录 微信
+                authorization(SHARE_MEDIA.WEIXIN);
+                break;
+            case R.id.iv_login_qq://第三方登录 QQ
+                authorization(SHARE_MEDIA.QQ);
+                break;
             default:
                 break;
         }
     }
+
+    //授权
+    private void authorization(SHARE_MEDIA share_media) {
+        UMShareConfig config = new UMShareConfig();
+        config.isNeedAuthOnGetUserInfo(true);
+        UMShareAPI.get(this).setShareConfig(config);
+        UMShareAPI.get(this).getPlatformInfo(LoginActivity.this, share_media, new UMAuthListener() {
+            @Override
+            public void onStart(SHARE_MEDIA share_media) {
+                LogUtil.i("onStart " + "授权开始");
+            }
+
+            @Override
+            public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                LogUtil.i("onComplete " + "授权完成");
+
+                //sdk是6.4.4的,但是获取值的时候用的是6.2以前的(access_token)才能获取到值,未知原因
+                String uid = map.get("uid");
+                String openid = map.get("openid");//微博没有
+                String unionid = map.get("unionid");//微博没有
+                String access_token = map.get("access_token");
+                String refresh_token = map.get("refresh_token");//微信,qq,微博都没有获取到
+                String expires_in = map.get("expires_in");
+                String name = map.get("name");
+                String gender = map.get("gender");
+                String iconurl = map.get("iconurl");
+
+//                LogUtil.i("uid--" + uid);
+//                LogUtil.i("openid--" + openid);
+//                LogUtil.i("unionid--" + unionid);
+//                LogUtil.i("access_token--" + access_token);
+//                LogUtil.i("name--" + name);
+//                LogUtil.i("gender--" + gender);
+//                LogUtil.i("iconurl--" + iconurl);
+
+                //拿到信息去请求登录接口。。。
+                sendOtherLogin(share_media, map);
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                LogUtil.i("onError " + "授权失败");
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA share_media, int i) {
+                LogUtil.i("onCancel " + "授权取消");
+            }
+        });
+    }
+
+    private void sendOtherLogin(final SHARE_MEDIA share_media, final Map<String, String> requesMap) {
+        String url = Constants.SEND_LOGIN_WEIXIN;
+        HashMap<String, String> map = new HashMap<>();
+        String from = "1";
+        switch (share_media) {
+            case WEIXIN:
+                url = Constants.SEND_LOGIN_WEIXIN;
+                from ="1";
+                map = new HashMap<>();
+                map.put("access_token", requesMap.get("access_token"));
+                map.put("openid", requesMap.get("openid"));
+                map.put("terminal", "1");//Android 1  iOS 2
+                break;
+            case QQ:
+                url = Constants.SEND_LOGIN_QQ;
+                from = "2";
+                map = new HashMap<>();
+                map.put("access_token", requesMap.get("access_token"));
+                map.put("openid", requesMap.get("openid"));
+                map.put("terminal", "1");//Android 1  iOS 2
+                break;
+        }
+        LogUtil.i("url--" + url);
+        final HashMap<String, String> finalMap = map;
+        final String finalFrom = from;
+        MyStringNoTokenRequest stringRequest = new MyStringNoTokenRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i("Response--" + s);
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                LogUtil.i(loginInfoBean.toString());
+                LogUtil.i("code--" + loginInfoBean.getCode());
+                if (loginInfoBean.getSuccess() && loginInfoBean.getCode() == 0) {
+                    SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
+                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                    if (loginInfoBean.getData().getMember() != null) {
+                        SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                    }
+                    Data data = loginInfoBean.getData();
+                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+
+                    //查询信息
+                    queryUserInfo(loginInfoBean.getData().getPerson().getId());
+                    if (Constants.DEV_CONFIG) {
+                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                    } else {
+                        login_txim(data.getPerson().getMember_no(), data.getSig());
+                    }
+                    setMipushId();
+                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                    ToastUtils.showToastShort("登录成功");
+                } else {
+                    switch (loginInfoBean.getCode()) {//0:登录成功  1:微信登录认证失败或者token 超时  2:认证成功，请先绑定手机号  4:资料不全，需要补全资料
+                        case 2:// 2:认证成功，请先绑定手机号
+                            LogUtil.i("form--"+finalFrom);
+                            startActivity(new Intent(LoginActivity.this, RegisterToOtherActivity.class)
+                                    .putExtra("access_token", finalMap.get("access_token"))
+                                    .putExtra("openid", finalMap.get("openid"))
+                                    .putExtra("from", finalFrom)//区分第三方登录的类型 1：微信   2：QQ
+                            );
+                            break;
+                        case 4:// 4:资料不全，需要补全资料
+                            startActivity(new Intent(LoginActivity.this, RegisterInfoActivity.class));
+                            break;
+                        default:
+                            ToastUtils.showToastShort("用户名或密码错误");
+                            break;
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null) {
+                    LogUtil.i(volleyError.toString());
+                } else {
+                    LogUtil.i("NULL");
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                LogUtil.i("finalMap--" + finalMap.toString());
+                return finalMap;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
 
     private final String[] HostList = new String[]{"http://192.168.1.114:8003/", "http://192.168.1.66:8003/", "http://192.168.1.78:8003/", "http://192.168.1.138:8003/"};
     private final String[] HostListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器"};
@@ -577,7 +754,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
      * @param userSig
      */
     private void login_txim(final String identifier, final String userSig) {
-        SPUtils.setString(Constants.MY_TXIM_ADMIN,identifier);
+        SPUtils.setString(Constants.MY_TXIM_ADMIN, identifier);
         LogUtil.i(identifier + "/n" + userSig);
 
 
@@ -643,5 +820,4 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
 
     }
-
 }

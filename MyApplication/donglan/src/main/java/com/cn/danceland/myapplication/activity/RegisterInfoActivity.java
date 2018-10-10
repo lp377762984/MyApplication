@@ -93,7 +93,6 @@ public class RegisterInfoActivity extends BaseActivity {
                     }
                 });
             }
-
         }
     };
 
@@ -240,10 +239,9 @@ public class RegisterInfoActivity extends BaseActivity {
         text_female = findViewById(R.id.text_female);
         button = findViewById(R.id.button);
         text_name = findViewById(R.id.text_name);
-        if (TextUtils.isEmpty(mData.getPerson().getNick_name())){
-
+        if (mData.getPerson().getNick_name() != null && mData.getPerson().getNick_name().length() > 0) {
             text_name.setText(mData.getPerson().getNick_name());
-
+            strName = mData.getPerson().getNick_name().toString();
         }
         if (TextUtils.equals(mData.getPerson().getGender(),"1")){
             text_male.setBackgroundResource(R.drawable.male_blue);
@@ -257,7 +255,6 @@ public class RegisterInfoActivity extends BaseActivity {
             strSex = "女";
             gender = "2";
         }
-
     }
 
     public void setClick() {

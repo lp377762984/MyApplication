@@ -56,6 +56,9 @@ import com.tencent.qalsdk.sdk.MsfSdkUtils;
 import com.tencent.qcloud.sdk.Constant;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
@@ -201,7 +204,14 @@ initchannel();
             initYouMeng();//初始化友盟
         }
 
+        //友盟分享初始化
+        UMConfigure.init(this,Constants.APP_ID_UMENG
+                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");//5ba1ee11f1f5569f370000f7
+        PlatformConfig.setWeixin(Constants.APP_ID_WEIXIN, Constants.APP_SECRET_WEIXIN);
+        PlatformConfig.setQQZone(Constants.APP_ID_QQ_ZONE, Constants.APP_SECRET_QQ_ZONE);
+
     }
+
 public void initchannel(){
     channelMap.put("guangwang","1");
     channelMap.put("360","3");

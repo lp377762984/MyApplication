@@ -206,33 +206,39 @@
         android:textSize="12sp" />
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/tv_login_others">
 
         <ImageView
+            android:id="@+id/iv_login_wx"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:src="@drawable/img_weixin" />
+            android:layout_weight="1"
+            android:src="@drawable/img_weixin"
+            android:visibility="gone"/>
 
         <ImageView
+            android:id="@+id/iv_login_wb"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/img_weibo" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/img_weibo"
+            android:layout_weight="1"
+            android:visibility="gone"/>
 
         <ImageView
+            android:id="@+id/iv_login_qq"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="25dp"
-            android:src="@drawable/img_qq" />
-    </RelativeLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@drawable/img_qq"
+            android:visibility="gone"/>
+    </LinearLayout>
 
 
 </RelativeLayout>
