@@ -20,13 +20,18 @@ public class Constants {
     public static String HOST_SERVICE = "http://192.168.1.66:8003/";//佳楠
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
 //    public static final String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
-//        public static  String HOST_SERVICE = "http://192.168.1.168:8003/";//超哥
+//        public static  String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
 //   public static  String HOST_SERVICE = "http://39.104.188.91:6003/";//审核服务器
 
 
     public static String HOST = HOST_SERVICE;
     public static boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
+    public static String APP_ID_UMENG="5ba1ee11f1f5569f370000f7";//第三方AppId   友盟
+    public static String APP_ID_WEIXIN="wx530b17b3c2de2e0d";//第三方AppId   微信
+    public static String APP_SECRET_WEIXIN="a8887e732c374dbffc37cd1390cf8bce";//第三方AppSecret   微信
+    public static String APP_ID_QQ_ZONE="101506602";//第三方AppId   QQ
+    public static String APP_SECRET_QQ_ZONE="";//第三方AppSecret   QQ
 
     public static String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -287,6 +292,20 @@ public class Constants {
 
     //体测分析-历史记录
     public static String QUERY_FITNESS_LIST = HOST + "/bcaAnalysis/queryPage";//按条件查询不分页[体测分析]列表
+
+    //第三方登录-微信
+    public static String SEND_LOGIN_WEIXIN = HOST + "/auth/wxLogin";//第三方登录 微信
+
+    //第三方登录-QQ
+    public static String SEND_LOGIN_QQ = HOST + "/auth/qqLogin";//第三方登录 QQ
+
+    //第三方登录-微信登录绑定手机号
+    public static String BIND_ACCOUNT_WEIXIN = HOST + "/auth/wxBindAccount";//微信登录绑定手机号
+
+    //第三方登录-QQ登录绑定手机号
+    public static String BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
+
+
 
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
@@ -596,6 +615,16 @@ public class Constants {
         //体测分析-历史记录
         QUERY_FITNESS_LIST = HOST + "/bcaAnalysis/queryPage";//按条件查询不分页[体测分析]列表
 
+        //第三方登录-微信
+        SEND_LOGIN_WEIXIN = HOST + "/auth/wxLogin";//第三方登录 微信
 
+        //第三方登录-QQ
+        SEND_LOGIN_QQ = HOST + "/auth/qqLogin";//第三方登录 QQ
+
+        //第三方登录-微信登录绑定手机号
+        BIND_ACCOUNT_WEIXIN = HOST + "/auth/wxBindAccount";//微信登录绑定手机号
+
+        //第三方登录-QQ登录绑定手机号
+        BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
     }
 }

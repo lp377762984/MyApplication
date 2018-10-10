@@ -913,5 +913,18 @@
     <string name="add_video_error_gif">添加失败</string>
 
     <string name="matters_needing_attention_text">注意事项</string>
+    <!--友盟第三方分享、登录等 开始-->
+    <string name="umeng_socialize_sharetosina">分享到新浪微博</string>
+
+    <string name="umeng_socialize_sharetodouban">分享到豆瓣</string>
+
+    <string name="umeng_socialize_sharetorenren">分享到人人网</string>
+
+    <string name="umeng_socialize_sharetotencent">分享到腾讯微博</string>
+
+    <string name="umeng_socialize_sharetotwitter">分享到twitter</string>
+
+    <string name="umeng_socialize_sharetolinkin">分享到领英</string>
+    <!--友盟第三方分享、登录等 结束-->
 
 </resources>

@@ -51,6 +51,10 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.utils.SocializeUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -616,8 +620,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 // map.put("romType", "0");
                 return map;
             }
-
-
         };
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
@@ -655,13 +657,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         }
         //清空手环数据-- 结束
+        //删除umeng授权-- 开始
+        boolean isauth = UMShareAPI.get(MyApplication.getContext()).isAuthorize(SettingActivity.this, SHARE_MEDIA.WEIXIN);
+        if (isauth) {//删除授权
+            UMShareAPI.get(MyApplication.getContext()).deleteOauth(SettingActivity.this, SHARE_MEDIA.WEIXIN, authListener);
+        }
+        //删除umeng授权-- 结束
 
         //退出主页面
         HomeActivity.instance.finish();
-
-
-
-
     }
 
     public void logoutTXIM() {
@@ -851,5 +855,48 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
         return detail;
     }
+
+    UMAuthListener authListener = new UMAuthListener() {
+        /**
+         *  @desc 授权开始的回调
+         *  @param platform 平台名称
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+//            SocializeUtils.safeShowDialog(dialog);
+        }
+
+        /**
+         * @param platform 平台名称
+         * @param action   行为序号，开发者用不上
+         * @param data     用户资料返回
+         * @desc 授权成功的回调
+         */
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+//            SocializeUtils.safeCloseDialog(dialog);
+            LogUtil.i("删除umeng授权成功");
+        }
+
+        /**
+         *  @desc 授权失败的回调
+         *  @param platform 平台名称
+         *  @param action 行为序号，开发者用不上
+         *  @param t 错误原因     */
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+//            SocializeUtils.safeCloseDialog(dialog);
+        }
+
+        /**
+         *  @desc 授权取消的回调
+         *  @param platform 平台名称
+         *  @param action 行为序号，开发者用不上
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+//            SocializeUtils.safeCloseDialog(dialog);
+        }
+    };
 
 }
