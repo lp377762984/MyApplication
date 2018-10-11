@@ -345,7 +345,7 @@ public class MyProActivity extends BaseActivity {
                     dismissWindow();
                     break;
                 case R.id.rl_phone:
-                    showSettingPhoneDialog();
+//                    showSettingPhoneDialog();
                     break;
                 case R.id.height:
                     //修改身高
@@ -508,30 +508,6 @@ public class MyProActivity extends BaseActivity {
             }
         });
         alertdialog.show();
-    }
-
-    /**
-     * 设置手机号
-     */
-    private void showSettingPhoneDialog() {
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        dialog.setTitle("提示");
-        dialog.setMessage("是否重新绑定手机号");
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                startActivity(new Intent(MyProActivity.this, ConfirmPasswordActivity.class).putExtra("phone", tv_phone.getText().toString()));
-            }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        dialog.show();
     }
 
     public void showLocation() {

@@ -293,6 +293,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     ToastUtils.showToastShort("请输入账号或手机号");
                     return;
                 }
+                if (!(mEtPhone.getText().toString().length() >= 8 && mEtPhone.getText().toString().length() <= 11)) {//（验证：大于等于8位小于等于11位）
+                    ToastUtils.showToastShort("请输入账号或手机号");
+                    return;
+                }
                 //判断密码是否为空
                 if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
                     ToastUtils.showToastShort("请输入密码");
@@ -622,51 +626,50 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
-                if (loginInfoBean.getSuccess()) {
+                if(loginInfoBean.getCode() == 6){//如手机号被解绑,立刻绑定手机号
+                    SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
+                    startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password",MD5Utils.encode(mEtPsw.getText().toString().trim())));
+                }else{
+                    if (loginInfoBean.getSuccess()) {
+                        SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
-                    SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
+                        SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                        if (loginInfoBean.getData().getMember() != null) {
+                            SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                        }
+                        Data data = loginInfoBean.getData();
+                        DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
-                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
-                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
-                    if (loginInfoBean.getData().getMember() != null) {
-                        SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
-                    }
-                    Data data = loginInfoBean.getData();
-                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-
-                    //查询信息
-                    queryUserInfo(loginInfoBean.getData().getPerson().getId());
-                    if (Constants.DEV_CONFIG) {
-                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                        //查询信息
+                        queryUserInfo(loginInfoBean.getData().getPerson().getId());
+                        if (Constants.DEV_CONFIG) {
+                            login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                        } else {
+                            login_txim(data.getPerson().getMember_no(), data.getSig());
+                        }
+                        setMipushId();
+                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                        // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        //        finish();
+                        ToastUtils.showToastShort("登录成功");
+                        //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                     } else {
-                        login_txim(data.getPerson().getMember_no(), data.getSig());
+                        if (loginInfoBean.getCode() == 5) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            builder.setMessage("您未在此设备登录，请绑定设备");
+                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
+                                }
+                            });
+                            builder.show();
+                        } else{
+                            ToastUtils.showToastShort("用户名或密码错误");
+                        }
                     }
-                    setMipushId();
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    //        finish();
-                    ToastUtils.showToastShort("登录成功");
-                    //    login_hx(data.getPerson().getMember_no(),"QWE",data);
-                } else {
-                    if (loginInfoBean.getCode() == 5) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setMessage("您未在此设备登录，请绑定设备");
-                        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
-                            }
-                        });
-                        builder.show();
-
-
-                    } else {
-                        ToastUtils.showToastShort("用户名或密码错误");
-                    }
-
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -699,7 +702,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void queryUserInfo(String id) {
+    private void queryUserInfo(String id ) {
 
         String params = id;
 
