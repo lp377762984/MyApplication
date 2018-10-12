@@ -3,31 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black">
-
+    <!--手环摇摇拍照与体测人阔共用layout-->
     <RelativeLayout
         android:id="@+id/camera_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<!--<FrameLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--&gt;-->
-    <!--<TextureView-->
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextureView
+                android:id="@+id/textureView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center" />
+
+            <ImageView
+                android:id="@+id/finess_floating_layer_im"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/finess_camera_man_side"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+        <!--<TextureView-->
         <!--android:id="@+id/textureView"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->
         <!--android:gravity="center" />-->
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@drawable/unselected"/>-->
-
-<!--</FrameLayout>-->
-        <TextureView
-            android:id="@+id/textureView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center" />
 
         <ImageButton
             android:id="@+id/cameraSwap"

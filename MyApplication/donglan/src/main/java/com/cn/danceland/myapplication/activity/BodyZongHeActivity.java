@@ -161,6 +161,8 @@ public class BodyZongHeActivity extends BaseActivity {
             isClick = false;
             //有权限
             takePhoto();
+
+            startActivity(new Intent(BodyZongHeActivity.this, FloatingLayerCameraActivity.class).putExtra("requsetInfo", requsetInfo));
         } else {
             PermissionsUtil.requestPermission(BodyZongHeActivity.this, new PermissionListener() {
                 @Override
