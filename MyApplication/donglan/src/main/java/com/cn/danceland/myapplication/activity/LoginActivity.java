@@ -384,11 +384,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.iv_login_wx://第三方登录 微信
                 authorization(SHARE_MEDIA.WEIXIN);
-//                SendAuth.Req req = new SendAuth.Req();
-//                req.scope = "snsapi_userinfo";//
-////                req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
-//                req.state = "wechat_sdk_微信登录";
-//                wxApi.sendReq(req);
                 break;
             case R.id.iv_login_qq://第三方登录 QQ
 //                authorization(SHARE_MEDIA.QQ);
@@ -452,8 +447,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
     private class BaseUiListener implements IUiListener {
         public void onComplete(Object response) {
-//            Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
-                        /*    
+                        /*
                         *  下面隐藏的是用户登录成功后  登录用户数据的获取的方法    
                         *  共分为两种    一种是简单的信息的获取,另一种是通过UserInfo类获取用户较为详细的信息    
                         *有需要看看    
@@ -462,12 +456,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                        try  {
                                 //获得的数据是JSON格式的，获得你想获得的内容    
                                 //如果你不知道你能获得什么，看一下下面的LOG    
-                           LogUtil.i("----TAG--" + "-------------" + response.toString());
+                           LogUtil.i(response.toString());
                            String openidString = ((JSONObject) response).getString("openid");
                            mTencent.setOpenId(openidString);
                            mTencent.setAccessToken(((JSONObject) response).getString("access_token"), ((JSONObject) response).getString("expires_in"));
 
-                           LogUtil.i("-------------" + openidString);
                            map.put("openid",((JSONObject) response).getString("openid"));
                            map.put("access_token",((JSONObject) response).getString("access_token"));
                            //拿到信息去请求登录接口。。。
@@ -480,14 +473,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
              sdk给我们提供了一个类UserInfo，这个类中封装了QQ用户的一些信息，我么可以通过这个类拿到这些信息
              如何得到这个UserInfo类呢？    */
 
-            QQToken qqToken = mTencent.getQQToken();
-            UserInfo info = new UserInfo(getApplicationContext(), qqToken);
-
-            //        info.getUserInfo(new  BaseUIListener(this,"get_simple_userinfo"));
-            info.getUserInfo(new IUiListener() {
-                @Override
-                public void onComplete(Object o) {
-                    //用户信息获取到了
+//            QQToken qqToken = mTencent.getQQToken();
+//            UserInfo info = new UserInfo(getApplicationContext(), qqToken);
+//
+//            //        info.getUserInfo(new  BaseUIListener(this,"get_simple_userinfo"));
+//            info.getUserInfo(new IUiListener() {
+//                @Override
+//                public void onComplete(Object o) {
+//                    //用户信息获取到了
 //                    try {
 //
 ////                        Toast.makeText(getApplicationContext(), ((JSONObject) o).getString("nickname") + ((JSONObject) o).getString("gender"), Toast.LENGTH_SHORT).show();
@@ -525,18 +518,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 //                        //  TODO  Auto-generated  catch  block
 //                        e.printStackTrace();
 //                    }
-                }
-
-                @Override
-                public void onError(UiError uiError) {
-                    LogUtil.i("UserInfo--" + "onError");
-                }
-
-                @Override
-                public void onCancel() {
-                    LogUtil.i("UserInfo--" + "onCancel");
-                }
-            });
+//                }
+//
+//                @Override
+//                public void onError(UiError uiError) {
+//                    LogUtil.i("UserInfo--" + "onError");
+//                }
+//
+//                @Override
+//                public void onCancel() {
+//                    LogUtil.i("UserInfo--" + "onCancel");
+//                }
+//            });
 
         }
 
