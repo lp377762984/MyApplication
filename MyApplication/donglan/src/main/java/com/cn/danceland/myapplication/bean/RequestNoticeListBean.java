@@ -126,6 +126,7 @@ public class RequestNoticeListBean implements Serializable {
         }
 
         public class Content implements Serializable {
+            private String id;
             private String content;
             private String push_date;
             private String status;
@@ -134,11 +135,20 @@ public class RequestNoticeListBean implements Serializable {
             @Override
             public String toString() {
                 return "Content{" +
-                        "content='" + content +
-                        ", push_date=" + push_date +
-                        ", status=" + status +
-                        ", title=" + title +
+                        "id='" + id + '\'' +
+                        ", content='" + content + '\'' +
+                        ", push_date='" + push_date + '\'' +
+                        ", status='" + status + '\'' +
+                        ", title='" + title + '\'' +
                         '}';
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
             }
 
             public String getContent() {

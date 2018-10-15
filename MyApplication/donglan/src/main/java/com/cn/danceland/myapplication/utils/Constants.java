@@ -206,6 +206,7 @@ public class Constants {
     public static String MY_INFO = "my_info";//我的资料
     public static String MY_MIPUSH_ID = "my_mipush_id";//小米推送id
     public static String MY_WEAR_FIT_SETTING = "my_wear_fit_setting";//手环设置
+    public static String MY_APP_MESSAGE_SUM = "my_app_message_sum";//应用消息总数 用于桌面icon显示
 
     public static String BRANCH_DEPOSIT_DAYS = "deposit_days";//定金有效期
     public static String BRANCH_OPEN_DAYS = "open_days";//开卡有效期
@@ -304,6 +305,12 @@ public class Constants {
 
     //第三方登录-QQ登录绑定手机号
     public static String BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
+
+    //我的通知-接收移动端传过来的角标数
+    public static String PUSH_RECORD_SET_BADGE = HOST + "/pushRecord/setbadge";//接收移动端传过来的角标数
+
+    //获取推送角标数
+    public static String PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
 
 
 
@@ -626,5 +633,11 @@ public class Constants {
 
         //第三方登录-QQ登录绑定手机号
         BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
+
+        //我的通知-接收移动端传过来的角标数
+        PUSH_RECORD_SET_BADGE = HOST + "/pushRecord/setbadge";//接收移动端传过来的角标数
+
+        //获取推送角标数
+        PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
     }
 }

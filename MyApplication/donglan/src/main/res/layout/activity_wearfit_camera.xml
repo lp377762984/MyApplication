@@ -23,8 +23,8 @@
                 android:id="@+id/finess_floating_layer_im"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/finess_camera_man_side"
-                android:visibility="gone"/>
+                android:background="@drawable/finess_camera_man_reverse"
+                android:visibility="visible"/>
 
         </FrameLayout>
         <!--<TextureView-->

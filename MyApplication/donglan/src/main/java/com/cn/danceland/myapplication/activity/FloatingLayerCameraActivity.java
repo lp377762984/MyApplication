@@ -36,6 +36,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -45,10 +46,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.shouhuan.activity.WearFitClockSettingActivity;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.shouhuan.service.BluetoothLeService;
 import com.cn.danceland.myapplication.shouhuan.utils.DataHandlerUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
 
@@ -66,7 +69,8 @@ import java.util.List;
 /**
  * 公共浮层相机
  * 返回照片
- * isFloatLayer 是否有浮层
+ * isFloatLayer 是否有浮层 1有
+ * floatLayerImgType 浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
  * cameraPath 图片保存地址
  * Created by yxx on 2018/10/12.
  */
@@ -101,6 +105,7 @@ public class FloatingLayerCameraActivity extends Activity {
     private ProgressDialog dialog;
     private String isFloatLayer;
     private String cameraPath;
+    private String floatLayerImgType;//浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -116,8 +121,14 @@ public class FloatingLayerCameraActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wearfit_camera);
         context = this;
-        isFloatLayer = getIntent().getStringExtra("isFloatLayer");//是否有浮层
+        isFloatLayer = getIntent().getStringExtra("isFloatLayer");//是否有浮层 1有
         cameraPath = getIntent().getStringExtra("cameraPath");//图片保存地址
+        if (isFloatLayer != null && isFloatLayer.equals("1")) {
+            floatLayerImgType = getIntent().getStringExtra("floatLayerImgType");//浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
+        }
+        LogUtil.i("isFloatLayer--" + isFloatLayer);
+        LogUtil.i("cameraPath--" + cameraPath);
+        LogUtil.i("floatLayerImgType--" + floatLayerImgType);
         initView();
     }
 
@@ -136,10 +147,32 @@ public class FloatingLayerCameraActivity extends Activity {
         confirm_layout = findViewById(R.id.confirm_layout);
         camera_layout = findViewById(R.id.camera_layout);
         finess_floating_layer_im = findViewById(R.id.finess_floating_layer_im);
-        finess_floating_layer_im.setVisibility(View.VISIBLE);
+        if (isFloatLayer != null && isFloatLayer.equals("1")) {
+            finess_floating_layer_im.setVisibility(View.VISIBLE);
+            switch (floatLayerImgType) {
+                case "1":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_man_positive));
+                    break;
+                case "2":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_man_reverse));
+                    break;
+                case "3":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_man_side));
+                    break;
+                case "4":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_woman_positive));
+                    break;
+                case "5":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_woman_reverse));
+                    break;
+                case "6":
+                    finess_floating_layer_im.setBackground(getResources().getDrawable(R.drawable.finess_camera_woman_side));
+                    break;
+            }
+        }
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("正在加载……");
+        dialog.setMessage("保存中……");
 
         //重新拍照
         reTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +197,7 @@ public class FloatingLayerCameraActivity extends Activity {
                     surePhoto.setFocusable(false);
                     closePhoto.setFocusable(false);
                     saveImage();
-                    finish();
+
                 }
             }
         });
@@ -173,6 +206,8 @@ public class FloatingLayerCameraActivity extends Activity {
         closePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                setResult(-1, new Intent(context, BodyZongHeActivity.class));
                 finish();
             }
         });
@@ -203,6 +238,7 @@ public class FloatingLayerCameraActivity extends Activity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(-1, new Intent(context, BodyZongHeActivity.class));
                 finish();
             }
         });
@@ -210,6 +246,12 @@ public class FloatingLayerCameraActivity extends Activity {
         textureView.setSurfaceTextureListener(surfaceTextureListener);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        setResult(-1, new Intent(context, BodyZongHeActivity.class));
+        finish();
+        return super.onKeyDown(keyCode, event);
+    }
 
     //-------------------------------------------------------------------------------------
     int mDisplayWidth = 0;
@@ -242,6 +284,11 @@ public class FloatingLayerCameraActivity extends Activity {
             } else {
                 mDisplayWidth = (int) (mWidth / aspect + .5);
                 mDisplayHeight = mHeight;
+            }
+            LogUtil.i("mHeight--" + mHeight);
+            if (mWidth == 1080 && mHeight == 1857) {//1080*1920 如此
+                mDisplayWidth = (int) (mWidth / aspect + .5);
+                mDisplayHeight = 1920;
             }
 
             RectF surfaceDimensions = new RectF(0, 0, mDisplayWidth, mDisplayHeight);
@@ -563,6 +610,9 @@ public class FloatingLayerCameraActivity extends Activity {
                 + File.separator + Environment.DIRECTORY_DCIM
                 + File.separator + "Camera" + File.separator;
         String picturePath = System.currentTimeMillis() + ".jpg";
+        cameraPath=picturePath;
+        LogUtil.i("cameraPath--"+cameraPath);
+//        String picturePath = cameraPath;
         File file = new File(galleryPath, picturePath);
         try {
             //存到本地相册
@@ -574,10 +624,12 @@ public class FloatingLayerCameraActivity extends Activity {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
             Bitmap bitmap = BitmapFactory.decodeByteArray(saveImageData, 0, saveImageData.length, options);
-
             //通知相册更新
             MediaStore.Images.Media.insertImage(context.getContentResolver(),
-                    bitmap, picturePath, null);
+                    UIUtils.rotateBitmap(bitmap, 90), picturePath, null);
+//            //通知相册更新
+//            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                    bitmap, picturePath, null);
             Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             Uri uri = Uri.fromFile(file);
             intent.setData(uri);
@@ -586,7 +638,10 @@ public class FloatingLayerCameraActivity extends Activity {
             surePhoto.setFocusable(true);
             closePhoto.setFocusable(true);
             dialog.dismiss();
-            ToastUtils.showToastShort("图片保存成功");
+//            ToastUtils.showToastShort("图片保存成功");
+            LogUtil.i("cameraPath--"+galleryPath+picturePath);
+            setResult(1, new Intent(context, BodyZongHeActivity.class).putExtra("picturePath",galleryPath+picturePath));
+            finish();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

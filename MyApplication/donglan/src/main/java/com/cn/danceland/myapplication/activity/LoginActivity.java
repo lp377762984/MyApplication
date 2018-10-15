@@ -120,7 +120,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         intView();
         dialog = new ProgressDialog(this);
         dialog.setMessage("登录中……");
-
     }
 
     @Override
@@ -435,7 +434,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         switch (share_media) {
             case WEIXIN:
                 url = Constants.SEND_LOGIN_WEIXIN;
-                from ="1";
+                from = "1";
                 map = new HashMap<>();
                 map.put("access_token", requesMap.get("access_token"));
                 map.put("openid", requesMap.get("openid"));
@@ -484,7 +483,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 } else {
                     switch (loginInfoBean.getCode()) {//0:登录成功  1:微信登录认证失败或者token 超时  2:认证成功，请先绑定手机号  4:资料不全，需要补全资料
                         case 2:// 2:认证成功，请先绑定手机号
-                            LogUtil.i("form--"+finalFrom);
+                            LogUtil.i("form--" + finalFrom);
                             startActivity(new Intent(LoginActivity.this, RegisterToOtherActivity.class)
                                     .putExtra("access_token", finalMap.get("access_token"))
                                     .putExtra("openid", finalMap.get("openid"))
@@ -626,10 +625,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
-                if(loginInfoBean.getCode() == 6){//如手机号被解绑,立刻绑定手机号
+                if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
                     SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
-                    startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password",MD5Utils.encode(mEtPsw.getText().toString().trim())));
-                }else{
+                    startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password", MD5Utils.encode(mEtPsw.getText().toString().trim())));
+                } else {
                     if (loginInfoBean.getSuccess()) {
                         SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
@@ -665,7 +664,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                                 }
                             });
                             builder.show();
-                        } else{
+                        } else {
                             ToastUtils.showToastShort("用户名或密码错误");
                         }
                     }
@@ -702,7 +701,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void queryUserInfo(String id ) {
+    private void queryUserInfo(String id) {
 
         String params = id;
 
