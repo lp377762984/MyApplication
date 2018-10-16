@@ -38,6 +38,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
+import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.db.HeartRate;
@@ -107,6 +108,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.view.animation.Animation.REVERSE;
 
@@ -370,6 +372,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         commandManager = CommandManager.getInstance(this);//手环
         initConnWearFit();
+        initCornerMark();
     }
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -527,6 +530,37 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 });
 
         TIMManager.getInstance().setUserConfig(userConfig);
+    }
+
+    private void initCornerMark() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PUSH_RECORD_QUERY_BADGE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i("Response--" + s);
+                CornerMarkMessageBean responseBean = new Gson().fromJson(s, CornerMarkMessageBean.class);
+                if (responseBean.getCode() != null && responseBean.getCode().equals("0")) {
+                    int message_sum = Integer.valueOf(responseBean.getData()+"");
+                    SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum+"");//应用消息总数 用于桌面icon显示
+                    ShortcutBadger.applyCount(HomeActivity.this, message_sum); //for 1.1.4+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null) {
+                    LogUtil.i(volleyError.toString());
+                } else {
+                    LogUtil.i("NULL");
+                }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     /**

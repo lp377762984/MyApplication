@@ -809,6 +809,31 @@
             android:name=".activity.RegisterToOtherActivity"
             android:screenOrientation="portrait" />
 
+        <!--公共浮层相机-->
+        <activity
+            android:name=".activity.FloatingLayerCameraActivity"
+            android:screenOrientation="portrait" />
+
+        <!--QQ登录配置 start-->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">  
+            <intent-filter>  
+                <action android:name="android.intent.action.VIEW" />  
+                <category android:name="android.intent.category.DEFAULT" />  
+                <category android:name="android.intent.category.BROWSABLE" />  
+                  
+                <data android:scheme="tencent101506602" />  
+            </intent-filter>
+        </activity>
+                
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--QQ登录配置 end-->
+        <!--微信登录配置 start-->
         <!--第三方登录-微信-->
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -816,24 +841,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent101506602" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-
+        <!--微信登录配置 end-->
         <receiver
             android:name=".Receiver.MessageReceiver"
             android:exported="true"
@@ -901,7 +909,7 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5ba1ee11f1f5569f370000f7" />
-<!--     <meta-data
+    <!--   <meta-data
             android:name="UMENG_CHANNEL"
             android:value="1" />-->
     </application>

@@ -326,6 +326,7 @@ public class RegisterToOtherActivity extends BaseActivity implements View.OnClic
             map.put("access_token", access_token);
             map.put("openid", openid);
             map.put("terminal", "1");//Android 1  iOS 2
+            map.put("platform", Constants.getPlatform());
             map.put("phone_no", mEtPhone.getText().toString().trim());
             map.put("validateCode", mEtSms.getText().toString());
             map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));
@@ -334,6 +335,7 @@ public class RegisterToOtherActivity extends BaseActivity implements View.OnClic
             map = new HashMap<>();
             map.put("access_token", access_token);
             map.put("terminal", "1");//Android 1  iOS 2
+            map.put("platform", Constants.getPlatform());
             map.put("phone_no", mEtPhone.getText().toString().trim());
             map.put("validateCode", mEtSms.getText().toString());
             map.put("password", MD5Utils.encode(mEtPsw.getText().toString().trim()));

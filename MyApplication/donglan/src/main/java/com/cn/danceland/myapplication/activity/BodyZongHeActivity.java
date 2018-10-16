@@ -28,12 +28,14 @@ import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisRequest;
 import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -157,15 +159,54 @@ public class BodyZongHeActivity extends BaseActivity {
     };
 
     private void getPermission() {
+        cameraPath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png";
+        String floatLayerImgType = "1";//浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
+        Data myInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+        switch (num) {
+            case "1"://正面
+                if (myInfo.getPerson().getGender().equals("1")) {//1男
+                    floatLayerImgType = "1";
+                } else {
+                    floatLayerImgType = "4";
+                }
+                break;
+            case "2"://侧面
+                if (myInfo.getPerson().getGender().equals("1")) {//1男
+                    floatLayerImgType = "3";
+                } else {
+                    floatLayerImgType = "6";
+                }
+                break;
+            case "3"://背面
+                if (myInfo.getPerson().getGender().equals("1")) {//1男
+                    floatLayerImgType = "2";
+                } else {
+                    floatLayerImgType = "5";
+                }
+                break;
+        }
         if (PermissionsUtil.hasPermission(BodyZongHeActivity.this, Manifest.permission.CAMERA)) {
             isClick = false;
             //有权限
-            takePhoto();
+//            takePhoto();
+
+            startActivityForResult(new Intent(BodyZongHeActivity.this, FloatingLayerCameraActivity.class)
+                            .putExtra("isFloatLayer", "1")//isFloatLayer 是否有浮层 1有
+                            .putExtra("floatLayerImgType", floatLayerImgType)//浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
+                            .putExtra("cameraPath", cameraPath)//图片保存地址
+                    , 1);
         } else {
+            final String finalFloatLayerImgType = floatLayerImgType;
             PermissionsUtil.requestPermission(BodyZongHeActivity.this, new PermissionListener() {
                 @Override
                 public void permissionGranted(@NonNull String[] permissions) {
-                    takePhoto();
+//                    takePhoto();
+                    startActivityForResult(new Intent(BodyZongHeActivity.this, FloatingLayerCameraActivity.class)
+                                    .putExtra("isFloatLayer", "1")//isFloatLayer 是否有浮层 1有
+                                    .putExtra("floatLayerImgType", finalFloatLayerImgType)//浮层图片 1男正面 2男反面 3男侧面 4女正面 5女反面 6女侧面
+                                    .putExtra("cameraPath", cameraPath)//图片保存地址
+                            , 1);
                 }
 
                 @Override
@@ -198,11 +239,11 @@ public class BodyZongHeActivity extends BaseActivity {
                 DLResult<String> result = gson.fromJson(json.toString(), new TypeToken<DLResult<String>>() {
                 }.getType());
                 if (result.isSuccess()) {
-                    LogUtil.i(""+json.toString());
+                    LogUtil.i("" + json.toString());
                     ToastUtils.showToastShort("提交成功！");
                     startActivity(new Intent(BodyZongHeActivity.this, FitnessResultsSummaryActivity.class)
                             .putExtra("requsetInfo", requsetInfo)
-                    .putExtra("saveId",result.getData()));
+                            .putExtra("saveId", result.getData()));
                 } else {
                     ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
                 }
@@ -245,68 +286,79 @@ public class BodyZongHeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1) {
-                if (cameraPath != null) {
-                    Bitmap bitmap = PictureUtil.FileCompressToBitmap(cameraPath);//压缩
+        LogUtil.i("requestCode--" + requestCode);
+        LogUtil.i("resultCode--" + resultCode);
+        if (resultCode == 1) {
+            if (cameraPath != null) {
+                String resultPicturePath = data.getStringExtra("picturePath");//是否有浮层 1有
+                LogUtil.i("picturePath--");
+                if (resultPicturePath != null) {
+                    Bitmap bitmap = PictureUtil.FileCompressToBitmap(resultPicturePath);//压缩
+                    if (bitmap != null) {
+                        LogUtil.i("11--");
+                    } else {
+                        LogUtil.i("22--");
 
+                    }
                     if ("1".equals(num)) {
                         rl_01.setVisibility(View.GONE);
                         img_01.setVisibility(View.VISIBLE);
-                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_01);
+                        Glide.with(BodyZongHeActivity.this).load(resultPicturePath).into(img_01);
                     } else if ("2".equals(num)) {
                         rl_02.setVisibility(View.GONE);
                         img_02.setVisibility(View.VISIBLE);
-                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_02);
+                        Glide.with(BodyZongHeActivity.this).load(resultPicturePath).into(img_02);
                     } else if ("3".equals(num)) {
                         rl_03.setVisibility(View.GONE);
                         img_03.setVisibility(View.VISIBLE);
-                        Glide.with(BodyZongHeActivity.this).load(uri).into(img_03);
+                        Glide.with(BodyZongHeActivity.this).load(resultPicturePath).into(img_03);
                     }
                     //上传图片
                     MultipartRequestParams params = new MultipartRequestParams();
-//                    File file = new File(cameraPath);
-                    File file = PictureUtil.SaveBitmapFile(bitmap, cameraPath);
+                    if (bitmap != null) {
+                        File file = new File(resultPicturePath);
+//                    File file = PictureUtil.SaveBitmapFile(bitmap, resultPicturePath);
 
-                    params.put("file", file);
-                    LogUtil.i("上传图片大小--" + file.length());
-                    LogUtil.i("上传图片参数--" + params.toString());
+                        params.put("file", file);
+                        LogUtil.i("上传图片大小--" + file.length());
+                        LogUtil.i("上传图片参数--" + params.toString());
 
-                    MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {
+                        MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {
 
-                        @Override
-                        public void onResponse(String s) {
-                            LogUtil.i("上传图片接收--" + s.toString());
-                            HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
-                            if (headImageBean != null && headImageBean.getData() != null) {
-                                String imgPath = headImageBean.getData().getImgPath();
-                                String imgUrl = headImageBean.getData().getImgUrl();
-                                Message message = new Message();
-                                message.what = MSG_REFRESH_DATA;
-                                message.obj = imgPath;
-                                handler.sendMessage(message);
-                                ToastUtils.showToastShort("上传图片成功！");
-                                LogUtil.i("上传图片成功");
-                            } else {
-                                LogUtil.i("上传图片失败");
-                                ToastUtils.showToastShort("上传图片失败！请重新拍照！");
-                                isClick = true;
+                            @Override
+                            public void onResponse(String s) {
+                                LogUtil.i("上传图片接收--" + s.toString());
+                                HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
+                                if (headImageBean != null && headImageBean.getData() != null) {
+                                    String imgPath = headImageBean.getData().getImgPath();
+                                    String imgUrl = headImageBean.getData().getImgUrl();
+                                    Message message = new Message();
+                                    message.what = MSG_REFRESH_DATA;
+                                    message.obj = imgPath;
+                                    handler.sendMessage(message);
+                                    ToastUtils.showToastShort("上传图片成功！");
+                                    LogUtil.i("上传图片成功");
+                                } else {
+                                    LogUtil.i("上传图片失败");
+                                    ToastUtils.showToastShort("上传图片失败！请重新拍照！");
+                                    isClick = true;
+                                }
+
                             }
-
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                isClick = true;
+                                ToastUtils.showToastShort("上传图片失败！请重新拍照！");
+                                LogUtil.i("上传图片失败--" + volleyError.toString());
+                            }
                         }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            isClick = true;
-                            ToastUtils.showToastShort("上传图片失败！请重新拍照！");
-                            LogUtil.i("上传图片失败--" + volleyError.toString());
-                        }
+                        );
+                        request.setRetryPolicy(new DefaultRetryPolicy(30000,
+                                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        MyApplication.getHttpQueues().add(request);
                     }
-                    );
-                    request.setRetryPolicy(new DefaultRetryPolicy(30000,
-                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    MyApplication.getHttpQueues().add(request);
                 }
             }
         } else {

@@ -6,20 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -30,9 +35,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * Created by yxx on 2018-09-06.
@@ -190,9 +199,9 @@ public class NoticeFragment extends BaseFragment {
     public void find_all_data(final int pageCount) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.page = pageCount+ "";
+        strBean.page = pageCount + "";
         String s = gson.toJson(strBean);
-        LogUtil.i("gson-"+s);
+        LogUtil.i("gson-" + s);
         JSONObject jsonObject = new JSONObject(s.toString());
 
         MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
@@ -205,13 +214,13 @@ public class NoticeFragment extends BaseFragment {
 
                 if (datainfo.getSuccess()) {
 
-                        if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
-                            isEnd = true;
-                            setEnd();
-                        } else {
-                            isEnd = false;
-                            init_pullToRefresh();
-                        }
+                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
+                        isEnd = true;
+                        setEnd();
+                    } else {
+                        isEnd = false;
+                        init_pullToRefresh();
+                    }
 
                     if (mCurrentPage == 0) {
                         datalist = datainfo.getData().getContent();
@@ -282,6 +291,7 @@ public class NoticeFragment extends BaseFragment {
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
                 vh.tv_time = convertView.findViewById(R.id.tv_time);
                 vh.tv_status = convertView.findViewById(R.id.tv_status);
+                vh.item_layout = convertView.findViewById(R.id.item_layout);
                 convertView.setTag(vh);
             } else {
                 vh = (ViewHolder) convertView.getTag();
@@ -291,9 +301,51 @@ public class NoticeFragment extends BaseFragment {
             vh.tv_time.setText(datalist.get(position).getPush_date());
             if (datalist.get(position).getStatus().equals("0")) {
                 vh.tv_status.setText("未读");
+                vh.tv_status.setTextColor(getResources().getColor(R.color.red));
             } else {
+                vh.tv_status.setTextColor(getResources().getColor(R.color.black));
                 vh.tv_status.setText("已读");
             }
+            vh.item_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PUSH_RECORD_SET_BADGE, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            LogUtil.i("Response--" + s);
+                            CornerMarkMessageBean responseBean = new Gson().fromJson(s, CornerMarkMessageBean.class);
+                            if (responseBean.getCode() != null && responseBean.getCode().equals("0")) {
+                                String message_sum_str = SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, "0");//应用消息总数 用于桌面icon显示
+                                int message_sum = (Integer.valueOf(message_sum_str) - 1);
+                                SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
+                                ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
+                            }
+                            datalist.get(position).setStatus("1");
+                            myListAatapter.notifyDataSetChanged();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            if (volleyError != null) {
+                                LogUtil.i(volleyError.toString());
+                            } else {
+                                LogUtil.i("NULL");
+                            }
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("badge", SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, ""));//应用消息总数 用于桌面icon显示);
+                            map.put("recordId", datalist.get(position).getId());
+                            LogUtil.i("finalMap--" + map.toString());
+                            return map;
+                        }
+                    };
+                    MyApplication.getHttpQueues().add(stringRequest);
+
+                }
+            });
             return convertView;
         }
 
@@ -302,6 +354,7 @@ public class NoticeFragment extends BaseFragment {
             public TextView tv_time;
             public TextView tv_content;
             public TextView tv_status;
+            public LinearLayout item_layout;
         }
     }
 }

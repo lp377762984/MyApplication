@@ -1,8 +1,11 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -21,16 +24,22 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-
-import org.greenrobot.eventbus.EventBus;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.qcloud.presentation.business.LoginBusiness;
+import com.tencent.qcloud.tlslibrary.service.TLSService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +50,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
     private TextView mTvGetsms;
     private EditText mEtSms;
     private String smsCode = "";
+    private String password = "";
     private EditText mEtPhone;
     private int recLen = 30;//倒计时时长
     Handler handler = new Handler();
@@ -67,6 +77,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_phone);
+        password=getIntent().getStringExtra("password");
         initView();
     }
 
@@ -203,8 +214,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
     }
 
     private void resetPhone() {
-
-        MyStringRequest jsonRequest = new MyStringRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
+        MyStringNoTokenRequest jsonRequest = new MyStringNoTokenRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -214,15 +224,14 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 if (infoBean.getSuccess()) {
 
                     ToastUtils.showToastShort("手机号修改成功");
-                    //发送事件
-                    EventBus.getDefault().post(new StringEvent(mEtPhone.getText().toString().trim(),111));
-                    Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    data.getPerson().setPhone_no(mEtPhone.getText().toString().trim());
-                    DataInfoCache.saveOneCache(data,Constants.MY_INFO);
-
-                    finish();
+                    login(mEtPhone.getText().toString().trim());
+//                    //发送事件
+//                    EventBus.getDefault().post(new StringEvent(mEtPhone.getText().toString().trim(),111));
+//                    Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    data.getPerson().setPhone_no(mEtPhone.getText().toString().trim());
+//                    DataInfoCache.saveOneCache(data,Constants.MY_INFO);
+//                    finish();
                 } else {
-
                     ToastUtils.showToastShort("修改失败，原因：" + infoBean.getErrorMsg());
                 }
             }
@@ -233,23 +242,211 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 ToastUtils.showToastShort("请查看网络连接");
             }
         }) {
-
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 //   map.put("id", SPUtils.getString(Constants.MY_USERID, ""));
                 map.put("phone", mEtPhone.getText().toString().trim());
                 map.put("validateCode", mEtSms.getText().toString().trim());
+                return map;
+            }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("Authorization", SPUtils.getString("tempTokenToCode", null));
+                map.put("version", Constants.getVersion());
+                map.put("platform", Constants.getPlatform());
+                map.put("channel", AppUtils.getChannelCode());
+                return map;
+            }
+        };
 
+        MyApplication.getHttpQueues().add(jsonRequest);
+    }
+
+    /**
+     * 登录
+     */
+    private void login(final String phoneNum) {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                LogUtil.i(loginInfoBean.toString());
+                LogUtil.i(loginInfoBean.getCode() + "");
+                if(loginInfoBean.getCode() == 6){//如手机号被解绑,立刻绑定手机号
+                    SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
+                    startActivity(new Intent(ResetPhoneActivity.this, ResetPhoneActivity.class));
+                }else{
+                    if (loginInfoBean.getSuccess()) {
+                        SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
+
+                        SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(phoneNum.toString().trim()));//保存id\
+                        if (loginInfoBean.getData().getMember() != null) {
+                            SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                        }
+                        Data data = loginInfoBean.getData();
+                        DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+
+//                        //查询信息
+                        queryUserInfo(loginInfoBean.getData().getPerson().getId(),loginInfoBean.getCode()+"");
+                        if (Constants.DEV_CONFIG) {
+                            login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                        } else {
+                            login_txim(data.getPerson().getMember_no(), data.getSig());
+                        }
+                        setMipushId();
+                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                        // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        //        finish();
+                        ToastUtils.showToastShort("登录成功");
+                        //    login_hx(data.getPerson().getMember_no(),"QWE",data);
+
+                    } else {
+                        if (loginInfoBean.getCode() == 5) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ResetPhoneActivity.this);
+                            builder.setMessage("您未在此设备登录，请绑定设备");
+                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(ResetPhoneActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
+                                }
+                            });
+                            builder.show();
+                        } else{
+                            ToastUtils.showToastShort("用户名或密码错误");
+                        }
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("phone", mEtPhone.getText().toString().trim());
+                map.put("password", password);
+                map.put("terminal", "1");
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
+                LogUtil.i(AppUtils.getDeviceId(MyApplication.getContext()));
+                return map;
+            }
+        };
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
+
+    private void queryUserInfo(String id , final String loginCode) {
+        String params = id;
+        String url = Constants.QUERY_USER_DYN_INFO_URL + params;
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequsetUserDynInfoBean requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
+                    startActivity(new Intent(ResetPhoneActivity.this, HomeActivity.class).putExtra("loginCode",loginCode));
+                    finish();
+                } else {
+                    ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+            }
+        });
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("queryUserInfo");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
+    /**
+     * 登录腾讯im
+     *
+     * @param identifier 账号
+     * @param userSig
+     */
+    private void login_txim(final String identifier, final String userSig) {
+        SPUtils.setString(Constants.MY_TXIM_ADMIN, identifier);
+        LogUtil.i(identifier + "/n" + userSig);
+        LoginBusiness.loginIm(identifier, userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                LogUtil.i("login failed. code: " + code + " errmsg: " + desc);
+                TLSService.getInstance().setLastErrno(-1);
+            }
+
+            @Override
+            public void onSuccess() {
+                LogUtil.i("login succ 登录成功");
+                TLSService.getInstance().setLastErrno(0);
+                SPUtils.setString("sig", userSig);
+            }
+        });
+    }
+
+    /**
+     * 设置mipusid
+     */
+    private void setMipushId() {
+        LogUtil.e(Constants.SET_MIPUSH_ID);
+        MyStringRequest request = new MyStringRequest(Request.Method.PUT, Constants.SET_MIPUSH_ID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //   LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (requestInfoBean.getSuccess()) {
+                    LogUtil.i("设置mipush成功");
+                } else {
+                    LogUtil.i("设置mipush失败");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(final VolleyError volleyError) {
+                LogUtil.i("设置mipush失败" + volleyError.toString());
+
+            }
+
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("regId", SPUtils.getString(Constants.MY_MIPUSH_ID, null));
+                map.put("terminal", "1");
                 return map;
             }
 
 
         };
 
-        MyApplication.getHttpQueues().add(jsonRequest);
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+
     }
-
-
 }

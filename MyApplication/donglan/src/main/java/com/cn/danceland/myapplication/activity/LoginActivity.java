@@ -44,6 +44,8 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.auth.QQToken;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMLogLevel;
@@ -51,6 +53,9 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.qalsdk.QALSDKManager;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.presentation.event.FriendshipEvent;
@@ -59,6 +64,9 @@ import com.tencent.qcloud.presentation.event.MessageEvent;
 import com.tencent.qcloud.presentation.event.RefreshEvent;
 import com.tencent.qcloud.sdk.Constant;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareConfig;
@@ -66,6 +74,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -106,6 +116,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private boolean isPermission;
     private ImageView iv_login_wx;//第三方登录 微信
     private ImageView iv_login_qq;//第三方登录 QQ
+    private Tencent mTencent;//第三方登录 QQ
+    private IWXAPI wxApi;//第三方登录 微信
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +128,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         EventBus.getDefault().register(this);
 
         initTXIM();
-
+        mTencent = Tencent.createInstance(Constants.APP_ID_QQ_ZONE, getApplicationContext());//自己的AppID
+        //通过WXAPIFactory工厂获取IWXApI的示例
+        wxApi = WXAPIFactory.createWXAPI(this, Constants.APP_ID_WEIXIN, true);
+        //将应用的appid注册到微信
+        wxApi.registerApp(Constants.APP_ID_WEIXIN);
         intView();
         dialog = new ProgressDialog(this);
         dialog.setMessage("登录中……");
-
     }
 
     @Override
@@ -293,6 +308,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     ToastUtils.showToastShort("请输入账号或手机号");
                     return;
                 }
+                if (!(mEtPhone.getText().toString().length() >= 8 && mEtPhone.getText().toString().length() <= 11)) {//（验证：大于等于8位小于等于11位）
+                    ToastUtils.showToastShort("请输入账号或手机号");
+                    return;
+                }
                 //判断密码是否为空
                 if (TextUtils.isEmpty(mEtPsw.getText().toString())) {
                     ToastUtils.showToastShort("请输入密码");
@@ -365,9 +384,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.iv_login_wx://第三方登录 微信
                 authorization(SHARE_MEDIA.WEIXIN);
+//                SendAuth.Req req = new SendAuth.Req();
+//                req.scope = "snsapi_userinfo";//
+////                req.scope = "snsapi_login";//提示 scope参数错误，或者没有scope权限
+//                req.state = "wechat_sdk_微信登录";
+//                wxApi.sendReq(req);
                 break;
             case R.id.iv_login_qq://第三方登录 QQ
-                authorization(SHARE_MEDIA.QQ);
+//                authorization(SHARE_MEDIA.QQ);
+                //QQ第三方登录  
+                mTencent.login(LoginActivity.this, "all", new BaseUiListener());
                 break;
             default:
                 break;
@@ -424,6 +450,107 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         });
     }
 
+    private class BaseUiListener implements IUiListener {
+        public void onComplete(Object response) {
+//            Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
+                        /*    
+                        *  下面隐藏的是用户登录成功后  登录用户数据的获取的方法    
+                        *  共分为两种    一种是简单的信息的获取,另一种是通过UserInfo类获取用户较为详细的信息    
+                        *有需要看看    
+                        *  */
+            final Map<String, String> map = new HashMap<String, String>();
+                       try  {
+                                //获得的数据是JSON格式的，获得你想获得的内容    
+                                //如果你不知道你能获得什么，看一下下面的LOG    
+                           LogUtil.i("----TAG--" + "-------------" + response.toString());
+                           String openidString = ((JSONObject) response).getString("openid");
+                           mTencent.setOpenId(openidString);
+                           mTencent.setAccessToken(((JSONObject) response).getString("access_token"), ((JSONObject) response).getString("expires_in"));
+
+                           LogUtil.i("-------------" + openidString);
+                           map.put("openid",((JSONObject) response).getString("openid"));
+                           map.put("access_token",((JSONObject) response).getString("access_token"));
+                           //拿到信息去请求登录接口。。。
+                           sendOtherLogin(SHARE_MEDIA.QQ, map);
+                        }  catch  (JSONException  e)  {    
+                                e.printStackTrace();
+                        }    
+                        /**到此已经获得OpneID以及其他你想获得的内容了
+             QQ登录成功了，我们还想获取一些QQ的基本信息，比如昵称，头像什么的，这个时候怎么办？
+             sdk给我们提供了一个类UserInfo，这个类中封装了QQ用户的一些信息，我么可以通过这个类拿到这些信息
+             如何得到这个UserInfo类呢？    */
+
+            QQToken qqToken = mTencent.getQQToken();
+            UserInfo info = new UserInfo(getApplicationContext(), qqToken);
+
+            //        info.getUserInfo(new  BaseUIListener(this,"get_simple_userinfo"));
+            info.getUserInfo(new IUiListener() {
+                @Override
+                public void onComplete(Object o) {
+                    //用户信息获取到了
+//                    try {
+//
+////                        Toast.makeText(getApplicationContext(), ((JSONObject) o).getString("nickname") + ((JSONObject) o).getString("gender"), Toast.LENGTH_SHORT).show();
+//                        LogUtil.i("UserInfo--" + o.toString());
+//
+////                        map.put("uid",((JSONObject) o).getString("uid"));
+////                        map.put("openid",((JSONObject) o).getString("openid"));
+////                        map.put("unionid",((JSONObject) o).getString("unionid"));
+////                        map.put("access_token",((JSONObject) o).getString("access_token"));
+////                        map.put("refresh_token",((JSONObject) o).getString("refresh_token"));
+////                        map.put("expires_in",((JSONObject) o).getString("expires_in"));
+//                        map.put("name",((JSONObject) o).getString("nickname"));
+//                        map.put("gender",((JSONObject) o).getString("gender"));
+//                        map.put("iconurl",((JSONObject) o).getString("iconurl"));
+//                        String uid = map.get("uid");
+//                        String openid = map.get("openid");//微博没有
+//                        String unionid = map.get("unionid");//微博没有
+//                        String access_token = map.get("access_token");
+//                        String name = map.get("name");
+//                        String gender = map.get("gender");
+//                        String iconurl = map.get("iconurl");
+//                        LogUtil.i("uid--" + uid);
+//                        LogUtil.i("openid--" + openid);
+//                        LogUtil.i("unionid--" + unionid);
+//                        LogUtil.i("access_token--" + access_token);
+//                        LogUtil.i("name--" + name);
+//                        LogUtil.i("gender--" + gender);
+//                        LogUtil.i("iconurl--" + iconurl);
+//                        //拿到信息去请求登录接口。。。
+//                        sendOtherLogin(SHARE_MEDIA.QQ, map);
+////                        Intent intent1 = new Intent(LoginActivity.this, MainActivity.class);
+////                        startActivity(intent1);
+////                        finish();
+//                    } catch (JSONException e) {
+//                        //  TODO  Auto-generated  catch  block
+//                        e.printStackTrace();
+//                    }
+                }
+
+                @Override
+                public void onError(UiError uiError) {
+                    LogUtil.i("UserInfo--" + "onError");
+                }
+
+                @Override
+                public void onCancel() {
+                    LogUtil.i("UserInfo--" + "onCancel");
+                }
+            });
+
+        }
+
+        @Override
+        public void onError(UiError uiError) {
+            Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel() {
+            Toast.makeText(getApplicationContext(), "onCancel", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void sendOtherLogin(final SHARE_MEDIA share_media, final Map<String, String> requesMap) {
         String url = Constants.SEND_LOGIN_WEIXIN;
         HashMap<String, String> map = new HashMap<>();
@@ -431,7 +558,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         switch (share_media) {
             case WEIXIN:
                 url = Constants.SEND_LOGIN_WEIXIN;
-                from ="1";
+                from = "1";
                 map = new HashMap<>();
                 map.put("access_token", requesMap.get("access_token"));
                 map.put("openid", requesMap.get("openid"));
@@ -480,7 +607,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 } else {
                     switch (loginInfoBean.getCode()) {//0:登录成功  1:微信登录认证失败或者token 超时  2:认证成功，请先绑定手机号  4:资料不全，需要补全资料
                         case 2:// 2:认证成功，请先绑定手机号
-                            LogUtil.i("form--"+finalFrom);
+                            LogUtil.i("form--" + finalFrom);
                             startActivity(new Intent(LoginActivity.this, RegisterToOtherActivity.class)
                                     .putExtra("access_token", finalMap.get("access_token"))
                                     .putExtra("openid", finalMap.get("openid"))
@@ -519,6 +646,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        Tencent.onActivityResultData(requestCode, resultCode, data, new BaseUiListener());
+        if (requestCode == com.tencent.connect.common.Constants.REQUEST_API) {
+            if (resultCode == com.tencent.connect.common.Constants.REQUEST_LOGIN) {
+                Tencent.handleResultData(data, new BaseUiListener());
+            }
+        }
     }
 
 
@@ -622,51 +755,50 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
-                if (loginInfoBean.getSuccess()) {
-
-                    SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
-
-                    SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
-                    SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
-                    if (loginInfoBean.getData().getMember() != null) {
-                        SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
-                    }
-                    Data data = loginInfoBean.getData();
-                    DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-
-                    //查询信息
-                    queryUserInfo(loginInfoBean.getData().getPerson().getId());
-                    if (Constants.DEV_CONFIG) {
-                        login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
-                    } else {
-                        login_txim(data.getPerson().getMember_no(), data.getSig());
-                    }
-                    setMipushId();
-                    SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    //        finish();
-                    ToastUtils.showToastShort("登录成功");
-                    //    login_hx(data.getPerson().getMember_no(),"QWE",data);
+                if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
+                    SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
+                    startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password", MD5Utils.encode(mEtPsw.getText().toString().trim())));
                 } else {
-                    if (loginInfoBean.getCode() == 5) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setMessage("您未在此设备登录，请绑定设备");
-                        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
-                            }
-                        });
-                        builder.show();
+                    if (loginInfoBean.getSuccess()) {
+                        SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
+                        SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                        if (loginInfoBean.getData().getMember() != null) {
+                            SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                        }
+                        Data data = loginInfoBean.getData();
+                        DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
+                        //查询信息
+                        queryUserInfo(loginInfoBean.getData().getPerson().getId());
+                        if (Constants.DEV_CONFIG) {
+                            login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                        } else {
+                            login_txim(data.getPerson().getMember_no(), data.getSig());
+                        }
+                        setMipushId();
+                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                        // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        //        finish();
+                        ToastUtils.showToastShort("登录成功");
+                        //    login_hx(data.getPerson().getMember_no(),"QWE",data);
                     } else {
-                        ToastUtils.showToastShort("用户名或密码错误");
+                        if (loginInfoBean.getCode() == 5) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            builder.setMessage("您未在此设备登录，请绑定设备");
+                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
+                                }
+                            });
+                            builder.show();
+                        } else {
+                            ToastUtils.showToastShort("用户名或密码错误");
+                        }
                     }
-
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
