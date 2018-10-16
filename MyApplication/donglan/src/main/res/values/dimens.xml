@@ -35,4 +35,8 @@
     <dimen name="default_slider_margin_btw_title">20dp</dimen>
     <dimen name="default_margin_edge_d">15.5dp</dimen>
     <dimen name="line_chart_layout_height_d">280dp</dimen>
+
+    <!--2.0版本开始-->
+
+    <!--2.0版本结束-->
 </resources>

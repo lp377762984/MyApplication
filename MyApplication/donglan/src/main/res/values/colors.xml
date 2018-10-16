@@ -102,4 +102,11 @@
     <color name="deep_sleep_selected_bg">#0068b7</color>
     <color name="sleep_line_bg">#e5e5e5</color>
 
+
+    <!--2.0版本开始-->
+
+
+
+    <!--2.0版本结束-->
+
 </resources>

@@ -46,4 +46,8 @@
         <attr name="HorizontalselectedViewTextSize" format="float"></attr>
         <attr name="HorizontalselectedViewTextColor" format="color|reference"></attr>
     </declare-styleable>
+
+    <!--2.0版本开始-->
+
+    <!--2.0版本结束-->
 </resources>
