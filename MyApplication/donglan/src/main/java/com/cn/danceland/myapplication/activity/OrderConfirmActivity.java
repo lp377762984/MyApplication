@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,7 +136,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                     switch (payResult.getResultStatus()) {
                         case "9000":
                             ToastUtils.showToastShort("支付成功");
-                            finish();
+                            showpayresult();
+
                             break;
                         case "8000":
                             ToastUtils.showToastShort("正在处理中");
@@ -200,9 +203,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     @Subscribe
     public void onEventMainThread(StringEvent event) {
         if (event.getEventCode() == 40001) {
-            finish();
+            showpayresult();
         }
         if (event.getEventCode() == 40002) {
+
             btn_repay.setVisibility(View.VISIBLE);
         }
     }
@@ -681,7 +685,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(stringRequest);
 
     }
@@ -778,7 +782,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
-                    finish();
+                    showpayresult();
+
                 } else {
                     if (TextUtils.equals(requestSimpleBean.getCode(), "-5") || TextUtils.equals(requestSimpleBean.getCode(), "-6") || TextUtils.equals(requestSimpleBean.getCode(), "-7") || TextUtils.equals(requestSimpleBean.getCode(), "-8")) {
                         ToastUtils.showToastShort("储值卡余额不足");
@@ -795,7 +800,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 ToastUtils.showToastShort("支付失败");
 
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
@@ -884,6 +889,49 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     private static final int PICK_CONTACT = 0;
 
+    private void showpayresult() {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(OrderConfirmActivity.this);
+        builder.setMessage("支付完成");
+
+        if (order_bustype==32){
+            builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    startActivity(new Intent(OrderConfirmActivity.this,MyCardActivity.class));
+                    finish();
+                }
+            });
+
+        }
+        if (order_bustype==34){
+            builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    startActivity(new Intent(OrderConfirmActivity.this,MyCardActivity.class).putExtra("issend",1));
+                    finish();
+                }
+            });
+        }
+
+
+        builder.setNegativeButton("完成", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+
+        builder.show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -1008,7 +1056,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         extendsParams.setTotal_count(CardsInfo.getTotal_count());
                     }
                     if (isme) {
-                        newOrderInfoBean.setBus_type(32);//给别人买定金
+                        newOrderInfoBean.setBus_type(32);
 //                        orderInfoBean.setFor_other(0);
                     } else {
                         order_bustype = 34;
@@ -1029,7 +1077,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
 
                     }
-                    if (!isme){
+                    if (!isme) {
                         if (StringUtils.isFirstNumeric(et_grant_name.getText().toString())) {//姓名不能以数字开头
                             ToastUtils.showToastShort(MyApplication.getContext().getResources().getString(R.string.name_no_numeric_first_text));
                             return;

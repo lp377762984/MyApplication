@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
@@ -41,9 +42,8 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
@@ -95,7 +95,7 @@ public class SellStoreCardActivity extends BaseActivity {
                     switch (payResult.getResultStatus()) {
                         case "9000":
                             ToastUtils.showToastShort("支付成功");
-                            finish();
+                            showpayresult();
                             break;
                         case "8000":
                             ToastUtils.showToastShort("正在处理中");
@@ -157,7 +157,7 @@ public class SellStoreCardActivity extends BaseActivity {
     public void onEventMainThread(StringEvent event) {
         if (event.getEventCode() == 40001) {
             ToastUtils.showToastShort("支付成功");
-            finish();
+            showpayresult();
         }
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
@@ -166,6 +166,32 @@ public class SellStoreCardActivity extends BaseActivity {
         }
     }
 
+    private void showpayresult() {
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(SellStoreCardActivity.this);
+        builder.setMessage("支付完成");
+        builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                startActivity(new Intent(SellStoreCardActivity.this,XiaoFeiRecordActivity.class));
+                finish();
+            }
+        });
+        builder.setNegativeButton("完成", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+        builder.show();
+    }
 
     @Override
     protected void onDestroy() {

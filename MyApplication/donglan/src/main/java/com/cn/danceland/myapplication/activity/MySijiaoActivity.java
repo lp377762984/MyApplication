@@ -111,7 +111,9 @@ public class MySijiaoActivity extends BaseActivity {
         magicIndicator.setNavigator(commonNavigator);
 
         ViewPagerHelper.bind(magicIndicator,view_pager);
-
+        if (getIntent().getIntExtra("issend",0)==1){
+            view_pager.setCurrentItem(1,false);
+        }
     }
 
     public class myFragmentPagerAdapter extends FragmentPagerAdapter {

@@ -672,6 +672,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 dialog.dismiss();
+                LogUtil.e(volleyError.toString());
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
 
             }

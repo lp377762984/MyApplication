@@ -71,8 +71,8 @@ public class JiaoLianCourseBean implements Serializable {
         private int member_id;
         private String member_name;
         private String member_no;
-        private int price;
-        private int real_price;
+        private float price;
+        private float real_price;
         private Long start_date;
         private int surplus_count;
         private int time_length;
@@ -234,19 +234,19 @@ public class JiaoLianCourseBean implements Serializable {
             return member_no;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
 
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
-        public void setReal_price(int real_price) {
+        public void setReal_price(float real_price) {
             this.real_price = real_price;
         }
 
-        public int getReal_price() {
+        public float getReal_price() {
             return real_price;
         }
 

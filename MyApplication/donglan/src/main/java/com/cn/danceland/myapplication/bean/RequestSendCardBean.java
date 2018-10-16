@@ -54,7 +54,7 @@ public class RequestSendCardBean {
         private int type_id;
         private int total_count;
         private String end_date;
-        private int face_value;
+        private float face_value;
         private float sell_price;
         private int charge_mode;
         private long sell_date;
@@ -146,10 +146,10 @@ public class RequestSendCardBean {
             return end_date;
         }
 
-        public void setFace_value(int face_value) {
+        public void setFace_value(float face_value) {
             this.face_value = face_value;
         }
-        public int getFace_value() {
+        public float getFace_value() {
             return face_value;
         }
 

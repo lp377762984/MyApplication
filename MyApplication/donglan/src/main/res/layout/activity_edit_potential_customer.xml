@@ -371,7 +371,7 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:hint="请输入证件号码"
-                    android:inputType="number"
+
                     android:maxLength="18"
                     android:paddingRight="10dp"
                     android:textColorHint="#999999" />
