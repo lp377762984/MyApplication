@@ -15,8 +15,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -32,7 +30,6 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -453,7 +450,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     viewHolder.rl_button.setClickable(false);
                     viewHolder.rl_button_tv.setClickable(false);
                     viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+                    viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
                 } else {
                     viewHolder.rl_button_tv.setClickable(true);
                     viewHolder.rl_qiandao.setVisibility(View.GONE);

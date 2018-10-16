@@ -35,8 +35,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BuySiJiaoBean;
@@ -58,9 +56,8 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
@@ -140,7 +137,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                     switch (payResult.getResultStatus()) {
                         case "9000":
                             ToastUtils.showToastShort("支付成功");
-                            finish();
+                            showpayresult();
                             break;
                         case "8000":
                             ToastUtils.showToastShort("正在处理中");
@@ -206,7 +203,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     public void onEventMainThread(StringEvent event) {
         if (event.getEventCode() == 40001) {
             ToastUtils.showToastShort("支付成功");
-            finish();
+            showpayresult();
         }
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
@@ -216,7 +213,50 @@ public class SiJiaoOrderActivity extends BaseActivity {
         }
     }
 
+int order_bustype=56;
+    private void showpayresult() {
 
+        AlertDialog.Builder builder=new AlertDialog.Builder(SiJiaoOrderActivity.this);
+        builder.setMessage("支付完成");
+
+        if (order_bustype==56){
+            builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class));
+                    finish();
+                }
+            });
+
+        }
+        if (order_bustype==57){
+            builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class).putExtra("issend",1));
+                    finish();
+                }
+            });
+        }
+
+
+
+        builder.setNegativeButton("完成", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+        builder.show();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -740,8 +780,10 @@ public class SiJiaoOrderActivity extends BaseActivity {
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         if ("1".equals(forme)) {//给好友买
             sijiaoOrderConfirmBean.setBus_type(57);
+            order_bustype=57;
         } else if ("0".equals(forme)) {
             sijiaoOrderConfirmBean.setBus_type(56);
+            order_bustype=56;
         }
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝,3微信
         sijiaoOrderConfirmBean.setPlatform(1);//1是安卓
@@ -952,7 +994,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                 RequestSimpleBean requestSimpleBean = gson.fromJson(jsonObject.toString(), RequestSimpleBean.class);
                 if (requestSimpleBean.getSuccess()) {
                     ToastUtils.showToastShort("支付成功");
-                    finish();
+                    showpayresult();
                 } else {
                     if (TextUtils.equals(requestSimpleBean.getCode(), "-5") || TextUtils.equals(requestSimpleBean.getCode(), "-6") || TextUtils.equals(requestSimpleBean.getCode(), "-7") || TextUtils.equals(requestSimpleBean.getCode(), "-8")) {
                         ToastUtils.showToastShort("储值卡余额不足");

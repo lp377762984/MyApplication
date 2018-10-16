@@ -99,6 +99,9 @@ public class MyCardActivity extends BaseActivity implements View.OnClickListener
 
             }
         });
+        if (getIntent().getIntExtra("issend",0)==1){
+            mViewPager.setCurrentItem(1,false);
+        }
 
     }
 

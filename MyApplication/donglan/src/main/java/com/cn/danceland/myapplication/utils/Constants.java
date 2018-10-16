@@ -17,7 +17,7 @@ public class Constants {
     //  public static final String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
 //   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static final String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
-    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//佳楠
+    public static String HOST_SERVICE = "http://192.168.1.114:8003/";//
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
 //    public static final String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
 //        public static  String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
@@ -361,7 +361,7 @@ public class Constants {
 
 
     public static void setHost(String hostip) {
-        HOST = hostip;
+        HOST = hostip+"/";
         DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
         CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
         GET_SMS_URL = HOST + "person/encode/";//获取验证码

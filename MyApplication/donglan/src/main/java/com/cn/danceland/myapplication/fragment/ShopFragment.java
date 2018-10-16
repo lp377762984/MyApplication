@@ -40,7 +40,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -90,6 +89,7 @@ import com.cn.danceland.myapplication.utils.UIUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -389,7 +389,6 @@ public class ShopFragment extends BaseFragment {
         roleMap.put("出纳", "9");
         roleMap.put("收银", "10");
         roleMap.put("兼职教练", "11");
-
         authMap.put("准会员", "1");
         authMap.put("会员", "2");
 
@@ -800,24 +799,30 @@ public class ShopFragment extends BaseFragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
             if (data != null) {
-                if (data.get(i).getId() == 1) {
-                    //id为1,表示在线售卡
-                    startActivity(new Intent(mActivity, SellCardActivity.class));
-                }
+
                 switch (data.get(i).getId()) {
+                    case 1://在线售卡
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "在线售卡");
+                        startActivity(new Intent(mActivity, SellCardActivity.class));
+                        break;
                     case 2://我的会员卡
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的会员卡");
                         startActivity(new Intent(mActivity, MyCardActivity.class));
                         break;
                     case 3://健身圈
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "健身圈");
                         startActivity(new Intent(mActivity, UserHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)).putExtra("isdyn", true));
                         break;
                     case 4://购买私教
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "购买私教");
                         startActivity(new Intent(mActivity, BuySiJiaoActivity.class));
                         break;
                     case 5://会所动态
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会所动态");
                         startActivity(new Intent(mActivity, ClubDynActivity.class));
                         break;
                     case 6://预约私教
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约私教");
                         Intent intent1 = new Intent(mActivity, CourseActivity.class);
                         intent1.putExtra("isTuanke", "1");
                         if (role != null && !role.equals("准会员") && !role.equals("会员")) {
@@ -828,24 +833,31 @@ public class ShopFragment extends BaseFragment {
                         startActivity(intent1);
                         break;
                     case 9://意见反馈
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "意见反馈");
                         //startActivity(new Intent(mActivity, LoginNumberActivity.class));
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 10://我的定金
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的定金");
                         startActivity(new Intent(mActivity, MyDepositListActivity.class));
                         break;
                     case 11://我的订单
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的订单");
                         startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 12://体测
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "体侧");
                         Intent intent = new Intent(mActivity, AddFriendsActivity.class);
                         intent.putExtra("from", "体测");
                         startActivity(intent);
                         break;
                     case 13://潜客维护
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "潜客维护");
+
                         startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth", "1"));
                         break;
                     case 14://会员维护
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会员维护");
                         startActivity(new Intent(mActivity, PotentialCustomerRevisitActivity.class).putExtra("auth", "2"));
 
                         //  startActivity(new Intent(mActivity, MyOrderActivity.class));
@@ -854,19 +866,24 @@ public class ShopFragment extends BaseFragment {
                         //    startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
                     case 16://我的租柜
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的租柜");
                         startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
 
                     case 25://推荐好友
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "推荐好友");
                         startActivity(new Intent(mActivity, RecommendActivity.class));
                         break;
                     case 17://会员推荐
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会员推荐");
                         startActivity(new Intent(mActivity, HuiYuanTuiJianActivty.class));
                         break;
                     case 18://意见反馈
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "意见反馈");
                         startActivity(new Intent(mActivity, AdviseActivity.class));
                         break;
                     case 19://扫码入场
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
                         if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
                             //有权限
                             startActivity(new Intent(mActivity, ScanerCodeActivity.class));
@@ -889,40 +906,51 @@ public class ShopFragment extends BaseFragment {
                         break;
 
                     case 20://预约团课
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约团课");
                         startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
                         break;
 
                     case 21://储值卡
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "储值卡");
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
                         break;
                     case 22://我要培训
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我要培训");
                         startActivity(new Intent(mActivity, NewsDetailsActivity.class)
                                 .putExtra("url", "http://jiaolian.danceland.com.cn/").putExtra("title", "动岚健身学院"));
                         break;
                     case 23://会籍报表
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍报表");
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "1"));
                         break;
                     case 24://全店报表
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "全店报表");
                         startActivity(new Intent(mActivity, AllReportActivity.class).putExtra("role_type", role).putExtra("target_role_type", "4"));
                         break;
                     case 26://体测分析
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "体侧分析");
                         startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from", "体测").putExtra("isAnalysis", "true"));
                         break;
-                    case 28:
+                    case 28://
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务报表");
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "3"));
                         break;
                     case 29://私信
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "私信");
                         startActivity(new Intent(mActivity, ConversationActivity.class));
                         //  startActivity(new Intent(mActivity, TXIMHomeActivity.class));
                         //  ToastUtils.showToastShort("功能正在开发中");
                         break;
                     case 30://教练报表
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "教练报表");
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "2"));
                         break;
                     case 31://我的私教
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的私教");
                         startActivity(new Intent(mActivity, MySijiaoActivity.class));
                         break;
                     case 33://预约会员
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约会员");
                         Intent intent2 = new Intent(mActivity, CourseActivity.class);
                         intent2.putExtra("isTuanke", "1");
                         if (role != null && !role.equals("准会员") && !role.equals("会员")) {
@@ -933,17 +961,20 @@ public class ShopFragment extends BaseFragment {
                         startActivity(intent2);
                         break;
                     case 34://我的体测
-
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的体侧");
                         startActivity(new Intent(mActivity, FitnessTestActivity.class));
 
                         break;
                     case 35://动态码
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "动态码");
                         startActivity(new Intent(mActivity, LoginNumberActivity.class));
                         break;
                     case 36://联系人
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "联系人");
                         startActivity(new Intent(mActivity, MyContactsActivity.class));
                         break;
                     case 37://会员业务
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会员业务");
                         startActivity(new Intent(mActivity, YeWuActivity.class).putExtra("auth", "2"));
                         break;
                     default:
