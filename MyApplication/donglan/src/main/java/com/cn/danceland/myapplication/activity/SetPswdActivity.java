@@ -57,7 +57,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
                 finish();
             }
         });
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         mEtPsw = findViewById(R.id.et_password);
         mEtConfirmPsd = findViewById(R.id.et_confirm_password);
     }
@@ -66,7 +66,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
 
                 //判断密码是否为空
                 if (TextUtils.isEmpty(mEtPsw.getText().toString())) {

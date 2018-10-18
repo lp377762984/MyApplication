@@ -124,7 +124,7 @@ public class BindDeviceNoPswdActivity extends BaseActivity implements View.OnCli
         });
 
         mEtSms = findViewById(R.id.et_sms);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
 
 
     }
@@ -156,7 +156,7 @@ public class BindDeviceNoPswdActivity extends BaseActivity implements View.OnCli
 
                 getSMS();
                 break;
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
                 //判断验证码是否为空
 //                if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
 //                    Toast.makeText(BindDeviceNoPswdActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();

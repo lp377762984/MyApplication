@@ -114,7 +114,7 @@ public class LoginBindActivity extends BaseActivity implements View.OnClickListe
             }
         });
         mEtSms = findViewById(R.id.et_sms);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
 
 
@@ -153,7 +153,7 @@ public class LoginBindActivity extends BaseActivity implements View.OnClickListe
 
 
                 break;
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
                     Toast.makeText(LoginBindActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();

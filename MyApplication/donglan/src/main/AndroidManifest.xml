@@ -339,6 +339,12 @@
             android:name=".activity.EmpUserHomeActivty"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.SetRegisterInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SetRegisterInfoSaveActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.UserSelfHomeActivity"
             android:screenOrientation="portrait" />
         <!--      <activity

@@ -327,6 +327,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             finish();
         }
 
+        startActivity(new Intent(this, SetRegisterInfoActivity.class));
+
         if (myInfo != null) {//判断资料是否全
             if (myInfo.getHasPwd()!=null&&!myInfo.getHasPwd()){
                 ToastUtils.showToastShort("请您设置密码");

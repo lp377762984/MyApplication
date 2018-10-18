@@ -10,14 +10,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -53,7 +52,6 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.TIMUserConfig;
 import com.tencent.imsdk.TIMUserStatusListener;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.qalsdk.QALSDKManager;
@@ -93,7 +91,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     private EditText mEtPhone;
     private EditText mEtPsw;
     private boolean isPswdChecked = false;
-    private ImageView iv_pswd_see;
+//    private ImageView iv_pswd_see;
     ProgressDialog dialog;
     public static final String PERMISSION_RECORD_AUDIO = Manifest.permission.RECORD_AUDIO;
     public static final String PERMISSION_CALL_PHONE = Manifest.permission.CALL_PHONE;
@@ -112,7 +110,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     };
     private CheckBox cb_agreement;
     private TLSService tlsService;
-    private Button btn_login;
+    private LinearLayout btn_login;
     private boolean isPermission;
     private ImageView iv_login_wx;//第三方登录 微信
     private ImageView iv_login_qq;//第三方登录 QQ
@@ -165,11 +163,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         findViewById(R.id.tv_login_sms).setOnClickListener(this);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
-        findViewById(R.id.tv_login_others).setOnClickListener(this);
         btn_login = findViewById(R.id.btn_login);
         findViewById(R.id.logo).setOnClickListener(this);
-        iv_pswd_see = findViewById(R.id.iv_pswd_see);
-        iv_pswd_see.setOnClickListener(this);
+//        iv_pswd_see = findViewById(R.id.iv_pswd_see);
+//        iv_pswd_see.setOnClickListener(this);
         mEtPhone = findViewById(R.id.et_phone);
         mEtPsw = findViewById(R.id.et_password);
         cb_agreement = findViewById(R.id.cb_agreement);
@@ -340,41 +337,26 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
                 startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
                 break;
-            case R.id.tv_login_others://其他方式登陆
-                //  Toast.makeText(this, "其他方式登陆", Toast.LENGTH_SHORT).show();
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            getServerVersion();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
 
-                    }
-                }.start();
-
-
-                break;
             case R.id.tv_agreemnet:
                 startActivity(new Intent(LoginActivity.this, NewsDetailsActivity.class).putExtra("url", Constants.REGISTER_AGREEMENT_URL).putExtra("title", "用户协议"));
 
                 break;
-            case R.id.iv_pswd_see://设置密码可见
-                if (isPswdChecked) {
-                    //密码不可见
-                    mEtPsw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    isPswdChecked = false;
-                    iv_pswd_see.setImageResource(R.drawable.img_unlook);
-
-                } else {
-                    //密码可见
-                    mEtPsw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    isPswdChecked = true;
-                    iv_pswd_see.setImageResource(R.drawable.img_look);
-                }
-
-                break;
+//            case R.id.iv_pswd_see://设置密码可见
+//                if (isPswdChecked) {
+//                    //密码不可见
+//                    mEtPsw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//                    isPswdChecked = false;
+//                    iv_pswd_see.setImageResource(R.drawable.img_unlook);
+//
+//                } else {
+//                    //密码可见
+//                    mEtPsw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+//                    isPswdChecked = true;
+//                    iv_pswd_see.setImageResource(R.drawable.img_look);
+//                }
+//
+//                break;
             case R.id.logo:
                 // tlsService.initAccountLoginService();
                 if (Constants.DEV_CONFIG) {

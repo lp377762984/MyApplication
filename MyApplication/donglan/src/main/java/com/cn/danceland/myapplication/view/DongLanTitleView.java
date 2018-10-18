@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,6 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 
-import java.util.zip.Inflater;
-
 /**
  * Created by feng on 2018/4/4.
  */
@@ -21,13 +20,38 @@ public class DongLanTitleView extends RelativeLayout {
 
     ImageView donglan_back;
     TextView donglan_title,donglan_right_tv;
+    private  View inflate;
+    private  String titleText;
+    private boolean cannotBack;
 
     public DongLanTitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        View inflate = LayoutInflater.from(context).inflate(R.layout.donglantitle, this);
+        inflate = LayoutInflater.from(context).inflate(R.layout.donglantitle, this);
 
-        donglan_back = inflate.findViewById(R.id.donglan_back);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.DongLanTitleView, 0, 0);
+        try {
+            titleText = ta.getString(R.styleable.DongLanTitleView_titleText);
+            cannotBack = ta.getBoolean(R.styleable.DongLanTitleView_cannotBack, false);
+//            backText = ta.getString(R.styleable.TemplateTitle_backText);
+//            moreImg = ta.getResourceId(R.styleable.TemplateTitle_moreImg, 0);
+//            moreText = ta.getString(R.styleable.TemplateTitle_moreText);
+            setUpView();
+        } finally {
+            ta.recycle();
+        }
+
+
+
+
+    }
+    private void setUpView(){
+        donglan_back = inflate.findViewById(R.id.iv_back);
+        if (cannotBack){
+            donglan_back.setVisibility(GONE);
+        }
+
         donglan_title = inflate.findViewById(R.id.donglan_title);
+        donglan_title.setText(titleText);
         donglan_right_tv = inflate.findViewById(R.id.donglan_right_tv);
         donglan_right_tv.setTextColor(getResources().getColor(R.color.color_dl_yellow));
 
@@ -38,9 +62,7 @@ public class DongLanTitleView extends RelativeLayout {
                 activity.finish();
             }
         });
-
     }
-
     public TextView getRightTv(){
         return donglan_right_tv;
     }

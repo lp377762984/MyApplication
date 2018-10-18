@@ -54,7 +54,6 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.utils.SocializeUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -632,7 +631,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 
 
-        logoutTXIM();
+
         startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
         SPUtils.setBoolean(Constants.ISLOGINED, false);
@@ -662,8 +661,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (isauth) {//删除授权
             UMShareAPI.get(MyApplication.getContext()).deleteOauth(SettingActivity.this, SHARE_MEDIA.WEIXIN, authListener);
         }
-        //删除umeng授权-- 结束
 
+        logoutTXIM();
         //退出主页面
         HomeActivity.instance.finish();
     }
@@ -689,7 +688,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             }
         });
         SPUtils.setString(Constants.MY_TXIM_ADMIN,null);
-        TlsBusiness.logout(UserInfo.getInstance().getId());
+        if (UserInfo.getInstance().getId()!=null){
+            TlsBusiness.logout(UserInfo.getInstance().getId());
+        }
         UserInfo.getInstance().setId(null);
         MessageEvent.getInstance().clear();
         FriendshipInfo.getInstance().clear();
