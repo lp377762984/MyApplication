@@ -54,7 +54,6 @@ import com.tencent.qcloud.tlslibrary.service.TlsBusiness;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.utils.SocializeUtils;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import org.greenrobot.eventbus.EventBus;
@@ -632,7 +631,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 
 
-        logoutTXIM();
+
         startActivity(new Intent(SettingActivity.this, LoginActivity.class));
 
         SPUtils.setBoolean(Constants.ISLOGINED, false);
@@ -666,6 +665,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         //退出主页面
         HomeActivity.instance.finish();
+        logoutTXIM();
     }
 
     public void logoutTXIM() {
@@ -701,34 +701,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    //    private void logouthx() {
-//        EMClient.getInstance().logout(true, new EMCallBack() {
-//
-//            @Override
-//            public void onSuccess() {
-//                // TODO Auto-generated method stub
-//                //成功
-//                startActivity(new Intent(SettingActivity.this, LoginActivity.class));
-//
-//                SPUtils.setBoolean(Constants.ISLOGINED, false);
-//                //退出主页面
-//                TXIMHomeActivity.instance.finish();
-//                finish();
-//            }
-//
-//            @Override
-//            public void onProgress(int progress, String status) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//
-//            @Override
-//            public void onError(int code, String message) {
-//                // TODO Auto-generated method stub
-//                //失败
-//                LogUtil.i("环信退出登录失败");
-//            }
-//        });
+
     private ArrayList<JsonBean> options1Items = new ArrayList<>();
     private ArrayList<Long> zonecode1 = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
