@@ -182,7 +182,7 @@ dependencies {
     compile project(':ui')
     //compile 'com.android.support:multidex:'
     compile files('libs/umeng-share-core-6.9.3.jar')
-//    compile files('libs/umeng-share-QQ-si mplify-6.9.3.jar')
+    //    compile files('libs/umeng-share-QQ-si mplify-6.9.3.jar')
     compile files('libs/umeng-share-wechat-simplify-6.9.3.jar')
     compile files('libs/umeng-share-sina-simplify-6.9.3.jar')
     compile files('libs/umeng-shareboard-widget-6.9.3.jar')

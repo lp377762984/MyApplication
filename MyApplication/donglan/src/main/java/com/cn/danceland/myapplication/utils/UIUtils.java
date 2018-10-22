@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -8,9 +9,12 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 import com.cn.danceland.myapplication.MyApplication;
 
@@ -224,4 +228,28 @@ public class UIUtils {
 		return s;
 	}
 
+	/**
+	 * 详情ImageView等比缩放 多用于商品详情  譬如生鲜详情
+	 * <p/>
+	 * Created by yangxiaoxue on 2018/10/19.
+	 * @param context
+	 * @param view ImageView 等
+	 * @param imageWidth 设计图比例宽
+	 * @param imageHeight 设计图比例高
+	 * @return
+	 */
+	public static View setViewRatio(Context context, View view,float imageWidth,float imageHeight) {
+		// 获取屏幕宽度，由宽度来设置banner的高度。
+		Display displaey = ((Activity) context).getWindowManager()
+				.getDefaultDisplay();
+		int width = displaey.getWidth();
+		float heightTemp = ((imageHeight / imageWidth) * width);
+		int height = (int) heightTemp;
+		LayoutParams lp;
+		lp = view.getLayoutParams();
+		lp.width = width;
+		lp.height = height;
+		view.setLayoutParams(lp);
+		return view;
+	}
 }

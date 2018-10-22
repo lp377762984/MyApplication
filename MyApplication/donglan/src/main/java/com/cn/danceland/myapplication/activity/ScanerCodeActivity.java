@@ -34,9 +34,17 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     @Override
     public void do_result(String result) {
         LogUtil.i(result);
-        startActivity(new Intent(ScanerCodeActivity.this, ScanerCodeDetailActivity.class).putExtra("message", result));
-        finish();
-//        showConfirmDialog(result);
+        String[] resultA = result.toString().split("\\,");
+        if (resultA != null && resultA.length > 1) {
+            if(resultA[2].equals("13")) {
+                startActivity(new Intent(ScanerCodeActivity.this, ScanerCodeDetailActivity.class).putExtra("message", result));
+                finish();
+            }else{
+                showConfirmDialog(result);
+            }
+        }else{
+            showConfirmDialog(result);
+        }
     }
 
     // BaseActivity中统一调用MobclickAgent 类的 onResume/onPause 接口

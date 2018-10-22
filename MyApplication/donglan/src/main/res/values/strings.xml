@@ -928,7 +928,13 @@
     <!--友盟第三方分享、登录等 结束-->
 
     <!--2.0版本开始-->
+    <string name="in_the_cumulative_text">进场累计</string>
+    <string name="fitness_diary_text">健身日记</string>
+    <string name="punch_list_text">打卡排行</string>
 
+
+    <string name="hot_topic_text">热门话题</string>
+    <string name="collect_text">收藏</string>
     <!--2.0版本结束-->
 
 </resources>

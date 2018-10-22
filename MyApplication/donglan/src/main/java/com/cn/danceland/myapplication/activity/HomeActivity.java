@@ -49,8 +49,9 @@ import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
-import com.cn.danceland.myapplication.fragment.HomeFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
+import com.cn.danceland.myapplication.fragment.NewHomeFragment;
+import com.cn.danceland.myapplication.fragment.NewHomeFragment2;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
@@ -103,6 +104,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,10 +122,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
-    private HomeFragment homeFragment;
+    private NewHomeFragment2 homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
-    private DiscoverFragment discoverFragment;
+    private NewHomeFragment discoverFragment;
+//    private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;
     private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
@@ -261,12 +264,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         checkUpdate();
 
         buildAnima();
-        homeFragment = new HomeFragment();
+        homeFragment = new NewHomeFragment2();
         shopFragment = new ShopFragment();
 
         shopListFragment = new ShopListFragment();
 
-        discoverFragment = new DiscoverFragment();
+        discoverFragment = new NewHomeFragment();
         meFragment = new MeFragment();
         msgUnread = (ImageView) findViewById(R.id.tabUnread);
         presenter = new ConversationPresenter(new ConversationView() {
@@ -374,23 +377,23 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         initConnWearFit();
         initCornerMark();
     }
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                //有按下时
-                break;
-            case MotionEvent.ACTION_UP:
-                //抬起时
-                if (!isSendWearFit) {
-                    isSendWearFit = true;
-                    initWearFitData();
-                }
-                break;
-        }
-        return super.dispatchTouchEvent(ev);
-
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        switch (ev.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                //有按下时
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                //抬起时
+//                if (!isSendWearFit) {
+//                    isSendWearFit = true;
+//                    initWearFitData();
+//                }
+//                break;
+//        }
+//        return super.dispatchTouchEvent(ev);
+//
+//    }
 
     public void initTimUser() {
         //基本用户配置
@@ -1177,4 +1180,50 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     };
 
+    public interface MyTouchListener {
+        public void onTouchEvent(MotionEvent event);
+    }
+
+    // 保存MyTouchListener接口的列表
+    private ArrayList<MyTouchListener> myTouchListeners = new ArrayList<HomeActivity.MyTouchListener>();
+
+    /**
+     * 提供给Fragment通过getActivity()方法来注册自己的触摸事件的方法
+     * @param listener
+     */
+    public void registerMyTouchListener(MyTouchListener listener) {
+        myTouchListeners.add(listener);
+    }
+
+    /**
+     * 提供给Fragment通过getActivity()方法来取消注册自己的触摸事件的方法
+     * @param listener
+     */
+    public void unRegisterMyTouchListener(MyTouchListener listener) {
+        myTouchListeners.remove( listener );
+    }
+
+    /**
+     * 分发触摸事件给所有注册了MyTouchListener的接口
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        for (MyTouchListener listener : myTouchListeners) {
+            listener.onTouchEvent(ev);
+        }
+
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                //有按下时
+                break;
+            case MotionEvent.ACTION_UP:
+                //抬起时
+                if (!isSendWearFit) {
+                    isSendWearFit = true;
+                    initWearFitData();
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

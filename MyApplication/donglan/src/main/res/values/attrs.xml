@@ -48,6 +48,13 @@
     </declare-styleable>
 
     <!--2.0版本开始-->
-
+    <!--圆角ImageView-->
+    <declare-styleable name="Round_Image_View">
+        <attr name="radius" format="dimension"/>
+        <attr name="left_top_radius" format="dimension"/>
+        <attr name="right_top_radius" format="dimension"/>
+        <attr name="right_bottom_radius" format="dimension"/>
+        <attr name="left_bottom_radius" format="dimension"/>
+    </declare-styleable>
     <!--2.0版本结束-->
 </resources>

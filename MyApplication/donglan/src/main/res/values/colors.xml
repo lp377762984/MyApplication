@@ -104,8 +104,26 @@
 
 
     <!--2.0版本开始-->
+    <color name="home_enter_total_text_color">#ff5e3a</color>
+    <color name="home_menu_bg_color">#e9e9e9</color>
 
+    <!--gray1-->
+    <color name="colorGray0">#707070</color>
 
+    <color name="colorGray21">#2c2837</color>
+    <color name="home_bottom_text_color">#ffb5a6</color>
+    <color name="home_item_text_color">#6d819c</color>
+
+    <color name="white_color">#ffffffff</color>
+    <color name="white_color90">#1Affffff</color>
+    <color name="white_color80">#33ffffff</color>
+    <color name="white_color70">#4Dffffff</color>
+    <color name="white_color60">#66ffffff</color>
+    <color name="white_color50">#80ffffff</color>
+    <color name="white_color40">#99ffffff</color>
+    <color name="white_color30">#B3ffffff</color>
+    <color name="white_color20">#CCffffff</color>
+    <color name="white_color10">#E6ffffff</color>
 
     <!--2.0版本结束-->
 
