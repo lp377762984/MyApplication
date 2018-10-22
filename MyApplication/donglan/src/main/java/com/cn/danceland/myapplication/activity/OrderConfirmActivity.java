@@ -30,7 +30,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -188,9 +187,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (Constants.DEV_CONFIG) {
-            EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
-        }
+//        if (Constants.DEV_CONFIG) {
+//            EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);//支付宝沙箱环境
+//        }
 
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);

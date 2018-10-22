@@ -2,29 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/dl_title"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery">
+        app:text="绑定设备"
+        android:layout_height="40dp">
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            style="@style/TextViewTitileStyle"
-            android:text="绑定设备"
-            />
-    </RelativeLayout>
+    </com.cn.danceland.myapplication.view.DongLanTitleView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,79 +21,96 @@
         <LinearLayout
             android:id="@+id/ll_phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="58dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/edit_bg_phone"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+            <!--       <Spinner
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:entries="@array/phone_codes"
+                       android:layout_gravity="center_vertical"
+                       android:id="@+id/sp_phone">
 
-            <!--         <Spinner
-                android:id="@+id/sp_phone"
+                   </Spinner>-->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:entries="@array/phone_codes">
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:text="手机号"
+                android:textColor="#6d819c"
+                android:textSize="12sp" />
 
-            </Spinner>-->
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/img_phone" />
 
             <EditText
                 android:id="@+id/et_phone"
                 style="@style/EtStyle"
-
-                android:hint="手机号"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:hint="请输入您的手机号"
                 android:inputType="phone" />
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/tv_getsms"
-            style="@style/TvGetsmsStyle"
-            android:layout_below="@+id/ll_phone"
-            android:layout_marginTop="10dp" />
-
         <LinearLayout
             android:id="@+id/ll_getsms"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_getsms"
+            android:layout_height="58dp"
+            android:layout_below="@id/ll_phone"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
+
+            android:layout_marginTop="16dp"
             android:background="@drawable/edit_bg_phone"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/img_muber" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/et_sms"
-                style="@style/EtStyle"
-                android:maxLength="4"
-                android:hint="请输入短信验证码"
-                android:inputType="number" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="验证码"
+                    android:textColor="#6d819c"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/et_sms"
+                    style="@style/EtStyle"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="6dp"
+                    android:hint="请输入短信验证码"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_getsms"
+
+                style="@style/TvGetsmsStyle"
+
+                android:layout_marginTop="14dp" />
         </LinearLayout>
 
 
-        <Button
-            android:id="@+id/btn_commit"
-            style="@style/BtnCommitStyle"
+        <com.cn.danceland.myapplication.view.CommitButton
+            android:id="@+id/dlbtn_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/ll_getsms"
             android:layout_marginTop="172dp"
-            android:text="完成" />
+            app:text="完成"></com.cn.danceland.myapplication.view.CommitButton>
+
 
     </RelativeLayout>
 

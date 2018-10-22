@@ -22,7 +22,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -39,6 +38,7 @@ import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CommitButton;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
@@ -127,7 +127,7 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
         super.onDestroy();
         EventBus.getDefault().unregister(this);
 
-        super.onDestroy();
+
     }
 
     private void initView() {
@@ -154,16 +154,12 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
             }
         });
         mEtSms = findViewById(R.id.et_sms);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
+        CommitButton commitButton=findViewById(R.id.dlbtn_commit);
 
 
+        commitButton.setOnClickListener(this);
     }
 
-    //返回
-    public void back(View view) {
-        finish();
-    }
 
     @Override
     public void onClick(View v) {
@@ -193,21 +189,14 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
 
 
                 break;
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
+
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
                     Toast.makeText(LoginSMSActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                //判断验证码是否正确
-//                if (TextUtils.equals(mEtSms.getText().toString().trim(), smsCode)) {
-//
-//                    login_by_phone_url(mEtPhone.getText().toString().trim());
-//
-//                } else {
-//                    Toast.makeText(LoginSMSActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
-//
-//                }
+
                 login_by_phone_url(mEtPhone.getText().toString().trim());
 
                 break;
@@ -232,7 +221,7 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
 
         String url = Constants.GET_SMS_URL + params;
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

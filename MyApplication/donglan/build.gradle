@@ -187,4 +187,9 @@ dependencies {
     compile files('libs/umeng-share-sina-simplify-6.9.3.jar')
     compile files('libs/umeng-shareboard-widget-6.9.3.jar')
     compile files('libs/umeng-sharetool-6.9.3.jar')
+
+        //阴影控件
+     // compile 'com.sdsmdg.harjot:materialshadows:1.2.5'
+    compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
+
 }

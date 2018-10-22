@@ -21,7 +21,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestBindBean;
@@ -115,7 +114,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         });
 
         mEtSms = findViewById(R.id.et_sms);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
 
 
     }
@@ -149,7 +148,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
                 getSMS();
                 break;
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
                 //判断验证码是否为空
                 if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
                     Toast.makeText(ForgetPasswordActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
@@ -210,7 +209,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
         String url = Constants.GET_SMS_URL + params;
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

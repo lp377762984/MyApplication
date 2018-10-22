@@ -6,6 +6,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -64,8 +65,10 @@ public class MultipartRequest extends Request<String>{
 
 //        headers.put("Accept","application/json");
 //        headers.put("content-Type","multipart/form-data");
-        headers.put("Authorization", SPUtils.getString(Constants.MY_TOKEN,null));
-
+        headers.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+        headers.put("version", Constants.getVersion());
+        headers.put("platform", Constants.getPlatform());
+        headers.put("channel", AppUtils.getChannelCode());
 
         LogUtil.i(headers.toString());
         return headers;
