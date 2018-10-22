@@ -44,6 +44,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,6 +61,8 @@ public class SiJiaoFragment extends BaseFragment {
     MyListAdapter childListAdapter;
     List<JiaoLianCourseBean.Content> jiaolianContent;
     List<MyCourseBean.Data> myCourseList;
+    List<List<SiJiaoRecordBean.Content>> childDatas = new ArrayList<>();
+
     List<SiJiaoRecordBean.Content> childContent;
     MyListView mylist;
     View view;
@@ -67,6 +70,7 @@ public class SiJiaoFragment extends BaseFragment {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+    int cureent_ex = -1;//当前子分组
 
     @Override
     public View initViews() {
@@ -76,26 +80,61 @@ public class SiJiaoFragment extends BaseFragment {
         mylist.setDividerHeight(0);
         ex_lv = inflate.findViewById(R.id.ex_lv);
         ex_lv.setGroupIndicator(null);
-        ex_lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                down_img = v.findViewById(R.id.down_img);
-                up_img = v.findViewById(R.id.up_img);
-                if (down_img.getVisibility() == View.GONE) {
-                    down_img.setVisibility(View.VISIBLE);
-                    up_img.setVisibility(View.GONE);
-                } else {
-                    if (role != null) {
-                        getChildData(jiaolianContent.get(groupPosition).getId(), jiaolianContent.get(groupPosition).getCourse_category() + "");
+        if (role==null){
+            ex_lv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                    LogUtil.i("cureent_ex=" + cureent_ex);
+                    LogUtil.i("groupPosition=" + groupPosition);
+//                if (cureent_ex > 0) {
+//                    if (cureent_ex != groupPosition) {
+//                        ex_lv.collapseGroup(cureent_ex);
+//                    } else {
+//
+//                    }
+//
+//                }
+                    cureent_ex = groupPosition;
+
+                    down_img = v.findViewById(R.id.down_img);
+                    up_img = v.findViewById(R.id.up_img);
+                    if (down_img.getVisibility() == View.GONE) {
+                        down_img.setVisibility(View.VISIBLE);
+                        up_img.setVisibility(View.GONE);
                     } else {
-                        getChildData(myCourseList.get(groupPosition).getId(), myCourseList.get(groupPosition).getCourse_category() + "");
+//                    if (role != null) {
+//                        getChildData(jiaolianContent.get(groupPosition).getId(), jiaolianContent.get(groupPosition).getCourse_category() + "", groupPosition);
+//                    } else {
+//                        getChildData(myCourseList.get(groupPosition).getId(), myCourseList.get(groupPosition).getCourse_category() + "", groupPosition);
+//                    }
+                        down_img.setVisibility(View.GONE);
+                        up_img.setVisibility(View.VISIBLE);
                     }
-                    down_img.setVisibility(View.GONE);
-                    up_img.setVisibility(View.VISIBLE);
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+
+            ex_lv.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                @Override
+                public void onGroupExpand(int groupPosition) {
+                    if (role != null) {
+                        getChildData(jiaolianContent.get(groupPosition).getId(), jiaolianContent.get(groupPosition).getCourse_category() + "", groupPosition);
+                    } else {
+                        getChildData(myCourseList.get(groupPosition).getId(), myCourseList.get(groupPosition).getCourse_category() + "", groupPosition);
+                    }
+                    for (int i = 0, count = ex_lv
+                            .getExpandableListAdapter().getGroupCount(); i < count; i++) {
+                        if (groupPosition != i) {// 关闭其他分组
+                            ex_lv.collapseGroup(i);
+                        }
+                    }
+
+                }
+            });
+        }
+
+
+
         rl_error = inflate.findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
         Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
@@ -156,6 +195,10 @@ public class SiJiaoFragment extends BaseFragment {
                             jiaolianContent = jiaoLianCourseBean.getData().getContent();
                             if (jiaolianContent != null) {
                                 ex_lv.setAdapter(new JiaoLianAdapter(jiaolianContent));
+                                childDatas = new ArrayList<>();
+                                for (int i = 0; i < jiaolianContent.size(); i++) {
+                                    childDatas.add(new ArrayList<SiJiaoRecordBean.Content>());
+                                }
                             }
                         }
                     } else {
@@ -165,6 +208,10 @@ public class SiJiaoFragment extends BaseFragment {
                             myCourseList = myCourseBean.getData();
                             if (myCourseList != null) {
                                 ex_lv.setAdapter(new MyExAdapter(myCourseList));
+                                for (int i = 0; i < myCourseList.size(); i++) {
+                                    childDatas.add(new ArrayList<SiJiaoRecordBean.Content>());
+                                }
+
                             }
                         }
                     }
@@ -186,7 +233,7 @@ public class SiJiaoFragment extends BaseFragment {
         }
     }
 
-    private void getChildData(Integer courseid, final String course_category) {
+    private void getChildData(Integer courseid, final String course_category, final int pos) {
 
         String url = null;
 
@@ -201,6 +248,8 @@ public class SiJiaoFragment extends BaseFragment {
             url = Constants.FINDGROUPCOURSEAPPOINTLIST;
         } else {
             url = Constants.APPOINTLIST;
+            childListAdapter = new MyListAdapter(new ArrayList<SiJiaoRecordBean.Content>(), course_category);
+
         }
 
         siJiaoYuYueConBean.setCourse_date_lt(System.currentTimeMillis());
@@ -240,7 +289,8 @@ public class SiJiaoFragment extends BaseFragment {
                             }
                             childContent = data.getContent();
                             if (childContent != null) {
-                                childListAdapter = new MyListAdapter(childContent, course_category);
+                                childDatas.set(pos, childContent);
+                                childListAdapter = new MyListAdapter(childDatas.get(pos), course_category);
                                 mylist.setAdapter(childListAdapter);
                                 //childListAdapter.notifyDataSetChanged();
                                 //childListAdapter.notifyDataSetChanged();
@@ -258,7 +308,7 @@ public class SiJiaoFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e("zzf", volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -314,16 +364,18 @@ public class SiJiaoFragment extends BaseFragment {
                 convertView = LayoutInflater.from(mActivity).inflate(R.layout.sijiao_parent_item, null);
 
                 viewHolder.sijiao_title = convertView.findViewById(R.id.sijiao_title);
+                viewHolder.down_img = convertView.findViewById(R.id.down_img);
                 viewHolder.sijiao_jiaolian = convertView.findViewById(R.id.sijiao_jiaolian);
                 viewHolder.sijiao_num = convertView.findViewById(R.id.sijiao_num);
                 viewHolder.sijiao_shengyu = convertView.findViewById(R.id.sijiao_shengyu);
                 viewHolder.sijiao_date = convertView.findViewById(R.id.sijiao_date);
                 viewHolder.sijiao_fangshi = convertView.findViewById(R.id.sijiao_fangshi);
-                viewHolder.sijiao_detail=convertView.findViewById(R.id.sijiao_detail);
+                viewHolder.sijiao_detail = convertView.findViewById(R.id.sijiao_detail);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+            viewHolder.down_img.setVisibility(View.GONE);
             RelativeLayout sijiao_yuyue = convertView.findViewById(R.id.sijiao_yuyue);
             final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
             final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
@@ -351,7 +403,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
 
             viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
-       //     LogUtil.i("有效期：" + startTime + "至" + endTime);
+            //     LogUtil.i("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");
             } else if (list.get(groupPosition).getCourse_category() == 2) {
@@ -369,7 +421,7 @@ public class SiJiaoFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
 
-                //    LogUtil.i("role"+role+"/n" +list.get(groupPosition).toString());
+                    //    LogUtil.i("role"+role+"/n" +list.get(groupPosition).toString());
                     if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, CourseDetailActivity.class).
                                 putExtra("item", list.get(groupPosition)).
@@ -400,7 +452,7 @@ public class SiJiaoFragment extends BaseFragment {
 //                viewHolder.mylist.setAdapter(childListAdapter);
 //            }
 
-            return convertView;
+            return new View(getActivity());
         }
 
         @Override
@@ -475,10 +527,10 @@ public class SiJiaoFragment extends BaseFragment {
             }
             final String startTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getStart_date() + "", "yyyy-MM-dd");
             final String endTime = TimeUtils.timeStamp2Date(list.get(groupPosition).getEnd_date() + "", "yyyy-MM-dd");
-            if (list.get(groupPosition).getDelete_remark()==1){
+            if (list.get(groupPosition).getDelete_remark() == 1) {
                 viewHolder.sijiao_yuyue.setVisibility(View.GONE);
                 viewHolder.sijiao_detail.setVisibility(View.GONE);
-            }else {
+            } else {
                 viewHolder.sijiao_yuyue.setVisibility(View.VISIBLE);
                 viewHolder.sijiao_detail.setVisibility(View.VISIBLE);
             }
@@ -527,7 +579,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_detail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LogUtil.i("!!!!!!"+list.get(groupPosition).toString());
+                    LogUtil.i("!!!!!!" + list.get(groupPosition).toString());
                     if (list.get(groupPosition).getCourse_category() == 1) {
                         startActivity(new Intent(mActivity, CourseDetailActivity.class).
                                 putExtra("item", list.get(groupPosition)).
@@ -552,14 +604,14 @@ public class SiJiaoFragment extends BaseFragment {
                 viewHolder.sijiao_detail.setVisibility(View.VISIBLE);
             }
 
-            if (System.currentTimeMillis()>list.get(groupPosition).getEnd_date()){
+            if (System.currentTimeMillis() > list.get(groupPosition).getEnd_date()) {
                 viewHolder.sijiao_date.setText("课时已过期，无法预约");
                 viewHolder.sijiao_date.setTextColor(Color.RED);
                 viewHolder.sijiao_yuyue.setVisibility(View.GONE);
                 viewHolder.sijiao_detail.setVisibility(View.GONE);
             }
 
-            if (list.get(groupPosition).getDelete_remark()==1){
+            if (list.get(groupPosition).getDelete_remark() == 1) {
                 viewHolder.sijiao_date.setText("课程已失效");
                 viewHolder.sijiao_date.setTextColor(Color.RED);
                 viewHolder.sijiao_yuyue.setVisibility(View.GONE);
@@ -567,7 +619,7 @@ public class SiJiaoFragment extends BaseFragment {
 
             }
 
-            if (list.get(groupPosition).getSurplus_count()<1){
+            if (list.get(groupPosition).getSurplus_count() < 1) {
                 viewHolder.sijiao_date.setText("课程已完成");
                 viewHolder.sijiao_date.setTextColor(Color.RED);
                 viewHolder.sijiao_yuyue.setVisibility(View.GONE);
@@ -608,6 +660,7 @@ public class SiJiaoFragment extends BaseFragment {
     class ViewHolder {
         RelativeLayout sijiao_detail, sijiao_yuyue;
         MyListView mylist;
+        ImageView down_img;
         TextView sijiao_title, sijiao_jiaolian, sijiao_num, sijiao_shengyu, sijiao_date, sijiao_fangshi;
     }
 
@@ -687,7 +740,7 @@ public class SiJiaoFragment extends BaseFragment {
                 public void onClick(View v) {
                     if (list.get(position).getStatus() == 4) {
                         if ("2".equals(course_category)) {
-                            startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record_id", list.get(position).getId()+""));
+                            startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).putExtra("record_id", list.get(position).getId() + ""));
                         } else {
                             startActivity(new Intent(mActivity, PingJiaActivity.class).putExtra("item", list.get(position)).
                                     putExtra("course_category", course_category).putExtra("evaluate_id", list.get(position).getEvaluate_id()));
@@ -743,7 +796,7 @@ public class SiJiaoFragment extends BaseFragment {
 
             if ("2".equals(course_category)) {
 
-           //     viewHolder1.tv_pingfen.setText("查看详情");
+                //     viewHolder1.tv_pingfen.setText("查看详情");
 
             }
 
