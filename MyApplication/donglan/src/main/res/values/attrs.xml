@@ -80,4 +80,8 @@
         <attr name="perValue" format="float"/>
     </declare-styleable>
 
+
+    <!--2.0版本开始-->
+
+    <!--2.0版本结束-->
 </resources>
