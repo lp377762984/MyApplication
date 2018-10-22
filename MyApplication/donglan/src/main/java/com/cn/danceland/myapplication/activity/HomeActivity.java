@@ -327,7 +327,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             finish();
         }
 
-        startActivity(new Intent(this, SetRegisterInfoActivity.class));
+//        startActivity(new Intent(this, SetRegisterInfoActivity.class));
 
         if (myInfo != null) {//判断资料是否全
             if (myInfo.getHasPwd()!=null&&!myInfo.getHasPwd()){
@@ -338,7 +338,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
             LogUtil.i(myInfo.toString());
             if (TextUtils.isEmpty(myInfo.getPerson().getNick_name())||TextUtils.isEmpty(myInfo.getPerson().getBirthday())||TextUtils.isEmpty(myInfo.getPerson().getHeight())||TextUtils.isEmpty(myInfo.getPerson().getWeight())) {
-                startActivity(new Intent(this, RegisterInfoActivity.class));
+                startActivity(new Intent(this, SetRegisterInfoActivity.class));
                 ToastUtils.showToastShort("请您填写个人信息");
                 finish();
             }

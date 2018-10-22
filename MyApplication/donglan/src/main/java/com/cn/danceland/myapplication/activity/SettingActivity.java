@@ -665,7 +665,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         logoutTXIM();
         //退出主页面
         HomeActivity.instance.finish();
-        logoutTXIM();
+
     }
 
     public void logoutTXIM() {
