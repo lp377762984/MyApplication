@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,9 +23,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.app.AppManager;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
@@ -321,7 +320,7 @@ public class BodyZongHeActivity extends BaseActivity {
 
                         params.put("file", file);
                         LogUtil.i("上传图片大小--" + file.length());
-                        LogUtil.i("上传图片参数--" + params.toString());
+                        LogUtil.i("上传图片地址--" + Constants.BCAUPLOAD);
 
                         MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.BCAUPLOAD, new Response.Listener<String>() {
 
@@ -379,6 +378,7 @@ public class BodyZongHeActivity extends BaseActivity {
                     } else if ("3".equals(num)) {
                         numMap.put(3, (String) message.obj);
                     }
+                    LogUtil.i("imgUrl--" + (String) message.obj);
                     LogUtil.i("2num-" + num);
                     LogUtil.i("2numMap.size()-" + numMap.size());
                     break;

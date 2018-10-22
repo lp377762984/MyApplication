@@ -74,7 +74,9 @@ public class AppUtils {
             return "1";
         }
         code=MyApplication.channelMap.get(getChannelName());
-
+        if (code==null){
+            code="1";
+        }
         return code;
     }
 
