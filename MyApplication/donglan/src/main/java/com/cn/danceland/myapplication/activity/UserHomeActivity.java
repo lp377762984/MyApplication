@@ -24,8 +24,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -45,7 +43,7 @@ import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -80,7 +78,7 @@ public class UserHomeActivity extends BaseActivity {
     public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
-   ProgressDialog dialog;
+    ProgressDialog dialog;
     private int mCurrentPage = 0;//当前请求页
     private String userId;
     private boolean isdyn = false;
@@ -150,9 +148,9 @@ public class UserHomeActivity extends BaseActivity {
 
     private void initView() {
 
-        DongLanTitleView titleView=findViewById(R.id.title);
+        DongLanTransparentTitleView titleView = findViewById(R.id.title);
         titleView.setTitle("动态");
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("title"))){
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("title"))) {
             titleView.setTitle(getIntent().getStringExtra("title"));
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -176,8 +174,8 @@ public class UserHomeActivity extends BaseActivity {
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         new FinishRefresh().execute();
                     }
                 };
@@ -205,8 +203,6 @@ public class UserHomeActivity extends BaseActivity {
     }
 
     private void setHeadViewData(final RequsetUserDynInfoBean.Data data) {
-
-
 
 
         if (TextUtils.equals(data.getPerson().getGender(), "1")) {
@@ -332,9 +328,9 @@ public class UserHomeActivity extends BaseActivity {
         iv_userifno_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(data.getPerson().getSelf_avatar_path())){
-                    startActivity(new Intent(UserHomeActivity.this,AvatarActivity.class).putExtra("url",data.getPerson().getSelf_avatar_path()));
-                }else {
+                if (!TextUtils.isEmpty(data.getPerson().getSelf_avatar_path())) {
+                    startActivity(new Intent(UserHomeActivity.this, AvatarActivity.class).putExtra("url", data.getPerson().getSelf_avatar_path()));
+                } else {
                     ToastUtils.showToastLong("未设置头像");
                 }
 
@@ -377,15 +373,15 @@ public class UserHomeActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {      //判断标志位
                 case 1:
-                   // dialog.dismiss();
+                    // dialog.dismiss();
                     myDynListviewAdater.notifyDataSetChanged();
                     pullToRefresh.onRefreshComplete();
 
                     break;
                 case 2:
                     //    pullToRefresh.getRefreshableView().addHeaderView(initHeadview(requestInfoBean.getData()));
-             //       setHeadViewData(userInfo);
-                 //   dialog.dismiss();
+                    //       setHeadViewData(userInfo);
+                    //   dialog.dismiss();
 
                     if (isdyn) {//跳转到动态的那行
 
@@ -473,7 +469,7 @@ public class UserHomeActivity extends BaseActivity {
                 LogUtil.i("收到消息" + msg);
                 RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
                 Glide.with(this).load(msg).apply(options).into(iv_userifno_avatar);
-                for (int i=0;i<data.size();i++){
+                for (int i = 0; i < data.size(); i++) {
                     data.get(i).setSelfUrl(msg);
                 }
                 myDynListviewAdater.notifyDataSetChanged();
@@ -483,7 +479,7 @@ public class UserHomeActivity extends BaseActivity {
                 if (100 == event.getEventCode()) {
                     tv_head_nickname.setText(event.getMsg());
                 }
-                for (int i=0;i<data.size();i++){
+                for (int i = 0; i < data.size(); i++) {
                     data.get(i).setNickName(event.getMsg());
                 }
                 myDynListviewAdater.notifyDataSetChanged();
@@ -515,7 +511,7 @@ public class UserHomeActivity extends BaseActivity {
     }
 
     private void initData() {
-      //  dialog.show();
+        //  dialog.show();
         findSelfDT();
         queryUserInfo(userId);
     }
@@ -543,17 +539,17 @@ public class UserHomeActivity extends BaseActivity {
                 requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
 
-               userInfo = requestInfoBean.getData();
+                userInfo = requestInfoBean.getData();
 
 
                 if (TextUtils.equals(id, SPUtils.getString(Constants.MY_USERID, null))) {
                     //如果是本人更新本地缓存
-                    Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                     data.setPerson(userInfo.getPerson());
                     DataInfoCache.saveOneCache(data, Constants.MY_INFO);
-                    SPUtils.setInt(Constants.MY_DYN,requestInfoBean.getData().getDyn_no());
-                    SPUtils.setInt(Constants.MY_FANS,requestInfoBean.getData().getFanse_no());
-                    SPUtils.setInt(Constants.MY_FOLLOWS,requestInfoBean.getData().getFollow_no());
+                    SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
+                    SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
+                    SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
 
 
                     EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_USER_INFO));
@@ -617,7 +613,7 @@ public class UserHomeActivity extends BaseActivity {
                 if (requsetDynInfoBean.getSuccess()) {
                     data = requsetDynInfoBean.getData().getItems();
                     // requsetDynInfoBean.getData().getItems().toString();
-                  //  LogUtil.i(data.toString());
+                    //  LogUtil.i(data.toString());
 
                     //         myDynListviewAdater.notifyDataSetChanged();
                     mCurrentPage = mCurrentPage + 1;
@@ -669,8 +665,6 @@ public class UserHomeActivity extends BaseActivity {
             }
 
 
-
-
         };
         MyApplication.getHttpQueues().add(request);
 
@@ -702,8 +696,6 @@ public class UserHomeActivity extends BaseActivity {
                 finish();
             }
         });
-
-
 
 
         return headview;
@@ -762,7 +754,6 @@ public class UserHomeActivity extends BaseActivity {
     }
 
 
-
     /**
      * 加关注
      *
@@ -771,11 +762,11 @@ public class UserHomeActivity extends BaseActivity {
      */
     private void addGuanzhu(final String id, final boolean b) {
 
-        StrBean1 strBean1=new StrBean1();
-        strBean1.is_follower=b;
-        strBean1.user_id=id;
+        StrBean1 strBean1 = new StrBean1();
+        strBean1.is_follower = b;
+        strBean1.user_id = id;
 
-        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU,new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -820,8 +811,6 @@ public class UserHomeActivity extends BaseActivity {
         MyApplication.getHttpQueues().add(request);
 
     }
-
-
 
 
 }
