@@ -108,7 +108,7 @@ public class NewHomeFragment2 extends BaseFragment {
     private LinearLayout fitness_diary_pink_ll;//健身日记 菜单 粉色布局
     private LinearLayout punch_list_pink_ll;//打卡排行 菜单 粉色布局
     private ImageView header_background_iv;//打卡排行 菜单 粉色布局
-    private LinearLayout listview_top_layout;//listview_top_layout
+    private RelativeLayout listview_top_layout;//listview_top_layout
     private ImageView iv_avatar;
     private TextView tv_nick_name;
 
@@ -354,11 +354,16 @@ public class NewHomeFragment2 extends BaseFragment {
                         break;
                     case MotionEvent.ACTION_UP://当触点松开时被触发。
                         int temp = originalTop + (int) (mCurPosY - mPosY);
+                        int temp2 = originalTop2 + (int) (mCurPosY - mPosY);
+                        int temp3 = originalTop3 + (int) (mCurPosY - mPosY);
                         if (temp >= -140 && temp <= 140) {
                             originalTop = temp;
                         }
-//                        if (temp >= 0 && temp <= 140) {
-//                            originalTop += (int) (mCurPosY - mPosY);
+                        if (temp2 >= -300 && temp2 <= 300) {
+                            originalTop2 = temp2;
+                        }
+//                        if (temp3 >= 440 && temp3 <= -300) {
+                        originalTop3 += (int) (mCurPosY - mPosY);
 //                        }
                         break;
                 }
@@ -399,8 +404,9 @@ public class NewHomeFragment2 extends BaseFragment {
             }
         }
     };
-    //    private int originalTop = 140;
-    private int originalTop = 0;//总偏移量
+    private int originalTop = 0;//日记排行总偏移量
+    private int originalTop2 = 300;//listview总偏移量
+    private int originalTop3 = 0;//headerlayout总偏移量
 
     /**
      * 本Activity透明度刷新有问题，所以如下这么写
@@ -409,18 +415,28 @@ public class NewHomeFragment2 extends BaseFragment {
      */
     public void setHeader(int offsetNumTemp) {
         int offsetNum = originalTop + offsetNumTemp;
-        //设置头像
-        RequestOptions whiteOptions1 = new RequestOptions().placeholder(R.drawable.fitness_diary_white_two_img);
-        RequestOptions whiteOptions2 = new RequestOptions().placeholder(R.drawable.punch_list_white_two_img);
-        RequestOptions pinkOptions1 = new RequestOptions().placeholder(R.drawable.fitness_diary_pink_img);
-        RequestOptions pinkOptions2 = new RequestOptions().placeholder(R.drawable.punch_list_pink_img);
-        if (-140 <= offsetNum && offsetNum >= 140) {
-            FrameLayout.LayoutParams listviewLayoutParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//            listviewLayoutParams.width = 120;
-            listviewLayoutParams.setMargins(0, offsetNum + 300, 0, 0);
-            pullToRefresh.getRefreshableView().setLayoutParams(listviewLayoutParams);
-        }
+        int offsetNum2 = originalTop2 + offsetNumTemp;
+        int offsetNum3 = originalTop3 + offsetNumTemp;
 
+        FrameLayout.LayoutParams lppTemp = (FrameLayout.LayoutParams) header_layout.getLayoutParams();
+
+//        LogUtil.i("TEBOTE-00--(" + offsetNumTemp);
+//        LogUtil.i("TEBOTE-11--(" + offsetNum2);
+//        LogUtil.i("TEBOTE---(" + originalTop2);
+        FrameLayout.LayoutParams listviewLayoutParams = (FrameLayout.LayoutParams) listview_top_layout.getLayoutParams();
+        if (0 <= offsetNum2 && offsetNum2 <= 300) {
+//            LogUtil.i("TEBOTE-22--(" + (offsetNum2));
+            listviewLayoutParams.setMargins(0, offsetNum2, 0, 0);
+            listview_top_layout.setLayoutParams(listviewLayoutParams);
+        } else {
+            if (offsetNum < 0) {//向上滑动
+                listviewLayoutParams.setMargins(0, 0, 0, 0);
+                listview_top_layout.setLayoutParams(listviewLayoutParams);
+            } else if (offsetNum > 0) {//向下滑动
+                listviewLayoutParams.setMargins(0, 300, 0, 0);
+                listview_top_layout.setLayoutParams(listviewLayoutParams);
+            }
+        }
         if (offsetNum >= 0) {
             originalTop = 0;
             LogUtil.i("offsetNum--0--(" + offsetNum);
@@ -428,335 +444,132 @@ public class NewHomeFragment2 extends BaseFragment {
             fitness_diary_white_iv.setVisibility(View.GONE);
             punch_list_white_iv.setVisibility(View.GONE);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_img)).apply(pinkOptions2).into(punch_list_pink_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_img));
         } else if (0 > offsetNum && offsetNum >= -20) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--1--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_eight_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_eight_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_two_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_two_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_eight_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_eight_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_two_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_two_img));
         } else if (-20 > offsetNum && offsetNum >= -40) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--2--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_seven_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_seven_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_three_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_three_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_seven_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_seven_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_three_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_three_img));
         } else if (-40 > offsetNum && offsetNum >= -60) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--3--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_six_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_six_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_four_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_four_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_six_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_six_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_four_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_four_img));
         } else if (-60 > offsetNum && offsetNum >= -80) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--4--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_five_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_five_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_five_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_five_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_five_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_five_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_five_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_five_img));
         } else if (-80 > offsetNum && offsetNum >= -100) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--5--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_four_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_four_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_six_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_six_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_four_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_four_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_six_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_six_img));
         } else if (-100 > offsetNum && offsetNum >= -120) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--6--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_three_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_three_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_seven_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_seven_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_three_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_three_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_seven_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_seven_img));
         } else if (-120 > offsetNum && offsetNum > -140) {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             LogUtil.i("offsetNum--7--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_pink_two_img)).apply(pinkOptions1).into(fitness_diary_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_pink_two_img)).apply(pinkOptions2).into(punch_list_pink_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_eight_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_eight_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
+            fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_two_img));
+            punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_two_img));
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_eight_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_eight_img));
         } else if (offsetNum <= -140) {
             LogUtil.i("offsetNum--8--(" + offsetNum);
             originalTop = -140;
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.fitness_diary_white_img)).apply(whiteOptions1).into(fitness_diary_white_iv);
-            Glide.with(mActivity).load(getResources().getDrawable(R.drawable.punch_list_white_img)).apply(whiteOptions2).into(punch_list_white_iv);
+            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_img));
+            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
+        } else {
+            if (offsetNumTemp < 0) {//向上滑动
+                originalTop = -140;//改变布局
+                meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
+                fitness_diary_white_iv.setVisibility(View.VISIBLE);
+                punch_list_white_iv.setVisibility(View.VISIBLE);
+                fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_img));
+                punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
+            } else if (offsetNumTemp > 0) {//向下滑动
+                originalTop = 0;//改变布局
+                meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
+                fitness_diary_white_iv.setVisibility(View.GONE);
+                punch_list_white_iv.setVisibility(View.GONE);
+                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));
+                fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_img));
+                punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_img));
+            }
         }
-
-//        if ((offsetNum) >= -140 && (offsetNum) <= 140) {//白
-        //改变日记、排行布局--开始
-//        int mheight = 140 / 10;
-//        if (offsetNum < 140 && offsetNum >= (140 - mheight * 1)) {
-//            LogUtil.i("offsetNum--1--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_one_bg));
-//        } else if ((offsetNum) < (140 - mheight * 1) && (offsetNum) >= (140 - mheight * 2)) {
-//            LogUtil.i("offsetNum--2--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-//        } else if ((offsetNum) < (140 - mheight * 2) && (offsetNum) >= (140 - mheight * 3)) {
-//            LogUtil.i("offsetNum--3--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
-//        } else if ((offsetNum) < (140 - mheight * 3) && (offsetNum) >= (140 - mheight * 4)) {
-//            LogUtil.i("offsetNum--4--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
-//        } else if ((offsetNum) < (140 - mheight * 4) && (offsetNum) >= (140 - mheight * 5)) {
-//            LogUtil.i("offsetNum--5--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
-//        } else if ((offsetNum) < (140 - mheight * 5) && (offsetNum) >= (140 - mheight * 6)) {
-//            LogUtil.i("offsetNum--6--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
-//        } else if ((offsetNum) < (140 - mheight * 6) && (offsetNum) >= (140 - mheight * 7)) {
-//            LogUtil.i("offsetNum--7--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
-//        } else if ((offsetNum) < (140 - mheight * 7) && (offsetNum) >= (140 - mheight * 8)) {
-//            LogUtil.i("offsetNum--8--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
-//        } else if ((offsetNum) < (140 - mheight * 8) && (offsetNum) >= (140 - mheight * 9)) {
-//            LogUtil.i("offsetNum--9--(" + offsetNum);
-//            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_nine_bg));
-//        } else if ((offsetNum) < (140 - mheight * 9) && (offsetNum) >= -140) {
-//            LogUtil.i("offsetNum--10--(" + offsetNum);
-//            meun_cradview.setVisibility(View.GONE);
-//            fitness_diary_white_iv.setVisibility(View.VISIBLE);
-//            punch_list_white_iv.setVisibility(View.VISIBLE);
-//        }
-//        } else {
+        LogUtil.i("originalTop3-----(" + originalTop3);
+        LogUtil.i("offsetNum3-----(" + offsetNum3);
+        if (-300 > offsetNum3 && offsetNum3 >= -440) {
+            LogUtil.i("进了--（" + (140 + (offsetNum3 + 300)));
+            lppTemp.setMargins(0, 140 + (offsetNum3 + 300), 140, 0);
+            in_the_cumulative_tv.setVisibility(View.GONE);
+        } else {
+            LogUtil.i("offsetNumTemp-----(" + offsetNumTemp);
+            if(offsetNum3 < -440){
+                lppTemp.setMargins(0, 0, 140, 0);
+                in_the_cumulative_tv.setVisibility(View.GONE);
+            }else {
+                lppTemp.setMargins(0, 140, 140, 0);
+                in_the_cumulative_tv.setVisibility(View.VISIBLE);
+            }
 //            if (offsetNumTemp < 0) {//向上滑动
-////                lppTemp.setMargins(0, 0, 140, 0);//改变头像那条布局
-////                in_the_cumulative_tv.setVisibility(View.GONE);//改变头像那条布局
-////                originalTop = 0;//改变头像那条布局
-//                meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
-//            } else if (offsetNumTemp > 0) {//向下滑动
-////                lppTemp.setMargins(0, 140, 140, 0);//改变头像那条布局
-////                in_the_cumulative_tv.setVisibility(View.VISIBLE);//改变头像那条布局
-////                originalTop = 140;//改变头像那条布局
-//                meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));//改变日记、排行布局
-//            }
-//        }
-
-
-//        //140是默认布局margin top
-//        FrameLayout.LayoutParams lppTemp = (FrameLayout.LayoutParams) header_layout.getLayoutParams();
-//        int offsetNum = originalTop + offsetNumTemp;
-//        if ((offsetNum) >= 0 && (offsetNum) <= 140) {
-//            //改变头像那条布局--开始
-//            lppTemp.setMargins(0, offsetNum, 140, 0);
-//            in_the_cumulative_tv.setVisibility(View.GONE);
-//            //改变头像那条布局--结束
-//            //改变日记、排行布局--开始
-//            int mheight = 280 / 10;
-//            if ((offsetNum) <= (140 - mheight * 1)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_one_bg));
-//            } else if ((offsetNum) > (140 - mheight * 1) && (offsetNum) <= (140 - mheight * 2)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-//            } else if ((offsetNum) > (140 - mheight * 2) && (offsetNum) <= (140 - mheight * 3)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
-//            } else if ((offsetNum) > (140 - mheight * 3) && (offsetNum) <= (140 - mheight * 4)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
-//            } else if ((offsetNum) > (140 - mheight * 4) && (offsetNum) <= (140 - mheight * 5)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
-//            } else if ((offsetNum) > (140 - mheight * 5) && (offsetNum) <= (140 - mheight * 6)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
-//            } else if ((offsetNum) > (140 - mheight * 6) && (offsetNum) <= (140 - mheight * 7)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
-//            } else if ((offsetNum) > (140 - mheight * 7) && (offsetNum) <= (140 - mheight * 8)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
-//            } else if ((offsetNum) > (140 - mheight * 8) && (offsetNum) <= (140 - mheight * 9)) {
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_nine_bg));
-//            } else if ((offsetNum) <= (140 - mheight * 9) && (offsetNum) >= -140) {
-//                meun_cradview.setVisibility(View.GONE);
-//            }
-////            if (offsetNum < 0) {//向上滑动 负数
-////                if ((offsetNum) <= -(140 / 10 * 1)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));
-////                } else if ((offsetNum) > -(140 / 10 * 1) && (offsetNum) <= -(140 / 10 * 2)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-////                } else if ((offsetNum) > -(140 / 10 * 2) && (offsetNum) <= -(140 / 10 * 3)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
-////                } else if ((offsetNum) > -(140 / 10 * 3) && (offsetNum) <= -(140 / 10 * 4)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
-////                } else if ((offsetNum) > -(140 / 10 * 4) && (offsetNum) <= (140 / 10 * 5)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
-////                } else if ((offsetNum) > (140 / 10 * 5) && (offsetNum) <= (140 / 10 * 6)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
-////                } else if ((offsetNum) > (140 / 10 * 6) && (offsetNum) <= (140 / 10 * 7)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
-////                } else if ((offsetNum) > (140 / 10 * 7) && (offsetNum) <= (140 / 10 * 8)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
-////                } else if ((offsetNum) > (140 / 10 * 8) && (offsetNum) <= (140 / 10 * 9)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_nine_bg));
-////                } else if ((offsetNum) > (140 / 10 * 9) && (offsetNum) <= 140) {
-//////                meun_cradview.setVisibility(View.GONE);
-////                }
-////            } else if (offsetNum > 0) {//向下滑动 正数
-////                if ((offsetNum) <= (140 / 10 * 1)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));
-////                } else if ((offsetNum) > (140 / 10 * 1) && (offsetNum) <= (140 / 10 * 2)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-////                } else if ((offsetNum) > (140 / 10 * 2) && (offsetNum) <= (140 / 10 * 3)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
-////                } else if ((offsetNum) > (140 / 10 * 3) && (offsetNum) <= (140 / 10 * 4)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
-////                } else if ((offsetNum) > (140 / 10 * 4) && (offsetNum) <= (140 / 10 * 5)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
-////                } else if ((offsetNum) > (140 / 10 * 5) && (offsetNum) <= (140 / 10 * 6)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
-////                } else if ((offsetNum) > (140 / 10 * 6) && (offsetNum) <= (140 / 10 * 7)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
-////                } else if ((offsetNum) > (140 / 10 * 7) && (offsetNum) <= (140 / 10 * 8)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
-////                } else if ((offsetNum) > (140 / 10 * 8) && (offsetNum) <= (140 / 10 * 9)) {
-////                    meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_nine_bg));
-////                } else if ((offsetNum) > (140 / 10 * 9) && (offsetNum) <= 140) {
-//////                meun_cradview.setVisibility(View.GONE);
-////                }
-////            }
-//
-//            //            if ((offsetNum) <= (140 / 10 * 1)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color));
-////            } else if ((offsetNum) >= (140 / 10 * 1) && (offsetNum) <= (140 / 10 * 2)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color10));
-////            } else if ((offsetNum) >= (140 / 10 * 2) && (offsetNum) <= (140 / 10 * 3)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color20));
-////            } else if ((offsetNum) >= (140 / 10 * 3) && (offsetNum) <= (140 / 10 * 4)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color30));
-////            } else if ((offsetNum) >= (140 / 10 * 4) && (offsetNum) <= (140 / 10 * 5)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color40));
-////            } else if ((offsetNum) >= (140 / 10 * 5) && (offsetNum) <= (140 / 10 * 6)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color50));
-////            } else if ((offsetNum) >= (140 / 10 * 6) && (offsetNum) <= (140 / 10 * 7)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color60));
-////            } else if ((offsetNum) >= (140 / 10 * 7) && (offsetNum) <= (140 / 10 * 8)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color70));
-////            } else if ((offsetNum) >= (140 / 10 * 8) && (offsetNum) <= (140 / 10 * 9)) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color80));
-////            } else if ((offsetNum) >= (140 / 10 * 9) && (offsetNum) <= 140) {
-////                meun_cradview.setBackgroundColor(getResources().getColor(R.color.white_color90));
-////            }
-//            //改变日记、排行布局--结束
-//        } else {
-//            if (offsetNum < 0) {//向上滑动
-//                lppTemp.setMargins(0, 0, 140, 0);//改变头像那条布局
-//                in_the_cumulative_tv.setVisibility(View.GONE);//改变头像那条布局
-//                originalTop = 0;//改变头像那条布局
-//                meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
-//            } else if (offsetNum > 0) {//向下滑动
-//                lppTemp.setMargins(0, 140, 140, 0);//改变头像那条布局
-//                in_the_cumulative_tv.setVisibility(View.VISIBLE);//改变头像那条布局
-//                originalTop = 140;//改变头像那条布局
-//                meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
-//                meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_bg));//改变日记、排行布局
-//            }
-//        }
-//        header_layout.setLayoutParams(lppTemp);
-
-//        if (offsetNum < 0) {//向上滑动
-//            if ((originalTop + offsetNum) >= 0) {
-//                lppTemp.setMargins(0, originalTop + offsetNum, 140, 0);
-//                header_layout.setLayoutParams(lppTemp);
-//                in_the_cumulative_tv.setVisibility(View.GONE);
-//            } else {
 //                lppTemp.setMargins(0, 0, 140, 0);
-//                header_layout.setLayoutParams(lppTemp);
 //                in_the_cumulative_tv.setVisibility(View.GONE);
-//                originalTop = 0;
-//            }
-//        } else if (offsetNum > 0) {//向下滑动
-//            LogUtil.i("111--(" + offsetNum);
-//            LogUtil.i("222--(" + originalTop);
-//            LogUtil.i("444--(" + (originalTop + offsetNum));
-//            if ((originalTop + offsetNum) <= 140) {
-//                lppTemp.setMargins(0, originalTop + offsetNum, 140, 0);
-//                header_layout.setLayoutParams(lppTemp);
-//                in_the_cumulative_tv.setVisibility(View.GONE);
-//            } else {
+//                originalTop3 = 0;
+//            } else {//向下滑动
 //                lppTemp.setMargins(0, 140, 140, 0);
 //                in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//                header_layout.setLayoutParams(lppTemp);
 //                originalTop = 140;
 //            }
-//        }
-
-
-//        originalTop += offsetNum;
-//        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
-//        if (offsetNum >= 0 && offsetNum <= 140) {
-//            LogUtil.i("setHeader滑动--(" + offsetNum);
-//            LogUtil.i("setHeader实际--" + originalTop);
-//            lppTemp.setMargins(0, originalTop, 140, 0);
-//            header_layout.setLayoutParams(lppTemp);
-//            in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//        } else {
-//                if (offsetNum < 0) {//向上滑动
-//                    lppTemp.setMargins(0, 0, 140, 0);
-//                    header_layout.setLayoutParams(lppTemp);
-//                    in_the_cumulative_tv.setVisibility(View.GONE);
-//                    originalTop=0;
-//                } else if (offsetNum > 0) {//向下滑动
-//                    lppTemp.setMargins(0, 140, 140, 0);
-//                    in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//                    header_layout.setLayoutParams(lppTemp);
-//                    originalTop=140;
-//                }
-//            }
-//        }
-//        if (state == CollapsingToolbarLayoutState.COLLAPSED) {
-//            if (Math.abs(offsetNum) >= 50 && Math.abs(offsetNum) <= 350) {
-//                int marginTopNum = offsetNum / 30;
-//                LogUtil.i("setHeader滑动--" + offsetNum);
-//                LogUtil.i("setHeader实际--" + marginTopNum);
-//                lppTemp.setMargins(0, marginTopNum, 140, 0);
-//                header_layout.setLayoutParams(lppTemp);
-//                in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//            } else {
-//                if (offsetNum < 0) {//向上滑动
-//                    lppTemp.setMargins(0, 0, 140, 0);
-//                    header_layout.setLayoutParams(lppTemp);
-//                    in_the_cumulative_tv.setVisibility(View.GONE);
-//                } else if (offsetNum > 0) {//向下滑动
-//                    lppTemp.setMargins(0, 140, 140, 0);
-//                    in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//                    header_layout.setLayoutParams(lppTemp);
-//                }
-//            }
-//        } else {
-//            lppTemp.setMargins(0, 140, 140, 0);
-//            in_the_cumulative_tv.setVisibility(View.VISIBLE);
-//            header_layout.setLayoutParams(lppTemp);
-//        }
-
-//        AlphaAnimation anim = new AlphaAnimation(0, 1);
-//        anim.setDuration(1500);
-//        anim.setInterpolator(getActivity(), android.R.interpolator.linear);
-//        meun_cradview.setAnimation(anim);
-//        meun_cradview.setAlpha((int) distance);
+        }
+        header_layout.setLayoutParams(lppTemp);
+        LogUtil.i("------------------------------------------------------------------------");
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -764,27 +577,11 @@ public class NewHomeFragment2 extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fitness_diary_white_iv:
-                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (myPaiMingBean == null) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
-
-                    break;
-                case R.id.punch_list_white_iv:
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
                     break;
-                case R.id.fitness_diary_pink_ll:
+                case R.id.punch_list_white_iv:
                     if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                         ToastUtils.showToastShort("您还没有参加健身运动");
                         return;
@@ -800,11 +597,27 @@ public class NewHomeFragment2 extends BaseFragment {
                     startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
 
                     break;
-                case R.id.punch_list_pink_ll:
+                case R.id.fitness_diary_pink_ll:
+
                     //      startActivity(new Intent(mActivity, TestActivity.class));
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
+                    break;
+                case R.id.punch_list_pink_ll:
+                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (myPaiMingBean == null) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
                     break;
             }
         }

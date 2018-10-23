@@ -612,7 +612,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
 
-//                LogUtil.i("!!!!!!!!!!!!!!!!!!!"+s);
+                LogUtil.i("!!!!!!!!!!!!!!!!!!!"+s);
                 CheckUpdateBean checkUpdateBean = new Gson().fromJson(s, CheckUpdateBean.class);
                 if (checkUpdateBean != null && checkUpdateBean.getData() != null) {
                     String status = checkUpdateBean.getData().getStatus();
