@@ -710,6 +710,7 @@ public class NewHomeFragment extends BaseFragment {
     private View initBanner() {
         View v = View.inflate(mActivity, R.layout.headview_banner, null);
         mMZBanner = (MZBannerView) v.findViewById(R.id.banner);
+        mMZBanner.setIndicatorRes(R.drawable.home_banner_indicator_icon,R.drawable.home_banner_indicator_select_icon);
         CardView banner_cardview = v.findViewById(R.id.banner_cardview);
         banner_cardview = (CardView) UIUtils.setViewRatio(mActivity, banner_cardview, 155, 80);
 
