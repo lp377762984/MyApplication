@@ -493,7 +493,7 @@ public class NewHomeFragment extends BaseFragment {
                 }
             }
             header_layout.setLayoutParams(lppTemp);
-        }else{
+        } else {
 
         }
 
@@ -584,27 +584,11 @@ public class NewHomeFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fitness_diary_white_iv:
-                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (myPaiMingBean == null) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
-
-                    break;
-                case R.id.punch_list_white_iv:
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
                     break;
-                case R.id.fitness_diary_pink_ll:
+                case R.id.punch_list_white_iv:
                     if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                         ToastUtils.showToastShort("您还没有参加健身运动");
                         return;
@@ -620,11 +604,27 @@ public class NewHomeFragment extends BaseFragment {
                     startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
 
                     break;
-                case R.id.punch_list_pink_ll:
+                case R.id.fitness_diary_pink_ll:
+
                     //      startActivity(new Intent(mActivity, TestActivity.class));
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
+                    break;
+                case R.id.punch_list_pink_ll:
+                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (myPaiMingBean == null) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
                     break;
             }
         }
