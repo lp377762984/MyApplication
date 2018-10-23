@@ -12,6 +12,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.List;
 

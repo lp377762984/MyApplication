@@ -26,23 +26,23 @@
         android:id="@+id/ll_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_setting_item_selector"
+        android:layout_marginTop="24dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="98dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:src="@drawable/img_my_avatar" />
 
             <LinearLayout
@@ -57,19 +57,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-
-                    android:textColor="@color/dl_gery"
+                    android:textColor="@color/colorGray21"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/tv_time"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="5dp"
-                    android:text="最近发布"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="12sp" />
+                    android:layout_marginTop="11dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/home_item_time_icon" />
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="6dp"
+                        android:text="最近发布"
+                        android:textColor="@color/home_item_text_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -127,15 +140,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="45dp"
             android:orientation="vertical">
 
             <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="5dp"
                 android:textColor="#333333"
                 android:textSize="16sp"
@@ -158,8 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="#333333"
+                    android:textColor="@color/colorGray21"
                     android:textSize="16sp"
                     emojicon:emojiconSize="18sp" />
 
@@ -175,18 +186,15 @@
             <cn.jzvd.JZVideoPlayerStandard
                 android:id="@+id/videoplayer"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="225dp"
+                android:layout_marginTop="16dp"
                 android:visibility="gone" />
 
             <com.cn.danceland.myapplication.view.NoScrollGridView
                 android:id="@+id/gridview"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="16dp"
                 android:columnWidth="100dp"
                 android:gravity="center_vertical"
                 android:numColumns="3"
@@ -202,8 +210,8 @@
                     android:id="@+id/iv_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -212,8 +220,8 @@
                 android:id="@+id/ll_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -233,28 +241,23 @@
                     android:textSize="12sp"
 
                     />
-
-
             </LinearLayout>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-
+                android:layout_height="55dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
-
 
                 <LinearLayout
                     android:id="@+id/ll_zan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_width="82.5dp"
+                    android:layout_height="55dp"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
                     android:gravity="left">
 
                     <ImageView
-
                         android:id="@+id/iv_zan"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
@@ -297,11 +300,9 @@
 
                 <LinearLayout
                     android:id="@id/ll_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
+                    android:layout_width="82.5dp"
+                    android:layout_height="55dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_weight="1"
                     android:gravity="left">
 
                     <ImageView
@@ -333,10 +334,9 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_more"
-                    android:layout_width="30dp"
+                    android:layout_width="82.5dp"
                     android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1">
+                    android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/iv_more"
@@ -344,18 +344,10 @@
                         android:layout_height="5dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="16dp"
                         android:src="@drawable/img_more_dyn" />
                 </RelativeLayout>
-
-
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/color_bg_line" />
 </LinearLayout>
