@@ -129,6 +129,7 @@ public class Constants {
     public static String UPLOAD_FILES_URL = HOST + "appDynMsg/uploadFiles";//上传多文件
 
     public static String FIND_NEWS_URL = HOST + "appHome/showNews/";//查找新闻列表
+    public static String FIND_NEWS_URL_NEW = HOST + "/appHome/showHomeNews";//查找新闻列表 new
     public static String FIND_IMAGE_NEWS_URL = HOST + "appHome/showCarousel";//查找新闻轮播图片
     public static String FIND_BRANCHRANKING = HOST + "/cardenter/branchRanking";//我的门店的排名
     public static String FIND_MYRANKING_URL = HOST + "/cardenter/myRanking";//我的排名
@@ -312,6 +313,15 @@ public class Constants {
 
     //获取推送角标数
     public static String PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
+
+    //新增[收藏表
+    public static String PUSH_COLLECT_SAVE = HOST + "/collect/save";//新增[收藏表
+
+    //分页查询当前登录的人收藏的新闻列表
+    public static String PUSH_COLLECT_QUERY = HOST + "/collect/queryCollect";//分页查询当前登录的人收藏的新闻列表
+
+    //更新新闻资讯的阅读数
+    public static String PUSH_READ_NUMBER = HOST + "/appHome/updateReadNumber";//更新新闻资讯的阅读数
 
 
 
@@ -640,5 +650,17 @@ public class Constants {
 
         //获取推送角标数
         PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
+
+        //新增[收藏表
+        PUSH_COLLECT_SAVE = HOST + "/collect/save";//新增[收藏表
+
+        //分页查询当前登录的人收藏的新闻列表
+        PUSH_COLLECT_QUERY = HOST + "/collect/queryCollect";//分页查询当前登录的人收藏的新闻列表
+
+        //查找新闻列表 new
+        FIND_NEWS_URL_NEW = HOST + "/appHome/showHomeNews";//查找新闻列表 new
+
+        //更新新闻资讯的阅读数
+        PUSH_READ_NUMBER = HOST + "/appHome/updateReadNumber";//更新新闻资讯的阅读数
     }
 }

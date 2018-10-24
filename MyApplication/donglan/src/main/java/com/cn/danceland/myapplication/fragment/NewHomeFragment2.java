@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -67,7 +68,9 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -543,14 +546,14 @@ public class NewHomeFragment2 extends BaseFragment {
                 punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_img));
             }
         }
-        LogUtil.i("originalTop3-----(" + originalTop3);
-        LogUtil.i("offsetNum3-----(" + offsetNum3);
+//        LogUtil.i("originalTop3-----(" + originalTop3);
+//        LogUtil.i("offsetNum3-----(" + offsetNum3);
         if (-300 > offsetNum3 && offsetNum3 >= -440) {
-            LogUtil.i("进了--（" + (140 + (offsetNum3 + 300)));
+//            LogUtil.i("进了--（" + (140 + (offsetNum3 + 300)));
             lppTemp.setMargins(0, 140 + (offsetNum3 + 300), 140, 0);
             in_the_cumulative_tv.setVisibility(View.GONE);
         } else {
-            LogUtil.i("offsetNumTemp-----(" + offsetNumTemp);
+//            LogUtil.i("offsetNumTemp-----(" + offsetNumTemp);
             if(offsetNum3 < -440){
                 lppTemp.setMargins(0, 0, 140, 0);
                 in_the_cumulative_tv.setVisibility(View.GONE);
@@ -569,7 +572,7 @@ public class NewHomeFragment2 extends BaseFragment {
 //            }
         }
         header_layout.setLayoutParams(lppTemp);
-        LogUtil.i("------------------------------------------------------------------------");
+//        LogUtil.i("------------------------------------------------------------------------");
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -821,16 +824,14 @@ public class NewHomeFragment2 extends BaseFragment {
         }
     };
 
-    private void findNews(int page) {
-        String params = page + "";
-        String url = Constants.FIND_NEWS_URL + params;
-        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+    private void findNews(final int page) {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_NEWS_URL_NEW, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
                 //   pullToRefresh.onRefreshComplete();
-                LogUtil.i(s);
+                LogUtil.i("热门话题--"+s);
                 Gson gson = new Gson();
                 RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
                 if (newsDataBean.getSuccess()) {
@@ -856,12 +857,18 @@ public class NewHomeFragment2 extends BaseFragment {
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-                dialog.dismiss();
-                ToastUtils.showToastShort("请查看网络连接");
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("page", page + "");
+                return map;
+            }
+        };
+
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findNews");
         // 设置超时时间
