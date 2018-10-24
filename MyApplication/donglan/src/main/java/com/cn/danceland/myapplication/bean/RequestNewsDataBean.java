@@ -92,6 +92,8 @@ public class RequestNewsDataBean {
             private String start_time;// 显示开始时间
             private String publish_time;// 发布时间
             private String news_txt;
+            private String read_number;
+            private boolean is_collect;
 
             @Override
             public String toString() {
@@ -107,7 +109,25 @@ public class RequestNewsDataBean {
                         ", start_time='" + start_time + '\'' +
                         ", publish_time='" + publish_time + '\'' +
                         ", news_txt='" + news_txt + '\'' +
+                        ", read_number='" + read_number + '\'' +
+                        ", is_collect=" + is_collect +
                         '}';
+            }
+
+            public String getRead_number() {
+                return read_number;
+            }
+
+            public void setRead_number(String read_number) {
+                this.read_number = read_number;
+            }
+
+            public boolean is_collect() {
+                return is_collect;
+            }
+
+            public void setIs_collect(boolean is_collect) {
+                this.is_collect = is_collect;
             }
 
             public String getNews_txt() {

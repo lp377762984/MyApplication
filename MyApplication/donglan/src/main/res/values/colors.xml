@@ -115,7 +115,6 @@
     <color name="home_item_text_color">#6d819c</color>
 
     <color name="white_color">#ffffffff</color>
-    <color name="white_color90">#1Affffff</color>
     <color name="white_color80">#33ffffff</color>
     <color name="white_color70">#4Dffffff</color>
     <color name="white_color60">#66ffffff</color>
@@ -123,7 +122,6 @@
     <color name="white_color40">#99ffffff</color>
     <color name="white_color30">#B3ffffff</color>
     <color name="white_color20">#CCffffff</color>
-    <color name="white_color10">#E6ffffff</color>
 
     <!--2.0版本结束-->
 

@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -67,7 +69,9 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -284,6 +288,7 @@ public class NewHomeFragment extends BaseFragment {
         newsListviewAdapter.setOnItemClickListener(new NewsListviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, List<RequestNewsDataBean.Data.Items> data) {
+                setReadNum(data.get(position).getId());
                 mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
             }
         });
@@ -493,7 +498,7 @@ public class NewHomeFragment extends BaseFragment {
                 }
             }
             header_layout.setLayoutParams(lppTemp);
-        }else{
+        } else {
 
         }
 
@@ -584,27 +589,11 @@ public class NewHomeFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.fitness_diary_white_iv:
-                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (myPaiMingBean == null) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
-
-                    break;
-                case R.id.punch_list_white_iv:
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
                     break;
-                case R.id.fitness_diary_pink_ll:
+                case R.id.punch_list_white_iv:
                     if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                         ToastUtils.showToastShort("您还没有参加健身运动");
                         return;
@@ -620,15 +609,58 @@ public class NewHomeFragment extends BaseFragment {
                     startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
 
                     break;
-                case R.id.punch_list_pink_ll:
+                case R.id.fitness_diary_pink_ll:
+
                     //      startActivity(new Intent(mActivity, TestActivity.class));
                     startActivity(new Intent(mActivity, UserHomeActivity.class)
                             .putExtra("id", SPUtils.getString(Constants.MY_USERID, null))
                             .putExtra("isdyn", true).putExtra("title", "健身日记"));
                     break;
+                case R.id.punch_list_pink_ll:
+                    if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    if (myPaiMingBean == null) {
+                        ToastUtils.showToastShort("您还没有参加健身运动");
+                        return;
+                    }
+                    startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
+                    break;
             }
         }
     };
+    //增加阅读数
+    private void setReadNum(final String news_id) {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_READ_NUMBER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("news_id", news_id);
+                LogUtil.i("map--" + map.toString());
+                return map;
+            }
+        };
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
 
     /**
      * 下拉刷新
@@ -710,6 +742,7 @@ public class NewHomeFragment extends BaseFragment {
     private View initBanner() {
         View v = View.inflate(mActivity, R.layout.headview_banner, null);
         mMZBanner = (MZBannerView) v.findViewById(R.id.banner);
+        mMZBanner.setIndicatorRes(R.drawable.home_banner_indicator_icon,R.drawable.home_banner_indicator_select_icon);
         CardView banner_cardview = v.findViewById(R.id.banner_cardview);
         banner_cardview = (CardView) UIUtils.setViewRatio(mActivity, banner_cardview, 155, 80);
 
@@ -806,16 +839,14 @@ public class NewHomeFragment extends BaseFragment {
         }
     };
 
-    private void findNews(int page) {
-        String params = page + "";
-        String url = Constants.FIND_NEWS_URL + params;
-        MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+    private void findNews(final int page) {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_NEWS_URL_NEW, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String s) {
                 dialog.dismiss();
                 //   pullToRefresh.onRefreshComplete();
-                LogUtil.i(s);
+                LogUtil.i("热门话题--"+s);
                 Gson gson = new Gson();
                 RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
                 if (newsDataBean.getSuccess()) {
@@ -841,12 +872,17 @@ public class NewHomeFragment extends BaseFragment {
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(final VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-                dialog.dismiss();
-                ToastUtils.showToastShort("请查看网络连接");
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("page", page + "");
+                return map;
+            }
+        };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findNews");
         // 设置超时时间

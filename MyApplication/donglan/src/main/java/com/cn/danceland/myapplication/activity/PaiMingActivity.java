@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,9 +40,12 @@ import java.util.List;
  * Email:644563767@qq.com
  * 等级排名
  */
-
-
 public class PaiMingActivity extends BaseActivity {
+
+    private TextView title;
+    private TextView tv_paiming;
+    private TextView tv_daka_num;
+
 
     private PullToRefreshListView pullToRefresh;
     MyUserListviewAdapter myUserListviewAdapter;
@@ -83,11 +87,7 @@ public class PaiMingActivity extends BaseActivity {
                     .into(iv_avatar_top3);
             tv_nick_name3.setText(data.get(2).getNick_name());
             tv_daka_nun3.setText(data.get(2).getBranchScore() + "次");
-
-
         }
-
-
     }
 
     private TextView tv_nick_name1;
@@ -112,20 +112,24 @@ public class PaiMingActivity extends BaseActivity {
 
     private void initData() {
         findPaiming();
-        int paiming = getIntent().getIntExtra("paiming",0);
-        int cishu = getIntent().getIntExtra("cishu",0);
-        TextView tv_paiming = findViewById(R.id.tv_paiming);
-        TextView tv_daka_nun = findViewById(R.id.tv_daka_nun);
-        ImageView iv_avatar=findViewById(R.id.iv_avatar);
-        tv_daka_nun.setText(cishu + "次");
-        tv_paiming.setText("NO."+paiming);
+        title = findViewById(R.id.donglan_title);
+        title.setText("打卡排行");
+        int paiming = getIntent().getIntExtra("paiming", 0);
+        int cishu = getIntent().getIntExtra("cishu", 0);
+        tv_paiming = findViewById(R.id.tv_paiming);
+        tv_daka_num = findViewById(R.id.tv_daka_num);
+
+        ImageView iv_avatar = findViewById(R.id.iv_avatar);
+        tv_daka_num.setText(cishu + "次");
+        tv_paiming.setText("NO." + paiming);
 
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         Glide.with(this)
                 .load(data.getPerson().getSelf_avatar_path())
                 .apply(options)
                 .into(iv_avatar);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
 
     private void initView() {
