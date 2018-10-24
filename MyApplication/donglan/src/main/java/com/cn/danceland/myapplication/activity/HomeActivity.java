@@ -48,10 +48,9 @@ import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.NewHomeFragment;
-import com.cn.danceland.myapplication.fragment.NewHomeFragment2;
+import com.cn.danceland.myapplication.fragment.NewHomeFragment3;
 import com.cn.danceland.myapplication.fragment.ShopFragment;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
@@ -122,7 +121,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
-    private NewHomeFragment2 homeFragment;
+    private NewHomeFragment3 homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
     private NewHomeFragment discoverFragment;
@@ -264,7 +263,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         checkUpdate();
 
         buildAnima();
-        homeFragment = new NewHomeFragment2();
+        homeFragment = new NewHomeFragment3();
         shopFragment = new ShopFragment();
 
         shopListFragment = new ShopListFragment();
@@ -612,11 +611,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onResponse(String s) {
 
-//                LogUtil.i("!!!!!!!!!!!!!!!!!!!"+s);
+               LogUtil.i("!!!!!!!!!!!!!!!!!!!"+s);
                 CheckUpdateBean checkUpdateBean = new Gson().fromJson(s, CheckUpdateBean.class);
                 if (checkUpdateBean != null && checkUpdateBean.getData() != null) {
                     String status = checkUpdateBean.getData().getStatus();
-                    if ("2".equals(status) && checkUpdateBean.getData().getUrl() != null) {
+                    LogUtil.i(status);
+                    if (TextUtils.equals("2",status)&& checkUpdateBean.getData().getUrl() != null) {
+                        LogUtil.i(status+"!!!!"+checkUpdateBean.getData().getUrl());
+
                         showDialog(checkUpdateBean.getData().getUrl());
                     }
                 }
@@ -629,13 +631,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             }
         }) {
 
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("version", Constants.getVersion());
-                map.put("platform", Constants.getPlatform());
-                return map;
-            }
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("version", Constants.getVersion());
+//                map.put("platform", Constants.getPlatform());
+//                LogUtil.i(map.toString());
+//                return map;
+//            }
 
 
         };

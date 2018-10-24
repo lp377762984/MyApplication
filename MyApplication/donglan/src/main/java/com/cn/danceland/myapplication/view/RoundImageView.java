@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.LogUtil;
 
 /**
  * 自由设定ImageView圆角
@@ -58,7 +57,7 @@ public class RoundImageView extends AppCompatImageView {
         rightBottomRadius = array.getDimensionPixelOffset(R.styleable.Round_Image_View_right_bottom_radius, defaultRadius);
         leftBottomRadius = array.getDimensionPixelOffset(R.styleable.Round_Image_View_left_bottom_radius, defaultRadius);
 
-        LogUtil.i("radius --> " + radius);
+        //LogUtil.i("radius --> " + radius);
 
         //如果四个角的值没有设置，那么就使用通用的radius的值。
         if (defaultRadius == leftTopRadius) {

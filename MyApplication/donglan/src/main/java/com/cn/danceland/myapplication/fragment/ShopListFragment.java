@@ -70,13 +70,16 @@ public class ShopListFragment extends BaseFragment {
     private TextView tv_detail;//新增详情布局
 
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
+    private TextView tv_time;
 
     @Override
     public View initViews() {
         View inflate = View.inflate(mActivity, R.layout.shoplist_fragment, null);
         headView = LayoutInflater.from(mActivity).inflate(R.layout.shoplist_fragment_head, null);
         shop_banner = headView.findViewById(R.id.shop_banner);
+
         tv_shopname = headView.findViewById(R.id.tv_shopname);
+        tv_time = headView.findViewById(R.id.tv_time);
         tv_shopAddress = headView.findViewById(R.id.tv_shopAddress);
         tv_detail = headView.findViewById(R.id.tv_detail);
         ibtn_gps = headView.findViewById(R.id.ibtn_gps);
@@ -144,6 +147,22 @@ public class ShopListFragment extends BaseFragment {
                     itemsList = storeBean.getData();
                     if (itemsList != null && itemsList.size() > 0) {
                         tv_shopname.setText(itemsList.get(0).getName());
+                        String  open_time;
+                        String colse_time;
+                        if (Integer.valueOf(itemsList.get(0).getOpen_time())%60==0){
+                            open_time =Integer.valueOf(itemsList.get(0).getOpen_time())/60+":00";
+                        }else {
+                            open_time =Integer.valueOf(itemsList.get(0).getOpen_time())/60+":"+Integer.valueOf(itemsList.get(0).getOpen_time())%60;
+                        }
+                        if (Integer.valueOf(itemsList.get(0).getClose_time())%60==0){
+                            colse_time=Integer.valueOf(itemsList.get(0).getClose_time())/60+":00";
+                        }else {
+                            colse_time=Integer.valueOf(itemsList.get(0).getClose_time())/60+":"+Integer.valueOf(itemsList.get(0).getClose_time())%60;
+                        }
+
+
+                        tv_time.setText(open_time+"-"+colse_time);
+
                         LatLng latLng = new LatLng(Double.valueOf(itemsList.get(0).getLat()),Double.valueOf(itemsList.get(0).getLng()));
                         double distance = DistanceUtil.getDistance(startLng, latLng);
                         Double aDouble = new Double(distance);
@@ -281,6 +300,7 @@ public class ShopListFragment extends BaseFragment {
                 convertView = View.inflate(mActivity, R.layout.store_item, null);
                 viewHolder.store_item_img = convertView.findViewById(R.id.store_item_img);
                 viewHolder.store_address = convertView.findViewById(R.id.store_address);
+                viewHolder.tv_item_time = convertView.findViewById(R.id.tv_item_time);
                 viewHolder.distance = convertView.findViewById(R.id.distance);
                 viewHolder.img_location = convertView.findViewById(R.id.img_location);
                 viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
@@ -310,6 +330,19 @@ public class ShopListFragment extends BaseFragment {
                 }
 
                 viewHolder.store_address.setText(items.getName());
+                String  open_time;
+                String colse_time;
+                if (Integer.valueOf(itemsList.get(position).getOpen_time())%60==0){
+                    open_time =Integer.valueOf(itemsList.get(position).getOpen_time())/60+":00";
+                }else {
+                    open_time =Integer.valueOf(itemsList.get(position).getOpen_time())/60+":"+Integer.valueOf(itemsList.get(position).getOpen_time())%60;
+                }
+                if (Integer.valueOf(itemsList.get(position).getClose_time())%60==0){
+                    colse_time=Integer.valueOf(itemsList.get(position).getClose_time())/60+":00";
+                }else {
+                    colse_time=Integer.valueOf(itemsList.get(position).getClose_time())/60+":"+Integer.valueOf(itemsList.get(position).getClose_time())%60;
+                }
+                viewHolder.tv_item_time.setText(open_time+"-"+colse_time);
 
                 Glide.with(getActivity()).load(items.getLogo_url()).into(viewHolder.store_item_img);
                 //PhoneNo = items.getTelphone_no();
@@ -399,7 +432,7 @@ public class ShopListFragment extends BaseFragment {
 
     class ViewHolder {
         ImageView store_item_img, img_location, img_phone, img_join;
-        TextView store_address, distance, unread_msg_number;
+        TextView store_address, distance, unread_msg_number,tv_item_time;
         RelativeLayout clickitem;
     }
 
@@ -460,7 +493,7 @@ public class ShopListFragment extends BaseFragment {
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item1, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
