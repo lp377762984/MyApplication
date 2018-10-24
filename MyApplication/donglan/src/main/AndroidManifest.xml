@@ -820,6 +820,11 @@
             android:name=".activity.FloatingLayerCameraActivity"
             android:screenOrientation="portrait" />
 
+        <!--我的收藏-->
+        <activity
+            android:name=".activity.CollectEntranceActivity"
+            android:screenOrientation="portrait" />
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

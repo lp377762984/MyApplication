@@ -148,11 +148,6 @@ public class UserHomeActivity extends BaseActivity {
 
     private void initView() {
 
-        DongLanTransparentTitleView titleView = findViewById(R.id.title);
-        titleView.setTitle("动态");
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("title"))) {
-            titleView.setTitle(getIntent().getStringExtra("title"));
-        }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         pullToRefresh = findViewById(R.id.pullToRefresh);

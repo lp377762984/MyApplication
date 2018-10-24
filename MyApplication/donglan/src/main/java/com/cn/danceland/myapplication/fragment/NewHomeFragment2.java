@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.CollectEntranceActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.activity.PaiMingActivity;
@@ -726,11 +727,17 @@ public class NewHomeFragment2 extends BaseFragment {
 
     private View initBanner() {
         View v = View.inflate(mActivity, R.layout.headview_banner, null);
+        CardView banner_cardview = v.findViewById(R.id.banner_cardview);
+        LinearLayout collect_entrance_layout = v.findViewById(R.id.collect_entrance_layout);
         mMZBanner = (MZBannerView) v.findViewById(R.id.banner);
         mMZBanner.setIndicatorRes(R.drawable.home_banner_indicator_icon,R.drawable.home_banner_indicator_select_icon);
-        CardView banner_cardview = v.findViewById(R.id.banner_cardview);
         banner_cardview = (CardView) UIUtils.setViewRatio(mActivity, banner_cardview, 155, 80);
-
+        collect_entrance_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {//收藏
+                mActivity.startActivity(new Intent(mActivity, CollectEntranceActivity.class));
+            }
+        });
         mMZBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {

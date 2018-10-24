@@ -444,12 +444,12 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                             if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
 //                                linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), 0, 0);
+                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
                                 viewHolder.iv_pic.setLayoutParams(linearParams);
                             } else {
                                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
 //                                linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), 0, 0);
+                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
                                 viewHolder.iv_pic.setLayoutParams(linearParams);
                             }
                         }
@@ -476,7 +476,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     });
                     LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                    linearParams1.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-                    linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
                     viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 //
 
@@ -488,7 +488,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     int width = DensityUtils.dp2px(context, 205f);//此处的宽度需要动态计算
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                    linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), 0, 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
                     viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
                 } else {
@@ -496,7 +496,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     viewHolder.gridView.setNumColumns(3);
                     int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
 //                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                     viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
                 }

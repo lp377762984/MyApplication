@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
                     android:text="14次"
-                    android:textColor="@color/home_item_text_color"
+                    android:textColor="@color/colorGray22"
                     android:textSize="14sp" />
             </LinearLayout>
 

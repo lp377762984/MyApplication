@@ -48,6 +48,7 @@ import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.DiscoverFragment;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.NewHomeFragment;
 import com.cn.danceland.myapplication.fragment.NewHomeFragment2;
@@ -124,8 +125,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private NewHomeFragment2 homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
-    private NewHomeFragment discoverFragment;
-//    private DiscoverFragment discoverFragment;
+//    private NewHomeFragment discoverFragment;
+    private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;
     private static final String[] FRAGMENT_TAG = {"homeFragment", "shopFragment", "discoverFragment", "meFragment"};
@@ -268,7 +269,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         shopListFragment = new ShopListFragment();
 
-        discoverFragment = new NewHomeFragment();
+        discoverFragment = new DiscoverFragment();
         meFragment = new MeFragment();
         msgUnread = (ImageView) findViewById(R.id.tabUnread);
         presenter = new ConversationPresenter(new ConversationView() {
