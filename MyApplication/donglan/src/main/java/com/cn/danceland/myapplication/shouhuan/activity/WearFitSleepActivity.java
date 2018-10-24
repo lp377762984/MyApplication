@@ -615,14 +615,7 @@ public class WearFitSleepActivity extends Activity {
                     ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                     LogUtil.e("onErrorResponse", volleyError.toString());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                    return map;
-                }
-            };
+            });
             MyApplication.getHttpQueues().add(request);
         }
     }
@@ -701,14 +694,7 @@ public class WearFitSleepActivity extends Activity {
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
-                return map;
-            }
-        };
+        }) ;
         MyApplication.getHttpQueues().add(request);
     }
 

@@ -58,6 +58,7 @@
                 android:textSize="14sp" />
 
             <LinearLayout
+                android:id="@+id/collect_entrance_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -68,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/collect_text"
-                    android:textColor="@color/home_item_text_color"
+                    android:textColor="@color/colorGray22"
                     android:textSize="14sp" />
 
                 <ImageView
