@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/status_bar_iv"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/colorGray24"/>
 
     <LinearLayout
+        android:layout_below="@id/status_bar_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
         <!--  <com.cn.danceland.myapplication.view.SwitchButton

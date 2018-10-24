@@ -1,22 +1,13 @@
 package com.cn.danceland.myapplication.fragment;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,7 +33,6 @@ import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.activity.PaiMingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
-import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter2;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
@@ -57,9 +47,6 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.NumberAnimTextView;
 import com.cn.danceland.myapplication.view.RoundImageView;
-import com.cn.danceland.myapplication.view.adapter.CommonAdapter;
-import com.cn.danceland.myapplication.view.adapter.ViewHolder;
-import com.cn.danceland.myapplication.view.refresh.PullRefreshLayout;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -74,8 +61,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import it.sephiroth.android.library.easing.Linear;
 
 /**
  * Created by yxx on 2018-10-18.
@@ -547,8 +532,8 @@ public class NewHomeFragment2 extends BaseFragment {
                 punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_img));
             }
         }
-//        LogUtil.i("originalTop3-----(" + originalTop3);
-//        LogUtil.i("offsetNum3-----(" + offsetNum3);
+        LogUtil.i("抬起手之后-----(" + originalTop3);
+        LogUtil.i("滑动时-----(" + offsetNum3);
         if (-300 > offsetNum3 && offsetNum3 >= -440) {
 //            LogUtil.i("进了--（" + (140 + (offsetNum3 + 300)));
             lppTemp.setMargins(0, 140 + (offsetNum3 + 300), 140, 0);
