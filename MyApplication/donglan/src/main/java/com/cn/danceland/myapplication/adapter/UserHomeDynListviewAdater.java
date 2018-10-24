@@ -488,7 +488,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                    linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 10f), 0);
                     viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
                 } else {
@@ -496,7 +496,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     viewHolder.gridView.setNumColumns(3);
                     int width = DensityUtils.dp2px(context, 290f);//此处的宽度需要动态计算
                     LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
+                    linearParams.setMargins(DensityUtils.dp2px(context, 0f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 10f), 0);
 //                    linearParams.setMargins(DensityUtils.dp2px(context, 15f), DensityUtils.dp2px(context, 5f), 0, 0);
                     viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
                 }
