@@ -153,7 +153,6 @@ public class CollectListviewAdapter extends BaseAdapter {
                                 data.remove(position);
                                 finalViewHolder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
                             }
-//                            activity.refreshData();
                             notifyDataSetChanged();
                         } else {
                             //失败

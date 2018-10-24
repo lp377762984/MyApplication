@@ -184,16 +184,6 @@ public class CollectEntranceActivity extends BaseActivity {
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
     }
 
-    /**
-     * 刷新界面数据
-     */
-    public void refreshData() {
-        mCurrentPage = 0;//当前请求页
-        data = new ArrayList<>();
-        collectListviewAdapter = new CollectListviewAdapter(data, context, CollectEntranceActivity.this);
-        initData();
-    }
-
     private void initData() {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_COLLECT_QUERY, new Response.Listener<String>() {
             @Override
