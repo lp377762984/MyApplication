@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -23,6 +24,8 @@ import com.android.volley.VolleyError;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.MapActivity;
@@ -501,8 +504,13 @@ public class ShopListFragment extends BaseFragment {
         @Override
         public void onBind(Context context, int position, String data) {
             // 数据绑定
-            Glide.with(context).load(data).into(mImageView);
-            //mImageView.setImageResource(data);
+            Glide.with(context).load(data)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                            mImageView.setBackground(resource);
+                        }
+                    });
         }
     }
 

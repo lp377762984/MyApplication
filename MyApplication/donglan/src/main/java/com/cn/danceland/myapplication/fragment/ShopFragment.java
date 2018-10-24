@@ -6,10 +6,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -41,6 +45,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.AddFriendsActivity;
@@ -105,6 +111,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.R.attr.resource;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -130,7 +138,7 @@ public class ShopFragment extends BaseFragment {
     MZBannerView shop_banner;
     ArrayList<String> drawableArrayList;
     PopupWindow popupWindow;
-    RelativeLayout rl_role;
+    LinearLayout rl_role;
     ImageView down_img, up_img;
     private String role_id;
     private TextView tv_distance_km;
@@ -139,6 +147,7 @@ public class ShopFragment extends BaseFragment {
     private boolean isPermission;
     private TextView tv_detail;//新增详情布局
     private TextView tv_dcs;
+    private TextView tv_time;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -178,7 +187,7 @@ public class ShopFragment extends BaseFragment {
         down_img = v.findViewById(R.id.down_img);
         up_img = v.findViewById(R.id.up_img);
         tv_detail = v.findViewById(R.id.tv_detail);
-
+        tv_detail.setOnClickListener(this);
         setMap();
         addRoles();
         setPop();
@@ -223,6 +232,8 @@ public class ShopFragment extends BaseFragment {
 
         ll_top = v.findViewById(R.id.ll_top);
         tv_shopname = v.findViewById(R.id.tv_shopname);
+        tv_time = v.findViewById(R.id.tv_time);
+
         tv_distance_km = v.findViewById(R.id.tv_distance_km);
         drawableArrayList = new ArrayList<>();
         mGridView.setOnItemClickListener(new MyOnItemClickListener());
@@ -362,7 +373,7 @@ public class ShopFragment extends BaseFragment {
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item1, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
@@ -370,8 +381,17 @@ public class ShopFragment extends BaseFragment {
         @Override
         public void onBind(Context context, int position, String data) {
             // 数据绑定
-            Glide.with(context).load(data).into(mImageView);
-            //mImageView.setImageResource(data);
+
+
+            Glide.with(context).load(data)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                            mImageView.setBackground(resource);
+                        }
+                    });
+
+
         }
     }
 
@@ -511,6 +531,21 @@ public class ShopFragment extends BaseFragment {
                     shopWeidu = data.getLat() + "";
                     shopJingdu = data.getLng() + "";
                     PhoneNo = data.getTelphone();
+                    String  open_time;
+                    String colse_time;
+                    if (Integer.valueOf(data.getOpen_time())%60==0){
+                        open_time =Integer.valueOf(data.getOpen_time())/60+":00";
+                    }else {
+                        open_time =Integer.valueOf(data.getOpen_time())/60+":"+Integer.valueOf(data.getOpen_time())%60;
+                    }
+                    if (Integer.valueOf(data.getClose_time())%60==0){
+                        colse_time=Integer.valueOf(data.getClose_time())/60+":00";
+                    }else {
+                        colse_time=Integer.valueOf(data.getClose_time())/60+":"+Integer.valueOf(data.getClose_time())%60;
+                    }
+
+
+                    tv_time.setText(open_time+"-"+colse_time);
 
                     tv_detail.setVisibility(View.VISIBLE);
                     if (isPermission) {
@@ -750,6 +785,18 @@ public class ShopFragment extends BaseFragment {
                 b.putSerializable("backBannerList", backBannerList);
                 intent1.putExtras(b);
                 startActivity(intent1);
+                break;
+            case R.id.tv_detail:
+                Intent intent2 = new Intent(getActivity(), ShopDetailedActivity.class);
+                intent2.putExtra("jingdu", jingdu);
+                intent2.putExtra("weidu", weidu);
+                intent2.putExtra("shopJingdu", shopJingdu);
+                intent2.putExtra("shopWeidu", shopWeidu);
+                intent2.putExtra("branchID", branchId);
+                Bundle c = new Bundle();
+                c.putSerializable("backBannerList", backBannerList);
+                intent2.putExtras(c);
+                startActivity(intent2);
                 break;
             default:
                 break;

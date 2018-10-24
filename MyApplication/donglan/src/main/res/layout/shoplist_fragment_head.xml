@@ -28,6 +28,7 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/img_gps_white" />
 
+
         <ImageButton
             android:id="@+id/ibtn_call"
             android:layout_width="24dp"
