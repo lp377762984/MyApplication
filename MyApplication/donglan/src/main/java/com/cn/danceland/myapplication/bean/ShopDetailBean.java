@@ -100,9 +100,27 @@ public class ShopDetailBean {
         private String create_time;
         private String creator;
         private String logo_url;
+        private String open_time;
+        private String close_time;
         private String league_name;
         private Object create_name;
         private List<String> photo_url;
+
+        public String getOpen_time() {
+            return open_time;
+        }
+
+        public void setOpen_time(String open_time) {
+            this.open_time = open_time;
+        }
+
+        public String getClose_time() {
+            return close_time;
+        }
+
+        public void setClose_time(String close_time) {
+            this.close_time = close_time;
+        }
 
         public String getBranch_id() {
             return branch_id;
