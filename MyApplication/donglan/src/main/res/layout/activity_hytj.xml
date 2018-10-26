@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_gery"
+        android:background="@color/color_white"
 
         >
 
@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="会员推荐"
-            android:textColor="@color/color_white"
+            android:textColor="@color/color_dl_black"
             android:textSize="18sp"
             />
     </RelativeLayout>

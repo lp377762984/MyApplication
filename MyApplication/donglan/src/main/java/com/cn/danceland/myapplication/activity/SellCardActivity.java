@@ -145,7 +145,7 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
 
     private void setPop() {
 
-        View inflate = LayoutInflater.from(SellCardActivity.this).inflate(R.layout.shop_pop, null);
+        View inflate = LayoutInflater.from(SellCardActivity.this).inflate(R.layout.shop_pop1, null);
 
         popupWindow = new PopupWindow(inflate);
         popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);

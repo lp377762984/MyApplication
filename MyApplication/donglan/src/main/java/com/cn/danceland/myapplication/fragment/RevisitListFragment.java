@@ -193,6 +193,11 @@ public class RevisitListFragment extends BaseFragment {
             btn_add.setVisibility(View.GONE);
         }
         v.findViewById(R.id.btn_add).setOnClickListener(this);
+
+
+ //       EasyRecyclerView easyRecyclerView=v.findViewById(R.id.easyrecyclerView);
+
+
         mListView = v.findViewById(R.id.pullToRefresh);
         View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
@@ -541,9 +546,9 @@ public class RevisitListFragment extends BaseFragment {
                 vh.iv_sex.setImageResource(R.drawable.img_sex2);
             }
             if (datalist.get(position).getLast_time() != null) {
-                vh.tv_lasttime.setText("最后维护时间：" + datalist.get(position).getLast_time());
+                vh.tv_lasttime.setText(datalist.get(position).getLast_time());
             } else {
-                vh.tv_lasttime.setText("最后维护时间：" + "最近未维护");
+                vh.tv_lasttime.setText( "最近未维护");
             }
 
             vh.ll_item.setOnClickListener(new View.OnClickListener() {

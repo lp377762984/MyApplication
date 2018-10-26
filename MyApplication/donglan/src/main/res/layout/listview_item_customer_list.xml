@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/ll_item"
 
     android:layout_width="match_parent"
@@ -10,86 +11,108 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background=""></LinearLayout>-->
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardElevation="5dp">
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_avatar"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/img_avatar1" />
-
             <LinearLayout
-                android:layout_width="wrap_content"
+
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical">
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_avatar"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/img_avatar1" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_name"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="派大星"
-                        android:textColor="#333"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/iv_sex"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/img_sex1" />
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="派大星"
+                            android:textColor="#333"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_sex"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/img_sex1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/img_time_grey"/>
+                        <TextView
+                            android:id="@+id/tv_lasttime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="最后维护时间："
+                            android:textColor="@color/color_dl_deep_blue"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_lasttime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="最后维护时间："
-                    android:textColor="#999"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/iv_hx_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+
+                android:src="@drawable/img_sx" />
+
+            <ImageView
+                android:id="@+id/iv_callphone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:src="@drawable/img_call" />
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_hx_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-
-            android:src="@drawable/img_sx" />
-
-        <ImageView
-            android:id="@+id/iv_callphone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:src="@drawable/img_call" />
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

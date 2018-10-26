@@ -24,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -78,9 +79,9 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
     public String[] TITLES = new String[]{"最近维护"};
     public String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
-
+    PopupWindow popupWindow;
+    ListView pop_lv;
     private int untreated_num = 0;
-    private ListPopup listPopup;
     private Gson gson = new Gson();
     private int current_page = 0;
     private int current_item1 = 0;
@@ -270,8 +271,107 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
 
             }
         });
-        listPopup = new ListPopup(this);
+        setPop();
     }
+
+    private void setPop() {
+
+        View inflate = LayoutInflater.from(YeWuActivity.this).inflate(R.layout.shop_pop1, null);
+
+        popupWindow = new PopupWindow(inflate);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);  //设置点击屏幕其它地方弹出框消失
+
+        pop_lv = inflate.findViewById(R.id.pop_lv);
+//        pop_lv.setAdapter(new PopAdapter());
+        pop_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
+                if (current_page == 0) {
+
+                    if (i == 0) {//最近
+                        //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
+
+                        TITLES[0] = "最近维护";
+                    } else if (i == 1) {//最晚
+                        //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
+                        TITLES[0] = "最晚维护";
+                    } else if (i == 2) {//健身指数
+                        TITLES[0] = "健身指数";
+                        //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
+                    } else if (i == 3) {//关注程度
+                        TITLES[0] = "关注程度";
+                        //                 EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
+                    }
+                    current_item1 = i;
+
+                }
+                if (current_page == 2) {
+                    current_item3 = i;
+                    if (i == 0) {//查询未处理
+                        //     EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
+                        TITLES[2] = "未处理待办事项";
+
+                    } else if (i == 1) {//查询已处理
+                        TITLES[2] = "已处理待办事项";
+                        //         EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
+                    } else {//查询全部
+                        TITLES[2] = "全部待办事项";
+                        //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
+                    }
+
+                }
+                if (current_page == 1) {
+                    current_item2 = 0;
+                    //   EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 210));
+                }
+                searshInfo();
+                commonNavigatorAdapter.notifyDataSetChanged();
+                popupWindow.dismiss();
+
+            }
+        });
+
+
+    }
+
+
+    private class PopAdapter extends BaseAdapter {
+        String[] data = new String[]{};
+
+        public PopAdapter(String[] data) {
+            this.data = data;
+        }
+
+        public void setData(String[] data) {
+            this.data = data;
+        }
+        @Override
+        public int getCount() {
+            return data.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View inflate = LayoutInflater.from(YeWuActivity.this).inflate(R.layout.shop_pop_item, null);
+            TextView tv_item = inflate.findViewById(R.id.tv_item);
+            tv_item.setText(data[position]);
+            return inflate;
+        }
+    }
+
 
 
     private void searshInfo() {
@@ -332,17 +432,34 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
 
                     if (index == 0) {
 
-                        listPopup = new ListPopup(YeWuActivity.this);
-                        myListPopupViewAdapter.setData(LIST_TYPE);
-                        listPopup.showPopupWindow(v);
+
+
+
+                        pop_lv.setAdapter(new PopAdapter(LIST_TYPE));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
+
                     }
 
 
                     if (index == 2) {
 
-                        listPopup = new ListPopup(YeWuActivity.this);
-                        myListPopupViewAdapter.setData(UPCOMING_CONDITION);
-                        listPopup.showPopupWindow(v);
+
+                        pop_lv.setAdapter(new PopAdapter(UPCOMING_CONDITION));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
                     }
                     mViewPager.setCurrentItem(index);
                     //      badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
@@ -646,7 +763,6 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
                         commonNavigatorAdapter.notifyDataSetChanged();
 
 
-                        listPopup.dismiss();
                     }
                 });
             }

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,14 +15,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -37,7 +34,6 @@ import com.cn.danceland.myapplication.fragment.PotentialUpcomingMatterFragment;
 import com.cn.danceland.myapplication.fragment.RevisitListFragment;
 import com.cn.danceland.myapplication.fragment.RevisiterRecordAllFragment;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -63,8 +59,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import razerdp.basepopup.BasePopupWindow;
-
 /**
  * Created by shy on 2018/1/8 16:00
  * Email:644563767@qq.com
@@ -78,9 +72,8 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     public String[] TITLES = new String[]{"最近维护", "回访记录", "未处理待办事项"};
     public String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
-
+    PopupWindow popupWindow;
     private int untreated_num = 0;
-    private ListPopup listPopup;
     private Gson gson = new Gson();
     private int current_page = 0;
     private int current_item1 = 0;
@@ -88,12 +81,12 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     private int current_item3 = 0;
     private SimplePagerTitleView simplePagerTitleView;
     private BadgePagerTitleView badgePagerTitleView;
-    private MyListPopupViewAdapter myListPopupViewAdapter;
     private String auth;
     private EditText et_searchInfo;
     private ImageView iv_del;
     private TextView tv_tiltle_num;
     int num1,num2,num3;
+    private ListView pop_lv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -270,7 +263,7 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
 
             }
         });
-        listPopup = new ListPopup(this);
+        setPop();
     }
 
 
@@ -311,6 +304,106 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
 
     }
 
+
+
+    private void setPop() {
+
+        View inflate = LayoutInflater.from(PotentialCustomerRevisitActivity.this).inflate(R.layout.shop_pop1, null);
+
+        popupWindow = new PopupWindow(inflate);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);  //设置点击屏幕其它地方弹出框消失
+
+        pop_lv = inflate.findViewById(R.id.pop_lv);
+//        pop_lv.setAdapter(new PopAdapter());
+        pop_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
+                if (current_page == 0) {
+
+                    if (i == 0) {//最近
+                        //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
+
+                        TITLES[0] = "最近维护"+"⇋";
+                    } else if (i == 1) {//最晚
+                        //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
+                        TITLES[0] = "最晚维护"+"⇋";
+                    } else if (i == 2) {//健身指数
+                        TITLES[0] = "健身指数"+"⇋";
+                        //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
+                    } else if (i == 3) {//关注程度
+                        TITLES[0] = "关注程度"+"⇋";
+                        //                 EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
+                    }
+                    current_item1 = i;
+
+                }
+                if (current_page == 2) {
+                    current_item3 = i;
+                    if (i == 0) {//查询未处理
+                        //     EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
+                        TITLES[2] = "未处理待办事项"+"⇋";
+
+                    } else if (i == 1) {//查询已处理
+                        TITLES[2] = "已处理待办事项"+"⇋";
+                        //         EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
+                    } else {//查询全部
+                        TITLES[2] = "全部待办事项"+"⇋";
+                        //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
+                    }
+
+                }
+                if (current_page == 1) {
+                    current_item2 = 0;
+                    //   EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 210));
+                }
+                searshInfo();
+                commonNavigatorAdapter.notifyDataSetChanged();
+
+                popupWindow.dismiss();
+
+            }
+        });
+
+
+    }
+
+    private class PopAdapter extends BaseAdapter {
+        String[] data = new String[]{};
+
+        public PopAdapter(String[] data) {
+            this.data = data;
+        }
+
+        public void setData(String[] data) {
+            this.data = data;
+        }
+        @Override
+        public int getCount() {
+            return data.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View inflate = LayoutInflater.from(PotentialCustomerRevisitActivity.this).inflate(R.layout.shop_pop_item, null);
+            TextView tv_item = inflate.findViewById(R.id.tv_item);
+                tv_item.setText(data[position]);
+            return inflate;
+        }
+    }
+
     CommonNavigatorAdapter commonNavigatorAdapter = new CommonNavigatorAdapter() {
         @Override
         public int getCount() {
@@ -322,6 +415,8 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+
+
             simplePagerTitleView.setText(TITLES[index]);
 
             simplePagerTitleView.setNormalColor(Color.BLACK);
@@ -332,17 +427,35 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
 
                     if (index == 0) {
 
-                        listPopup = new ListPopup(PotentialCustomerRevisitActivity.this);
-                        myListPopupViewAdapter.setData(LIST_TYPE);
-                        listPopup.showPopupWindow(v);
+
+                        pop_lv.setAdapter(new PopAdapter(LIST_TYPE));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
+
+
                     }
 
 
                     if (index == 2) {
 
-                        listPopup = new ListPopup(PotentialCustomerRevisitActivity.this);
-                        myListPopupViewAdapter.setData(UPCOMING_CONDITION);
-                        listPopup.showPopupWindow(v);
+
+
+                        pop_lv.setAdapter(new PopAdapter(UPCOMING_CONDITION));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
+
                     }
                     mViewPager.setCurrentItem(index);
                     //      badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
@@ -541,163 +654,6 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     }
 
 
-    public class ListPopup extends BasePopupWindow {
-        private Context context;
-
-        private View popupView;
-        private ListView listView;
-
-
-        public ListPopup(Activity context) {
-            super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            setAutoLocatePopup(true);
-            bindEvent();
-
-            this.context = context;
-        }
-
-        //
-        @Override
-        protected Animation initShowAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, -DensityUtils.dp2px(getContext(), 350f), 0);
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(1));
-
-            return translateAnimation;
-        }
-
-        //
-        @Override
-        protected Animation initExitAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, 0, -DensityUtils.dp2px(getContext(), 350f));
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(-4));
-            return translateAnimation;
-        }
-
-
-        @Override
-        public View getClickToDismissView() {
-            return getPopupWindowView();
-        }
-
-        @Override
-        public View onCreatePopupView() {
-            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_list_menu, null);
-            return popupView;
-        }
-
-        @Override
-        public View initAnimaView() {
-
-
-            // return findViewById(R.id.popup_contianer);
-            return null;
-        }
-
-        private void bindEvent() {
-            if (popupView != null) {
-                listView = popupView.findViewById(R.id.listview);
-                myListPopupViewAdapter = new MyListPopupViewAdapter(UPCOMING_CONDITION);
-                listView.setAdapter(myListPopupViewAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        if (current_page == 0) {
-
-                            if (i == 0) {//最近
-                                //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
-
-                                TITLES[0] = "最近维护";
-                            } else if (i == 1) {//最晚
-                                //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
-                                TITLES[0] = "最晚维护";
-                            } else if (i == 2) {//健身指数
-                                TITLES[0] = "健身指数";
-                                //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
-                            } else if (i == 3) {//关注程度
-                                TITLES[0] = "关注程度";
-                                //                 EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
-                            }
-                            current_item1 = i;
-
-                        }
-                        if (current_page == 2) {
-                            current_item3 = i;
-                            if (i == 0) {//查询未处理
-                                //     EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
-                                TITLES[2] = "未处理待办事项";
-
-                            } else if (i == 1) {//查询已处理
-                                TITLES[2] = "已处理待办事项";
-                                //         EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
-                            } else {//查询全部
-                                TITLES[2] = "全部待办事项";
-                                //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
-                            }
-
-                        }
-                        if (current_page == 1) {
-                            current_item2 = 0;
-                            //   EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 210));
-                        }
-                        searshInfo();
-                        commonNavigatorAdapter.notifyDataSetChanged();
-
-
-                        listPopup.dismiss();
-                    }
-                });
-            }
-
-        }
-
-
-    }
-
-
-    class MyListPopupViewAdapter extends BaseAdapter {
-        String[] data = new String[]{};
-
-        public MyListPopupViewAdapter(String[] data) {
-            this.data = data;
-        }
-
-        public void setData(String[] data) {
-            this.data = data;
-        }
-
-        @Override
-        public int getCount() {
-            return data.length;
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return i;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = View.inflate(PotentialCustomerRevisitActivity.this, R.layout.listview_item_popup, null);
-
-            TextView tv_cardname = view.findViewById(R.id.tv_cardname);
-//            if (i == 0) {
-//                tv_cardname.setText("全部");
-//            } else {
-//                tv_cardname.setText(cardTypeData.get(i - 1).getName());
-//            }
-            tv_cardname.setText(data[i]);
-
-            return view;
-        }
-    }
 
 
 }
