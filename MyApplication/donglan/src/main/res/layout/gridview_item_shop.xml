@@ -2,49 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+ >
+    <android.support.v7.widget.CardView
+        android:layout_width="78dp"
+        android:layout_height="68dp"
         android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+       >
 
-        <RelativeLayout
-            android:id="@+id/rl_item"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp">
-
-            <ImageView
-                android:id="@+id/ibtn"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/unread_msg_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/point1"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:visibility="invisible" />
-        </RelativeLayout>
-
-
-        <TextView
-            android:id="@+id/tv_dcs"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="健身圈"
-            android:textColor="#000"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_item"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/ibtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_dl_logo"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:id="@+id/unread_msg_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/point1"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_dcs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="健身圈"
+                android:textColor="#000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
 
 </LinearLayout>

@@ -129,6 +129,7 @@ public class ShopListFragment extends BaseFragment {
             ToastUtils.showToastShort("定位失败，获取门店列表失败");
         }
          LogUtil.i(jingdu + weidu);
+
         startLng = new LatLng(Double.valueOf(weidu),Double.valueOf(jingdu));
         getListData();
     }

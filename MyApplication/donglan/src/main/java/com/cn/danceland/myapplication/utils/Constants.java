@@ -155,6 +155,8 @@ public class Constants {
 
     public static String FIND_BC_DATA = HOST + "appBca/findMemberBcaData";//查找最近一次体测记录
     public static String BANNER = HOST + "branch/banner";//门店轮播图
+    public static String BRANCH_PICTURE_URL = HOST + "/branch/queryBranchPicture";//门店介绍图片列表
+
     public static String MYCONSUME = HOST + "/appOrder/queryMyOrder";//我的消费
 
 
@@ -528,7 +530,7 @@ public class Constants {
         INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 
         SELL_CARD_PRARMS = "http://192.168.1.93/test.txt";//买卡参数
-
+       BRANCH_PICTURE_URL = HOST + "/branch/queryBranchPicture";//门店介绍图片列表
         ISLOGINED = "islogined";//是否登录
         MY_USERID = "my_userid";//我的ID
 

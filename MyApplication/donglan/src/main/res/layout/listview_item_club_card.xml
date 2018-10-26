@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="16dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -52,11 +52,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="16dp"
                         android:layout_weight="1"
 
-                        android:textColor="@color/color_dl_yellow"
-                        android:textSize="14sp" />
+                        android:textColor="@color/color_white"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tv_price1"
@@ -67,7 +67,7 @@
                         android:layout_weight="1"
                         android:text="￥1580"
                         android:textColor="#fff"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <TextView
@@ -75,6 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:textSize="12sp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white" />
@@ -86,20 +87,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:layout_marginLeft="15dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+
                     android:orientation="horizontal">
 
-                    <!--         <TextView
-                                 android:layout_width="wrap_content"
-                                 android:layout_height="wrap_content"
-                                 android:text="卡种："
-                                 android:textColor="#333333"
-                                 android:textSize="16sp" />-->
+
 
                     <TextView
                         android:id="@+id/tv_cardname"
@@ -107,7 +104,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="#333333"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
 
@@ -116,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_cardname"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="计次卡"
                     android:textColor="#333333"
                     android:textSize="12sp" />
@@ -137,7 +134,7 @@
                     android:id="@+id/tv_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="次数：100次"
                     android:textColor="#444444"
                     android:textSize="12sp"
@@ -147,7 +144,7 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="时间：有效期365天"
                     android:textColor="#444444"
                     android:textSize="12sp" />
@@ -172,8 +169,9 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -182,22 +180,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-
-
+                    android:visibility="gone"
                     android:textColor="@color/color_dl_yellow"
                     android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal|bottom"
 
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_bg_selector"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/img_btn_bg_sell_card"
                     android:gravity="center"
                     android:text="购买"
                     android:textColor="#fff"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </LinearLayout>
