@@ -4,17 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/banner_header"
+        android:layout_width="match_parent"
+        android:layout_height="146dp" />
+
     <android.support.v7.widget.CardView
         android:id="@+id/banner_cardview"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_marginLeft="16dp"
+        android:layout_below="@+id/banner_header"
         android:layout_marginRight="16dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/white_rounded_corners_bg"
         app:cardCornerRadius="6dp"
-        app:cardElevation="5dp"
-        >
+        app:cardElevation="5dp">
 
         <com.zhouwei.mzbanner.MZBannerView
             android:id="@+id/banner"
@@ -24,18 +29,17 @@
             app:canLoop="true"
             app:indicatorAlign="center"
             app:indicatorPaddingLeft="10dp"
-            app:open_mz_mode="false"
-            />
+            app:open_mz_mode="false" />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_below="@id/banner_cardview"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:background="@drawable/white_rounded_corners_bg"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">

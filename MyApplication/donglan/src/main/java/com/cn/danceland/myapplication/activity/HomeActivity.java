@@ -49,6 +49,8 @@ import com.cn.danceland.myapplication.db.WearFitStepBean;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.DiscoverFragment;
+import com.cn.danceland.myapplication.fragment.HomeFragment;
+import com.cn.danceland.myapplication.fragment.HomeFragment2;
 import com.cn.danceland.myapplication.fragment.MeFragment;
 import com.cn.danceland.myapplication.fragment.NewHomeFragment;
 import com.cn.danceland.myapplication.fragment.NewHomeFragment2;
@@ -122,7 +124,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
-    private NewHomeFragment2 homeFragment;
+    private HomeFragment homeFragment;
+//    private NewHomeFragment2 homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
     private NewHomeFragment discoverFragment;
@@ -264,7 +267,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         checkUpdate();
 
         buildAnima();
-        homeFragment = new NewHomeFragment2();
+        homeFragment = new HomeFragment();
         shopFragment = new ShopFragment();
 
         shopListFragment = new ShopListFragment();
