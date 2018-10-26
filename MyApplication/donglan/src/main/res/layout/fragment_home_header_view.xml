@@ -13,11 +13,55 @@
         android:scaleType="fitXY"
         android:src="@drawable/header_background" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical">
+        android:layout_marginTop="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/banner_header2"
+                android:layout_width="match_parent"
+                android:layout_height="146dp"
+                android:background="@color/common_botton_bar_blue"
+                android:visibility="gone" />
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                app:srlAccentColor="@android:color/transparent"
+                app:srlEnablePreviewInEditMode="true"
+                app:srlPrimaryColor="@color/transparent">
+                <!--srlAccentColor srlPrimaryColor 将会改变 Header 和 Footer 的主题颜色-->
+                <!--srlEnablePreviewInEditMode 可以开启和关闭预览功能-->
+                <com.scwang.smartrefresh.layout.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:paddingTop="90dp"
+                    android:cacheColorHint="@null"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    android:scrollingCache="false" />
+
+                <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -58,7 +102,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/header_layout"
@@ -106,127 +150,80 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/listview_frame_layout"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/meun_cradview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="80dp"
                     android:layout_below="@+id/header_layout"
-                    android:layout_marginTop="26dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/white_rounded_corners_bg"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="10dp">
 
-                    <RelativeLayout
-                        android:id="@+id/listview_top_layout"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="94dp"
-                        android:layout_weight="1">
-
-                        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-                            android:id="@+id/refreshLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/baby_blue"
-                            app:srlAccentColor="@android:color/white"
-                            app:srlEnablePreviewInEditMode="true"
-                            app:srlPrimaryColor="#444444">
-                            <!--srlAccentColor srlPrimaryColor 将会改变 Header 和 Footer 的主题颜色-->
-                            <!--srlEnablePreviewInEditMode 可以开启和关闭预览功能-->
-                            <com.scwang.smartrefresh.layout.header.ClassicsHeader
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/recycler"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@color/white"
-                                android:cacheColorHint="@null"
-                                android:divider="@android:color/transparent"
-                                android:dividerHeight="0dp"
-                                android:overScrollMode="never"
-                                android:scrollbars="none"
-                                android:scrollingCache="false" />
-
-                            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-                        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
-                    </RelativeLayout>
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/meun_cradview"
-                        android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:background="@drawable/white_rounded_corners_bg"
-                        app:cardCornerRadius="6dp"
-                        app:cardElevation="10dp">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:id="@+id/fitness_diary_pink_ll"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:layout_marginLeft="16dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/fitness_diary_pink_ll"
+                            <ImageView
+                                android:id="@+id/fitness_diary_pink_iv"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/fitness_diary_pink_img" />
+
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="16dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|left"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/fitness_diary_pink_iv"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:src="@drawable/fitness_diary_pink_img" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="@string/fitness_diary_text"
-                                    android:textColor="@color/colorGray0"
-                                    android:textSize="14dp" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="1dp"
-                                android:layout_height="wrap_content"
-                                android:background="@color/home_menu_bg_color" />
-
-                            <LinearLayout
-                                android:id="@+id/punch_list_pink_ll"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="16dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical|left"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:id="@+id/punch_list_pink_iv"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
-                                    android:src="@drawable/punch_list_pink_img" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="@string/punch_list_text"
-                                    android:textColor="@color/colorGray0"
-                                    android:textSize="14dp" />
-                            </LinearLayout>
+                                android:layout_marginTop="4dp"
+                                android:text="@string/fitness_diary_text"
+                                android:textColor="@color/colorGray0"
+                                android:textSize="14dp" />
                         </LinearLayout>
-                    </android.support.v7.widget.CardView>
-                </FrameLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:background="@color/home_menu_bg_color" />
+
+                        <LinearLayout
+                            android:id="@+id/punch_list_pink_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical|left"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/punch_list_pink_iv"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/punch_list_pink_img" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/punch_list_text"
+                                android:textColor="@color/colorGray0"
+                                android:textSize="14dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
             </RelativeLayout>
         </FrameLayout>
-
-
-    </LinearLayout>
+    </FrameLayout>
 </FrameLayout>

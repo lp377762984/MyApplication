@@ -179,7 +179,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View initViews() {
         LogUtil.i(Constants.HOST);
-        View v = View.inflate(mActivity, R.layout.fragment_home_header_view_haoshi, null);
+        View v = View.inflate(mActivity, R.layout.fragment_home_header_view, null);
 
         refreshLayout = v.findViewById(R.id.refreshLayout);
         mRecycler = (RecyclerView) v.findViewById(R.id.recycler);
@@ -254,7 +254,7 @@ public class HomeFragment extends BaseFragment {
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("加载中……");
 //设置 Header 为 贝塞尔雷达 样式
-        refreshLayout.setPrimaryColorsId(R.color.transparent, android.R.color.transparent);//下拉刷新主题颜色
+        refreshLayout.setPrimaryColorsId(R.color.transparent, R.color.white_color70);//下拉刷新主题颜色 前面背景色 后面图色
         refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置Header
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
         refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多

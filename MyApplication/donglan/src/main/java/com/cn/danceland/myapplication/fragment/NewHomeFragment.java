@@ -184,10 +184,7 @@ public class NewHomeFragment extends BaseFragment {
     @Override
     public View initViews() {
         LogUtil.i(Constants.HOST);
-//        View v = View.inflate(mActivity, R.layout.fragment_home, null);
-//        View v = View.inflate(mActivity, R.layout.fragment_home_header_view_two, null);
         View v = View.inflate(mActivity, R.layout.fragment_home_header_view_three, null);
-//        View v = View.inflate(mActivity, R.layout.fragment_home_header_view, null);
 
         mRecycler = (RecyclerView) v.findViewById(R.id.recycler);
         mSwipe = (SwipeRefreshLayout) v.findViewById(R.id.swipe);
