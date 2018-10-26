@@ -51,7 +51,7 @@ public class ImageGridAdapter2 extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        view = inflater.inflate(R.layout.gridview_item_two, null);
+        view = inflater.inflate(R.layout.gridview_item, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.iv_content);
 
         RequestOptions options = new RequestOptions()
