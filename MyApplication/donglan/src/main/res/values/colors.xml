@@ -115,6 +115,7 @@
     <color name="colorGray23">#f8faff</color>
     <color name="colorGray24">#332c2837</color>
     <color name="home_bottom_text_color">#ffb5a6</color>
+    <color name="home_top_bg_color">#FF345F</color>
 
     <color name="white_color">#ffffffff</color>
     <color name="white_color80">#33ffffff</color>

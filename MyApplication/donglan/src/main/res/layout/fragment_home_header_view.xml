@@ -12,11 +12,21 @@
         android:orientation="vertical"
         android:scaleType="fitXY"
         android:src="@drawable/header_background" />
-
+    <View
+        android:id="@+id/header_fold_bg_view"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:visibility="gone"
+        android:background="@color/home_top_bg_color"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="24dp">
+
+        <include
+            android:id="@+id/rl_error"
+            layout="@layout/home_no_info_layout"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent"
-                app:srlAccentColor="@android:color/transparent"
+                app:srlAccentColor="@color/transparent"
                 app:srlEnablePreviewInEditMode="true"
                 app:srlPrimaryColor="@color/transparent">
                 <!--srlAccentColor srlPrimaryColor 将会改变 Header 和 Footer 的主题颜色-->
@@ -49,20 +59,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/transparent"
-                    android:paddingTop="90dp"
                     android:cacheColorHint="@null"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="0dp"
                     android:overScrollMode="never"
+                    android:paddingTop="90dp"
                     android:scrollbars="none"
                     android:scrollingCache="false" />
 
                 <com.scwang.smartrefresh.layout.footer.ClassicsFooter
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         </LinearLayout>
-
+        <View
+            android:id="@+id/header_fold_bg_view2"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:visibility="gone"
+            android:background="@color/home_top_bg_color"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,10 +171,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_below="@+id/header_layout"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="26dp"
-                    android:layout_marginBottom="16dp"
                     android:background="@drawable/white_rounded_corners_bg"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="10dp">
@@ -224,6 +240,7 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </RelativeLayout>
+
         </FrameLayout>
     </FrameLayout>
 </FrameLayout>

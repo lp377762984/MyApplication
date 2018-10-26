@@ -51,10 +51,14 @@ import com.cn.danceland.myapplication.view.NumberAnimTextView;
 import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -102,7 +106,11 @@ public class HomeFragment extends BaseFragment {
     private ImageView header_background_iv;//打卡排行 菜单 粉色布局
     private ImageView iv_avatar;
     private TextView tv_nick_name;
-    private View banner_header2;
+    private RelativeLayout rl_error;
+    private View header_fold_bg_view;
+    private View header_fold_bg_view2;
+
+    private View banner_header2;//临时布局 后面看要不要改刷新在某位置
 
     private int recLen = 99;//进场累计  99-0 0-x
     private int cumulative_num = 0;//进场累计  99-0 0-x
@@ -197,7 +205,10 @@ public class HomeFragment extends BaseFragment {
         iv_avatar = v.findViewById(R.id.iv_avatar);
         tv_nick_name = v.findViewById(R.id.tv_nick_name);
         header_background_iv = v.findViewById(R.id.header_background_iv);
+        rl_error = v.findViewById(R.id.rl_error);
 
+        header_fold_bg_view = v.findViewById(R.id.header_fold_bg_view);
+        header_fold_bg_view2 = v.findViewById(R.id.header_fold_bg_view2);
         banner_header2 = v.findViewById(R.id.banner_header2);
 
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
@@ -253,15 +264,19 @@ public class HomeFragment extends BaseFragment {
 
         dialog = new ProgressDialog(mActivity);
         dialog.setMessage("加载中……");
-//设置 Header 为 贝塞尔雷达 样式
-        refreshLayout.setPrimaryColorsId(R.color.transparent, R.color.white_color70);//下拉刷新主题颜色 前面背景色 后面图色
-        refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置Header
+
+        refreshLayout.setPrimaryColorsId(R.color.home_top_bg_color, R.color.white_color80);//下拉刷新主题颜色 前面背景色 后面图色
+        refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置 Header 为 贝塞尔雷达 样式
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
         refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
+        refreshLayout.setEnableHeaderTranslationContent(false);//拖动Header的时候是否同时拖动内容（默认true）
+        refreshLayout.setEnableFooterTranslationContent(true);//拖动Footer的时候是否同时拖动内容（默认true）
+        refreshLayout.setEnableOverScrollDrag(false);//禁止越界拖动（1.0.4以上版本）
+        refreshLayout.setRefreshFooter(new BallPulseFooter(mActivity).setSpinnerStyle(SpinnerStyle.Scale));
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                LogUtil.i("onRefresh");
+//                LogUtil.i("onRefresh");
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -275,7 +290,7 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                LogUtil.i("onLoadMore");
+//                LogUtil.i("onLoadMore");
 //                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -287,50 +302,11 @@ public class HomeFragment extends BaseFragment {
             }
         });
 
-//        /* Fragment中，注册
-//                * 接收MainActivity的Touch回调的对象
-//                * 重写其中的onTouchEvent函数，并进行该Fragment的逻辑处理
-//                */
-//        HomeActivity.MyTouchListener myTouchListener = new HomeActivity.MyTouchListener() {
-//            private float mPosX = 0;
-//            private float mPosY = 0;
-//            private float mCurPosX = 0;
-//            private float mCurPosY = 0;
-//
-//            @Override
-//            public void onTouchEvent(MotionEvent event) {
-//                // 处理手势事件
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN://当屏幕检测到第一个触点按下之后就会触发到这个事件。
-//                        mPosX = event.getX();
-//                        mPosY = event.getY();
-//                        break;
-//                    case MotionEvent.ACTION_MOVE://当触点在屏幕上移动时触发，触点在屏幕上停留也是会触发的，主要是由于它的灵敏度很高，而我们的手指又不可能完全静止（即使我们感觉不到移动，但其实我们的手指也在不停地抖动）。
-////                        mCurPosX = event.getX();
-////                        mCurPosY = event.getY();
-//////                        LogUtil.i("ACTION_MOVE--(" + (mCurPosY - mPosY));
-//////                            LogUtil.i("---->" + (mCurPosY - mPosY));
-////                        if (refreshLayout.getState()==RefreshState.None) {
-////                            setHeader((int) (mCurPosY - mPosY));
-////                        }
-//                        break;
-//                    case MotionEvent.ACTION_UP://当触点松开时被触发。
-////                        if (refreshLayout.getState()==RefreshState.None) {
-////                            originalTop += (int) (mCurPosY - mPosY);
-////                            setHeader(0);
-////                        }
-//                        break;
-//                }
-//            }
-//        };
-        //// 将myTouchListener注册到分发列表
-//        ((HomeActivity) this.getActivity()).registerMyTouchListener(myTouchListener);
-
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LogUtil.i("X=" + dx + "Y=" + dy);
+//                LogUtil.i("X=" + dx + "Y=" + dy);
                 offsetNum += (dy);
 
 //                if (offsetNum != 0) {
@@ -342,8 +318,45 @@ public class HomeFragment extends BaseFragment {
         });
 //        nullView.setVisibility(View.GONE);
 //        banner_header2.setVisibility(View.VISIBLE);
-//        refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
-//            @Override
+        refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener() {
+            @Override
+            public void onFooterMoving(RefreshFooter footer, boolean isDragging, float percent, int offset, int footerHeight, int maxDragHeight) {
+                super.onFooterMoving(footer, isDragging, percent, offset, footerHeight, maxDragHeight);
+                LogUtil.i("isDragging=" + isDragging+",percent=" + percent+",offset=" + offset+",footerHeight=" + footerHeight+",maxDragHeight=" + maxDragHeight);
+//                if (isDragging){
+//                    header_fold_bg_view2.setVisibility(View.VISIBLE);
+//                    header_fold_bg_view.setVisibility(View.VISIBLE);
+//                }else{
+//                    if(offset!=0) {
+//                        header_fold_bg_view.setVisibility(View.VISIBLE);
+//                        header_fold_bg_view2.setVisibility(View.VISIBLE);
+//                    }
+//                    header_fold_bg_view.setVisibility(View.GONE);
+//                    header_fold_bg_view2.setVisibility(View.GONE);
+//                }
+            }
+
+            @Override
+            public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
+                super.onStateChanged(refreshLayout, oldState, newState);
+                LogUtil.i("oldState=" + oldState);
+                LogUtil.i("newState=" + newState);
+//                if(newState==RefreshState.None){//专治下拉  但上拉冲突
+//                    header_fold_bg_view.setVisibility(View.GONE);
+//                    header_fold_bg_view2.setVisibility(View.GONE);
+//                }else{
+//                    header_fold_bg_view.setVisibility(View.VISIBLE);
+//                    header_fold_bg_view2.setVisibility(View.VISIBLE);
+//                }
+//                if(newState==RefreshState.PullUpToLoad
+//                        ||newState==RefreshState.ReleaseToLoad
+//                        ||newState==RefreshState.LoadReleased
+//                        ||newState==RefreshState.Loading){//执行刷新一系列操作时
+//                    header_fold_bg_view.setVisibility(View.VISIBLE);
+//                    header_fold_bg_view2.setVisibility(View.VISIBLE);
+//                }
+            }
+            //            @Override
 //            public void onHeaderMoving(RefreshHeader header, boolean isDragging, float percent, int offset, int headerHeight, int maxDragHeight) {
 //                super.onHeaderMoving(header, isDragging, percent, offset, headerHeight, maxDragHeight);
 //                LogUtil.i("isDragging---" + isDragging);
@@ -377,19 +390,7 @@ public class HomeFragment extends BaseFragment {
 //                }
 //            }
 
-//            @Override
-//            public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
-//                LogUtil.i("newState---" + newState);
-//                if (newState == RefreshState.None) {
-//                    nullView.setVisibility(View.GONE);
-//                    banner_header2.setVisibility(View.VISIBLE);
-//                }else{
-//                    nullView.setVisibility(View.GONE);
-//                    banner_header2.setVisibility(View.VISIBLE);
-//                }
-//                super.onStateChanged(refreshLayout, oldState, newState);
-//            }
-//        });//设置多功能监听器
+        });//设置多功能监听器
         return v;
     }
 
@@ -429,9 +430,6 @@ public class HomeFragment extends BaseFragment {
      */
     public void setFoldView() {
         RelativeLayout.LayoutParams lppTemp = (RelativeLayout.LayoutParams) header_layout.getLayoutParams();
-        int shakeNum = offsetNum / 50;//抖动偏移
-        LogUtil.i("shakeNum==" + shakeNum + "------" + offsetNum);
-
 
         int listMaxOffset = DensityUtils.dp2px(mActivity, 94f);//listview 最大偏移
         int listOffset = listMaxOffset - offsetNum;
@@ -445,11 +443,9 @@ public class HomeFragment extends BaseFragment {
 
 
         if (0 <= offsetNum && offsetNum <= 390) {
-//            listviewLayoutParams.setMargins(0, listOffset, 0, 0);
             if (0 <= offsetNum && offsetNum <= 246) {
                 setMeunCradview();
             }
-
             if (listMaxOffset <= offsetNum && offsetNum <= 390) {
                 lppTemp.setMargins(headerMarginLeft, headerOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.GONE);
@@ -458,9 +454,7 @@ public class HomeFragment extends BaseFragment {
                 in_the_cumulative_tv.setVisibility(View.VISIBLE);
             }
         } else {
-//            listviewLayoutParams.setMargins(0, 0, 0, 0);
-//            lppTemp.setMargins(headerMarginLeft, 0, headerMarginRight, 0);
-
+            lppTemp.setMargins(headerMarginLeft, 0, headerMarginRight, 0);
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
@@ -468,14 +462,12 @@ public class HomeFragment extends BaseFragment {
             punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
         }
         header_layout.setLayoutParams(lppTemp);
-//        listview_top_layout.setLayoutParams(listviewLayoutParams);
         LogUtil.i("总偏移量-----(" + offsetNum);
 
     }
 
     private void setMeunCradview() {
         if (0 <= offsetNum && offsetNum < 25) {
-            LogUtil.i("setMeunCradview--0--(" + offsetNum);
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.GONE);
             punch_list_white_iv.setVisibility(View.GONE);
@@ -486,7 +478,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--1--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_eight_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_eight_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_eight_img));
@@ -496,7 +487,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--2--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_seven_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_seven_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_seven_img));
@@ -506,7 +496,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--3--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_six_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_six_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_six_img));
@@ -516,7 +505,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--4--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_five_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_five_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_five_img));
@@ -526,7 +514,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--5--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_four_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_four_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_four_img));
@@ -536,7 +523,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--6--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_three_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_three_img));
@@ -546,7 +532,6 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.VISIBLE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--7--(" + offsetNum);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_two_img));
@@ -557,23 +542,8 @@ public class HomeFragment extends BaseFragment {
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
-            LogUtil.i("setMeunCradview--7--(" + offsetNum);
             fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_img));
             punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
-
-//        } else if (offsetNum <= -140) {
-//            LogUtil.i("setMeunCradview--8--(" + offsetNum);
-//            meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
-//            fitness_diary_white_iv.setVisibility(View.VISIBLE);
-//            punch_list_white_iv.setVisibility(View.VISIBLE);
-//            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_img));
-//            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
-//        } else {
-//            meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
-//            fitness_diary_white_iv.setVisibility(View.VISIBLE);
-//            punch_list_white_iv.setVisibility(View.VISIBLE);
-//            fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_img));
-//            punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
         }
     }
 
@@ -818,29 +788,6 @@ public class HomeFragment extends BaseFragment {
                         meun_cradview.getBackground().mutate().setAlpha(alphaNum);//参数x为透明度，取值范围为0~255，数值越小越透明。
                     }
                     break;
-                case 1234:
-                    mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-                            LogUtil.i("X=" + dx + "Y=" + dy);
-                            offsetNum += (dy);
-                            if (offsetNum > 0) {
-                                nullView.setVisibility(View.VISIBLE);
-                                banner_header2.setVisibility(View.GONE);
-//                                Message message=Message.obtain();
-//                                message.what=1234;
-//                                message.obj=
-//                                handler.sendMessage(message);
-                            } else {
-                                nullView.setVisibility(View.GONE);
-                                banner_header2.setVisibility(View.VISIBLE);
-                            }
-
-                            setFoldView();
-                        }
-                    });
-                    break;
                 default:
                     break;
             }
@@ -861,6 +808,12 @@ public class HomeFragment extends BaseFragment {
                     data = newsDataBean.getData().getItems();
                     //    LogUtil.i(data.toString());
                     if (mCurrentPage == 0) {
+                        LogUtil.i("data.size()" + data.size());
+                        if (data.size() == 0) {
+                            rl_error.setVisibility(View.VISIBLE);
+                        } else {
+                            rl_error.setVisibility(View.GONE);
+                        }
                         newsListviewAdapter.setData(data);
 
                         newsListviewAdapter.notifyDataSetChanged();
