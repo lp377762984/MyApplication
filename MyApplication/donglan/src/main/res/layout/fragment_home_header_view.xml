@@ -12,12 +12,14 @@
         android:orientation="vertical"
         android:scaleType="fitXY"
         android:src="@drawable/header_background" />
+
     <View
         android:id="@+id/header_fold_bg_view"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:visibility="gone"
-        android:background="@color/home_top_bg_color"/>
+        android:background="@color/home_top_bg_color"
+        android:visibility="gone" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -69,16 +71,17 @@
 
                 <com.scwang.smartrefresh.layout.footer.ClassicsFooter
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
             </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         </LinearLayout>
+
         <View
             android:id="@+id/header_fold_bg_view2"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:visibility="gone"
-            android:background="@color/home_top_bg_color"/>
+            android:background="@color/home_top_bg_color"
+            android:visibility="gone" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -177,18 +180,19 @@
                     android:layout_marginTop="26dp"
                     android:background="@drawable/white_rounded_corners_bg"
                     app:cardCornerRadius="6dp"
+                    app:cardPreventCornerOverlap="false"
                     app:cardElevation="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/fitness_diary_pink_ll"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="16dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical|left"
@@ -216,8 +220,8 @@
 
                         <LinearLayout
                             android:id="@+id/punch_list_pink_ll"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="16dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical|left"
@@ -240,7 +244,6 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </RelativeLayout>
-
         </FrameLayout>
     </FrameLayout>
 </FrameLayout>

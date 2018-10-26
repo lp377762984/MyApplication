@@ -322,7 +322,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onFooterMoving(RefreshFooter footer, boolean isDragging, float percent, int offset, int footerHeight, int maxDragHeight) {
                 super.onFooterMoving(footer, isDragging, percent, offset, footerHeight, maxDragHeight);
-                LogUtil.i("isDragging=" + isDragging+",percent=" + percent+",offset=" + offset+",footerHeight=" + footerHeight+",maxDragHeight=" + maxDragHeight);
+//                LogUtil.i("isDragging=" + isDragging+",percent=" + percent+",offset=" + offset+",footerHeight=" + footerHeight+",maxDragHeight=" + maxDragHeight);
 //                if (isDragging){
 //                    header_fold_bg_view2.setVisibility(View.VISIBLE);
 //                    header_fold_bg_view.setVisibility(View.VISIBLE);
@@ -339,8 +339,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
                 super.onStateChanged(refreshLayout, oldState, newState);
-                LogUtil.i("oldState=" + oldState);
-                LogUtil.i("newState=" + newState);
+//                LogUtil.i("oldState=" + oldState);
+//                LogUtil.i("newState=" + newState);
 //                if(newState==RefreshState.None){//专治下拉  但上拉冲突
 //                    header_fold_bg_view.setVisibility(View.GONE);
 //                    header_fold_bg_view2.setVisibility(View.GONE);
@@ -441,12 +441,13 @@ public class HomeFragment extends BaseFragment {
         int headerOffset = DensityUtils.dp2px(mActivity, 55f) - (offsetNum - listMaxOffset);
         LogUtil.i("头部" + headerOffset + "=============" + headerMaxOffset + "-" + offsetNum + "-" + listMaxOffset);
 
-
-        if (0 <= offsetNum && offsetNum <= 390) {
-            if (0 <= offsetNum && offsetNum <= 246) {
+        int ooo = listMaxOffset + headerMaxOffset;
+        LogUtil.i("ooo=" + ooo);
+        if (0 <= offsetNum && offsetNum <= ooo) {
+            if (0 <= offsetNum && offsetNum <= listMaxOffset) {
                 setMeunCradview();
             }
-            if (listMaxOffset <= offsetNum && offsetNum <= 390) {
+            if (listMaxOffset <= offsetNum && offsetNum <= ooo) {
                 lppTemp.setMargins(headerMarginLeft, headerOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.GONE);
             } else if (offsetNum == 0) {
@@ -455,6 +456,7 @@ public class HomeFragment extends BaseFragment {
             }
         } else {
             lppTemp.setMargins(headerMarginLeft, 0, headerMarginRight, 0);
+            in_the_cumulative_tv.setVisibility(View.GONE);
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
