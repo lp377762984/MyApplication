@@ -4,8 +4,15 @@
     android:layout_height="match_parent"
     android:background="@color/color_bg_mianlayout">
 
+    <ImageView
+        android:id="@+id/status_bar_iv"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/colorGray24"/>
+
     <RelativeLayout
         android:id="@+id/title_layout"
+        android:layout_below="@id/status_bar_iv"
         android:layout_width="match_parent"
         android:layout_height="45dp">
 

@@ -199,6 +199,8 @@
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:columnWidth="100dp"
                 android:gravity="center_vertical"
                 android:numColumns="3"
@@ -256,7 +258,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="10dp"
                 app:cardCornerRadius="6dp"
-                app:cardElevation="8dp">
+                app:cardElevation="5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
