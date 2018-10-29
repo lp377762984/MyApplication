@@ -22,8 +22,6 @@
             android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:divider="@color/home_menu_bg_color"
             android:dividerHeight="1px"
