@@ -45,7 +45,7 @@ public class ClubDynActivity extends BaseActivity {
     private ClubNewsListviewAdapter newsListviewAdapter;
     private int mCurrentPage = 0;//起始请求页
     private boolean isEnd = false;
-    Gson gson=new Gson();
+    Gson gson = new Gson();
     private TextView tv_error;
     private ImageView imageView;
 
@@ -71,9 +71,9 @@ public class ClubDynActivity extends BaseActivity {
                 finish();
             }
         });
-        pullToRefresh =findViewById(R.id.pullToRefresh1);
+        pullToRefresh = findViewById(R.id.pullToRefresh1);
 
-        View    listEmptyView=findViewById(R.id.rl_no_info);
+        View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
@@ -88,7 +88,6 @@ public class ClubDynActivity extends BaseActivity {
         pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-
 
 
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -154,7 +153,7 @@ public class ClubDynActivity extends BaseActivity {
             //  findSelectionDyn_Down(1);
             init();
             mCurrentPage = 0;
-            isEnd=false;
+            isEnd = false;
             findNews(mCurrentPage);
 
             return null;
@@ -167,14 +166,16 @@ public class ClubDynActivity extends BaseActivity {
             pullToRefresh.onRefreshComplete();
         }
     }
-class StrBean{
-    public String page;
-}
-    private void findNews(final int currentPage) {
-            StrBean strBean=new StrBean();
-        strBean.page=currentPage+"";
 
-        MyJsonObjectRequest request=new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_CLUBDYNAMIC_URL, gson.toJson(strBean), new Response.Listener<JSONObject>() {
+    class StrBean {
+        public String page;
+    }
+
+    private void findNews(final int currentPage) {
+        StrBean strBean = new StrBean();
+        strBean.page = currentPage + "";
+
+        MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.FIND_CLUBDYNAMIC_URL, gson.toJson(strBean), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
@@ -196,10 +197,10 @@ class StrBean{
                         newsListviewAdapter.addLastList(data);
                         newsListviewAdapter.notifyDataSetChanged();
                     }
-                    LogUtil.i(newsDataBean.getData().getLast()+"");
-                    if (newsDataBean.getData().getLast()){
+                    LogUtil.i(newsDataBean.getData().getLast() + "");
+                    if (newsDataBean.getData().getLast()) {
                         setEnd();
-                    }else {
+                    } else {
                         mCurrentPage = currentPage + 1;
                     }
 
@@ -251,15 +252,12 @@ class StrBean{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-         //   dialog.dismiss();
+            //   dialog.dismiss();
             // newsListviewAdapter.notifyDataSetChanged();
             if (isEnd) {//没数据了
                 pullToRefresh.onRefreshComplete();
             }
-
-               pullToRefresh.onRefreshComplete();
+            pullToRefresh.onRefreshComplete();
         }
     }
-
-
 }

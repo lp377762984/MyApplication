@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24dp"
         android:orientation="vertical">
 
         <com.cn.danceland.myapplication.view.DongLanTitleView
@@ -31,5 +31,11 @@
             ptr:ptrHeaderTextColor="#999999"
             ptr:ptrRefreshableViewBackground="#00000000"
             ptr:ptrScrollingWhileRefreshingEnabled="true" />
+
+        <include
+            android:id="@+id/rl_no_info"
+            layout="@layout/no_info_layout"
+            android:visibility="gone"
+            />
     </LinearLayout>
 </FrameLayout>

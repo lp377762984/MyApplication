@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -56,6 +57,7 @@ import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
 import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
@@ -131,13 +133,13 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private boolean init;
     private int replypos = -1;
     private RelativeLayout rl_more;
-   // SlideFromBottomPopup slideFromBottomPopup;
+    // SlideFromBottomPopup slideFromBottomPopup;
     private EmojiconEditText et_popup_comment;
     private TextView tv_popup_title;
     private ImageView iv_pic;
     RxShineButton rx_zan;
     RxShineButton rx_guanzhu;
-  //  private View listEmptyView;
+    //  private View listEmptyView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -146,7 +148,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_dyn_home);
         //注册event事件
         EventBus.getDefault().register(this);
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     }
@@ -248,8 +250,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
         msgId = getIntent().getStringExtra("msgId");
         userId = getIntent().getStringExtra("userId");
-      //  slideFromBottomPopup = new SlideFromBottomPopup(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
+        //  slideFromBottomPopup = new SlideFromBottomPopup(this);
         tv_send = findViewById(R.id.tv_send);
         tv_send.setOnClickListener(this);
         tv_zan_num = findViewById(R.id.tv_zan_num);
@@ -267,8 +268,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             public void onKeyboardOpen() {
                 Log.e("Keyboard", "open");
                 tv_zan_num.setVisibility(View.GONE);
-              iv_zan.setVisibility(View.GONE);
-             //   rx_zan.setVisibility(View.GONE);
+                iv_zan.setVisibility(View.GONE);
+                //   rx_zan.setVisibility(View.GONE);
                 emojiButton.setVisibility(View.VISIBLE);
                 //     tv_send.setVisibility(View.VISIBLE);
             }
@@ -277,8 +278,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             public void onKeyboardClose() {
                 Log.e("Keyboard", "close");
                 tv_zan_num.setVisibility(View.VISIBLE);
-               iv_zan.setVisibility(View.VISIBLE);
-            //    rx_zan.setVisibility(View.VISIBLE);
+                iv_zan.setVisibility(View.VISIBLE);
+                //    rx_zan.setVisibility(View.VISIBLE);
                 emojiButton.setVisibility(View.GONE);
                 //   tv_send.setVisibility(View.GONE);
             }
@@ -303,7 +304,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 //        listEmptyView = findViewById(R.id.rl_no_info);
 //        TextView tv_error= listEmptyView.findViewById(R.id.tv_error);
 //        ImageView imageView = listEmptyView.findViewById(R.id.iv_error);
-      //  pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
+        //  pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
@@ -324,8 +325,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 //    new FinishRefresh().execute();
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         if (!isEnd) {
                             findCommentList(msgId, mCurrentPage);
                         } else {
@@ -335,9 +336,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 };
                 Timer timer = new Timer();
                 timer.schedule(task, 1000);
-
-
-
 
 
             }
@@ -379,6 +377,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         });
         listDialog.show();
     }
+
     class JuBaoBean {
 
         public String member_id;//评论或动态id
@@ -427,8 +426,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             case R.id.tv_send:
                 //  LogUtil.i(et_comment.getText().toString());
 
-                Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())){
+                Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                if (TextUtils.isEmpty(info.getPerson().getDefault_branch())) {
                     ToastUtils.showToastShort("请先加人一个门店");
                     return;
                 }
@@ -436,7 +435,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
                 if (!TextUtils.isEmpty(et_comment.getText().toString())) {
 
-                    if (et_comment.getText().toString().length()>1000){
+                    if (et_comment.getText().toString().length() > 1000) {
                         ToastUtils.showToastShort("输入字数不能超过1000字");
                         return;
                     }
@@ -450,11 +449,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 }
 
 
-                break;
-
-
-            case R.id.iv_back:
-                finish();
                 break;
             default:
                 break;
@@ -481,13 +475,12 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         tv_zan_num.setText(info.getPriaseNumber() + "");
                     }
                     if (info.getPraise()) {//如果点赞
-                     iv_zan.setImageResource(R.drawable.img_zan1);
+                        iv_zan.setImageResource(R.drawable.img_zan1);
                         rx_zan.setChecked(true);
                     } else {
-                       iv_zan.setImageResource(R.drawable.img_zan);
+                        iv_zan.setImageResource(R.drawable.img_zan);
                         rx_zan.setChecked(false);
                     }
-
 
 
                     iv_zan.setOnClickListener(new View.OnClickListener() {
@@ -497,8 +490,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                             if (info.getPraise()) {//如果点赞
                                 addZan(info.getId(), false);
                             } else {//未点赞
-                             //   iv_zan.clearAnimation();//添加动画
-                             //   iv_zan.startAnimation(mAnimationSet);
+                                //   iv_zan.clearAnimation();//添加动画
+                                //   iv_zan.startAnimation(mAnimationSet);
                                 addZan(info.getId(), true);
                             }
                         }
@@ -570,7 +563,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
         if (oneDynInfo.isFollower()) {
             tv_guanzhu.setText("已关注");
-          //  tv_guanzhu.setTextColor(Color.GRAY);
+            //  tv_guanzhu.setTextColor(Color.GRAY);
             rx_guanzhu.setChecked(true);
             rx_guanzhu.setClickable(false);
         } else {
@@ -645,8 +638,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_pic.setVisibility(View.VISIBLE);
                 StringBuilder sb = new StringBuilder(oneDynInfo.getImgList().get(0));
 
-                String houzhui =oneDynInfo.getImgList().get(0).substring(oneDynInfo.getImgList().get(0).lastIndexOf(".")+ 1);
-                sb.insert(oneDynInfo.getImgList().get(0).length() - houzhui.length()-1, "_400X400");
+                String houzhui = oneDynInfo.getImgList().get(0).substring(oneDynInfo.getImgList().get(0).lastIndexOf(".") + 1);
+                sb.insert(oneDynInfo.getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
 //                String[] b = sb.toString().split("_");
 //                String[] c = b[2].toString().toString().split("X");
                 String[] b = sb.toString().split("_");
@@ -659,20 +652,19 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
 
                     if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,30f))* Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
                         linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
                         iv_pic.setLayoutParams(linearParams);
                     } else {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this)-DensityUtils.dp2px(this,30f))* Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
                         linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
                         iv_pic.setLayoutParams(linearParams);
                     }
                 }
 
 
-
                 Glide.with(this)
-                    //    .load(sb.toString())
+                        //    .load(sb.toString())
                         .load(oneDynInfo.getImgList().get(0))
                         // .apply(options1)
                         .into(iv_pic);
@@ -698,16 +690,22 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             } else if (oneDynInfo.getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 gridView.setNumColumns(2);
-                int width = DensityUtils.dp2px(DynHomeActivity.this, 195f);//此处的宽度需要动态计算
+//                int width = DensityUtils.dp2px(DynHomeActivity.this, 195f);//此处的宽度需要动态计算
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+//                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                int width = (DensityUtils.dp2px(DynHomeActivity.this, AppUtils.getScreenWidth()) - DensityUtils.dp2px(DynHomeActivity.this, 32f)) / 3 * 2;
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-
             } else {
                 gridView.setNumColumns(3);
-                int width = DensityUtils.dp2px(DynHomeActivity.this, 290f);//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+//                int width = DensityUtils.dp2px(DynHomeActivity.this, 290f);//此处的宽度需要动态计算
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+//                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             }
 
@@ -816,7 +814,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 commentInfoBean = gson.fromJson(jsonObject.toString(), RequstCommentInfoBean.class);
                 //  LogUtil.i(commentInfoBean.toString());
                 if (commentInfoBean.getSuccess()) {
-                //    listEmptyView.setVisibility(View.GONE);
+                    //    listEmptyView.setVisibility(View.GONE);
 
                     if (commentInfoBean.getData().getItems() != null) {
                         data = commentInfoBean.getData().getItems();
@@ -897,8 +895,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
                 return map;
             }
-
-
 
 
         };
@@ -1048,24 +1044,24 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 LogUtil.i(jsonObject.toString());
 
                 Gson gson = new Gson();
-                RequestCommitCommentBean requestCommitCommentBean=gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
-                if (requestCommitCommentBean.isSuccess()){
+                RequestCommitCommentBean requestCommitCommentBean = gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
+                if (requestCommitCommentBean.isSuccess()) {
 
                     ToastUtils.showToastShort("评论成功");
                     mCurrentPage = 0;
-                  //  findCommentList(msgId, mCurrentPage);
+                    //  findCommentList(msgId, mCurrentPage);
                     myAdater.addFirst(requestCommitCommentBean.getData());
                     myAdater.notifyDataSetChanged();
                     et_comment.setText("");
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
 
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
-                //    slideFromBottomPopup.dismiss();
+                    //    slideFromBottomPopup.dismiss();
 
-                }else {
-                    if (requestCommitCommentBean.getCode()==1){
+                } else {
+                    if (requestCommitCommentBean.getCode() == 1) {
                         ToastUtils.showToastShort(requestCommitCommentBean.getErrorMsg());
-                    }else {
+                    } else {
                         ToastUtils.showToastShort("评论失败");
                     }
 
@@ -1125,7 +1121,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 LogUtil.i(jsonObject.toString());
 
                 Gson gson = new Gson();
-                RequestCommitCommentBean requestCommitCommentBean=gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
+                RequestCommitCommentBean requestCommitCommentBean = gson.fromJson(jsonObject.toString(), RequestCommitCommentBean.class);
                 if (requestCommitCommentBean.isSuccess()) {
                     ToastUtils.showToastShort("评论成功");
                     mCurrentPage = 0;
@@ -1136,7 +1132,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                     et_comment.setHint("写评论");
                     KeyBoardUtils.closeKeybord(et_comment, DynHomeActivity.this);
                     EventBus.getDefault().post(new StringEvent(msgId, EventConstants.ADD_COMMENT));
-                  //  slideFromBottomPopup.dismiss();
+                    //  slideFromBottomPopup.dismiss();
                 } else {
                     ToastUtils.showToastShort("评论失败：" + requestCommitCommentBean.getErrorMsg());
                 }
@@ -1285,7 +1281,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
                 switch (which) {
                     case 0:
-                     showJuBaoListDialog();
+                        showJuBaoListDialog();
                         break;
                     case 1:
 
@@ -1472,8 +1468,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 LogUtil.i(volleyError.toString());
             }
         }) {
-
-
 
 
         };

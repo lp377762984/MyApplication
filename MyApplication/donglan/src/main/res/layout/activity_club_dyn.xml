@@ -1,62 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EAEAEA"
-    >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery"
+    android:background="@color/white"
+    android:layout_height="match_parent">
 
-        >
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="会所动态"
-            android:textColor="#fff"
-
-            android:textSize="18sp"
-
-            />
-    </RelativeLayout>
-    <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pullToRefresh1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:scrollingCache="false"
-        ptr:ptrDrawable="@drawable/listview_loading_anim"
-        ptr:ptrHeaderBackground="#00000000"
-        ptr:ptrHeaderTextColor="#999999"
-        ptr:ptrRefreshableViewBackground="#00000000"
-        ptr:ptrScrollingWhileRefreshingEnabled="true" />
-    <include layout="@layout/no_info_layout"
-        android:id="@+id/rl_no_info"
-        android:visibility="gone"
+        android:orientation="vertical">
 
-        />
-</LinearLayout>
+        <com.cn.danceland.myapplication.view.DongLanTitleView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleText="会所动态" />
 
+        <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pullToRefresh1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:scrollingCache="false"
+            android:background="@color/transparent"
+            ptr:ptrDrawable="@drawable/listview_loading_anim"
+            ptr:ptrHeaderBackground="#00000000"
+            ptr:ptrHeaderTextColor="#999999"
+            ptr:ptrRefreshableViewBackground="#00000000"
+            ptr:ptrScrollingWhileRefreshingEnabled="true" />
+
+        <include
+            android:id="@+id/rl_no_info"
+            layout="@layout/no_info_layout"
+            android:visibility="gone"/>
+    </LinearLayout>
 </RelativeLayout>

@@ -150,6 +150,8 @@ public class UserHomeActivity extends BaseActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
+        View listEmptyView=findViewById(R.id.rl_no_info);
+        pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
 

@@ -114,7 +114,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((Holder) holder).ll_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    mListener.onItemClick(position, data);
+                    mListener.onItemClick(position, data);
                 }
             });
             ((Holder) holder).collect_iv.setOnClickListener(new View.OnClickListener() {

@@ -14,7 +14,7 @@ public class Constants {
         return PLATFORM;
     }
 
-    //  public static final String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
+//      public static final String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
 //   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static final String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST_SERVICE = "http://192.168.1.114:8003/";//
