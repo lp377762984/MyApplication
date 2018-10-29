@@ -19,6 +19,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/white_rounded_corners_bg"
         app:cardCornerRadius="6dp"
+        app:cardPreventCornerOverlap="false"
         app:cardElevation="5dp">
 
         <com.zhouwei.mzbanner.MZBannerView
@@ -40,6 +41,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        app:cardPreventCornerOverlap="false"
         android:background="@drawable/white_rounded_corners_bg"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp">

@@ -5,21 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <!--
-        <TextView
-            android:id="@+id/tv_no_data"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="没有发布动态"
-            android:visibility="gone" />-->
     <include
         android:id="@+id/rl_no_info"
         layout="@layout/no_info_layout"
-        android:visibility="gone"
-
-        />
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/ll_item"
@@ -196,16 +185,13 @@
 
             <com.cn.danceland.myapplication.view.NoScrollGridView
                 android:id="@+id/gridview"
-                android:layout_width="280dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:columnWidth="100dp"
                 android:gravity="center_vertical"
                 android:numColumns="3"
-                android:stretchMode="spacingWidth"
-                android:verticalSpacing="5dp"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -263,7 +249,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
+                    android:layout_height="match_parent"
                     android:background="@color/color_white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -271,7 +257,7 @@
                     <LinearLayout
                         android:id="@+id/ll_zan"
                         android:layout_width="82.5dp"
-                        android:layout_height="55dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="left">
 
@@ -319,7 +305,7 @@
                     <LinearLayout
                         android:id="@id/ll_comment"
                         android:layout_width="82.5dp"
-                        android:layout_height="55dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="16dp"
                         android:gravity="left">
 

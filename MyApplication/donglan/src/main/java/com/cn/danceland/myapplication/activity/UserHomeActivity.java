@@ -29,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.UserHomeDynListviewAdater;
+import com.cn.danceland.myapplication.adapter.UserHomeDynListviewAdater2;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -76,7 +77,7 @@ public class UserHomeActivity extends BaseActivity {
     private PullToRefreshListView pullToRefresh;
     //  private List<PullBean> data = new ArrayList<PullBean>();
     public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
-    UserHomeDynListviewAdater myDynListviewAdater;
+    UserHomeDynListviewAdater2 myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
     private int mCurrentPage = 0;//当前请求页
@@ -155,7 +156,7 @@ public class UserHomeActivity extends BaseActivity {
         dialog.setMessage("正在加载……");
 
 
-        myDynListviewAdater = new UserHomeDynListviewAdater(this, (ArrayList<RequsetDynInfoBean.Data.Content>) data);
+        myDynListviewAdater = new UserHomeDynListviewAdater2(this, (ArrayList<RequsetDynInfoBean.Data.Content>) data);
         myDynListviewAdater.setGzType(true);//隐藏关注按钮
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
