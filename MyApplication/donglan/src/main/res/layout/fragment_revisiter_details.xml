@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,988 +14,1015 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fff"
-                android:orientation="horizontal">
+                android:layout_margin="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_weight="1"
+                    android:background="#fff"
                     android:orientation="horizontal">
 
-                    <ImageView
-
-                        android:id="@+id/iv_avatar"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/img_avatar1" />
-
                     <LinearLayout
-                        android:layout_width="wrap_content"
+
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+
+                            android:id="@+id/iv_avatar"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/img_avatar1" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/tv_name"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""
-                                android:textColor="#333"
-                                android:textSize="16sp" />
+                                android:orientation="horizontal">
 
-                            <ImageView
-                                android:id="@+id/iv_sex"
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="5dp"
-                                android:src="@drawable/img_sex1" />
+                                <TextView
+                                    android:id="@+id/tv_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textColor="#333"
+                                    android:textSize="16sp" />
+
+                                <ImageView
+                                    android:id="@+id/iv_sex"
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="5dp"
+                                    android:src="@drawable/img_sex1" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_lasttime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="最后维护时间："
+                                android:textColor="#999"
+                                android:textSize="14sp" />
                         </LinearLayout>
 
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="10dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/img_edit1" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_mdxq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="12dp"
+                        android:text="个人基本信息"
+                        android:textColor="@color/color_dl_black"
+                        android:textSize="14sp" />
+
+                    <View
+
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#e9e9e9" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
                         <TextView
-                            android:id="@+id/tv_lasttime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="最后维护时间："
-                            android:textColor="#999"
-                            android:textSize="14sp" />
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="手机号："
+                            android:textColor="@color/color_dl_deep_blue"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text=""
+                            android:textColor="@color/color_dl_deep_blue"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_send_msg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="10dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/img_msg_setting" />
+
+                        <ImageView
+                            android:id="@+id/iv_callphone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="10dp"
+                            android:src="@drawable/img_call" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="微信号：" />
+
+                        <TextView
+                            android:id="@+id/tv_weixin_no"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+
+                            android:text="单位：" />
+
+                        <TextView
+                            android:id="@+id/tv_company"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="住址：" />
+
+                        <TextView
+                            android:id="@+id/tv_address"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="邮箱：" />
+
+                        <TextView
+                            android:id="@+id/tv_email"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="国籍：" />
+
+                        <TextView
+                            android:id="@+id/tv_nationality"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="证件类型：" />
+
+                        <TextView
+                            android:id="@+id/tv_certificate_type"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="证件号码：" />
+
+                        <TextView
+                            android:id="@+id/tv_certificate_no"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="紧急联系人：" />
+
+                        <TextView
+                            android:id="@+id/tv_emergency_name"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="紧急电话：" />
+
+                        <TextView
+                            android:id="@+id/tv_emergency_phone"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="生日：" />
+
+                        <TextView
+                            android:id="@+id/tv_birthday"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="身高（cm）：" />
+
+                        <TextView
+                            android:id="@+id/tv_height"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/DL_blueText12Style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="体重（kg）：" />
+
+                        <TextView
+                            android:id="@+id/tv_weight"
+                            style="@style/TextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="未填写" />
+
                     </LinearLayout>
 
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_more"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/img_more_dyn" />
+            </android.support.v7.widget.CardView>
 
-            </LinearLayout>
 
-            <View
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/color_bg_line" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="手机号："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:text=""
-                    android:textColor="#333333" />
-
-                <ImageView
-                    android:id="@+id/iv_send_msg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/img_msg_setting" />
-
-                <ImageView
-                    android:id="@+id/iv_callphone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="10dp"
-                    android:src="@drawable/img_call" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-
-            <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="#fff"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:text="性别："
-                android:textColor="#333333" />
-
-            <TextView
-                android:id="@+id/tv_sex"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:textColor="#333"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="未选择" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/line_bg" />-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="微信号："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_weixin_no"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="单位："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_company"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="住址："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_address"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="邮箱："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_email"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="国籍："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_nationality"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="证件类型："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_certificate_type"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="证件号码："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_certificate_no"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="紧急联系人："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_emergency_name"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="紧急电话："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_emergency_phone"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="生日："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_birthday"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="身高（cm）："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_height"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="体重（kg）："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_weight"
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="未填写" />
-
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="所属门店："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_branch_name"
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_final_admin"
-                android:layout_width="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/line_bg" />
+                android:layout_margin="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp">
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#fff"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="会员教练："
-                        android:textColor="#333333" />
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="12dp"
+                        android:text="个人扩展信息"
+                        android:textColor="@color/color_dl_black"
+                        android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/tv_final_teach_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:text="未填写"
-                        android:textColor="#333" />
-                </LinearLayout>
+                    <View
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/line_bg" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#e9e9e9" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
 
-                    android:layout_height="40dp"
-                    android:background="#fff"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="会员会籍："
-                        android:textColor="#333333" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_final_admin_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:text="未填写"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="所属门店："
+                            style="@style/DL_blueText12Style" />
 
-                        android:textColor="#333" />
-                </LinearLayout>
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_branch_name"
 
-            <LinearLayout
-                android:id="@+id/ll_admin"
-                android:layout_width="wrap_content"
-                android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+                            style="@style/DL_blueText12Style" />
+                    </LinearLayout>
 
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/line_bg" />
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#fff"
-                    android:orientation="horizontal">
-
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/ll_final_admin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="潜客教练："
-                        android:textColor="#333333" />
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                    <TextView
-                        android:id="@+id/tv_teach_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:text="未填写"
-                        android:textColor="#333" />
-                </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/line_bg" />
+                        <LinearLayout
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edit_bg_phone"
+                            android:orientation="horizontal">
 
-                    android:layout_height="40dp"
-                    android:background="#fff"
-                    android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:text="会员教练："
+                                style="@style/DL_blueText12Style"  />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tv_final_teach_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right|center_vertical"
+                                android:text="未填写"
+                                style="@style/DL_blueText12Style"  />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="40dp"
+                            android:background="#fff"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:text="会员会籍："
+                                style="@style/DL_blueText12Style" />
+
+                            <TextView
+                                android:id="@+id/tv_final_admin_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right|center_vertical"
+                                android:text="未填写"
+
+                                style="@style/DL_blueText12Style" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_admin"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:text="潜客会籍："
-                        android:textColor="#333333" />
 
-                    <TextView
-                        android:id="@+id/tv_admin_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="right|center_vertical"
-                        android:layout_marginRight="10dp"
-                        android:text="未填写"
+                        android:orientation="vertical">
 
-                        android:textColor="#333" />
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edit_bg_phone"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:text="潜客教练："
+                                style="@style/DL_blueText12Style" />
+
+                            <TextView
+                                android:id="@+id/tv_teach_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right|center_vertical"
+                                android:text="未填写"
+                                style="@style/DL_blueText12Style"  />
+                        </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edit_bg_phone"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:text="潜客会籍："
+                                style="@style/DL_blueText12Style"  />
+
+                            <TextView
+                                android:id="@+id/tv_admin_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right|center_vertical"
+                                android:text="未填写"
+
+                                style="@style/DL_blueText12Style" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_tuijianren"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="推荐人："
+                            android:textColor="#333333" />
+
+                        <TextView
+                            android:id="@+id/tv_guest_recom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+
+                            style="@style/DL_blueText12Style" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="客户来源："
+                            style="@style/DL_blueText12Style" />
+
+                        <TextView
+                            android:id="@+id/tv_guest_aware_way"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+
+                            style="@style/DL_blueText12Style" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="健身指数："
+                            style="@style/DL_blueText12Style"  />
+
+
+                        <com.willy.ratingbar.ScaleRatingBar
+
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/sr_fitness_level"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:focusable="false"
+
+                            android:gravity="right|center_vertical"
+                            app:srb_clearRatingEnabled="true"
+                            app:srb_clickable="false"
+                            app:srb_drawableEmpty="@drawable/empty"
+                            app:srb_drawableFilled="@drawable/filled"
+                            app:srb_isIndicator="false"
+                            app:srb_rating="0"
+                            app:srb_scrollable="false"
+                            app:srb_starHeight="20dp"
+                            app:srb_starWidth="20dp"
+                            app:srb_stepSize="1"></com.willy.ratingbar.ScaleRatingBar>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="关注程度："
+                            style="@style/DL_blueText12Style"  />
+
+                        <com.willy.ratingbar.ScaleRatingBar xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/sr_follow_level"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:focusable="false"
+                            android:gravity="right|center_vertical"
+                            app:srb_clearRatingEnabled="true"
+                            app:srb_clickable="false"
+                            app:srb_drawableEmpty="@drawable/img_xin_sr1"
+                            app:srb_drawableFilled="@drawable/img_xin_sr"
+                            app:srb_isIndicator="false"
+                            app:srb_rating="0"
+                            app:srb_scrollable="false"
+                            app:srb_starHeight="20dp"
+                            app:srb_starWidth="20dp"
+                            app:srb_stepSize="1"></com.willy.ratingbar.ScaleRatingBar>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="健身目的："
+                            style="@style/DL_blueText12Style" />
+
+                        <TextView
+                            android:id="@+id/tv_target"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+                            style="@style/DL_blueText12Style"  />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="意向卡型："
+                            style="@style/DL_blueText12Style" />
+
+                        <TextView
+                            android:id="@+id/tv_card_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+                            style="@style/DL_blueText12Style"  />
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="喜欢项目："
+                            style="@style/DL_blueText12Style"  />
+
+                        <TextView
+                            android:id="@+id/tv_like"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+                            style="@style/DL_blueText12Style"  />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/edit_bg_phone"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:text="慢性疾病："
+                            style="@style/DL_blueText12Style" />
+
+                        <TextView
+                            android:id="@+id/tv_medical_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:gravity="right|center_vertical"
+                            android:text="未填写"
+                            style="@style/DL_blueText12Style"  />
+
+                    </LinearLayout>
+
+
+
                 </LinearLayout>
-            </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:id="@+id/ll_tuijianren"
-                android:layout_width="match_parent"
-
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:visibility="gone"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="推荐人："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_guest_recom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="客户来源："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_guest_aware_way"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="健身指数："
-                    android:textColor="#333333" />
-
-
-                <com.willy.ratingbar.ScaleRatingBar
-
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/sr_fitness_level"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-
-                    android:focusable="false"
-                    app:srb_clearRatingEnabled="true"
-                    app:srb_clickable="false"
-                    app:srb_drawableEmpty="@drawable/empty"
-                    app:srb_drawableFilled="@drawable/filled"
-                    app:srb_isIndicator="false"
-                    app:srb_rating="0"
-                    app:srb_scrollable="false"
-                    app:srb_starHeight="20dp"
-                    app:srb_starWidth="20dp"
-                    app:srb_stepSize="1"></com.willy.ratingbar.ScaleRatingBar>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="关注程度："
-                    android:textColor="#333333" />
-
-                <com.willy.ratingbar.ScaleRatingBar xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/sr_follow_level"
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:focusable="false"
-                    app:srb_clearRatingEnabled="true"
-                    app:srb_clickable="false"
-                    app:srb_drawableEmpty="@drawable/img_xin_sr1"
-                    app:srb_drawableFilled="@drawable/img_xin_sr"
-                    app:srb_isIndicator="false"
-                    app:srb_rating="0"
-                    app:srb_scrollable="false"
-                    app:srb_starHeight="20dp"
-                    app:srb_starWidth="20dp"
-                    app:srb_stepSize="1"></com.willy.ratingbar.ScaleRatingBar>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="健身目的："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_target"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="意向卡型："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_card_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-                    android:textColor="#333" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="喜欢项目："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-                    android:textColor="#333" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/line_bg" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#fff"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:text="慢性疾病："
-                    android:textColor="#333333" />
-
-                <TextView
-                    android:id="@+id/tv_medical_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="right|center_vertical"
-                    android:layout_marginRight="10dp"
-                    android:text="未填写"
-                    android:textColor="#333" />
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

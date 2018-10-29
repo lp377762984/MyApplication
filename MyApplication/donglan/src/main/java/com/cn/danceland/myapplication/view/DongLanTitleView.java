@@ -71,4 +71,5 @@ public class DongLanTitleView extends RelativeLayout {
         donglan_title.setText(s);
     }
 
+
 }
