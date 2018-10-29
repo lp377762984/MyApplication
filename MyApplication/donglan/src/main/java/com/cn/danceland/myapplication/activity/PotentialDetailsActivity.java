@@ -69,8 +69,8 @@ import org.json.JSONObject;
 public class PotentialDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    public  String[] TITLES = new String[]{"详细资料", "回访记录", "未处理待办事项"};
-    public  String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
+    public  String[] TITLES = new String[]{"详细资料", "回访记录", "未处理待办"};
+    public  String[] UPCOMING_CONDITION = new String[]{"未处理待办", "已处理待办", "全部待办"};
     PopupWindow popupWindow;
     ListView pop_lv;
     private String id;
@@ -159,14 +159,14 @@ public class PotentialDetailsActivity extends BaseActivity implements View.OnCli
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
 
                 if (i == 0) {//查询未处理
-                    TITLES[2] = "未处理待办事项";
+                    TITLES[2] = "未处理待办";
                     EventBus.getDefault().post(new IntEvent(0, 152));
                 } else if (i == 1) {//查询已处理
-                    TITLES[2] = "已处理待办事项";
+                    TITLES[2] = "已处理待办";
                     EventBus.getDefault().post(new IntEvent(0, 153));
                 } else {//查询全部
                     EventBus.getDefault().post(new IntEvent(0, 154));
-                    TITLES[2] = "全部待办事项";
+                    TITLES[2] = "全部待办";
 
                 }
                 commonNavigatorAdapter.notifyDataSetChanged();
@@ -273,8 +273,11 @@ public class PotentialDetailsActivity extends BaseActivity implements View.OnCli
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-            simplePagerTitleView.setText(TITLES[index]);
-
+            if ( index == 2) {
+                simplePagerTitleView.setText(TITLES[index]+"⇋");
+            } else {
+                simplePagerTitleView.setText(TITLES[index]);
+            }
             simplePagerTitleView.setNormalColor(Color.BLACK);
             simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));
             simplePagerTitleView.setOnClickListener(new View.OnClickListener() {

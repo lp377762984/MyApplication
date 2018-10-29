@@ -293,7 +293,13 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-            simplePagerTitleView.setText(TITLES[index]);
+            if (index == 1 || index == 2) {
+                simplePagerTitleView.setText(TITLES[index]+"⇋");
+            } else {
+                simplePagerTitleView.setText(TITLES[index]);
+            }
+
+
 
             simplePagerTitleView.setNormalColor(Color.BLACK);
             simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));

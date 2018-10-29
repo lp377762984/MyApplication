@@ -77,7 +77,7 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
     public String[] TITLES = new String[]{"最近维护"};
-    public String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
+    public String[] UPCOMING_CONDITION = new String[]{"未处理待办", "已处理待办", "全部待办"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
     PopupWindow popupWindow;
     ListView pop_lv;
@@ -312,13 +312,13 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
                     current_item3 = i;
                     if (i == 0) {//查询未处理
                         //     EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
-                        TITLES[2] = "未处理待办事项";
+                        TITLES[2] = "未处理待办";
 
                     } else if (i == 1) {//查询已处理
-                        TITLES[2] = "已处理待办事项";
+                        TITLES[2] = "已处理待办";
                         //         EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
                     } else {//查询全部
-                        TITLES[2] = "全部待办事项";
+                        TITLES[2] = "全部待办";
                         //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
                     }
 
@@ -422,7 +422,14 @@ public class YeWuActivity extends BaseActivity implements View.OnClickListener {
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-            simplePagerTitleView.setText(TITLES[index]);
+
+            if (index == 0) {
+                simplePagerTitleView.setText(TITLES[index]+"⇋");
+            } else {
+                simplePagerTitleView.setText(TITLES[index]);
+            }
+
+
 
             simplePagerTitleView.setNormalColor(Color.BLACK);
             simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));

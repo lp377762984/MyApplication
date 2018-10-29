@@ -69,8 +69,8 @@ import org.json.JSONObject;
 public class PotentialCustomerRevisitActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    public String[] TITLES = new String[]{"最近维护", "回访记录", "未处理待办事项"};
-    public String[] UPCOMING_CONDITION = new String[]{"未处理待办事项", "已处理待办事项", "全部待办事项"};
+    public String[] TITLES = new String[]{"最近维护", "回访记录", "未处理待办"};
+    public String[] UPCOMING_CONDITION = new String[]{"未处理待办", "已处理待办", "全部待办"};
     public String[] LIST_TYPE = new String[]{"最近维护", "最晚维护", "健身指数", "关注程度"};
     PopupWindow popupWindow;
     private int untreated_num = 0;
@@ -85,7 +85,7 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     private EditText et_searchInfo;
     private ImageView iv_del;
     private TextView tv_tiltle_num;
-    int num1,num2,num3;
+    int num1, num2, num3;
     private ListView pop_lv;
 
     @Override
@@ -136,19 +136,19 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
                 }
                 break;
             case 161:
-                num1=event.getMsg();
+                num1 = event.getMsg();
 
-           settitlenum();
+                settitlenum();
 
                 break;
             case 162:
-                num2=event.getMsg();
+                num2 = event.getMsg();
 
                 settitlenum();
 
                 break;
             case 163:
-                num3=event.getMsg();
+                num3 = event.getMsg();
 
                 settitlenum();
 
@@ -162,24 +162,24 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     private void settitlenum() {
 
 
-        if (current_page==0){
-            if (num1>0){
-                tv_tiltle_num.setText("("+num1+")");
-            }else {
+        if (current_page == 0) {
+            if (num1 > 0) {
+                tv_tiltle_num.setText("(" + num1 + ")");
+            } else {
                 tv_tiltle_num.setText("");
             }
         }
-        if (current_page==1){
-            if (num2>0){
-                tv_tiltle_num.setText("("+num2+")");
-            }else {
+        if (current_page == 1) {
+            if (num2 > 0) {
+                tv_tiltle_num.setText("(" + num2 + ")");
+            } else {
                 tv_tiltle_num.setText("");
             }
         }
-        if (current_page==2){
-            if (num3>0){
-                tv_tiltle_num.setText("("+num3+")");
-            }else {
+        if (current_page == 2) {
+            if (num3 > 0) {
+                tv_tiltle_num.setText("(" + num3 + ")");
+            } else {
                 tv_tiltle_num.setText("");
             }
         }
@@ -305,7 +305,6 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
     }
 
 
-
     private void setPop() {
 
         View inflate = LayoutInflater.from(PotentialCustomerRevisitActivity.this).inflate(R.layout.shop_pop1, null);
@@ -326,15 +325,15 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
                     if (i == 0) {//最近
                         //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 162));
 
-                        TITLES[0] = "最近维护"+"⇋";
+                        TITLES[0] = "最近维护";
                     } else if (i == 1) {//最晚
                         //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 163));
-                        TITLES[0] = "最晚维护"+"⇋";
+                        TITLES[0] = "最晚维护";
                     } else if (i == 2) {//健身指数
-                        TITLES[0] = "健身指数"+"⇋";
+                        TITLES[0] = "健身指数";
                         //            EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 164));
                     } else if (i == 3) {//关注程度
-                        TITLES[0] = "关注程度"+"⇋";
+                        TITLES[0] = "关注程度";
                         //                 EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 165));
                     }
                     current_item1 = i;
@@ -344,13 +343,13 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
                     current_item3 = i;
                     if (i == 0) {//查询未处理
                         //     EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 152));
-                        TITLES[2] = "未处理待办事项"+"⇋";
+                        TITLES[2] = "未处理待办";
 
                     } else if (i == 1) {//查询已处理
-                        TITLES[2] = "已处理待办事项"+"⇋";
+                        TITLES[2] = "已处理待办";
                         //         EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 153));
                     } else {//查询全部
-                        TITLES[2] = "全部待办事项"+"⇋";
+                        TITLES[2] = "全部待办";
                         //      EventBus.getDefault().post(new StringEvent(et_searchInfo.getText().toString(), 154));
                     }
 
@@ -380,6 +379,7 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
         public void setData(String[] data) {
             this.data = data;
         }
+
         @Override
         public int getCount() {
             return data.length;
@@ -399,7 +399,7 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
         public View getView(int position, View convertView, ViewGroup parent) {
             View inflate = LayoutInflater.from(PotentialCustomerRevisitActivity.this).inflate(R.layout.shop_pop_item, null);
             TextView tv_item = inflate.findViewById(R.id.tv_item);
-                tv_item.setText(data[position]);
+            tv_item.setText(data[position]);
             return inflate;
         }
     }
@@ -415,9 +415,13 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             simplePagerTitleView = new ColorTransitionPagerTitleView(context);
+            if (index == 0 || index == 2) {
+                simplePagerTitleView.setText(TITLES[index]+"⇋");
+            } else {
+                simplePagerTitleView.setText(TITLES[index]);
+            }
 
 
-            simplePagerTitleView.setText(TITLES[index]);
 
             simplePagerTitleView.setNormalColor(Color.BLACK);
             simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));
@@ -443,7 +447,6 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
 
 
                     if (index == 2) {
-
 
 
                         pop_lv.setAdapter(new PopAdapter(UPCOMING_CONDITION));
@@ -652,8 +655,6 @@ public class PotentialCustomerRevisitActivity extends BaseActivity implements Vi
         });
         MyApplication.getHttpQueues().add(stringRequest);
     }
-
-
 
 
 }
