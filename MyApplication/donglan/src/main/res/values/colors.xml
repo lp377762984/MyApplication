@@ -8,6 +8,8 @@
     <color name="color_tab_text_yellow">#f7d915</color>
     <color name="color_dl_yellow">#ff5e3a</color>
     <color name="color_dl_yellow_deep">#d25706</color>
+    <color name="color_dl_black">#282c37</color>
+    <color name="color_dl_deep_blue">#6d819c</color>
 
     <color name="color_content_text">#333333</color>
     <color name="color_white">#fff</color>

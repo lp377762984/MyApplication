@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +13,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -27,7 +24,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
@@ -35,16 +36,17 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
+import com.cn.danceland.myapplication.bean.ShopPictrueBean;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CommitButton;
+import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -54,30 +56,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by feng on 2017/11/29.
  */
 
 public class ShopDetailedActivity extends BaseActivity {
-    Button  join_button;
+    Button join_button;
     ImageView bt_back;
     RequestQueue requestQueue;
     Gson gson;
     TextView tv_adress, tv_time, store_name;
-    ExpandableTextView tv_detail;
+    TextView tv_detail;
     String phoneNo;
-    ImageView detail_phone, detail_adress, img_01, img_02, img_kechenganpai;
+    ImageView detail_phone, detail_adress, img_kechenganpai;
     String jingdu, weidu, shopJingdu, shopWeidu, branchID, myBranchId;
-    RelativeLayout s_button;
+    CommitButton s_button;
     Data myInfo;
-    ExpandableListView jiaolian_grid, huiji_grid;
+    //    ExpandableListView jiaolian_grid, huiji_grid;
     ImageView down_img, up_img;
-    ArrayList<String> imgList=new ArrayList<>();
+    ArrayList<String> imgList = new ArrayList<>();
     ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();//回传过来的bannerlist
     MZBannerView shop_banner;
     private String shopname;
+    private TextView tv_shopAddress;
+    private NoScrollGridView gv_huiji;
+    private NoScrollGridView gv_jiaolian;
+    private NoScrollGridView gv_shop_image;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class ShopDetailedActivity extends BaseActivity {
         initView();
     }
 
+    LatLng startLng;
+
     private void initHost() {
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -94,6 +100,8 @@ public class ShopDetailedActivity extends BaseActivity {
         gson = new Gson();
         jingdu = getIntent().getStringExtra("jingdu");
         weidu = getIntent().getStringExtra("weidu");
+        startLng = new LatLng(Double.valueOf(weidu), Double.valueOf(jingdu));
+
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
@@ -109,22 +117,22 @@ public class ShopDetailedActivity extends BaseActivity {
 
     }
 
-    private  boolean isjion=false;
+    private boolean isjion = false;
 
     private void isJoinBranch(final String branchId) {
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-            LogUtil.i(s);
+                LogUtil.i(s);
 
 
                 if (s.contains("1")) {
                     LogUtil.i(s);
                     s_button.setVisibility(View.GONE);
-                    isjion=true;
-                }else{
-                    isjion=false;
+                    isjion = true;
+                } else {
+                    isjion = false;
 
                     s_button.setVisibility(View.VISIBLE);
                 }
@@ -156,69 +164,23 @@ public class ShopDetailedActivity extends BaseActivity {
         img_kechenganpai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isjion==true){
-                    startActivity(new Intent(ShopDetailedActivity.this,TimeTableActivity.class));
-                }else {
+                if (isjion == true) {
+                    startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class));
+                } else {
                     ToastUtils.showToastShort("清闲");
                 }
 
             }
         });
-        jiaolian_grid = findViewById(R.id.jiaolian_grid);
-        huiji_grid = findViewById(R.id.huiji_grid);
-        jiaolian_grid.setGroupIndicator(null);
-        huiji_grid.setGroupIndicator(null);
-        huiji_grid.setDivider(null);
-        jiaolian_grid.setDivider(null);
-        jiaolian_grid.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                down_img = v.findViewById(R.id.down_img);
-                up_img = v.findViewById(R.id.up_img);
-                if (down_img.getVisibility() == View.GONE) {
-                    down_img.setVisibility(View.VISIBLE);
-                    up_img.setVisibility(View.GONE);
-                } else {
-                    down_img.setVisibility(View.GONE);
-                    up_img.setVisibility(View.VISIBLE);
-                }
-                return false;
-            }
-        });
 
-        huiji_grid.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                down_img = v.findViewById(R.id.down_img);
-                up_img = v.findViewById(R.id.up_img);
-                if (down_img.getVisibility() == View.GONE) {
-                    down_img.setVisibility(View.VISIBLE);
-                    up_img.setVisibility(View.GONE);
-                } else {
-                    down_img.setVisibility(View.GONE);
-                    up_img.setVisibility(View.VISIBLE);
-                }
-                return false;
-            }
-        });
+        gv_huiji = findViewById(R.id.gv_huiji);
+        gv_shop_image = findViewById(R.id.gv_shop_image);
+        gv_jiaolian = findViewById(R.id.gv_jiaolian);
 
-        img_01 = findViewById(R.id.img_01);
-        img_01.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", imgList.get(0)));
-            }
-        });
-        img_02 = findViewById(R.id.img_02);
-        img_02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", imgList.get(0)));
-            }
-        });
+
+
         if (imgList != null && imgList.size() > 0) {
-            Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_01);
-            Glide.with(ShopDetailedActivity.this).load(imgList.get(0)).into(img_02);
+
             Glide.with(ShopDetailedActivity.this).load("http://img.dljsgw.com/app_dir/default_course.png").into(img_kechenganpai);
         }
 
@@ -227,10 +189,12 @@ public class ShopDetailedActivity extends BaseActivity {
         tv_time = findViewById(R.id.tv_time);
         tv_detail = findViewById(R.id.tv_detail);
         store_name = findViewById(R.id.store_name);
+        tv_shopAddress = findViewById(R.id.tv_shopAddress);
+
         detail_phone = findViewById(R.id.detail_phone);
         detail_adress = findViewById(R.id.detail_adress);
 
-        s_button = findViewById(R.id.s_button);
+        s_button = findViewById(R.id.dlbtn_commit);
 
 //        join_button = findViewById(R.id.join_button);
 
@@ -309,6 +273,7 @@ public class ShopDetailedActivity extends BaseActivity {
         });
         setBannner();
         getShopDetail();
+        getShopPictrue();
         getJiaolian(branchID);
         getHuiJi(branchID);
     }
@@ -319,7 +284,7 @@ public class ShopDetailedActivity extends BaseActivity {
             @Override
             public void onPageClick(View view, int i) {
                 startActivity(new Intent(ShopDetailedActivity.this, NewsDetailsActivity.class)
-                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title",  backBannerList.get(i).getTitle()));
+                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title", backBannerList.get(i).getTitle()));
 
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
 //                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");
@@ -357,16 +322,20 @@ public class ShopDetailedActivity extends BaseActivity {
         @Override
         public View createView(Context context) {
             // 返回页面布局
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item1, null);
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
         }
 
         @Override
         public void onBind(Context context, int position, String data) {
-            // 数据绑定
-            Glide.with(context).load(data).into(mImageView);
-            //mImageView.setImageResource(data);
+            Glide.with(context).load(data)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                            mImageView.setBackground(resource);
+                        }
+                    });
         }
     }
 
@@ -443,19 +412,13 @@ public class ShopDetailedActivity extends BaseActivity {
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
                 if (shopJiaoLianBean != null) {
                     List<ShopJiaoLianBean.Data> huijiList = shopJiaoLianBean.getData();
-                    ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
-                    if (huijiList != null && huijiList.size() > 6) {
-                        for (int i = 6; i < huijiList.size(); i++) {
-                            objects.add(huijiList.get(i));
-                        }
+                    if (huijiList.size() > 4) {
+                        gv_huiji.setAdapter(new MyGridViewAdapter(huijiList.subList(0, 4)));
+                    } else {
+                        gv_huiji.setAdapter(new MyGridViewAdapter(huijiList));
+                    }
 
-                    }
-                    if (huijiList != null && huijiList.size() == 0) {
-                        huiji_grid.setVisibility(View.GONE);
-                    }
-                    huiji_grid.setAdapter(new MyAdapter(huijiList, objects));
-                } else {
-                    huiji_grid.setVisibility(View.GONE);
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -472,7 +435,6 @@ public class ShopDetailedActivity extends BaseActivity {
 
                 return map;
             }
-
 
 
         };
@@ -491,19 +453,15 @@ public class ShopDetailedActivity extends BaseActivity {
                 if (shopJiaoLianBean != null) {
 
                     List<ShopJiaoLianBean.Data> jiaolianList = shopJiaoLianBean.getData();
-                    ArrayList<ShopJiaoLianBean.Data> objects = new ArrayList<>();
-                    if (jiaolianList != null && jiaolianList.size() > 6) {
-                        for (int i = 6; i < jiaolianList.size(); i++) {
-                            objects.add(jiaolianList.get(i));
-                        }
+                    if (jiaolianList.size() > 4) {
+                        gv_jiaolian.setAdapter(new MyGridViewAdapter(jiaolianList.subList(0, 4)));
+                    } else {
+
+                        gv_jiaolian.setAdapter(new MyGridViewAdapter(jiaolianList));
 
                     }
-                    if (jiaolianList != null && jiaolianList.size() == 0) {
-                        jiaolian_grid.setVisibility(View.GONE);
-                    }
-                    jiaolian_grid.setAdapter(new MyAdapter(jiaolianList, objects));
-                } else {
-                    jiaolian_grid.setVisibility(View.GONE);
+
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -523,11 +481,36 @@ public class ShopDetailedActivity extends BaseActivity {
             }
 
 
-
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
 
+    }
+
+    private void getShopPictrue() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BRANCH_PICTURE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                ShopPictrueBean pictrueBean=gson.fromJson(s,ShopPictrueBean.class);
+                if (pictrueBean.getData().size()>0){
+                    gv_shop_image.setAdapter(new MyGridViewImageAdapter(pictrueBean.getData()));
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("branch_id", branchID);
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void getShopDetail() {
@@ -539,18 +522,46 @@ public class ShopDetailedActivity extends BaseActivity {
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
                 ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data != null) {
-                    List<String> photo_url = data.getPhoto_url();
-                    if (photo_url != null) {
-                        if (photo_url.size() == 1) {
-                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
-                        }
-                        if (photo_url.size() == 2) {
-                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
-                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(1)).into(img_02);
-                        }
-                    }
+//                    List<String> photo_url = data.getPhoto_url();
+//                    if (photo_url != null) {
+//                        if (photo_url.size() == 1) {
+//
+//                        }
+//                        if (photo_url.size() == 2) {
+//                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
+//                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(1)).into(img_02);
+//                        }
+//                    }
 
                     store_name.setText(data.getName());
+
+                    LatLng latLng = new LatLng(Double.valueOf(data.getLat()), Double.valueOf(data.getLng()));
+                    double distance = DistanceUtil.getDistance(startLng, latLng);
+                    Double aDouble = new Double(distance);
+                    int i1 = aDouble.intValue();
+                    if (i1 >= 1000) {
+                        int v = i1 / 1000;
+                        int v1 = (i1 - v * 1000) / 100;
+                        tv_shopAddress.setText("距我 " + v + "." + v1 + " km");
+                    } else {
+                        tv_shopAddress.setText("距我 " + i1 + " m");
+                    }
+                    String open_time;
+                    String colse_time;
+                    if (Integer.valueOf(data.getOpen_time()) % 60 == 0) {
+                        open_time = Integer.valueOf(data.getOpen_time()) / 60 + ":00";
+                    } else {
+                        open_time = Integer.valueOf(data.getOpen_time()) / 60 + ":" + Integer.valueOf(data.getOpen_time()) % 60;
+                    }
+                    if (Integer.valueOf(data.getClose_time()) % 60 == 0) {
+                        colse_time = Integer.valueOf(data.getClose_time()) / 60 + ":00";
+                    } else {
+                        colse_time = Integer.valueOf(data.getClose_time()) / 60 + ":" + Integer.valueOf(data.getClose_time()) % 60;
+                    }
+
+
+                    tv_time.setText(open_time + "-" + colse_time);
+
 
                     shopname = data.getName();
                     tv_adress.setText(data.getAddress());
@@ -606,161 +617,79 @@ public class ShopDetailedActivity extends BaseActivity {
 
     }
 
-    private class MyAdapter extends BaseExpandableListAdapter {
-
+    private class MyGridViewAdapter extends BaseAdapter {
         List<ShopJiaoLianBean.Data> jiaolianList;
-        List<ShopJiaoLianBean.Data> childList;
 
-        MyAdapter(List<ShopJiaoLianBean.Data> jiaolianList, List<ShopJiaoLianBean.Data> childList) {
+        public MyGridViewAdapter(List<ShopJiaoLianBean.Data> jiaolianList) {
             this.jiaolianList = jiaolianList;
-            this.childList = childList;
-        }
-
-        @Override
-        public int getGroupCount() {
-            return 1;
-        }
-
-        @Override
-        public int getChildrenCount(int groupPosition) {
-            if (jiaolianList.size() > 6) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-
-        @Override
-        public Object getGroup(int groupPosition) {
-            return null;
-        }
-
-        @Override
-        public Object getChild(int groupPosition, int childPosition) {
-            return null;
-        }
-
-        @Override
-        public long getGroupId(int groupPosition) {
-            return 0;
-        }
-
-        @Override
-        public long getChildId(int groupPosition, int childPosition) {
-            return 0;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return false;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-
-            if (convertView == null) {
-                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_parent, null);
-            }
-
-            CircleImageView[] circleImageViews = {convertView.findViewById(R.id.circle_1), convertView.findViewById(R.id.circle_2), convertView.findViewById(R.id.circle_3)
-                    , convertView.findViewById(R.id.circle_4), convertView.findViewById(R.id.circle_5), convertView.findViewById(R.id.circle_6)};
-
-            if (jiaolianList.size() <= 6) {
-                for (int i = 0; i < jiaolianList.size(); i++) {
-                    circleImageViews[i].setVisibility(View.VISIBLE);
-                    final int finalI = i;
-                    circleImageViews[i].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                                    .putExtra("person_id", jiaolianList.get(finalI).getPerson_id() + "")
-                                    .putExtra("employee_id", jiaolianList.get(finalI).getId() + "")
-                                    .putExtra("branch_id", jiaolianList.get(finalI).getBranch_id() + ""));
-                        }
-                    });
-                    if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
-                        Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    } else {
-                        Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
-                    }
-
-                }
-            } else if (jiaolianList.size() > 6) {
-                for (int i = 0; i < 6; i++) {
-                    circleImageViews[i].setVisibility(View.VISIBLE);
-                    if ("".equals(jiaolianList.get(i).getSelf_avatar_path()) || jiaolianList.get(i).getSelf_avatar_path() == null) {
-                        Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circleImageViews[i]);
-                    } else {
-                        Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(i).getSelf_avatar_path()).into(circleImageViews[i]);
-                    }
-                }
-            }
-
-            return convertView;
-        }
-
-        @Override
-        public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
-            if (convertView == null) {
-                convertView = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_child, null);
-            }
-            CustomGridView grid_view = convertView.findViewById(R.id.grid_view);
-            grid_view.setAdapter(new MyGridAdapter(childList));
-            grid_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                            .putExtra("person_id", childList.get(childPosition).getPerson_id() + "")
-                            .putExtra("employee_id", childList.get(childPosition).getId() + "")
-                            .putExtra("branch_id", childList.get(childPosition).getBranch_id() + ""));
-                }
-            });
-
-            return convertView;
-        }
-
-        @Override
-        public boolean isChildSelectable(int groupPosition, int childPosition) {
-            return false;
-        }
-    }
-
-
-    private class MyGridAdapter extends BaseAdapter {
-
-        List<ShopJiaoLianBean.Data> gridViewList;
-
-        MyGridAdapter(List<ShopJiaoLianBean.Data> gridViewList) {
-            this.gridViewList = gridViewList;
         }
 
         @Override
         public int getCount() {
-            return gridViewList.size();
+            return jiaolianList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return position;
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View inflate = LayoutInflater.from(ShopDetailedActivity.this).inflate(R.layout.kecheng_grid_item, null);
-            CircleImageView circle_item = inflate.findViewById(R.id.circle_item);
-            if ("".equals(gridViewList.get(position).getSelf_avatar_path()) || gridViewList.get(position).getSelf_avatar_path() == null) {
-                Glide.with(ShopDetailedActivity.this).load(R.drawable.img_my_avatar).into(circle_item);
-            } else {
-                Glide.with(ShopDetailedActivity.this).load(gridViewList.get(position).getSelf_avatar_path()).into(circle_item);
-            }
+            convertView = View.inflate(ShopDetailedActivity.this, R.layout.gridview_item_jiaolian, null);
+            TextView tv_name = convertView.findViewById(R.id.tv_name);
+            ImageView iv_avatar = convertView.findViewById(R.id.iv_avatar);
+            tv_name.setText(jiaolianList.get(position).getCname());
 
-            return inflate;
+            Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getSelf_avatar_path()).into(iv_avatar);
+            return convertView;
         }
     }
+    private class MyGridViewImageAdapter extends BaseAdapter {
+        List<ShopPictrueBean.Data> jiaolianList;
+
+        public MyGridViewImageAdapter(List<ShopPictrueBean.Data> shop_pictrue) {
+            this.jiaolianList = shop_pictrue;
+        }
+
+        @Override
+        public int getCount() {
+            return jiaolianList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            convertView = View.inflate(ShopDetailedActivity.this, R.layout.gridview_item_shop_pictrue, null);
+            ImageView iv_shoppictrue = convertView.findViewById(R.id.iv_shoppictrue);
+            StringBuilder sb = new StringBuilder(jiaolianList.get(position).getPicture_url());
+            String houzhui = jiaolianList.get(position).getPicture_url().substring(jiaolianList.get(position).getPicture_url().lastIndexOf(".") + 1);
+            sb.insert(jiaolianList.get(position).getPicture_url().length() - houzhui.length() - 1, "_400X400");
+
+            Glide.with(ShopDetailedActivity.this).load(sb.toString()).into(iv_shoppictrue);
+            iv_shoppictrue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", jiaolianList.get(position).getPicture_url()));
+                }
+            });
+            return convertView;
+        }
+    }
+
+
 }

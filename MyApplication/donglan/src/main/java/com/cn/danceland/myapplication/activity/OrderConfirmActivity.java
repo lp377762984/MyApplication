@@ -572,7 +572,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
         ExplainCond cond = new ExplainCond();
         cond.setBranch_id(Long.valueOf(branch_id));
-        cond.setType(Byte.valueOf("1"));// 1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
+        cond.setType(Byte.valueOf("4"));// 1 买卡须知 2 买私教须知 3 买储值须知 4 买卡说明 5 买私教说明
 
         request.queryList(cond, new Response.Listener<JSONObject>() {
             public void onResponse(JSONObject json) {

@@ -8,7 +8,7 @@
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/dl_title"
         android:layout_width="match_parent"
-        app:text="绑定设备"
+        app:titleText="绑定设备"
         android:layout_height="40dp">
 
     </com.cn.danceland.myapplication.view.DongLanTitleView>

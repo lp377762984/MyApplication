@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/dl_gery">
+        android:background="@color/color_white">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -31,12 +31,12 @@
                 android:layout_height="wrap_content"
 
                 android:text="潜客管理"
-                android:textColor="@color/color_white"
+                android:textColor="@color/color_dl_black"
                 android:textSize="18sp" />
             <TextView
                 android:id="@+id/tv_tiltle_num"
                 android:layout_width="wrap_content"
-                android:textColor="@color/color_white"
+                android:textColor="@color/color_dl_black"
                 android:textSize="18sp"
                 android:text=""
                 android:layout_height="wrap_content" />

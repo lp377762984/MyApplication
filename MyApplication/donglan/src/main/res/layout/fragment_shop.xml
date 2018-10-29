@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/arow_down_yellow"
+                android:src="@drawable/arow_down_white"
 
                 />
 
@@ -155,9 +155,9 @@
                 android:id="@+id/up_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/arow_up_yellow"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/arow_up_white"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -194,16 +194,13 @@
 
         <GridView
             android:id="@+id/gridview"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numColumns="4"></GridView>
-        <!--<ListView-->
-        <!--android:id="@+id/storelist"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone"-->
-        <!--&gt;-->
-        <!--</ListView>-->
+
     </RelativeLayout>
 
 </LinearLayout>

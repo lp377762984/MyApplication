@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,13 +16,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.OvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -37,7 +34,6 @@ import com.cn.danceland.myapplication.fragment.RevisiterInfoFragment;
 import com.cn.danceland.myapplication.fragment.YeWuAllFragment;
 import com.cn.danceland.myapplication.fragment.YeWuOfMeFragment;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -62,8 +58,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import razerdp.basepopup.BasePopupWindow;
-
 /**
  * Created by shy on 2018/1/11 16:53
  * Email:644563767@qq.com
@@ -77,14 +71,17 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
     public  String[] TITLES = new String[]{"详细资料", "全部业务", "我的业务"};
     public  String[] UPCOMING_CONDITION = new String[]{"我的业务", "定金业务", "储值业务", "卡业务", "租柜业务", "私教业务"};
     public  String[] UPCOMING_CONDITION1 = new String[]{"全部业务", "定金业务", "储值业务", "卡业务", "租柜业务", "私教业务"};
+
+    PopupWindow popupWindow;
+    ListView pop_lv;
+
     private String id;
     private RequsetPotentialListBean.Data.Content info;
     private int current_page = 0;
     private Button btn_add;
     private Gson gson = new Gson();
     private int untreated_num = 0;
-    private ListPopup listPopup;
-    private ListPopup1 listPopup1;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -191,9 +188,95 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
-        listPopup = new ListPopup(this);
-        listPopup1 = new ListPopup1(this);
+
+        setPop();
     }
+
+    private void setPop() {
+
+        View inflate = LayoutInflater.from(YeWuDetailsActivity.this).inflate(R.layout.shop_pop1, null);
+
+        popupWindow = new PopupWindow(inflate);
+        popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setOutsideTouchable(true);  //设置点击屏幕其它地方弹出框消失
+
+        pop_lv = inflate.findViewById(R.id.pop_lv);
+//        pop_lv.setAdapter(new PopAdapter());
+        pop_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+
+
+                if (current_page == 2) {
+                    if (i == 0) {//查询全部
+                        EventBus.getDefault().post(new IntEvent(0, 177));
+                    }  else {
+                        EventBus.getDefault().post(new IntEvent(0, 171+i));
+
+                    }
+                    TITLES[2] = UPCOMING_CONDITION[i];
+
+                }
+                if (current_page == 1) {
+
+                    if (i == 0) {//查询全部
+                        EventBus.getDefault().post(new IntEvent(0, 187));
+                    }  else {
+                        EventBus.getDefault().post(new IntEvent(0, 181+i));
+
+                    }
+                    TITLES[1] = UPCOMING_CONDITION1[i];
+
+                }
+
+                commonNavigatorAdapter.notifyDataSetChanged();
+                popupWindow.dismiss();
+
+            }
+        });
+
+
+    }
+
+
+    private class PopAdapter extends BaseAdapter {
+        String[] data = new String[]{};
+
+        public PopAdapter(String[] data) {
+            this.data = data;
+        }
+
+        public void setData(String[] data) {
+            this.data = data;
+        }
+        @Override
+        public int getCount() {
+            return data.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View inflate = LayoutInflater.from(YeWuDetailsActivity.this).inflate(R.layout.shop_pop_item, null);
+            TextView tv_item = inflate.findViewById(R.id.tv_item);
+            tv_item.setText(data[position]);
+            return inflate;
+        }
+    }
+
+
+
+
 
     private TextView badgeTextView;
     private BadgePagerTitleView badgePagerTitleView;
@@ -210,7 +293,13 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
             badgePagerTitleView = new BadgePagerTitleView(context);
 
             SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-            simplePagerTitleView.setText(TITLES[index]);
+            if (index == 1 || index == 2) {
+                simplePagerTitleView.setText(TITLES[index]+"⇋");
+            } else {
+                simplePagerTitleView.setText(TITLES[index]);
+            }
+
+
 
             simplePagerTitleView.setNormalColor(Color.BLACK);
             simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));
@@ -220,10 +309,32 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
 
                     //badgePagerTitleView.setBadgeView(null); // cancel badge when click tab
                     if (index == 2 ) {
-                        listPopup.showPopupWindow(v);
+                      //  listPopup.showPopupWindow(v);
+
+
+                        pop_lv.setAdapter(new PopAdapter(UPCOMING_CONDITION));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
+
                     }
                     if (index == 1 ) {
-                        listPopup1.showPopupWindow(v);
+
+                        pop_lv.setAdapter(new PopAdapter(UPCOMING_CONDITION1));
+
+                        if (popupWindow.isShowing()) {
+                            popupWindow.dismiss();
+
+                        } else {
+                            popupWindow.showAsDropDown(v);
+
+                        }
+                      //  listPopup1.showPopupWindow(v);
                     }
 
                     mViewPager.setCurrentItem(index);
@@ -479,245 +590,6 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
             }
         });
         MyApplication.getHttpQueues().add(stringRequest);
-    }
-
-    public class ListPopup extends BasePopupWindow {
-        private Context context;
-
-        private View popupView;
-        private ListView listView;
-
-
-        public ListPopup(Activity context) {
-            super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            setAutoLocatePopup(true);
-            bindEvent();
-
-            this.context = context;
-        }
-
-        //
-        @Override
-        protected Animation initShowAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, -DensityUtils.dp2px(getContext(), 350f), 0);
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(1));
-            return translateAnimation;
-        }
-
-        //
-        @Override
-        protected Animation initExitAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, 0, -DensityUtils.dp2px(getContext(), 350f));
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(-4));
-            return translateAnimation;
-        }
-
-
-        @Override
-        public View getClickToDismissView() {
-            return getPopupWindowView();
-        }
-
-        @Override
-        public View onCreatePopupView() {
-            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_list_menu, null);
-            return popupView;
-        }
-
-        @Override
-        public View initAnimaView() {
-
-            return null;
-       //     return findViewById(R.id.popup_contianer);
-        }
-
-        private void bindEvent() {
-            if (popupView != null) {
-                listView = popupView.findViewById(R.id.listview);
-                MyListPopupViewAdapter myListPopupViewAdapter = new MyListPopupViewAdapter();
-                listView.setAdapter(myListPopupViewAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        if (i == 0) {//查询全部
-                            EventBus.getDefault().post(new IntEvent(0, 177));
-                        }  else {
-                            EventBus.getDefault().post(new IntEvent(0, 171+i));
-
-                        }
-                        TITLES[2] = UPCOMING_CONDITION[i];
-
-
-
-
-                        listPopup.dismiss();
-                        commonNavigatorAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-        }
-
-
-    }
-
-
-
-    public class ListPopup1 extends BasePopupWindow {
-        private Context context;
-
-        private View popupView;
-        private ListView listView;
-
-
-        public ListPopup1(Activity context) {
-            super(context, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            setAutoLocatePopup(true);
-            bindEvent();
-
-            this.context = context;
-        }
-
-        //
-        @Override
-        protected Animation initShowAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, -DensityUtils.dp2px(getContext(), 350f), 0);
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(1));
-            return translateAnimation;
-        }
-
-        //
-        @Override
-        protected Animation initExitAnimation() {
-            TranslateAnimation translateAnimation = new TranslateAnimation(0f, 0f, 0, -DensityUtils.dp2px(getContext(), 350f));
-            translateAnimation.setDuration(450);
-            translateAnimation.setInterpolator(new OvershootInterpolator(-4));
-            return translateAnimation;
-        }
-
-
-        @Override
-        public View getClickToDismissView() {
-            return getPopupWindowView();
-        }
-
-        @Override
-        public View onCreatePopupView() {
-            popupView = LayoutInflater.from(getContext()).inflate(R.layout.popup_list_menu, null);
-            return popupView;
-        }
-
-        @Override
-        public View initAnimaView() {
-
-            return null;
-            //     return findViewById(R.id.popup_contianer);
-        }
-
-        private void bindEvent() {
-            if (popupView != null) {
-                listView = popupView.findViewById(R.id.listview);
-                MyListPopupViewAdapter1 myListPopupViewAdapter = new MyListPopupViewAdapter1();
-                listView.setAdapter(myListPopupViewAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                        if (i == 0) {//查询全部
-                            EventBus.getDefault().post(new IntEvent(0, 187));
-                        }  else {
-                            EventBus.getDefault().post(new IntEvent(0, 181+i));
-
-                        }
-                        TITLES[1] = UPCOMING_CONDITION1[i];
-
-
-
-
-                        listPopup1.dismiss();
-                        commonNavigatorAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-
-        }
-
-
-    }
-
-
-
-
-
-    class MyListPopupViewAdapter extends BaseAdapter {
-
-
-        @Override
-        public int getCount() {
-            return UPCOMING_CONDITION.length;
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return i;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = View.inflate(YeWuDetailsActivity.this, R.layout.listview_item_popup, null);
-
-            TextView tv_cardname = view.findViewById(R.id.tv_cardname);
-//            if (i == 0) {
-//                tv_cardname.setText("全部");
-//            } else {
-//                tv_cardname.setText(cardTypeData.get(i - 1).getName());
-//            }
-            tv_cardname.setText(UPCOMING_CONDITION[i]);
-
-            return view;
-        }
-    }
-    class MyListPopupViewAdapter1 extends BaseAdapter {
-
-
-        @Override
-        public int getCount() {
-            return UPCOMING_CONDITION.length;
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return i;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = View.inflate(YeWuDetailsActivity.this, R.layout.listview_item_popup, null);
-
-            TextView tv_cardname = view.findViewById(R.id.tv_cardname);
-//            if (i == 0) {
-//                tv_cardname.setText("全部");
-//            } else {
-//                tv_cardname.setText(cardTypeData.get(i - 1).getName());
-//            }
-            tv_cardname.setText(UPCOMING_CONDITION1[i]);
-
-            return view;
-        }
     }
 
 
