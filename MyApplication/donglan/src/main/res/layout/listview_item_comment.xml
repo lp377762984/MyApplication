@@ -3,8 +3,7 @@
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:background="@color/colorGray23"
     android:orientation="vertical">
 
     <include
@@ -16,7 +15,8 @@
         android:id="@+id/ll_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_setting_item_selector"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -35,7 +35,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
@@ -46,8 +45,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="昵称"
                     android:singleLine="true"
+                    android:text="昵称"
                     android:textColor="@color/colorGray21"
                     android:textSize="14sp" />
 
@@ -55,8 +54,8 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2014-7-2 12:30:01"
                     android:layout_marginLeft="16dp"
+                    android:text="2014-7-2 12:30:01"
                     android:textColor="@color/colorGray22"
                     android:textSize="14sp" />
 
@@ -83,7 +82,6 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:text="这是一个评论哈哈哈哈爱好哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈爱好爱好哈哈哈哈哈"
             android:textColor="@color/colorGray22"
@@ -92,5 +90,11 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/home_menu_bg_color" />
 
 </LinearLayout>
