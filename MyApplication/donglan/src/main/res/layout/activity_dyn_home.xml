@@ -22,12 +22,12 @@
             android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:divider="@color/home_menu_bg_color"
             android:dividerHeight="1px"
             android:fadingEdge="none"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:scrollingCache="false"
             ptr:ptrDrawable="@drawable/listview_loading_anim"
             ptr:ptrHeaderBackground="#00000000"
@@ -172,6 +172,4 @@
                 android:background="@color/line_bg" />
         </FrameLayout>
     </LinearLayout>
-
-
 </RelativeLayout>
