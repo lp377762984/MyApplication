@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,11 +51,10 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 
 /**
+ * 个人主页
  * Created by shy on 2018/4/16 17:58
  * Email:644563767@qq.com
  */
-
-
 public class UserSelfHomeActivity extends BaseActivity implements View.OnClickListener {
     private RequsetUserDynInfoBean.Data userInfo;
     private TextView tv_dyn;
@@ -68,7 +68,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     private String userId;
     private boolean isdyn;
     private ImageView iv_sex;
-    RxShineButton rx_guangzhu;
+//    RxShineButton rx_guangzhu;
     private ImageView iv_guanzhu;
     private TextView tv_sign;
 
@@ -78,6 +78,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         //注册event事件
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_user_self_home);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     }
@@ -102,15 +103,14 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.ll_guanzhu).setOnClickListener(this);
         findViewById(R.id.ll_sixin).setOnClickListener(this);
         findViewById(R.id.ll_edit).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_more).setOnClickListener(this);
+        findViewById(R.id.donglan_right_tv).setOnClickListener(this);
 
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
-        rx_guangzhu = findViewById(R.id.rx_guangzhu);
+//        rx_guangzhu = findViewById(R.id.rx_guangzhu);
         iv_guanzhu = findViewById(R.id.iv_guanzhu);
         iv_guanzhu.setOnClickListener(this);
-        rx_guangzhu.setOnClickListener(this);
+//        rx_guangzhu.setOnClickListener(this);
 
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
@@ -229,11 +229,11 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         if (userInfo.getIs_follow()) {
             tv_guanzhu.setText("已关注");
             iv_guanzhu.setImageResource(R.drawable.img_xin1);
-            rx_guangzhu.setChecked(true);
+//            rx_guangzhu.setChecked(true);
         } else {
             tv_guanzhu.setText("+关注");
             iv_guanzhu.setImageResource(R.drawable.img_xin);
-            rx_guangzhu.setChecked(false);
+//            rx_guangzhu.setChecked(false);
         }
 
 
@@ -259,10 +259,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.iv_more:
+            case R.id.donglan_right_tv:
                 showListDialogSelf(userId);
 
                 break;
@@ -293,15 +290,13 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                     addGuanzhu(userId, true);
                 }
                 break;
-            case R.id.rx_guangzhu:
-                if (userInfo.getIs_follow()) {
-                    showClearDialog();
-                } else {
-                    addGuanzhu(userId, true);
-                }
-
-
-                break;
+//            case R.id.rx_guangzhu:
+//                if (userInfo.getIs_follow()) {
+//                    showClearDialog();
+//                } else {
+//                    addGuanzhu(userId, true);
+//                }
+//                break;
 
             case R.id.ll_edit:
                 startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
@@ -326,11 +321,11 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
                 switch (which) {
                     case 0:
-                        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                       if (TextUtils.equals(data.getPerson().getId(),userid)){
+                        Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                        if (TextUtils.equals(data.getPerson().getId(), userid)) {
                             ToastUtils.showToastShort("不能将本人加入黑名单");
-                        return;
-                       }
+                            return;
+                        }
                         addBlack(userid);
 
                         break;
@@ -366,7 +361,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(request);
     }
 

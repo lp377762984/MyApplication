@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/rl_no_info"
-        layout="@layout/no_info_layout"
+        layout="@layout/no_data_layout"
         android:visibility="gone" />
 
     <LinearLayout
@@ -88,13 +88,9 @@
             android:textSize="14sp"
             emojicon:emojiconSize="16sp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/home_menu_bg_color" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/home_menu_bg_color" />
-
 </LinearLayout>

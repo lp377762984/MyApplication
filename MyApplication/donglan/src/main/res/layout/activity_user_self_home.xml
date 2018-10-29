@@ -1,47 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery"
-
-        >
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            android:id="@+id/tv_tiltle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="个人主页"
-            android:textColor="@color/color_white"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/img_more_dyn"/>
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        app:cannotBack="false"
+        app:paddingEnd=""
+        app:titleText="个人主页" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -69,9 +39,9 @@
                     android:id="@+id/ll_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                   android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/iv_avatar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
@@ -91,16 +61,16 @@
                         android:layout_marginLeft="5dp"
                         android:src="@drawable/img_sex1" />
                 </LinearLayout>
-         <!--       <TextView
-                    android:id="@+id/tv_nick_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_avatar"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:text=""
-                    android:textColor="#000"
-                    android:textSize="14sp" />-->
+                <!--       <TextView
+                           android:id="@+id/tv_nick_name"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:layout_below="@+id/iv_avatar"
+                           android:layout_centerHorizontal="true"
+                           android:layout_marginTop="8dp"
+                           android:text=""
+                           android:textColor="#000"
+                           android:textSize="14sp" />-->
 
                 <LinearLayout
                     android:id="@+id/ll_edit"
@@ -143,50 +113,51 @@
                         android:layout_gravity="center_vertical"
 
                         android:orientation="vertical">
-                        <com.vondear.rxtools.view.likeview.RxShineButton
-                            android:layout_marginTop="10dp"
-                            android:id="@+id/rx_guangzhu"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_centerInParent="true"
-                            android:src="@android:color/darker_gray"
-                            app:allow_random_color="false"
-                            app:big_shine_color="@color/color_dl_yellow"
-                            app:btn_color="@android:color/darker_gray"
-                            app:btn_fill_color="@color/color_dl_yellow"
-                            app:click_animation_duration="200"
-                            app:enable_flashing="false"
-                            app:shine_animation_duration="1500"
-                            app:shine_count="15"
-                            app:shine_distance_multiple="1.5"
-                            app:shine_turn_angle="10"
-                            app:siShape="@raw/heart"
-                            app:small_shine_color="#CC9999"
-                            android:visibility="gone"
-                            android:layout_gravity="center"
-                            app:small_shine_offset_angle="20"/>
-         <!--               <com.cn.danceland.myapplication.view.AnimButton
-                            android:id="@+id/iv_guanzhu"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:visibility="gone"
-                            android:src="@drawable/img_xin" />-->
+
+                        <!--<com.vondear.rxtools.view.likeview.RxShineButton-->
+                        <!--android:id="@+id/rx_guangzhu"-->
+                        <!--android:layout_width="20dp"-->
+                        <!--android:layout_height="20dp"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:src="@android:color/darker_gray"-->
+                        <!--android:visibility="gone"-->
+                        <!--app:allow_random_color="false"-->
+                        <!--app:big_shine_color="@color/color_dl_yellow"-->
+                        <!--app:btn_color="@android:color/darker_gray"-->
+                        <!--app:btn_fill_color="@color/color_dl_yellow"-->
+                        <!--app:click_animation_duration="200"-->
+                        <!--app:enable_flashing="false"-->
+                        <!--app:shine_animation_duration="1500"-->
+                        <!--app:shine_count="15"-->
+                        <!--app:shine_distance_multiple="1.5"-->
+                        <!--app:shine_turn_angle="10"-->
+                        <!--app:siShape="@raw/heart"-->
+                        <!--app:small_shine_color="#CC9999"-->
+                        <!--app:small_shine_offset_angle="20" />-->
+                        <!--               <com.cn.danceland.myapplication.view.AnimButton
+                                           android:id="@+id/iv_guanzhu"
+                                           android:layout_width="20dp"
+                                           android:layout_height="20dp"
+                                           android:layout_gravity="center"
+                                           android:layout_marginTop="10dp"
+                                           android:visibility="gone"
+                                           android:src="@drawable/img_xin" />-->
                         <ImageView
                             android:id="@+id/iv_guanzhu"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/img_xin"
-                            />
+                            android:src="@drawable/img_xin" />
+
                         <TextView
                             android:id="@+id/tv_guanzhu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="+关注"
                             android:layout_gravity="center_horizontal"
+                            android:text="+关注"
                             android:textColor="@color/color_dl_yellow"
                             android:textSize="14sp" />
 
@@ -199,8 +170,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="30dp"
-                        android:visibility="gone"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
 
@@ -213,8 +184,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="私信"
                             android:layout_gravity="center_horizontal"
+                            android:text="私信"
                             android:textColor="@color/color_dl_yellow"
                             android:textSize="14sp" />
 
@@ -252,9 +223,9 @@
                     android:id="@+id/ll_01"
                     android:layout_width="325dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="5dp"
                     android:layout_alignBottom="@+id/line11"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/img_bg_juxing"
                     android:orientation="horizontal">
 
@@ -360,8 +331,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="个人简介："
                     android:gravity="right"
+                    android:text="个人简介："
                     android:textColor="#000"
                     android:textSize="14sp" />
 
@@ -386,8 +357,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="喜好："
                     android:gravity="right"
+                    android:text="喜好："
                     android:textColor="#000"
                     android:textSize="14sp" />
 

@@ -66,6 +66,7 @@ import static com.cn.danceland.myapplication.R.id.iv_avatar;
 import static com.cn.danceland.myapplication.R.id.tv_nickname;
 
 /**
+ * 健身日记
  * Created by shy on 2017/11/1 13:55
  * Email:644563767@qq.com
  */

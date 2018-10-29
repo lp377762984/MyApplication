@@ -77,6 +77,7 @@ import static com.cn.danceland.myapplication.R.id.iv_zan;
 import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 /**
+ * 健身日记adapter
  * Created by shy on 2017/10/24 17:40
  * Email:644563767@qq.com
  */
