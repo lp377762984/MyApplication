@@ -49,7 +49,6 @@ public class ClubDynActivity extends BaseActivity {
     private TextView tv_error;
     private ImageView imageView;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +79,6 @@ public class ClubDynActivity extends BaseActivity {
 
         init();
 
-
         if (newsListviewAdapter == null) {
             newsListviewAdapter = new ClubNewsListviewAdapter(data, this);
         }
@@ -88,7 +86,6 @@ public class ClubDynActivity extends BaseActivity {
         pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
-
 
         pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -103,7 +100,6 @@ public class ClubDynActivity extends BaseActivity {
                 Timer timer = new Timer();
                 timer.schedule(task, 1000);
 
-
             }
 
             @Override
@@ -116,7 +112,6 @@ public class ClubDynActivity extends BaseActivity {
                 };
                 Timer timer = new Timer();
                 timer.schedule(task, 1000);
-
 
             }
         });
@@ -139,14 +134,12 @@ public class ClubDynActivity extends BaseActivity {
         endLabels.setRefreshingLabel("正在加载...");// 刷新时
         endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
 
-
     }
 
     /**
      * 下拉刷新
      */
     private class DownRefresh extends AsyncTask<Void, Void, Void> {
-
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -245,7 +238,6 @@ public class ClubDynActivity extends BaseActivity {
             if (!isEnd) {//还有数据请求
                 findNews(mCurrentPage);
             }
-
 
             return null;
         }

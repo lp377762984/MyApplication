@@ -83,6 +83,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 /**
@@ -115,7 +116,6 @@ public class MyProActivity extends BaseActivity {
     File cutfile;
     RelativeLayout height, weight, rl_zone, rl_phone, identity;
     TextView text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
-    EmojiconTextView text_name;
     View contentView;
     PopupWindow mPopWindow;
     ListView list_height;
@@ -134,6 +134,7 @@ public class MyProActivity extends BaseActivity {
     TextView tv_start, over_time, tv_hobby, tv_sign;
     private LinearLayout  sex, hobby, headimage, rl_jianjie;
     private DongLanTransparentTitleView dongLanTitleView;
+    private EmojiconEditText text_name;
 
     private Handler handler = new Handler() {
         @Override
@@ -277,7 +278,8 @@ public class MyProActivity extends BaseActivity {
         TextView more_iv = dongLanTitleView.getRightTv();
         more_iv.setVisibility(View.VISIBLE);
         more_iv.setText("保存");
-
+        more_iv.setTextColor(getResources().getColor(R.color.white));
+//        text_name.setSelection(text.length());//光标位置在文字末尾
         if (zoneArr.size() > 0) {
             tv_zone.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
             zoneArr.clear();
@@ -285,33 +287,28 @@ public class MyProActivity extends BaseActivity {
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//拉黑
-//                if (TextUtils.isEmpty(ed.getText().toString())) {
-//                    ToastUtils.showToastShort("请输入昵称");
-//
-//                    return;
-//                }
-//                nickName = ed.getText().toString();
-//                text_name.setText(nickName);
-//                commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
-//                infoData.getPerson().setNick_name(nickName);
-//                DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-//
-//
-//                FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
-//                    @Override
-//                    public void onError(int i, String s) {
-//                        LogUtil.i("昵称修改失败");
-//                    }
-//
-//                    @Override
-//                    public void onSuccess() {
-//
-//                        LogUtil.i("昵称修改成功");
-//                    }
-//                });
-//
-//                //发送事件
-//                EventBus.getDefault().post(new StringEvent(nickName, 100));
+                if (TextUtils.isEmpty(text_name.getText().toString())) {
+                    ToastUtils.showToastShort("请输入昵称");
+                    return;
+                }
+                nickName = text_name.getText().toString();
+                commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
+                infoData.getPerson().setNick_name(nickName);
+                DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+
+                FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
+                    @Override
+                    public void onError(int i, String s) {
+                        LogUtil.i("昵称修改失败");
+                    }
+
+                    @Override
+                    public void onSuccess() {
+                        LogUtil.i("昵称修改成功");
+                    }
+                });
+                //发送事件
+                EventBus.getDefault().post(new StringEvent(nickName, 100));
             }
         });
     }

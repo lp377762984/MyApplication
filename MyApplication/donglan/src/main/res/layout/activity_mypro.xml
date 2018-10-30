@@ -109,7 +109,7 @@
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
-                            <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
+                            <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
                                 android:id="@+id/text_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -118,6 +118,7 @@
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 android:text="未填写"
+                                android:background="@color/transparent"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp"  />
                         </LinearLayout>
