@@ -147,9 +147,6 @@ public class UserHomeActivity extends BaseActivity {
     }
 
     private void initView() {
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
         pullToRefresh = findViewById(R.id.pullToRefresh);
         View listEmptyView=findViewById(R.id.rl_no_info);
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);

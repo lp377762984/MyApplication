@@ -148,7 +148,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_dyn_home);
         //注册event事件
         EventBus.getDefault().register(this);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     }

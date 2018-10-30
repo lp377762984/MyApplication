@@ -38,7 +38,6 @@ public class NewsDetailsActivity extends BaseActivity implements View.OnClickLis
 //                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
 //                //  .repeat(5)
 //                .playOn(view);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     //    setEnterSwichLayout();
