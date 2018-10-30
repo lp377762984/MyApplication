@@ -43,8 +43,6 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
-import com.tencent.connect.UserInfo;
-import com.tencent.connect.auth.QQToken;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConnListener;
 import com.tencent.imsdk.TIMLogLevel;
@@ -590,7 +588,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                             );
                             break;
                         case 4:// 4:资料不全，需要补全资料
-                            startActivity(new Intent(LoginActivity.this, RegisterInfoActivity.class));
+                            startActivity(new Intent(LoginActivity.this, SetRegisterInfoActivity.class));
                             break;
                         default:
                             ToastUtils.showToastShort("用户名或密码错误");

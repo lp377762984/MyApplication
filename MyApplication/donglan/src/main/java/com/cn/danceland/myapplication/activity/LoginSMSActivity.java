@@ -508,7 +508,7 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            startActivity(new Intent(LoginSMSActivity.this, RegisterInfoActivity.class));
+                            startActivity(new Intent(LoginSMSActivity.this, SetRegisterInfoActivity.class));
 
                             dialog.dismiss();
 

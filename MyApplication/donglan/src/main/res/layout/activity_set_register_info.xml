@@ -47,7 +47,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="6dp"
             android:hint="请输入您的昵称"
-            android:inputType="phone"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -69,7 +68,7 @@
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:background="@drawable/img_sex_info_man_"></ImageView>
+        android:background="@drawable/img_sex_defualt"></ImageView>
 
     <TextView
         android:layout_width="wrap_content"

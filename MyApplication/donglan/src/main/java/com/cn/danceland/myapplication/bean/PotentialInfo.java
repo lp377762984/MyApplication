@@ -84,6 +84,8 @@ public class PotentialInfo implements Serializable {
     public String fitness_level;// 健身指数
     public String address;// 详细住址
     public String company;// 单位
+    private String admin_mark;//会籍备注
+    private String teach_mark;//教练备注
 
     private List<ChonicList> chonicList;
     private List<ProjectList> projectList;
@@ -95,6 +97,22 @@ public class PotentialInfo implements Serializable {
 
     public void setGuest_way(String guest_way) {
         this.guest_way = guest_way;
+    }
+
+    public String getAdmin_mark() {
+        return admin_mark;
+    }
+
+    public void setAdmin_mark(String admin_mark) {
+        this.admin_mark = admin_mark;
+    }
+
+    public String getTeach_mark() {
+        return teach_mark;
+    }
+
+    public void setTeach_mark(String teach_mark) {
+        this.teach_mark = teach_mark;
     }
 
     @Override
@@ -139,6 +157,7 @@ public class PotentialInfo implements Serializable {
                 ", guest_recom='" + guest_recom + '\'' +
                 ", member_recom='" + member_recom + '\'' +
                 ", guest_aware_way='" + guest_aware_way + '\'' +
+                ", guest_way='" + guest_way + '\'' +
                 ", member_aware_way='" + member_aware_way + '\'' +
                 ", target='" + target + '\'' +
                 ", card_type='" + card_type + '\'' +
@@ -163,6 +182,8 @@ public class PotentialInfo implements Serializable {
                 ", fitness_level='" + fitness_level + '\'' +
                 ", address='" + address + '\'' +
                 ", company='" + company + '\'' +
+                ", admin_mark='" + admin_mark + '\'' +
+                ", teach_mark='" + teach_mark + '\'' +
                 ", chonicList=" + chonicList +
                 ", projectList=" + projectList +
                 ", targetList=" + targetList +

@@ -365,7 +365,7 @@ public class LoginBindActivity extends BaseActivity implements View.OnClickListe
 
                 if (TextUtils.isEmpty(myinfo.getPerson().getNick_name())) {
                     ToastUtils.showToastShort("您补全您的资料");
-                    startActivity(new Intent(LoginBindActivity.this, RegisterInfoActivity.class));
+                    startActivity(new Intent(LoginBindActivity.this, SetRegisterInfoActivity.class));
                 } else {
                     startActivity(new Intent(LoginBindActivity.this, HomeActivity.class));
                 }

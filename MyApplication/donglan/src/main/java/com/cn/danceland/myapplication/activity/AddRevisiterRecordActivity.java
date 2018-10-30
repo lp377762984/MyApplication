@@ -75,7 +75,7 @@ public class AddRevisiterRecordActivity extends BaseActivity implements View.OnC
         requsetBean.member_no = bundle.getString("member_no");
         listPopup = new ListPopup(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         tv_type = findViewById(R.id.tv_type);
         tv_type.setOnClickListener(this);
         et_content = findViewById(R.id.et_content);
@@ -89,7 +89,7 @@ public class AddRevisiterRecordActivity extends BaseActivity implements View.OnC
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.btn_commit:
+            case R.id.dlbtn_commit:
 
                 if (TextUtils.isEmpty(requsetBean.type)) {
                     ToastUtils.showToastShort("请选择回访方式");

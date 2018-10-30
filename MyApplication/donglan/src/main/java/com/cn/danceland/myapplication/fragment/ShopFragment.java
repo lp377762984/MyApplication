@@ -112,6 +112,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.R.attr.resource;
+import static com.cn.danceland.myapplication.R.id.dlbtn_commit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -205,6 +206,7 @@ public class ShopFragment extends BaseFragment {
                 }
             }
         });
+
 //        shop_layout.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -275,7 +277,13 @@ public class ShopFragment extends BaseFragment {
                 down_img.setVisibility(View.VISIBLE);
             }
         });
-
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                up_img.setVisibility(View.GONE);
+                down_img.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
 

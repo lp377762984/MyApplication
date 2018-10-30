@@ -25,8 +25,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
@@ -78,7 +76,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
     public static final int TARGET = 8;//健身目的
     public static final int LIKE = 7;//喜欢项目
     public static final int MEDICAL = 11;//病史
-    private ContainsEmojiEditText et_remark;//备注
+    private ContainsEmojiEditText et_remark,et_biaoqian;//备注
     private TextView tv_medical_history;//慢性病史
     private ContainsEmojiEditText et_phone;//电话
     private EditText et_name;//名字
@@ -231,6 +229,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
             tv_admin_name.setText(data.getEmployee().getCname());
             tv_admin_name.setClickable(false);
             tv_admin_name.setFocusable(false);
+            et_biaoqian.setText(info.getAdmin_mark());
 
         }
         if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
@@ -239,6 +238,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
             tv_teach_name.setText(data.getEmployee().getCname());
             tv_teach_name.setClickable(false);
             tv_teach_name.setClickable(false);
+            et_biaoqian.setText(info.getTeach_mark());
 
         }
 
@@ -272,6 +272,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
         tv_sex.setOnClickListener(this);
 
         et_weixin_no = findViewById(R.id.et_weixin_no);
+        et_biaoqian = findViewById(R.id.et_biaoqian);
         et_company = findViewById(R.id.et_company);
         et_address = findViewById(R.id.et_address);
         et_email = findViewById(R.id.et_email);
@@ -311,7 +312,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
         tv_medical_history = findViewById(R.id.tv_medical_history);
         tv_medical_history.setOnClickListener(this);
         et_remark = findViewById(R.id.et_remark);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
 
         tv_certificate_type = findViewById(R.id.et_certificate_type);
         tv_certificate_type.setOnClickListener(this);
@@ -391,7 +392,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                 codeType = MEDICAL;
                 findParams(codeType);
                 break;
-            case R.id.btn_commit://保存
+            case R.id.dlbtn_commit://保存
                 if (TextUtils.isEmpty(et_phone.getText().toString().trim())) {
                     ToastUtils.showToastShort("手机号码必须填写");
                     return;
@@ -444,7 +445,15 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                 info.setHeight(et_height.getText().toString().trim());
                 info.setWeight(et_weight.getText().toString().trim());
                 info.setNationality(et_nationality.getText().toString().trim());
+                //会籍或会籍主管
+                if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+                    info.setAdmin_mark(et_biaoqian.getText().toString());
 
+                }
+                //教练或教练主管
+                if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+                    info.setTeach_mark(et_biaoqian.getText().toString());
+                }
 
                 LogUtil.i(gson.toJson(info).toString());
                 try {

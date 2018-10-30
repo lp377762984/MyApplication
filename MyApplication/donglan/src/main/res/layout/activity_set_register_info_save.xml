@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="165.0cm"
+        android:text="请选择您的身高"
         android:layout_marginTop="10dp"
         android:textColor="#ff5e3a"
         android:textSize="16sp" />
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="50.0kg"
+        android:text="请选择您的体重"
         android:layout_marginTop="10dp"
         android:textColor="#ff5e3a"
         android:textSize="16sp" />

@@ -496,7 +496,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
                     SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    startActivity(new Intent(RegisterActivity.this, RegisterInfoActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, SetRegisterInfoActivity.class));
                     setMipushId();
                     finish();
 

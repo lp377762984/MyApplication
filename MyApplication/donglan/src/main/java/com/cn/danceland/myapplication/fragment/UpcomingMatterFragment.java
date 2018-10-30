@@ -441,7 +441,7 @@ public class UpcomingMatterFragment extends BaseFragment {
             }
             vh.tv_name.setText(datalist.get(position).getEmployee_name());
             vh.tv_type.setText(datalist.get(position).getWork_type_name());
-            vh.tv_content.setText(datalist.get(position).getContent());
+            vh.tv_content.setText("待办内容："+datalist.get(position).getContent());
             vh.tv_lasttime.setText(datalist.get(position).getRecord_time());
             vh.tv_upcoming_name.setText(datalist.get(position).getMember_name());
             vh.tv_upcoming_time.setText(datalist.get(position).getWarn_time());
@@ -450,7 +450,11 @@ public class UpcomingMatterFragment extends BaseFragment {
             } else {
                 vh.iv_done.setImageResource(R.drawable.img_isdone_up);
             }
-            vh.tv_result.setText(datalist.get(position).getResult());
+            if (datalist.get(position).getResult()!=null){
+                vh.tv_result.setText("待办结果："+datalist.get(position).getResult());
+            }else {
+                vh.tv_result.setText("待办结果：");
+            }
 //            vh.iv_done.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {

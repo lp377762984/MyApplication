@@ -180,6 +180,24 @@ public class RequsetPotentialListBean {
             private List<String> target_ids;
             private String avatar_url;
             private String self_avatar_url;
+            private String admin_mark;//会籍备注
+            private String teach_mark;//教练备注
+
+            public String getAdmin_mark() {
+                return admin_mark;
+            }
+
+            public void setAdmin_mark(String admin_mark) {
+                this.admin_mark = admin_mark;
+            }
+
+            public String getTeach_mark() {
+                return teach_mark;
+            }
+
+            public void setTeach_mark(String teach_mark) {
+                this.teach_mark = teach_mark;
+            }
 
             @Override
             public String toString() {
@@ -231,8 +249,8 @@ public class RequsetPotentialListBean {
                         ", department_id='" + department_id + '\'' +
                         ", weichat_no='" + weichat_no + '\'' +
                         ", mail='" + mail + '\'' +
-                        ", follow_level=" + follow_level +
-                        ", fitness_level=" + fitness_level +
+                        ", follow_level='" + follow_level + '\'' +
+                        ", fitness_level='" + fitness_level + '\'' +
                         ", emergency_name='" + emergency_name + '\'' +
                         ", address='" + address + '\'' +
                         ", company='" + company + '\'' +
@@ -245,6 +263,8 @@ public class RequsetPotentialListBean {
                         ", target_ids=" + target_ids +
                         ", avatar_url='" + avatar_url + '\'' +
                         ", self_avatar_url='" + self_avatar_url + '\'' +
+                        ", admin_mark='" + admin_mark + '\'' +
+                        ", teach_mark='" + teach_mark + '\'' +
                         '}';
             }
 

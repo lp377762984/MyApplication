@@ -34,6 +34,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -96,6 +97,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private TextView tv_weight;
     private TextView tv_branch_name;
     private TextView tv_teach_name;
+    private TextView tv_biaoqian;
     private TextView tv_admin_name;
     private TextView tv_guest_recom;
     private TextView tv_final_teach_name;
@@ -131,6 +133,26 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         }else {
             tv_lasttime.setText("最后维护时间：" + "最近未维护");
         }
+
+        //会籍或会籍主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+            if (TextUtils.isEmpty(info.getAdmin_mark())){
+                tv_biaoqian.setText(info.getAdmin_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getAdmin_mark()+")");
+            }
+
+
+        }
+        //教练或教练主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+            if (TextUtils.isEmpty(info.getTeach_mark())){
+                tv_biaoqian.setText(info.getTeach_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getTeach_mark()+")");
+            }
+        }
+
 
         tv_weixin_no.setText(info.getWeichat_no());
         tv_company.setText(info.getCompany());
@@ -283,6 +305,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         iv_callphone = v.findViewById(R.id.iv_callphone);
         iv_send_msg = v.findViewById(R.id.iv_send_msg);
         tv_phone = v.findViewById(R.id.tv_phone);
+        tv_biaoqian = v.findViewById(R.id.tv_biaoqian);
         iv_sex = v.findViewById(R.id.iv_sex);
         tv_name = v.findViewById(R.id.tv_name);
         tv_lasttime = v.findViewById(R.id.tv_lasttime);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -110,6 +111,17 @@ public class SetRegisterInfoSaveActivity extends BaseActivity {
         findViewById(R.id.dlbtn_commit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (TextUtils.isEmpty(height)){
+                    ToastUtils.showToastShort("请选择您的身高");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(weight)){
+                    ToastUtils.showToastShort("请选择您的体重");
+                    return;
+                }
+
                 commit();
             }
         });
