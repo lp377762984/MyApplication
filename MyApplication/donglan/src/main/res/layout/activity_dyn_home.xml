@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_bg_mianlayout">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="24dp"
+        android:background="@color/colorGray23"
         android:orientation="vertical">
 
         <com.cn.danceland.myapplication.view.DongLanTitleView
@@ -23,11 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:divider="@color/home_menu_bg_color"
-            android:dividerHeight="1px"
+            android:divider="@color/transparent"
+            android:dividerHeight="0dp"
             android:fadingEdge="none"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:scrollingCache="false"
             ptr:ptrDrawable="@drawable/listview_loading_anim"
             ptr:ptrHeaderBackground="#00000000"
@@ -172,6 +170,4 @@
                 android:background="@color/line_bg" />
         </FrameLayout>
     </LinearLayout>
-
-
 </RelativeLayout>

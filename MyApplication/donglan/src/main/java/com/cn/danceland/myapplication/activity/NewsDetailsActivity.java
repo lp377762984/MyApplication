@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -37,6 +38,7 @@ public class NewsDetailsActivity extends BaseActivity implements View.OnClickLis
 //                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
 //                //  .repeat(5)
 //                .playOn(view);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     //    setEnterSwichLayout();

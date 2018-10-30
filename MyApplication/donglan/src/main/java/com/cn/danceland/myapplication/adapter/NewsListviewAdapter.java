@@ -1,12 +1,10 @@
 package com.cn.danceland.myapplication.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -27,8 +24,6 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.adapter.CommonAdapter;
-import com.cn.danceland.myapplication.view.adapter.ViewHolder;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -42,7 +37,7 @@ import java.util.Map;
  * Email:644563767@qq.com
  */
 
-public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapter.ViewHolder> {
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_NORMAL = 1;
 
@@ -71,15 +66,17 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        ViewHolder viewHolder = ViewHolder.get(context, parent, R.layout.listview_item_homepage);
-//        return viewHolder;
-
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (mHeaderView != null && viewType == TYPE_HEADER)
-            return new Holder(mHeaderView);
+            return new ViewHolder(mHeaderView);
 
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_homepage, parent, false);
-        return new Holder(layout);
+//        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_homepage, parent, false);
+//        return new Holder(layout);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_item_homepage, parent, false);
+
+        NewsListviewAdapter.ViewHolder vh = new NewsListviewAdapter.ViewHolder(view);
+
+        return vh;
     }
 
     @Override
@@ -91,86 +88,85 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_HEADER) return;
-
+        LogUtil.i("position--" + position);
         final int pos = getRealPosition(holder);
-        if (holder instanceof Holder) {
-            Glide.with(context)
-                    .load(data.get(position).getImg_url())
-                    //  .apply(options)
-                    .into(((Holder) holder).iv_image);
-            ((Holder) holder).tv_title.setText(data.get(position).getTitle());
-            ((Holder) holder).tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(position).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
-            ((Holder) holder).tv_content.setText(data.get(position).getNews_txt());
-            ((Holder) holder).read_number_tv.setText(data.get(position).getRead_number());
+        Glide.with(context)
+                .load(data.get(pos).getImg_url())
+                //  .apply(options)
+                .into(holder.iv_image);
+        LogUtil.i("title" + data.get(pos).getTitle());
+        holder.tv_title.setText(data.get(pos).getTitle());
+        holder.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(pos).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
+        holder.tv_content.setText(data.get(pos).getNews_txt());
+        holder.read_number_tv.setText(data.get(pos).getRead_number());
 
-            if(data.get(position).is_collect()){
-                ((Holder) holder).collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
-            }else{
-                ((Holder) holder).collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
+        if (data.get(pos).is_collect()) {
+            holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
+        } else {
+            holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
+        }
+        if (mListener == null) return;
+        holder.ll_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(pos, data);
             }
-            if (mListener == null) return;
-            ((Holder) holder).ll_item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemClick(position, data);
-                }
-            });
-            ((Holder) holder).collect_iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_COLLECT_SAVE, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String s) {
-                            LogUtil.i(s);
+        });
+        holder.collect_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_COLLECT_SAVE, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        LogUtil.i(s);
 
-                            Gson gson = new Gson();
-                            RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
-                            if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
-                                data.get(position).setIs_collect(!data.get(position).is_collect());
-                                if(data.get(position).is_collect()){
-                                    ((Holder) holder).collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
-                                }else{
-                                    ((Holder) holder).collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
-                                }
+                        Gson gson = new Gson();
+                        RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
+                        if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
+                            data.get(pos).setIs_collect(!data.get(pos).is_collect());
+                            if (data.get(pos).is_collect()) {
+                                holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
                             } else {
-                                //失败
-                                ToastUtils.showToastShort("请求失败，请查看网络连接");
+                                holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
+                        } else {
+                            //失败
                             ToastUtils.showToastShort("请求失败，请查看网络连接");
                         }
-                    }) {
-                        @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("news_id", data.get(position).getId());
-                            map.put("type", "0");
-                            map.put("is_collect", String.valueOf(!data.get(position).is_collect()));
-                            LogUtil.i("map--" + map.toString());
-                            return map;
-                        }
-                    };
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        ToastUtils.showToastShort("请求失败，请查看网络连接");
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("news_id", data.get(pos).getId());
+                        map.put("type", "0");
+                        map.put("is_collect", String.valueOf(!data.get(pos).is_collect()));
+                        LogUtil.i("map--" + map.toString());
+                        return map;
+                    }
+                };
 
-                    // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
-                    request.setTag("userRegister");
-                    // 设置超时时间
-                    request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    // 将请求加入全局队列中
-                    MyApplication.getHttpQueues().add(request);
-                }
-            });
-        }
-
+                // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+                request.setTag("userRegister");
+                // 设置超时时间
+                request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                // 将请求加入全局队列中
+                MyApplication.getHttpQueues().add(request);
+            }
+        });
     }
+
     @Override
     public int getItemCount() {
-        return data == null ? 0 : data.size();
+        return mHeaderView == null ? data.size() : data.size() + 1;
     }
 
     public int getRealPosition(RecyclerView.ViewHolder holder) {
@@ -178,7 +174,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mHeaderView == null ? position : position - 1;
     }
 
-    class Holder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_title;
         ImageView iv_image;//头像
@@ -189,9 +185,8 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         LinearLayout ll_item;
 
-        public Holder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            if (itemView == mHeaderView) return;
             tv_title = itemView.findViewById(R.id.tv_tiltle);
             iv_image = itemView.findViewById(R.id.iv_image);
             tv_time = itemView.findViewById(R.id.tv_time);
@@ -204,6 +199,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void setData(List<RequestNewsDataBean.Data.Items> data) {
         this.data = data;
+        LogUtil.i("adapter" + data.get(0).getTitle());
     }
 
     //增加数据

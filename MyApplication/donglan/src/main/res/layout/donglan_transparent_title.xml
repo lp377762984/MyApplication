@@ -35,4 +35,13 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/iv_more"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/img_more_dyn"
+        android:visibility="gone" />
 </RelativeLayout>

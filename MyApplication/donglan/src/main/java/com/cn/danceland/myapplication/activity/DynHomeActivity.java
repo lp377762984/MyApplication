@@ -122,7 +122,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private FrameLayout fl_emojicons;
     private TextView tv_nick_name;
     private TextView tv_time;
-    private TextView tv_guanzhu;
+//    private TextView tv_guanzhu;
     private TextView tv_location;
     private LinearLayout ll_location;
     private hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
@@ -543,7 +543,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         });
 
         if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
-            tv_guanzhu.setVisibility(View.INVISIBLE);
+//            tv_guanzhu.setVisibility(View.INVISIBLE);
             rx_guanzhu.setVisibility(View.INVISIBLE);
         } else {
             rx_guanzhu.setVisibility(View.VISIBLE);
@@ -562,12 +562,12 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
 
         if (oneDynInfo.isFollower()) {
-            tv_guanzhu.setText("已关注");
+//            tv_guanzhu.setText("已关注");
             //  tv_guanzhu.setTextColor(Color.GRAY);
             rx_guanzhu.setChecked(true);
             rx_guanzhu.setClickable(false);
         } else {
-            tv_guanzhu.setText("+关注");
+//            tv_guanzhu.setText("+关注");
             rx_guanzhu.setChecked(false);
             rx_guanzhu.setClickable(true);
         }
@@ -599,9 +599,10 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 .load(oneDynInfo.getSelfUrl())
                 .apply(options)
                 .into(iv_avatar);
+
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {//个人主页
                 startActivity(new Intent(DynHomeActivity.this, UserSelfHomeActivity.class).putExtra("id", oneDynInfo.getAuthor()));
             }
         });
@@ -682,10 +683,12 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         ImagePagerActivity.startActivity(DynHomeActivity.this, config);
                     }
                 });
+//                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams1.setMargins(DensityUtils.dp2px(this, 16f), DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 16f), 0);
+//                gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
+                linearParams1.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 5f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
-//
 
             } else if (oneDynInfo.getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
@@ -694,6 +697,11 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 //                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
 //                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 15f), DensityUtils.dp2px(this, 5f), 0, 0);
 //                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//                int width = (DensityUtils.dp2px(DynHomeActivity.this, AppUtils.getScreenWidth()) - DensityUtils.dp2px(DynHomeActivity.this, 32f)) / 3 * 2;
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
+//                gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
                 int width = (DensityUtils.dp2px(DynHomeActivity.this, AppUtils.getScreenWidth()) - DensityUtils.dp2px(DynHomeActivity.this, 32f)) / 3 * 2;
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
@@ -707,6 +715,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+
             }
 
 
@@ -746,7 +755,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
         tv_nick_name = headview.findViewById(R.id.tv_nick_name);
         tv_time = headview.findViewById(R.id.tv_time);
-        tv_guanzhu = headview.findViewById(R.id.tv_guanzhu);
+//        tv_guanzhu = headview.findViewById(R.id.tv_guanzhu);
         tv_location = headview.findViewById(R.id.tv_location);
         ll_location = headview.findViewById(R.id.ll_location);
         tv_content = headview.findViewById(R.id.tv_content);

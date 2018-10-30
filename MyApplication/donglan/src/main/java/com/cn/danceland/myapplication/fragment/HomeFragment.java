@@ -36,6 +36,7 @@ import com.cn.danceland.myapplication.activity.PaiMingActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.adapter.NewsListviewAdapter;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
@@ -231,13 +232,16 @@ public class HomeFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycler.setLayoutManager(layoutManager);
+        mRecycler.setHasFixedSize(true);//刷新最重要的这句
+//        RecyclerView.Adapter.n
+//        RecyclerView.Adapter.notifyItemInserted(getItemCount());//必须用此方法才能进行recycleview的刷新。（末尾刷新）
         header_background_iv = (ImageView) UIUtils.setViewRatio(mActivity, header_background_iv, (float) 187.5, 118);
 
         newsListviewAdapter.setHeaderView(initBanner());
         newsListviewAdapter.setOnItemClickListener(new NewsListviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, List<RequestNewsDataBean.Data.Items> data) {
-                setReadNum(data.get(position).getId());
+                setReadNum(data.get(position).getId(), position);
                 mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
             }
         });
@@ -433,16 +437,15 @@ public class HomeFragment extends BaseFragment {
 
         int listMaxOffset = DensityUtils.dp2px(mActivity, 94f);//listview 最大偏移
         int listOffset = listMaxOffset - offsetNum;
-        LogUtil.i("白色" + listOffset + "=============" + listMaxOffset + "-" + offsetNum);
+//        LogUtil.i("白色" + listOffset + "=============" + listMaxOffset + "-" + offsetNum);
 
         int headerMarginLeft = DensityUtils.dp2px(mActivity, 16f);//header MarginLeft
         int headerMarginRight = DensityUtils.dp2px(mActivity, 65f);//header MarginRight
         int headerMaxOffset = DensityUtils.dp2px(mActivity, 55f);//header 最大偏移
         int headerOffset = DensityUtils.dp2px(mActivity, 55f) - (offsetNum - listMaxOffset);
-        LogUtil.i("头部" + headerOffset + "=============" + headerMaxOffset + "-" + offsetNum + "-" + listMaxOffset);
+//        LogUtil.i("头部" + headerOffset + "=============" + headerMaxOffset + "-" + offsetNum + "-" + listMaxOffset);
 
         int ooo = listMaxOffset + headerMaxOffset;
-        LogUtil.i("ooo=" + ooo);
         if (0 <= offsetNum && offsetNum <= ooo) {
             if (0 <= offsetNum && offsetNum <= listMaxOffset) {
                 setMeunCradview();
@@ -464,7 +467,7 @@ public class HomeFragment extends BaseFragment {
             punch_list_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_white_img));
         }
         header_layout.setLayoutParams(lppTemp);
-        LogUtil.i("总偏移量-----(" + offsetNum);
+//        LogUtil.i("总偏移量-----(" + offsetNum);
 
     }
 
@@ -624,6 +627,7 @@ public class HomeFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
+            LogUtil.i("刷新111");
             newsListviewAdapter.notifyDataSetChanged();
             refreshLayout.finishRefresh(0, false);//传入false表示刷新失败
         }
@@ -810,14 +814,15 @@ public class HomeFragment extends BaseFragment {
                     data = newsDataBean.getData().getItems();
                     //    LogUtil.i(data.toString());
                     if (mCurrentPage == 0) {
+
                         LogUtil.i("data.size()" + data.size());
                         if (data.size() == 0) {
                             rl_error.setVisibility(View.VISIBLE);
                         } else {
                             rl_error.setVisibility(View.GONE);
                         }
+                        LogUtil.i("刷新222"+data.get(0).getTitle());
                         newsListviewAdapter.setData(data);
-
                         newsListviewAdapter.notifyDataSetChanged();
                         //   pullToRefresh.setVisibility(View.VISIBLE);
 
@@ -929,11 +934,21 @@ public class HomeFragment extends BaseFragment {
     }
 
     //增加阅读数
-    private void setReadNum(final String news_id) {
+    private void setReadNum(final String news_id, final int pos) {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_READ_NUMBER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
+                if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
+                    if(data.get(pos).getRead_number()!=null&&data.get(pos).getRead_number().length()>0){
+                        data.get(pos).setRead_number((Integer.valueOf(data.get(pos).getRead_number())+ 1) +"");//增加阅读数
+                    }
+                    newsListviewAdapter.setData(data);
+                    newsListviewAdapter.notifyDataSetChanged();
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -944,7 +959,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("news_id", news_id);
+                map.put("id", news_id);
                 LogUtil.i("map--" + map.toString());
                 return map;
             }

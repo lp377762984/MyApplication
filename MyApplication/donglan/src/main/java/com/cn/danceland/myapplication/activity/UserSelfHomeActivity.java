@@ -9,16 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -32,10 +30,12 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
+import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 import com.google.gson.Gson;
 import com.vondear.rxtools.view.likeview.RxShineButton;
 
@@ -43,18 +43,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 
 /**
+ * 个人主页
  * Created by shy on 2018/4/16 17:58
  * Email:644563767@qq.com
  */
-
-
 public class UserSelfHomeActivity extends BaseActivity implements View.OnClickListener {
     private RequsetUserDynInfoBean.Data userInfo;
     private TextView tv_dyn;
@@ -71,6 +67,9 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     RxShineButton rx_guangzhu;
     private ImageView iv_guanzhu;
     private TextView tv_sign;
+    private DongLanTransparentTitleView dongLanTitleView;
+
+    private ImageView header_background_iv;//打卡排行 菜单 粉色布局
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +77,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         //注册event事件
         EventBus.getDefault().register(this);
         setContentView(R.layout.activity_user_self_home);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     }
@@ -101,9 +101,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.ll_my_fans).setOnClickListener(this);
         findViewById(R.id.ll_guanzhu).setOnClickListener(this);
         findViewById(R.id.ll_sixin).setOnClickListener(this);
-        findViewById(R.id.ll_edit).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(R.id.iv_more).setOnClickListener(this);
 
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
@@ -122,11 +119,31 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         //   iv_guanzhu.setOnClickListener(this);
         tv_hobby = findViewById(R.id.tv_hobby);
         tv_sign = findViewById(R.id.tv_sign);
+
+        header_background_iv = findViewById(R.id.header_background_iv);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(UserSelfHomeActivity.this, header_background_iv, (float) 187.5, 118);
+
+        dongLanTitleView = findViewById(R.id.title);
+        ImageView more_iv = dongLanTitleView.getRightIv();
+        more_iv.setVisibility(View.VISIBLE);
+
+
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_edit).setVisibility(View.VISIBLE);
+            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_edit));
+        }else{
+            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.black_list_icon));
         }
-
+        more_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {//拉黑
+                if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
+                    startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
+                }else{
+                    showListDialogSelf(userId);
+                }
+            }
+        });
     }
 
     private Handler handler = new Handler() {
@@ -259,13 +276,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.iv_more:
-                showListDialogSelf(userId);
-
-                break;
             case R.id.ll_my_dyn://我的动态
                 startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true));
                 break;
@@ -288,7 +298,8 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 //                break;
             case R.id.iv_guanzhu:
                 if (userInfo.getIs_follow()) {
-                    showClearDialog();
+//                    showClearDialog();//2018-10-28 亚茹 不要弹框
+                    addGuanzhu(userId, false);
                 } else {
                     addGuanzhu(userId, true);
                 }
@@ -299,16 +310,8 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     addGuanzhu(userId, true);
                 }
-
-
-                break;
-
-            case R.id.ll_edit:
-                startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
                 break;
             case R.id.ll_sixin:
-
-
                 break;
             default:
                 break;
@@ -326,11 +329,11 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
                 switch (which) {
                     case 0:
-                        Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                       if (TextUtils.equals(data.getPerson().getId(),userid)){
+                        Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                        if (TextUtils.equals(data.getPerson().getId(), userid)) {
                             ToastUtils.showToastShort("不能将本人加入黑名单");
-                        return;
-                       }
+                            return;
+                        }
                         addBlack(userid);
 
                         break;
@@ -366,7 +369,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(request);
     }
 

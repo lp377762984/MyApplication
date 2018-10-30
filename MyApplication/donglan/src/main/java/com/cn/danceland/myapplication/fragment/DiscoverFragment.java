@@ -128,8 +128,9 @@ public class DiscoverFragment extends BaseFragment {
             SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
             simplePagerTitleView.setText(TITLES[index]);
 
-            simplePagerTitleView.setNormalColor(Color.BLACK);
-            simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.color_dl_yellow));
+            simplePagerTitleView.setNormalColor(getResources().getColor(R.color.colorGray22));
+            simplePagerTitleView.setSelectedColor(getResources().getColor(R.color.home_enter_total_text_color));
+            simplePagerTitleView.setTextSize(14);
             simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
