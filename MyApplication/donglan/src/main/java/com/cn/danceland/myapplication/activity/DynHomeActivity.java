@@ -599,9 +599,10 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 .load(oneDynInfo.getSelfUrl())
                 .apply(options)
                 .into(iv_avatar);
+
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {//个人主页
                 startActivity(new Intent(DynHomeActivity.this, UserSelfHomeActivity.class).putExtra("id", oneDynInfo.getAuthor()));
             }
         });

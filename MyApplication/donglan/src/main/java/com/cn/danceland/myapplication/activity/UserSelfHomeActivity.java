@@ -13,13 +13,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -33,12 +30,11 @@ import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 import com.google.gson.Gson;
 import com.vondear.rxtools.view.likeview.RxShineButton;
@@ -46,9 +42,6 @@ import com.vondear.rxtools.view.likeview.RxShineButton;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
@@ -108,8 +101,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.ll_my_fans).setOnClickListener(this);
         findViewById(R.id.ll_guanzhu).setOnClickListener(this);
         findViewById(R.id.ll_sixin).setOnClickListener(this);
-        findViewById(R.id.ll_edit).setOnClickListener(this);
-        findViewById(R.id.donglan_right_tv).setOnClickListener(this);
 
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
@@ -134,15 +125,23 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
         dongLanTitleView = findViewById(R.id.title);
         ImageView more_iv = dongLanTitleView.getRightIv();
+        more_iv.setVisibility(View.VISIBLE);
+
 
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
-            findViewById(R.id.meun_cradview).setVisibility(View.INVISIBLE);
-            findViewById(R.id.ll_edit).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
+            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_edit));
+        }else{
+            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.black_list_icon));
         }
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                showListDialogSelf(userId);
+            public void onClick(View v) {//拉黑
+                if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
+                    startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
+                }else{
+                    showListDialogSelf(userId);
+                }
             }
         });
     }
@@ -277,10 +276,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.donglan_right_tv:
-                showListDialogSelf(userId);
-
-                break;
             case R.id.ll_my_dyn://我的动态
                 startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true));
                 break;
@@ -303,7 +298,8 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 //                break;
             case R.id.iv_guanzhu:
                 if (userInfo.getIs_follow()) {
-                    showClearDialog();
+//                    showClearDialog();//2018-10-28 亚茹 不要弹框
+                    addGuanzhu(userId, false);
                 } else {
                     addGuanzhu(userId, true);
                 }
@@ -314,16 +310,8 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     addGuanzhu(userId, true);
                 }
-
-
-                break;
-
-            case R.id.ll_edit:
-                startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
                 break;
             case R.id.ll_sixin:
-
-
                 break;
             default:
                 break;
