@@ -176,7 +176,6 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
                     android:background="@drawable/white_rounded_corners_bg"
                     android:minHeight="131dp"
                     app:cardCornerRadius="6dp"
@@ -203,9 +202,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="dsjkfhisk"
-                                android:textColor="#333333"
-                                android:textSize="15sp" />
+                                android:textColor="@color/colorGray21"
+                                android:textSize="14sp" />
 
                             <ImageView
                                 android:id="@+id/iv_sex"
@@ -328,7 +326,7 @@
                                 android:layout_marginTop="10dp"
                                 android:gravity="right"
                                 android:text="个人简介："
-                                android:textColor="#000"
+                                android:textColor="@color/colorGray21"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -337,6 +335,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:text="没有填写"
+                                android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -356,8 +355,8 @@
                                 android:layout_marginTop="10dp"
                                 android:gravity="right"
                                 android:text="喜好："
-                                android:textColor="#000"
-                                android:textSize="14sp" />
+                                android:textColor="@color/colorGray21"
+                                android:textSize="14sp"/>
 
                             <TextView
                                 android:id="@+id/tv_hobby"
@@ -365,6 +364,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:text="没有填写"
+                                android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
                         </LinearLayout>
                     </LinearLayout>

@@ -25,10 +25,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -82,6 +84,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 /**
+ * 我的资料
  * Created by feng on 2017/10/10.
  */
 
@@ -108,7 +111,7 @@ public class MyProActivity extends BaseActivity {
     Gson gson;
     RequestQueue queue;
     File cutfile;
-    RelativeLayout headimage, name, sex, height, weight, rl_zone, rl_phone, identity, hobby, rl_jianjie;
+    RelativeLayout height, weight, rl_zone, rl_phone, identity;
     TextView text_sex, photograph, photo_album, cancel, cancel1, male, female, tv_height, tv_weight, tv_zone, tv_phone, tv_identity, selecttitle, over, cancel_action, lo_cancel_action, over_action;
     EmojiconTextView text_name;
     View contentView;
@@ -127,6 +130,7 @@ public class MyProActivity extends BaseActivity {
     AlertDialog.Builder alertdialog;
     LoopView loopview;
     TextView tv_start, over_time, tv_hobby, tv_sign;
+    private LinearLayout  sex, hobby, headimage, rl_jianjie;
 
     private Handler handler = new Handler() {
         @Override
@@ -136,7 +140,6 @@ public class MyProActivity extends BaseActivity {
 
                     Glide.with(getApplicationContext()).load(selfAvatarPath).into(circleImageView);
                     file.delete();
-                    break;
                 default:
                     break;
             }
@@ -167,7 +170,7 @@ public class MyProActivity extends BaseActivity {
     }
 
     public void initView() {
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         inflate = LayoutInflater.from(MyProActivity.this).inflate(R.layout.timeselect, null);
         tv_start = inflate.findViewById(R.id.tv_start);
         tv_start.setVisibility(View.GONE);
@@ -187,9 +190,9 @@ public class MyProActivity extends BaseActivity {
         text_name = findViewById(R.id.text_name);
         text_sex = findViewById(R.id.text_sex);
         headimage = findViewById(R.id.head_image);
-        name = findViewById(R.id.name);
+//        name = findViewById(R.id.name);
         sex = findViewById(R.id.sex);
-        back = findViewById(R.id.back);
+        back = findViewById(R.id.iv_back);
         height = findViewById(R.id.height);
         weight = findViewById(R.id.weight);
         rl_zone = findViewById(R.id.rl_zone);
@@ -216,17 +219,17 @@ public class MyProActivity extends BaseActivity {
             tv_weight.setText(infoData.getPerson().getWeight() + " kg");
         }
 
-        if (infoData.getPerson().getHobby() != null&&infoData.getPerson().getHobby().length()>0) {
+        if (infoData.getPerson().getHobby() != null && infoData.getPerson().getHobby().length() > 0) {
             tv_hobby.setText(infoData.getPerson().getHobby());
-        }else{
+        } else {
             tv_hobby.setText("未填写");
         }
 
-        if (infoData.getPerson().getSign() != null&&infoData.getPerson().getSign().length()>0) {
+        if (infoData.getPerson().getSign() != null && infoData.getPerson().getSign().length() > 0) {
             tv_sign.setText(infoData.getPerson().getSign());
-            }else{
-                tv_sign.setText("未填写");
-            }
+        } else {
+            tv_sign.setText("未填写");
+        }
 
 
         if ("1".equals(infoData.getPerson().getGender())) {
@@ -237,9 +240,9 @@ public class MyProActivity extends BaseActivity {
 
         hobby = findViewById(R.id.hobby);
         rl_jianjie = findViewById(R.id.rl_jianjie);
-        if (infoData.getPerson().getNick_name() != null&&infoData.getPerson().getNick_name().length()>0) {
+        if (infoData.getPerson().getNick_name() != null && infoData.getPerson().getNick_name().length() > 0) {
             text_name.setText(infoData.getPerson().getNick_name());
-        }else{
+        } else {
             text_name.setText("未填写");
         }
 
@@ -274,7 +277,7 @@ public class MyProActivity extends BaseActivity {
 
     public void setClick() {
         headimage.setOnClickListener(onClickListener);
-        name.setOnClickListener(onClickListener);
+//        name.setOnClickListener(onClickListener);
         hobby.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
         cancel.setOnClickListener(onClickListener);
@@ -333,13 +336,13 @@ public class MyProActivity extends BaseActivity {
                                 //用户拒绝了申请
                                 ToastUtils.showToastShort("没有权限");
                             }
-                        }, new String[]{Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE}, false, null);
+                        }, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, false, null);
                     }
                 }
                 break;
                 case R.id.rl_jianjie:
-                    Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    startActivityForResult(new Intent(MyProActivity.this, EditProActivity.class).putExtra("hint",info.getPerson().getSign()), 13);
+                    Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    startActivityForResult(new Intent(MyProActivity.this, EditProActivity.class).putExtra("hint", info.getPerson().getSign()), 13);
                     break;
                 case R.id.lo_cancel_action:
                     dismissWindow();
@@ -359,7 +362,7 @@ public class MyProActivity extends BaseActivity {
                     //selecttitle.setText("选择体重");
                     break;
                 case R.id.hobby:
-                    showHobby( infoData.getPerson().getHobby());
+                    showHobby(infoData.getPerson().getHobby());
                     break;
 
 //                case R.id.over:
@@ -376,10 +379,10 @@ public class MyProActivity extends BaseActivity {
 //                case R.id.cancel_action:
 //                    dismissWindow();
 //                    break;
-                case R.id.name: {
-                    showName(0, infoData.getPerson().getNick_name());
-                }
-                break;
+//                case R.id.name: {
+//                    showName(0, infoData.getPerson().getNick_name());
+//                }
+//                break;
                 case R.id.sex: {
                     flag = 1;
                     dismissWindow();
@@ -418,7 +421,7 @@ public class MyProActivity extends BaseActivity {
                         break;
                     }
                     break;
-                case R.id.back:
+                case R.id.iv_back:
                     Intent intent = new Intent();
                     intent.putExtra("selfAvatarPath", selfAvatarPath);
                     setResult(99, intent);
@@ -444,7 +447,7 @@ public class MyProActivity extends BaseActivity {
                     showLocation();
                     break;
                 case R.id.identity:
-                    showName(1,infoData.getPerson().getIdentity_card());
+                    showName(1, infoData.getPerson().getIdentity_card());
                     break;
             }
         }
@@ -697,7 +700,7 @@ public class MyProActivity extends BaseActivity {
 
     public void showPop() {
         head_image_window = new PopupWindow(headView,
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         head_image_window.setOutsideTouchable(true);
         head_image_window.setBackgroundDrawable(new BitmapDrawable());
         //显示PopupWindow
@@ -744,7 +747,7 @@ public class MyProActivity extends BaseActivity {
     }
 
 
-    public void showName(final int i,String hint) {
+    public void showName(final int i, String hint) {
         //i==0是编辑昵称i==1表示身份证
         final AlertDialog.Builder normalDialog =
                 new AlertDialog.Builder(MyProActivity.this);
@@ -782,7 +785,6 @@ public class MyProActivity extends BaseActivity {
                             commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
                             infoData.getPerson().setNick_name(nickName);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-
 
 
                             FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
@@ -861,11 +863,11 @@ public class MyProActivity extends BaseActivity {
         // 指定相机拍摄照片保存地址
         String state = Environment.getExternalStorageState();
         if (state.equals(Environment.MEDIA_MOUNTED)) {
-            cameraPath =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/" + System.currentTimeMillis() + ".png";
+            cameraPath = AppUtils.getDiskCachePath(MyProActivity.this) + "/" + System.currentTimeMillis() + ".png";
             Intent intent = new Intent();
             // 指定开启系统相机的Action
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-            String out_file_path =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/";
+            String out_file_path = AppUtils.getDiskCachePath(MyProActivity.this) + "/";
             File dir = new File(out_file_path);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -966,7 +968,6 @@ public class MyProActivity extends BaseActivity {
                             commitSelf(Constants.MODIFYY_IMAGE, "self_Avatar_path", compath);
 
 
-
                             //初始化参数修改头像
                             TIMFriendshipManager.ModifyUserProfileParam param = new TIMFriendshipManager.ModifyUserProfileParam();
                             param.setFaceUrl(selfAvatarPath);
@@ -1002,9 +1003,9 @@ public class MyProActivity extends BaseActivity {
 
         } else if (resultCode == 13) {
             String sign = data.getStringExtra("sign");
-            if(sign!=null&&sign.length()>0){
+            if (sign != null && sign.length() > 0) {
                 tv_sign.setText(sign);
-            }else{
+            } else {
                 tv_sign.setText("未填写");
             }
         }
@@ -1032,7 +1033,7 @@ public class MyProActivity extends BaseActivity {
             //设置裁剪之后的图片路径文件
             //随便命名一个
 
-            cutfile = new File( AppUtils.getDiskCachePath(MyProActivity.this)+ "/"+System.currentTimeMillis() + ".png");
+            cutfile = new File(AppUtils.getDiskCachePath(MyProActivity.this) + "/" + System.currentTimeMillis() + ".png");
             LogUtil.i(cutfile.getAbsolutePath());
             if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
                 cutfile.delete();
@@ -1078,7 +1079,7 @@ public class MyProActivity extends BaseActivity {
     private String imagePath;
 
     public void startPhotoZoom(Uri uri) throws IOException {
-        imagePath =  AppUtils.getDiskCachePath(MyProActivity.this)+ "/" + System.currentTimeMillis() + "cut.png";
+        imagePath = AppUtils.getDiskCachePath(MyProActivity.this) + "/" + System.currentTimeMillis() + "cut.png";
 
         cutfile = new File(imagePath);
         if (cutfile.exists()) { //如果已经存在，则先删除,这里应该是上传到服务器，然后再删除本地的，没服务器，只能这样了
