@@ -86,7 +86,7 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
         tv_date.setOnClickListener(this);
 
         et_content = findViewById(R.id.et_content);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         getDate();
         //LogUtil.i(SPUtils.getString("role_type",""));
     }
@@ -97,7 +97,7 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.btn_commit://保存
+            case R.id.dlbtn_commit://保存
 
 
                 if (TextUtils.isEmpty(et_content.getText().toString().trim())) {

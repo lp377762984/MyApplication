@@ -2,37 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery"
-
-        >
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            android:id="@+id/tv_tiltle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="添加待办事项"
-            android:textColor="@color/color_white"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
+<com.cn.danceland.myapplication.view.DongLanTitleView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleText="添加待办事项"></com.cn.danceland.myapplication.view.DongLanTitleView>
 
 
     <LinearLayout
@@ -166,11 +142,10 @@
         android:layout_height="1px"
         android:background="@color/line_bg" />
 
-    <Button
-        android:id="@+id/btn_commit"
-        style="@style/BtnCommitStyle"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="保存" />
+    <com.cn.danceland.myapplication.view.CommitButton
+        android:id="@+id/dlbtn_commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:text="保存"></com.cn.danceland.myapplication.view.CommitButton>
+
 </LinearLayout>

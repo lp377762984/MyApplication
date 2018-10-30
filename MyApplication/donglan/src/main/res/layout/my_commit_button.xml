@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        style="@style/BtnCommitStyle"
+        style="@style/BtnCommitStyle1"
         android:layout_width="327dp"
         android:layout_height="72.5dp"
         android:layout_centerHorizontal="true"

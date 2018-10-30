@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -68,6 +69,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.cn.danceland.myapplication.R.id.tv_biaoqian;
 import static com.cn.danceland.myapplication.R.id.tv_name;
 
 /**
@@ -195,7 +197,7 @@ public class RevisitListFragment extends BaseFragment {
         v.findViewById(R.id.btn_add).setOnClickListener(this);
 
 
- //       EasyRecyclerView easyRecyclerView=v.findViewById(R.id.easyrecyclerView);
+        //       EasyRecyclerView easyRecyclerView=v.findViewById(R.id.easyrecyclerView);
 
 
         mListView = v.findViewById(R.id.pullToRefresh);
@@ -511,6 +513,7 @@ public class RevisitListFragment extends BaseFragment {
                 vh.iv_hx_msg = convertView.findViewById(R.id.iv_hx_msg);
 
                 vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_biaoqian = convertView.findViewById(tv_biaoqian);
 
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
 
@@ -525,6 +528,26 @@ public class RevisitListFragment extends BaseFragment {
 
                 vh = (ViewHolder) convertView.getTag();
 
+            }
+
+
+            //会籍或会籍主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+                if (TextUtils.isEmpty(datalist.get(position).getAdmin_mark())) {
+                    vh.tv_biaoqian.setText(datalist.get(position).getAdmin_mark());
+                } else {
+                    vh.tv_biaoqian.setText("(" + datalist.get(position).getAdmin_mark() + ")");
+                }
+
+
+            }
+            //教练或教练主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+                if (TextUtils.isEmpty(datalist.get(position).getTeach_mark())) {
+                    vh.tv_biaoqian.setText(datalist.get(position).getTeach_mark());
+                } else {
+                    vh.tv_biaoqian.setText("(" + datalist.get(position).getTeach_mark() + ")");
+                }
             }
 
 
@@ -548,7 +571,7 @@ public class RevisitListFragment extends BaseFragment {
             if (datalist.get(position).getLast_time() != null) {
                 vh.tv_lasttime.setText(datalist.get(position).getLast_time());
             } else {
-                vh.tv_lasttime.setText( "最近未维护");
+                vh.tv_lasttime.setText("最近未维护");
             }
 
             vh.ll_item.setOnClickListener(new View.OnClickListener() {
@@ -782,6 +805,7 @@ public class RevisitListFragment extends BaseFragment {
             public ImageView iv_avatar;
             public ImageView iv_callphone;
             public TextView tv_name;
+            public TextView tv_biaoqian;
             public ImageView iv_sex;
             public TextView tv_lasttime;
             public LinearLayout ll_item;

@@ -345,7 +345,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             }
             vh.tv_name.setText(datalist.get(position).getOperate_name());
             vh.tv_type.setText(datalist.get(position).getType());
-            vh.tv_result.setText(datalist.get(position).getResult());
+            vh.tv_result.setText("回访结果："+datalist.get(position).getResult());
             if (TextUtils.equals(datalist.get(position).getType(), "电话")) {
 
                 vh.tv_time.setVisibility(View.VISIBLE);

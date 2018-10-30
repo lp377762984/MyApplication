@@ -50,7 +50,7 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
     private final static int DATE_DIALOG = 0;
     private Calendar c = null;
     RequestQueue requestQueue;
-    String id, strName, gender = "1", syear, smonth, sdate;//性别:1、男，2、女，3、未知，4、保密
+    String id, strName, gender = "0", syear, smonth, sdate;//性别:1、男，2、女，3、未知，4、保密
     Data mData;
     Gson gson;
     AlertDialog.Builder alertdialog;
@@ -187,11 +187,18 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
             iv_sex.setBackgroundResource(R.drawable.img_sex_info_woman);
             gender = "2";
         }
+
+        if (TextUtils.equals(mData.getPerson().getGender(), "1")) {
+            iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
+            gender = "1";
+        }
+
+
         if (!TextUtils.isEmpty(mData.getPerson().getBirthday())) {
             setdate(mData.getPerson().getBirthday());
         } else {
             //默认值
-            setdate("1990-6-15");
+            setdate("2018-10-15");
         }
 
     }
@@ -225,9 +232,19 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                     ToastUtils.showToastShort("请输入您的昵称");
                     return;
                 }
+                if (TextUtils.equals(gender, "0")) {
+                    ToastUtils.showToastShort("请选择您的性别");
+                    return;
+                }
                 strBirthday = syear + "-" + smonth + "-" + sdate;
-//                LogUtil.i(strBirthday);
-//                LogUtil.i(mData.getPerson().getBirthday());
+                LogUtil.i(strBirthday);
+                LogUtil.i(mData.getPerson().getBirthday());
+
+                if (TextUtils.equals(strBirthday, "2018-10-15")) {
+                    ToastUtils.showToastShort("请选择您生日");
+                    return;
+                }
+
                 startActivity(new Intent(SetRegisterInfoActivity.this, SetRegisterInfoSaveActivity.class)
                         .putExtra("gender", gender)
                         .putExtra("name", et_nickname.getText().toString())
@@ -239,7 +256,10 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                 if (TextUtils.equals("1", gender)) {
                     iv_sex.setBackgroundResource(R.drawable.img_sex_info_woman);
                     gender = "2";
-                } else {
+                } else if (TextUtils.equals("2", gender)) {
+                    iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
+                    gender = "1";
+                } else if (TextUtils.equals("0", gender)) {
                     iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
                     gender = "1";
                 }

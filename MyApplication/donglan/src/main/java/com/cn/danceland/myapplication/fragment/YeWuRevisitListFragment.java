@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
@@ -506,6 +507,7 @@ public class YeWuRevisitListFragment extends BaseFragment {
                 vh.iv_hx_msg = convertView.findViewById(R.id.iv_hx_msg);
 
                 vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_biaoqian = convertView.findViewById(R.id.tv_biaoqian);
 
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
 
@@ -522,7 +524,24 @@ public class YeWuRevisitListFragment extends BaseFragment {
 
             }
 
+            //会籍或会籍主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+                if (TextUtils.isEmpty(datalist.get(position).getAdmin_mark())) {
+                    vh.tv_biaoqian.setText(datalist.get(position).getAdmin_mark());
+                } else {
+                    vh.tv_biaoqian.setText("(" + datalist.get(position).getAdmin_mark() + ")");
+                }
 
+
+            }
+            //教练或教练主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+                if (TextUtils.isEmpty(datalist.get(position).getTeach_mark())) {
+                    vh.tv_biaoqian.setText(datalist.get(position).getTeach_mark());
+                } else {
+                    vh.tv_biaoqian.setText("(" + datalist.get(position).getTeach_mark() + ")");
+                }
+            }
             //第一个是上下文，第二个是圆角的弧度
             RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(mActivity, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
 
@@ -777,6 +796,7 @@ public class YeWuRevisitListFragment extends BaseFragment {
             public ImageView iv_avatar;
             public ImageView iv_callphone;
             public TextView tv_name;
+            public TextView tv_biaoqian;
             public ImageView iv_sex;
             public TextView tv_lasttime;
             public LinearLayout ll_item;

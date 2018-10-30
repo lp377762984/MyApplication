@@ -25,8 +25,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -106,7 +104,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
     private ListJiaoLianPopup listJiaoLianPopup;
     private ContainsEmojiEditText et_nationality;
     private ContainsEmojiEditText et_emergency_name;
-    private EditText et_certificate_no, et_emergency_phone;
+    private ContainsEmojiEditText et_certificate_no, et_emergency_phone, et_biaoqian;
     private TextView tv_birthday;
     private EditText et_height;
     private EditText et_weight;
@@ -132,6 +130,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
         et_phone = findViewById(R.id.et_phone);
         et_name = findViewById(R.id.et_name);
         tv_sex = findViewById(R.id.tv_sex);
+        et_biaoqian = findViewById(R.id.et_biaoqian);
         tv_sex.setOnClickListener(this);
 
         et_weixin_no = findViewById(R.id.et_weixin_no);
@@ -173,7 +172,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
         tv_medical_history = findViewById(R.id.tv_medical_history);
         tv_medical_history.setOnClickListener(this);
         et_remark = findViewById(R.id.et_remark);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         tv_certificate_type = findViewById(R.id.et_certificate_type);
         tv_certificate_type.setOnClickListener(this);
         et_certificate_no = findViewById(R.id.et_certificate_no);
@@ -199,7 +198,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
         year = time.year;
 
 
-        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIGUWEN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_HUIJIZHUGUANG) {
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
             potentialInfo.setAdmin_emp_id(data.getEmployee().getId() + "");
             potentialInfo.setAdmin_name(data.getEmployee().getCname());
             tv_admin_name.setText(data.getEmployee().getCname());
@@ -208,7 +207,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
             tv_admin_name.setTextColor(Color.GRAY);
 
         }
-        if (SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIAN||SPUtils.getInt(Constants.ROLE_ID,0)==Constants.ROLE_ID_JIAOLIANZHUGUAN){
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
             potentialInfo.setTeach_emp_id(data.getEmployee().getId() + "");
             potentialInfo.setAdmin_name(data.getEmployee().getCname());
             tv_teach_name.setText(data.getEmployee().getCname());
@@ -267,7 +266,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
                 codeType = MEDICAL;
                 findParams(codeType);
                 break;
-            case R.id.btn_commit://保存
+            case R.id.dlbtn_commit://保存
                 if (TextUtils.isEmpty(et_phone.getText().toString().trim())) {
                     ToastUtils.showToastShort("手机号码必须填写");
                     return;
@@ -335,6 +334,15 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
                 potentialInfo.setNationality(et_nationality.getText().toString().trim());
                 potentialInfo.setPlatform("6");
 
+                //会籍或会籍主管
+                if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+                    potentialInfo.setAdmin_mark(et_biaoqian.getText().toString());
+
+                }
+                //教练或教练主管
+                if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+                    potentialInfo.setTeach_mark(et_biaoqian.getText().toString());
+                }
 
 
                 LogUtil.i(gson.toJson(potentialInfo).toString());

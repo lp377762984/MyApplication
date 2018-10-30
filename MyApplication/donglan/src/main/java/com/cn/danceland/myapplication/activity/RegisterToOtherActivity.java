@@ -432,7 +432,7 @@ public class RegisterToOtherActivity extends BaseActivity implements View.OnClic
                             );
                             break;
                         case 4:// 4:资料不全，需要补全资料
-                            startActivity(new Intent(context, RegisterInfoActivity.class));
+                            startActivity(new Intent(context, SetRegisterInfoActivity.class));
                             break;
                         default:
                             ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
@@ -514,7 +514,7 @@ public class RegisterToOtherActivity extends BaseActivity implements View.OnClic
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
                     SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
-                    startActivity(new Intent(RegisterToOtherActivity.this, RegisterInfoActivity.class));
+                    startActivity(new Intent(RegisterToOtherActivity.this, SetRegisterInfoActivity.class));
                     setMipushId();
                     finish();
 

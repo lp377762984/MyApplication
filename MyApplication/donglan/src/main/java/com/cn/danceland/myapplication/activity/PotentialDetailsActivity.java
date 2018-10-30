@@ -190,6 +190,8 @@ public class PotentialDetailsActivity extends BaseActivity implements View.OnCli
         auth = getIntent().getStringExtra("auth");
         if (TextUtils.equals(auth,"2")){
             tv_tiltle.setText("会员详情");
+        }else {
+            tv_tiltle.setText("潜客详情");
         }
         findViewById(R.id.iv_back).setOnClickListener(this);
         btn_add = findViewById(R.id.btn_add);
