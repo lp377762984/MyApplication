@@ -57,10 +57,12 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PictureUtil;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
+import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -131,6 +133,7 @@ public class MyProActivity extends BaseActivity {
     LoopView loopview;
     TextView tv_start, over_time, tv_hobby, tv_sign;
     private LinearLayout  sex, hobby, headimage, rl_jianjie;
+    private DongLanTransparentTitleView dongLanTitleView;
 
     private Handler handler = new Handler() {
         @Override
@@ -269,10 +272,48 @@ public class MyProActivity extends BaseActivity {
         over_action = locationView.findViewById(R.id.over_action);
         list_province = locationView.findViewById(R.id.list_province);
         list_city = locationView.findViewById(R.id.list_city);
+
+        dongLanTitleView = findViewById(R.id.title);
+        TextView more_iv = dongLanTitleView.getRightTv();
+        more_iv.setVisibility(View.VISIBLE);
+        more_iv.setText("保存");
+
         if (zoneArr.size() > 0) {
             tv_zone.setText(zoneArr.get(0).getProvince() + " " + zoneArr.get(0).getCity());
             zoneArr.clear();
         }
+        more_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {//拉黑
+//                if (TextUtils.isEmpty(ed.getText().toString())) {
+//                    ToastUtils.showToastShort("请输入昵称");
+//
+//                    return;
+//                }
+//                nickName = ed.getText().toString();
+//                text_name.setText(nickName);
+//                commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
+//                infoData.getPerson().setNick_name(nickName);
+//                DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+//
+//
+//                FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
+//                    @Override
+//                    public void onError(int i, String s) {
+//                        LogUtil.i("昵称修改失败");
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//
+//                        LogUtil.i("昵称修改成功");
+//                    }
+//                });
+//
+//                //发送事件
+//                EventBus.getDefault().post(new StringEvent(nickName, 100));
+            }
+        });
     }
 
     public void setClick() {
