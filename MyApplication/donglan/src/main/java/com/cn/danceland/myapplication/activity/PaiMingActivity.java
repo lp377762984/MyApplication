@@ -27,6 +27,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -45,7 +46,7 @@ public class PaiMingActivity extends BaseActivity {
     private TextView title;
     private TextView tv_paiming;
     private TextView tv_daka_num;
-
+    private ImageView header_background_iv;//打卡排行 菜单 粉色布局
 
     private PullToRefreshListView pullToRefresh;
     MyUserListviewAdapter myUserListviewAdapter;
@@ -134,6 +135,8 @@ public class PaiMingActivity extends BaseActivity {
 
     private void initView() {
         pullToRefresh = findViewById(R.id.pullToRefresh);
+        header_background_iv = findViewById(R.id.header_background_iv);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(PaiMingActivity.this, header_background_iv, (float) 187.5, 118);
         init();
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);

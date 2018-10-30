@@ -37,6 +37,9 @@ import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 import com.google.gson.Gson;
 import com.vondear.rxtools.view.likeview.RxShineButton;
 
@@ -68,9 +71,12 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     private String userId;
     private boolean isdyn;
     private ImageView iv_sex;
-//    RxShineButton rx_guangzhu;
+    RxShineButton rx_guangzhu;
     private ImageView iv_guanzhu;
     private TextView tv_sign;
+    private DongLanTransparentTitleView dongLanTitleView;
+
+    private ImageView header_background_iv;//打卡排行 菜单 粉色布局
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,10 +113,10 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
         tv_dyn = findViewById(R.id.tv_dyn);
         tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
-//        rx_guangzhu = findViewById(R.id.rx_guangzhu);
+        rx_guangzhu = findViewById(R.id.rx_guangzhu);
         iv_guanzhu = findViewById(R.id.iv_guanzhu);
         iv_guanzhu.setOnClickListener(this);
-//        rx_guangzhu.setOnClickListener(this);
+        rx_guangzhu.setOnClickListener(this);
 
         tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
@@ -122,11 +128,23 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         //   iv_guanzhu.setOnClickListener(this);
         tv_hobby = findViewById(R.id.tv_hobby);
         tv_sign = findViewById(R.id.tv_sign);
+
+        header_background_iv = findViewById(R.id.header_background_iv);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(UserSelfHomeActivity.this, header_background_iv, (float) 187.5, 118);
+
+        dongLanTitleView = findViewById(R.id.title);
+        ImageView more_iv = dongLanTitleView.getRightIv();
+
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
-            findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
+            findViewById(R.id.meun_cradview).setVisibility(View.INVISIBLE);
             findViewById(R.id.ll_edit).setVisibility(View.VISIBLE);
         }
-
+        more_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showListDialogSelf(userId);
+            }
+        });
     }
 
     private Handler handler = new Handler() {
@@ -229,11 +247,11 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         if (userInfo.getIs_follow()) {
             tv_guanzhu.setText("已关注");
             iv_guanzhu.setImageResource(R.drawable.img_xin1);
-//            rx_guangzhu.setChecked(true);
+            rx_guangzhu.setChecked(true);
         } else {
             tv_guanzhu.setText("+关注");
             iv_guanzhu.setImageResource(R.drawable.img_xin);
-//            rx_guangzhu.setChecked(false);
+            rx_guangzhu.setChecked(false);
         }
 
 
@@ -290,13 +308,15 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                     addGuanzhu(userId, true);
                 }
                 break;
-//            case R.id.rx_guangzhu:
-//                if (userInfo.getIs_follow()) {
-//                    showClearDialog();
-//                } else {
-//                    addGuanzhu(userId, true);
-//                }
-//                break;
+            case R.id.rx_guangzhu:
+                if (userInfo.getIs_follow()) {
+                    showClearDialog();
+                } else {
+                    addGuanzhu(userId, true);
+                }
+
+
+                break;
 
             case R.id.ll_edit:
                 startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));

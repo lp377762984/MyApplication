@@ -205,7 +205,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.listview_item_dynamic, null);
             viewHolder.tv_nick_name = (TextView) convertView.findViewById(R.id.tv_nick_name);
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
-            viewHolder.tv_guanzhu = (TextView) convertView.findViewById(tv_guanzhu);
+//            viewHolder.tv_guanzhu = (TextView) convertView.findViewById(tv_guanzhu);
             viewHolder.tv_location = convertView.findViewById(R.id.tv_location);
             viewHolder.ll_location = convertView.findViewById(R.id.ll_location);
             viewHolder.tv_content = convertView.findViewById(R.id.tv_content);
@@ -326,21 +326,21 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                 }
             });
 
-            if (isMe) {//是否是个人页面
-                viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
-            } else {
-                viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
-            }
+//            if (isMe) {//是否是个人页面
+//                viewHolder.tv_guanzhu.setVisibility(View.INVISIBLE);
+//            } else {
+//                viewHolder.tv_guanzhu.setVisibility(View.VISIBLE);
+//            }
 
 
             if (data.get(position).isFollower()) {
-                viewHolder.tv_guanzhu.setText("已关注");
-                viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
+//                viewHolder.tv_guanzhu.setText("已关注");
+//                viewHolder.tv_guanzhu.setTextColor(Color.GRAY);
                 viewHolder.rx_guanzhu.setChecked(true);
                 viewHolder.rx_guanzhu.setClickable(false);
             } else {
-                viewHolder.tv_guanzhu.setText("+关注");
-                viewHolder.tv_guanzhu.setTextColor(Color.parseColor("#ff6600"));
+//                viewHolder.tv_guanzhu.setText("+关注");
+//                viewHolder.tv_guanzhu.setTextColor(Color.parseColor("#ff6600"));
                 viewHolder.rx_guanzhu.setChecked(true);
                 viewHolder.rx_guanzhu.setClickable(false);
             }
@@ -548,7 +548,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
         TextView tv_location;//地点
         TextView tv_zan_num;//点赞数量
-        TextView tv_guanzhu;
+//        TextView tv_guanzhu;
         //  TextView tv_no_data;
         ImageView iv_avatar;
         ImageView iv_zan;//点赞

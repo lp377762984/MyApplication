@@ -120,7 +120,8 @@
                     android:layout_gravity="center_horizontal"
                     android:text="已关注"
                     android:textColor="@color/color_dl_yellow"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

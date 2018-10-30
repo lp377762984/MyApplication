@@ -98,8 +98,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="+关注"
-
-                android:textColor="@color/color_dl_yellow" />
+                android:textColor="@color/color_dl_yellow"
+                android:visibility="gone"/>
         </LinearLayout>
 
 

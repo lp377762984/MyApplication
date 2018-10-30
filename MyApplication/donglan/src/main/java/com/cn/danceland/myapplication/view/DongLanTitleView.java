@@ -18,8 +18,9 @@ import com.cn.danceland.myapplication.R;
 
 public class DongLanTitleView extends RelativeLayout {
 
-    ImageView donglan_back;
-    TextView donglan_title,donglan_right_tv;
+    private ImageView donglan_back;
+    private ImageView donglan_more;
+    private TextView donglan_title,donglan_right_tv;
     private  View inflate;
     private  String titleText;
     private boolean cannotBack;
@@ -46,6 +47,7 @@ public class DongLanTitleView extends RelativeLayout {
     }
     private void setUpView(){
         donglan_back = inflate.findViewById(R.id.iv_back);
+        donglan_more = inflate.findViewById(R.id.iv_more);
         if (cannotBack){
             donglan_back.setVisibility(GONE);
         }
@@ -65,6 +67,9 @@ public class DongLanTitleView extends RelativeLayout {
     }
     public TextView getRightTv(){
         return donglan_right_tv;
+    }
+    public ImageView getRightIv(){
+        return donglan_more;
     }
 
     public void setTitle(String s){
