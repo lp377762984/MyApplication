@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
@@ -16,15 +16,14 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:src="@drawable/img_back"
             android:layout_centerVertical="true"
             android:paddingLeft="15dp"
-            />
+            android:paddingRight="30dp"
+            android:src="@drawable/img_back" />
+
         <TextView
             style="@style/TextViewTitileStyle"
-            android:text="我的资料"
-            />
+            android:text="我的资料" />
 
     </RelativeLayout>
 
@@ -33,36 +32,36 @@
         android:id="@+id/head_image"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/bg_setting_item_selector"
-        android:layout_below="@+id/iv_back"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/iv_back"
+        android:background="@drawable/bg_setting_item_selector">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:text="头像"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circleimageview"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-           android:src="@drawable/img_my_avatar"
-            />
+            android:layout_marginRight="30dp"
+            android:src="@drawable/img_my_avatar" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/name"
-        android:background="@drawable/bg_setting_item_selector"
-        android:layout_below="@+id/head_image"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:layout_below="@+id/head_image"
+        android:background="@drawable/bg_setting_item_selector">
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,218 +69,210 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:text="昵称"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
+
         <hani.momanii.supernova_emoji_library.Helper.EmojiconTextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:layout_alignParentRight="true"
             android:text="未填写"
-            android:textSize="13sp"
             android:textColor="@color/color_dl_yellow"
-            />
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/sex"
-        android:background="@drawable/bg_setting_item_selector"
-        android:layout_below="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="40dp"
+        android:layout_below="@+id/name"
+        android:background="@drawable/bg_setting_item_selector">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
             android:text="性别"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/text_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
-            android:layout_alignParentRight="true"
             android:text="女"
-            android:textSize="13sp"
             android:textColor="@color/color_dl_yellow"
-            />
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <RelativeLayout
-    android:id="@+id/hobby"
-    android:layout_below="@+id/sex"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@drawable/bg_setting_item_selector"
-    >
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="喜好"
-    android:textSize="15sp"
-    android:layout_centerVertical="true"
-    android:layout_marginLeft="30dp"
-    />
+        android:id="@+id/hobby"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/sex"
+        android:background="@drawable/bg_setting_item_selector">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:text="喜好"
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_hobby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="30dp"
             android:text="未填写"
-            android:layout_centerVertical="true"
-            android:textColor="@color/color_dl_yellow"
-            />
+            android:textColor="@color/color_dl_yellow" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_jianjie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/hobby"
         android:layout_marginTop="15dp"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+        android:focusableInTouchMode="true">
 
-        <TextView
-            android:id="@+id/tv_title_hobby"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="个人简介"
-            android:layout_marginLeft="30dp"
-            android:textSize="15sp"
-            />
-
-        <TextView
-            android:id="@+id/tv_sign"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="未填写"
-            />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_title_hobby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:text="个人简介"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_sign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="未填写"
+                android:textSize="13sp" />
 
 
-</LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
-
 
 
     <RelativeLayout
         android:id="@+id/height"
-        android:layout_below="@+id/line3"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
+        android:layout_below="@+id/line3"
         android:background="@drawable/bg_setting_item_selector"
-        >
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="身高"
-            android:textSize="15sp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
-            />
+            android:text="身高"
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
-            android:textColor="@color/color_dl_yellow"
-            />
+            android:layout_marginRight="30dp"
+            android:text=""
+            android:textColor="@color/color_dl_yellow" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/weight"
-        android:layout_below="@+id/height"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
+        android:layout_below="@+id/height"
         android:background="@drawable/bg_setting_item_selector"
-        >
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="体重"
-            android:textSize="15sp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
-            />
+            android:text="体重"
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
-            android:textColor="@color/color_dl_yellow"            />
+            android:layout_marginRight="30dp"
+            android:text=""
+            android:textColor="@color/color_dl_yellow" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_zone"
-        android:layout_below="@+id/weight"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
+        android:layout_below="@+id/weight"
         android:background="@drawable/bg_setting_item_selector"
-        >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_zone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="13sp"
-            android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:text=""
             android:textColor="@color/color_dl_yellow"
-            />
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_phone"
-        android:layout_below="@+id/rl_zone"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:visibility="gone"
+        android:layout_below="@+id/rl_zone"
         android:background="@drawable/bg_setting_item_selector"
-        >
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="手机号"
             android:layout_centerVertical="true"
-            android:textSize="15sp"
             android:layout_marginLeft="30dp"
-            />
+            android:text="手机号"
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="13sp"
-            android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:text=""
             android:textColor="@color/color_dl_yellow"
-            />
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -289,28 +280,27 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/rl_phone"
-        android:visibility="gone"
         android:background="@drawable/bg_setting_item_selector"
-        >
+        android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="身份证号"
-            android:textSize="15sp"
-            android:layout_marginLeft="30dp"
             android:layout_centerVertical="true"
-            />
+            android:layout_marginLeft="30dp"
+            android:text="身份证号"
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/tv_identity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
             android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
             android:text=""
-            android:textSize="13sp"
             android:textColor="@color/color_dl_yellow"
-            />
+            android:textSize="13sp" />
     </RelativeLayout>
 
 </RelativeLayout>

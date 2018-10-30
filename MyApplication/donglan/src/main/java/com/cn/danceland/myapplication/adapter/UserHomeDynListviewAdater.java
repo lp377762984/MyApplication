@@ -480,9 +480,6 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //                    linearParams1.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
                     linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
                     viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
-//
-
-
                 } else if (data.get(position).getImgList().size() == 4) {
                     viewHolder.iv_pic.setVisibility(View.GONE);
                     viewHolder.gridView.setNumColumns(2);
