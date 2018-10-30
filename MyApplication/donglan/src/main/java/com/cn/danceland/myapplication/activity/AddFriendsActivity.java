@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -82,6 +83,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
         AppManager.getAppManager().addActivity(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         from = getIntent().getStringExtra("from");
         iv_del = findViewById(R.id.iv_del);
         ll_search = findViewById(R.id.ll_search);
@@ -125,7 +127,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
 
         tv_guanzhu = findViewById(R.id.tv_guanzhu);
-        tv_title = findViewById(R.id.tv_title);
+        tv_title = findViewById(R.id.donglan_title);
         if ("体测".equals(from)) {
 //            tv_guanzhu.setVisibility(View.GONE);
             tv_title.setText("搜索会员");
@@ -155,7 +157,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
     private void setListener() {
         ll_search.setOnClickListener(this);
         iv_del.setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
+//        findViewById(R.id.iv_back).setOnClickListener(this);
         mEtPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -199,9 +201,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                     findUser(mEtPhone.getText().toString().trim());
                 }
                 break;
-            case R.id.iv_back://返回
-                finish();
-                break;
+//            case R.id.iv_back://返回
+//                finish();
+//                break;
             case R.id.tv_guanzhu://加关注
 //                if (!userInfo.getData().getIs_follow()) {//如果未加关注
 //                    addGuanzhu(userInfo.getData().getPerson().getId(), true);
