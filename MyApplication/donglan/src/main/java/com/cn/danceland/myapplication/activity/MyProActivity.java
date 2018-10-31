@@ -286,7 +286,7 @@ public class MyProActivity extends BaseActivity {
         }
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {//拉黑
+            public void onClick(View v) {
                 if (TextUtils.isEmpty(text_name.getText().toString())) {
                     ToastUtils.showToastShort("请输入昵称");
                     return;
