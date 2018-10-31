@@ -325,6 +325,8 @@ public class Constants {
     //更新新闻资讯的阅读数
     public static String PUSH_READ_NUMBER = HOST + "/appHome/updateReadNumber";//更新新闻资讯的阅读数
 
+    //修改个人资料(v 2.0增加接口)
+    public static String PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
 
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
@@ -663,5 +665,8 @@ public class Constants {
 
         //更新新闻资讯的阅读数
         PUSH_READ_NUMBER = HOST + "/appHome/updateReadNumber";//更新新闻资讯的阅读数
+
+        //修改个人资料(v 2.0增加接口)
+       PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
     }
 }
