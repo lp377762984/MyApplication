@@ -615,6 +615,7 @@ public class WearFitSleepActivity extends Activity {
                     ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                     LogUtil.e("onErrorResponse", volleyError.toString());
                 }
+            }) ;
             });
             MyApplication.getHttpQueues().add(request);
         }
@@ -694,6 +695,7 @@ public class WearFitSleepActivity extends Activity {
                 ToastUtils.showToastShort(context.getResources().getText(R.string.network_connection_text).toString());
                 LogUtil.e("onErrorResponse", volleyError.toString());
             }
+        });
         }) ;
         MyApplication.getHttpQueues().add(request);
     }
