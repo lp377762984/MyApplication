@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,9 @@ import com.cn.danceland.myapplication.bean.UpImagesBean;
 import com.cn.danceland.myapplication.bean.VideoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.FileUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
@@ -87,6 +90,7 @@ import top.zibin.luban.OnCompressListener;
  */
 
 public class PublishActivity extends BaseActivity {
+
     private static final int SELECT_VIDEO = 1010;
     private DongLanTitleView dongLanTitleView;
     TextView publish_ok;
@@ -97,7 +101,7 @@ public class PublishActivity extends BaseActivity {
     List<String> arrayList = new ArrayList<String>();
     GridView grid_view;
     String location = "";
-    TextView location_img;
+    ImageView location_img;
     Map<String, File> arrayFileMap;
     String videoPath, videoUrl;
     String cameraPath;
@@ -776,7 +780,11 @@ public class PublishActivity extends BaseActivity {
             }
         } else if (resultCode == 1) {
             location = data.getStringExtra("location");
-            publish_location.setText(location);
+            if(location!=null&&location.length()>0){
+                publish_location.setText(location);
+            }else{
+                publish_location.setText("所在位置");
+            }
         } else if (resultCode == 111) {
             isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
@@ -847,6 +855,7 @@ public class PublishActivity extends BaseActivity {
 
         @Override
         public int getCount() {
+            LogUtil.i("个数=("+(arrayLists.size() + 1));
             return arrayLists.size() + 1;
         }
 
@@ -876,7 +885,17 @@ public class PublishActivity extends BaseActivity {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            int imageP = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 40f)) / 3
+                    - DensityUtils.dp2px(context, 0f);//32：gridView左右margin  1:设计图
+            RelativeLayout.LayoutParams linearParams = new RelativeLayout.LayoutParams(imageP, imageP);
+            RelativeLayout.LayoutParams linearParams2 = new RelativeLayout.LayoutParams(imageP, imageP);
+            int marginXNum = DensityUtils.dp2px(context, 1f);
+            int marginYNum = DensityUtils.dp2px(context, 2.3f);
+            linearParams.setMargins(marginXNum, marginYNum, marginXNum, marginYNum);
+            linearParams2.setMargins(DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context,0f), DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context,0f));
+            viewHolder.rl_item.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+            viewHolder.img.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//            viewHolder.pl_sta.setLayoutParams(linearParams2); //使设置好的布局参数应用到控件
             if ("0".equals(isPhoto)) {
                 if (arrayLists.size() == 0) {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
@@ -905,6 +924,7 @@ public class PublishActivity extends BaseActivity {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    LogUtil.i("imgN="+imgN);
                     if (imgN != 100) { //100是视频
 
                         if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
@@ -957,8 +977,6 @@ public class PublishActivity extends BaseActivity {
                 }
             });
 //            }
-
-
             return convertView;
         }
     }

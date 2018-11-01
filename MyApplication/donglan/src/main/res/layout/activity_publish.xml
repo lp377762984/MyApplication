@@ -1,164 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGray23"
     android:orientation="vertical">
 
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="" />
+        app:titleText="发布动态" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/publish_status_cardview"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_below="@+id/title"
-        android:layout_margin="16dp"
-        android:background="@drawable/white_rounded_corners_bg"
-        app:cardCornerRadius="6dp"
-        app:cardElevation="5dp"
-        app:cardPreventCornerOverlap="false">
+        android:layout_height="match_parent">
 
-        <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
-            android:id="@+id/publish_status"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/transparent"
-            android:hint="晒改变，晒心得，晒运动"
-            android:maxLength="1500"
-            android:padding="15dp"
-            android:textColor="@color/colorGray21"
-            android:textColorHint="@color/colorGray21"
-            android:textSize="14sp"
-            emojicon:emojiconSize="18sp" />
-    </android.support.v7.widget.CardView>
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/rl_video"-->
-    <!--android:layout_width="80dp"-->
-    <!--android:layout_height="80dp"-->
-    <!--android:layout_below="@+id/publish_status"-->
-    <!--android:layout_marginLeft="10dp"-->
-    <!--android:layout_marginRight="10dp"-->
-    <!--android:background="#f5f5f5"-->
-    <!--android:visibility="gone"-->
-    <!--&gt;-->
-    <!--<Button-->
-    <!--android:id="@+id/videoimg"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/publish_status"-->
+            android:layout_height="match_parent">
 
-    <!--/>-->
-    <!--</RelativeLayout>-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/publish_status_cardview"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/white_rounded_corners_bg"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
 
-    <RelativeLayout
-        android:id="@+id/publish_mid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/publish_status_cardview">
+                <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                    android:id="@+id/publish_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/transparent"
+                    android:hint="晒改变，晒心得，晒运动"
+                    android:maxLength="1500"
+                    android:padding="15dp"
+                    android:textColor="@color/colorGray21"
+                    android:textColorHint="@color/colorGray21"
+                    android:textSize="14sp"
+                    emojicon:emojiconSize="18sp" />
+            </android.support.v7.widget.CardView>
 
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/publish_photo"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:background="#d3d3d3"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--&gt;-->
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:background="@drawable/publish_status"-->
-        <!--/>-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/publish_mid_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/publish_status_cardview"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/white_rounded_corners_bg"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
 
-        <!--</RelativeLayout>-->
+                <RelativeLayout
+                    android:id="@+id/publish_mid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <GridView
-            android:id="@+id/grid_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:numColumns="4"
-            android:visibility="visible">
+                    <com.cn.danceland.myapplication.view.NoScrollGridView
+                        android:id="@+id/grid_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="4dp"
+                        android:numColumns="3"
+                        android:scrollbars="none"
+                        android:visibility="visible" />
 
+                    <cn.jzvd.JZVideoPlayerStandard
+                        android:id="@+id/videoplayer"
+                        android:layout_width="150dp"
+                        android:layout_height="240dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:visibility="gone" />
 
-        </GridView>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
-        <cn.jzvd.JZVideoPlayerStandard
-            android:id="@+id/videoplayer"
-            android:layout_width="150dp"
-            android:layout_height="240dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
-            android:visibility="gone" />
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/publish_mid_layout">
 
-    <RelativeLayout
-        android:id="@+id/publish_line"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_below="@+id/publish_mid"
-        android:background="#ffffff">
+                <ImageView
+                    android:id="@+id/location_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/publish_location" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="#e8e8e8" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/publish_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/location_img"
+                    android:text="所在位置"
+                    android:textColor="@color/colorGray22" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/publish_line"
-        android:background="#ffffff">
+                <TextView
+                    android:id="@+id/publish_share1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+                    android:text="同步到健身圈"
+                    android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/location_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/publish_location" />
-
-        <TextView
-            android:id="@+id/publish_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/location_img"
-
-            />
-
-        <TextView
-            android:id="@+id/publish_share1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="同步到健身圈"
-            android:visibility="gone" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="8dp"
-            android:layout_toLeftOf="@+id/publish_share1"
-            android:background="@drawable/publish_circle"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></LinearLayout>
-
-</RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:layout_toLeftOf="@+id/publish_share1"
+                    android:background="@drawable/publish_circle"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
