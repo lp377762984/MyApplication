@@ -143,10 +143,10 @@ public class PublishActivity extends BaseActivity {
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
                     PublishBean bean = new PublishBean();
-                    LogUtil.i("stringstatus--" + stringstatus);
-                    LogUtil.i("picPath--" + picPath);
-                    LogUtil.i("vedioPath--" + vedioPath);
-                    LogUtil.i("location--" + location);
+//                    LogUtil.i("stringstatus--" + stringstatus);
+//                    LogUtil.i("picPath--" + picPath);
+//                    LogUtil.i("vedioPath--" + vedioPath);
+//                    LogUtil.i("location--" + location);
 
                     bean.setContent("");
                     if (!"".equals(stringstatus)) {
@@ -236,7 +236,7 @@ public class PublishActivity extends BaseActivity {
 
     public void getPic() {
         int m = SPUtils.getInt("imgN", 0);
-        if (m <= 9) {
+        if (m < 9) {
             Matisse.from(PublishActivity.this)
                     .choose(MimeType.allOf()) // 选择 mime 的类型
                     .countable(true)
@@ -293,8 +293,9 @@ public class PublishActivity extends BaseActivity {
 //                    .recordVideoSecond(10)//视频秒数录制 默认60s int
 //                    .isDragFrame(false)// 是否可拖动裁剪框(固定)
 //                    .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+        } else {
+            ToastUtils.showToastShort("最多选择9张图片");
         }
-
     }
 
     long length;
@@ -352,13 +353,11 @@ public class PublishActivity extends BaseActivity {
                                 finish();
                             } else {
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
-
                             }
-
                         }
                     } else {
-                        LogUtil.i("videoPath11--" + videoPath);
-                        LogUtil.i("picFile11--" + picFile);
+//                        LogUtil.i("videoPath11--" + videoPath);
+//                        LogUtil.i("picFile11--" + picFile);
                         if (videoPath != null && !"".equals(videoPath)) {
                             videoFile = new File(videoPath);
 
@@ -374,8 +373,8 @@ public class PublishActivity extends BaseActivity {
                                             if (videoBean != null && videoBean.getData() != null) {
                                                 vedioUrl = videoBean.getData().getImgUrl();
                                                 vedioPath = videoBean.getData().getImgPath();
-                                                LogUtil.i("提交视频 vedioUrl--" + vedioUrl);
-                                                LogUtil.i("提交视频 vedioPath--" + vedioPath);
+//                                                LogUtil.i("提交视频 vedioUrl--" + vedioUrl);
+//                                                LogUtil.i("提交视频 vedioPath--" + vedioPath);
                                                 if (picFile != null) {
                                                     MultipartRequestParams params = new MultipartRequestParams();
                                                     params.put("file", picFile);
@@ -386,8 +385,8 @@ public class PublishActivity extends BaseActivity {
                                                             if (headImageBean != null && headImageBean.getData() != null) {
                                                                 picUrl = headImageBean.getData().getImgUrl();
                                                                 picPath = headImageBean.getData().getImgPath();
-                                                                LogUtil.i("提交图片 picUrl--" + picUrl);
-                                                                LogUtil.i("提交图片 picPath--" + picPath);
+//                                                                LogUtil.i("提交图片 picUrl--" + picUrl);
+//                                                                LogUtil.i("提交图片 picPath--" + picPath);
 
                                                                 Message message = new Message();
                                                                 message.what = 1;
@@ -712,7 +711,7 @@ public class PublishActivity extends BaseActivity {
                     Bitmap frameAtTime = media.getFrameAtTime();
                     picFile = saveBitmapFile(frameAtTime);
                     String duration = media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
-                    LogUtil.i("-----" + "时长=" + duration);
+//                    LogUtil.i("-----" + "时长=" + duration);
                     if (duration != null && duration.length() > 0) {
                         long durationL = Long.valueOf(duration);
                         if (durationL < (60 * 1000)) {//视频不能超过60秒  5M
@@ -723,12 +722,12 @@ public class PublishActivity extends BaseActivity {
                             FileUtil.compressVideoResouce(PublishActivity.this, videoPath, savePath);//压缩视频
                             File file = new File(savePath);
                             long length = file.length();
-                            try {
-                                LogUtil.i("视频大小121--" + FileUtil.getDataSize(Long.valueOf(size)));
-                                LogUtil.i("视频大小" + FileUtil.getDataSize(FileUtil.getFileSize(file)) + "--" + FileUtil.getFileSize(file));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+//                                LogUtil.i("视频大小121--" + FileUtil.getDataSize(Long.valueOf(size)));
+//                                LogUtil.i("视频大小" + FileUtil.getDataSize(FileUtil.getFileSize(file)) + "--" + FileUtil.getFileSize(file));
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
                             if (length < (5 * 1024 * 1024)) {
                                 SPUtils.setInt("imgN", 100);
                                 List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
@@ -740,7 +739,6 @@ public class PublishActivity extends BaseActivity {
                             } else {
                                 ToastUtils.showToastShort("文件过大");
                             }
-
                         } else {
                             ToastUtils.showToastShort("文件过大");
                         }
@@ -762,11 +760,13 @@ public class PublishActivity extends BaseActivity {
                 List<Uri> uris = Matisse.obtainResult(data);
 
                 if (uris != null) {
+                    SPUtils.setInt("imgN", (arrayList.size()) + uris.size());
+//                    SPUtils.setInt("imgN", (arrayList.size()) + SPUtils.getInt("imgN", 0));
                     for (int i = 0; i < uris.size(); i++) {
                         arrayList.add(PictureUtil.getRealPath(getApplicationContext(), uris.get(i)));
                     }
 
-                    SPUtils.setInt("imgN", arrayList.size() + SPUtils.getInt("imgN", 0));
+
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
             }
@@ -780,9 +780,9 @@ public class PublishActivity extends BaseActivity {
             }
         } else if (resultCode == 1) {
             location = data.getStringExtra("location");
-            if(location!=null&&location.length()>0){
+            if (location != null && location.length() > 0) {
                 publish_location.setText(location);
-            }else{
+            } else {
                 publish_location.setText("所在位置");
             }
         } else if (resultCode == 111) {
@@ -855,8 +855,10 @@ public class PublishActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            LogUtil.i("个数=("+(arrayLists.size() + 1));
-            return arrayLists.size() + 1;
+            if ((arrayLists.size() + 1) <= 9) {
+                return arrayLists.size() + 1;
+            }
+            return arrayLists.size();
         }
 
         @Override
@@ -892,7 +894,7 @@ public class PublishActivity extends BaseActivity {
             int marginXNum = DensityUtils.dp2px(context, 1f);
             int marginYNum = DensityUtils.dp2px(context, 2.3f);
             linearParams.setMargins(marginXNum, marginYNum, marginXNum, marginYNum);
-            linearParams2.setMargins(DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context,0f), DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context,0f));
+            linearParams2.setMargins(DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context, 0f), DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context, 0f));
             viewHolder.rl_item.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             viewHolder.img.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 //            viewHolder.pl_sta.setLayoutParams(linearParams2); //使设置好的布局参数应用到控件
@@ -901,7 +903,6 @@ public class PublishActivity extends BaseActivity {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
-                        LogUtil.i("--&&---imagepath=" + arrayLists.get(position));
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -913,7 +914,6 @@ public class PublishActivity extends BaseActivity {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
-                        LogUtil.i("--&&---path=" + arrayLists.get(position));
                         Glide.with(context).load(thumbnailList.get(0)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -924,7 +924,6 @@ public class PublishActivity extends BaseActivity {
             viewHolder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LogUtil.i("imgN="+imgN);
                     if (imgN != 100) { //100是视频
 
                         if (PermissionsUtil.hasPermission(PublishActivity.this, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
