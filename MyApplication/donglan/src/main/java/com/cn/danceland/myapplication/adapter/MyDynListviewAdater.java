@@ -380,16 +380,27 @@ public class MyDynListviewAdater extends BaseAdapter {
         viewHolder.ll_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!data.get(position).isFollower()) {//未关注添加关注
-                    int pos = position;
-                    try {
-                        addGuanzhu(data.get(position).getAuthor(), true, pos);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                try {
+                    if (data.get(position).isFollower()) {
+                        addGuanzhu(data.get(position).getAuthor(), false, position);
+                    } else {
+                        addGuanzhu(data.get(position).getAuthor(), true, position);
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+//                if (!data.get(position).isFollower()) {//未关注添加关注
+//                    int pos = position;
+//                    try {
+//                        addGuanzhu(data.get(position).getAuthor(), true, pos);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
         });
+
+
 //        viewHolder.tv_guanzhu.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -856,22 +867,36 @@ public class MyDynListviewAdater extends BaseAdapter {
                 Gson gson = new Gson();
                 RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
                 requestInfoBean = gson.fromJson(json.toString(), RequsetSimpleBean.class);
-
-                if (requestInfoBean.isSuccess()) {
-
-                    ToastUtils.showToastShort("关注成功");
-                    EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.ADD_GUANZHU));
-
+                if (b) {
+                    if (requestInfoBean.getSuccess()) {
+                        ToastUtils.showToastShort("关注成功");
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.ADD_GUANZHU));
+                    } else {
+                        ToastUtils.showToastShort("关注失败");
+                    }
                 } else {
-                    ToastUtils.showToastShort("关注失败");
+                    if (requestInfoBean.getSuccess()) {
+                        EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.DEL_GUANZHU));
+                    } else {
+                        ToastUtils.showToastShort("取消关注失败");
+                    }
                 }
+//
+//                if (requestInfoBean.isSuccess()) {
+//
+//                    ToastUtils.showToastShort("关注成功");
+//                    EventBus.getDefault().post(new StringEvent(data.get(pos).getAuthor(), EventConstants.ADD_GUANZHU));
+//
+//                } else {
+//                    ToastUtils.showToastShort("关注失败");
+//                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
-        }) ;
+        });
 
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("addGuanzhu");

@@ -280,7 +280,6 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-//                LogUtil.i("onRefresh");
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -294,7 +293,6 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-//                LogUtil.i("onLoadMore");
 //                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -310,7 +308,6 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                LogUtil.i("X=" + dx + "Y=" + dy);
                 offsetNum += (dy);
 
 //                if (offsetNum != 0) {

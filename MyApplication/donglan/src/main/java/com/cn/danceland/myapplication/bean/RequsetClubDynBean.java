@@ -151,6 +151,7 @@ public class RequsetClubDynBean {
             private String news_txt;
             private int branch_id;
             private int type;
+            private String read_number;//阅读数
 
             @Override
             public String toString() {
@@ -168,7 +169,16 @@ public class RequsetClubDynBean {
                         ", news_txt='" + news_txt + '\'' +
                         ", branch_id=" + branch_id +
                         ", type=" + type +
+                        ", read_number='" + read_number + '\'' +
                         '}';
+            }
+
+            public String getRead_number() {
+                return read_number;
+            }
+
+            public void setRead_number(String read_number) {
+                this.read_number = read_number;
             }
 
             public void setId(int id) {

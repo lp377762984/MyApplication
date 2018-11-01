@@ -234,12 +234,10 @@ public class DiscoverFragment extends BaseFragment {
             case R.id.iv_photo://发布动态
                 Data data= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 
-
                 if (TextUtils.isEmpty(data.getPerson().getDefault_branch())){
                     ToastUtils.showToastShort("请先加人一个门店");
                     return;
                 }
-
 
 //                Intent intent = new Intent(mActivity,  QRCodeActivity.class);
 //               startActivity(intent);

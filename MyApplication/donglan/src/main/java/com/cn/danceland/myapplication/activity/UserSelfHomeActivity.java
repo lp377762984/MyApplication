@@ -189,8 +189,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                     tv_nick_name.setText(event.getMsg());
 
                     break;
-
-
                 case EventConstants.ADD_DYN:  //设置动态数+1
                     LogUtil.i("动态加1");
                     //mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);

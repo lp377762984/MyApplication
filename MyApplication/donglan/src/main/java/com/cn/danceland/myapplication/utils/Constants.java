@@ -328,6 +328,9 @@ public class Constants {
     //修改个人资料(v 2.0增加接口)
     public static String PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
 
+    //更新会送动态的阅读数
+    public static String PUSH_CLUB_READ_NUMBER = HOST + "/clubDynamic/updateReadNumber";//更新会送动态的阅读数
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -668,5 +671,8 @@ public class Constants {
 
         //修改个人资料(v 2.0增加接口)
        PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
+
+        //更新会送动态的阅读数
+        PUSH_CLUB_READ_NUMBER = HOST + "/clubDynamic/updateReadNumber";//更新会送动态的阅读数
     }
 }
