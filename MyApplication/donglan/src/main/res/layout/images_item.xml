@@ -33,7 +33,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:background="@drawable/publish_status"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 
