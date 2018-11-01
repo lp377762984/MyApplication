@@ -381,6 +381,7 @@ public class MyProActivity extends BaseActivity {
                     infoData.getPerson().setSign(sign);
                     DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
                     //修改个人简介--结束
+                    ToastUtils.showToastShort("修改成功");
                 } else {
                     ToastUtils.showToastShort("修改失败！");
                 }

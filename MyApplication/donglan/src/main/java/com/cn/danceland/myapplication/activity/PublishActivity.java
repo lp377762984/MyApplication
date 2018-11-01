@@ -56,6 +56,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -87,7 +88,7 @@ import top.zibin.luban.OnCompressListener;
 
 public class PublishActivity extends BaseActivity {
     private static final int SELECT_VIDEO = 1010;
-    TextView publish_cancel;
+    private DongLanTitleView dongLanTitleView;
     TextView publish_ok;
     hani.momanii.supernova_emoji_library.Helper.EmojiconEditText publish_status;
     RelativeLayout publish_photo, rl_video;
@@ -202,12 +203,14 @@ public class PublishActivity extends BaseActivity {
         publish_location.setOnClickListener(onClickListener);
         location_img.setOnClickListener(onClickListener);
         publish_ok.setOnClickListener(onClickListener);
-        publish_cancel.setOnClickListener(onClickListener);
     }
 
     private void initView() {
-        publish_cancel = findViewById(R.id.publish_cancel);
-        publish_ok = findViewById(R.id.publish_ok);
+        dongLanTitleView = findViewById(R.id.title);
+        publish_ok = dongLanTitleView.findViewById(R.id.donglan_right_tv);
+        publish_ok.setText("发布");
+        publish_ok.setVisibility(View.VISIBLE);
+        publish_ok.setTextColor(getResources().getColor(R.color.home_enter_total_text_color));
         publish_ok.setClickable(true);
         location_img = findViewById(R.id.location_img);
         publish_status = findViewById(R.id.publish_status);
@@ -303,7 +306,7 @@ public class PublishActivity extends BaseActivity {
                     Intent intent2 = new Intent(PublishActivity.this, LocationActivity.class);
                     startActivityForResult(intent2, 1);
                     break;
-                case R.id.publish_ok:
+                case R.id.donglan_right_tv:
                     //Intent intent3 = new Intent(PublishActivity.this,S);
                     final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
@@ -424,16 +427,12 @@ public class PublishActivity extends BaseActivity {
 
                         }
                     }
-
-                    break;
-                case R.id.publish_cancel:
-                    finish();
                     break;
             }
         }
     };
 
-    private void showListDialog( String[] items) {
+    private void showListDialog(String[] items) {
 
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
@@ -517,9 +516,9 @@ public class PublishActivity extends BaseActivity {
                     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                     //finish();
                 } else {
-                    if (rootBean.code==1){
+                    if (rootBean.code == 1) {
                         ToastUtils.showToastShort(rootBean.errorMsg);
-                    }else {
+                    } else {
                         ToastUtils.showToastShort("发布失败！请检查网络连接");
                     }
                 }
@@ -530,7 +529,7 @@ public class PublishActivity extends BaseActivity {
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
@@ -712,7 +711,7 @@ public class PublishActivity extends BaseActivity {
                     LogUtil.i("-----" + "时长=" + duration);
                     if (duration != null && duration.length() > 0) {
                         long durationL = Long.valueOf(duration);
-                        if (durationL < (60 * 1000) ) {//视频不能超过60秒  5M
+                        if (durationL < (60 * 1000)) {//视频不能超过60秒  5M
 
                             String savePath = Environment.getExternalStorageDirectory().getPath()
                                     + "/donglan/camera/vedio/" + name;//压缩后的视频地址
@@ -721,12 +720,12 @@ public class PublishActivity extends BaseActivity {
                             File file = new File(savePath);
                             long length = file.length();
                             try {
-                                LogUtil.i("视频大小121--"+FileUtil.getDataSize(Long.valueOf(size)));
-                                LogUtil.i("视频大小"+FileUtil.getDataSize(FileUtil.getFileSize(file))+"--"+FileUtil.getFileSize(file));
+                                LogUtil.i("视频大小121--" + FileUtil.getDataSize(Long.valueOf(size)));
+                                LogUtil.i("视频大小" + FileUtil.getDataSize(FileUtil.getFileSize(file)) + "--" + FileUtil.getFileSize(file));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (length < (5 * 1024 * 1024 )) {
+                            if (length < (5 * 1024 * 1024)) {
                                 SPUtils.setInt("imgN", 100);
                                 List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
                                 thumbnailList.add(frameAtTime);
