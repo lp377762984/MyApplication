@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
@@ -16,7 +17,10 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
+import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.activity.ActivityScanerCode;
+import com.vondear.rxtools.module.scaner.CameraManager;
+import com.vondear.rxtools.module.scaner.decoding.InactivityTimer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +34,23 @@ import java.util.Map;
 
 public class ScanerCodeActivity extends ActivityScanerCode {
 
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        RxBarTool.setNoTitle(this);
+//        setContentView(com.vondear.rxtools.R.layout.activity_scaner_code);
+//        RxBarTool.setTransparentStatusBar(this);
+//        //界面控件初始化
+//        initView();
+//        //权限初始化
+//        initPermission();
+//        //扫描动画初始化
+//        initScanerAnimation();
+//        //初始化 CameraManager
+//        CameraManager.init(mContext);
+//        hasSurface = false;
+//        inactivityTimer = new InactivityTimer(this);
+//    }
 
     @Override
     public void do_result(String result) {

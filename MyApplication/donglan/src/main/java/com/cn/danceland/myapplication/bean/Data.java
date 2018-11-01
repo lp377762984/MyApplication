@@ -143,8 +143,8 @@ public class Data implements Serializable {
         private String phone_no;
         private int gender;
         private String nick_name;
-        private int height;
-        private int weight;
+        private float height;
+        private float weight;
         private String birthday;
         private long reg_date;
         private String password;
@@ -488,20 +488,20 @@ public class Data implements Serializable {
             return nick_name;
         }
 
-        public void setHeight(int height) {
-            this.height = height;
-        }
-
-        public int getHeight() {
+        public float getHeight() {
             return height;
         }
 
-        public void setWeight(int weight) {
-            this.weight = weight;
+        public void setHeight(float height) {
+            this.height = height;
         }
 
-        public int getWeight() {
+        public float getWeight() {
             return weight;
+        }
+
+        public void setWeight(float weight) {
+            this.weight = weight;
         }
 
         public void setBirthday(String birthday) {
