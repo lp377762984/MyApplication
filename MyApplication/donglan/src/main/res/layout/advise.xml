@@ -176,8 +176,8 @@
         android:layout_alignStart="@+id/miman"
         android:layout_below="@+id/ll_agreement"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="41dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 

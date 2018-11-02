@@ -628,8 +628,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
     }
 
 
-    private final String[] HostList = new String[]{"http://192.168.1.114:8003/", "http://192.168.1.66:8003/", "http://192.168.1.78:8003/", "http://192.168.1.138:8003/"};
-    private final String[] HostListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器"};
+    private final String[] HostList = new String[]{"http://192.168.1.114:8003/", "http://192.168.1.66:8003/", "http://192.168.1.78:8003/", "http://192.168.1.138:8003/","http://coder-hc.oicp.io:57068/"};
+    private final String[] HostListName = new String[]{"高振中服务器", "李佳楠服务器", "唐值超服务器", "王丽萍服务器","舒华服务器"};
 
     private void showHostDialog() {
 

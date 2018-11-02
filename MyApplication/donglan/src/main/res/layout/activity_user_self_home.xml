@@ -316,15 +316,12 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:minHeight="44dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:paddingTop="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="right"
                                 android:text="个人简介："
                                 android:textColor="@color/colorGray21"
                                 android:textSize="14sp" />
@@ -333,7 +330,7 @@
                                 android:id="@+id/tv_sign"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
+                                android:gravity="top"
                                 android:text="没有填写"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
@@ -345,24 +342,20 @@
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:minHeight="44dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:paddingTop="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginTop="10dp"
-                                android:gravity="right"
                                 android:text="喜好："
                                 android:textColor="@color/colorGray21"
-                                android:textSize="14sp"/>
+                                android:textSize="14sp" />
 
                             <TextView
                                 android:id="@+id/tv_hobby"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
                                 android:text="没有填写"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />

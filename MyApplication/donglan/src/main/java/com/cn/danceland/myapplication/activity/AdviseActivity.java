@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -74,6 +75,10 @@ public class AdviseActivity extends BaseActivity {
         rl_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (TextUtils.isEmpty(advise_ed.getText().toString())) {
+                    ToastUtils.showToastShort("请输入您的意见或建议");
+                    return;
+                }
                 save();
             }
         });

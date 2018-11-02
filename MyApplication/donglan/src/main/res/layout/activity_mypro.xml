@@ -106,6 +106,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="16dp"
                                 android:text="昵称"
+                                android:gravity="top"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
@@ -117,8 +118,10 @@
                                 android:layout_marginRight="16dp"
                                 android:layout_weight="1"
                                 android:background="@color/transparent"
-                                android:gravity="right"
+                                android:gravity="right|top"
                                 android:hint="未填写"
+                                android:maxLength="12"
+                                android:singleLine="true"
                                 android:textColor="@color/colorGray22"
                                 android:textColorHint="@color/colorGray22"
                                 android:textSize="14sp" />
@@ -173,6 +176,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="喜好"
+                                android:gravity="top"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
@@ -184,9 +188,10 @@
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_weight="1"
+                                android:gravity="top|right"
                                 android:background="@color/transparent"
-                                android:gravity="right"
                                 android:hint="未填写"
+                                android:maxLength="20"
                                 android:textColor="@color/colorGray22"
                                 android:textColorHint="@color/colorGray22"
                                 android:textSize="14sp" />
@@ -209,6 +214,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="个人简介"
+                                android:gravity="top"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
@@ -220,8 +226,10 @@
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_weight="1"
+                                android:gravity="top"
                                 android:background="@color/transparent"
                                 android:hint="未填写"
+                                android:maxLength="100"
                                 android:textColor="@color/colorGray22"
                                 android:textColorHint="@color/colorGray22"
                                 android:textSize="14sp" />
