@@ -14,6 +14,7 @@ import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.activity.ActivityScanerCode;
@@ -30,20 +31,33 @@ import java.util.Map;
 
 public class ScanerCodeActivity extends ActivityScanerCode {
 
-
     @Override
     public void do_result(String result) {
         LogUtil.i(result);
-        String[] resultA = result.toString().split("\\,");
-        if (resultA != null && resultA.length > 1) {
-            if(resultA[2].equals("13")) {
-                startActivity(new Intent(ScanerCodeActivity.this, ScanerCodeDetailActivity.class).putExtra("message", result));
-                finish();
-            }else{
-                showConfirmDialog(result);
+        String from = this.getIntent().getStringExtra("from");
+        if (from != null && from.length() > 0) {
+            switch (from) {
+                case "entrance"://扫码入场
+                    String[] resultA = result.toString().split("\\,");
+                    if (resultA != null && resultA.length > 1) {
+                        if (resultA[2].equals("13")) {
+                            startActivity(new Intent(ScanerCodeActivity.this, ScanerCodeDetailActivity.class).putExtra("message", result));
+                            finish();
+                        } else {
+                            showConfirmDialog(result);
+                        }
+                    } else {
+                        showConfirmDialog(result);
+                    }
+                    break;
+                case "train"://扫码训练
+                    if (result != null && result.length() > 0) {//开启后结果  0成功   1失败
+                        scan_train(result);
+                    } else {
+                        showResultDialog("扫码失败",false);
+                    }
+                    break;
             }
-        }else{
-            showConfirmDialog(result);
         }
     }
 
@@ -61,7 +75,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
         MobclickAgent.onPause(this); // 基础指标统计，不能遗漏
     }
 
-    private void scan_qrcode(final String result) {
+    private void scan_qrcode(final String result) {//扫码入场
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -69,41 +83,68 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
                     if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
-                        showResultDialog("入场成功");
+                        showResultDialog("入场成功",true);
                     } else {
-
-                        showResultDialog(requsetSimpleBean.getErrorMsg());
+                        showResultDialog(requsetSimpleBean.getErrorMsg(),true);
                     }
-
                 } else {
-
-                    showResultDialog(requsetSimpleBean.getErrorMsg());
-
+                    showResultDialog(requsetSimpleBean.getErrorMsg(),true);
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                showResultDialog("入场失败:请查看网络连接");
+                showResultDialog("入场失败:请查看网络连接",true);
             }
         }) {
-
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 Map<String, String> map = new HashMap<>();
                 map.put("qrcode", result);
                 return map;
-
             }
         };
         MyApplication.getHttpQueues().add(request);
     }
 
+    private void scan_train(final String result) {//扫码训练
+        LogUtil.i("url=" + Constants.PUSH_SCANER_TRAIN);
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_SCANER_TRAIN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
+                if (requsetSimpleBean.getSuccess()) {
+                    if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
+                        showResultDialog("扫码成功，开始训练",false);
+                    } else if (TextUtils.equals(requsetSimpleBean.getCode(), "1")) {
+                        showResultDialog("开启失败",false);
+                    } else {
+                        showResultDialog("扫码失败",false);
+                    }
+                } else {
+                    showResultDialog(requsetSimpleBean.getErrorMsg(),false);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                showResultDialog("扫码失败",false);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("codeValue", result);
+                LogUtil.i("SPUtils.getString(Constants.MY_TOKEN, null)" + SPUtils.getString(Constants.MY_TOKEN, null));
+                LogUtil.i("trainParams" + map.toString());
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
 
     /**
      * 确认对话
@@ -132,7 +173,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     /**
      * 显示结果对话
      */
-    private void showResultDialog(final String result) {
+    private void showResultDialog(final String result,boolean cancel) {
         final AlertDialog.Builder dialog =
                 new AlertDialog.Builder(this);
         //   dialog.setTitle("提示");
@@ -144,14 +185,14 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 finish();
             }
         });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
+        if(cancel){
+            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+        }
         dialog.show();
     }
-
-
 }

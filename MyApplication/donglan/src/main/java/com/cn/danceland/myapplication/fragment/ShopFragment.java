@@ -528,6 +528,7 @@ public class ShopFragment extends BaseFragment {
 
     private static final int BAIDU_READ_PHONE_STATE = 100;//定位权限请求
     private static final int PRIVATE_CODE = 1315;//开启GPS权限
+
     private void getShop(String shopID) {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + shopID, new Response.Listener<String>() {
             @Override
@@ -558,17 +559,17 @@ public class ShopFragment extends BaseFragment {
 
                     tv_detail.setVisibility(View.VISIBLE);
                     if (isPermission) {
-                        LogUtil.i("data.getLat()"+data.getLat());
-                        LogUtil.i("data.getLng()"+data.getLng());
-                        LogUtil.i("getLngAndLat(mActivity).getLat()"+getLngAndLat(mActivity).getLat());
-                        LogUtil.i("getLngAndLat(mActivity).getLng()"+getLngAndLat(mActivity).getLng());
-                        double distanceKm= UIUtils.getDistance(data.getLat(),data.getLng(),getLngAndLat(mActivity).getLat(),getLngAndLat(mActivity).getLng());
-                        double dis=distanceKm/1000;
+                        LogUtil.i("data.getLat()" + data.getLat());
+                        LogUtil.i("data.getLng()" + data.getLng());
+                        LogUtil.i("getLngAndLat(mActivity).getLat()" + getLngAndLat(mActivity).getLat());
+                        LogUtil.i("getLngAndLat(mActivity).getLng()" + getLngAndLat(mActivity).getLng());
+                        double distanceKm = UIUtils.getDistance(data.getLat(), data.getLng(), getLngAndLat(mActivity).getLat(), getLngAndLat(mActivity).getLng());
+                        double dis = distanceKm / 1000;
                         NumberFormat nf = new DecimalFormat("##.#");
                         String str = nf.format(dis);
-                        tv_distance_km.setText("距我"+str+"km");
+                        tv_distance_km.setText("距我" + str + "km");
                         tv_distance_km.setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         tv_distance_km.setVisibility(View.GONE);
                     }
                 }
@@ -617,7 +618,7 @@ public class ShopFragment extends BaseFragment {
                 MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-                        LogUtil.i( jsonObject.toString());
+                        LogUtil.i(jsonObject.toString());
                         if (jsonObject.toString().contains("true")) {
 
                             MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
@@ -643,10 +644,10 @@ public class ShopFragment extends BaseFragment {
 
                 id = authMap.get(role);
                 url = Constants.GETHUIYUANMENUS;
-                if (Integer.valueOf(id)==1){
-                    SPUtils.setInt(Constants.ROLE_ID,Constants.ROLE_ID_QIANKE);
-                }else {
-                    SPUtils.setInt(Constants.ROLE_ID,Constants.ROLE_ID_HUIYUAN);
+                if (Integer.valueOf(id) == 1) {
+                    SPUtils.setInt(Constants.ROLE_ID, Constants.ROLE_ID_QIANKE);
+                } else {
+                    SPUtils.setInt(Constants.ROLE_ID, Constants.ROLE_ID_HUIYUAN);
                 }
 
                 MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -668,8 +669,8 @@ public class ShopFragment extends BaseFragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                       // ToastUtils.showToastShort("请查看网络连接");
-                        LogUtil.i( volleyError.toString());
+                        // ToastUtils.showToastShort("请查看网络连接");
+                        LogUtil.i(volleyError.toString());
                     }
                 }) {
 
@@ -942,13 +943,13 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
                         if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
                             //有权限
-                            startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from","entrance"));
                         } else {
                             PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
                                 @Override
                                 public void permissionGranted(@NonNull String[] permissions) {
                                     //用户授予了权限
-                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from","entrance"));
                                 }
 
                                 @Override
@@ -1031,16 +1032,16 @@ public class ShopFragment extends BaseFragment {
                         startActivity(new Intent(mActivity, YeWuActivity.class).putExtra("auth", "2"));
                         break;
                     case 38://扫码训练
-                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码训练");
                         if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
                             //有权限
-                            startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from", "train"));
                         } else {
                             PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
                                 @Override
                                 public void permissionGranted(@NonNull String[] permissions) {
                                     //用户授予了权限
-                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from", "train"));
                                 }
 
                                 @Override
@@ -1256,7 +1257,7 @@ public class ShopFragment extends BaseFragment {
                 longitude = location.getLongitude();
             }
         }
-        ShopDetailBean.DataBean sdbean=new ShopDetailBean.DataBean();
+        ShopDetailBean.DataBean sdbean = new ShopDetailBean.DataBean();
         sdbean.setLat(latitude);
         sdbean.setLng(longitude);
         return sdbean;
@@ -1273,7 +1274,7 @@ public class ShopFragment extends BaseFragment {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         }
-        ShopDetailBean.DataBean sdbean=new ShopDetailBean.DataBean();
+        ShopDetailBean.DataBean sdbean = new ShopDetailBean.DataBean();
         sdbean.setLat(latitude);
         sdbean.setLng(longitude);
         return sdbean;
@@ -1307,7 +1308,7 @@ public class ShopFragment extends BaseFragment {
 
     public void permissions() {
         PermissionsUtil.TipInfo tip = new PermissionsUtil.TipInfo("注意:", "未授予位置和文件权限，应用将无法使用", "不了，谢谢", "打开权限");
-        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION)) {
             //有权限
             isPermission = true;
         } else {
@@ -1324,7 +1325,7 @@ public class ShopFragment extends BaseFragment {
                     isPermission = false;
 
                 }
-            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION}, true, tip);
+            }, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION}, true, tip);
         }
 
     }
