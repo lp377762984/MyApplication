@@ -207,10 +207,10 @@
 
                             <ImageView
                                 android:id="@+id/iv_sex"
-                                android:layout_width="12dp"
-                                android:layout_height="18dp"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="10.4dp"
+                                android:layout_marginLeft="16dp"
                                 android:src="@drawable/img_sex1" />
 
                             <LinearLayout
