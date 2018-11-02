@@ -65,7 +65,6 @@ public class ScanerCodeActivity extends ActivityScanerCode {
             }
         }else{
             showConfirmDialog(result);
-
         }
     }
 

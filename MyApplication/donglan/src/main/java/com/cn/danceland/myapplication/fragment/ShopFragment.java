@@ -977,6 +977,27 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会员业务");
                         startActivity(new Intent(mActivity, YeWuActivity.class).putExtra("auth", "2"));
                         break;
+                    case 38://扫码训练
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
+                        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
+                            //有权限
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                        } else {
+                            PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                                @Override
+                                public void permissionGranted(@NonNull String[] permissions) {
+                                    //用户授予了权限
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                                }
+
+                                @Override
+                                public void permissionDenied(@NonNull String[] permissions) {
+                                    //用户拒绝了申请
+                                    ToastUtils.showToastShort("没有权限");
+                                }
+                            }, new String[]{Manifest.permission.CAMERA}, false, null);
+                        }
+                        break;
                     default:
                         break;
                 }
