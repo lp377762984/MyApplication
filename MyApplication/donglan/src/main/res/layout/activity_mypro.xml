@@ -77,12 +77,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:text="个人简介："
                             android:layout_marginBottom="11dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginTop="11dp"
+                            android:gravity="center_vertical"
+                            android:text="个人简介："
                             android:textColor="@color/colorGray21"
                             android:textSize="14sp" />
 
@@ -104,8 +104,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:text="昵称"
                                 android:layout_marginLeft="16dp"
+                                android:text="昵称"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
@@ -113,22 +113,24 @@
                                 android:id="@+id/text_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="right"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:text="未填写"
+                                android:layout_weight="1"
                                 android:background="@color/transparent"
+                                android:gravity="right"
+                                android:hint="未填写"
                                 android:textColor="@color/colorGray22"
-                                android:textSize="14sp"  />
+                                android:textColorHint="@color/colorGray22"
+                                android:textSize="14sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/sex"
                             android:layout_width="match_parent"
                             android:layout_height="58dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
                             android:background="@drawable/edit_search_bg"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
@@ -136,8 +138,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="性别"
                                 android:layout_marginLeft="16dp"
+                                android:text="性别"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
@@ -145,22 +147,23 @@
                                 android:id="@+id/text_sex"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="right"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:text="男"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/hobby"
                             android:layout_width="match_parent"
                             android:layout_height="58dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
                             android:background="@drawable/edit_search_bg"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
@@ -168,31 +171,34 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="喜好"
                                 android:layout_marginLeft="16dp"
+                                android:text="喜好"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/tv_hobby"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="right"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:text="未填写"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"
+                                android:gravity="right"
+                                android:hint="未填写"
                                 android:textColor="@color/colorGray22"
+                                android:textColorHint="@color/colorGray22"
                                 android:textSize="14sp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/rl_jianjie"
                             android:layout_width="match_parent"
                             android:layout_height="58dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginLeft="16dp"
                             android:layout_marginRight="16dp"
-                            android:layout_marginBottom="16dp"
                             android:background="@drawable/edit_search_bg"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
@@ -201,21 +207,23 @@
                                 android:id="@+id/tv_title_hobby"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="个人简介"
                                 android:layout_marginLeft="16dp"
+                                android:text="个人简介"
                                 android:textColor="@color/colorGray22"
                                 android:textSize="14sp" />
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/tv_sign"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:text="未填写"
+                                android:layout_weight="1"
+                                android:background="@color/transparent"
+                                android:hint="未填写"
                                 android:textColor="@color/colorGray22"
+                                android:textColorHint="@color/colorGray22"
                                 android:textSize="14sp" />
                         </LinearLayout>
                     </LinearLayout>

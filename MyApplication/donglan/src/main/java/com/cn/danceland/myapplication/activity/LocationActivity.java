@@ -66,12 +66,12 @@ public class LocationActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.location_back:
+                case R.id.iv_back:
                     Intent intent = new Intent();
                     setResult(1,intent);
                     finish();
                     break;
-                case R.id.location_success:
+                case R.id.donglan_right_tv:
                     Intent intent1 = new Intent();
                     intent1.putExtra("location",location);
                     setResult(1,intent1);
@@ -128,11 +128,16 @@ public class LocationActivity extends BaseActivity {
 
         loading = findViewById(R.id.location_loading);
         location_first = findViewById(R.id.location_first);
-        location_success = findViewById(R.id.location_success);
+        location_success = findViewById(R.id.donglan_right_tv);
         location_list = findViewById(R.id.location_list);
         myLocationAdapter = new MyLocationAdapter(LocationActivity.this,arrLocation);
         location_list.setAdapter(myLocationAdapter);
-        location_back = findViewById(R.id.location_back);
+        location_back = findViewById(R.id.iv_back);
+
+        location_success.setText("完成");
+        location_success.setVisibility(View.VISIBLE);
+        location_success.setTextColor(getResources().getColor(R.color.home_enter_total_text_color));
+
         location_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

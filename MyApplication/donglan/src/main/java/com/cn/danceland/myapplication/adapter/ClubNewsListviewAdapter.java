@@ -10,14 +10,29 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
+import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequsetClubDynBean;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -51,7 +66,7 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
 
     //增加数据
     public void addLastList(List<RequsetClubDynBean.Data.Content> bean) {
-     //   LogUtil.i(data.toString());
+        //   LogUtil.i(data.toString());
         data.addAll(bean);
         // LogUtil.i(data.toString());
     }
@@ -59,10 +74,10 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-     //   LogUtil.i(data.size()+"");
+        //   LogUtil.i(data.size()+"");
         return data.size();
 
-      //
+        //
 
     }
 
@@ -79,7 +94,7 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup viewGroup) {
 
-    //    LogUtil.i("getView"+position);
+        //    LogUtil.i("getView"+position);
         ViewHolder viewHolder = null;
         if (view == null) {
             viewHolder = new ViewHolder();
@@ -89,6 +104,8 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
             viewHolder.tv_time = view.findViewById(R.id.tv_time);
             viewHolder.tv_content = view.findViewById(R.id.tv_content);
             viewHolder.ll_item = view.findViewById(R.id.ll_item);
+            viewHolder.read_number_tv = view.findViewById(R.id.read_number_tv);
+            viewHolder.collect_iv = view.findViewById(R.id.collect_iv);
 
             view.setTag(viewHolder);
         } else {
@@ -100,13 +117,16 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
                 .apply(options)
                 .into(viewHolder.iv_image);
         viewHolder.tv_title.setText(data.get(position).getTitle());
-        viewHolder.tv_time.setText(data.get(position).getPublish_time());
+        viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(position).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
         viewHolder.tv_content.setText(data.get(position).getNews_txt());
+        viewHolder.read_number_tv.setText(data.get(position).getRead_number());
+        viewHolder.collect_iv.setVisibility(View.GONE);//此页面不显示
 
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, NewsDetailsActivity.class).putExtra("url",data.get(position).getUrl()).putExtra("title",data.get(position).getTitle()));
+                setReadNum(data.get(position).getId() + "", position);
+                context.startActivity(new Intent(context, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
 
             }
         });
@@ -118,9 +138,47 @@ public class ClubNewsListviewAdapter extends BaseAdapter {
         ImageView iv_image;//头像
         TextView tv_time;//时间
         TextView tv_content;//内容
+        TextView read_number_tv;//阅读数
+        ImageView collect_iv;//收藏
 
         LinearLayout ll_item;
     }
 
+    //增加阅读数
+    private void setReadNum(final String news_id, final int pos) {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_CLUB_READ_NUMBER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
+                if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
+                    if (data.get(pos).getRead_number() != null && data.get(pos).getRead_number().length() > 0) {
+                        data.get(pos).setRead_number((Integer.valueOf(data.get(pos).getRead_number()) + 1) + "");//增加阅读数
+                    }
+                    setData(data);
+                    notifyDataSetChanged();
+                }
 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id", news_id);
+                LogUtil.i("map--" + map.toString());
+                return map;
+            }
+        };
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
 }

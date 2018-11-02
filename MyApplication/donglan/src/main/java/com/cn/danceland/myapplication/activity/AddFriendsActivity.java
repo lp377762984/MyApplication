@@ -83,7 +83,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
         AppManager.getAppManager().addActivity(this);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         from = getIntent().getStringExtra("from");
         iv_del = findViewById(R.id.iv_del);
         ll_search = findViewById(R.id.ll_search);

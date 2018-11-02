@@ -24,6 +24,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -138,7 +139,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private TextView tv_popup_title;
     private ImageView iv_pic;
     RxShineButton rx_zan;
-    RxShineButton rx_guanzhu;
+    ImageButton rx_guanzhu;
     //  private View listEmptyView;
 
     @Override
@@ -148,7 +149,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         setContentView(R.layout.activity_dyn_home);
         //注册event事件
         EventBus.getDefault().register(this);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
         initData();
     }
@@ -194,6 +194,16 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
                 oneDynInfo = requstOneDynInfoBean.getData();
                 Message msg = Message.obtain();
+                msg.what = 1;
+                msg.obj = oneDynInfo;
+                handler.sendMessage(msg);
+
+                break;
+            case EventConstants.DEL_GUANZHU:
+                requstOneDynInfoBean.getData().
+                        setFollower(false);
+                oneDynInfo = requstOneDynInfoBean.getData();
+                msg = Message.obtain();
                 msg.what = 1;
                 msg.obj = oneDynInfo;
                 handler.sendMessage(msg);
@@ -482,7 +492,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         rx_zan.setChecked(false);
                     }
 
-
                     iv_zan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -550,12 +559,21 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             rx_guanzhu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //      ToastUtils.showToastShort("点击了关注");
-                    LogUtil.i(oneDynInfo.getAuthor());
-                    if (!oneDynInfo.isFollower()) {//如果未关注，加关注
 
+                    if (oneDynInfo.isFollower()) {
+                        addGuanzhu(oneDynInfo.getAuthor(), false);
+                        rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin));
+                    } else {
                         addGuanzhu(oneDynInfo.getAuthor(), true);
+                        rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin1));
                     }
+//                    if (!oneDynInfo.isFollower()) {//如果未关注，加关注
+//                        addGuanzhu(oneDynInfo.getAuthor(), true);
+//                        rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin1));
+//                    }else{
+//                        addGuanzhu(oneDynInfo.getAuthor(), false);
+//                        rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin));
+//                    }
                 }
             });
         }
@@ -564,12 +582,14 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         if (oneDynInfo.isFollower()) {
 //            tv_guanzhu.setText("已关注");
             //  tv_guanzhu.setTextColor(Color.GRAY);
-            rx_guanzhu.setChecked(true);
-            rx_guanzhu.setClickable(false);
+//            rx_guanzhu.setChecked(true);
+            rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin1));
+//            rx_guanzhu.setClickable(false);
         } else {
 //            tv_guanzhu.setText("+关注");
-            rx_guanzhu.setChecked(false);
-            rx_guanzhu.setClickable(true);
+//            rx_guanzhu.setChecked(false);
+            rx_guanzhu.setImageDrawable(getResources().getDrawable(R.drawable.img_xin));
+//            rx_guanzhu.setClickable(true);
         }
 
 
@@ -1253,14 +1273,27 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 Gson gson = new Gson();
                 RequsetSimpleBean requestInfoBean = new RequsetSimpleBean();
                 requestInfoBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
-                if (requestInfoBean.getSuccess()) {
-
-
-                    ToastUtils.showToastShort("关注成功");
-                    EventBus.getDefault().post(new StringEvent(userId, EventConstants.ADD_GUANZHU));
+                if (b) {
+                    if (requestInfoBean.getSuccess()) {
+                        ToastUtils.showToastShort("关注成功");
+                        EventBus.getDefault().post(new StringEvent(userId, EventConstants.ADD_GUANZHU));
+                    } else {
+                        ToastUtils.showToastShort("关注失败");
+                    }
                 } else {
-                    ToastUtils.showToastShort("关注失败");
+                    if (requestInfoBean.getSuccess()) {
+                        ToastUtils.showToastShort("取消关注成功");
+                        EventBus.getDefault().post(new StringEvent(userId, EventConstants.DEL_GUANZHU));
+                    } else {
+                        ToastUtils.showToastShort("取消关注失败");
+                    }
                 }
+//                if (requestInfoBean.getSuccess()) {
+//                    ToastUtils.showToastShort("关注成功");
+//                    EventBus.getDefault().post(new StringEvent(userId, EventConstants.ADD_GUANZHU));
+//                } else {
+//                    ToastUtils.showToastShort("关注失败");
+//                }
 
             }
         }, new Response.ErrorListener() {

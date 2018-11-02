@@ -280,7 +280,6 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-//                LogUtil.i("onRefresh");
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -294,7 +293,6 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-//                LogUtil.i("onLoadMore");
 //                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
                 TimerTask task = new TimerTask() {
                     public void run() {
@@ -310,7 +308,6 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                LogUtil.i("X=" + dx + "Y=" + dy);
                 offsetNum += (dy);
 
 //                if (offsetNum != 0) {
@@ -807,7 +804,7 @@ public class HomeFragment extends BaseFragment {
             public void onResponse(String s) {
                 dialog.dismiss();
                 //   pullToRefresh.onRefreshComplete();
-                LogUtil.i("热门话题--" + s);
+                LogUtil.i(s);
                 Gson gson = new Gson();
                 RequestNewsDataBean newsDataBean = gson.fromJson(s, RequestNewsDataBean.class);
                 if (newsDataBean.getSuccess()) {
@@ -815,13 +812,11 @@ public class HomeFragment extends BaseFragment {
                     //    LogUtil.i(data.toString());
                     if (mCurrentPage == 0) {
 
-                        LogUtil.i("data.size()" + data.size());
                         if (data.size() == 0) {
                             rl_error.setVisibility(View.VISIBLE);
                         } else {
                             rl_error.setVisibility(View.GONE);
                         }
-                        LogUtil.i("刷新222"+data.get(0).getTitle());
                         newsListviewAdapter.setData(data);
                         newsListviewAdapter.notifyDataSetChanged();
                         //   pullToRefresh.setVisibility(View.VISIBLE);
@@ -842,6 +837,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
+                volleyError.printStackTrace();
             }
         }) {
             @Override

@@ -150,7 +150,6 @@ public class UserListviewAdapter extends BaseAdapter {
                         break;
                     case 2://查看粉丝
                         context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getFollower()));
-
                         break;
                     case 3://查看点赞
                         context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", data.get(position).getPraiseUserId()));
@@ -158,10 +157,7 @@ public class UserListviewAdapter extends BaseAdapter {
                     default:
                         break;
                 }
-
-
                 // context.startActivity(new Intent(context, UserHomeActivity.class).putExtra("id", data.get(position).getAuthor()));
-
             }
         });
 
@@ -189,7 +185,6 @@ public class UserListviewAdapter extends BaseAdapter {
             }
         }
 
-
         viewHolder.ll_guanzhu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,20 +197,14 @@ public class UserListviewAdapter extends BaseAdapter {
                         if (type==2){
                             addGuanzhu(data.get(position).getFollower(), true, pos);
                         }
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-
-
         return view;
     }
-
-
 
     class StrBean {
         public String is_praise;

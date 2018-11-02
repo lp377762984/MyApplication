@@ -112,8 +112,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
             LogUtil.i(":收到" + event.getEventCode());
             LogUtil.i("TYPE" + type);
             switch (event.getEventCode()) {
-
-
                 case EventConstants.ADD_DYN:  //设置动态数+1
 
                     break;
@@ -125,7 +123,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
                         mCurrentPage = 0;
                         initData();
                     }
-
                     break;
                 case EventConstants.DEL_GUANZHU:
                     if (type == 1) {
@@ -133,7 +130,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
                         initData();
                     }
                     break;
-//
                 default:
                     break;
             }
@@ -143,7 +139,7 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
-        tv_tiltle = findViewById(R.id.tv_tiltle);
+        tv_tiltle = findViewById(R.id.donglan_title);
         pullToRefresh = findViewById(R.id.pullToRefresh);
         //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
         View listEmptyView = findViewById(R.id.rl_no_info);
@@ -152,7 +148,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
         imageView.setImageResource(R.drawable.img_error5);
         switch (type) {
             case 1:
-
                 tv_error.setText("你还没有关注的人");
                 break;
             case 2:
@@ -160,18 +155,15 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
                 break;
             case 3:
                 tv_error.setText("没有数据");
-
                 break;
             default:
                 break;
         }
 
-
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
 
         dialog.setMessage("正在加载……");
-        findViewById(R.id.iv_back).setOnClickListener(this);
 
         mListviewAdapter = new UserListviewAdapter(this, data, type);
         pullToRefresh.setAdapter(mListviewAdapter);
@@ -194,8 +186,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
                 };
                 Timer timer = new Timer();
                 timer.schedule(task, 1000);
-
-
             }
         });
 
@@ -204,13 +194,9 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
             default:
                 break;
         }
-
     }
 
 
@@ -231,7 +217,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
                     default:
                         break;
                 }
-
             } catch (Exception e) {
             }
             return null;
@@ -258,10 +243,7 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
         endLabels.setPullLabel("上拉加载...");// 刚下拉时，显示的提示
         endLabels.setRefreshingLabel("正在加载...");// 刷新时
         endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
-
-
     }
-
 
     private boolean isEnd;
 
@@ -277,7 +259,6 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
     }
 
     private RequsetUserListBean UserListBean = new RequsetUserListBean();
-
 
     class StrBean {
         public Integer page;

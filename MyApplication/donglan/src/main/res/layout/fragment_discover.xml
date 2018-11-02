@@ -62,10 +62,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="发现"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:textColor="@color/colorGray21" />
+                android:text="发现"
+                android:textColor="@color/colorGray21"
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/iv_photo"
@@ -75,6 +75,11 @@
                 android:layout_marginRight="18dp"
                 android:background="@drawable/img_photo" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/line" />
 
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/magic_indicator"

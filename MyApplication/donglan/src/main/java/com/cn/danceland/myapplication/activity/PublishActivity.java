@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,9 @@ import com.cn.danceland.myapplication.bean.UpImagesBean;
 import com.cn.danceland.myapplication.bean.VideoBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.FileUtil;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
@@ -56,6 +59,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UpLoadUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -86,8 +90,9 @@ import top.zibin.luban.OnCompressListener;
  */
 
 public class PublishActivity extends BaseActivity {
+
     private static final int SELECT_VIDEO = 1010;
-    TextView publish_cancel;
+    private DongLanTitleView dongLanTitleView;
     TextView publish_ok;
     hani.momanii.supernova_emoji_library.Helper.EmojiconEditText publish_status;
     RelativeLayout publish_photo, rl_video;
@@ -96,7 +101,7 @@ public class PublishActivity extends BaseActivity {
     List<String> arrayList = new ArrayList<String>();
     GridView grid_view;
     String location = "";
-    TextView location_img;
+    ImageView location_img;
     Map<String, File> arrayFileMap;
     String videoPath, videoUrl;
     String cameraPath;
@@ -138,10 +143,10 @@ public class PublishActivity extends BaseActivity {
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
                     PublishBean bean = new PublishBean();
-                    LogUtil.i("stringstatus--" + stringstatus);
-                    LogUtil.i("picPath--" + picPath);
-                    LogUtil.i("vedioPath--" + vedioPath);
-                    LogUtil.i("location--" + location);
+//                    LogUtil.i("stringstatus--" + stringstatus);
+//                    LogUtil.i("picPath--" + picPath);
+//                    LogUtil.i("vedioPath--" + vedioPath);
+//                    LogUtil.i("location--" + location);
 
                     bean.setContent("");
                     if (!"".equals(stringstatus)) {
@@ -202,12 +207,14 @@ public class PublishActivity extends BaseActivity {
         publish_location.setOnClickListener(onClickListener);
         location_img.setOnClickListener(onClickListener);
         publish_ok.setOnClickListener(onClickListener);
-        publish_cancel.setOnClickListener(onClickListener);
     }
 
     private void initView() {
-        publish_cancel = findViewById(R.id.publish_cancel);
-        publish_ok = findViewById(R.id.publish_ok);
+        dongLanTitleView = findViewById(R.id.title);
+        publish_ok = dongLanTitleView.findViewById(R.id.donglan_right_tv);
+        publish_ok.setText("发布");
+        publish_ok.setVisibility(View.VISIBLE);
+        publish_ok.setTextColor(getResources().getColor(R.color.home_enter_total_text_color));
         publish_ok.setClickable(true);
         location_img = findViewById(R.id.location_img);
         publish_status = findViewById(R.id.publish_status);
@@ -229,7 +236,7 @@ public class PublishActivity extends BaseActivity {
 
     public void getPic() {
         int m = SPUtils.getInt("imgN", 0);
-        if (m <= 9) {
+        if (m < 9) {
             Matisse.from(PublishActivity.this)
                     .choose(MimeType.allOf()) // 选择 mime 的类型
                     .countable(true)
@@ -286,8 +293,9 @@ public class PublishActivity extends BaseActivity {
 //                    .recordVideoSecond(10)//视频秒数录制 默认60s int
 //                    .isDragFrame(false)// 是否可拖动裁剪框(固定)
 //                    .forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
+        } else {
+            ToastUtils.showToastShort("最多选择9张图片");
         }
-
     }
 
     long length;
@@ -303,7 +311,7 @@ public class PublishActivity extends BaseActivity {
                     Intent intent2 = new Intent(PublishActivity.this, LocationActivity.class);
                     startActivityForResult(intent2, 1);
                     break;
-                case R.id.publish_ok:
+                case R.id.donglan_right_tv:
                     //Intent intent3 = new Intent(PublishActivity.this,S);
                     final PublishBean publishBean = new PublishBean();
                     stringstatus = publish_status.getText().toString();
@@ -345,13 +353,11 @@ public class PublishActivity extends BaseActivity {
                                 finish();
                             } else {
                                 ToastUtils.showToastShort("请填写需要发布的动态！");
-
                             }
-
                         }
                     } else {
-                        LogUtil.i("videoPath11--" + videoPath);
-                        LogUtil.i("picFile11--" + picFile);
+//                        LogUtil.i("videoPath11--" + videoPath);
+//                        LogUtil.i("picFile11--" + picFile);
                         if (videoPath != null && !"".equals(videoPath)) {
                             videoFile = new File(videoPath);
 
@@ -367,8 +373,8 @@ public class PublishActivity extends BaseActivity {
                                             if (videoBean != null && videoBean.getData() != null) {
                                                 vedioUrl = videoBean.getData().getImgUrl();
                                                 vedioPath = videoBean.getData().getImgPath();
-                                                LogUtil.i("提交视频 vedioUrl--" + vedioUrl);
-                                                LogUtil.i("提交视频 vedioPath--" + vedioPath);
+//                                                LogUtil.i("提交视频 vedioUrl--" + vedioUrl);
+//                                                LogUtil.i("提交视频 vedioPath--" + vedioPath);
                                                 if (picFile != null) {
                                                     MultipartRequestParams params = new MultipartRequestParams();
                                                     params.put("file", picFile);
@@ -379,8 +385,8 @@ public class PublishActivity extends BaseActivity {
                                                             if (headImageBean != null && headImageBean.getData() != null) {
                                                                 picUrl = headImageBean.getData().getImgUrl();
                                                                 picPath = headImageBean.getData().getImgPath();
-                                                                LogUtil.i("提交图片 picUrl--" + picUrl);
-                                                                LogUtil.i("提交图片 picPath--" + picPath);
+//                                                                LogUtil.i("提交图片 picUrl--" + picUrl);
+//                                                                LogUtil.i("提交图片 picPath--" + picPath);
 
                                                                 Message message = new Message();
                                                                 message.what = 1;
@@ -424,16 +430,12 @@ public class PublishActivity extends BaseActivity {
 
                         }
                     }
-
-                    break;
-                case R.id.publish_cancel:
-                    finish();
                     break;
             }
         }
     };
 
-    private void showListDialog( String[] items) {
+    private void showListDialog(String[] items) {
 
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(PublishActivity.this);
@@ -517,9 +519,9 @@ public class PublishActivity extends BaseActivity {
                     EventBus.getDefault().post(new StringEvent("", EventConstants.ADD_DYN));
                     //finish();
                 } else {
-                    if (rootBean.code==1){
+                    if (rootBean.code == 1) {
                         ToastUtils.showToastShort(rootBean.errorMsg);
-                    }else {
+                    } else {
                         ToastUtils.showToastShort("发布失败！请检查网络连接");
                     }
                 }
@@ -530,7 +532,7 @@ public class PublishActivity extends BaseActivity {
                 ToastUtils.showToastShort(volleyError.toString());
 
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
@@ -709,10 +711,10 @@ public class PublishActivity extends BaseActivity {
                     Bitmap frameAtTime = media.getFrameAtTime();
                     picFile = saveBitmapFile(frameAtTime);
                     String duration = media.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION); // 播放时长单位为毫秒
-                    LogUtil.i("-----" + "时长=" + duration);
+//                    LogUtil.i("-----" + "时长=" + duration);
                     if (duration != null && duration.length() > 0) {
                         long durationL = Long.valueOf(duration);
-                        if (durationL < (60 * 1000) ) {//视频不能超过60秒  5M
+                        if (durationL < (60 * 1000)) {//视频不能超过60秒  5M
 
                             String savePath = Environment.getExternalStorageDirectory().getPath()
                                     + "/donglan/camera/vedio/" + name;//压缩后的视频地址
@@ -720,13 +722,13 @@ public class PublishActivity extends BaseActivity {
                             FileUtil.compressVideoResouce(PublishActivity.this, videoPath, savePath);//压缩视频
                             File file = new File(savePath);
                             long length = file.length();
-                            try {
-                                LogUtil.i("视频大小121--"+FileUtil.getDataSize(Long.valueOf(size)));
-                                LogUtil.i("视频大小"+FileUtil.getDataSize(FileUtil.getFileSize(file))+"--"+FileUtil.getFileSize(file));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            if (length < (5 * 1024 * 1024 )) {
+//                            try {
+//                                LogUtil.i("视频大小121--" + FileUtil.getDataSize(Long.valueOf(size)));
+//                                LogUtil.i("视频大小" + FileUtil.getDataSize(FileUtil.getFileSize(file)) + "--" + FileUtil.getFileSize(file));
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+                            if (length < (5 * 1024 * 1024)) {
                                 SPUtils.setInt("imgN", 100);
                                 List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
                                 thumbnailList.add(frameAtTime);
@@ -737,7 +739,6 @@ public class PublishActivity extends BaseActivity {
                             } else {
                                 ToastUtils.showToastShort("文件过大");
                             }
-
                         } else {
                             ToastUtils.showToastShort("文件过大");
                         }
@@ -759,11 +760,13 @@ public class PublishActivity extends BaseActivity {
                 List<Uri> uris = Matisse.obtainResult(data);
 
                 if (uris != null) {
+                    SPUtils.setInt("imgN", (arrayList.size()) + uris.size());
+//                    SPUtils.setInt("imgN", (arrayList.size()) + SPUtils.getInt("imgN", 0));
                     for (int i = 0; i < uris.size(); i++) {
                         arrayList.add(PictureUtil.getRealPath(getApplicationContext(), uris.get(i)));
                     }
 
-                    SPUtils.setInt("imgN", arrayList.size() + SPUtils.getInt("imgN", 0));
+
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
             }
@@ -777,7 +780,11 @@ public class PublishActivity extends BaseActivity {
             }
         } else if (resultCode == 1) {
             location = data.getStringExtra("location");
-            publish_location.setText(location);
+            if (location != null && location.length() > 0) {
+                publish_location.setText(location);
+            } else {
+                publish_location.setText("所在位置");
+            }
         } else if (resultCode == 111) {
             isPhoto = "1";
             videoPath = data.getStringExtra("videoPath");
@@ -848,7 +855,10 @@ public class PublishActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return arrayLists.size() + 1;
+            if ((arrayLists.size() + 1) <= 9) {
+                return arrayLists.size() + 1;
+            }
+            return arrayLists.size();
         }
 
         @Override
@@ -877,13 +887,22 @@ public class PublishActivity extends BaseActivity {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            int imageP = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 40f)) / 3
+                    - DensityUtils.dp2px(context, 0f);//32：gridView左右margin  1:设计图
+            RelativeLayout.LayoutParams linearParams = new RelativeLayout.LayoutParams(imageP, imageP);
+            RelativeLayout.LayoutParams linearParams2 = new RelativeLayout.LayoutParams(imageP, imageP);
+            int marginXNum = DensityUtils.dp2px(context, 1f);
+            int marginYNum = DensityUtils.dp2px(context, 2.3f);
+            linearParams.setMargins(marginXNum, marginYNum, marginXNum, marginYNum);
+            linearParams2.setMargins(DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context, 0f), DensityUtils.dp2px(context, 2.0f), DensityUtils.dp2px(context, 0f));
+            viewHolder.rl_item.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+            viewHolder.img.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//            viewHolder.pl_sta.setLayoutParams(linearParams2); //使设置好的布局参数应用到控件
             if ("0".equals(isPhoto)) {
                 if (arrayLists.size() == 0) {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
-                        LogUtil.i("--&&---imagepath=" + arrayLists.get(position));
                         Glide.with(context).load(arrayLists.get(position)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -895,7 +914,6 @@ public class PublishActivity extends BaseActivity {
                     viewHolder.pl_sta.setVisibility(View.VISIBLE);
                 } else {
                     if (position < arrayLists.size()) {
-                        LogUtil.i("--&&---path=" + arrayLists.get(position));
                         Glide.with(context).load(thumbnailList.get(0)).into(viewHolder.img);
                         viewHolder.pl_sta.setVisibility(View.GONE);
                     } else if (position == arrayLists.size()) {
@@ -958,8 +976,6 @@ public class PublishActivity extends BaseActivity {
                 }
             });
 //            }
-
-
             return convertView;
         }
     }

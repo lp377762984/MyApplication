@@ -90,13 +90,11 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_HEADER) return;
-        LogUtil.i("position--" + position);
         final int pos = getRealPosition(holder);
         Glide.with(context)
                 .load(data.get(pos).getImg_url())
                 //  .apply(options)
                 .into(holder.iv_image);
-        LogUtil.i("title" + data.get(pos).getTitle());
         holder.tv_title.setText(data.get(pos).getTitle());
         holder.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(pos).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
         holder.tv_content.setText(data.get(pos).getNews_txt());
@@ -199,7 +197,6 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
 
     public void setData(List<RequestNewsDataBean.Data.Items> data) {
         this.data = data;
-        LogUtil.i("adapter" + data.get(0).getTitle());
     }
 
     //增加数据

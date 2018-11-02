@@ -48,6 +48,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
+import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -57,7 +58,6 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PictureUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
@@ -84,7 +84,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 /**
  * 我的资料
@@ -109,7 +108,7 @@ public class MyProActivity extends BaseActivity {
 //                    + "/donglan/camera/";// 拍照路径
     // public String SAVED_IMAGE_DIR_PATH = AppUtils.getDiskCachePath(MyProActivity.this)+ "/";// 拍照路径
 
-    String cameraPath, gemder, nickName, selfAvatarPath, strHeight, strWeight, iden;
+    String cameraPath, gemder, selfAvatarPath, strHeight, strWeight, iden;
     Data infoData;
     Gson gson;
     RequestQueue queue;
@@ -131,10 +130,18 @@ public class MyProActivity extends BaseActivity {
     View inflate;
     AlertDialog.Builder alertdialog;
     LoopView loopview;
-    TextView tv_start, over_time, tv_hobby, tv_sign;
-    private LinearLayout  sex, hobby, headimage, rl_jianjie;
+    TextView tv_start, over_time;
+    private LinearLayout sex, hobbyLL, headimage;
     private DongLanTransparentTitleView dongLanTitleView;
     private EmojiconEditText text_name;
+    private EditText tv_hobby, tv_sign;
+    private String compath;
+    private String self_avatar_path;//保存提交参数
+    private String nick_name;//保存提交参数
+    private String gender;//保存提交参数
+    private String hobby;//保存提交参数
+    private String sign;//保存提交参数
+
 
     private Handler handler = new Handler() {
         @Override
@@ -143,7 +150,10 @@ public class MyProActivity extends BaseActivity {
                 case 1:
 
                     Glide.with(getApplicationContext()).load(selfAvatarPath).into(circleImageView);
-                    file.delete();
+                    if (compath != null && compath.length() > 0) {//修改头像
+                        if (file != null)
+                            file.delete();
+                    }
                 default:
                     break;
             }
@@ -242,8 +252,8 @@ public class MyProActivity extends BaseActivity {
             text_sex.setText("女");
         }
 
-        hobby = findViewById(R.id.hobby);
-        rl_jianjie = findViewById(R.id.rl_jianjie);
+        hobbyLL = findViewById(R.id.hobby);
+//        rl_jianjie = findViewById(R.id.rl_jianjie);
         if (infoData.getPerson().getNick_name() != null && infoData.getPerson().getNick_name().length() > 0) {
             text_name.setText(infoData.getPerson().getNick_name());
         } else {
@@ -286,29 +296,32 @@ public class MyProActivity extends BaseActivity {
         }
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {//拉黑
+            public void onClick(View v) {
+                if (compath != null && compath.length() > 0) {//修改头像
+                    if (TextUtils.equals(infoData.getPerson().getSelf_avatar_path(), compath)) {
+                        selfAvatarPath = infoData.getPerson().getSelf_avatar_path();
+                        self_avatar_path = infoData.getPerson().getSelf_avatar_path();
+                    } else {
+                        self_avatar_path = compath;
+                    }
+                } else {
+                    selfAvatarPath = infoData.getPerson().getSelf_avatar_path();
+                    self_avatar_path = infoData.getPerson().getSelf_avatar_path();
+                }
                 if (TextUtils.isEmpty(text_name.getText().toString())) {
                     ToastUtils.showToastShort("请输入昵称");
                     return;
                 }
-                nickName = text_name.getText().toString();
-                commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
-                infoData.getPerson().setNick_name(nickName);
-                DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                nick_name = text_name.getText().toString();//修改昵称
 
-                FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
-                    @Override
-                    public void onError(int i, String s) {
-                        LogUtil.i("昵称修改失败");
-                    }
-
-                    @Override
-                    public void onSuccess() {
-                        LogUtil.i("昵称修改成功");
-                    }
-                });
-                //发送事件
-                EventBus.getDefault().post(new StringEvent(nickName, 100));
+                if ("男".equals(text_sex.getText().toString())) {//修改性别
+                    gender = "1";
+                } else {
+                    gender = "2";
+                }
+                hobby = tv_hobby.getText().toString();//修改喜好
+                sign = tv_sign.getText().toString();//修改个人简介
+                submitUserData();
             }
         });
     }
@@ -316,7 +329,7 @@ public class MyProActivity extends BaseActivity {
     public void setClick() {
         headimage.setOnClickListener(onClickListener);
 //        name.setOnClickListener(onClickListener);
-        hobby.setOnClickListener(onClickListener);
+        hobbyLL.setOnClickListener(onClickListener);
         sex.setOnClickListener(onClickListener);
         cancel.setOnClickListener(onClickListener);
         photo_album.setOnClickListener(onClickListener);
@@ -331,8 +344,69 @@ public class MyProActivity extends BaseActivity {
         over_action.setOnClickListener(onClickListener);
         rl_phone.setOnClickListener(onClickListener);
         identity.setOnClickListener(onClickListener);
-        rl_jianjie.setOnClickListener(onClickListener);
+//        rl_jianjie.setOnClickListener(onClickListener);
 
+    }
+
+    private void submitUserData() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PUSH_MODIFY_PERSON_DATA, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
+                if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
+                    //修改昵称--开始
+                    infoData.getPerson().setNick_name(nick_name);
+
+                    FriendshipManagerPresenter.setMyNick(nick_name, new TIMCallBack() {
+                        @Override
+                        public void onError(int i, String s) {
+                            LogUtil.i("昵称修改失败");
+                        }
+
+                        @Override
+                        public void onSuccess() {
+                            LogUtil.i("昵称修改成功");
+                        }
+                    });
+                    EventBus.getDefault().post(new StringEvent(nick_name, 100)); //发送事件
+                    //修改昵称--结束
+                    //修改性别--开始
+                    infoData.getPerson().setGender(gender);
+                    //修改性别--结束
+                    //修改喜好--开始
+                    infoData.getPerson().setHobby(hobby);
+                    //修改喜好--结束
+                    //修改个人简介--开始
+                    infoData.getPerson().setSign(sign);
+                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                    //修改个人简介--结束
+                    ToastUtils.showToastShort("修改成功");
+                } else {
+                    ToastUtils.showToastShort("修改失败！");
+                }
+                MyProActivity.this.finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                volleyError.printStackTrace();
+                ToastUtils.showToastShort("修改失败！请检查网络");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("self_avatar_path", self_avatar_path);
+                map.put("nick_name", nick_name);
+                map.put("gender", gender);
+                map.put("hobby", hobby);
+                map.put("sign", sign);
+                LogUtil.i("Params" + map);
+                return map;
+            }
+        };
+        queue.add(stringRequest);
     }
 
     public void dismissWindow() {
@@ -378,10 +452,10 @@ public class MyProActivity extends BaseActivity {
                     }
                 }
                 break;
-                case R.id.rl_jianjie:
-                    Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    startActivityForResult(new Intent(MyProActivity.this, EditProActivity.class).putExtra("hint", info.getPerson().getSign()), 13);
-                    break;
+//                case R.id.rl_jianjie:
+//                    Data info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+//                    startActivityForResult(new Intent(MyProActivity.this, EditProActivity.class).putExtra("hint", info.getPerson().getSign()), 13);
+//                    break;
                 case R.id.lo_cancel_action:
                     dismissWindow();
                     break;
@@ -399,9 +473,9 @@ public class MyProActivity extends BaseActivity {
                     showWH(x);
                     //selecttitle.setText("选择体重");
                     break;
-                case R.id.hobby:
-                    showHobby(infoData.getPerson().getHobby());
-                    break;
+//                case R.id.hobby:
+//                    showHobby(infoData.getPerson().getHobby());
+//                    break;
 
 //                case R.id.over:
 //                    if (x == 0) {
@@ -434,9 +508,10 @@ public class MyProActivity extends BaseActivity {
                     } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("女");
-                        infoData.getPerson().setGender("2");
-                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-                        commitSelf(Constants.MODIFY_GENDER, "gender", "2");
+//                        infoData.getPerson().setGender(gender);
+//                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                        gender = "2";
+//                        commitSelf(Constants.MODIFY_GENDER, "gender", "2");
                     }
                     break;
                 case R.id.photo_album:
@@ -446,9 +521,10 @@ public class MyProActivity extends BaseActivity {
                     } else if (flag == 1) {
                         dismissWindow();
                         text_sex.setText("男");
-                        infoData.getPerson().setGender("1");
-                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
-                        commitSelf(Constants.MODIFY_GENDER, "gender", "1");
+                        gender = "1";
+//                        infoData.getPerson().setGender(gender);
+//                        DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+//                        commitSelf(Constants.MODIFY_GENDER, "gender", "1");
                     }
                     break;
                 case R.id.photograph:
@@ -734,6 +810,7 @@ public class MyProActivity extends BaseActivity {
             item_text.setText(arrayList.get(i));
             return view;
         }
+
     }
 
     public void showPop() {
@@ -818,14 +895,14 @@ public class MyProActivity extends BaseActivity {
 
                                 return;
                             }
-                            nickName = ed.getText().toString();
-                            text_name.setText(nickName);
-                            commitSelf(Constants.MODIFY_NAME, "nickName", nickName);
-                            infoData.getPerson().setNick_name(nickName);
+                            nick_name = ed.getText().toString();
+                            text_name.setText(nick_name);
+                            commitSelf(Constants.MODIFY_NAME, "nickName", nick_name);
+                            infoData.getPerson().setNick_name(nick_name);
                             DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
 
 
-                            FriendshipManagerPresenter.setMyNick(nickName, new TIMCallBack() {
+                            FriendshipManagerPresenter.setMyNick(nick_name, new TIMCallBack() {
                                 @Override
                                 public void onError(int i, String s) {
                                     LogUtil.i("昵称修改失败");
@@ -839,7 +916,7 @@ public class MyProActivity extends BaseActivity {
                             });
 
                             //发送事件
-                            EventBus.getDefault().post(new StringEvent(nickName, 100));
+                            EventBus.getDefault().post(new StringEvent(nick_name, 100));
                         } else {
                             iden = ed.getText().toString();
                             tv_identity.setText(iden);
@@ -879,8 +956,6 @@ public class MyProActivity extends BaseActivity {
                 map.put(mapkey, mapvalue);
                 return map;
             }
-
-
         };
         queue.add(stringRequest);
     }
@@ -937,8 +1012,6 @@ public class MyProActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             MultipartRequestParams params = new MultipartRequestParams();
-
-
             if (requestCode == CAMERA_REQUEST_CODE) {
                 try {
                     startPhotoZoom(uri);
@@ -992,10 +1065,11 @@ public class MyProActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String s) {
+                        LogUtil.i( s);
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                         if (headImageBean != null && headImageBean.getData() != null) {
 
-                            String compath = headImageBean.getData().getImgPath();
+                            compath = headImageBean.getData().getImgPath();
                             selfAvatarPath = headImageBean.getData().getImgUrl();
                             infoData.getPerson().setSelf_avatar_path(selfAvatarPath);
                             //发送事件

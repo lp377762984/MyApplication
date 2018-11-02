@@ -958,14 +958,11 @@ public class ShopFragment extends BaseFragment {
                                 }
                             }, new String[]{Manifest.permission.CAMERA}, false, null);
                         }
-
                         break;
-
                     case 20://预约团课
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约团课");
                         startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
                         break;
-
                     case 21://储值卡
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "储值卡");
                         startActivity(new Intent(mActivity, StoreCardActivity.class));
@@ -1032,6 +1029,27 @@ public class ShopFragment extends BaseFragment {
                     case 37://会员业务
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会员业务");
                         startActivity(new Intent(mActivity, YeWuActivity.class).putExtra("auth", "2"));
+                        break;
+                    case 38://扫码训练
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
+                        if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
+                            //有权限
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                        } else {
+                            PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
+                                @Override
+                                public void permissionGranted(@NonNull String[] permissions) {
+                                    //用户授予了权限
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class));
+                                }
+
+                                @Override
+                                public void permissionDenied(@NonNull String[] permissions) {
+                                    //用户拒绝了申请
+                                    ToastUtils.showToastShort("没有权限");
+                                }
+                            }, new String[]{Manifest.permission.CAMERA}, false, null);
+                        }
                         break;
                     default:
                         break;

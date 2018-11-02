@@ -79,7 +79,6 @@ public class CollectEntranceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect_entrance);
         context = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initView();
     }
 

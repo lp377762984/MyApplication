@@ -83,13 +83,18 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
     private void initData() {
-
         queryUserInfo(userId);
     }
 
@@ -126,7 +131,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         dongLanTitleView = findViewById(R.id.title);
         ImageView more_iv = dongLanTitleView.getRightIv();
         more_iv.setVisibility(View.VISIBLE);
-
 
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
@@ -185,8 +189,6 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
                     tv_nick_name.setText(event.getMsg());
 
                     break;
-
-
                 case EventConstants.ADD_DYN:  //设置动态数+1
                     LogUtil.i("动态加1");
                     //mInfo.setDynMsgNumber(mInfo.getDynMsgNumber() + 1);

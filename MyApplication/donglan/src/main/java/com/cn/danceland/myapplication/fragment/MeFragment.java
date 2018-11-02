@@ -73,7 +73,6 @@ public class MeFragment extends BaseFragment {
     @Override
     public View initViews() {
 
-
         View v = View.inflate(mActivity, R.layout.fragment_me, null);
         v.findViewById(R.id.ll_setting).setOnClickListener(this);
         v.findViewById(R.id.ll_my_msg).setOnClickListener(this);
@@ -147,7 +146,6 @@ public class MeFragment extends BaseFragment {
 
         if (99 == event.getEventCode()) {
             String msg = event.getMsg();
-
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Glide.with(mActivity).load(msg).apply(options).into(iv_avatar);
 
@@ -209,7 +207,7 @@ public class MeFragment extends BaseFragment {
 
                 //设置粉丝数
                 // tv_fans.setText(mInfo.getFansNum() + "");
-          //      DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+                //      DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
 
                 //    SPUtils.setInt(Constants.MY_FOLLOWS,SPUtils.getInt(Constants.MY_FOLLOWS,0));
                 tv_fans.setText(SPUtils.getInt(Constants.MY_FANS, 0) + "");
@@ -242,7 +240,6 @@ public class MeFragment extends BaseFragment {
             case R.id.iv_edit://编辑资料页面
 
 
-
                 Intent intent = new Intent(mActivity, MyProActivity.class);
                 startActivityForResult(intent, 119);
                 //  startActivity(intent);
@@ -271,7 +268,7 @@ public class MeFragment extends BaseFragment {
             case R.id.ll_my_shop://我的门店
                 mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 LogUtil.i(mInfo.getPerson().getDefault_branch());
-                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())){
+                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                     ToastUtils.showToastShort("请先加入一个门店");
                     return;
                 }
@@ -279,7 +276,7 @@ public class MeFragment extends BaseFragment {
                 break;
             case R.id.iv_top_bg:
 
-           //   startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
+                //   startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
                 break;
             case R.id.ll_my_xiaofei:
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));
@@ -288,18 +285,18 @@ public class MeFragment extends BaseFragment {
 
 //                ToastUtils.showToastShort("功能正在开发中");
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     startActivity(new Intent(mActivity, WearFitActivity.class));
-                }else {
+                } else {
                     ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
                 }
 
                 break;
             case R.id.ll_consult://我想咨询
-                    startActivity(new Intent(mActivity, ConsultListActivity.class));
+                startActivity(new Intent(mActivity, ConsultListActivity.class));
                 break;
             case R.id.ll_recommend://我想推荐
-                    startActivity(new Intent(mActivity, RecommendListActivity.class));
+                startActivity(new Intent(mActivity, RecommendListActivity.class));
                 break;
             default:
                 break;
