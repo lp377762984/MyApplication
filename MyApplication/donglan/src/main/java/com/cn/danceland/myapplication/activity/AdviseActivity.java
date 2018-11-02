@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -41,7 +42,7 @@ public class AdviseActivity extends BaseActivity {
     Integer type = 2;
     ContainsEmojiEditText advise_ed;
     Data data;
-    RelativeLayout rl_commit;
+    LinearLayout rl_commit;
     TextView feed_record;
     RadioButton rb_0;
     private DongLanTitleView title;
