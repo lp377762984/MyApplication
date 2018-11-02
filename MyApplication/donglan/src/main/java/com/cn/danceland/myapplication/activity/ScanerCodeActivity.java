@@ -30,11 +30,14 @@ import java.util.Map;
 
 
 public class ScanerCodeActivity extends ActivityScanerCode {
+    private String from = "";
 
     @Override
     public void do_result(String result) {
         LogUtil.i(result);
-        String from = this.getIntent().getStringExtra("from");
+        if (this.getIntent() != null) {
+            from = this.getIntent().getStringExtra("from");
+        }
         if (from != null && from.length() > 0) {
             switch (from) {
                 case "entrance"://扫码入场
@@ -54,7 +57,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                     if (result != null && result.length() > 0) {//开启后结果  0成功   1失败
                         scan_train(result);
                     } else {
-                        showResultDialog("扫码失败",false);
+                        showResultDialog("扫码失败", false);
                     }
                     break;
             }
@@ -83,19 +86,19 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
                     if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
-                        showResultDialog("入场成功",true);
+                        showResultDialog("入场成功", true);
                     } else {
-                        showResultDialog(requsetSimpleBean.getErrorMsg(),true);
+                        showResultDialog(requsetSimpleBean.getErrorMsg(), true);
                     }
                 } else {
-                    showResultDialog(requsetSimpleBean.getErrorMsg(),true);
+                    showResultDialog(requsetSimpleBean.getErrorMsg(), true);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                showResultDialog("入场失败:请查看网络连接",true);
+                showResultDialog("入场失败:请查看网络连接", true);
             }
         }) {
             @Override
@@ -117,21 +120,21 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
                     if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
-                        showResultDialog("扫码成功，开始训练",false);
+                        showResultDialog("扫码成功，开始训练", false);
                     } else if (TextUtils.equals(requsetSimpleBean.getCode(), "1")) {
-                        showResultDialog("开启失败",false);
+                        showResultDialog("开启失败", false);
                     } else {
-                        showResultDialog("扫码失败",false);
+                        showResultDialog("扫码失败", false);
                     }
                 } else {
-                    showResultDialog(requsetSimpleBean.getErrorMsg(),false);
+                    showResultDialog(requsetSimpleBean.getErrorMsg(), false);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                showResultDialog("扫码失败",false);
+                showResultDialog("扫码失败", false);
             }
         }) {
             @Override
@@ -173,7 +176,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     /**
      * 显示结果对话
      */
-    private void showResultDialog(final String result,boolean cancel) {
+    private void showResultDialog(final String result, boolean cancel) {
         final AlertDialog.Builder dialog =
                 new AlertDialog.Builder(this);
         //   dialog.setTitle("提示");
@@ -185,7 +188,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 finish();
             }
         });
-        if(cancel){
+        if (cancel) {
             dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
