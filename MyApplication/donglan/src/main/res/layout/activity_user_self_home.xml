@@ -207,8 +207,8 @@
 
                             <ImageView
                                 android:id="@+id/iv_sex"
-                                android:layout_width="12dp"
-                                android:layout_height="18dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="10.4dp"
                                 android:src="@drawable/img_sex1" />
