@@ -312,6 +312,9 @@ public class Constants {
     //获取推送角标数
     public static String PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
 
+    //扫码训练
+    public static String PUSH_SCANER_TRAIN = HOST + "/SHDevice/openSHDevice";//扫码训练
+
 
 
     //环信相关
@@ -639,5 +642,8 @@ public class Constants {
 
         //获取推送角标数
         PUSH_RECORD_QUERY_BADGE = HOST + "/pushRecord/querybadge";//获取推送角标数
+
+        //扫码训练
+        PUSH_SCANER_TRAIN = HOST + "/SHDevice/openSHDevice";//扫码训练
     }
 }
