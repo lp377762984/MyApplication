@@ -21,6 +21,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 /**
+ * 意见反馈
  * Created by feng on 2018/3/13.
  */
 
@@ -40,9 +42,9 @@ public class AdviseActivity extends BaseActivity {
     ContainsEmojiEditText advise_ed;
     Data data;
     RelativeLayout rl_commit;
-    ImageView feed_back,img_biaoqing;
     TextView feed_record;
     RadioButton rb_0;
+    private DongLanTitleView title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +62,6 @@ public class AdviseActivity extends BaseActivity {
 
     private void initView() {
 
-        img_biaoqing = findViewById(R.id.img_biaoqing);
         advise_rg = findViewById(R.id.advise_rg);
         advise_rg.setOnCheckedChangeListener(onCheckedChangeListener);
 
@@ -76,21 +77,17 @@ public class AdviseActivity extends BaseActivity {
             }
         });
 
-        feed_back = findViewById(R.id.feed_back);
-        feed_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        feed_record = findViewById(R.id.feed_record);
+        title = findViewById(R.id.title);
+        feed_record = title.findViewById(R.id.donglan_right_tv);
+        feed_record.setText("记录");
+        feed_record.setVisibility(View.VISIBLE);
+        feed_record.setTextColor(getResources().getColor(R.color.home_enter_total_text_color));
         feed_record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AdviseActivity.this,AdviseRecordActivity.class));
+                startActivity(new Intent(AdviseActivity.this, AdviseRecordActivity.class));
             }
         });
-
     }
 
 
@@ -102,7 +99,7 @@ public class AdviseActivity extends BaseActivity {
         FeedBack feedBack = new FeedBack();
         feedBack.setType(type);
         feedBack.setContent(content);
-        feedBack.setBranch_id((long)data.getMember().getBranch_id());
+        feedBack.setBranch_id((long) data.getMember().getBranch_id());
         feedBack.setContact_way(data.getMember().getPhone_no());
 
         request.save(feedBack, new Response.Listener<JSONObject>() {
@@ -125,22 +122,22 @@ public class AdviseActivity extends BaseActivity {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             int checkedRadioButtonId = group.getCheckedRadioButtonId();
-            switch (checkedRadioButtonId){
+            switch (checkedRadioButtonId) {
                 case R.id.rb_0://表扬
                     type = 2;
-                    img_biaoqing.setImageResource(R.drawable.biaoyang);
+//                    rb_0.setCompoundDrawables(null,getResources().getDrawable(R.drawable.advise_selected_icon),null,null);
+//                    rb_1.setCompoundDrawables(null,getResources().getDrawable(R.drawable.advise_selected_icon),null,null);
+//                    rb_2.setCompoundDrawables(null,getResources().getDrawable(R.drawable.advise_selected_icon),null,null);
+//                    rb_3.setCompoundDrawables(null,getResources().getDrawable(R.drawable.advise_selected_icon),null,null);
                     break;
                 case R.id.rb_1://建议
                     type = 3;
-                    img_biaoqing.setImageResource(R.drawable.jianyi);
                     break;
                 case R.id.rb_2://批评
                     type = 1;
-                    img_biaoqing.setImageResource(R.drawable.piping);
                     break;
                 case R.id.rb_3://投诉
                     type = 4;
-                    img_biaoqing.setImageResource(R.drawable.tousu);
                     break;
 
             }
