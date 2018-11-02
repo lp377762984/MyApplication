@@ -149,7 +149,7 @@
 
     <LinearLayout
         android:id="@+id/btn_login"
-        style="@style/BtnCommitStyle"
+        style="@style/BtnCommitStyle1"
         android:layout_width="327dp"
         android:layout_alignLeft="@+id/miman"
         android:layout_marginLeft="20dp"
