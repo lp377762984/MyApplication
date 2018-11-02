@@ -247,7 +247,7 @@
 
         <LinearLayout
             android:id="@+id/btn_commit"
-            style="@style/BtnCommitStyle"
+            style="@style/BtnCommitStyle1"
             android:layout_width="327dp"
             android:layout_below="@+id/ll_agreement"
             android:layout_centerHorizontal="true"
