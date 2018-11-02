@@ -151,13 +151,7 @@ public class BuySiJiaoActivity extends BaseActivity implements AbsListView.OnScr
             }
         });
 
-        buy_img = findViewById(R.id.buy_img);
-        buy_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
 
         getData(page);
 
@@ -198,6 +192,8 @@ public class BuySiJiaoActivity extends BaseActivity implements AbsListView.OnScr
                 convertView = LayoutInflater.from(BuySiJiaoActivity.this).inflate(R.layout.sijiaocard, null);
                 viewHolder.card_img_1 = convertView.findViewById(R.id.card_img_1);
                 viewHolder.sijiao_name = convertView.findViewById(R.id.sijiao_name);
+                viewHolder.sijiao_name1 = convertView.findViewById(R.id.sijiao_name1);
+                viewHolder.tv_branch_name = convertView.findViewById(R.id.tv_branch_name);
                 viewHolder.sijiao_type = convertView.findViewById(R.id.sijiao_type);
                 viewHolder.sijiao_amount = convertView.findViewById(R.id.sijiao_amount);
                 viewHolder.sijiao_price = convertView.findViewById(R.id.sijiao_price);
@@ -217,19 +213,21 @@ public class BuySiJiaoActivity extends BaseActivity implements AbsListView.OnScr
                     .transform(new GlideRoundTransform(BuySiJiaoActivity.this,10));
 
 
-            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).apply(options).into(viewHolder.card_img_1);
+            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img_1);
             viewHolder.sijiao_name.setText(contentList.get(position).getName());
+            viewHolder.sijiao_name1.setText(contentList.get(position).getName());
             viewHolder.sijiao_type.setText("课程类型：" + contentList.get(position).getCourse_category_name());
             viewHolder.sijiao_amount.setText("课程节数：" + contentList.get(position).getCount() + "节");
             viewHolder.sijiao_price.setText("￥：" + contentList.get(position).getPrice() + "元");
-            viewHolder.sijiao_price.setTextColor(getResources().getColor(R.color.color_dl_yellow));
+     //       viewHolder.sijiao_price.setTextColor(getResources().getColor(R.color.color_dl_yellow));
+            viewHolder.tv_branch_name.setText(contentList.get(position).getBranch_name());
             return convertView;
         }
     }
 
     class ViewHolder {
         ImageView card_img_1;
-        TextView sijiao_name, sijiao_type, sijiao_amount, sijiao_price;
+        TextView sijiao_name, sijiao_type, sijiao_amount, sijiao_price,sijiao_name1,tv_branch_name;
 
     }
 }

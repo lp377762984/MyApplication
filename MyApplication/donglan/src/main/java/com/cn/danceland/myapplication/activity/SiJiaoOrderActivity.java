@@ -43,6 +43,7 @@ import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianBean;
 import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
+import com.cn.danceland.myapplication.bean.RequestPayWayBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
 import com.cn.danceland.myapplication.bean.WeiXinBean;
@@ -60,6 +61,7 @@ import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CommitButton;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
@@ -97,7 +99,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     RadioButton btn_forme, btn_foryou;
     CheckBox btn_zhifubao, btn_weixin, btn_chuzhika;
     View line7;
-    ImageView back_img, iv_phonebook;
+    ImageView  iv_phonebook;
     BuySiJiaoBean.Content itemContent;
     TextView goods_name, goods_type, goods_time, goods_price, tv_jiaolian, ed_time, tv_pay_price, tv_dingjin;
     ListPopup listPopup;
@@ -127,6 +129,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     TextView tv_explain;
     String deposit_days, deposit_course_price;
     public static final int SDK_PAY_FLAG = 0x1001;
+    private  boolean isRepay=false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -145,6 +148,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay=true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -154,12 +158,14 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay=true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay=true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -169,6 +175,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         default:
                             ToastUtils.showToastShort("支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay=true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -183,7 +190,9 @@ public class SiJiaoOrderActivity extends BaseActivity {
         }
     };
     private LinearLayout ll_storecard;
-
+    private ImageView iv_check;
+    private LinearLayout ll_02,ll_alipay,ll_weixin;
+    private CommitButton commitButton;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Constants.DEV_CONFIG) {
@@ -196,6 +205,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         getStoreCard();
         initView();
         queryList();
+        find_pay_way();
     }
 
     //even事件处理
@@ -208,6 +218,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             btn_repay.setVisibility(View.VISIBLE);
+            isRepay=true;
             btn_zhifubao.setClickable(false);
             btn_chuzhika.setClickable(false);
         }
@@ -404,12 +415,14 @@ int order_bustype=56;
             if (price>deposit){
                 tv_dingjin.setText("- " + deposit + "元");
                 tv_pay_price.setText("待支付：￥" + (price - deposit));
+                commitButton.setText("待支付：￥" + (price - deposit));
             }else {
                 tv_dingjin.setText("未使用");
                 deposit=0;
                 deposit_id="";
                 ToastUtils.showToastShort("定金金额必须小于商品金额");
                 tv_pay_price.setText("待支付：￥" + (price));
+                commitButton.setText("待支付：￥" + (price));
             }
 
         }
@@ -420,6 +433,9 @@ int order_bustype=56;
         ll_storecard = findViewById(R.id.ll_storecard);
         if (!"0".equals(type)) {
             ll_storecard.setVisibility(View.GONE);
+            TextView tv_gouka=findViewById(R.id.tv_gouka);
+            tv_gouka.setText("购买定金");
+
         }
         rl_jiaolian = findViewById(R.id.rl_jiaolian);
         tv_explain = findViewById(R.id.tv_explain);
@@ -431,26 +447,25 @@ int order_bustype=56;
         endMill = (long) days * 86400000 + startMill;
         endTime = TimeUtils.timeStamp2Date(endMill + "", "yyyy-MM-dd");
 
-        btn_forme = findViewById(R.id.btn_forme);
-        btn_foryou = findViewById(R.id.btn_foryou);
+  /*      btn_forme = findViewById(R.id.btn_forme);
+        btn_foryou = findViewById(R.id.btn_foryou);*/
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
         rl_name = findViewById(R.id.rl_name);
         btn_zhifubao = findViewById(R.id.btn_zhifubao);
         btn_weixin = findViewById(R.id.btn_weixin);
         btn_chuzhika = findViewById(R.id.btn_chuzhika);
-        back_img = findViewById(R.id.back_img);
         ed_phone = findViewById(R.id.ed_phone);
         ed_name = findViewById(R.id.ed_name);
-        goods_name = findViewById(R.id.goods_name);
-        goods_type = findViewById(R.id.goods_type);
-        goods_time = findViewById(R.id.goods_time);
-        goods_price = findViewById(R.id.goods_price);
+        goods_name = findViewById(R.id.tv_product_name);
+        goods_type = findViewById(R.id.tv_product_type);
+        goods_time = findViewById(R.id.tv_useful_life);
+        goods_price = findViewById(R.id.tv_price);
 //        goods_all_price = findViewById(R.id.goods_all_price);
 //        goods_num = findViewById(R.id.goods_num);
         tv_jiaolian = findViewById(R.id.tv_jiaolian);
         btn_commit = findViewById(R.id.btn_commit);
-        ll_dingjin = findViewById(R.id.ll_dingjin);
+        ll_dingjin = findViewById(R.id.ll_03);
         tv_dingjin = findViewById(R.id.tv_dingjin);
         btn_repay = findViewById(R.id.btn_repay);
 
@@ -471,11 +486,23 @@ int order_bustype=56;
                 startActivityForResult(new Intent(SiJiaoOrderActivity.this, DepositActivity.class).putExtra("bus_type", "3"), 22);
             }
         });
-
-
-        btn_commit.setOnClickListener(new View.OnClickListener() {
+        commitButton = findViewById(R.id.dlbtn_commit);
+        commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (isRepay){//重新支付
+
+                    if ("2".equals(zhifu)) {
+                        alipay(unpaidOrder);
+                    } else if ("3".equals(zhifu)) {
+                        wxPay(unpaidOrder);
+                    }
+                    return;
+                }
+
+
+
                 if ("0".equals(type)) {
                     if ("0".equals(forme)) {
                         if (tv_jiaolian.getText().toString().equals("请选择您的教练") || tv_jiaolian.getText().toString().isEmpty()) {
@@ -509,6 +536,42 @@ int order_bustype=56;
             }
         });
 
+//        btn_commit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if ("0".equals(type)) {
+//                    if ("0".equals(forme)) {
+//                        if (tv_jiaolian.getText().toString().equals("请选择您的教练") || tv_jiaolian.getText().toString().isEmpty()) {
+//                            ToastUtils.showToastShort("请选择教练！");
+//                        } else {
+//                            confirmOrder();
+//                        }
+//                    } else if ("1".equals(forme)) {
+//                        if (tv_jiaolian.getText().toString().equals("请选择您的教练") || tv_jiaolian.getText().toString().isEmpty() || ed_name.getText().toString().isEmpty() || ed_phone.getText().toString().isEmpty()) {
+//                            ToastUtils.showToastShort("请补全订单信息！");
+//                        } else {
+//                            confirmOrder();
+//                        }
+//                    }
+//
+//                } else if ("1".equals(type)) {
+//                    if ("1".equals(forme)) {
+//                        if (tv_jiaolian.getText().toString().equals("请选择您的教练") || tv_jiaolian.getText().toString().isEmpty() || ed_name.getText().toString().isEmpty() || ed_phone.getText().toString().isEmpty()) {
+//                            ToastUtils.showToastShort("请补全订单信息！");
+//                        } else {
+//                            commit_deposit();
+//                        }
+//                    } else if ("0".equals(forme)) {
+//                        if (tv_jiaolian.getText().toString().equals("请选择您的教练") || tv_jiaolian.getText().toString().isEmpty()) {
+//                            ToastUtils.showToastShort("请补全订单信息！");
+//                        } else {
+//                            commit_deposit();
+//                        }
+//                    }
+//                }
+//            }
+//        });
+
         if (itemContent != null) {
             if ("0".equals(type)) {
                 goods_name.setText("商品名称：" + itemContent.getName());
@@ -526,12 +589,6 @@ int order_bustype=56;
 //            goods_num.setText("商品数量："+itemContent.getCount()+"节");
         }
 
-        back_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         rl_jiaolian.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -549,42 +606,26 @@ int order_bustype=56;
 //            rl_jiaolian.setClickable(true);
 //        }
 
-        btn_forme.setOnClickListener(new View.OnClickListener() {
+        ll_02 = findViewById(R.id.ll_02);
+        ll_alipay = findViewById(R.id.ll_alipay);
+        ll_weixin = findViewById(R.id.ll_weixin);
+        iv_check = findViewById(R.id.iv_check);
+        iv_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_forme.setChecked(true);
-                btn_foryou.setChecked(false);
-                if ("1".equals(type)) {
-                    rl_kaikeshijian.setVisibility(View.GONE);
+                if (TextUtils.equals("0",forme)) {
+                    forme="1";
+                    ll_02.setVisibility(View.VISIBLE);
+                    iv_check.setImageResource(R.drawable.img_check2);
                 } else {
-                    rl_kaikeshijian.setVisibility(View.VISIBLE);
+                    forme="0";
+                    ll_02.setVisibility(View.GONE);
+                    iv_check.setImageResource(R.drawable.img_check1);
                 }
-                rl_phone.setVisibility(View.GONE);
-                rl_name.setVisibility(View.GONE);
-                if ("1".equals(type)) {
-                    rl_jiaolian.setVisibility(View.VISIBLE);
-                }
-                forme = "0";
             }
         });
 
-        btn_foryou.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btn_forme.setChecked(false);
-                btn_foryou.setChecked(true);
-                rl_kaikeshijian.setVisibility(View.GONE);
-                rl_name.setVisibility(View.VISIBLE);
-                rl_phone.setVisibility(View.VISIBLE);
-                rl_name.setVisibility(View.VISIBLE);
-                if ("1".equals(type)) {
-                    rl_jiaolian.setVisibility(View.VISIBLE);
-                }
-                forme = "1";
-            }
-        });
-        btn_zhifubao.setChecked(true);
-        zhifu = "2";
+      zhifu = "0";
 
         btn_zhifubao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -672,13 +713,42 @@ int order_bustype=56;
 
         if ("1".equals(type)) {
             tv_pay_price.setText("待支付：￥" + deposit_course_price);
+            commitButton.setText("待支付：￥" + deposit_course_price);
         } else {
             tv_pay_price.setText("待支付：￥" + price);
+            commitButton.setText("待支付：￥" + price);
         }
         getJiaoLian();
     }
 
     public boolean isStoreCard;
+
+    private void find_pay_way() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PAY_WAYS_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestPayWayBean payWayBean=new Gson().fromJson(s,RequestPayWayBean.class);
+                if (payWayBean.getData().getAlipay_enable()==1){
+                    ll_alipay.setVisibility(View.VISIBLE);
+                }
+                if (payWayBean.getData().getWxpay_enable()==1){
+                    ll_weixin.setVisibility(View.VISIBLE);
+                }
+                if (payWayBean.getData().getXypay_enable()==1){
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        });
+
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
 
     private void getStoreCard() {
         StoreAccountRequest request = new StoreAccountRequest();
@@ -775,6 +845,11 @@ int order_bustype=56;
     }
 
     private void confirmOrder() {
+
+        if (TextUtils.equals(zhifu,"0")){
+            ToastUtils.showToastShort("请选择支付方式");
+            return;
+        }
 
         SijiaoOrderConfirmBean sijiaoOrderConfirmBean = new SijiaoOrderConfirmBean();
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();

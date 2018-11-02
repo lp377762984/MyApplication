@@ -7,33 +7,10 @@
     android:orientation="vertical">
 
 
-    <RelativeLayout
+    <com.cn.danceland.myapplication.view.DongLanTitleView
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
-            android:onClick="back"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="会员卡详情"
-            android:textColor="@color/color_white"
-            android:textSize="18sp"
-
-            />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        app:titleText="会员卡详情"></com.cn.danceland.myapplication.view.DongLanTitleView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -92,8 +69,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="14sp" />
         </RelativeLayout>
 
 
@@ -211,311 +188,88 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--    <android.support.v7.widget.CardView
+    <ImageView
+        android:id="@+id/iv_gouaka"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/img_gouka" />
 
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
-            app:cardPreventCornerOverlap="false"
-            app:cardBackgroundColor="@android:color/holo_blue_light"
-            app:cardCornerRadius="16dp"
-            app:contentPadding="10dp">
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="会员须知"
+                android:textColor="@color/color_dl_black"
+                android:textSize="14sp" />
 
-            <RelativeLayout
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_bg_line" />
 
-                >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/img_dl_logo" />
-
-                <TextView
-                    android:id="@+id/tv_cardname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="center"
-
-                    android:gravity="center"
-                    android:text="钻石年卡"
-                    android:textColor="#333333"
-                    android:textSize="15sp" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_bg_phone">
 
                 <TextView
-                    android:id="@+id/tv_cardtype"
+                    android:id="@+id/tv_shuoming"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_cardname"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
-                    android:text="计次卡"
-                    android:textColor="#333333" />
-
-
-
-                <TextView
-                    android:id="@+id/tv_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="47dp"
-                    android:gravity="center"
-                    android:text="次数：100次"
-                    android:textColor="#444444"
+                    android:paddingBottom="10dp"
+                    android:text=""
+                    android:textColor="#333"
                     android:textSize="14sp" />
+            </ScrollView>
 
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="70dp"
-                    android:gravity="center"
-                    android:text="时间：有效期365天"
-                    android:textColor="#444444"
-                    android:textSize="14sp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-                <TextView
-                    android:id="@+id/tv_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="108dp"
-                    android:text="￥1580"
-                    android:textColor="#ff0000"
-                    android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="80dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/btn_bg_white"
-                    android:gravity="center"
-                    android:text="立即购买"
-                    android:textColor="#f00"
-                    android:textSize="15sp"
-                    android:visibility="gone" />
-            </RelativeLayout>
 
-        </android.support.v7.widget.CardView>-->
 
-    <!-- <RadioGroup
-         android:id="@+id/rg_who"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_marginLeft="30dp"
-         android:layout_marginRight="30dp"
-         android:gravity="center"
-         android:visibility=""
-         android:orientation="horizontal">
+    <com.cn.danceland.myapplication.view.CommitButton
 
-         <RadioButton
-             android:id="@+id/rbtn_me"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center"
-             android:layout_weight="1"
-             android:checked="true"
-             android:text="为自己购卡"
-             android:textColor="#333333" />
-
-         <RadioButton
-             android:id="@+id/rbtn_other"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_gravity="center"
-             android:layout_weight="1"
-             android:text="为好友购卡"
-             android:textColor="#333333" />
-     </RadioGroup>-->
-
-    <RadioGroup
-        android:id="@+id/rg_who"
+        android:id="@+id/dlbtn_commit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        app:text="购买">
 
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
+    </com.cn.danceland.myapplication.view.CommitButton>
 
-        <RadioButton
-            android:id="@+id/rbtn_me"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_radiobtn"
-            android:button="@null"
-            android:checked="true"
-            android:gravity="center"
-            android:text="购卡"
-            android:textColor="#333333" />
-
-        <RadioButton
-            android:id="@+id/rbtn_other"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_radiobtn"
-            android:button="@null"
-            android:gravity="center"
-            android:text="购买定金"
-            android:textColor="#333333" />
-    </RadioGroup>
-
-
-    <CheckBox
-        android:id="@+id/cb_forother"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:text="为好友购卡"
-        android:textColor="#333333"
-        android:visibility="gone" />
-
-    <CheckBox
-        android:id="@+id/cb_dingjin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="10dp"
-        android:text="预付定金"
-        android:textColor="#333333"
-        android:visibility="gone" />
-
-
-    <TextView
-        android:id="@+id/tv_select_counselor"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_bg_phone"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:text="*请选择您的会籍顾问"
-        android:textColor="#666666"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/tv_select_date"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_bg_phone"
-        android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:text="*请选开卡日期"
-
-        android:textColor="#666666"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/et_name"
-        style="@style/EtStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_bg_phone"
-        android:hint="请输入好友姓名"
-        android:paddingLeft="20dp"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@id/ll_phone"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edit_bg_phone"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/et_phone"
-            style="@style/EtStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="请输入好友电话"
-            android:inputType="phone" />
-
-        <ImageView
-            android:id="@+id/iv_phonebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:src="@drawable/img_phonebook" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="会员须知"
-        android:textColor="#333"
-        android:textSize="12sp" />
-
-    <TextView
-        android:layout_marginTop="2dp"
-        android:layout_width="50dp"
-        android:layout_height="2dp"
-        android:layout_marginLeft="10dp"
-        android:background="@color/color_dl_yellow" />
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="150dp">
-    <TextView
-        android:id="@+id/tv_shuoming"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:paddingBottom="10dp"
-        android:text=""
-        android:textColor="#333"
-        android:textSize="12sp" />
-</ScrollView>
-
-
-
-        <Button
-            android:id="@+id/btn_commit"
-            style="@style/BtnCommitStyle"
-
-            android:layout_gravity="bottom"
-            android:layout_marginTop="30dp"
-            android:text="购买" />
-
-
-
+<!--
     <Button
         android:id="@+id/btn_dj_commit"
         style="@style/BtnCommitStyle"
@@ -523,6 +277,7 @@
         android:layout_marginTop="10dp"
         android:text="预付定金"
         android:visibility="gone" />
+-->
 
 
 </LinearLayout>

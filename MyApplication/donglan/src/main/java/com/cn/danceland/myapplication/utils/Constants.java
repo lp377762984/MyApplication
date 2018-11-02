@@ -77,6 +77,7 @@ public class Constants {
     public static String RELOAD_LOGININFO = HOST + "/person/reloadLoginInfo";//重新获取用户信息
     public static String SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
     public static String ISJOINBRANCH = HOST + "/branch/iSJoinBranch";//判断是否加入该门店
+    public static String PAY_WAYS_URL = HOST + "/payConf/findById";//支持哪种支付方式
 
 
     public static String FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
@@ -418,7 +419,7 @@ public class Constants {
         SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
         ISJOINBRANCH = HOST + "/branch/iSJoinBranch";//判断是否加入该门店
 
-
+       PAY_WAYS_URL = HOST + "/payConf/findById";//支持哪种支付方式
         FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
         //报表相关

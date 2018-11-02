@@ -49,14 +49,13 @@ public class RequestConsultantInfoBean implements Serializable {
     }
 
     public class Data implements Serializable {
-        int id;
+      private   int id;
         private int branch_id;
         private int person_id;
         private int enabled;
         private int auth;
         private String is_default;
         private int type;
-        private int employee_id;
         private int department_id;
         private String cname;
         private String phone_no;
@@ -98,7 +97,7 @@ public class RequestConsultantInfoBean implements Serializable {
                     ", auth=" + auth +
                     ", is_default='" + is_default + '\'' +
                     ", type=" + type +
-                    ", employee_id=" + employee_id +
+                //    ", employee_id=" + employee_id +
                     ", department_id=" + department_id +
                     ", cname='" + cname + '\'' +
                     ", phone_no='" + phone_no + '\'' +
@@ -173,14 +172,6 @@ public class RequestConsultantInfoBean implements Serializable {
             return type;
         }
 
-        public void setEmployee_id(int employee_id) {
-            this.id = employee_id;
-        }
-
-        public int getEmployee_id() {
-            return id;
-        }
-
         public void setDepartment_id(int department_id) {
             this.department_id = department_id;
         }
@@ -213,12 +204,6 @@ public class RequestConsultantInfoBean implements Serializable {
             return member_no;
         }
 
-//        public void setReg_date(int reg_date) {
-//            this.reg_date = reg_date;
-//        }
-//        public int getReg_date() {
-//            return reg_date;
-//        }
 
         public void setGender(int gender) {
             this.gender = gender;

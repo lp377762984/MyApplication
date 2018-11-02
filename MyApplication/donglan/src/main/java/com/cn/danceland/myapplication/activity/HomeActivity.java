@@ -159,7 +159,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 if (shopFragment != null) {
                     shopFragment.refresh();
                 }
-                setMsgUnread(getTotalUnreadNum() == 0);
+                //setMsgUnread(getTotalUnreadNum() == 0);
                 break;
             default:
                 break;

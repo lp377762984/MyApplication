@@ -27,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.cn.danceland.myapplication.MyApplication;
@@ -39,6 +40,7 @@ import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
 import com.cn.danceland.myapplication.bean.ShopPictrueBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -51,6 +53,7 @@ import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +85,9 @@ public class ShopDetailedActivity extends BaseActivity {
     private NoScrollGridView gv_huiji;
     private NoScrollGridView gv_jiaolian;
     private NoScrollGridView gv_shop_image;
+    private TextView tv_more_huiji;
+    private TextView tv_more_jiaolian;
+    private List<ShopJiaoLianBean.Data> jiaolianList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,7 +199,26 @@ public class ShopDetailedActivity extends BaseActivity {
 
         detail_phone = findViewById(R.id.detail_phone);
         detail_adress = findViewById(R.id.detail_adress);
-
+        tv_more_jiaolian = findViewById(R.id.tv_more_jiaolian);
+        tv_more_jiaolian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("huijiList", (Serializable) jiaolianList);
+                bundle.putString("title","会籍团队");
+                startActivity(new Intent(ShopDetailedActivity.this,EmployeeListActivity.class).putExtras(bundle));
+            }
+        });
+        tv_more_huiji = findViewById(R.id.tv_more_huiji);
+        tv_more_huiji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("huijiList", (Serializable) huijiList);
+                bundle.putString("title","会籍团队");
+                startActivity(new Intent(ShopDetailedActivity.this,EmployeeListActivity.class).putExtras(bundle));
+            }
+        });
         s_button = findViewById(R.id.dlbtn_commit);
 
 //        join_button = findViewById(R.id.join_button);
@@ -403,15 +428,18 @@ public class ShopDetailedActivity extends BaseActivity {
         };
         MyApplication.getHttpQueues().add(request);
     }
+    private List<ShopJiaoLianBean.Data> huijiList;
 
     private void getHuiJi(final String shopID) {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
+
+
             @Override
             public void onResponse(String s) {
                 LogUtil.e("zzf", s);
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
                 if (shopJiaoLianBean != null) {
-                    List<ShopJiaoLianBean.Data> huijiList = shopJiaoLianBean.getData();
+                    huijiList = shopJiaoLianBean.getData();
                     if (huijiList.size() > 4) {
                         gv_huiji.setAdapter(new MyGridViewAdapter(huijiList.subList(0, 4)));
                     } else {
@@ -452,7 +480,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 ShopJiaoLianBean shopJiaoLianBean = gson.fromJson(s, ShopJiaoLianBean.class);
                 if (shopJiaoLianBean != null) {
 
-                    List<ShopJiaoLianBean.Data> jiaolianList = shopJiaoLianBean.getData();
+                    jiaolianList = shopJiaoLianBean.getData();
                     if (jiaolianList.size() > 4) {
                         gv_jiaolian.setAdapter(new MyGridViewAdapter(jiaolianList.subList(0, 4)));
                     } else {
@@ -645,8 +673,10 @@ public class ShopDetailedActivity extends BaseActivity {
             TextView tv_name = convertView.findViewById(R.id.tv_name);
             ImageView iv_avatar = convertView.findViewById(R.id.iv_avatar);
             tv_name.setText(jiaolianList.get(position).getCname());
+            RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(ShopDetailedActivity.this, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
 
-            Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getSelf_avatar_path()).into(iv_avatar);
+
+            Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getSelf_avatar_path()).apply(options).into(iv_avatar);
             return convertView;
         }
     }

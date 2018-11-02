@@ -67,6 +67,7 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
     private TextView tv_category;
     private TextView tv_count;
     private TextView tv_price;
+    private ImageView iv_gouaka;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,18 +160,13 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
 
     private void initView() {
         state = 0;
-        sell_img = findViewById(R.id.sell_img);
-        sell_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
         tv_shuoming = findViewById(R.id.tv_shuoming);
         xc_img = findViewById(R.id.xc_img);
 
 
         rl_buy = findViewById(R.id.rl_buy);
+        iv_gouaka = findViewById(R.id.iv_gouaka);
         btn_sijiao = findViewById(R.id.btn_sijiao);
         btn_sijiaodingjin = findViewById(R.id.btn_sijiaodingjin);
 
@@ -191,6 +187,21 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
                 state = 1;
             }
         });
+        iv_gouaka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (state==1){
+                    state=0;
+                    iv_gouaka.setImageResource(R.drawable.img_gousijiao);
+                }
+             else {
+                    state=1;
+                    iv_gouaka.setImageResource(R.drawable.img_gousijiao1);
+                }
+
+            }
+        });
+
 
         rl_buy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +213,17 @@ public class SellSiJiaoConfirmActivity extends BaseActivity {
                     showPirce(deposit_course_min,deposit_course_max);
                 }
 
+            }
+        });
+        findViewById(R.id.dlbtn_commit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(state==0){
+                    startActivity(new Intent(SellSiJiaoConfirmActivity.this,SiJiaoOrderActivity.class).putExtra("type","0").putExtra("itemContent",itemContent));
+                    finish();
+                }else if(state==1){
+                    showPirce(deposit_course_min,deposit_course_max);
+                }
             }
         });
         tv_branch_name = findViewById(R.id.tv_branch_name);

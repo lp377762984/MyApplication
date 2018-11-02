@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -19,22 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -50,11 +42,9 @@ import com.cn.danceland.myapplication.bean.explain.ExplainRequest;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
@@ -70,8 +60,6 @@ import java.util.List;
 import java.util.Map;
 
 import razerdp.basepopup.BasePopupWindow;
-
-import static android.R.attr.value;
 
 /**
  * Created by shy on 2017/11/3 09:44
@@ -96,11 +84,12 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
     // private ListPopup listPopup;
     private boolean isme = true;//是不是本人
     private String startDate;
-    private Button btn_commit;
-    private Button btn_dj_commit;
+//    private Button btn_commit;
+//    private Button btn_dj_commit;
     private Data info;
     private TextView tv_shuoming;
     private RequestParamsBean requestParamsBean;
+    private ImageView iv_gouaka;
 
 
     @Override
@@ -191,110 +180,33 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
 
 
         //    RadioGroup radioGroup = findViewById(R.id.rg_who);
-        tv_select_date = findViewById(R.id.tv_select_date);
-        tv_select_date.setOnClickListener(this);
-        tv_select_counselor = findViewById(R.id.tv_select_counselor);
-        tv_select_counselor.setOnClickListener(this);
         findViewById(R.id.iv_back).setOnClickListener(this);
-        btn_commit = findViewById(R.id.btn_commit);
-        btn_dj_commit = findViewById(R.id.btn_dj_commit);
-        findViewById(R.id.btn_commit).setOnClickListener(this);
-        findViewById(R.id.btn_dj_commit).setOnClickListener(this);
+//        btn_commit = findViewById(R.id.btn_commit);
+//        btn_dj_commit = findViewById(R.id.btn_dj_commit);
+        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
         ll_phone = findViewById(R.id.ll_phone);
 
-        et_name = findViewById(R.id.et_name);
-        et_phone = findViewById(R.id.et_phone);
-        findViewById(R.id.iv_phonebook).setOnClickListener(this);
+//        et_name = findViewById(R.id.et_name);
+//        et_phone = findViewById(R.id.et_phone);
+//        findViewById(R.id.iv_phonebook).setOnClickListener(this);
 
 
-        CheckBox cb_forother = findViewById(R.id.cb_forother);
-        CheckBox cb_dingjin = findViewById(R.id.cb_dingjin);
-        cb_forother.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        iv_gouaka = findViewById(R.id.iv_gouaka);
+        iv_gouaka.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    ll_phone.setVisibility(View.VISIBLE);
-                    et_name.setVisibility(View.VISIBLE);
-                    tv_select_date.setVisibility(View.GONE);
-                    isme = false;
-                } else {
-                    ll_phone.setVisibility(View.GONE);
-                    et_name.setVisibility(View.GONE);
-                    tv_select_date.setVisibility(View.VISIBLE);
-                    isme = true;
+            public void onClick(View v) {
+                if (isme){
+                    isme=false;
+                    iv_gouaka.setImageResource(R.drawable.img_gouka2);
+                }else {
+                    isme=true;
+                    iv_gouaka.setImageResource(R.drawable.img_gouka);
                 }
             }
         });
 
 
-        RadioGroup radioGroup = findViewById(R.id.rg_who);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                switch (i) {
 
-                    case R.id.rbtn_me:
-
-                        isme = true;
-
-
-                        break;
-                    case R.id.rbtn_other:
-                        isme = false;
-
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        });
-
-
-        cb_dingjin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    //  btn_commit.setVisibility(View.GONE);
-                    //   btn_dj_commit.setVisibility(View.VISIBLE);
-                    //    tv_select_date.setVisibility(View.GONE);
-
-                } else {
-                    //   tv_select_date.setVisibility(View.VISIBLE);
-                    //   btn_commit.setVisibility(View.VISIBLE);
-                    //    btn_dj_commit.setVisibility(View.GONE);
-                }
-            }
-        });
-//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-//                switch (i) {
-//
-//                    case R.id.rbtn_me:
-//                        //     ToastUtils.showToastShort("自己买");
-//                        ll_phone.setVisibility(View.GONE);
-//                        et_name.setVisibility(View.GONE);
-//                        tv_select_date.setVisibility(View.VISIBLE);
-//                        //      tv_select_counselor.setVisibility(View.VISIBLE);
-//                        isme = true;
-//
-//                        break;
-//                    case R.id.rbtn_other:
-//                        //    ToastUtils.showToastShort("别人买");
-//                        ll_phone.setVisibility(View.VISIBLE);
-//                        et_name.setVisibility(View.VISIBLE);
-//                        tv_select_date.setVisibility(View.GONE);
-//                        //     tv_select_counselor.setVisibility(View.GONE);
-//                        isme = false;
-//
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
-//            }
-//        });
     }
 
     private static final int PICK_CONTACT = 0;
@@ -496,21 +408,21 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_phonebook://打开通讯录
-
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_CONTACT);
-
-//                Uri uri = ContactsContract.Contacts.CONTENT_URI;
-//                Intent intent = new Intent(Intent.ACTION_PICK,
-//                        uri);
-//                startActivityForResult(intent, 0);
-                break;
+//            case R.id.iv_phonebook://打开通讯录
+//
+//                Intent intent = new Intent(Intent.ACTION_PICK);
+//                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+//                startActivityForResult(intent, PICK_CONTACT);
+//
+////                Uri uri = ContactsContract.Contacts.CONTENT_URI;
+////                Intent intent = new Intent(Intent.ACTION_PICK,
+////                        uri);
+////                startActivityForResult(intent, 0);
+//                break;
 
             case R.id.iv_back://返回
                 finish();
-            case R.id.tv_select_counselor://选择会籍顾问
+/*            case R.id.tv_select_counselor://选择会籍顾问
 
                 //listPopup.showPopupWindow();
                 break;
@@ -533,39 +445,12 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
                 dialog.show();
 
 
-                break;
-            case R.id.btn_commit://全款支付
+                break;*/
+            case R.id.dlbtn_commit://全款支付
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("cardinfo", CardsInfo);
-//                bundle.putSerializable("consultantInfo", consultantInfo);
-//                bundle.putBoolean("isme", isme);
-//                if (consultantInfo == null) {
-//                    ToastUtils.showToastLong("请选择会籍顾问");
-//                    return;
-//                }
-//                if (!isme) {
-//                    if (TextUtils.isEmpty(et_name.getText().toString().trim())) {
-//
-//                        ToastUtils.showToastLong("名字不能为空");
-//                        return;
-//                    }
-//                    if (TextUtils.isEmpty(et_phone.getText().toString().trim())) {
-//
-//                        ToastUtils.showToastLong("电话不能为空");
-//                        return;
-//                    }
-//
-//                    bundle.putString("name", et_name.getText().toString().trim());
-//                    bundle.putString("phone", et_phone.getText().toString().trim());
-//                } else {
-//                    if (TextUtils.isEmpty(startDate)) {
-//
-//                        ToastUtils.showToastLong("日期不能为空");
-//                        return;
-//                    }
-//                    bundle.putString("startDate", startDate);
-//                }
+
                 LogUtil.i("提交");
                 if (isme) {
                     bundle.putInt("product_type", 1);
@@ -581,15 +466,15 @@ public class SellCardConfirmActivity extends BaseActivity implements View.OnClic
 
 
                 break;
-            case R.id.btn_dj_commit://支付定金
-
-                if (requestParamsBean != null) {
-                    showPirce(requestParamsBean.getData().getDeposit_card_min(), requestParamsBean.getData().getDeposit_card_max());
-                }
-
-                break;
-            case value:
-                break;
+//            case R.id.btn_dj_commit://支付定金
+//
+//                if (requestParamsBean != null) {
+//                    showPirce(requestParamsBean.getData().getDeposit_card_min(), requestParamsBean.getData().getDeposit_card_max());
+//                }
+//
+//                break;
+//            case value:
+//                break;
             default:
                 break;
         }

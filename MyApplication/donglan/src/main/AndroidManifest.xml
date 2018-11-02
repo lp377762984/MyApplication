@@ -334,6 +334,9 @@
         <activity
             android:name=".activity.YeWuDetailsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EmployeeListActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.EmpUserHomeActivty"

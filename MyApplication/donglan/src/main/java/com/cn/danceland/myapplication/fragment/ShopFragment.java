@@ -197,12 +197,13 @@ public class ShopFragment extends BaseFragment {
             public void onClick(View v) {
                 if (popupWindow.isShowing()) {
                     dismissPop();
-                    up_img.setVisibility(View.GONE);
-                    down_img.setVisibility(View.VISIBLE);
-                } else {
-                    showPop();
                     up_img.setVisibility(View.VISIBLE);
                     down_img.setVisibility(View.GONE);
+                } else {
+                    showPop();
+                    up_img.setVisibility(View.GONE);
+                    down_img.setVisibility(View.VISIBLE);
+
                 }
             }
         });
@@ -273,15 +274,15 @@ public class ShopFragment extends BaseFragment {
                 tv_role.setText(role);
                 initData();
                 dismissPop();
-                up_img.setVisibility(View.GONE);
-                down_img.setVisibility(View.VISIBLE);
+                up_img.setVisibility(View.VISIBLE);
+                down_img.setVisibility(View.GONE);
             }
         });
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                up_img.setVisibility(View.GONE);
-                down_img.setVisibility(View.VISIBLE);
+                up_img.setVisibility(View.VISIBLE);
+                down_img.setVisibility(View.GONE);
             }
         });
 
@@ -744,8 +745,8 @@ public class ShopFragment extends BaseFragment {
         } else {
             SPUtils.setString("role", role);
             dismissPop();
-            up_img.setVisibility(View.GONE);
-            down_img.setVisibility(View.VISIBLE);
+            up_img.setVisibility(View.VISIBLE);
+            down_img.setVisibility(View.GONE);
         }
     }
 

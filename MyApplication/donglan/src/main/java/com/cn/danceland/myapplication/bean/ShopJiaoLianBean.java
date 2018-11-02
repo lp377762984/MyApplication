@@ -1,12 +1,13 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by feng on 2018/3/21.
  */
 
-public class ShopJiaoLianBean {
+public class ShopJiaoLianBean implements Serializable{
 
     private List<Data> data;
     private boolean success;
@@ -24,7 +25,7 @@ public class ShopJiaoLianBean {
         return success;
     }
 
-    public class Data {
+    public class Data implements Serializable {
 
         private int auth;
         private String avatar_path;
