@@ -53,13 +53,6 @@ public class CabinetActivity extends BaseActivity {
     private void initView() {
 
         gson = new Gson();
-        cabinet_back = findViewById(R.id.cabinet_back);
-        cabinet_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         cabinet_lv = findViewById(R.id.cabinet_lv);
         rl_error = findViewById(R.id.rl_error);
