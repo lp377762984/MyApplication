@@ -414,7 +414,7 @@ int order_bustype=56;
 
         }
     }
-
+String Strmonth,StrDay;
     private void initView() {
 
         ll_storecard = findViewById(R.id.ll_storecard);
@@ -425,8 +425,20 @@ int order_bustype=56;
         tv_explain = findViewById(R.id.tv_explain);
         tv_pay_price = findViewById(R.id.tv_pay_price);
         ed_time = findViewById(R.id.ed_time);
+        if (month<10){
+            Strmonth="0"+month;
+        }else {
+            Strmonth=""+month;
+        }
+        if (monthDay<10){
+            StrDay="0"+monthDay;
+        }else {
+            StrDay=""+monthDay;
+        }
+
         ed_time.setText(nowyear + "年" + month + "月" + monthDay + "日");
-        strTime = nowyear + "-" + month + "-" + monthDay;
+
+        strTime = nowyear + "-" + Strmonth + "-" + StrDay;
         startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
         endMill = (long) days * 86400000 + startMill;
         endTime = TimeUtils.timeStamp2Date(endMill + "", "yyyy-MM-dd");
@@ -1127,19 +1139,26 @@ int order_bustype=56;
                     dateList.add(z + "");
                 }
                 lp_date.setItems(dateList);
+                lp_date.setCurrentPosition(0);
             }
         });
 
         lp_month.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                smonth = monthList.get(index);
+//           if (Integer.valueOf(monthList.get(index))<10){
+//               smonth = "0"+monthList.get(index);
+//           }else {
+               smonth = monthList.get(index);
+       //    }
+
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
                     dateList.add(z + "");
                 }
                 lp_date.setItems(dateList);
+                lp_date.setCurrentPosition(0);
             }
         });
 
@@ -1148,7 +1167,13 @@ int order_bustype=56;
         lp_date.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                sdate = dateList.get(index);
+
+                if (Integer.valueOf(dateList.get(index))<10){
+                    sdate = "0"+dateList.get(index);
+                }else {
+                    sdate = dateList.get(index);
+                }
+
             }
         });
 
@@ -1158,7 +1183,10 @@ int order_bustype=56;
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ed_time.setText(syear + "年" + smonth + "月" + sdate + "日");
+
+
                 strTime = syear + "-" + smonth + "-" + sdate;
+
 
                 startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
                 endMill = (long) days * 86400000 + startMill;
