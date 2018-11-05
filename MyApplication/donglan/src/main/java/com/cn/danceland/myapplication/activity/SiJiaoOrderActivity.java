@@ -701,7 +701,9 @@ int order_bustype=56;
         ed_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDate();
+                //showDate();
+                startActivityForResult(new Intent(SiJiaoOrderActivity.this,AlertDialogSelectTimeActivity.class),21);
+
             }
         });
         if ("1".equals(type)) {//1是订金

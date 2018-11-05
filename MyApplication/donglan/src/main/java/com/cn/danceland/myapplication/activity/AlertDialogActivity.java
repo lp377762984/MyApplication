@@ -261,6 +261,7 @@ public class AlertDialogActivity extends BaseActivity {
                         Toast.makeText(context, bean.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         finish();
                     }
+
                 } else {
                     LogUtil.i("提交失败");
                 }

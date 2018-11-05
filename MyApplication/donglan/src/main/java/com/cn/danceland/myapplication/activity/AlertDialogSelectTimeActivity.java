@@ -1,12 +1,11 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,26 +13,25 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by shy on 2018/10/17 15:18
+ * Created by shy on 2018/11/2 16:56
  * Email:644563767@qq.com
  */
 
 
-public class SetRegisterInfoActivity extends BaseActivity implements View.OnClickListener {
+public class AlertDialogSelectTimeActivity extends BaseActivity {
+
     String strSex = "1", strBirthday = "1990-12-10";
     TextView
             button;
@@ -55,14 +53,32 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
     private ArrayList<String> monthList;
     private ArrayList<String> dateList;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_register_info);
+
+        setContentView(R.layout.activity_alertdialog_select_time);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//需要添加的语句
         initHost();
         intiView();
         setClick();
+    }
+
+    private void setClick() {
+        findViewById(R.id.iv_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        findViewById(R.id.iv_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                strBirthday = syear + "-" + smonth + "-" + sdate;
+                LogUtil.i(strBirthday);
+                ToastUtils.showToastShort(strBirthday);
+            }
+        });
     }
 
     private void initHost() {
@@ -74,10 +90,37 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
         gson = new Gson();
 
 
-        mData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        id = SPUtils.getString(Constants.MY_USERID, null);
         initDate();
     }
+
+    private void intiView() {
+
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = dateformat.format(System.currentTimeMillis());
+        LogUtil.e(dateStr);
+        //默认值
+        setdate(dateStr);
+
+
+
+    }
+
+    private void setdate(String date) {
+        String[] dates = date.split("-");
+
+        int yearpos = yearList.indexOf(dates[0] + "年");
+        lp_year.setCurrentPosition(yearpos);
+        syear = yearList.get(yearpos).replace("年", "");
+
+        int monthpos = monthList.indexOf(Integer.valueOf(dates[1]) + "月");
+        lp_month.setCurrentPosition(monthpos);
+        smonth = monthList.get(monthpos).replace("月", "");
+        int datepos = dateList.indexOf(Integer.valueOf(dates[2]) + "日");
+        lp_date.setCurrentPosition(datepos);
+    //    LogUtil.e(datepos+"");
+        sdate = dateList.get(datepos).replace("日", "");
+    }
+
 
     private void initDate() {
 
@@ -116,6 +159,7 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
         for (int z = 1; z <= daysByYearMonth; z++) {
             dateList.add(z + "日");
         }
+     //   LogUtil.e(dateList.toString());
         lp_date.setItems(dateList);
 
         //设置字体大小
@@ -123,9 +167,9 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
 
         lp_month.setTextSize(24);
         lp_date.setTextSize(24);
-        lp_year.setCenterTextColor(getColor(R.color.color_dl_yellow));
-        lp_month.setCenterTextColor(getColor(R.color.color_dl_yellow));
-        lp_date.setCenterTextColor(getColor(R.color.color_dl_yellow));
+        lp_year.setCenterTextColor(getColor(R.color.color_dl_black));
+        lp_month.setCenterTextColor(getColor(R.color.color_dl_black));
+        lp_date.setCenterTextColor(getColor(R.color.color_dl_black));
         lp_year.setOuterTextColor(Color.parseColor("#6d819c"));
         lp_month.setOuterTextColor(Color.parseColor("#6d819c"));
         lp_date.setOuterTextColor(Color.parseColor("#6d819c"));
@@ -167,98 +211,7 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                 sdate = dateList.get(index).replace("日", "");
             }
         });
+     //   LogUtil.e(dateList.toString());
     }
 
-    private void intiView() {
-        et_nickname = findViewById(R.id.et_nickname);
-        iv_sex = findViewById(R.id.iv_sex);
-        if (!TextUtils.isEmpty(mData.getPerson().getNick_name())) {
-            et_nickname.setText(mData.getPerson().getNick_name());
-        }
-        if (TextUtils.equals(mData.getPerson().getGender(), "2")) {
-            iv_sex.setBackgroundResource(R.drawable.img_sex_info_woman);
-            gender = "2";
-        }
-
-        if (TextUtils.equals(mData.getPerson().getGender(), "1")) {
-            iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
-            gender = "1";
-        }
-
-
-        if (!TextUtils.isEmpty(mData.getPerson().getBirthday())) {
-            setdate(mData.getPerson().getBirthday());
-        } else {
-            //默认值
-            setdate("2018-10-15");
-        }
-
-    }
-
-    private void setdate(String date) {
-        String[] dates = date.split("-");
-
-        int yearpos = yearList.indexOf(dates[0] + "年");
-        lp_year.setCurrentPosition(yearpos);
-        syear = yearList.get(yearpos).replace("年", "");
-
-        int monthpos = monthList.indexOf(dates[1] + "月");
-        lp_month.setCurrentPosition(monthpos);
-        smonth = monthList.get(monthpos).replace("月", "");
-        int datepos = dateList.indexOf(dates[2] + "日");
-        lp_date.setCurrentPosition(datepos);
-        sdate = dateList.get(datepos).replace("日", "");
-        LogUtil.i(yearpos + "AAA" + monthpos + "AAA" + datepos);
-    }
-
-    private void setClick() {
-        findViewById(R.id.dlbtn_commit).setOnClickListener(this);
-        iv_sex.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.dlbtn_commit:
-                if (TextUtils.isEmpty(et_nickname.getText().toString())) {
-                    ToastUtils.showToastShort("请输入您的昵称");
-                    return;
-                }
-                if (TextUtils.equals(gender, "0")) {
-                    ToastUtils.showToastShort("请选择您的性别");
-                    return;
-                }
-                strBirthday = syear + "-" + smonth + "-" + sdate;
-                LogUtil.i(strBirthday);
-                LogUtil.i(mData.getPerson().getBirthday());
-
-                if (TextUtils.equals(strBirthday, "2018-10-15")) {
-                    ToastUtils.showToastShort("请选择您生日");
-                    return;
-                }
-
-                startActivity(new Intent(SetRegisterInfoActivity.this, SetRegisterInfoSaveActivity.class)
-                        .putExtra("gender", gender)
-                        .putExtra("name", et_nickname.getText().toString())
-                        .putExtra("birthday", strBirthday));
-
-
-                break;
-            case R.id.iv_sex:
-                if (TextUtils.equals("1", gender)) {
-                    iv_sex.setBackgroundResource(R.drawable.img_sex_info_woman);
-                    gender = "2";
-                } else if (TextUtils.equals("2", gender)) {
-                    iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
-                    gender = "1";
-                } else if (TextUtils.equals("0", gender)) {
-                    iv_sex.setBackgroundResource(R.drawable.img_sex_info_man_);
-                    gender = "1";
-                }
-
-                break;
-            default:
-                break;
-        }
-    }
 }

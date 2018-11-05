@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <RelativeLayout
-        android:id="@+id/cabinet_title"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/dl_gery"
-
-        >
-        <ImageView
-            android:id="@+id/cabinet_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:src="@drawable/img_back"
-            android:layout_centerVertical="true"
-            android:paddingLeft="15dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我的租柜"
-            android:textSize="16sp"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            />
-
-    </RelativeLayout>
+<com.cn.danceland.myapplication.view.DongLanTitleView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleText="我的租柜"
+    ></com.cn.danceland.myapplication.view.DongLanTitleView>
 
     <ListView
         android:id="@+id/cabinet_lv"
@@ -38,16 +20,12 @@
 
     </ListView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/cabinet_title">
+
         <include
             android:id="@+id/rl_error"
             layout="@layout/no_info_layout"
             android:visibility="gone"
             />
 
-    </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
