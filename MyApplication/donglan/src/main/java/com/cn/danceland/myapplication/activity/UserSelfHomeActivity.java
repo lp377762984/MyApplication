@@ -279,13 +279,13 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_my_dyn://我的动态
-                startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true).putExtra("from",6));
                 break;
             case R.id.ll_my_guanzhu://我的关注
-                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1).putExtra("from",6));
                 break;
             case R.id.ll_my_fans://我的粉丝
-                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2).putExtra("from",6));
                 break;
             case R.id.iv_avatar://头像
                 startActivity(new Intent(UserSelfHomeActivity.this, AvatarActivity.class).putExtra("url", userInfo.getPerson().getSelf_avatar_path()));

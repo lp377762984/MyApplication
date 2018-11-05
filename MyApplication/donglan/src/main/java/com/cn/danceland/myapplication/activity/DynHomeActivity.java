@@ -123,7 +123,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private FrameLayout fl_emojicons;
     private TextView tv_nick_name;
     private TextView tv_time;
-//    private TextView tv_guanzhu;
+    //    private TextView tv_guanzhu;
     private TextView tv_location;
     private LinearLayout ll_location;
     private hani.momanii.supernova_emoji_library.Helper.EmojiconTextView tv_content;
@@ -961,13 +961,13 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
 
                     if (zanUserList.size() > 0) {
 
-                        mRecylerViewAdapter.setData(zanUserList, msgId);
+                        mRecylerViewAdapter.setData(zanUserList, msgId, userId);
 
                         mRecylerViewAdapter.notifyDataSetChanged();
 
                     } else {
                         // ToastUtils.showToastShort("没有点赞数据");
-                        mRecylerViewAdapter.setData(zanUserList, msgId);
+                        mRecylerViewAdapter.setData(zanUserList, msgId, userId);
                         mRecylerViewAdapter.notifyDataSetChanged();
                     }
                 } else {

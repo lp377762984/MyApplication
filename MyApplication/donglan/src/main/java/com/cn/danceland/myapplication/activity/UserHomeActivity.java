@@ -43,6 +43,7 @@ import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -108,7 +109,7 @@ public class UserHomeActivity extends BaseActivity {
         setContentView(R.layout.activity_user_home);
         userId = getIntent().getStringExtra("id");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
-        from = getIntent().getIntExtra("from", -1);
+        from = getIntent().getIntExtra("from", -1);//6个人主页
         //    LogUtil.i("userid:" + userId);
         //  userId="74";
 
@@ -148,7 +149,7 @@ public class UserHomeActivity extends BaseActivity {
 
     private void initView() {
         pullToRefresh = findViewById(R.id.pullToRefresh);
-        View listEmptyView=findViewById(R.id.rl_no_info);
+        View listEmptyView = findViewById(R.id.rl_no_info);
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
@@ -193,6 +194,7 @@ public class UserHomeActivity extends BaseActivity {
                 JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
             }
         });
+
 
     }
 
@@ -314,6 +316,15 @@ public class UserHomeActivity extends BaseActivity {
             });
             findViewById(R.id.ll_01).setVisibility(View.GONE);
             tv_add_gz.setVisibility(View.GONE);
+            if (from == 6) {//我的动态
+                DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+                dongLanTitleView.setTitle("我的动态");
+            }
+        } else {
+            if (from == 6) {//我的动态
+                DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+                dongLanTitleView.setTitle("动态");
+            }
         }
 
         //m默认头像
@@ -547,8 +558,17 @@ public class UserHomeActivity extends BaseActivity {
 
 
                     EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_USER_INFO));
-                }
 
+                    if (from == 6) {//我的动态
+                        DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+                        dongLanTitleView.setTitle("我的动态");
+                    }
+                } else {
+                    if (from == 6) {//动态
+                        DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+                        dongLanTitleView.setTitle("动态");
+                    }
+                }
 
                 Message msg = Message.obtain();
                 //   msg.obj = data;
