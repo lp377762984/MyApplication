@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSellCardsInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSellCardsTypeBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PriceUtils;
@@ -38,6 +39,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cn.danceland.myapplication.R.id.iv_card;
 import static com.cn.danceland.myapplication.R.id.tv_cardname;
 import static com.cn.danceland.myapplication.R.id.tv_cardtype;
 
@@ -244,7 +246,7 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
                 viewHolder.tv_time = view.findViewById(R.id.tv_time);
                 viewHolder.tv_price = view.findViewById(R.id.tv_price);
                 viewHolder.tv_cardtype = view.findViewById(tv_cardtype);
-                viewHolder.iv_card = view.findViewById(R.id.iv_card);
+                viewHolder.iv_card = view.findViewById(iv_card);
                 viewHolder.tv_price1 = view.findViewById(R.id.tv_price1);
                 viewHolder.tv_branch_name = view.findViewById(R.id.tv_branch_name);
                 viewHolder.tv_cardname1 = view.findViewById(R.id.tv_cardname1);
@@ -252,7 +254,9 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            RequestOptions options=new RequestOptions().placeholder(R.drawable.sijiao_card);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card)
+                    .transform(new GlideRoundTransform(SellCardActivity.this,6));
+
             Glide.with(SellCardActivity.this).load(sellCardsInfoBean.getData().get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
 
 
