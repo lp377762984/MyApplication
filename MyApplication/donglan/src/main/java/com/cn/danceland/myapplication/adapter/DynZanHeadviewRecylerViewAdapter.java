@@ -26,17 +26,17 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
     public List<RequsetUserListBeanZan.Data.Content> datas = null;
     private Context context;
     private String msgId;
-  //  private String userId;
+    private String userId;
 
     public DynZanHeadviewRecylerViewAdapter(Context context, List<RequsetUserListBeanZan.Data.Content> datas) {
         this.datas = datas;
         this.context = context;
     }
 
-    public void setData(List<RequsetUserListBeanZan.Data.Content> datas, String msgId) {
+    public void setData(List<RequsetUserListBeanZan.Data.Content> datas, String msgId ,String userId) {
         this.datas = datas;
         this.msgId = msgId;
-      //  this.userId = userId;
+        this.userId = userId;
     }
 
     //创建新View，被LayoutManager所调用
@@ -59,7 +59,7 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
                 if (datas.size() > 4 && datas.size() == position) {
                     //更多
                //     ToastUtils.showToastShort("查看全部点赞");
-                    context.startActivity(new Intent(context, UserListActivity.class).putExtra("msgId", msgId).putExtra("type", 3));
+                    context.startActivity(new Intent(context, UserListActivity.class).putExtra("id",  userId).putExtra("msgId", msgId).putExtra("type", 3).putExtra("from",6));
 
                 } else {
                     context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", datas.get(position).getPraiseUserId()));

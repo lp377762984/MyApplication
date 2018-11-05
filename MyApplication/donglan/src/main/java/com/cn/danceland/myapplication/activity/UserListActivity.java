@@ -84,17 +84,26 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initData() {
+        LogUtil.i("userId"+userId);
+        LogUtil.i("msgId"+msgId);
+        LogUtil.i("SPUtils.getString(Constants.MY_USERID, null))"+SPUtils.getString(Constants.MY_USERID, null));
+        String isMyStr="";
+        if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, null))) {
+            isMyStr="我的";
+        }else{
+            isMyStr="";
+        }
         switch (type) {
             case 1:
-                tv_tiltle.setText("关注");
+                tv_tiltle.setText(isMyStr+"关注");
                 findGZuserList(userId, 0);
                 break;
             case 2:
-                tv_tiltle.setText("粉丝");
+                tv_tiltle.setText(isMyStr+"粉丝");
                 findFansUserList(userId, 0);
                 break;
             case 3:
-                tv_tiltle.setText("点赞");
+                tv_tiltle.setText(isMyStr+"点赞");
                 findZanUserList(msgId, 0);
                 break;
             default:
