@@ -43,10 +43,10 @@ public class AdviseRecordActivity extends BaseActivity {
     private Gson gson;
     Data data;
     List<FeedBack> list;
-    ImageView fankui_back;
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +67,7 @@ public class AdviseRecordActivity extends BaseActivity {
         advise_record_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(AdviseRecordActivity.this,AdviseDetailActivity.class).putExtra("id",list.get(position).getId()));
+                startActivity(new Intent(AdviseRecordActivity.this, AdviseDetailActivity.class).putExtra("id", list.get(position).getId()));
             }
         });
         rl_error = findViewById(R.id.rl_error);
@@ -77,13 +77,6 @@ public class AdviseRecordActivity extends BaseActivity {
         tv_error.setText("您还没有反馈任何信息");
 
         advise_record_lv.setEmptyView(rl_error);
-        fankui_back = findViewById(R.id.fankui_back);
-        fankui_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
 
@@ -100,22 +93,22 @@ public class AdviseRecordActivity extends BaseActivity {
                 }.getType());
                 if (result.isSuccess()) {
                     list = result.getData();
-                    if(list!=null){
+                    if (list != null) {
                         advise_record_lv.setAdapter(new RecordAdapter(list));
                     }
                 } else {
                     ToastUtils.showToastShort("查询分页列表失败,请检查手机网络！");
                 }
             }
-        },rl_error,iv_error,tv_error);
+        }, rl_error, iv_error, tv_error);
     }
 
 
-    private class RecordAdapter extends BaseAdapter{
+    private class RecordAdapter extends BaseAdapter {
 
         List<FeedBack> list;
 
-        RecordAdapter(List<FeedBack> list){
+        RecordAdapter(List<FeedBack> list) {
 
             this.list = list;
 
@@ -139,51 +132,64 @@ public class AdviseRecordActivity extends BaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 convertView = View.inflate(AdviseRecordActivity.this, R.layout.advise_record_item, null);
                 viewHolder = new ViewHolder();
+                viewHolder.type_iv = convertView.findViewById(R.id.type_iv);
                 viewHolder.tv_type = convertView.findViewById(R.id.tv_type);
                 viewHolder.fankui_time = convertView.findViewById(R.id.fankui_time);
                 viewHolder.huifu_time = convertView.findViewById(R.id.huifu_time);
                 viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
-                if(list.get(position).getType()==1){
-                    viewHolder.tv_type.setText("批评");
-                }else if(list.get(position).getType()==2){
-                    viewHolder.tv_type.setText("表扬");
-                }else if(list.get(position).getType()==3){
-                    viewHolder.tv_type.setText("建议");
-                }else if(list.get(position).getType()==4){
-                    viewHolder.tv_type.setText("投诉");
-                }else{
-                    viewHolder.tv_type.setText("未知类型");
-                }
-
-                if(list.get(position).getStatus()==1){
-                    viewHolder.tv_status.setText("已回复");
-                }else if(list.get(position).getStatus()==2){
-                    viewHolder.tv_status.setText("未回复");
-                }else{
-                    viewHolder.tv_status.setText("状态未知");
-                }
-
-            if(list.get(position).getOpinion_date()!=null){
-                viewHolder.fankui_time.setText("反馈时间："+ TimeUtils.dateToString(list.get(position).getOpinion_date()));
+            if (list.get(position).getType() == 1) {
+                viewHolder.tv_type.setText("批评");
+                viewHolder.type_iv.setImageDrawable(getResources().getDrawable(R.drawable.item_criticism_icon));
+            } else if (list.get(position).getType() == 2) {
+                viewHolder.tv_type.setText("表扬");
+                viewHolder.type_iv.setImageDrawable(getResources().getDrawable(R.drawable.item_praise_icon));
+            } else if (list.get(position).getType() == 3) {
+                viewHolder.tv_type.setText("建议");
+                viewHolder.type_iv.setImageDrawable(getResources().getDrawable(R.drawable.item_advice_icon));
+            } else if (list.get(position).getType() == 4) {
+                viewHolder.tv_type.setText("投诉");
+                viewHolder.type_iv.setImageDrawable(getResources().getDrawable(R.drawable.item_complaint_icon));
+            } else {
+                viewHolder.tv_type.setText("未知类型");
+                viewHolder.type_iv.setImageDrawable(getResources().getDrawable(R.drawable.item_advice_icon));
             }
-            if(list.get(position).getReply_date()!=null){
-                viewHolder.huifu_time.setText("回复时间："+TimeUtils.dateToString(list.get(position).getReply_date()));
+
+            if (list.get(position).getStatus() == 1) {
+                viewHolder.tv_status.setText("已回复");
+                viewHolder.tv_status.setTextColor(getResources().getColor(R.color.colorGray21));
+                viewHolder.tv_status.setBackground(getResources().getDrawable(R.drawable.advise_status_white_bg));
+            } else if (list.get(position).getStatus() == 2) {
+                viewHolder.tv_status.setText("未回复");
+                viewHolder.tv_status.setTextColor(getResources().getColor(R.color.white));
+                viewHolder.tv_status.setBackground(getResources().getDrawable(R.drawable.advise_status_red_bg));
+            } else {
+                viewHolder.tv_status.setText("状态未知");
+                viewHolder.tv_status.setTextColor(getResources().getColor(R.color.white));
+                viewHolder.tv_status.setBackground(getResources().getDrawable(R.drawable.advise_status_red_bg));
+            }
+
+            if (list.get(position).getOpinion_date() != null) {
+                viewHolder.fankui_time.setText("反馈时间：" + TimeUtils.dateToString(list.get(position).getOpinion_date()));
+            }
+            if (list.get(position).getReply_date() != null) {
+                viewHolder.huifu_time.setText("回复时间：" + TimeUtils.dateToString(list.get(position).getReply_date()));
             }
 
             return convertView;
         }
     }
 
-    class ViewHolder{
-        TextView tv_type,fankui_time,huifu_time,tv_status;
+    class ViewHolder {
+        ImageView type_iv;
+        TextView tv_type, fankui_time, huifu_time, tv_status;
 
     }
 }
