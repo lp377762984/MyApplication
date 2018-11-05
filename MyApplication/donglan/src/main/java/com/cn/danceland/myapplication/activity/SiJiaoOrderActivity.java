@@ -99,7 +99,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     RadioButton btn_forme, btn_foryou;
     CheckBox btn_zhifubao, btn_weixin, btn_chuzhika;
     View line7;
-    ImageView  iv_phonebook;
+    ImageView iv_phonebook;
     BuySiJiaoBean.Content itemContent;
     TextView goods_name, goods_type, goods_time, goods_price, tv_jiaolian, ed_time, tv_pay_price, tv_dingjin;
     ListPopup listPopup;
@@ -129,7 +129,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     TextView tv_explain;
     String deposit_days, deposit_course_price;
     public static final int SDK_PAY_FLAG = 0x1001;
-    private  boolean isRepay=false;
+    private boolean isRepay = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -148,7 +148,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -158,14 +158,14 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -175,7 +175,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         default:
                             ToastUtils.showToastShort("支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -191,8 +191,9 @@ public class SiJiaoOrderActivity extends BaseActivity {
     };
     private LinearLayout ll_storecard;
     private ImageView iv_check;
-    private LinearLayout ll_02,ll_alipay,ll_weixin;
+    private LinearLayout ll_02, ll_alipay, ll_weixin;
     private CommitButton commitButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Constants.DEV_CONFIG) {
@@ -218,40 +219,40 @@ public class SiJiaoOrderActivity extends BaseActivity {
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             btn_repay.setVisibility(View.VISIBLE);
-            isRepay=true;
+            isRepay = true;
             btn_zhifubao.setClickable(false);
             btn_chuzhika.setClickable(false);
         }
     }
 
-int order_bustype=56;
+    int order_bustype = 56;
+
     private void showpayresult() {
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(SiJiaoOrderActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SiJiaoOrderActivity.this);
         builder.setMessage("支付完成");
 
-        if (order_bustype==56){
+        if (order_bustype == 56) {
             builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class));
+                    startActivity(new Intent(SiJiaoOrderActivity.this, MySijiaoActivity.class));
                     finish();
                 }
             });
 
         }
-        if (order_bustype==57){
+        if (order_bustype == 57) {
             builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class).putExtra("issend",1));
+                    startActivity(new Intent(SiJiaoOrderActivity.this, MySijiaoActivity.class).putExtra("issend", 1));
                     finish();
                 }
             });
         }
-
 
 
         builder.setNegativeButton("完成", new DialogInterface.OnClickListener() {
@@ -268,6 +269,7 @@ int order_bustype=56;
         });
         builder.show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -412,14 +414,14 @@ int order_bustype=56;
         } else if (resultCode == 11) {
             deposit = data.getFloatExtra("dingjin", 0);
             deposit_id = data.getStringExtra("id");
-            if (price>deposit){
+            if (price > deposit) {
                 tv_dingjin.setText("- " + deposit + "元");
                 tv_pay_price.setText("待支付：￥" + (price - deposit));
                 commitButton.setText("待支付：￥" + (price - deposit));
-            }else {
+            } else {
                 tv_dingjin.setText("未使用");
-                deposit=0;
-                deposit_id="";
+                deposit = 0;
+                deposit_id = "";
                 ToastUtils.showToastShort("定金金额必须小于商品金额");
                 tv_pay_price.setText("待支付：￥" + (price));
                 commitButton.setText("待支付：￥" + (price));
@@ -433,7 +435,7 @@ int order_bustype=56;
         ll_storecard = findViewById(R.id.ll_storecard);
         if (!"0".equals(type)) {
             ll_storecard.setVisibility(View.GONE);
-            TextView tv_gouka=findViewById(R.id.tv_gouka);
+            TextView tv_gouka = findViewById(R.id.tv_gouka);
             tv_gouka.setText("购买定金");
 
         }
@@ -491,7 +493,7 @@ int order_bustype=56;
             @Override
             public void onClick(View v) {
 
-                if (isRepay){//重新支付
+                if (isRepay) {//重新支付
 
                     if ("2".equals(zhifu)) {
                         alipay(unpaidOrder);
@@ -500,7 +502,6 @@ int order_bustype=56;
                     }
                     return;
                 }
-
 
 
                 if ("0".equals(type)) {
@@ -613,19 +614,19 @@ int order_bustype=56;
         iv_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.equals("0",forme)) {
-                    forme="1";
+                if (TextUtils.equals("0", forme)) {
+                    forme = "1";
                     ll_02.setVisibility(View.VISIBLE);
                     iv_check.setImageResource(R.drawable.img_check2);
                 } else {
-                    forme="0";
+                    forme = "0";
                     ll_02.setVisibility(View.GONE);
                     iv_check.setImageResource(R.drawable.img_check1);
                 }
             }
         });
 
-      zhifu = "0";
+        zhifu = "0";
 
         btn_zhifubao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -701,8 +702,8 @@ int order_bustype=56;
         ed_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDate();
-                startActivityForResult(new Intent(SiJiaoOrderActivity.this,AlertDialogSelectTimeActivity.class),21);
+                showDate();
+                //  startActivityForResult(new Intent(SiJiaoOrderActivity.this,AlertDialogSelectTimeActivity.class),21);
 
             }
         });
@@ -730,14 +731,14 @@ int order_bustype=56;
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestPayWayBean payWayBean=new Gson().fromJson(s,RequestPayWayBean.class);
-                if (payWayBean.getData().getAlipay_enable()==1){
+                RequestPayWayBean payWayBean = new Gson().fromJson(s, RequestPayWayBean.class);
+                if (payWayBean.getData().getAlipay_enable() == 1) {
                     ll_alipay.setVisibility(View.VISIBLE);
                 }
-                if (payWayBean.getData().getWxpay_enable()==1){
+                if (payWayBean.getData().getWxpay_enable() == 1) {
                     ll_weixin.setVisibility(View.VISIBLE);
                 }
-                if (payWayBean.getData().getXypay_enable()==1){
+                if (payWayBean.getData().getXypay_enable() == 1) {
 
                 }
 
@@ -845,10 +846,16 @@ int order_bustype=56;
 
 
     }
+    class ChuzhiPayBean {
+        public String id;
+
+
+
+    }
 
     private void confirmOrder() {
 
-        if (TextUtils.equals(zhifu,"0")){
+        if (TextUtils.equals(zhifu, "0")) {
             ToastUtils.showToastShort("请选择支付方式");
             return;
         }
@@ -857,10 +864,10 @@ int order_bustype=56;
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         if ("1".equals(forme)) {//给好友买
             sijiaoOrderConfirmBean.setBus_type(57);
-            order_bustype=57;
+            order_bustype = 57;
         } else if ("0".equals(forme)) {
             sijiaoOrderConfirmBean.setBus_type(56);
-            order_bustype=56;
+            order_bustype = 56;
         }
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝,3微信
         sijiaoOrderConfirmBean.setPlatform(1);//1是安卓
@@ -918,7 +925,7 @@ int order_bustype=56;
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -1060,10 +1067,10 @@ int order_bustype=56;
     }
 
     private void chuzhika(String id) {
-        PayBean payBean = new PayBean();
+        ChuzhiPayBean payBean = new ChuzhiPayBean();
         payBean.id = id;
         String str = gson.toJson(payBean);
-
+LogUtil.i(str.toString());
         MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -1083,8 +1090,7 @@ int order_bustype=56;
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.e(volleyError.toString());
 
             }
         });

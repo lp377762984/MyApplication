@@ -41,6 +41,7 @@ public class MyJsonObjectRequest extends JsonObjectRequest {
         Map<String, String> map = new HashMap<String, String>();
 
         map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+       // LogUtil.e( SPUtils.getString(Constants.MY_TOKEN, null));
         map.put("version", Constants.getVersion());
         map.put("platform", Constants.getPlatform());
         map.put("channel", AppUtils.getChannelCode());
