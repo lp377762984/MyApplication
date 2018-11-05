@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -453,19 +454,19 @@ public class YeWuOfMeFragment extends BaseFragment {
 
                 convertView = View.inflate(mActivity, R.layout.listview_item_my_yewu, null);
 
-
-                //          vh.tv_content = convertView.findViewById(R.id.tv_content);
+                vh.ll_code = convertView.findViewById(R.id.ll_code);
+                vh.ll_admin = convertView.findViewById(R.id.ll_admin);
 
                 vh.tv_name = convertView.findViewById(tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
-//                vh.tv_upcoming_name = convertView.findViewById(R.id.tv_upcoming_name);
-//                vh.tv_upcoming_time = convertView.findViewById(R.id.tv_upcoming_time);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
                 vh.tv_lasttime = convertView.findViewById(tv_lasttime);
                 vh.tv_money = convertView.findViewById(R.id.tv_money);
-                //   vh.tv_result = convertView.findViewById(tv_result);
+                vh.tv_admin_name = convertView.findViewById(R.id.tv_admin_name);
+                vh.tv_code = convertView.findViewById(R.id.tv_code);
+
 
                 convertView.setTag(vh);
 
@@ -476,62 +477,28 @@ public class YeWuOfMeFragment extends BaseFragment {
             }
 
 
-//
-//            {"key": 11, "value": "买定金","big_type":1},
-//            {"key": 12, "value": "用定金","big_type":1},
-//            {"key": 13, "value": "退定金","big_type":1},
-//
-//            {"key": 14, "value": "充储值","big_type":2},
-//            {"key": 15, "value": "退储值","big_type":2},
-//            {"key": 100, "value": "花储值","big_type":2},
-//
-//            {"key": 21, "value": "买卡","big_type":3},
-//            {"key": 22, "value": "卡升级","big_type":3},
-//            {"key": 23, "value": "续卡","big_type":3},
-//            {"key": 24, "value": "补卡","big_type":3},
-//            {"key": 25, "value": "转卡","big_type":3},
-//            {"key": 26, "value": "退卡","big_type":3},
-//            {"key": 27, "value": "停卡","big_type":3},
-//            {"key": 28, "value": "卡延期","big_type":3},
-//            {"key": 29, "value": "卡挂失","big_type":3},
-//            {"key": 30, "value": "卡加次","big_type":3},
-//
-//            {"key": 41, "value": "租柜","big_type":4},
-//            {"key": 42, "value": "续柜","big_type":4},
-//            {"key": 43, "value": "退柜","big_type":4},
-//            {"key": 44, "value": "转柜","big_type":4},
-//            {"key": 45, "value": "换柜","big_type":4},
-//
-//            {"key": 51, "value": "购买私教","big_type":5},
-//            {"key": 52, "value": "私教转会员","big_type":5},
-//            {"key": 53, "value": "私教换教练","big_type":5},
-//            {"key": 61, "value": "退私教","big_type":5}];
+
+
 
             vh.tv_name.setText(datalist.get(position).getOperater_name());
 
-         vh.tv_type.setText(yewumap.get(datalist.get(position).getBig_type())+"、"+yewumap.get(datalist.get(position).getType()));
-            vh.tv_money.setText("¥"+datalist.get(position).getMoney());
-            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(datalist.get(position).getDeal_time()+"","yyyy-MM-dd HH:mm"));
-//
-//
-//            vh.tv_result.setText(datalist.get(position).getResult());
-////            vh.iv_done.setOnClickListener(new View.OnClickListener() {
-////                @Override
-////                public void onClick(View view) {
-////                    if (!TextUtils.equals(datalist.get(position).getStatus(), "1")) {//未完成
-////
-////                    }
-////                }
-////            });
-//            vh.ll_item.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (TextUtils.equals(datalist.get(position).getStatus(), "0")) {
-//                        showDialog1(position);
-//                    }
-//
-//                }
-//            });
+            vh.tv_type.setText(yewumap.get(datalist.get(position).getBig_type()) + "、" + yewumap.get(datalist.get(position).getType()));
+            vh.tv_money.setText("¥" + datalist.get(position).getMoney());
+            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(datalist.get(position).getDeal_time() + "", "yyyy-MM-dd HH:mm"));
+            if (!TextUtils.isEmpty(datalist.get(position).getCode())) {
+                vh.ll_code.setVisibility(View.VISIBLE);
+                vh.tv_code.setText(datalist.get(position).getCode());
+            } else {
+                vh.ll_code.setVisibility(View.GONE);
+            }
+            if (!TextUtils.isEmpty(datalist.get(position).getEmployee_name())) {
+                vh.ll_admin.setVisibility(View.VISIBLE);
+                vh.tv_admin_name.setText(datalist.get(position).getEmployee_name());
+            } else {
+                vh.ll_admin.setVisibility(View.GONE);
+            }
+
+
             return convertView;
 
         }
@@ -542,8 +509,11 @@ public class YeWuOfMeFragment extends BaseFragment {
             public TextView tv_type;
             public TextView tv_name;
             public TextView tv_lasttime;
-            public TextView tv_result;
+            public TextView tv_admin_name;
+            public TextView tv_code;
             public LinearLayout ll_item;
+            public LinearLayout ll_code;
+            public LinearLayout ll_admin;
 
         }
 

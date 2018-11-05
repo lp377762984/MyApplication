@@ -65,7 +65,7 @@ public class YeWuAllFragment extends BaseFragment {
     private String auth = "1";
     private TextView tv_error;
     private ImageView imageView;
-    Map<Integer,String> yewumap=new HashMap<>();
+    Map<Integer, String> yewumap = new HashMap<>();
 
     @Override
     public View initViews() {
@@ -203,37 +203,37 @@ public class YeWuAllFragment extends BaseFragment {
     @Override
     public void initDta() {
 
-        yewumap.put(11,"买定金");
-        yewumap.put(12,"用定金");
-        yewumap.put(13,"退定金");
-        yewumap.put(14,"充储值");
-        yewumap.put(15,"退储值");
-        yewumap.put(100,"花储值");
-        yewumap.put(21,"买卡");
-        yewumap.put(22,"卡升级");
-        yewumap.put(23,"续卡");
-        yewumap.put(24,"补卡");
-        yewumap.put(25,"转卡");
-        yewumap.put(26,"退卡");
-        yewumap.put(27,"停卡");
-        yewumap.put(28,"卡延期");
-        yewumap.put(29,"卡挂失");
-        yewumap.put(30,"卡加次");
-        yewumap.put(41,"租柜");
-        yewumap.put(42,"续柜");
-        yewumap.put(43,"退柜");
-        yewumap.put(44,"转柜");
-        yewumap.put(45,"换柜");
-        yewumap.put(51,"购买私教");
-        yewumap.put(52,"私教转会员");
-        yewumap.put(53,"私教换教练");
-        yewumap.put(61,"退私教");
+        yewumap.put(11, "买定金");
+        yewumap.put(12, "用定金");
+        yewumap.put(13, "退定金");
+        yewumap.put(14, "充储值");
+        yewumap.put(15, "退储值");
+        yewumap.put(100, "花储值");
+        yewumap.put(21, "买卡");
+        yewumap.put(22, "卡升级");
+        yewumap.put(23, "续卡");
+        yewumap.put(24, "补卡");
+        yewumap.put(25, "转卡");
+        yewumap.put(26, "退卡");
+        yewumap.put(27, "停卡");
+        yewumap.put(28, "卡延期");
+        yewumap.put(29, "卡挂失");
+        yewumap.put(30, "卡加次");
+        yewumap.put(41, "租柜");
+        yewumap.put(42, "续柜");
+        yewumap.put(43, "退柜");
+        yewumap.put(44, "转柜");
+        yewumap.put(45, "换柜");
+        yewumap.put(51, "购买私教");
+        yewumap.put(52, "私教转会员");
+        yewumap.put(53, "私教换教练");
+        yewumap.put(61, "退私教");
 
-        yewumap.put(1,"定金业务");
-        yewumap.put(2,"储值业务");
-        yewumap.put(3,"卡业务");
-        yewumap.put(4,"租柜业务");
-        yewumap.put(5,"私教业务");
+        yewumap.put(1, "定金业务");
+        yewumap.put(2, "储值业务");
+        yewumap.put(3, "卡业务");
+        yewumap.put(4, "租柜业务");
+        yewumap.put(5, "私教业务");
 
 
         mCurrentPage = 1;
@@ -463,21 +463,19 @@ public class YeWuAllFragment extends BaseFragment {
                 convertView = View.inflate(mActivity, R.layout.listview_item_all_yewu, null);
 
 
-             vh.ll_code = convertView.findViewById(R.id.ll_code);
-             vh.ll_admin = convertView.findViewById(R.id.ll_admin);
+                vh.ll_code = convertView.findViewById(R.id.ll_code);
+                vh.ll_admin = convertView.findViewById(R.id.ll_admin);
 
                 vh.tv_name = convertView.findViewById(tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
-//                vh.tv_upcoming_name = convertView.findViewById(R.id.tv_upcoming_name);
-//                vh.tv_upcoming_time = convertView.findViewById(R.id.tv_upcoming_time);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
                 vh.tv_lasttime = convertView.findViewById(tv_lasttime);
                 vh.tv_money = convertView.findViewById(R.id.tv_money);
                 vh.tv_admin_name = convertView.findViewById(R.id.tv_admin_name);
                 vh.tv_code = convertView.findViewById(R.id.tv_code);
-                //   vh.tv_result = convertView.findViewById(tv_result);
+
 
                 convertView.setTag(vh);
 
@@ -489,19 +487,19 @@ public class YeWuAllFragment extends BaseFragment {
 
             vh.tv_name.setText(datalist.get(position).getOperater_name());
 
-         vh.tv_type.setText(yewumap.get(datalist.get(position).getBig_type())+"、"+yewumap.get(datalist.get(position).getType()));
-            vh.tv_money.setText("¥"+datalist.get(position).getMoney());
-            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(datalist.get(position).getDeal_time()+"","yyyy-MM-dd HH:mm"));
-            if (!TextUtils.isEmpty(datalist.get(position).getCode())){
+            vh.tv_type.setText(yewumap.get(datalist.get(position).getBig_type()) + "、" + yewumap.get(datalist.get(position).getType()));
+            vh.tv_money.setText("¥" + datalist.get(position).getMoney());
+            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(datalist.get(position).getDeal_time() + "", "yyyy-MM-dd HH:mm"));
+            if (!TextUtils.isEmpty(datalist.get(position).getCode())) {
                 vh.ll_code.setVisibility(View.VISIBLE);
                 vh.tv_code.setText(datalist.get(position).getCode());
-            }else {
+            } else {
                 vh.ll_code.setVisibility(View.GONE);
             }
-            if (!TextUtils.isEmpty(datalist.get(position).getEmployee_name())){
+            if (!TextUtils.isEmpty(datalist.get(position).getEmployee_name())) {
                 vh.ll_admin.setVisibility(View.VISIBLE);
                 vh.tv_admin_name.setText(datalist.get(position).getEmployee_name());
-            }else {
+            } else {
                 vh.ll_admin.setVisibility(View.GONE);
             }
 
