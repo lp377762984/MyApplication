@@ -32,279 +32,276 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:visibility="visible">
+            android:visibility="gone">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/rl_pie"
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/detail_cradview"
                     android:layout_width="match_parent"
-                    android:layout_height="366dp">
-
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/detail_cradview"
-                        android:layout_width="match_parent"
-                        android:layout_height="124dp"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/white_rounded_corners_bg"
-                        app:cardCornerRadius="6dp"
-                        app:cardElevation="5dp"
-                        app:cardPreventCornerOverlap="false">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="测试日期:"
-                                    android:textColor="@color/colorGray21"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/test_time"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:text="2018-8-8"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="操作人员:"
-                                    android:textColor="@color/colorGray21"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/test_person"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:text="2018-8-8"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="您的评分:"
-                                    android:textColor="@color/colorGray21"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/test_score"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:text="92.4"
-                                    android:textColor="@color/home_enter_total_text_color"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/test_classify"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="8dp"
-                                    android:text="健康匀称型"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </android.support.v7.widget.CardView>
+                    android:layout_height="124dp"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/white_rounded_corners_bg"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="5dp"
+                    app:cardPreventCornerOverlap="false">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@+id/detail_cradview"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:orientation="horizontal">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <ImageView
-                                android:layout_width="90dp"
-                                android:layout_height="90dp"
-                                android:layout_centerInParent="true"
-                                android:src="@drawable/body_image" />
-
-                            <lecho.lib.hellocharts.view.PieChartView
-                                android:id="@+id/pie_chart"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerInParent="true" />
-                        </RelativeLayout>
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="16dp"
-                            android:paddingBottom="34dp"
-                            android:gravity="bottom"
-                            android:orientation="vertical">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:text="测试日期:"
+                                android:textColor="@color/colorGray21"
+                                android:textSize="14sp" />
 
-                                <TextView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:background="@drawable/blue_round_bg" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="水分"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:id="@+id/moisture_tv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="0.3kg(62.3%)"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/test_time"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:layout_marginLeft="8dp"
+                                android:text="2018-8-8"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:background="@drawable/yellow_round_bg" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="脂肪"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:id="@+id/fat_tv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="0.3kg(62.3%)"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:text="操作人员:"
+                                android:textColor="@color/colorGray21"
+                                android:textSize="14sp" />
 
-                                <TextView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:background="@drawable/purple_round_bg" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="骨质"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:id="@+id/bone_tv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="0.3kg(62.3%)"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/test_person"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:layout_marginLeft="8dp"
+                                android:text="2018-8-8"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:background="@drawable/green_round_bg" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="蛋白质"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="12sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="您的评分:"
+                                android:textColor="@color/colorGray21"
+                                android:textSize="14sp" />
 
-                                <TextView
-                                    android:id="@+id/protein_tv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="6dp"
-                                    android:singleLine="true"
-                                    android:text="0.3kg(62.3%)"
-                                    android:textColor="@color/colorGray22"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
+                            <TextView
+                                android:id="@+id/test_score"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:text="92.4"
+                                android:textColor="@color/home_enter_total_text_color"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/test_classify"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:text="健康匀称型"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
                         </LinearLayout>
                     </LinearLayout>
-                </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="204dp"
+                    android:layout_below="@+id/detail_cradview"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/body_image" />
+
+                        <lecho.lib.hellocharts.view.PieChartView
+                            android:id="@+id/pie_chart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="16dp"
+                        android:gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingBottom="34dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/blue_round_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="水分"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/moisture_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="0.3kg(62.3%)"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/yellow_round_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="脂肪"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/fat_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="0.3kg(62.3%)"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/purple_round_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="骨质"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/bone_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="0.3kg(62.3%)"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@drawable/green_round_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="蛋白质"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/protein_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:singleLine="true"
+                                android:text="0.3kg(62.3%)"
+                                android:textColor="@color/colorGray22"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/rl_pie"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -1747,10 +1744,10 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="80dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_marginTop="16dp"
-                                android:layout_marginBottom="16dp"
                                 android:background="@drawable/edit_search_bg"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
@@ -1812,7 +1809,7 @@
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
-            </RelativeLayout>
+            </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 </LinearLayout>
