@@ -4,7 +4,7 @@
     <!-- background -->
     <item
         android:id="@android:id/background"
-        android:drawable="@drawable/progress_bg">
+        android:drawable="@drawable/horizontal_progress_bg">
     </item>
     <!-- progress -->
     <item

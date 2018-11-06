@@ -38,7 +38,6 @@ public class FitnessHistoryActivity extends BaseActivity {
     Gson gson;
     String member_no;
     List<FitnessHistoryBean.Content> content;
-    ImageView history_back;
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
@@ -89,8 +88,6 @@ public class FitnessHistoryActivity extends BaseActivity {
 
                 return map;
             }
-
-
         };
 
         MyApplication.getHttpQueues().add(stringRequest);
@@ -114,19 +111,9 @@ public class FitnessHistoryActivity extends BaseActivity {
         Glide.with(this).load(R.drawable.img_error4).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("暂无体测记录");
-
         lv_history.setEmptyView(rl_error);
-        history_back = findViewById(R.id.history_back);
-        history_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
     }
-
-
 
     private class MyAdapter extends BaseAdapter{
 

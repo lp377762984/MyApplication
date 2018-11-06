@@ -130,6 +130,14 @@
     <color name="white_color30">#B3ffffff</color>
     <color name="white_color20">#CCffffff</color>
 
+    <color name="blue_color1">#3FC1F7</color>
+    <color name="blue_color2">#3398cc</color>
+    <color name="yellow_color1">#FFCC01</color>
+    <color name="red_color1">#E56564</color>
+    <color name="green_color1">#398A12</color>
+    <color name="green_color2">#33CB98</color>
+    <color name="purple_color1">#CD98CC</color>
+
     <!--2.0版本结束-->
 
 </resources>
