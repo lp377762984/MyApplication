@@ -1053,6 +1053,7 @@ public class ShopFragment extends BaseFragment {
                         }
                         break;
                     default:
+                        ToastUtils.showToastShort("该功能正在研发中");
                         break;
                 }
             }

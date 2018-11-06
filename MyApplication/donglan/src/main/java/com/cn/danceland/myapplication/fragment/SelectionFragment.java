@@ -536,16 +536,6 @@ public class SelectionFragment extends BaseFragment {
             }
         }) {
 
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> hm = new HashMap<String, String>();
-                String token = SPUtils.getString(Constants.MY_TOKEN, "");
-                hm.put("Authorization", token);
-                return hm;
-            }
-
         };
         MyApplication.getHttpQueues().add(request);
 

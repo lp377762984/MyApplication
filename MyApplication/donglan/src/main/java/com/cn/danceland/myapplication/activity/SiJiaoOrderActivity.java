@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -193,6 +194,9 @@ public class SiJiaoOrderActivity extends BaseActivity {
     private ImageView iv_check;
     private LinearLayout ll_02, ll_alipay, ll_weixin;
     private CommitButton commitButton;
+    private ArrayList<String> yearList;
+    private ArrayList<String> monthList;
+    private ArrayList<String> dateList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -336,6 +340,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(SiJiaoOrderActivity.this);
         initWechat();
+        initDate();
     }
 
     private void getJiaoLian() {
@@ -430,6 +435,8 @@ public class SiJiaoOrderActivity extends BaseActivity {
         }
     }
 
+    String Strmonth, StrDay;
+
     private void initView() {
 
         ll_storecard = findViewById(R.id.ll_storecard);
@@ -443,14 +450,29 @@ public class SiJiaoOrderActivity extends BaseActivity {
         tv_explain = findViewById(R.id.tv_explain);
         tv_pay_price = findViewById(R.id.tv_pay_price);
         ed_time = findViewById(R.id.ed_time);
-        ed_time.setText(nowyear + "年" + month + "月" + monthDay + "日");
-        strTime = nowyear + "-" + month + "-" + monthDay;
+        if (month < 10) {
+            Strmonth = "0" + month;
+        } else {
+            Strmonth = "" + month;
+        }
+        if (monthDay < 10) {
+            StrDay = "0" + monthDay;
+        } else {
+            StrDay = "" + monthDay;
+        }
+
+        ed_time.setText(nowyear + "年" + Strmonth + "月" + StrDay + "日");
+
+        strTime = nowyear + "-" + Strmonth + "-" + StrDay;
         startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
         endMill = (long) days * 86400000 + startMill;
         endTime = TimeUtils.timeStamp2Date(endMill + "", "yyyy-MM-dd");
 
   /*      btn_forme = findViewById(R.id.btn_forme);
         btn_foryou = findViewById(R.id.btn_foryou);*/
+
+        btn_forme = findViewById(R.id.btn_forme);
+        btn_foryou = findViewById(R.id.btn_foryou);
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
         rl_name = findViewById(R.id.rl_name);
@@ -1158,24 +1180,41 @@ LogUtil.i(str.toString());
             public TextView mTextView;
         }
     }
+    private void setdate(String date) {
+        String[] dates = date.split("-");
 
+        int yearpos = yearList.indexOf(dates[0] + "年");
+        lp_year.setCurrentPosition(yearpos);
+        syear = yearList.get(yearpos).replace("年", "");
 
-    private void showDate() {
+        int monthpos = monthList.indexOf(dates[1] + "月");
+        lp_month.setCurrentPosition(monthpos);
+        smonth = monthList.get(monthpos).replace("月", "");
+        int datepos = dateList.indexOf(dates[2] + "日");
+        lp_date.setCurrentPosition(datepos);
+        //    LogUtil.e(datepos+"");
+        sdate = dateList.get(datepos).replace("日", "");
+    }
+    private void initDate() {
         ViewGroup parent = (ViewGroup) inflate1.getParent();
-        if (parent != null) {
-            parent.removeAllViews();
-        }
 
-        final ArrayList<String> yearList = new ArrayList<String>();
-        final ArrayList<String> monthList = new ArrayList<String>();
-        final ArrayList<String> dateList = new ArrayList<String>();
+        yearList = new ArrayList<String>();
+        monthList = new ArrayList<String>();
+        dateList = new ArrayList<String>();
         int n = nowyear;
         int len = 50;
+
+
         for (int i = 0; i <= len; i++) {
-            yearList.add((n + i) + "");
+            yearList.add((n + i) + "年");
         }
         for (int j = 0; j < 12; j++) {
-            monthList.add((1 + j) + "");
+            if ((1 + j) < 10) {
+                monthList.add("0" + (1 + j) + "月");
+            } else {
+                monthList.add((1 + j) + "月");
+            }
+
         }
         lp_year.setNotLoop();
         lp_date.setNotLoop();
@@ -1184,30 +1223,53 @@ LogUtil.i(str.toString());
         lp_month.setItems(monthList);
 
         lp_year.setInitPosition(0);
-        syear = yearList.get(0);
-        lp_month.setInitPosition(month - 1);
-        smonth = monthList.get(month - 1);
+        syear = yearList.get(0).replace("年", "");
+        lp_month.setInitPosition(0);
+        smonth = monthList.get(0).replace("月", "");
+        sdate = "1";
 
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
         for (int z = 1; z <= daysByYearMonth; z++) {
-            dateList.add(z + "");
+            if (z < 10) {
+                dateList.add("0" + z + "日");
+            } else {
+                dateList.add(z + "日");
+            }
+
         }
+        //   LogUtil.e(dateList.toString());
         lp_date.setItems(dateList);
 
         //设置字体大小
-        lp_year.setTextSize(16);
-        lp_month.setTextSize(16);
-        lp_date.setTextSize(16);
+        lp_year.setTextSize(24);
 
+        lp_month.setTextSize(24);
+        lp_date.setTextSize(24);
+        lp_year.setCenterTextColor(Color.parseColor("#333333"));
+        lp_month.setCenterTextColor(Color.parseColor("#333333"));
+        lp_date.setCenterTextColor(Color.parseColor("#333333"));
+        lp_year.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_month.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_date.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_year.setLineSpacingMultiplier(2f);
+        lp_month.setLineSpacingMultiplier(2f);
+        lp_date.setLineSpacingMultiplier(2f);
+        lp_year.setItemsVisibleCount(5);
+        lp_month.setItemsVisibleCount(5);
+        lp_date.setItemsVisibleCount(5);
         lp_year.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                syear = yearList.get(index);
+                syear = yearList.get(index).replace("年", "");
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "");
+                    if (z < 10) {
+                        dateList.add("0" + z + "日");
+                    } else {
+                        dateList.add(z + "日");
+                    }
                 }
                 lp_date.setItems(dateList);
             }
@@ -1216,24 +1278,111 @@ LogUtil.i(str.toString());
         lp_month.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                smonth = monthList.get(index);
+                smonth = monthList.get(index).replace("月", "");
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "");
+                    if (z < 10) {
+                        dateList.add("0" + z + "日");
+                    } else {
+                        dateList.add(z + "日");
+                    }
                 }
                 lp_date.setItems(dateList);
             }
         });
 
-        lp_date.setInitPosition(monthDay - 1);
-        sdate = dateList.get(monthDay);
         lp_date.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                sdate = dateList.get(index);
+                sdate = dateList.get(index).replace("日", "");
             }
         });
+    }
+
+    private void showDate() {
+        ViewGroup parent = (ViewGroup) inflate1.getParent();
+        if (parent != null) {
+            parent.removeAllViews();
+        }
+        setdate(strTime);
+
+//        for (int i = 0; i <= len; i++) {
+//            yearList.add((n + i) + "");
+//        }
+//        for (int j = 0; j < 12; j++) {
+//            monthList.add((1 + j) + "");
+//        }
+//        lp_year.setNotLoop();
+//        lp_date.setNotLoop();
+//        lp_month.setNotLoop();
+//        lp_year.setItems(yearList);
+//        lp_month.setItems(monthList);
+//
+//        lp_year.setInitPosition(0);
+//        syear = yearList.get(0);
+//        lp_month.setInitPosition(month - 1);
+//        smonth = monthList.get(month - 1);
+//
+//        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//        dateList.clear();
+//        for (int z = 1; z <= daysByYearMonth; z++) {
+//            dateList.add(z + "");
+//        }
+//        lp_date.setItems(dateList);
+//
+//        //设置字体大小
+//        lp_year.setTextSize(16);
+//        lp_month.setTextSize(16);
+//        lp_date.setTextSize(16);
+//
+//        lp_year.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+//                syear = yearList.get(index);
+//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//                dateList.clear();
+//                for (int z = 1; z <= daysByYearMonth; z++) {
+//                    dateList.add(z + "");
+//                }
+//                lp_date.setItems(dateList);
+//                lp_date.setCurrentPosition(0);
+//            }
+//        });
+//
+//        lp_month.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+////           if (Integer.valueOf(monthList.get(index))<10){
+////               smonth = "0"+monthList.get(index);
+////           }else {
+//               smonth = monthList.get(index);
+//       //    }
+//
+//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//                dateList.clear();
+//                for (int z = 1; z <= daysByYearMonth; z++) {
+//                    dateList.add(z + "");
+//                }
+//                lp_date.setItems(dateList);
+//                lp_date.setCurrentPosition(0);
+//            }
+//        });
+//
+//        lp_date.setInitPosition(monthDay - 1);
+//        sdate = dateList.get(monthDay);
+//        lp_date.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+//
+//                if (Integer.valueOf(dateList.get(index))<10){
+//                    sdate = "0"+dateList.get(index);
+//                }else {
+//                    sdate = dateList.get(index);
+//                }
+//
+//            }
+//        });
 
         alertdialog.setTitle("选择开课日期");
         alertdialog.setView(inflate1);
@@ -1241,7 +1390,10 @@ LogUtil.i(str.toString());
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ed_time.setText(syear + "年" + smonth + "月" + sdate + "日");
+
+
                 strTime = syear + "-" + smonth + "-" + sdate;
+
 
                 startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
                 endMill = (long) days * 86400000 + startMill;
