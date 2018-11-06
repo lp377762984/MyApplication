@@ -97,7 +97,12 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
             yearList.add((n + i) + "年");
         }
         for (int j = 0; j < 12; j++) {
-            monthList.add((1 + j) + "月");
+            if (j<9){
+                monthList.add("0"+(1 + j) + "月");
+            }else {
+                monthList.add((1 + j) + "月");
+            }
+
         }
         lp_year.setNotLoop();
         lp_date.setNotLoop();
@@ -114,7 +119,11 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
         for (int z = 1; z <= daysByYearMonth; z++) {
-            dateList.add(z + "日");
+            if (z<10){
+                dateList.add("0"+z + "日");
+            }else  {
+                dateList.add(z + "日");
+            }
         }
         lp_date.setItems(dateList);
 
@@ -142,7 +151,12 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "日");
+                    if (z<10){
+                        dateList.add("0"+z + "日");
+                    }else  {
+                        dateList.add(z + "日");
+                    }
+
                 }
                 lp_date.setItems(dateList);
             }
@@ -155,7 +169,11 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "日");
+                    if (z<10){
+                        dateList.add("0"+z + "日");
+                    }else  {
+                        dateList.add(z + "日");
+                    }
                 }
                 lp_date.setItems(dateList);
             }

@@ -38,7 +38,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -48,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="会员卡定金"
-                    android:textColor="@color/color_dl_deep_blue" />
+                    android:textColor="@color/color_dl_yellow" />
 
                 <TextView
                     android:id="@+id/tv_useful_life"
@@ -57,7 +57,7 @@
                     android:layout_marginTop="10dp"
 
                     android:text="有效期:30天"
-                    android:textColor="@color/color_dl_deep_blue" />
+                    android:textColor="@color/color_dl_yellow" />
             </LinearLayout>
             <TextView
                 android:id="@+id/tv_price"
@@ -67,7 +67,7 @@
                 android:layout_marginRight="16sp"
                 android:text="￥500"
                 android:layout_gravity="center"
-                android:textColor="@color/color_dl_deep_blue"
+                android:textColor="@color/color_dl_yellow"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

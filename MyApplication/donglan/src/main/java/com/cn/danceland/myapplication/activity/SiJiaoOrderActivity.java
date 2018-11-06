@@ -468,11 +468,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
         endMill = (long) days * 86400000 + startMill;
         endTime = TimeUtils.timeStamp2Date(endMill + "", "yyyy-MM-dd");
 
-  /*      btn_forme = findViewById(R.id.btn_forme);
-        btn_foryou = findViewById(R.id.btn_foryou);*/
 
-        btn_forme = findViewById(R.id.btn_forme);
-        btn_foryou = findViewById(R.id.btn_foryou);
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
         rl_name = findViewById(R.id.rl_name);
