@@ -15,17 +15,17 @@ public class Constants {
     }
 
     //  public static  String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
-//   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
+   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static  String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
     // public static  String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
-    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
+//    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
 //        public static  String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
 //   public static  String HOST_SERVICE = "http://39.104.188.91:6003/";//审核服务器
 
 
     public static String HOST = HOST_SERVICE;
-    public static boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
+    public static boolean DEV_CONFIG = false;//是否是开发模式、连接阿里云必须改成false
 
     public static String APP_ID_UMENG="5ba1ee11f1f5569f370000f7";//第三方AppId   友盟
     public static String APP_ID_WEIXIN="wx530b17b3c2de2e0d";//第三方AppId   微信
