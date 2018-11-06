@@ -202,18 +202,14 @@ public class BuySiJiaoActivity extends BaseActivity implements AbsListView.OnScr
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-//
-////设置图片圆角角度
-//            RoundedCorners roundedCorners = new RoundedCorners(20);
-////通过RequestOptions扩展功能
-//            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300);
+
 
             //第一个是上下文，第二个是圆角的弧度
             RequestOptions options = new RequestOptions()
-                    .transform(new GlideRoundTransform(BuySiJiaoActivity.this,10));
+                    .transform(new GlideRoundTransform(BuySiJiaoActivity.this,6));
 
 
-            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).into(viewHolder.card_img_1);
+            Glide.with(BuySiJiaoActivity.this).load(contentList.get(position).getImg_url()).apply(options).into(viewHolder.card_img_1);
             viewHolder.sijiao_name.setText(contentList.get(position).getName());
             viewHolder.sijiao_name1.setText(contentList.get(position).getName());
             viewHolder.sijiao_type.setText("课程类型：" + contentList.get(position).getCourse_category_name());

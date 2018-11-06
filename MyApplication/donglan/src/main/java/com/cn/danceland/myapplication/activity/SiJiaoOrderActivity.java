@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,7 +100,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     RadioButton btn_forme, btn_foryou;
     CheckBox btn_zhifubao, btn_weixin, btn_chuzhika;
     View line7;
-    ImageView  iv_phonebook;
+    ImageView iv_phonebook;
     BuySiJiaoBean.Content itemContent;
     TextView goods_name, goods_type, goods_time, goods_price, tv_jiaolian, ed_time, tv_pay_price, tv_dingjin;
     ListPopup listPopup;
@@ -129,7 +130,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     TextView tv_explain;
     String deposit_days, deposit_course_price;
     public static final int SDK_PAY_FLAG = 0x1001;
-    private  boolean isRepay=false;
+    private boolean isRepay = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -148,7 +149,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -158,14 +159,14 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -175,7 +176,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
                         default:
                             ToastUtils.showToastShort("支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
-                            isRepay=true;
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             btn_chuzhika.setClickable(false);
                             break;
@@ -191,8 +192,12 @@ public class SiJiaoOrderActivity extends BaseActivity {
     };
     private LinearLayout ll_storecard;
     private ImageView iv_check;
-    private LinearLayout ll_02,ll_alipay,ll_weixin;
+    private LinearLayout ll_02, ll_alipay, ll_weixin;
     private CommitButton commitButton;
+    private ArrayList<String> yearList;
+    private ArrayList<String> monthList;
+    private ArrayList<String> dateList;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Constants.DEV_CONFIG) {
@@ -218,40 +223,40 @@ public class SiJiaoOrderActivity extends BaseActivity {
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             btn_repay.setVisibility(View.VISIBLE);
-            isRepay=true;
+            isRepay = true;
             btn_zhifubao.setClickable(false);
             btn_chuzhika.setClickable(false);
         }
     }
 
-int order_bustype=56;
+    int order_bustype = 56;
+
     private void showpayresult() {
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(SiJiaoOrderActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SiJiaoOrderActivity.this);
         builder.setMessage("支付完成");
 
-        if (order_bustype==56){
+        if (order_bustype == 56) {
             builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class));
+                    startActivity(new Intent(SiJiaoOrderActivity.this, MySijiaoActivity.class));
                     finish();
                 }
             });
 
         }
-        if (order_bustype==57){
+        if (order_bustype == 57) {
             builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    startActivity(new Intent(SiJiaoOrderActivity.this,MySijiaoActivity.class).putExtra("issend",1));
+                    startActivity(new Intent(SiJiaoOrderActivity.this, MySijiaoActivity.class).putExtra("issend", 1));
                     finish();
                 }
             });
         }
-
 
 
         builder.setNegativeButton("完成", new DialogInterface.OnClickListener() {
@@ -268,6 +273,7 @@ int order_bustype=56;
         });
         builder.show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -334,6 +340,7 @@ int order_bustype=56;
         lp_date = inflate1.findViewById(R.id.lp_date);
         alertdialog = new AlertDialog.Builder(SiJiaoOrderActivity.this);
         initWechat();
+        initDate();
     }
 
     private void getJiaoLian() {
@@ -412,14 +419,14 @@ int order_bustype=56;
         } else if (resultCode == 11) {
             deposit = data.getFloatExtra("dingjin", 0);
             deposit_id = data.getStringExtra("id");
-            if (price>deposit){
+            if (price > deposit) {
                 tv_dingjin.setText("- " + deposit + "元");
                 tv_pay_price.setText("待支付：￥" + (price - deposit));
                 commitButton.setText("待支付：￥" + (price - deposit));
-            }else {
+            } else {
                 tv_dingjin.setText("未使用");
-                deposit=0;
-                deposit_id="";
+                deposit = 0;
+                deposit_id = "";
                 ToastUtils.showToastShort("定金金额必须小于商品金额");
                 tv_pay_price.setText("待支付：￥" + (price));
                 commitButton.setText("待支付：￥" + (price));
@@ -428,12 +435,14 @@ int order_bustype=56;
         }
     }
 
+    String Strmonth, StrDay;
+
     private void initView() {
 
         ll_storecard = findViewById(R.id.ll_storecard);
         if (!"0".equals(type)) {
             ll_storecard.setVisibility(View.GONE);
-            TextView tv_gouka=findViewById(R.id.tv_gouka);
+            TextView tv_gouka = findViewById(R.id.tv_gouka);
             tv_gouka.setText("购买定金");
 
         }
@@ -441,14 +450,25 @@ int order_bustype=56;
         tv_explain = findViewById(R.id.tv_explain);
         tv_pay_price = findViewById(R.id.tv_pay_price);
         ed_time = findViewById(R.id.ed_time);
-        ed_time.setText(nowyear + "年" + month + "月" + monthDay + "日");
-        strTime = nowyear + "-" + month + "-" + monthDay;
+        if (month < 10) {
+            Strmonth = "0" + month;
+        } else {
+            Strmonth = "" + month;
+        }
+        if (monthDay < 10) {
+            StrDay = "0" + monthDay;
+        } else {
+            StrDay = "" + monthDay;
+        }
+
+        ed_time.setText(nowyear + "年" + Strmonth + "月" + StrDay + "日");
+
+        strTime = nowyear + "-" + Strmonth + "-" + StrDay;
         startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
         endMill = (long) days * 86400000 + startMill;
         endTime = TimeUtils.timeStamp2Date(endMill + "", "yyyy-MM-dd");
 
-  /*      btn_forme = findViewById(R.id.btn_forme);
-        btn_foryou = findViewById(R.id.btn_foryou);*/
+
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
         rl_name = findViewById(R.id.rl_name);
@@ -491,7 +511,7 @@ int order_bustype=56;
             @Override
             public void onClick(View v) {
 
-                if (isRepay){//重新支付
+                if (isRepay) {//重新支付
 
                     if ("2".equals(zhifu)) {
                         alipay(unpaidOrder);
@@ -500,7 +520,6 @@ int order_bustype=56;
                     }
                     return;
                 }
-
 
 
                 if ("0".equals(type)) {
@@ -613,19 +632,19 @@ int order_bustype=56;
         iv_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.equals("0",forme)) {
-                    forme="1";
+                if (TextUtils.equals("0", forme)) {
+                    forme = "1";
                     ll_02.setVisibility(View.VISIBLE);
                     iv_check.setImageResource(R.drawable.img_check2);
                 } else {
-                    forme="0";
+                    forme = "0";
                     ll_02.setVisibility(View.GONE);
                     iv_check.setImageResource(R.drawable.img_check1);
                 }
             }
         });
 
-      zhifu = "0";
+        zhifu = "0";
 
         btn_zhifubao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -701,8 +720,8 @@ int order_bustype=56;
         ed_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showDate();
-                startActivityForResult(new Intent(SiJiaoOrderActivity.this,AlertDialogSelectTimeActivity.class),21);
+                showDate();
+                //  startActivityForResult(new Intent(SiJiaoOrderActivity.this,AlertDialogSelectTimeActivity.class),21);
 
             }
         });
@@ -730,14 +749,14 @@ int order_bustype=56;
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestPayWayBean payWayBean=new Gson().fromJson(s,RequestPayWayBean.class);
-                if (payWayBean.getData().getAlipay_enable()==1){
+                RequestPayWayBean payWayBean = new Gson().fromJson(s, RequestPayWayBean.class);
+                if (payWayBean.getData().getAlipay_enable() == 1) {
                     ll_alipay.setVisibility(View.VISIBLE);
                 }
-                if (payWayBean.getData().getWxpay_enable()==1){
+                if (payWayBean.getData().getWxpay_enable() == 1) {
                     ll_weixin.setVisibility(View.VISIBLE);
                 }
-                if (payWayBean.getData().getXypay_enable()==1){
+                if (payWayBean.getData().getXypay_enable() == 1) {
 
                 }
 
@@ -845,10 +864,16 @@ int order_bustype=56;
 
 
     }
+    class ChuzhiPayBean {
+        public String id;
+
+
+
+    }
 
     private void confirmOrder() {
 
-        if (TextUtils.equals(zhifu,"0")){
+        if (TextUtils.equals(zhifu, "0")) {
             ToastUtils.showToastShort("请选择支付方式");
             return;
         }
@@ -857,10 +882,10 @@ int order_bustype=56;
         SijiaoOrderConfirmBean.Extends_params extends_params = sijiaoOrderConfirmBean.new Extends_params();
         if ("1".equals(forme)) {//给好友买
             sijiaoOrderConfirmBean.setBus_type(57);
-            order_bustype=57;
+            order_bustype = 57;
         } else if ("0".equals(forme)) {
             sijiaoOrderConfirmBean.setBus_type(56);
-            order_bustype=56;
+            order_bustype = 56;
         }
         sijiaoOrderConfirmBean.setPay_way(zhifu);//2支付宝,3微信
         sijiaoOrderConfirmBean.setPlatform(1);//1是安卓
@@ -918,7 +943,7 @@ int order_bustype=56;
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -1060,10 +1085,10 @@ int order_bustype=56;
     }
 
     private void chuzhika(String id) {
-        PayBean payBean = new PayBean();
+        ChuzhiPayBean payBean = new ChuzhiPayBean();
         payBean.id = id;
         String str = gson.toJson(payBean);
-
+LogUtil.i(str.toString());
         MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.COMMIT_CHUZHIKA, str, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -1083,8 +1108,7 @@ int order_bustype=56;
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
+                LogUtil.e(volleyError.toString());
 
             }
         });
@@ -1152,24 +1176,41 @@ int order_bustype=56;
             public TextView mTextView;
         }
     }
+    private void setdate(String date) {
+        String[] dates = date.split("-");
 
+        int yearpos = yearList.indexOf(dates[0] + "年");
+        lp_year.setCurrentPosition(yearpos);
+        syear = yearList.get(yearpos).replace("年", "");
 
-    private void showDate() {
+        int monthpos = monthList.indexOf(dates[1] + "月");
+        lp_month.setCurrentPosition(monthpos);
+        smonth = monthList.get(monthpos).replace("月", "");
+        int datepos = dateList.indexOf(dates[2] + "日");
+        lp_date.setCurrentPosition(datepos);
+        //    LogUtil.e(datepos+"");
+        sdate = dateList.get(datepos).replace("日", "");
+    }
+    private void initDate() {
         ViewGroup parent = (ViewGroup) inflate1.getParent();
-        if (parent != null) {
-            parent.removeAllViews();
-        }
 
-        final ArrayList<String> yearList = new ArrayList<String>();
-        final ArrayList<String> monthList = new ArrayList<String>();
-        final ArrayList<String> dateList = new ArrayList<String>();
+        yearList = new ArrayList<String>();
+        monthList = new ArrayList<String>();
+        dateList = new ArrayList<String>();
         int n = nowyear;
         int len = 50;
+
+
         for (int i = 0; i <= len; i++) {
-            yearList.add((n + i) + "");
+            yearList.add((n + i) + "年");
         }
         for (int j = 0; j < 12; j++) {
-            monthList.add((1 + j) + "");
+            if ((1 + j) < 10) {
+                monthList.add("0" + (1 + j) + "月");
+            } else {
+                monthList.add((1 + j) + "月");
+            }
+
         }
         lp_year.setNotLoop();
         lp_date.setNotLoop();
@@ -1178,30 +1219,53 @@ int order_bustype=56;
         lp_month.setItems(monthList);
 
         lp_year.setInitPosition(0);
-        syear = yearList.get(0);
-        lp_month.setInitPosition(month - 1);
-        smonth = monthList.get(month - 1);
+        syear = yearList.get(0).replace("年", "");
+        lp_month.setInitPosition(0);
+        smonth = monthList.get(0).replace("月", "");
+        sdate = "1";
 
         daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
         dateList.clear();
         for (int z = 1; z <= daysByYearMonth; z++) {
-            dateList.add(z + "");
+            if (z < 10) {
+                dateList.add("0" + z + "日");
+            } else {
+                dateList.add(z + "日");
+            }
+
         }
+        //   LogUtil.e(dateList.toString());
         lp_date.setItems(dateList);
 
         //设置字体大小
-        lp_year.setTextSize(16);
-        lp_month.setTextSize(16);
-        lp_date.setTextSize(16);
+        lp_year.setTextSize(24);
 
+        lp_month.setTextSize(24);
+        lp_date.setTextSize(24);
+        lp_year.setCenterTextColor(Color.parseColor("#333333"));
+        lp_month.setCenterTextColor(Color.parseColor("#333333"));
+        lp_date.setCenterTextColor(Color.parseColor("#333333"));
+        lp_year.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_month.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_date.setOuterTextColor(Color.parseColor("#6d819c"));
+        lp_year.setLineSpacingMultiplier(2f);
+        lp_month.setLineSpacingMultiplier(2f);
+        lp_date.setLineSpacingMultiplier(2f);
+        lp_year.setItemsVisibleCount(5);
+        lp_month.setItemsVisibleCount(5);
+        lp_date.setItemsVisibleCount(5);
         lp_year.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                syear = yearList.get(index);
+                syear = yearList.get(index).replace("年", "");
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "");
+                    if (z < 10) {
+                        dateList.add("0" + z + "日");
+                    } else {
+                        dateList.add(z + "日");
+                    }
                 }
                 lp_date.setItems(dateList);
             }
@@ -1210,24 +1274,111 @@ int order_bustype=56;
         lp_month.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                smonth = monthList.get(index);
+                smonth = monthList.get(index).replace("月", "");
                 daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
                 dateList.clear();
                 for (int z = 1; z <= daysByYearMonth; z++) {
-                    dateList.add(z + "");
+                    if (z < 10) {
+                        dateList.add("0" + z + "日");
+                    } else {
+                        dateList.add(z + "日");
+                    }
                 }
                 lp_date.setItems(dateList);
             }
         });
 
-        lp_date.setInitPosition(monthDay - 1);
-        sdate = dateList.get(monthDay);
         lp_date.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                sdate = dateList.get(index);
+                sdate = dateList.get(index).replace("日", "");
             }
         });
+    }
+
+    private void showDate() {
+        ViewGroup parent = (ViewGroup) inflate1.getParent();
+        if (parent != null) {
+            parent.removeAllViews();
+        }
+        setdate(strTime);
+
+//        for (int i = 0; i <= len; i++) {
+//            yearList.add((n + i) + "");
+//        }
+//        for (int j = 0; j < 12; j++) {
+//            monthList.add((1 + j) + "");
+//        }
+//        lp_year.setNotLoop();
+//        lp_date.setNotLoop();
+//        lp_month.setNotLoop();
+//        lp_year.setItems(yearList);
+//        lp_month.setItems(monthList);
+//
+//        lp_year.setInitPosition(0);
+//        syear = yearList.get(0);
+//        lp_month.setInitPosition(month - 1);
+//        smonth = monthList.get(month - 1);
+//
+//        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//        dateList.clear();
+//        for (int z = 1; z <= daysByYearMonth; z++) {
+//            dateList.add(z + "");
+//        }
+//        lp_date.setItems(dateList);
+//
+//        //设置字体大小
+//        lp_year.setTextSize(16);
+//        lp_month.setTextSize(16);
+//        lp_date.setTextSize(16);
+//
+//        lp_year.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+//                syear = yearList.get(index);
+//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//                dateList.clear();
+//                for (int z = 1; z <= daysByYearMonth; z++) {
+//                    dateList.add(z + "");
+//                }
+//                lp_date.setItems(dateList);
+//                lp_date.setCurrentPosition(0);
+//            }
+//        });
+//
+//        lp_month.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+////           if (Integer.valueOf(monthList.get(index))<10){
+////               smonth = "0"+monthList.get(index);
+////           }else {
+//               smonth = monthList.get(index);
+//       //    }
+//
+//                daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
+//                dateList.clear();
+//                for (int z = 1; z <= daysByYearMonth; z++) {
+//                    dateList.add(z + "");
+//                }
+//                lp_date.setItems(dateList);
+//                lp_date.setCurrentPosition(0);
+//            }
+//        });
+//
+//        lp_date.setInitPosition(monthDay - 1);
+//        sdate = dateList.get(monthDay);
+//        lp_date.setListener(new OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(int index) {
+//
+//                if (Integer.valueOf(dateList.get(index))<10){
+//                    sdate = "0"+dateList.get(index);
+//                }else {
+//                    sdate = dateList.get(index);
+//                }
+//
+//            }
+//        });
 
         alertdialog.setTitle("选择开课日期");
         alertdialog.setView(inflate1);
@@ -1235,7 +1386,10 @@ int order_bustype=56;
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ed_time.setText(syear + "年" + smonth + "月" + sdate + "日");
+
+
                 strTime = syear + "-" + smonth + "-" + sdate;
+
 
                 startMill = TimeUtils.date2TimeStamp(strTime, "yyyy-MM-dd");
                 endMill = (long) days * 86400000 + startMill;

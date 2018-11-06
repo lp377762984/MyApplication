@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.cn.danceland.myapplication.R.id.tv_biaoqian;
 import static com.cn.danceland.myapplication.R.id.tv_name;
 
 /**
@@ -507,7 +508,7 @@ public class YeWuRevisitListFragment extends BaseFragment {
                 vh.iv_hx_msg = convertView.findViewById(R.id.iv_hx_msg);
 
                 vh.tv_name = convertView.findViewById(tv_name);
-                vh.tv_biaoqian = convertView.findViewById(R.id.tv_biaoqian);
+                vh.tv_biaoqian = convertView.findViewById(tv_biaoqian);
 
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
 
