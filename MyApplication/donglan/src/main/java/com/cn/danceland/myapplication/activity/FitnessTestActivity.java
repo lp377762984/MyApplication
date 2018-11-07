@@ -232,6 +232,9 @@ public class FitnessTestActivity extends BaseActivity {
         if (height == null) {
             height = data.getHeight();
         }
+        if (xingbie == null) {
+            xingbie = data.getMember_sex()+ "";
+        }
         if (weight != null || height != null) {
             setLine("体重", data.getWeight());
             setLine("肌肉", data.getMuscle());
@@ -251,7 +254,7 @@ public class FitnessTestActivity extends BaseActivity {
     }
 
     private void setLine(String type, String value) {
-        double realValue = Float.valueOf(value);
+        double realValue = Float.valueOf(value);//要计算的值
         double dw = Double.valueOf(weight);
         double h = Double.valueOf(height);
         double sm1 = 0.00344 * h * h - 0.37678 * h + 14.40021;
@@ -259,7 +262,7 @@ public class FitnessTestActivity extends BaseActivity {
 
         if ("体重".equals(type)) {
             tv_line1.setText(value);
-            String mi = TimeUtils.convertMi(height);
+            String mi = TimeUtils.convertMi(height);//转换成米
             double m = Double.valueOf(mi);
             double min = m * m * 18.5;
             double max = m * m * 23.9;
@@ -542,56 +545,6 @@ public class FitnessTestActivity extends BaseActivity {
         bone_tv = findViewById(R.id.bone_tv);//饼状图 骨质
         protein_tv = findViewById(R.id.protein_tv);//饼状图 蛋白质
 
-        setLine("体重", "0");
-        setLine("肌肉", "10");
-        setLine("体脂百分比", "20");
-        setLine("骨质", "40");
-        setLine("总水分", "60");
-        setLine("骨骼肌", "80");
-        setLine("体质指数", "100");
-        setLine("腰臀比", "50");
-
-        List<SliceValue> values = new ArrayList<SliceValue>();
-        List<Double> chartValues = new ArrayList<Double>();
-        pieChardata = new PieChartData();
-        pieChardata.setHasLabels(false);//显示表情
-        pieChardata.setHasLabelsOnlyForSelected(false);//不用点击显示占的百分比
-        pieChardata.setHasLabelsOutside(false);//占的百分比是否显示在饼图外面
-        pieChardata.setHasCenterCircle(true);//是否是环形显示
-        pieChardata.setSlicesSpacing(0);
-        Double[] lv = {Double.valueOf("80"), Double.valueOf("53"), Double.valueOf("10"), Double.valueOf("60")};
-//        Integer[] color = {0xFF3398CC, 0xFFFFCC01, 0xFFCD98CC, 0xFF33CB98};
-        Integer[] color = {getResources().getColor(R.color.blue_color2),getResources().getColor(R.color.yellow_color1), getResources().getColor(R.color.purple_color1),getResources().getColor(R.color.green_color2)};
-
-        String[] str = {"水分", "脂肪", "骨质", "蛋白质"};
-        for (int i = 0; i <= 3; i++) {
-            SliceValue sliceValue = new SliceValue(lv[i].floatValue(), color[i]);//这里的颜色是我写了一个工具类 是随机选择颜色的
-            sliceValue.setLabel(str[i] + " " + lv[i] + "%");
-            values.add(sliceValue);
-            chartValues.add(lv[i]);
-        }
-        Double sum = 0.0;
-        DecimalFormat df = new DecimalFormat("#.00");
-        for (Double dd : chartValues) {
-            sum += dd;
-        }
-        String moistureStr = chartValues.get(0) + "[" + df.format(sum / 100 * chartValues.get(0)) + "%" + "]";
-        String fatStr = chartValues.get(1) + "[" + df.format(sum / 100 * chartValues.get(1)) + "%" + "]";
-        String boneStr = chartValues.get(2) + "[" + df.format(sum / 100 * chartValues.get(2)) + "%" + "]";
-        String proteinStr = chartValues.get(3) + "[" + df.format(sum / 100 * chartValues.get(3)) + "%" + "]";
-
-        pieChardata.setValues(values);//填充数据
-        pieChardata.setCenterCircleColor(0x00FFFFFF);//设置环形中间的颜色
-        pieChardata.setCenterCircleScale(0.8f);//设置环形的大小级别
-        pieChardata.setCenterText1Color(Color.BLACK);//文字颜色
-        pieChardata.setCenterText1FontSize(12);//文字大小
-
-        pie_chart.setPieChartData(pieChardata);
-        pie_chart.setViewportCalculationEnabled(true);
-        pie_chart.setChartRotationEnabled(false);//设置饼图是否可以手动旋转
-        pie_chart.setValueSelectionEnabled(false);//选择饼图某一块变大
-        pie_chart.setAlpha(1f);//设置透明度
-        pie_chart.setCircleFillRatio(1f);//设置饼图大小
     }
 
 
