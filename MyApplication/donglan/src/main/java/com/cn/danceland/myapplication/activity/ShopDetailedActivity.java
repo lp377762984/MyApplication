@@ -173,7 +173,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 if (isjion == true) {
                     startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class));
                 } else {
-                    ToastUtils.showToastShort("清闲");
+                    ToastUtils.showToastShort("请先加入门店");
                 }
 
             }
@@ -182,8 +182,6 @@ public class ShopDetailedActivity extends BaseActivity {
         gv_huiji = findViewById(R.id.gv_huiji);
         gv_shop_image = findViewById(R.id.gv_shop_image);
         gv_jiaolian = findViewById(R.id.gv_jiaolian);
-
-
 
         if (imgList != null && imgList.size() > 0) {
 
@@ -203,20 +201,20 @@ public class ShopDetailedActivity extends BaseActivity {
         tv_more_jiaolian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putSerializable("huijiList", (Serializable) jiaolianList);
-                bundle.putString("title","会籍团队");
-                startActivity(new Intent(ShopDetailedActivity.this,EmployeeListActivity.class).putExtras(bundle));
+                bundle.putString("title", "会籍团队");
+                startActivity(new Intent(ShopDetailedActivity.this, EmployeeListActivity.class).putExtras(bundle));
             }
         });
         tv_more_huiji = findViewById(R.id.tv_more_huiji);
         tv_more_huiji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putSerializable("huijiList", (Serializable) huijiList);
-                bundle.putString("title","会籍团队");
-                startActivity(new Intent(ShopDetailedActivity.this,EmployeeListActivity.class).putExtras(bundle));
+                bundle.putString("title", "会籍团队");
+                startActivity(new Intent(ShopDetailedActivity.this, EmployeeListActivity.class).putExtras(bundle));
             }
         });
         s_button = findViewById(R.id.dlbtn_commit);
@@ -428,6 +426,7 @@ public class ShopDetailedActivity extends BaseActivity {
         };
         MyApplication.getHttpQueues().add(request);
     }
+
     private List<ShopJiaoLianBean.Data> huijiList;
 
     private void getHuiJi(final String shopID) {
@@ -520,8 +519,8 @@ public class ShopDetailedActivity extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                ShopPictrueBean pictrueBean=gson.fromJson(s,ShopPictrueBean.class);
-                if (pictrueBean.getData().size()>0){
+                ShopPictrueBean pictrueBean = gson.fromJson(s, ShopPictrueBean.class);
+                if (pictrueBean.getData().size() > 0) {
                     gv_shop_image.setAdapter(new MyGridViewImageAdapter(pictrueBean.getData()));
                 }
             }
@@ -550,16 +549,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 ShopDetailBean shopDetailBean = gson.fromJson(s, ShopDetailBean.class);
                 ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data != null) {
-//                    List<String> photo_url = data.getPhoto_url();
-//                    if (photo_url != null) {
-//                        if (photo_url.size() == 1) {
-//
-//                        }
-//                        if (photo_url.size() == 2) {
-//                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(0)).into(img_01);
-//                            Glide.with(ShopDetailedActivity.this).load(photo_url.get(1)).into(img_02);
-//                        }
-//                    }
+
 
                     store_name.setText(data.getName());
 
@@ -668,18 +658,29 @@ public class ShopDetailedActivity extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             convertView = View.inflate(ShopDetailedActivity.this, R.layout.gridview_item_jiaolian, null);
             TextView tv_name = convertView.findViewById(R.id.tv_name);
             ImageView iv_avatar = convertView.findViewById(R.id.iv_avatar);
             tv_name.setText(jiaolianList.get(position).getCname());
             RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(ShopDetailedActivity.this, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
-
-
             Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getSelf_avatar_path()).apply(options).into(iv_avatar);
+            iv_avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
+                            .putExtra("person_id", jiaolianList.get(position).getPerson_id()+"")
+                            .putExtra("employee_id", jiaolianList.get(position).getId()+"")
+                            .putExtra("branch_id", jiaolianList.get(position).getBranch_id()+"")
+                            .putExtra("avatar",jiaolianList.get(position).getSelf_avatar_path())
+                    );
+                }
+            });
             return convertView;
         }
     }
+
     private class MyGridViewImageAdapter extends BaseAdapter {
         List<ShopPictrueBean.Data> jiaolianList;
 

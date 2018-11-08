@@ -317,6 +317,20 @@ public class SiJiaoRecordBean implements Serializable{
         private int totalPages;
         private int totalElements;
         private int size;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "content=" + content +
+                    ", number=" + number +
+                    ", numberOfElements=" + numberOfElements +
+                    ", last=" + last +
+                    ", totalPages=" + totalPages +
+                    ", totalElements=" + totalElements +
+                    ", size=" + size +
+                    '}';
+        }
+
         public void setContent(List<Content> content) {
             this.content = content;
         }

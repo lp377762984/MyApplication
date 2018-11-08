@@ -145,7 +145,7 @@ public class SellStoreCardFragment extends BaseFragment {
             address_name.setText(list.get(position).getAddress_name());
             cardname.setText(new DecimalFormat("0.00").format(list.get(position).getFace())+"元储值卡");
             tv_jine.setText("￥"+new DecimalFormat("0.00").format(list.get(position).getFace()));
-            LogUtil.i("qian--"+new DecimalFormat("0.00").format(list.get(position).getGiving()));
+         //   LogUtil.i("qian--"+new DecimalFormat("0.00").format(list.get(position).getGiving()));
             tv_zengsong.setText("赠送：￥ "+new DecimalFormat("0.00").format(list.get(position).getGiving())+"元");
 
             Glide.with(mActivity).load(list.get(position).getImg_url()).into(card_img);

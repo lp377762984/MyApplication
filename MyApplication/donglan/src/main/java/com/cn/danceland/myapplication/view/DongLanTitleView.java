@@ -22,7 +22,7 @@ public class DongLanTitleView extends RelativeLayout {
     private ImageView donglan_more;
     private TextView donglan_title,donglan_right_tv;
     private  View inflate;
-    private  String titleText;
+    private  String titleText,moreText;
     private boolean cannotBack;
 
     public DongLanTitleView(Context context, AttributeSet attrs) {
@@ -35,7 +35,7 @@ public class DongLanTitleView extends RelativeLayout {
             cannotBack = ta.getBoolean(R.styleable.DongLanTitleView_cannotBack, false);
 //            backText = ta.getString(R.styleable.TemplateTitle_backText);
 //            moreImg = ta.getResourceId(R.styleable.TemplateTitle_moreImg, 0);
-//            moreText = ta.getString(R.styleable.TemplateTitle_moreText);
+            moreText = ta.getString(R.styleable.DongLanTitleView_moreText);
             setUpView();
         } finally {
             ta.recycle();
@@ -55,6 +55,7 @@ public class DongLanTitleView extends RelativeLayout {
         donglan_title = inflate.findViewById(R.id.donglan_title);
         donglan_title.setText(titleText);
         donglan_right_tv = inflate.findViewById(R.id.donglan_right_tv);
+        donglan_right_tv.setText(moreText);
         donglan_right_tv.setTextColor(getResources().getColor(R.color.color_dl_yellow));
 
         donglan_back.setOnClickListener(new OnClickListener() {
@@ -65,15 +66,18 @@ public class DongLanTitleView extends RelativeLayout {
             }
         });
     }
-    public TextView getRightTv(){
+    public TextView getMoreTv(){
         return donglan_right_tv;
     }
-    public ImageView getRightIv(){
+    public ImageView getMoreIv(){
         return donglan_more;
     }
 
     public void setTitle(String s){
         donglan_title.setText(s);
+    }
+    public void setMoreTvOnClick(OnClickListener listener){
+        donglan_right_tv.setOnClickListener(listener);
     }
 
 

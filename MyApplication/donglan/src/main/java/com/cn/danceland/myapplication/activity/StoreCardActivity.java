@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.MyStoreFragment;
 import com.cn.danceland.myapplication.fragment.SellStoreCardFragment;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -31,6 +33,7 @@ import java.util.List;
 
 /**
  * Created by feng on 2018/3/14.
+ * 储值卡
  */
 
 public class StoreCardActivity extends BaseActivity {
@@ -73,7 +76,13 @@ public class StoreCardActivity extends BaseActivity {
     private void initView() {
 
 
-
+        DongLanTitleView titleView=findViewById(R.id.dl_title);
+        titleView.setMoreTvOnClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(StoreCardActivity.this,XiaoFeiRecordActivity.class));
+            }
+        });
         mTitleDataList = new ArrayList<>();
         mTitleDataList.add("我的储值");
         mTitleDataList.add("我要充值");
@@ -82,13 +91,7 @@ public class StoreCardActivity extends BaseActivity {
         view_pager = findViewById(R.id.view_pager);
 
         view_pager.setAdapter(new myFragmentPagerAdapter(supportFragmentManager,fragmentArrayList));
-        storecard_back = findViewById(R.id.storecard_back);
-        storecard_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
 
 
 

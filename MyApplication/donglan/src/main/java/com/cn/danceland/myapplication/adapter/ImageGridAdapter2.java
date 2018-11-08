@@ -15,7 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.DensityUtils;
-import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.util.List;
 
@@ -61,7 +60,9 @@ public class ImageGridAdapter2 extends BaseAdapter {
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .priority(Priority.HIGH);
         StringBuilder sb = new StringBuilder(imgUrls.get(position));
-        sb.insert(imgUrls.get(position).length() - 4, "_400X400");
+
+        String houzhui = imgUrls.get(position).substring(imgUrls.get(position).lastIndexOf(".") + 1);
+        sb.insert(imgUrls.get(position).length() - houzhui.length() - 1, "_400X400");
         //    LogUtil.i(sb.toString());
 
         int imageP = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 32f)) / 3

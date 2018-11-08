@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -99,6 +101,7 @@ public class EmployeeListActivity extends BaseActivity {
                 convertView = View.inflate(context, R.layout.listview_item_emp_list, null);
                 vh.tv_nickname = convertView.findViewById(R.id.tv_nickname);
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
+                vh.ll_item = convertView.findViewById(R.id.ll_item);
                 vh.iv_avatar = convertView.findViewById(R.id.iv_avatar);
                 convertView.setTag(vh);
             } else {
@@ -114,6 +117,19 @@ public class EmployeeListActivity extends BaseActivity {
             }
             
             vh.tv_nickname.setText(huijiList.get(position).getCname());
+            vh.ll_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(EmployeeListActivity.this, EmpUserHomeActivty.class)
+                            .putExtra("person_id", huijiList.get(position).getPerson_id()+"")
+                            .putExtra("employee_id", huijiList.get(position).getId()+"")
+                            .putExtra("branch_id", huijiList.get(position).getBranch_id()+"")
+                            .putExtra("avatar",huijiList.get(position).getSelf_avatar_path()));
+                }
+            });
+
+
+
             return convertView;
 
         }
@@ -122,6 +138,7 @@ public class EmployeeListActivity extends BaseActivity {
         class ViewHolder {
             public TextView tv_nickname;
             public ImageView iv_avatar;
+            LinearLayout ll_item;
             public ImageView iv_sex;
         }
     }
