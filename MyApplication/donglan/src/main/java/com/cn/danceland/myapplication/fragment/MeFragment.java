@@ -35,6 +35,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,12 +51,13 @@ public class MeFragment extends BaseFragment {
 
 
     private ImageView iv_avatar;
-    private TextView tv_nick_name;
     private Data mInfo;
     private TextView tv_dyn;
     private TextView tv_guanzhu, tv_message;
     private TextView tv_fans;
     Badge badge;
+
+    private DongLanTransparentTitleView dongLanTitleView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,24 +78,31 @@ public class MeFragment extends BaseFragment {
         View v = View.inflate(mActivity, R.layout.fragment_me, null);
         v.findViewById(R.id.ll_setting).setOnClickListener(this);
         v.findViewById(R.id.ll_my_msg).setOnClickListener(this);
-        v.findViewById(R.id.iv_edit).setOnClickListener(this);
         v.findViewById(R.id.ll_my_dyn).setOnClickListener(this);
         v.findViewById(R.id.ll_my_guanzhu).setOnClickListener(this);
         v.findViewById(R.id.ll_my_fans).setOnClickListener(this);
         v.findViewById(R.id.ll_my_data).setOnClickListener(this);
         v.findViewById(R.id.ll_my_shop).setOnClickListener(this);
-        v.findViewById(R.id.iv_top_bg).setOnClickListener(this);
         v.findViewById(R.id.ll_my_xiaofei).setOnClickListener(this);
         v.findViewById(R.id.ll_my_shouhuan).setOnClickListener(this);
         v.findViewById(R.id.ll_consult).setOnClickListener(this);//我想咨询
         v.findViewById(R.id.ll_recommend).setOnClickListener(this);//我想推荐
 
+
+
+        dongLanTitleView = v.findViewById(R.id.title);
+        ImageView more_iv = dongLanTitleView.findViewById(R.id.iv_more);
+
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
         tv_fans = v.findViewById(R.id.tv_fans);
-        tv_nick_name = v.findViewById(R.id.tv_nick_name);
         iv_avatar = v.findViewById(R.id.iv_avatar);
         tv_message = v.findViewById(R.id.tv_message);
+
+        more_iv.setVisibility(View.VISIBLE);
+        more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_edit));
+        more_iv.setOnClickListener(this);
+
         iv_avatar.setOnClickListener(this);
 
         badge = new QBadgeView(mActivity).bindTarget(tv_message);
@@ -117,8 +126,7 @@ public class MeFragment extends BaseFragment {
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
         Glide.with(mActivity).load(mInfo.getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
-        tv_nick_name.setText(mInfo.getPerson().getNick_name());
-
+        dongLanTitleView.setTitle(mInfo.getPerson().getNick_name());
 
     }
 
@@ -134,8 +142,7 @@ public class MeFragment extends BaseFragment {
         //设置头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Glide.with(mActivity).load(mInfo.getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
-        tv_nick_name.setText(mInfo.getPerson().getNick_name());
-
+        dongLanTitleView.setTitle(mInfo.getPerson().getNick_name());
 
     }
 
@@ -151,7 +158,7 @@ public class MeFragment extends BaseFragment {
 
         }
         if (100 == event.getEventCode()) {
-            tv_nick_name.setText(event.getMsg());
+            dongLanTitleView.setTitle(event.getMsg());
         }
 
         if (101 == event.getEventCode()) {
@@ -237,12 +244,9 @@ public class MeFragment extends BaseFragment {
             case R.id.ll_setting://设置页面
                 startActivity(new Intent(mActivity, SettingActivity.class));
                 break;
-            case R.id.iv_edit://编辑资料页面
-
-
+            case R.id.iv_more://编辑资料页面
                 Intent intent = new Intent(mActivity, MyProActivity.class);
                 startActivityForResult(intent, 119);
-                //  startActivity(intent);
                 break;
             case R.id.ll_my_msg://我的消息
                 ShortcutBadger.removeCount(mActivity.getApplicationContext());
@@ -273,10 +277,6 @@ public class MeFragment extends BaseFragment {
                     return;
                 }
                 startActivity(new Intent(mActivity, MyShopActivity.class));
-                break;
-            case R.id.iv_top_bg:
-
-                //   startActivity(new Intent(mActivity, EmpUserHomeActivty.class).putExtra("person_id","").putExtra("employee_id","").putExtra("branch_id",""));
                 break;
             case R.id.ll_my_xiaofei:
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));
