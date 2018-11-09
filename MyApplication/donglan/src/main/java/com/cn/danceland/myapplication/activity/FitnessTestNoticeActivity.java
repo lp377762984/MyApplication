@@ -43,7 +43,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
     private Context context;
     private DongLanTitleView title;//数据title
     private ListView listView;
-    private Button btn_start;
+    private LinearLayout btn_start;
 
     private ListAdapter adapter;
 
@@ -86,7 +86,7 @@ public class FitnessTestNoticeActivity extends BaseActivity {
     public void getData() {
         BCAQuestionBean.Data bean = new BCAQuestionBean.Data();
         bean.setType("7");// 7：体测分析-体能须知
-        LogUtil.i("请求后台心率" + bean.toString());
+        LogUtil.i( bean.toString());
         //获取后台数据
         MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_LIST
                 , new Gson().toJson(bean), new Response.Listener<JSONObject>() {
@@ -152,10 +152,9 @@ public class FitnessTestNoticeActivity extends BaseActivity {
                 ListView.LayoutParams layoutParams = new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT, ListView.LayoutParams.WRAP_CONTENT);
                 textView.setLayoutParams(layoutParams);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
-                textView.setPadding(0, 10, 0, 10);
                 textView.setText(dataList.get(position).getOptions().get(i).getOrder_no().toString() + "." + dataList.get(position).getOptions().get(i).getTitle().toString());
-                textView.setTextColor(context.getResources().getColor(R.color.colorGray8));
-                textView.setTextSize(14);
+                textView.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                textView.setTextSize(12);
                 vh.options_layout.addView(textView);
             }
             return convertView;

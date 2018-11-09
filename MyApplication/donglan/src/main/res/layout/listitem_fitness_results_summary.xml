@@ -17,15 +17,14 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:text="一、身体基本情况"
-            android:textColor="@color/black"
-            android:textSize="@dimen/h5" />
+            android:textColor="@color/colorGray21"
+            android:textSize="14sp" />
 
         <com.cn.danceland.myapplication.view.NoScrollListView
             android:id="@+id/child_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="25dp"
-            android:background="@color/white"
+            android:layout_marginLeft="26dp"
             android:divider="@null"
             android:dividerHeight="0dp"
             android:listSelector="@color/transparent" />

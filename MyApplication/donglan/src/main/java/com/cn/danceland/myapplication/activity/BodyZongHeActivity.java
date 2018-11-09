@@ -13,9 +13,9 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -26,27 +26,22 @@ import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.app.AppManager;
-import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.HeadImageBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
-import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
-import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisRequest;
 import com.cn.danceland.myapplication.bean.bca.bcaresult.BcaResult;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,7 +67,7 @@ public class BodyZongHeActivity extends BaseActivity {
     DongLanTitleView body_zonghe_title;
     List<BcaResult> resultList;
     EditText et_content;
-    Button btn_commit;
+    LinearLayout btn_commit;
     private boolean isClick = true;
     private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
@@ -101,7 +96,7 @@ public class BodyZongHeActivity extends BaseActivity {
 
     private void initView() {
         body_zonghe_title = findViewById(R.id.body_zonghe_title);
-        body_zonghe_title.setTitle("综合评价");
+        body_zonghe_title.setTitle("体型体态分析");
         et_content = findViewById(R.id.et_content);
         btn_commit = findViewById(R.id.btn_commit);
 
@@ -113,6 +108,12 @@ public class BodyZongHeActivity extends BaseActivity {
         img_02 = findViewById(R.id.img_02);
         img_03 = findViewById(R.id.img_03);
 
+        rl_01 = (RelativeLayout) UIUtils.setViewRatio(BodyZongHeActivity.this, rl_01, 280, 350);
+        rl_02 = (RelativeLayout) UIUtils.setViewRatio(BodyZongHeActivity.this, rl_02, 280, 350);
+        rl_03 = (RelativeLayout) UIUtils.setViewRatio(BodyZongHeActivity.this, rl_03, 280, 350);
+        img_01 = (ImageView) UIUtils.setViewRatio(BodyZongHeActivity.this, img_01, 280, 350);
+        img_02 = (ImageView) UIUtils.setViewRatio(BodyZongHeActivity.this, img_02, 280, 350);
+        img_03 = (ImageView) UIUtils.setViewRatio(BodyZongHeActivity.this, img_03, 280, 350);
         setOnClick();
 
     }
@@ -121,6 +122,9 @@ public class BodyZongHeActivity extends BaseActivity {
         rl_01.setOnClickListener(onClickListener);
         rl_02.setOnClickListener(onClickListener);
         rl_03.setOnClickListener(onClickListener);
+        img_01.setOnClickListener(onClickListener);
+        img_02.setOnClickListener(onClickListener);
+        img_03.setOnClickListener(onClickListener);
         btn_commit.setOnClickListener(onClickListener);
     }
 
@@ -143,9 +147,21 @@ public class BodyZongHeActivity extends BaseActivity {
                         num = "3";
                         getPermission();
                         break;
+                    case R.id.img_01:
+                        num = "1";
+                        getPermission();
+                        break;
+                    case R.id.img_02:
+                        num = "2";
+                        getPermission();
+                        break;
+                    case R.id.img_03:
+                        num = "3";
+                        getPermission();
+                        break;
                     case R.id.btn_commit:
                         if (numMap.size() != 3) {
-                            ToastUtils.showToastShort("请拍照完成后提交！");
+                            ToastUtils.showToastShort("请先拍照！");
                         } else {
                             save();
                         }
@@ -215,39 +231,50 @@ public class BodyZongHeActivity extends BaseActivity {
                 }
             }, new String[]{Manifest.permission.CAMERA}, false, null);
         }
-
     }
 
     /**
      * @方法说明:新增体测分析
      **/
     public void save() {
-        BcaAnalysis bcaAnalysis = new BcaAnalysis();
-        final BcaAnalysisRequest request = new BcaAnalysisRequest();
-        bcaAnalysis.setMember_id(Long.valueOf(requsetInfo.getId()));
-        bcaAnalysis.setMember_no(requsetInfo.getMember_no());
-        bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
-        bcaAnalysis.setSide_path(numMap.get(2));//侧面照
-        bcaAnalysis.setBehind_path(numMap.get(3));//背面照
-        bcaAnalysis.setResult(resultList);
+        String content="";
         if (et_content.getText() != null) {
-            bcaAnalysis.setContent(et_content.getText().toString());
+            content=et_content.getText().toString();
         }
-        request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
-            public void onResponse(JSONObject json) {
-                DLResult<String> result = gson.fromJson(json.toString(), new TypeToken<DLResult<String>>() {
-                }.getType());
-                if (result.isSuccess()) {
-                    LogUtil.i("" + json.toString());
-                    ToastUtils.showToastShort("提交成功！");
-                    startActivity(new Intent(BodyZongHeActivity.this, FitnessResultsSummaryActivity.class)
-                            .putExtra("requsetInfo", requsetInfo)
-                            .putExtra("saveId", result.getData()));
-                } else {
-                    ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
-                }
-            }
-        });
+
+        startActivity(new Intent(BodyZongHeActivity.this, BodyTiXingActivity.class)
+                .putExtra("requsetInfo", requsetInfo)
+                .putExtra("frontal_path", numMap.get(1))
+                .putExtra("side_path", numMap.get(2))
+                .putExtra("behind_path", numMap.get(3))
+                .putExtra("content", content)
+        );
+//        BcaAnalysis bcaAnalysis = new BcaAnalysis();
+//        bcaAnalysis.setMember_id(Long.valueOf(requsetInfo.getId()));
+//        bcaAnalysis.setMember_no(requsetInfo.getMember_no());
+//        bcaAnalysis.setFrontal_path(numMap.get(1));//正面照
+//        bcaAnalysis.setSide_path(numMap.get(2));//侧面照
+//        bcaAnalysis.setBehind_path(numMap.get(3));//背面照
+//        bcaAnalysis.setResult(resultList);
+//        if (et_content.getText() != null) {
+//            bcaAnalysis.setContent(et_content.getText().toString());
+//        }
+//        final BcaAnalysisRequest request = new BcaAnalysisRequest();
+//        request.save(bcaAnalysis, new Response.Listener<JSONObject>() {
+//            public void onResponse(JSONObject json) {
+//                DLResult<String> result = gson.fromJson(json.toString(), new TypeToken<DLResult<String>>() {
+//                }.getType());
+//                if (result.isSuccess()) {
+//                    LogUtil.i("" + json.toString());
+//                    ToastUtils.showToastShort("提交成功！");
+////                    startActivity(new Intent(BodyZongHeActivity.this, BodyTiXingActivity.class)
+////                            .putExtra("requsetInfo", requsetInfo)
+////                            .putExtra("saveId", result.getData()));
+//                } else {
+//                    ToastUtils.showToastShort("保存数据失败,请检查手机网络！");
+//                }
+//            }
+//        });
 
     }
 

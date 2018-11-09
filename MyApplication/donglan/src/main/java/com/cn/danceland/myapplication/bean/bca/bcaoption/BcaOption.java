@@ -16,8 +16,15 @@ public class BcaOption {
 	private Long question_id;// 问题编号
 	private String perfix;// 前缀
 	private Long branch_id;// 门店
+	private boolean isChecked;//是否选中
 
-	//新增属性
+	public boolean getIsChecked() {
+		return isChecked;
+	}
+
+	public void setIsChecked(boolean checked) {
+		isChecked = checked;
+	}
 
 	public Long getId() {
 		return id;

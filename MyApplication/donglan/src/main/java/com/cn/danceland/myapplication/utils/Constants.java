@@ -334,6 +334,9 @@ public class Constants {
     //更新会送动态的阅读数
     public static String PUSH_CLUB_READ_NUMBER = HOST + "/clubDynamic/updateReadNumber";//更新会送动态的阅读数
 
+    //新增问题题干
+    public static String PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -680,5 +683,9 @@ public class Constants {
 
         //更新会送动态的阅读数
         PUSH_CLUB_READ_NUMBER = HOST + "/clubDynamic/updateReadNumber";//更新会送动态的阅读数
+
+        //新增问题题干
+       PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
+
     }
 }

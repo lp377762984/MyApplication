@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -13,10 +15,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.RoundImageView;
 
 import java.util.Date;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 体测分析-搜索结果
@@ -26,16 +27,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FitnessTestSearchResultActivity extends BaseActivity {
     private Context context;
     private DongLanTitleView title;
-    private CircleImageView iv_avatar;
+    private RoundImageView iv_avatar;
     private TextView name_tv;
     private TextView tel_tv;
     private TextView real_name_ev;
     private TextView birthday_ev;
     private TextView height_ev;
-    private TextView history_btn;
-    private TextView finess_btn;
-    private TextView text_male;
-    private TextView text_female;
+    private LinearLayout history_btn;
+    private LinearLayout finess_btn;
+//    private TextView text_male;
+//    private TextView text_female;
+    private ImageView iv_sex;
+    private TextView age_tv;
 
     private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
 
@@ -60,8 +63,11 @@ public class FitnessTestSearchResultActivity extends BaseActivity {
         height_ev = findViewById(R.id.height_ev);
         history_btn = findViewById(R.id.history_btn);
         finess_btn = findViewById(R.id.finess_btn);
-        text_male = findViewById(R.id.text_male);
-        text_female = findViewById(R.id.text_female);
+//        text_male = findViewById(R.id.text_male);
+//        text_female = findViewById(R.id.text_female);
+        iv_sex = findViewById(R.id.iv_sex);
+        age_tv = findViewById(R.id.age_tv);
+
         history_btn.setOnClickListener(onClickListener);
         finess_btn.setOnClickListener(onClickListener);
     }
@@ -76,12 +82,18 @@ public class FitnessTestSearchResultActivity extends BaseActivity {
         real_name_ev.setText(requsetInfo.getCname());
         birthday_ev.setText(requsetInfo.getBirthday());//年龄
         height_ev.setText(requsetInfo.getHeight()+"cm");
+        if (requsetInfo.getBirthday() != null) {
+            int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(requsetInfo.getBirthday(), "yyyy-MM-dd")));
+            age_tv.setText(age + "岁");//年龄
+        }
         if(requsetInfo.getGender()==1){//性别 1男  2女
-            text_male.setBackgroundResource(R.drawable.male_blue);
-            text_female.setBackgroundResource(R.drawable.female_gray);
+            iv_sex.setImageResource(R.drawable.img_sex1);
+//            text_male.setBackgroundResource(R.drawable.male_blue);
+//            text_female.setBackgroundResource(R.drawable.female_gray);
         }else{
-            text_male.setBackgroundResource(R.drawable.male_gray);
-            text_female.setBackgroundResource(R.drawable.female_blue);
+            iv_sex.setImageResource(R.drawable.img_sex2);
+//            text_male.setBackgroundResource(R.drawable.male_gray);
+//            text_female.setBackgroundResource(R.drawable.female_blue);
         }
     }
 

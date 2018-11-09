@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -27,8 +28,10 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.NoScrollListView;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -46,9 +49,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FitnessResultsSummaryActivity extends BaseActivity {
     private Context context;
-    private CircleImageView iv_avatar;//头像
+    private RoundImageView iv_avatar;//头像
     private TextView name_tv;//姓名
-    private TextView sex_tv;//性别
+    private ImageView iv_sex;//性别
     private TextView age_tv;//年龄
     private TextView tel_tv;//电话
     private TextView date_tv;//体测日期
@@ -59,7 +62,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
     private ImageView side_iv;//侧面照
     private ImageView behind_iv;//背后照
     private NoScrollListView listview;//listview
-    private Button ok_btn;//完成
+    private LinearLayout ok_btn;//完成
     private DongLanTitleView title;//数据title
 
     private FitnessResultsSummaryAdapter adapter;//adapter
@@ -89,7 +92,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
         title.setTitle("结果汇总");
         iv_avatar = findViewById(R.id.iv_avatar);
         name_tv = findViewById(R.id.name_tv);
-        sex_tv = findViewById(R.id.sex_tv);
+        iv_sex = findViewById(R.id.iv_sex);
         age_tv = findViewById(R.id.age_tv);
         tel_tv = findViewById(R.id.tel_tv);
         date_tv = findViewById(R.id.date_tv);
@@ -101,6 +104,10 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
         side_iv = findViewById(R.id.side_iv);
         behind_iv = findViewById(R.id.behind_iv);
         ok_btn = findViewById(R.id.ok_btn);
+
+        frontal_iv = (ImageView) UIUtils.setViewRatio(context, frontal_iv, 316, 400);
+        side_iv = (ImageView) UIUtils.setViewRatio(context, side_iv,316, 400);
+        behind_iv = (ImageView) UIUtils.setViewRatio(context, behind_iv, 316, 400);
 
         questionTypesList = new ArrayList<>();
 
@@ -154,12 +161,17 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                     questionTypesList.clear();
                     name_tv.setText(requsetInfo.getCname() + "");//姓名
                     if (requsetInfo.getGender()==1) {
-                        sex_tv.setText("男");//性别
+                        iv_sex.setImageDrawable(getResources().getDrawable(R.drawable.img_sex1));
                     } else if (requsetInfo.getGender()==2) {
-                        sex_tv.setText("女");//性别
-                    } else {
-                        sex_tv.setText("未设置");//性别
+                        iv_sex.setImageDrawable(getResources().getDrawable(R.drawable.img_sex2));
                     }
+//                    if (requsetInfo.getGender()==1) {
+//                        sex_tv.setText("男");//性别
+//                    } else if (requsetInfo.getGender()==2) {
+//                        sex_tv.setText("女");//性别
+//                    } else {
+//                        sex_tv.setText("未设置");//性别
+//                    }
                     if (requsetInfo.getBirthday() != null) {
                         int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(requsetInfo.getBirthday(), "yyyy-MM-dd")));
                         age_tv.setText(age + "岁");//年龄

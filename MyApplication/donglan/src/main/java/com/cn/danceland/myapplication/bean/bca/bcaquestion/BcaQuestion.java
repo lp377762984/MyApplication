@@ -20,6 +20,15 @@ public class BcaQuestion {
 	private String test_content;// 测试内容JSON
 	private Long branch_id;// 门店
 	private List<BcaOption> options;
+	private Long is_single;// 是否为单选 1 单选 0 非单选
+
+	public Long getIs_single() {
+		return is_single;
+	}
+
+	public void setIs_single(Long is_single) {
+		this.is_single = is_single;
+	}
 
 
 	public List<BcaOption> getOptions() {

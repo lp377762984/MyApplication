@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -91,7 +92,7 @@ public class PhysicalTestActivity extends BaseActivity {
     private void initView() {
 
         physical_title = findViewById(R.id.physical_title);
-        physical_title.setTitle("体能测试");
+        physical_title.setTitle("体测分析");
 
         vp_physical = findViewById(R.id.vp_physical);
         vp_physical.setScroll(false);
@@ -154,7 +155,6 @@ public class PhysicalTestActivity extends BaseActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            // TODO Auto-generated method stub
             View v = viewList.get(position);
             ViewGroup parent = (ViewGroup) v.getParent();
             if (parent != null) {
@@ -188,7 +188,11 @@ public class PhysicalTestActivity extends BaseActivity {
             StringBuilder stringBuilder1 = new StringBuilder();
             if (action_detail != null) {
                 for (int j = 0; j < action_detail.size(); j++) {
-                    stringBuilder.append((j + 1) + "." + action_detail.get(j).getNote() + "\n");
+                    if(j==action_detail.size()-1){
+                        stringBuilder.append((j + 1) + "." + action_detail.get(j).getNote() );
+                    }else{
+                        stringBuilder.append((j + 1) + "." + action_detail.get(j).getNote() + "\n");
+                    }
                     if (arrImg.length > j) {
                         Glide.with(PhysicalTestActivity.this).load(action_detail.get(j).getPic_url()).into(arrImg[j]);
                     }
@@ -203,8 +207,11 @@ public class PhysicalTestActivity extends BaseActivity {
             List<String> attention = physicalTestBean.getAttention();
             if (attention != null) {
                 for (int n = 0; n < attention.size(); n++) {
-                    stringBuilder1.append((n + 1) + "." + attention.get(n) + "\n");
-
+                    if(n==attention.size()-1){
+                        stringBuilder1.append((n + 1) + "." + attention.get(n) );
+                    }else{
+                        stringBuilder1.append((n + 1) + "." + attention.get(n) + "\n");
+                    }
                 }
                 tv_zhuyi.setText(stringBuilder1.toString());
             }
@@ -239,9 +246,6 @@ public class PhysicalTestActivity extends BaseActivity {
             rg_result.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    LogUtil.i("Checked--"+group.getCheckedRadioButtonId());
-                    LogUtil.i("position--"+position);
-                    LogUtil.i("list.get(position).getOptions().size()--"+list.get(position).getOptions().size());
                     switch (group.getCheckedRadioButtonId()) {
                         case R.id.rb_result_01:
 //                            if (list.get(position).getOptions() != null && list.get(position).getOptions().size() >= 3) {
@@ -263,13 +267,12 @@ public class PhysicalTestActivity extends BaseActivity {
             });
 
 
-            Button bt_next = v.findViewById(R.id.bt_next);
-            bt_next.setOnClickListener(new View.OnClickListener() {
+            LinearLayout bt_next_layout = v.findViewById(R.id.bt_next_layout);
+            TextView bt_next = v.findViewById(R.id.bt_next);
+            bt_next.setText("下一步");
+            bt_next_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LogUtil.i("list-"+list.toString());
-                    LogUtil.i("list-"+list.size());
-                    LogUtil.i("select"+select);
                     if (select != null) {
                         BcaResult bcaResult = new BcaResult();
                         bcaResult.setQuestion_id(list.get(position).getId());

@@ -61,7 +61,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:background="@color/transparent"
-                    android:src="@drawable/img_back" />
+                    android:src="@drawable/img_white_back" />
             </LinearLayout>
 
             <LinearLayout
