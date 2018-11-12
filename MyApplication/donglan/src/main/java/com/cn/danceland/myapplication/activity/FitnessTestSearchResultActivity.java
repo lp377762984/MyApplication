@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.ReadyTestBean;
 import com.cn.danceland.myapplication.bean.RequsetFindUserBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -123,7 +124,7 @@ public class FitnessTestSearchResultActivity extends BaseActivity {
         tel_tv.setText(requsetInfo.getPhone_no());
         real_name_ev.setText(requsetInfo.getCname());
         birthday_ev.setText(requsetInfo.getBirthday());//年龄
-        height_ev.setText(requsetInfo.getHeight() + "cm");
+        height_ev.setText(requsetInfo.getHeight());
         if (requsetInfo.getBirthday() != null) {
             int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(requsetInfo.getBirthday(), "yyyy-MM-dd")));
             age_tv.setText(age + "岁");//年龄
@@ -154,23 +155,24 @@ public class FitnessTestSearchResultActivity extends BaseActivity {
     };
 
     private void commit() {
-        requsetInfo.setCname(name_tv.getText().toString());
-        requsetInfo.setGender(requsetInfo.getGender());
+        ReadyTestBean readyTestBean = new ReadyTestBean();
+        readyTestBean.setCname(name_tv.getText().toString());
+        readyTestBean.setGender(requsetInfo.getGender());
         if (birthday_ev.getText().toString().isEmpty()) {
             ToastUtils.showToastShort("请选择生日");
             return;
         } else {
-            requsetInfo.setBirthday(birthday_ev.getText().toString());
+            readyTestBean.setBirthday(birthday_ev.getText().toString());
         }
 
         if (height_ev.getText().toString().isEmpty()) {
             ToastUtils.showToastShort("请选择身高");
             return;
         } else {
-            requsetInfo.setHeight(height_ev.getText().toString());
+            readyTestBean.setHeight(Float.valueOf(height_ev.getText().toString()));
         }
-
-        String strbean = gson.toJson(requsetInfo);
+        readyTestBean.setId(Integer.valueOf(requsetInfo.getPerson_id()));
+        String strbean = gson.toJson(readyTestBean);
 
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.REAYTEST, strbean, new Response.Listener<JSONObject>() {
             @Override
