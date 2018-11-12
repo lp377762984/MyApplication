@@ -441,21 +441,24 @@ public class HomeFragment extends BaseFragment {
         int headerOffset = DensityUtils.dp2px(mActivity, 55f) - (offsetNum - listMaxOffset);
 //        LogUtil.i("头部" + headerOffset + "=============" + headerMaxOffset + "-" + offsetNum + "-" + listMaxOffset);
 
-        int ooo = listMaxOffset + headerMaxOffset;
-        if (0 <= offsetNum && offsetNum <= ooo) {
+        int ggg = listMaxOffset + headerMaxOffset;
+        if (0 <= offsetNum && offsetNum <= ggg) {
             if (0 <= offsetNum && offsetNum <= listMaxOffset) {
                 setMeunCradview();
             }
-            if (listMaxOffset <= offsetNum && offsetNum <= ooo) {
+            if (listMaxOffset <= offsetNum && offsetNum <= ggg) {
                 lppTemp.setMargins(headerMarginLeft, headerOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.GONE);
+                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f),DensityUtils.dp2px(mActivity, 30f)));
             } else if (offsetNum == 0) {
                 lppTemp.setMargins(headerMarginLeft, headerMaxOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.VISIBLE);
+                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 21f),DensityUtils.dp2px(mActivity, 21f)));
             }
         } else {
             lppTemp.setMargins(headerMarginLeft, 0, headerMarginRight, 0);
             in_the_cumulative_tv.setVisibility(View.GONE);
+            cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f),DensityUtils.dp2px(mActivity, 30f)));
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
