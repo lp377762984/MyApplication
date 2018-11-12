@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
@@ -122,9 +123,9 @@ public class FitnessResultsSummaryAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            if(questions!=null){
+            if (questions != null) {
                 return questions.size();
-            }else{
+            } else {
                 return 0;
             }
         }
@@ -151,7 +152,8 @@ public class FitnessResultsSummaryAdapter extends BaseAdapter {
             } else {
                 vh = (ListAdapter.ViewHolder) convertView.getTag();
             }
-            vh.title_tv.setTextColor(context.getResources().getColor(R.color.black));
+            vh.title_tv.setTextColor(context.getResources().getColor(R.color.colorGray21));
+            vh.title_tv.setTextSize(12);
             vh.title_tv.setText(questions.get(position).getOrder_no() + "." + questions.get(position).getCentent());
             ChildListAdapter childAdapter = new ChildListAdapter(questions.get(position).getOptions());
             vh.child_listview.setAdapter(childAdapter);
@@ -163,6 +165,7 @@ public class FitnessResultsSummaryAdapter extends BaseAdapter {
             public NoScrollListView child_listview;
         }
     }
+
     class ChildListAdapter extends BaseAdapter {
         private List<BcaOption> options;//三级
 
@@ -176,9 +179,9 @@ public class FitnessResultsSummaryAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            if(options!=null){
+            if (options != null) {
                 return options.size();
-            }else{
+            } else {
                 return 0;
             }
         }
@@ -204,8 +207,10 @@ public class FitnessResultsSummaryAdapter extends BaseAdapter {
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-            vh.title_tv.setTextColor(context.getResources().getColor(R.color.colorGray8));
+            vh.title_tv.setTextColor(context.getResources().getColor(R.color.colorGray21));
+            vh.title_tv.setTextSize(12);
             vh.title_tv.setText(options.get(position).getOrder_no() + "." + options.get(position).getTitle());
+
             return convertView;
         }
 

@@ -28,10 +28,13 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +52,6 @@ public class FitnessTestActivity extends BaseActivity {
     PieChartView pie_chart;
     PieChartData pieChardata;
     RelativeLayout rl_age;
-    ImageView fitness_back;
     Gson gson;
     Data myInfo;
     String member_no;
@@ -62,6 +64,12 @@ public class FitnessTestActivity extends BaseActivity {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
+    private TextView moisture_tv;//饼状图 水分
+    private TextView fat_tv;//饼状图 脂肪
+    private TextView bone_tv;//饼状图 骨质
+    private TextView protein_tv;//饼状图 蛋白质
+    private TextView test_person;//操作人员
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,6 +137,7 @@ public class FitnessTestActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
+                volleyError.printStackTrace();
             }
         }) {
             @Override
@@ -139,13 +148,11 @@ public class FitnessTestActivity extends BaseActivity {
             }
 
 
-
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void initData() {
-
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_BC_DATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -171,6 +178,7 @@ public class FitnessTestActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
+                volleyError.printStackTrace();
             }
         }) {
 
@@ -216,12 +224,16 @@ public class FitnessTestActivity extends BaseActivity {
         tv_youxiazhishuifen.setText(data.getRl_water());
         tv_xishu.setText(data.getEdema());
         test_score.setText(data.getScore());
-        test_time.setText("测试日期 " + data.getDate());
+        test_time.setText(data.getDate());
+        test_person.setText(data.getEmployee_name());
         if (weight == null) {
             weight = data.getWeight();
         }
         if (height == null) {
             height = data.getHeight();
+        }
+        if (xingbie == null) {
+            xingbie = data.getMember_sex()+ "";
         }
         if (weight != null || height != null) {
             setLine("体重", data.getWeight());
@@ -242,51 +254,50 @@ public class FitnessTestActivity extends BaseActivity {
     }
 
     private void setLine(String type, String value) {
-        double realValue = Float.valueOf(value);
+        double realValue = Float.valueOf(value);//要计算的值
         double dw = Double.valueOf(weight);
         double h = Double.valueOf(height);
         double sm1 = 0.00344 * h * h - 0.37678 * h + 14.40021;
         double sm2 = 0.00351 * h * h - 0.4661 * h + 23.04821;
 
-
         if ("体重".equals(type)) {
             tv_line1.setText(value);
-            String mi = TimeUtils.convertMi(height);
+            String mi = TimeUtils.convertMi(height);//转换成米
             double m = Double.valueOf(mi);
             double min = m * m * 18.5;
             double max = m * m * 23.9;
             if (realValue < min) {
-                setLowLine(base_line1, tv_line1);
+                setLowLine(base_line1, tv_line1, tv_tizhong);
                 tv_tizhong.setText("偏低");
             } else if (realValue >= min && realValue <= max) {
-                setNormalLine(base_line1, tv_line1);
+                setNormalLine(base_line1, tv_line1, tv_tizhong);
                 tv_tizhong.setText("正常");
             } else {
-                setHighLine(base_line1, tv_line1);
+                setHighLine(base_line1, tv_line1, tv_tizhong);
                 tv_tizhong.setText("偏高");
             }
         } else if ("肌肉".equals(type)) {
             tv_line2.setText(value);
             if ("1".equals(xingbie)) {
                 if (realValue < (sm1 - 5)) {
-                    setLowLine(base_line2, tv_line2);
+                    setLowLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏低");
                 } else if (realValue >= (sm1 - 5) && realValue <= (sm1 - 5)) {
-                    setNormalLine(base_line2, tv_line2);
+                    setNormalLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("正常");
                 } else {
-                    setHighLine(base_line2, tv_line2);
+                    setHighLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏高");
                 }
             } else if ("2".equals(xingbie)) {
                 if (realValue < (sm2 - 3)) {
-                    setLowLine(base_line2, tv_line2);
+                    setLowLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏低");
                 } else if (realValue >= (sm2 - 3) && realValue <= (sm2 - 3)) {
-                    setNormalLine(base_line2, tv_line2);
+                    setNormalLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("正常");
                 } else {
-                    setHighLine(base_line2, tv_line2);
+                    setHighLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏高");
                 }
             }
@@ -295,25 +306,25 @@ public class FitnessTestActivity extends BaseActivity {
             tv_line3.setText(value);
             if ("1".equals(xingbie)) {
                 if (realValue < 10) {
-                    setLowLine(base_line3, tv_line3);
+                    setLowLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏低");
                 } else if (realValue > 20) {
-                    setHighLine(base_line3, tv_line3);
+                    setHighLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏高");
                 } else {
-                    setNormalLine(base_line3, tv_line3);
+                    setNormalLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("正常");
                 }
 
             } else if ("2".equals(xingbie)) {
                 if (realValue < 18) {
-                    setLowLine(base_line3, tv_line3);
+                    setLowLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏低");
                 } else if (realValue > 28) {
-                    setHighLine(base_line3, tv_line3);
+                    setHighLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏高");
                 } else {
-                    setNormalLine(base_line3, tv_line3);
+                    setNormalLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("正常");
                 }
             }
@@ -322,13 +333,13 @@ public class FitnessTestActivity extends BaseActivity {
             double min = 0.045 * dw;
             double max = 0.055 * dw;
             if (realValue < min) {
-                setLowLine(base_line4, tv_line4);
+                setLowLine(base_line4, tv_line4, tv_guzhi);
                 tv_guzhi.setText("偏低");
             } else if (realValue > max) {
-                setHighLine(base_line4, tv_line4);
+                setHighLine(base_line4, tv_line4, tv_guzhi);
                 tv_guzhi.setText("偏高");
             } else {
-                setNormalLine(base_line4, tv_line4);
+                setNormalLine(base_line4, tv_line4, tv_guzhi);
                 tv_guzhi.setText("正常");
             }
 
@@ -337,13 +348,13 @@ public class FitnessTestActivity extends BaseActivity {
             double min = 0.54 * dw;
             double max = 0.66 * dw;
             if (realValue < min) {
-                setLowLine(base_line5, tv_line5);
+                setLowLine(base_line5, tv_line5, tv_zongshuifen);
                 tv_zongshuifen.setText("偏低");
             } else if (realValue > max) {
-                setHighLine(base_line5, tv_line5);
+                setHighLine(base_line5, tv_line5, tv_zongshuifen);
                 tv_zongshuifen.setText("偏高");
             } else {
-                setNormalLine(base_line5, tv_line5);
+                setNormalLine(base_line5, tv_line5, tv_zongshuifen);
                 tv_zongshuifen.setText("正常");
             }
 
@@ -353,26 +364,26 @@ public class FitnessTestActivity extends BaseActivity {
                 double min = (sm1 - 5) * 0.75;
                 double max = (sm1 + 5) * 0.75;
                 if (realValue < min) {
-                    setLowLine(base_line6, tv_line6);
+                    setLowLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏低");
                 } else if (realValue > max) {
-                    setHighLine(base_line6, tv_line6);
+                    setHighLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏高");
                 } else {
-                    setNormalLine(base_line6, tv_line6);
+                    setNormalLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("正常");
                 }
             } else if ("2".equals(xingbie)) {
                 double min = (sm2 - 3) * 0.75;
                 double max = (sm2 + 3) * 0.75;
                 if (realValue < min) {
-                    setLowLine(base_line6, tv_line6);
+                    setLowLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏低");
                 } else if (realValue > max) {
-                    setHighLine(base_line6, tv_line6);
+                    setHighLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏高");
                 } else {
-                    setNormalLine(base_line6, tv_line6);
+                    setNormalLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("正常");
                 }
             }
@@ -380,13 +391,13 @@ public class FitnessTestActivity extends BaseActivity {
         } else if ("体质指数".equals(type)) {
             tv_line7.setText(value);
             if (realValue < 18.5) {
-                setLowLine(base_line7, tv_line7);
+                setLowLine(base_line7, tv_line7, tv_tizhishu);
                 tv_tizhishu.setText("体重较轻");
             } else if (realValue > 23.9) {
-                setHighLine(base_line7, tv_line7);
+                setHighLine(base_line7, tv_line7, tv_tizhishu);
                 tv_tizhishu.setText("超重");
             } else {
-                setNormalLine(base_line7, tv_line7);
+                setNormalLine(base_line7, tv_line7, tv_tizhishu);
                 tv_tizhishu.setText("正常");
             }
 
@@ -394,62 +405,53 @@ public class FitnessTestActivity extends BaseActivity {
             tv_line8.setText(value);
             if ("1".equals(xingbie)) {
                 if (realValue < 0.85) {
-                    setLowLine(base_line8, tv_line8);
+                    setLowLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("梨型");
                 } else if (realValue > 0.95) {
-                    setHighLine(base_line8, tv_line8);
+                    setHighLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("苹果型");
                 } else {
-                    setNormalLine(base_line8, tv_line8);
+                    setNormalLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("正常");
                 }
 
             } else if ("2".equals(xingbie)) {
                 if (realValue < 0.7) {
-                    setLowLine(base_line8, tv_line8);
+                    setLowLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("梨型");
                 } else if (realValue > 0.8) {
-                    setHighLine(base_line8, tv_line8);
+                    setHighLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("苹果型");
                 } else {
-                    setNormalLine(base_line8, tv_line8);
+                    setNormalLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("正常");
                 }
             }
-
         }
-
-
     }
 
-    private void setLowLine(ProgressBar pb, TextView tv) {
-        ClipDrawable drawableLow = new ClipDrawable(new ColorDrawable(0xff3fc1f7), Gravity.LEFT, ClipDrawable.HORIZONTAL);
-        pb.setProgressDrawable(drawableLow);
-        drawableLow.setLevel(25 * 100);
-        pb.setProgressDrawable(drawableLow);
+    private void setLowLine(ProgressBar pb, TextView tv, TextView tv2) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.blue_horizontal_progressbar));
         pb.setProgress(25);
         tv.setPadding(low, 0, 0, 0);
-        tv.setTextColor(0xff3fc1f7);
+        tv.setTextColor(getResources().getColor(R.color.blue_color1));
+        tv2.setTextColor(getResources().getColor(R.color.blue_color1));
     }
 
-    private void setNormalLine(ProgressBar pb, TextView tv) {
-        ClipDrawable drawableNormal = new ClipDrawable(new ColorDrawable(0xffff6600), Gravity.LEFT, ClipDrawable.HORIZONTAL);
-        pb.setProgressDrawable(drawableNormal);
-        drawableNormal.setLevel(50 * 100);
-        pb.setProgressDrawable(drawableNormal);
+    private void setNormalLine(ProgressBar pb, TextView tv, TextView tv2) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.green_horizontal_progressbar));
         pb.setProgress(50);
         tv.setPadding(normal, 0, 0, 0);
-        tv.setTextColor(0xffff6600);
+        tv.setTextColor(getResources().getColor(R.color.green_color1));
+        tv2.setTextColor(getResources().getColor(R.color.green_color1));
     }
 
-    private void setHighLine(ProgressBar pb, TextView tv) {
-        ClipDrawable drawableHigh = new ClipDrawable(new ColorDrawable(0xff007ef1), Gravity.LEFT, ClipDrawable.HORIZONTAL);
-        pb.setProgressDrawable(drawableHigh);
-        drawableHigh.setLevel(75 * 100);
-        pb.setProgressDrawable(drawableHigh);
+    private void setHighLine(ProgressBar pb, TextView tv, TextView tv2) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.red_horizontal_progressbar));
         pb.setProgress(75);
         tv.setPadding(high, 0, 0, 0);
-        tv.setTextColor(0xff007ef1);
+        tv.setTextColor(getResources().getColor(R.color.red_color1));
+        tv2.setTextColor(getResources().getColor(R.color.red_color1));
     }
 
     private void initView() {
@@ -461,14 +463,11 @@ public class FitnessTestActivity extends BaseActivity {
         tv_error.setText("请联系您的会籍或教练为您体测");
         sv = findViewById(R.id.sv);
         pie_chart = findViewById(R.id.pie_chart);
-        fitness_back = findViewById(R.id.fitness_back);
-        fitness_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        history = findViewById(R.id.history);
+        DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+        history = dongLanTitleView.findViewById(R.id.donglan_right_tv);
+        history.setText("历史");
+        history.setVisibility(View.VISIBLE);
+        history.setTextColor(getResources().getColor(R.color.home_enter_total_text_color));
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -476,7 +475,6 @@ public class FitnessTestActivity extends BaseActivity {
                 finish();
             }
         });
-
 
         rl_age = findViewById(R.id.rl_age);
         rl_age.setOnClickListener(new View.OnClickListener() {
@@ -486,7 +484,6 @@ public class FitnessTestActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
 
         tv_age = findViewById(R.id.tv_age);
         tv_height_mubiao = findViewById(R.id.tv_height_mubiao);
@@ -517,6 +514,7 @@ public class FitnessTestActivity extends BaseActivity {
         test_score = findViewById(R.id.test_score);
         test_classify = findViewById(R.id.test_classify);
         test_time = findViewById(R.id.test_time);
+        test_person = findViewById(R.id.test_person);
         tv_line1 = findViewById(R.id.tv_line1);
         tv_line2 = findViewById(R.id.tv_line2);
         tv_line3 = findViewById(R.id.tv_line3);
@@ -542,6 +540,11 @@ public class FitnessTestActivity extends BaseActivity {
         tv_tizhishu = findViewById(R.id.tv_tizhishu);
         tv_yaotunbi = findViewById(R.id.tv_yaotunbi);
 
+        moisture_tv = findViewById(R.id.moisture_tv);//饼状图 水分
+        fat_tv = findViewById(R.id.fat_tv);//饼状图 脂肪
+        bone_tv = findViewById(R.id.bone_tv);//饼状图 骨质
+        protein_tv = findViewById(R.id.protein_tv);//饼状图 蛋白质
+
     }
 
 
@@ -550,37 +553,52 @@ public class FitnessTestActivity extends BaseActivity {
          * 初始化
          */
         List<SliceValue> values = new ArrayList<SliceValue>();
+        List<Double> chartValues = new ArrayList<Double>();
         pieChardata = new PieChartData();
-        pieChardata.setHasLabels(true);//显示表情
+        pieChardata.setHasLabels(false);//显示表情
         pieChardata.setHasLabelsOnlyForSelected(false);//不用点击显示占的百分比
-        pieChardata.setHasLabelsOutside(true);//占的百分比是否显示在饼图外面
+        pieChardata.setHasLabelsOutside(false);//占的百分比是否显示在饼图外面
         pieChardata.setHasCenterCircle(true);//是否是环形显示
         pieChardata.setSlicesSpacing(0);
         if (data.getWater() != null && data.getFat() != null && data.getBone() != null && data.getProtein() != null) {
             Double[] lv = {Double.valueOf(data.getWater()), Double.valueOf(data.getFat()), Double.valueOf(data.getBone()), Double.valueOf(data.getProtein())};
-            Integer[] color = {0xFFFF6600, 0xFFFFBE0E, 0xFFFD8403, 0xFFFF004E};
+            Integer[] color = {getResources().getColor(R.color.blue_color2),getResources().getColor(R.color.yellow_color1), getResources().getColor(R.color.purple_color1),getResources().getColor(R.color.green_color2)};
             String[] str = {"水分", "脂肪", "骨质", "蛋白质"};
             for (int i = 0; i <= 3; i++) {
                 SliceValue sliceValue = new SliceValue(lv[i].floatValue(), color[i]);//这里的颜色是我写了一个工具类 是随机选择颜色的
                 sliceValue.setLabel(str[i] + " " + lv[i] + "%");
                 values.add(sliceValue);
+                chartValues.add(lv[i]);
             }
+            Double sum = 0.0;
+            DecimalFormat df = new DecimalFormat("#.00");
+            for (Double dd : chartValues) {
+                sum += dd;
+            }
+            String moistureStr = chartValues.get(0) + "[" + df.format(sum / 100 * chartValues.get(0)) + "%" + "]";
+            String fatStr = chartValues.get(1) + "[" + df.format(sum / 100 * chartValues.get(1)) + "%" + "]";
+            String boneStr = chartValues.get(2) + "[" + df.format(sum / 100 * chartValues.get(2)) + "%" + "]";
+            String proteinStr = chartValues.get(3) + "[" + df.format(sum / 100 * chartValues.get(3)) + "%" + "]";
+
+            moisture_tv.setText(moistureStr);//饼状图 水分
+            fat_tv.setText(fatStr);//饼状图 脂肪
+            bone_tv.setText(boneStr);//饼状图 骨质
+            protein_tv.setText(proteinStr);//饼状图 蛋白质
 
             pieChardata.setValues(values);//填充数据
             pieChardata.setCenterCircleColor(0x00FFFFFF);//设置环形中间的颜色
-            pieChardata.setCenterCircleScale(0.75f);//设置环形的大小级别
-            //pieChardata.setCenterText1("身体成分");//环形中间的文字1
+            pieChardata.setCenterCircleScale(0.8f);//设置环形的大小级别
             pieChardata.setCenterText1Color(Color.BLACK);//文字颜色
             pieChardata.setCenterText1FontSize(12);//文字大小
 
             pie_chart.setPieChartData(pieChardata);
             pie_chart.setViewportCalculationEnabled(true);
+            pie_chart.setChartRotationEnabled(false);//设置饼图是否可以手动旋转
             pie_chart.setValueSelectionEnabled(false);//选择饼图某一块变大
-            pie_chart.setAlpha(0.9f);//设置透明度
+            pie_chart.setAlpha(1f);//设置透明度
             pie_chart.setCircleFillRatio(1f);//设置饼图大小
 
         }
-
     }
 
     //判断体形

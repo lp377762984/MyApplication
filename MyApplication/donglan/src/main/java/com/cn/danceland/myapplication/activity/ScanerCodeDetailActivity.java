@@ -205,11 +205,8 @@ public class ScanerCodeDetailActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
                 showResultDialog("入场失败:请查看网络连接");
-
             }
         }) {
-
-
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();

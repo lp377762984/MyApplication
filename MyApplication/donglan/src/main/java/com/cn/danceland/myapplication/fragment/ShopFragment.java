@@ -71,6 +71,7 @@ import com.cn.danceland.myapplication.activity.PotentialCustomerRevisitActivity;
 import com.cn.danceland.myapplication.activity.RecommendActivity;
 import com.cn.danceland.myapplication.activity.ReportFormActivity;
 import com.cn.danceland.myapplication.activity.ScanerCodeActivity;
+import com.cn.danceland.myapplication.activity.SearchFriendsActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
@@ -983,7 +984,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 26://体测分析
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "体侧分析");
-                        startActivity(new Intent(mActivity, AddFriendsActivity.class).putExtra("from", "体测").putExtra("isAnalysis", "true"));
+                        startActivity(new Intent(mActivity, SearchFriendsActivity.class).putExtra("from", "体测").putExtra("isAnalysis", "true"));
                         break;
                     case 28://
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务报表");

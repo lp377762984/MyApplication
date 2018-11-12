@@ -51,12 +51,14 @@ public class BodyWeiDuActivity extends BaseActivity {
     BodyBaseAdapter bodyBaseAdapter;
     CustomGridView gv_bodybase;
     BodyBaseGridAdapter bodyBaseGridAdapter;
-    Button body_button;
+    LinearLayout body_button;
     List<BcaResult> resultList;
     EditText editText;
     Long que_id;
 
     private RequsetFindUserBean.Data requsetInfo;//前面搜索到的对象
+    private LinearLayout header_layout;
+    private TextView child_title_tv;//小标题
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,9 +86,12 @@ public class BodyWeiDuActivity extends BaseActivity {
     private void initView() {
 
         rl_bodybase_title = findViewById(R.id.rl_bodybase_title);
-        rl_bodybase_title.setTitle("身体围度");
+        rl_bodybase_title.setTitle("体测分析");
+        child_title_tv = findViewById(R.id.child_title_tv);
+        child_title_tv.setText("身体围度");
         listView = findViewById(R.id.lv_bodybase);
-
+        header_layout = findViewById(R.id.header_layout);
+        header_layout.setVisibility(View.GONE);
         bodyBaseAdapter = new BodyBaseAdapter();
         listView.setAdapter(bodyBaseAdapter);
 
@@ -104,7 +109,7 @@ public class BodyWeiDuActivity extends BaseActivity {
                     resultList.add(bcaResult);
                 }
                 deleteEqualsItem();
-                startActivity(new Intent(BodyWeiDuActivity.this,BodyTiXingActivity.class)
+                startActivity(new Intent(BodyWeiDuActivity.this,BodyZongHeActivity.class)
                         .putExtra("resultList",(Serializable) resultList)
                         .putExtra("requsetInfo", requsetInfo));
             }
@@ -186,10 +191,13 @@ public class BodyWeiDuActivity extends BaseActivity {
                 editText.setHintTextColor(Color.parseColor("#dcdcdc"));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.MATCH_PARENT);
-                lp.setMargins(0,15,0,0);
                 editText.setLayoutParams(lp);
                 editText.setMaxLines(1);
                 editText.setTag(options2.get(n));
+                lp.setMargins(0, 4, 0, 0);
+                editText.setPadding(10, 20, 10, 20);
+                editText.setTextSize(12);
+                editText.setTextColor(getResources().getColor(R.color.colorGray22));
                 editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {

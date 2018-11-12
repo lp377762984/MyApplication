@@ -171,7 +171,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 if (!TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
                     iv_del.setVisibility(View.VISIBLE);
                     ll_search.setVisibility(View.VISIBLE);
-
                     tv_search.setText("搜索：“" + mEtPhone.getText().toString().trim() + "”");
 
                 } else {
@@ -317,28 +316,12 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             public void onResponse(String s) {
                 LogUtil.i(s);
                 Gson gson = new Gson();
-//                SearchMember searchMember = gson.fromJson(s, SearchMember.class);
-//                SearchMember.Data data = searchMember.getData();
-//                if (data != null) {
-//                    memberId = data.getId();
-//                    personId = data.getPerson_id();
-//                    member_no = data.getMember_no();
-//                }
-
-
-
                 RequsetFindUserBean infoBean = gson.fromJson(s, RequsetFindUserBean.class);
 
                 if (infoBean.getSuccess()) {
                     dataList=infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
-
-
                 }
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override

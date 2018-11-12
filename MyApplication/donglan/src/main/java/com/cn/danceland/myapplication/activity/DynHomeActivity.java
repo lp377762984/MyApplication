@@ -70,6 +70,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ScreenUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -133,11 +134,11 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private RecyclerView mRecyclerView;
     private boolean init;
     private int replypos = -1;
-    private RelativeLayout rl_more;
     // SlideFromBottomPopup slideFromBottomPopup;
     private EmojiconEditText et_popup_comment;
     private TextView tv_popup_title;
     private ImageView iv_pic;
+    private RelativeLayout rl_more;
     RxShineButton rx_zan;
     ImageButton rx_guanzhu;
     //  private View listEmptyView;
@@ -352,6 +353,19 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         });
         pullToRefresh.getRefreshableView().addHeaderView(initHeadview());
 
+        DongLanTitleView dongLanTitleView = findViewById(R.id.title);
+        ImageView iv_more = dongLanTitleView.findViewById(R.id.iv_more);
+        iv_more.setVisibility(View.VISIBLE);
+        iv_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
+                    showListDialogSelf(1);
+                } else {
+                    showListDialog();
+                }
+            }
+        });
     }
 
     private boolean isKeyboardShown(View rootView) {
@@ -538,18 +552,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private boolean isEnd = false;
 
     private void initHeadviewData(final RequstOneDynInfoBean.Data oneDynInfo) {
-
-        rl_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
-
-                    showListDialogSelf(1);
-                } else {
-                    showListDialog();
-                }
-            }
-        });
 
         if (TextUtils.equals(SPUtils.getString(Constants.MY_USERID, null), oneDynInfo.getAuthor())) {//是否是个人页面
 //            tv_guanzhu.setVisibility(View.INVISIBLE);
@@ -784,8 +786,8 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         jzVideoPlayer = headview.findViewById(R.id.videoplayer);
         rx_guanzhu = headview.findViewById(R.id.rx_guanzhu);
 
-        rl_more = headview.findViewById(R.id.rl_more);
         iv_pic = headview.findViewById(R.id.iv_pic);
+        rl_more = headview.findViewById(R.id.rl_more);
 
         //创建默认的线性LayoutManager
         mRecyclerView = headview.findViewById(R.id.my_recycler_view);
@@ -886,7 +888,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private void findOneDyn(final String msgId, final String userId) {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_ONE_DYN, new Response.Listener<String>() {
 
-
             @Override
             public void onResponse(String s) {
 
@@ -962,13 +963,24 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                     if (zanUserList.size() > 0) {
 
                         mRecylerViewAdapter.setData(zanUserList, msgId, userId);
-
                         mRecylerViewAdapter.notifyDataSetChanged();
-
                     } else {
-                        // ToastUtils.showToastShort("没有点赞数据");
                         mRecylerViewAdapter.setData(zanUserList, msgId, userId);
                         mRecylerViewAdapter.notifyDataSetChanged();
+                    }
+                    if (zanUserList != null && zanUserList.size() > 4) {
+                        //更多
+                        rl_more.setVisibility(View.VISIBLE);
+                        rl_more.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                startActivity(new Intent(DynHomeActivity.this, UserListActivity.class)
+                                        .putExtra("id", userId)
+                                        .putExtra("msgId", msgId)
+                                        .putExtra("type", 3)
+                                        .putExtra("from", 6));
+                            }
+                        });
                     }
                 } else {
                     ToastUtils.showToastShort("请求失败：" + UserListBean.getErrorMsg());

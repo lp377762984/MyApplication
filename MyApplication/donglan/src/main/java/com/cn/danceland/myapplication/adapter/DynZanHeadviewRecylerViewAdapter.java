@@ -59,7 +59,7 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
                 if (datas.size() > 4 && datas.size() == position) {
                     //更多
                //     ToastUtils.showToastShort("查看全部点赞");
-                    context.startActivity(new Intent(context, UserListActivity.class).putExtra("id",  userId).putExtra("msgId", msgId).putExtra("type", 3).putExtra("from",6));
+//                    context.startActivity(new Intent(context, UserListActivity.class).putExtra("id",  userId).putExtra("msgId", msgId).putExtra("type", 3).putExtra("from",6));
 
                 } else {
                     context.startActivity(new Intent(context, UserSelfHomeActivity.class).putExtra("id", datas.get(position).getPraiseUserId()));
@@ -70,7 +70,7 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
 
         if (datas.size() > 4 && datas.size() == position) {
             //更多
-            viewHolder.iv_avatar.setImageResource(R.drawable.img_more_zan);
+//            viewHolder.iv_avatar.setImageResource(R.drawable.img_more_zan);
         } else {
             //m默认头像
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
@@ -86,9 +86,9 @@ public class DynZanHeadviewRecylerViewAdapter extends RecyclerView.Adapter<DynZa
     //获取数据的数量
     @Override
     public int getItemCount() {
-        if (datas.size() > 4) {
-            return datas.size() + 1;
-        }
+//        if (datas.size() > 4) {
+//            return datas.size() + 1;
+//        }
         return datas.size();
     }
 

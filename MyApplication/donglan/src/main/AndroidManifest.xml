@@ -835,6 +835,11 @@
             android:name=".activity.CollectEntranceActivity"
             android:screenOrientation="portrait" />
 
+        <!--体侧分析 搜索会员-->
+        <activity
+            android:name=".activity.SearchFriendsActivity"
+            android:screenOrientation="portrait" />
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

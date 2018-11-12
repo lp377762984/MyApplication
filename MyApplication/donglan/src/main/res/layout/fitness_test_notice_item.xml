@@ -15,20 +15,20 @@
             android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:gravity="center_vertical"
             android:text="title"
-            android:textColor="@color/colorGray9"
-            android:textSize="@dimen/h6" />
+            android:textColor="@color/colorGray21"
+            android:textSize="12sp" />
 
         <!--体测分析有用到，不能删↓-->
         <LinearLayout
             android:id="@+id/options_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="26dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical" />
 
     </LinearLayout>

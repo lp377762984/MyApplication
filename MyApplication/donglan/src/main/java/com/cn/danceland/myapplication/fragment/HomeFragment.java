@@ -93,7 +93,6 @@ public class HomeFragment extends BaseFragment {
     private int mCurrentIamgenews = 1;//轮播开始页
     private static final int TOP_NEWS_CHANGE_TIME = 4000;// 顶部新闻切换事件
 
-
     private static LinearLayout header_layout;//header布局 头像 姓名 俩按钮
     private CardView meun_cradview;//菜单 粉色整体布局 健身日记 打卡排行layout
     private TextView in_the_cumulative_tv;//进场累计

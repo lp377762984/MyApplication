@@ -342,8 +342,8 @@
 
                         <ImageView
                             android:id="@+id/iv_more"
-                            android:layout_width="20dp"
-                            android:layout_height="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:src="@drawable/img_more_dyn" />
