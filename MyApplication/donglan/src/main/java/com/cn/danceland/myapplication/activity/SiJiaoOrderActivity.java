@@ -96,7 +96,7 @@ public class SiJiaoOrderActivity extends BaseActivity {
     private static final int PICK_CONTACT = 0;
     String type;
     EditText ed_phone, ed_name;
-    LinearLayout rl_jiaolian, rl_kaikeshijian, rl_name, rl_phone, ll_dingjin;
+    LinearLayout rl_jiaolian, rl_kaikeshijian, rl_phone, ll_dingjin;
     RadioButton btn_forme, btn_foryou;
     CheckBox btn_zhifubao, btn_weixin, btn_chuzhika;
     View line7;
@@ -471,7 +471,6 @@ public class SiJiaoOrderActivity extends BaseActivity {
 
         rl_kaikeshijian = findViewById(R.id.rl_kaikeshijian);
         rl_phone = findViewById(R.id.rl_phone);
-        rl_name = findViewById(R.id.rl_name);
         btn_zhifubao = findViewById(R.id.btn_zhifubao);
         btn_weixin = findViewById(R.id.btn_weixin);
         btn_chuzhika = findViewById(R.id.btn_chuzhika);

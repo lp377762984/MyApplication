@@ -38,13 +38,16 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +100,12 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                         intent.putExtra("requsetInfo", dataList.get(position));
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(AddFriendsActivity.this, ReadyTestActivity.class);
+                        Intent intent = new Intent(AddFriendsActivity.this, ReadyTestActivity.class);//客户体测
                         intent.putExtra("id", dataList.get(position).getPerson_id());
                         intent.putExtra("memberId", dataList.get(position).getId());
                         intent.putExtra("member_no", dataList.get(position).getMember_no());
                         startActivity(intent);
                     }
-
-                    //finish();
                 } else {
                     startActivity(new Intent(AddFriendsActivity.this, UserSelfHomeActivity.class).putExtra("id", dataList.get(position).getId()));
                 }
@@ -150,7 +151,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 return false;
             }
         });
-
     }
 
     private void setListener() {
@@ -244,13 +244,11 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-
     class StrBean1 {
         public boolean is_follower;
         public String user_id;
 
     }
-
 
     /**
      * 加关注
@@ -259,11 +257,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
      * @param b
      */
     private void addGuanzhu(final String id, final boolean b) {
-
         StrBean1 strBean1 = new StrBean1();
         strBean1.is_follower = b;
         strBean1.user_id = id;
-
 
         MyJsonObjectRequest request = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_GUANZHU, new Gson().toJson(strBean1), new Response.Listener<JSONObject>() {
 
@@ -310,7 +306,6 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
 
     private void searchMember(final String phone) {
-
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDMEMBER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -321,6 +316,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 if (infoBean.getSuccess()) {
                     dataList=infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
+                    if(dataList.size()==0){
+                        ToastUtils.showToastShort("无结果");
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -335,12 +333,8 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 map.put("phone", phone);
                 return map;
             }
-
-
         };
-
         MyApplication.getHttpQueues().add(stringRequest);
-
     }
 
 
@@ -350,10 +344,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
      */
 
     private void findUser(final String phone) {
-
-
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.FIND_ADD_USER_USRL, new Response.Listener<String>() {
-
 
             @Override
             public void onResponse(String s) {
@@ -364,6 +355,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 if (infoBean.getSuccess()) {
                     dataList=infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
+                    if(dataList.size()==0){
+                        ToastUtils.showToastShort("无结果");
+                    }
                 }
 
             }
@@ -373,16 +367,13 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 LogUtil.i(volleyError.toString() + volleyError.networkResponse.statusCode);
 
             }
-
-        }
-        ) {
+        } ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("phone", phone);
                 return map;
             }
-
         };
         // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
         request.setTag("findUser");
@@ -416,21 +407,16 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
         public View getView(final int position, View convertView, ViewGroup viewGroup) {
             ViewHolder vh = null;
             if (convertView == null) {
-
                 vh = new ViewHolder();
-
-                convertView = View.inflate(AddFriendsActivity.this, R.layout.listview_item_finduser, null);
+                convertView = View.inflate(AddFriendsActivity.this, R.layout.listview_item_search_user, null);
                 vh.iv_avatar = convertView.findViewById(R.id.iv_avatar);
-
                 vh.tv_name = convertView.findViewById(R.id.tv_nickname);
-
-
+                vh.age_tv = convertView.findViewById(R.id.age_tv);
+                vh.tel_tv = convertView.findViewById(R.id.tel_tv);
                 convertView.setTag(vh);
 
             } else {
-
                 vh = (ViewHolder) convertView.getTag();
-
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
@@ -441,23 +427,26 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 vh.tv_name.setText(dataList.get(position).getNick_name());
                 Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
             }
-
-
-
+            if (dataList.get(position).getBirthday() != null) {
+                int age = TimeUtils.getAgeFromBirthTime(new Date(TimeUtils.date2TimeStamp(dataList.get(position).getBirthday(), "yyyy-MM-dd")));
+                vh.age_tv.setText(age + "岁");//年龄
+            }
+            if (dataList.get(position).getPhone_no() != null) {
+                vh.tel_tv.setText(dataList.get(position).getPhone_no());
+            }
             return convertView;
-
         }
-
-
     }
     class ViewHolder {
-        public ImageView iv_avatar;
         public ImageView iv_callphone;
-        public TextView tv_name;
         public ImageView iv_sex;
         public TextView tv_lasttime;
         public LinearLayout ll_item;
         public ImageView iv_hx_msg;
+        public RoundImageView iv_avatar;
+        public TextView tv_name;
+        public TextView age_tv;
+        public TextView tel_tv;
     }
 }
 

@@ -57,7 +57,7 @@ public class FitnessTestHistoryActivity extends BaseActivity {
     private RelativeLayout rl_error;
     private ImageView iv_error;
     private TextView tv_error;
-    private TextView rightTv;
+//    private TextView rightTv;
 
     private NoticeAdapter adapter;
 
@@ -78,11 +78,11 @@ public class FitnessTestHistoryActivity extends BaseActivity {
 
     private void initView() {
         title = findViewById(R.id.title);
-        rightTv = findViewById(R.id.donglan_right_tv);
-        rightTv.setVisibility(View.VISIBLE);
-        rightTv.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
+//        rightTv = findViewById(R.id.donglan_right_tv);
+//        rightTv.setVisibility(View.VISIBLE);
+//        rightTv.setTextColor(context.getResources().getColor(R.color.color_dl_yellow));
         title.setTitle("历史记录");
-        rightTv.setText("体测分析");
+//        rightTv.setText("体测分析");
         name_tv = findViewById(R.id.name_tv);
         mListView = findViewById(R.id.lv_message);
         rl_error = findViewById(R.id.rl_error);
@@ -132,12 +132,12 @@ public class FitnessTestHistoryActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        rightTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, FitnessTestNoticeActivity.class).putExtra("requsetInfo", requsetInfo));
-            }
-        });
+//        rightTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(context, FitnessTestNoticeActivity.class).putExtra("requsetInfo", requsetInfo));
+//            }
+//        });
     }
 
     /**
@@ -255,9 +255,9 @@ public class FitnessTestHistoryActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("size", 10+"");
-                map.put("page", pageCount+"");
-                map.put("member_id", requsetInfo.getId()+"");
+                map.put("size", 10 + "");
+                map.put("page", pageCount + "");
+                map.put("member_id", requsetInfo.getId() + "");
                 LogUtil.i(map.toString());
                 return map;
             }
@@ -308,14 +308,14 @@ public class FitnessTestHistoryActivity extends BaseActivity {
             } else {
                 vh = (NoticeAdapter.ViewHolder) convertView.getTag();
             }
-            vh.content_one_tv.setText(TimeUtils.timeStamp2Date(datalist.get(position).getTest_time(),"yyyy-MM-dd HH:mm"));
-            vh.content_two_tv.setText("工作人员："+datalist.get(position).getTeach_name());
+            vh.content_one_tv.setText(TimeUtils.timeStamp2Date(datalist.get(position).getTest_time(), "yyyy-MM-dd HH:mm"));
+            vh.content_two_tv.setText("工作人员：" + datalist.get(position).getTeach_name());
             vh.content_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(context, FitnessResultsSummaryActivity.class)
                             .putExtra("requsetInfo", requsetInfo)
-                            .putExtra("saveId",datalist.get(position).getId()+""));
+                            .putExtra("saveId", datalist.get(position).getId() + ""));
                 }
             });
             return convertView;

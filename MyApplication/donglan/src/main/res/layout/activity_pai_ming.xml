@@ -57,7 +57,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"
                     android:background="@color/white"
-                    android:text="NO.1"
+                    android:text="NO.--"
                     android:textColor="@color/colorGray21"
                     android:textSize="12sp" />
 

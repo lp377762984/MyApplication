@@ -59,8 +59,8 @@ public class RequsetMyPaiMingBean {
                     '}';
         }
 
-        private int branchScore;
-        private int branchRanking;
+        private int branchScore;//次数
+        private int branchRanking;//排名
         public void setBranchScore(int branchScore) {
             this.branchScore = branchScore;
         }

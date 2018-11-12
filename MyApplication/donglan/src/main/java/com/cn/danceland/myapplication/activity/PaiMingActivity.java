@@ -122,7 +122,11 @@ public class PaiMingActivity extends BaseActivity {
 
         ImageView iv_avatar = findViewById(R.id.iv_avatar);
         tv_daka_num.setText(cishu + "次");
-        tv_paiming.setText("NO." + paiming);
+        if(paiming==0){
+            tv_paiming.setText("NO.--");
+        }else{
+            tv_paiming.setText("NO." + paiming);
+        }
 
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
@@ -165,7 +169,6 @@ public class PaiMingActivity extends BaseActivity {
         endLabels.setPullLabel("上拉加载...");// 刚下拉时，显示的提示
         endLabels.setRefreshingLabel("正在加载...");// 刷新时
         endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
-
 
     }
 
