@@ -702,6 +702,9 @@
             android:name=".activity.LoginNumberActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.AddTuiJianRenActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.BlackListActivity"
             android:screenOrientation="portrait" />
         <activity
