@@ -17,7 +17,7 @@ import com.cn.danceland.myapplication.utils.ToastUtils;
 
 public class AboutUsActivity extends BaseActivity {
 
-    ImageView about_back,about_logo;
+    ImageView about_logo;
     TextView about_verson;
     long [] mHits = null;
 
@@ -30,13 +30,11 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     private void initView() {
-        about_back = findViewById(R.id.about_back);
         about_logo = findViewById(R.id.about_logo);
         about_verson = findViewById(R.id.about_verson);
         about_verson.setText("版本号  "+ AppUtils.getVersionName(this));
 
         about_logo.setOnClickListener(onClickListener);
-        about_back.setOnClickListener(onClickListener);
         about_verson = findViewById(R.id.about_verson);
         findViewById(R.id.about_verson).setOnClickListener(onClickListener);
 
@@ -46,9 +44,6 @@ public class AboutUsActivity extends BaseActivity {
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.about_back:
-                    finish();
-                    break;
                 case R.id.about_verson://切换服务器
 
                     break;

@@ -113,13 +113,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
                         Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
                         for (int i = 0; options1Items.size() > i; i++) {
-                            if ((int)(zonecode/1000)==(int)(options1Items.get(i).getValue()/1000)){
+                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
                                 LogUtil.i(zone);
-                                zone=options1Items.get(i).getLabel();
-                                if (options1Items.get(i).getChildren()!=null) {
-                                    for(int j = 0;j<options1Items.get(i).getChildren().size();j++){
-                                        if (options1Items.get(i).getChildren().get(j)!=null&&zonecode==(options1Items.get(i).getChildren().get(j).getValue())){
-                                            zone=options1Items.get(i).getLabel()+options1Items.get(i).getChildren().get(j).getLabel();
+                                zone = options1Items.get(i).getLabel();
+                                if (options1Items.get(i).getChildren() != null) {
+                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
+                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
+                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
                                             LogUtil.i(zone);
                                         }
 
@@ -135,8 +135,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     tx_location.setText(zone);
 
 
-
-
                     break;
 
                 case MSG_LOAD_FAILED:
@@ -148,13 +146,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
                         Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
                         for (int i = 0; options1Items.size() > i; i++) {
-                            if ((int)(zonecode/1000)==(int)(options1Items.get(i).getValue()/1000)){
-                               LogUtil.i(zone);
-                                zone=options1Items.get(i).getLabel();
-                                if (options1Items.get(i).getChildren()!=null) {
-                                    for(int j = 0;j<options1Items.get(i).getChildren().size();j++){
-                                        if (options1Items.get(i).getChildren().get(j)!=null&&zonecode==(options1Items.get(i).getChildren().get(j).getValue())){
-                                            zone=options1Items.get(i).getLabel()+options1Items.get(i).getChildren().get(j).getLabel();
+                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
+                                LogUtil.i(zone);
+                                zone = options1Items.get(i).getLabel();
+                                if (options1Items.get(i).getChildren() != null) {
+                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
+                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
+                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
                                             LogUtil.i(zone);
                                         }
 
@@ -228,14 +226,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(R.id.tv_quit).setOnClickListener(this);
         findViewById(R.id.ll_setting).setOnClickListener(this);
         findViewById(R.id.ll_setting_phone).setOnClickListener(this);
         findViewById(R.id.ll_setting_location).setOnClickListener(this);
         findViewById(R.id.ll_about_us).setOnClickListener(this);
         findViewById(R.id.ll_clear).setOnClickListener(this);
-        findViewById(R.id.ll_my_shop).setOnClickListener(this);
         findViewById(R.id.ll_setting_weixin).setOnClickListener(this);
         findViewById(R.id.ll_setting_email).setOnClickListener(this);
         findViewById(R.id.ll_blacklist).setOnClickListener(this);
@@ -293,10 +289,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             e.printStackTrace();
         }
 
-
         if (thread == null) {//如果已创建就不再重新创建子线程了
-
-
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -313,9 +306,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back://返回
-                finish();
-                break;
             case R.id.tv_quit://退出
 
                 logOut();
@@ -367,14 +357,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                 showClearDialog();
 
-                break;
-            case R.id.ll_my_shop:
-                LogUtil.i(mInfo.getPerson().getDefault_branch());
-                if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
-                    ToastUtils.showToastShort("请先加入一个门店");
-                    return;
-                }
-                //  startActivity(new Intent(SettingActivity.this, MyShopActivity.class));
                 break;
             case R.id.ll_setting_weixin:
                 showName(0);
@@ -446,8 +428,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     if (TextUtils.equals("zoneCode", mapkey)) {
                         mInfo.getPerson().setZone_code(mapvalue);
                         DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
-                        Message message=Message.obtain();
-                        message.what=1223;
+                        Message message = Message.obtain();
+                        message.what = 1223;
                         handler.sendMessage(message);
                     }
                     ToastUtils.showToastShort("修改成功！");
@@ -595,7 +577,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 if (requestInfoBean.getSuccess()) {
 
 
-
                 } else {
                     //失败
                     ToastUtils.showToastShort("退出登录失败");
@@ -605,7 +586,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-              LogUtil.e(volleyError.toString());
+                LogUtil.e(volleyError.toString());
 
             }
         }) {
@@ -628,8 +609,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
-
 
 
         startActivity(new Intent(SettingActivity.this, LoginActivity.class));
@@ -688,8 +667,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 //                GroupInfo.getInstance().clear();
             }
         });
-        SPUtils.setString(Constants.MY_TXIM_ADMIN,null);
-        if (UserInfo.getInstance().getId()!=null){
+        SPUtils.setString(Constants.MY_TXIM_ADMIN, null);
+        if (UserInfo.getInstance().getId() != null) {
             TlsBusiness.logout(UserInfo.getInstance().getId());
         }
         UserInfo.getInstance().setId(null);
@@ -719,7 +698,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 String tx = options1Items.get(options1).getLabel() + options2Items.get(options1).get(options2);
 
 
-            //    ToastUtils.showToastShort(tx + zonecode2.get(options1).get(options2));
+                //    ToastUtils.showToastShort(tx + zonecode2.get(options1).get(options2));
 
 
                 commitSelf(Constants.MODIFY_ZONE, "zoneCode", zonecode2.get(options1).get(options2) + "");
