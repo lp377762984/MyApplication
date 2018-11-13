@@ -48,7 +48,7 @@ public class RequestConsultantInfoBean implements Serializable {
         return data;
     }
 
-    public class Data implements Serializable {
+    public static class Data implements Serializable {
       private   int id;
         private int branch_id;
         private int person_id;

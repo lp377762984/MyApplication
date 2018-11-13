@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -47,9 +49,12 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import lecho.lib.hellocharts.model.Line;
 
 /**
  * 会籍报表
@@ -65,12 +70,15 @@ public class ReportFormActivity extends BaseActivity {
     RecyclerView report_rv;
     String nowDate, selectDate;
     TextView tv_date;
-    RelativeLayout btn_date;
-    Button btn_all;
+    LinearLayout btn_date;
+    TextView btn_all;
     Data myInfo;
     String target_role_type;//要查询什么报表
     String branch_id;
     private Time time;
+
+    private TextView group_type_tv;
+    private LinearLayout group_type_layout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -187,7 +195,6 @@ public class ReportFormActivity extends BaseActivity {
             }
 
 
-
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
@@ -291,6 +298,8 @@ public class ReportFormActivity extends BaseActivity {
         });
 
         btn_all = findViewById(R.id.btn_all);
+        group_type_tv = findViewById(R.id.group_type_tv);
+        group_type_layout = findViewById(R.id.group_type_layout);
         btn_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,49 +323,104 @@ public class ReportFormActivity extends BaseActivity {
         if ("会籍顾问".equals(role_type)) {
             role = "1";
             //emp_id = myInfo.getEmployee().getId() + "";
-            report_rv.setVisibility(View.GONE);
+//            report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("会籍报表");
+            group_type_tv.setText("会籍");
+            getPeople();
         } else if ("教练".equals(role_type)) {
             role = "2";
-            report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
+            group_type_tv.setText("教练");
+            getPeople();
         } else if ("店长".equals(role_type)) {
             role = "4";
             report_title.setTitle("全店报表");
+            group_type_tv.setText("服务");
+            report_rv.setVisibility(View.GONE);
+            group_type_layout.setVisibility(View.GONE);
             getPeople();
         } else if ("会籍主管".equals(role_type)) {
             role = "5";
             report_title.setTitle("会籍报表");
+            group_type_tv.setText("会籍");
             getPeople();
         } else if ("前台主管".equals(role_type)) {
             role = "7";
             report_title.setTitle("服务报表");
-            getPeople();
+            group_type_tv.setText("服务");
+
         } else if ("教练主管".equals(role_type)) {
             role = "6";
             report_title.setTitle("教练报表");
+            group_type_tv.setText("教练");
             getPeople();
         } else if ("操教".equals(role_type)) {
             role = "8";
-            //emp_id = myInfo.getEmployee().getId() + "";
-            report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
+            group_type_tv.setText("教练");
+            getPeople();
         } else if ("兼职教练".equals(role_type)) {
             role = "11";
-            //emp_id = myInfo.getEmployee().getId() + "";
-            report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("教练报表");
+            group_type_tv.setText("教练");
+            getPeople();
         } else if ("前台".equals(role_type)) {
             role = "3";
-            //emp_id = myInfo.getEmployee().getId() + "";
-            report_rv.setVisibility(View.GONE);
             btn_all.setVisibility(View.GONE);
             report_title.setTitle("服务报表");
+            group_type_tv.setText("服务");
+            getPeople();
         }
+//        if ("会籍顾问".equals(role_type)) {
+//            role = "1";
+//            //emp_id = myInfo.getEmployee().getId() + "";
+//            report_rv.setVisibility(View.GONE);
+//            btn_all.setVisibility(View.GONE);
+//            report_title.setTitle("会籍报表");
+//        } else if ("教练".equals(role_type)) {
+//            role = "2";
+//            report_rv.setVisibility(View.GONE);
+//            btn_all.setVisibility(View.GONE);
+//            report_title.setTitle("教练报表");
+//        } else if ("店长".equals(role_type)) {
+//            role = "4";
+//            report_title.setTitle("全店报表");
+//            getPeople();
+//        } else if ("会籍主管".equals(role_type)) {
+//            role = "5";
+//            report_title.setTitle("会籍报表");
+//            getPeople();
+//        } else if ("前台主管".equals(role_type)) {
+//            role = "7";
+//            report_title.setTitle("服务报表");
+//            getPeople();
+//        } else if ("教练主管".equals(role_type)) {
+//            role = "6";
+//            report_title.setTitle("教练报表");
+//            getPeople();
+//        } else if ("操教".equals(role_type)) {
+//            role = "8";
+//            //emp_id = myInfo.getEmployee().getId() + "";
+//            report_rv.setVisibility(View.GONE);
+//            btn_all.setVisibility(View.GONE);
+//            report_title.setTitle("教练报表");
+//        } else if ("兼职教练".equals(role_type)) {
+//            role = "11";
+//            //emp_id = myInfo.getEmployee().getId() + "";
+//            report_rv.setVisibility(View.GONE);
+//            btn_all.setVisibility(View.GONE);
+//            report_title.setTitle("教练报表");
+//        } else if ("前台".equals(role_type)) {
+//            role = "3";
+//            //emp_id = myInfo.getEmployee().getId() + "";
+//            report_rv.setVisibility(View.GONE);
+//            btn_all.setVisibility(View.GONE);
+//            report_title.setTitle("服务报表");
+//        }
         emp_id = myInfo.getEmployee().getId() + "";
         initBusData(selectDate, role, emp_id);
         initScoreData(selectDate, role, target_role_type, emp_id);
@@ -471,13 +535,12 @@ public class ReportFormActivity extends BaseActivity {
             }
 
 
-
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
 
-    Button btn_commit;
+    LinearLayout btn_commit;
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -598,7 +661,7 @@ public class ReportFormActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
@@ -670,41 +733,68 @@ public class ReportFormActivity extends BaseActivity {
         selectDate = nowDate;
     }
 
+    /**
+     * 除了主管和店长 显示本地用户的im
+     */
     private void getPeople() {
-
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_CONSULTANT_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                LogUtil.i(s);
-                RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
-                if (requestConsultantInfoBean != null) {
-                    List<RequestConsultantInfoBean.Data> data = requestConsultantInfoBean.getData();
-                    if (data != null && data.size() > 0) {
-                        report_rv.setAdapter(new MyRecyclerViewAdapter(data));
+        String url = Constants.FIND_SERVICE_URL;
+        boolean isLeader;
+        switch (role) {
+            case "4"://店长 服务
+                url = Constants.FIND_SERVICE_URL;
+                isLeader = true;
+                break;
+            case "5"://会籍
+                url = Constants.FIND_CONSULTANT_URL;
+                isLeader = true;
+                break;
+            case "6"://教练
+                url = Constants.FIND_JIAOLIAN_URL;
+                isLeader = true;
+                break;
+            default:
+                isLeader = false;
+                break;
+        }
+        if (isLeader) {
+            MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String s) {
+                    LogUtil.i(s);
+                    RequestConsultantInfoBean requestConsultantInfoBean = gson.fromJson(s, RequestConsultantInfoBean.class);
+                    if (requestConsultantInfoBean != null) {
+                        List<RequestConsultantInfoBean.Data> data = requestConsultantInfoBean.getData();
+                        if (data != null && data.size() > 0) {
+                            report_rv.setAdapter(new MyRecyclerViewAdapter(data));
+                        } else {
+                            report_rv.setVisibility(View.GONE);
+                        }
                     } else {
                         report_rv.setVisibility(View.GONE);
                     }
-                } else {
-                    report_rv.setVisibility(View.GONE);
                 }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.i(volleyError.toString());
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("branch_id", branch_id);
-                return map;
-            }
-
-
-        };
-        MyApplication.getHttpQueues().add(stringRequest);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    LogUtil.i(volleyError.toString());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("branch_id", branch_id);
+                    return map;
+                }
+            };
+            MyApplication.getHttpQueues().add(stringRequest);
+        } else {//不是领导
+            List<RequestConsultantInfoBean.Data> data = new ArrayList<>();
+            RequestConsultantInfoBean.Data data1 = new RequestConsultantInfoBean.Data();
+            data1.setCname(myInfo.getEmployee().getCname());
+            data1.setSelf_avatar_path(Constants.HOST+myInfo.getEmployee().getSelf_avatar_path());
+            data.add(data1);
+            report_rv.setAdapter(new MyRecyclerViewAdapter(data));
+        }
     }
 
     TextView PreclickText;
@@ -729,22 +819,24 @@ public class ReportFormActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            Glide.with(ReportFormActivity.this).load(data.get(position).getSelf_avatar_path()).into(holder.img_touxiang);
-            holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (click != position && PreclickText != null) {
-                        PreclickText.setTextColor(Color.parseColor("#808080"));
-                    }
-                    click = position;
-                    PreclickText = holder.tv_name;
-                    holder.tv_name.setTextColor(Color.parseColor("#ff6600"));
-                    emp_id = data.get(position).getId() + "";
-                    initBusData(selectDate, role, emp_id);
-                    initScoreData(selectDate, role, target_role_type, emp_id);
-                    initReportData(selectDate, emp_id);
-                }
-            });
+            LogUtil.i("avatar="+data.get(position).getSelf_avatar_path());
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1);
+            Glide.with(ReportFormActivity.this).load(data.get(position).getSelf_avatar_path()).apply(options).into(holder.img_touxiang);
+//            holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (click != position && PreclickText != null) {
+//                        PreclickText.setTextColor(Color.parseColor("#808080"));
+//                    }
+//                    click = position;
+//                    PreclickText = holder.tv_name;
+//                    holder.tv_name.setTextColor(Color.parseColor("#ff6600"));
+//                    emp_id = data.get(position).getId() + "";
+//                    initBusData(selectDate, role, emp_id);
+//                    initScoreData(selectDate, role, target_role_type, emp_id);
+//                    initReportData(selectDate, emp_id);
+//                }
+//            });
             holder.tv_name.setText(data.get(position).getCname());
         }
 

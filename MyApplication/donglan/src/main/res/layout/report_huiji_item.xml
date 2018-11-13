@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="90dp" android:layout_height="wrap_content">
+    android:layout_width="90dp"
+    android:layout_height="wrap_content">
 
     <com.cn.danceland.myapplication.view.XCRoundRectImageView
         android:id="@+id/img_touxiang"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="5dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="5dp"
+        android:src="@drawable/img_avatar1"/>
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="哈哈哈哈"
-        android:textColor="#808080"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/img_touxiang"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:textSize="14sp"
-        android:maxLines="1"
-        android:maxEms="4"
         android:ellipsize="end"
-        />
+        android:gravity="center_horizontal"
+        android:maxEms="4"
+        android:maxLines="1"
+        android:text="哈哈哈哈"
+        android:textColor="@color/colorGray22"
+        android:textSize="12sp" />
 
 
 </RelativeLayout>

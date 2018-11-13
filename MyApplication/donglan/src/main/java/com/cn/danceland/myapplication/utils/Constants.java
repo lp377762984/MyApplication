@@ -94,6 +94,7 @@ public class Constants {
     public static String FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
     public static String FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
     public static String FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach";//查找教练
+    public static String FIND_SERVICE_URL = HOST + "/employ/queryService";//查找服务
 
     public static String FIND_CLUBDYNAMIC_URL = HOST + "/clubDynamic/queryPage";//会所动态
 
@@ -445,6 +446,7 @@ public class Constants {
         FIND_JOIN_SHOP_URL = HOST + "/myJoinBranch/findJoinBranchs";//查找已经加入门店
         FIND_CONSULTANT_URL = HOST + "/employ/queryAdmin";//查找会籍顾问
         FIND_JIAOLIAN_URL = HOST + "/employ/queryTeach";//查找教练
+        FIND_SERVICE_URL = HOST + "/employ/queryService";//查找服务
 
         FIND_CLUBDYNAMIC_URL = HOST + "/clubDynamic/queryPage";//会所动态
 
