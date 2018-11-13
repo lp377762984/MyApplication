@@ -788,6 +788,10 @@
             android:name=".activity.AlertDialogSelectTimeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialog" />
+        <activity
+            android:name=".activity.AlertDialogTuiJianActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog" />
 
         <!--ListViewAlertDialog  有×的-->
         <activity

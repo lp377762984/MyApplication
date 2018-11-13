@@ -92,6 +92,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     static String emailFormat = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
     private boolean isLoaded = false;
     private Handler handler = new Handler() {
+
+        private String[] zones;
+
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 0x01:
@@ -117,46 +120,34 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         for (int a = 0; jsonBean.size() > a; a++) {
 
                             for (int b = 0; jsonBean.get(a).getChildren().size() > b; b++) {
-                                LogUtil.i(jsonBean.get(a).getChildren().size()+"");
-
-                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getLabel()+"");
-                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getChildren().size()+"");
+//                                LogUtil.i(jsonBean.get(a).getChildren().size()+"");
+//
+//                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getLabel()+"");
+//                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getChildren().size()+"");
                                 for (int c = 0; jsonBean.get(a).getChildren().get(b).getChildren().size() > c; c++) {
                                     if (zonecode == jsonBean.get(a).getChildren().get(b).getChildren().get(c).getValue()) {
                                         zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel();
                                         LogUtil.i(zone);
                                     }
 
-
                                 }
-
-
                             }
-
                         }
-
-
-//                        for (int i = 0; options1Items.size() > i; i++) {
-//                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
-//                                LogUtil.i(zone);
-//                                zone = options1Items.get(i).getLabel();
-//                                if (options1Items.get(i).getChildren() != null) {
-//                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
-//                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
-//                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
-//                                            LogUtil.i(zone);
-//                                        }
-//
-//                                    }
-//                                }
-//
-//                            }
-//
-//                        }
-
                     }
 
-                    tx_location.setText(zone);
+                    if (zone != null) {
+                        zones = zone.split("-");
+
+                        if (zones[0].equals(zones[1])) {
+                            zone = zones[0];
+                        } else if (zones[2].equals(zones[1])) {
+                            zone = zones[0] + "-" + zones[1];
+                        }
+                        tx_location.setText(zone);
+                    }
+
+
+
 
 
                     break;
@@ -170,64 +161,35 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
                         Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
 
+
                         for (int a = 0; jsonBean.size() > a; a++) {
-                            if ((int) (zonecode / 1000) == (int) (jsonBean.get(a).getValue() / 1000)) {
-                                zone = jsonBean.get(a).getLabel();
-                                LogUtil.i(zone);
 
-                                for (int b = 0; jsonBean.get(a).getChildren().size() > b; b++) {
+                            for (int b = 0; jsonBean.get(a).getChildren().size() > b; b++) {
 
-
-                                    if ((int) (zonecode / 100) == (int) (jsonBean.get(a).getChildren().get(b).getValue() / 100)) {
-                                        LogUtil.i(zone);
-                                        if (!TextUtils.equals(jsonBean.get(a).getLabel(), jsonBean.get(a).getChildren().get(b).getLabel())) {
-                                            zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel();
-                                            for (int c = 0; jsonBean.get(a).getChildren().get(b).getChildren().size() > c; c++) {
-                                                if (zonecode == jsonBean.get(a).getChildren().get(b).getChildren().get(c).getValue()) {
-
-                                                    if (!TextUtils.equals(jsonBean.get(a).getChildren().get(b).getLabel(), jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel())) {
-                                                        zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel();
-                                                    }
-                                                    LogUtil.i(zone);
-                                                }
-
-
-                                            }
-
-                                        }
+                                for (int c = 0; jsonBean.get(a).getChildren().get(b).getChildren().size() > c; c++) {
+                                    if (zonecode == jsonBean.get(a).getChildren().get(b).getChildren().get(c).getValue()) {
+                                        zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel();
+                                        //     LogUtil.i(zone);
                                     }
 
 
                                 }
 
-                            }
 
+                            }
 
                         }
                     }
 
+                    //数据去重
+                    zones = zone.split("-");
 
-//                    if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
-//                        Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
-//                        for (int i = 0; options1Items.size() > i; i++) {
-//                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
-//                                LogUtil.i(zone);
-//                                zone = options1Items.get(i).getLabel();
-//                                if (options1Items.get(i).getChildren() != null) {
-//                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
-//                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
-//                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
-//                                            LogUtil.i(zone);
-//                                        }
-//
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//
-//                    }
-//
+                    if (zones[0].equals(zones[1])) {
+                        zone = zones[0];
+                    } else if (zones[2].equals(zones[1])) {
+                        zone = zones[0] + "-" + zones[1];
+                    }
+
                     tx_location.setText(zone);
 
                     break;
@@ -781,25 +743,21 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                 LogUtil.i(jsonBean.get(options1).getChildren().get(options2).getChildren().get(options3).getValue() + "");
                 commitSelf(Constants.MODIFY_ZONE, "zoneCode", jsonBean.get(options1).getChildren().get(options2).getChildren().get(options3).getValue() + "");
-//
-//                //返回的分别是三个级别的选中位置
-//                String tx = options1Items.get(options1).getLabel() + options2Items.get(options1).get(options2);
-//
-//
-//                //    ToastUtils.showToastShort(tx + zonecode2.get(options1).get(options2));
-//
-//
-//                commitSelf(Constants.MODIFY_ZONE, "zoneCode", zonecode2.get(options1).get(options2) + "");
+
             }
         })
 
                 .setTitleText("城市选择")
-                .setDividerColor(Color.BLACK)
-                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
-                .setContentTextSize(20)
+                .setDividerColor(Color.parseColor("#E9E9E9"))
+                .setTextColorCenter(getResources().getColor(R.color.color_dl_yellow)) //设置选中项文字颜色
+                .setContentTextSize(16)
+                .setCancelColor(getResources().getColor(R.color.color_dl_yellow))
+
+                .setSubmitColor(getResources().getColor(R.color.color_dl_yellow))
+
                 .build();
 
-//        pvOptions.setPicker(options1Items);//一级选择器
+        //   pvOptions.setPicker(options1Items);//一级选择器
         // pvOptions.setPicker(options1Items, options2Items);//二级选择器
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();

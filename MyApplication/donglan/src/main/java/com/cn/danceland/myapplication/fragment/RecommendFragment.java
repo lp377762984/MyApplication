@@ -287,8 +287,13 @@ public class RecommendFragment extends BaseFragment {
             ImageView iv_sex = view.findViewById(R.id.iv_sex);
 
             tv_name.setText(dataList.get(i).getName());
-            tv_phone.setText(dataList.get(i).getPhone_no());
-            tv_time.setText(TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy-MM-dd")));
+            if (dataList.get(i).getPhone_no()!=null){
+                tv_phone.setText("联系电话:"+dataList.get(i).getPhone_no());
+            }else {
+                tv_phone.setText("联系电话:空");
+            }
+
+            tv_time.setText("推荐时间:"+TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy.MM.dd")));
             if (dataList.get(i).getGender() == 1) {
 
                 iv_sex.setImageResource(R.drawable.img_sex1);
@@ -298,10 +303,16 @@ public class RecommendFragment extends BaseFragment {
             }
             if (dataList.get(i).getStatus() == 0) {
                 tv_status.setText("推荐中");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                tv_status.setTextColor(getResources().getColor(R.color.white));
             } else if (dataList.get(i).getStatus() == 1) {
                 tv_status.setText("推荐成功");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                tv_status.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
             } else if (dataList.get(i).getStatus() == 2) {
                 tv_status.setText("推荐失败");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                tv_status.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
             }
 
             return view;

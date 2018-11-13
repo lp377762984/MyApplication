@@ -154,8 +154,7 @@ public class SetRegisterInfoSaveActivity extends BaseActivity {
                     DataInfoCache.saveOneCache(mData, Constants.MY_INFO);
                     EventBus.getDefault().post(new StringEvent("", 1010));
                     handler.sendEmptyMessage(1);
-
-
+                    setResult(202);//关闭上个页面
                     Intent intent = new Intent(SetRegisterInfoSaveActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();

@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -131,13 +132,13 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
 
             tv_sijiaoName.setText(dataList.get(position).getCourse_type_name());
             tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name());
-            tv_goumai_num.setText("购买节数: "+dataList.get(position).getCount());
-            tv_shengyu_num.setText("剩余节数: "+dataList.get(position).getSurplus_count());
+            tv_goumai_num.setText(Html.fromHtml("购买节数: "+"<font color='#6D819C'>"+dataList.get(position).getCount()+"节</font>"));
+            tv_shengyu_num.setText(Html.fromHtml("剩余节数: "+"<font color='#6D819C'>"+dataList.get(position).getSurplus_count()+"节</font>"));
             tv_huiyuan_name.setText("会员: "+dataList.get(position).getMember_name());
 
             String start_date = TimeUtils.timeStamp2Date(dataList.get(position).getStart_date(), "yyyy-MM-dd");
             String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date(), "yyyy-MM-dd");
-            tv_youxiaoqi.setText("有效期: "+dataList.get(position).getTime_length()+"天");
+            tv_youxiaoqi.setText((Html.fromHtml("有效期: "+"<font color='#6D819C'>"+dataList.get(position).getTime_length()+"天"+"</font>")));
             if(dataList.get(position).getCourse_category()==1){
                 tv_category.setText("单人私教");
             }else if(dataList.get(position).getCourse_category()==2){
