@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -131,16 +132,16 @@ public class MySiJiaoFragment extends BaseFragment {
             TextView tv_category = inflate.findViewById(R.id.tv_category);
 
             tv_sijiaoName.setText(dataList.get(position).getCourse_type_name());
-            tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name());
-            tv_goumai_num.setText("购买节数: "+dataList.get(position).getCount());
-            tv_shengyu_num.setText("剩余节数: "+dataList.get(position).getSurplus_count());
+            tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name()+"节");
+            tv_goumai_num.setText(Html.fromHtml("购买节数: "+"<font color='#6D819C'>"+dataList.get(position).getCount()+"节</font>"));
+            tv_shengyu_num.setText(Html.fromHtml("剩余节数: "+"<font color='#6D819C'>"+dataList.get(position).getSurplus_count()+"节</font>"));
             //tv_huiyuan_name.setText("会员:"+dataList.get(position).getMember_name());
             tv_huiyuan_name.setVisibility(View.GONE);
 
 
-            String start_date = TimeUtils.timeStamp2Date(dataList.get(position).getStart_date()+"", "yyyy-MM-dd");
-            String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date()+"", "yyyy-MM-dd");
-            tv_youxiaoqi.setText("有效期: "+start_date+" 至 "+end_date);
+            String start_date = TimeUtils.timeStamp2Date(dataList.get(position).getStart_date()+"", "yyyy.MM.dd");
+            String end_date = TimeUtils.timeStamp2Date(dataList.get(position).getEnd_date()+"", "yyyy.MM.dd");
+            tv_youxiaoqi.setText((Html.fromHtml("有效期: "+"<font color='#6D819C'>"+start_date+" - "+end_date+"</font>")));
             if(dataList.get(position).getCourse_category()==1){
                 tv_category.setText("单人私教");
             }else if(dataList.get(position).getCourse_category()==2){

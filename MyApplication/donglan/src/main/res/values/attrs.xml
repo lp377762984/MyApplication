@@ -60,6 +60,8 @@
         <attr name="titleText" format="string"/>
         <!-- 是否有back按钮 -->
         <attr name="cannotBack" format="boolean"/>
+        <!-- 右侧更多功能按钮文字 -->
+        <attr name="moreText" format="string"/>
     </declare-styleable>
 
 

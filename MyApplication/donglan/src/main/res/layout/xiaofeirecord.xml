@@ -1,120 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<com.cn.danceland.myapplication.view.DongLanTitleView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleText="消费记录"></com.cn.danceland.myapplication.view.DongLanTitleView>
 
-    <RelativeLayout
-        android:id="@+id/xiaofei_title"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/dl_gery">
-
-        <ImageView
-            android:id="@+id/xiaofei_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:layout_centerVertical="true"
-            android:paddingLeft="15dp"
-            android:src="@drawable/img_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="消费记录"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/rl_leiji"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/xiaofei_title">
+        android:layout_height="90dp"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-          >
-
-            <TextView
-                android:id="@+id/rl_leijichongzhi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="累计充值：¥ "
-                android:textColor="@color/color_dl_yellow"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tv_leijichongzhi"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_dl_yellow"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:layout_marginRight="15dp">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/rl_leijixiaofei"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="累计消费：¥ "
-                android:textSize="16sp" />
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_leijixiaofei"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="累计充值： "
+                    android:textColor="@color/color_dl_deep_blue" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    >
+
+
+                    <TextView
+                        android:id="@+id/rl_leijichongzhi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="¥ "
+                        android:textColor="@color/color_dl_yellow"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tv_leijichongzhi"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_dl_yellow"
+                        android:textSize="24sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+<View
+    android:layout_width="1dp"
+    android:layout_height="90dp"
+    android:background="@color/color_bg_line"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/rl_leijixiaofei"
-                android:textSize="16sp" />
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="center_vertical"
 
-        </RelativeLayout>
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="累计消费："
+
+                    style="@style/DL_blueText14Style" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                   >
+
+                    <TextView
+                        android:id="@+id/rl_leijixiaofei"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="¥ "
+                        android:textColor="@color/color_dl_deep_blue"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/tv_leijixiaofei"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_dl_deep_blue"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
-    </LinearLayout>
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="0.2dp"
-        android:layout_below="@+id/rl_leiji"
-        android:background="@color/black"></View>
 
     <ListView
         android:id="@+id/lv_xiaofei"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:divider="@color/transparent"
+        android:dividerHeight="0dp"
         android:layout_below="@+id/line">
 
 
     </ListView>
+    <include
+        android:id="@+id/rl_error"
+        layout="@layout/no_info_layout"
+        android:visibility="gone" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/line">
 
-        <include
-            android:id="@+id/rl_error"
-            layout="@layout/no_info_layout"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>

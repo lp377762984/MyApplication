@@ -5,92 +5,112 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
 
-        <ImageView
-            android:id="@+id/iv_card"
-            android:layout_width="145dp"
-            android:layout_height="93dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/sijiao_card" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_cardname"
-                android:layout_width="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_card"
+                android:layout_width="167dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/sijiao_card" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="钻石年卡"
-                android:textColor="#333333"
-                android:textSize="15sp" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_cardtype"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_cardname"
-                android:layout_marginTop="5dp"
-                android:text="计次卡"
-                android:textColor="#333333" />
+                <TextView
+                    android:id="@+id/tv_cardname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="钻石年卡"
+                    android:textColor="#333333"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_cardtype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_cardname"
+                    android:layout_marginTop="5dp"
+                    android:text="计次卡"
+                    android:textColor="#333333"
+                    android:textSize="12sp" />
 
 
-            <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="次数：100次"
-                android:textColor="#444444"
-                android:textSize="14sp"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="次数：100次"
+                    android:textColor="#444444"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:text="时间：有效期365天"
-                android:textColor="#444444"
-                android:textSize="14sp" />
-            <!--<TextView-->
-            <!--android:id="@+id/tv_order_name"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:textColor="#444444"-->
-            <!--android:textSize="14sp"-->
-            <!--android:layout_height="wrap_content" />-->
-            <!--<TextView-->
-            <!--android:id="@+id/tv_phone"-->
-            <!--android:textColor="#444444"-->
-            <!--android:textSize="14sp"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-            <Button
-                android:id="@+id/btn_commit"
-                android:layout_marginTop="5dp"
-                style="@style/BtnCommitStyle"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:textSize="14sp"
-                android:text="扫码入场" />
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:text="时间：有效期365天"
+                    android:textColor="#444444"
+                    android:textSize="12sp" />
+                <!--<TextView-->
+                <!--android:id="@+id/tv_order_name"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:textColor="#444444"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_height="wrap_content" />-->
+                <!--<TextView-->
+                <!--android:id="@+id/tv_phone"-->
+                <!--android:textColor="#444444"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom">
+
+                    <Button
+                        android:id="@+id/btn_commit"
+                        style="@style/BtnCommitStyle"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="扫码入场"
+                        android:textSize="14sp" />
+                </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
     <!--    <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="170dp"

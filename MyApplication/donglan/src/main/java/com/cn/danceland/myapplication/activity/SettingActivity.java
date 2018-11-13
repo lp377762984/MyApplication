@@ -92,6 +92,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     static String emailFormat = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
     private boolean isLoaded = false;
     private Handler handler = new Handler() {
+
+        private String[] zones;
+
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 0x01:
@@ -106,33 +109,43 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                 case MSG_LOAD_SUCCESS:
                     // Toast.makeText(SettingActivity.this, "Parse Succeed", Toast.LENGTH_SHORT).show();
+
                     isLoaded = true;
 
                     LogUtil.i("修改，地区");
 
                     if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
                         Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
-                        for (int i = 0; options1Items.size() > i; i++) {
-                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
-                                LogUtil.i(zone);
-                                zone = options1Items.get(i).getLabel();
-                                if (options1Items.get(i).getChildren() != null) {
-                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
-                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
-                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
-                                            LogUtil.i(zone);
-                                        }
 
+                        for (int a = 0; jsonBean.size() > a; a++) {
+
+                            for (int b = 0; jsonBean.get(a).getChildren().size() > b; b++) {
+//                                LogUtil.i(jsonBean.get(a).getChildren().size()+"");
+//
+//                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getLabel()+"");
+//                                LogUtil.i(jsonBean.get(a).getChildren().get(b).getChildren().size()+"");
+                                for (int c = 0; jsonBean.get(a).getChildren().get(b).getChildren().size() > c; c++) {
+                                    if (zonecode == jsonBean.get(a).getChildren().get(b).getChildren().get(c).getValue()) {
+                                        zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel();
+                                        LogUtil.i(zone);
                                     }
+
                                 }
-
                             }
-
                         }
-
                     }
 
-                    tx_location.setText(zone);
+                    if (zone != null) {
+                        zones = zone.split("-");
+
+                        if (zones[0].equals(zones[1])) {
+                            zone = zones[0];
+                        } else if (zones[2].equals(zones[1])) {
+                            zone = zones[0] + "-" + zones[1];
+                        }
+                        tx_location.setText(zone);
+                    }
+
 
 
                     break;
@@ -145,23 +158,34 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
                     if (!TextUtils.isEmpty(mInfo.getPerson().getZone_code())) {
                         Long zonecode = Long.valueOf(mInfo.getPerson().getZone_code());
-                        for (int i = 0; options1Items.size() > i; i++) {
-                            if ((int) (zonecode / 1000) == (int) (options1Items.get(i).getValue() / 1000)) {
-                                LogUtil.i(zone);
-                                zone = options1Items.get(i).getLabel();
-                                if (options1Items.get(i).getChildren() != null) {
-                                    for (int j = 0; j < options1Items.get(i).getChildren().size(); j++) {
-                                        if (options1Items.get(i).getChildren().get(j) != null && zonecode == (options1Items.get(i).getChildren().get(j).getValue())) {
-                                            zone = options1Items.get(i).getLabel() + options1Items.get(i).getChildren().get(j).getLabel();
-                                            LogUtil.i(zone);
-                                        }
 
+
+                        for (int a = 0; jsonBean.size() > a; a++) {
+
+                            for (int b = 0; jsonBean.get(a).getChildren().size() > b; b++) {
+
+                                for (int c = 0; jsonBean.get(a).getChildren().get(b).getChildren().size() > c; c++) {
+                                    if (zonecode == jsonBean.get(a).getChildren().get(b).getChildren().get(c).getValue()) {
+                                        zone = jsonBean.get(a).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getLabel() + "-" + jsonBean.get(a).getChildren().get(b).getChildren().get(c).getLabel();
+                                        //     LogUtil.i(zone);
                                     }
+
+
                                 }
+
+
                             }
 
                         }
+                    }
 
+                    //数据去重
+                    zones = zone.split("-");
+
+                    if (zones[0].equals(zones[1])) {
+                        zone = zones[0];
+                    } else if (zones[2].equals(zones[1])) {
+                        zone = zones[0] + "-" + zones[1];
                     }
 
                     tx_location.setText(zone);
@@ -176,6 +200,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     };
     private TextView tv_cache;
     private Thread thread;
+    private ArrayList<JsonBean> jsonBean;
 
     @Override
 
@@ -687,33 +712,36 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private ArrayList<Long> zonecode1 = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<Long>> zonecode2 = new ArrayList<>();
-    //  private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
     private void showPickerView() {// 弹出选择器
 
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String tx = options1Items.get(options1).getLabel() + options2Items.get(options1).get(options2);
 
+                ToastUtils.showToastShort(jsonBean.get(options1).getLabel() + jsonBean.get(options1).getChildren().get(options2).getLabel() +
+                        jsonBean.get(options1).getChildren().get(options2).getChildren().get(options3).getLabel());
 
-                //    ToastUtils.showToastShort(tx + zonecode2.get(options1).get(options2));
+                LogUtil.i(jsonBean.get(options1).getChildren().get(options2).getChildren().get(options3).getValue() + "");
+                commitSelf(Constants.MODIFY_ZONE, "zoneCode", jsonBean.get(options1).getChildren().get(options2).getChildren().get(options3).getValue() + "");
 
-
-                commitSelf(Constants.MODIFY_ZONE, "zoneCode", zonecode2.get(options1).get(options2) + "");
             }
         })
 
                 .setTitleText("城市选择")
-                .setDividerColor(Color.BLACK)
-                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
-                .setContentTextSize(20)
+                .setDividerColor(Color.parseColor("#E9E9E9"))
+                .setTextColorCenter(getResources().getColor(R.color.color_dl_yellow)) //设置选中项文字颜色
+                .setContentTextSize(16)
+                .setCancelColor(getResources().getColor(R.color.color_dl_yellow))
+
+                .setSubmitColor(getResources().getColor(R.color.color_dl_yellow))
+
                 .build();
 
-//        pvOptions.setPicker(options1Items);//一级选择器
-        pvOptions.setPicker(options1Items, options2Items);//二级选择器
-        //     pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        //   pvOptions.setPicker(options1Items);//一级选择器
+        // pvOptions.setPicker(options1Items, options2Items);//二级选择器
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
     }
 
@@ -726,7 +754,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
          * */
         String JsonData = new GetJsonDataUtil().getJson(this, "address.json");//获取assets目录下的json文件数据
 
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+        //用Gson 转成实体
+        jsonBean = parseData(JsonData);
 
         /**
          * 添加省份数据
@@ -744,34 +773,29 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
 //
             //        LogUtil.i(CityList.toString());
-
-            for (int c = 0; c < jsonBean.get(i).getChildren().size(); c++) {//遍历该省份的所有城市
+//遍历该省份的所有城市
+            for (int c = 0; c < jsonBean.get(i).getChildren().size(); c++) {
                 //     LogUtil.i(jsonBean.get(i).getChildren().toString());
                 if (jsonBean.get(i).getChildren() != null && jsonBean.get(i).getChildren().get(c) != null) {
                     String CityName = jsonBean.get(i).getChildren().get(c).getLabel();
                     CityList.add(CityName);//添加城市
                     CityListcode.add(jsonBean.get(i).getChildren().get(c).getValue());
 
-                    //        LogUtil.i(CityList.toString());
 
-//                    ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-//
-//                    //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
-//                    if (jsonBean.get(i).getChildren().get(c).getChildren() == null
-//                            || jsonBean.get(i).getChildren().get(c).getChildren().size() == 0) {
-//                        City_AreaList.add("");
-//                    } else {
-//                        for (int j = 0; j < jsonBean.get(i).getChildren().get(c).getChildren().size(); j++) {
-//                            if (jsonBean.get(i).getChildren()!=null){
-//                                City_AreaList.add(jsonBean.get(i).getChildren().get(c).getChildren().get(j).getLabel());
-//                            }
-//
-//                        }
-//
-//                    }
-//
-//                    Province_AreaList.add(City_AreaList);//添加该省所有地区数据
-//                    LogUtil.i(Province_AreaList.toString());
+                    ArrayList<String> Province_AreaList1 = new ArrayList<>();//第三层 地区
+                    if (jsonBean.get(i).getChildren().get(c).getChildren() != null && jsonBean.get(i).getChildren().get(c).getChildren().size() > 0) {
+                        for (int j = 0; j < jsonBean.get(i).getChildren().get(c).getChildren().size(); j++) {
+                            Province_AreaList1.add(jsonBean.get(i).getChildren().get(c).getChildren().get(j).getLabel());
+                        }
+
+                    } else {
+                        Province_AreaList1.add(CityName);//给2级父类创建相同子类
+                        List<JsonBean.Children> childrens = new ArrayList<>();
+                        childrens.add(jsonBean.get(i).getChildren().get(c));
+                        jsonBean.get(i).getChildren().get(c).setChildren(childrens);
+                    }
+                    Province_AreaList.add(Province_AreaList1);//2级父类赋值
+
 
                 }
 
@@ -783,10 +807,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
              */
             options2Items.add(CityList);
             zonecode2.add(CityListcode);
-//            /**
-//             * 添加地区数据
-//             */
-//            options3Items.add(Province_AreaList);
+            /**
+             * 添加地区数据
+             */
+            options3Items.add(Province_AreaList);
         }
 
         handler.sendEmptyMessage(MSG_LOAD_SUCCESS);

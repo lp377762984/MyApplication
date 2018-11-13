@@ -246,6 +246,7 @@ public class SiJiaoFragment extends BaseFragment {
 
         if ("2".equals(course_category)) {
             url = Constants.FINDGROUPCOURSEAPPOINTLIST;
+
         } else {
             url = Constants.APPOINTLIST;
             childListAdapter = new MyListAdapter(new ArrayList<SiJiaoRecordBean.Content>(), course_category);
@@ -264,6 +265,8 @@ public class SiJiaoFragment extends BaseFragment {
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+
+                LogUtil.e(jsonObject.toString());
                 if ("2".equals(course_category)) {
                     GroupRecordBean groupRecordBean = gson.fromJson(jsonObject.toString(), GroupRecordBean.class);
                     if (groupRecordBean != null) {
@@ -291,6 +294,7 @@ public class SiJiaoFragment extends BaseFragment {
                             if (childContent != null) {
                                 childDatas.set(pos, childContent);
                                 childListAdapter = new MyListAdapter(childDatas.get(pos), course_category);
+                          //      LogUtil.e(childContent.toString());
                                 mylist.setAdapter(childListAdapter);
                                 //childListAdapter.notifyDataSetChanged();
                                 //childListAdapter.notifyDataSetChanged();
@@ -670,6 +674,7 @@ public class SiJiaoFragment extends BaseFragment {
 
         MyListAdapter(List<SiJiaoRecordBean.Content> list, String course_category) {
             this.list = list;
+            LogUtil.e(list.toString());
             this.course_category = course_category;
         }
 
@@ -717,7 +722,8 @@ public class SiJiaoFragment extends BaseFragment {
 
             } else {
                 int status = list.get(position).getStatus();
-                viewHolder1.tv_pingfen.setText("无法评分");
+               // viewHolder1.tv_pingfen.setText("小团课无法评分");
+                viewHolder1.tv_pingfen.setText("");
                 if (status == 1) {
                     viewHolder1.tv_status.setText("已过期");
                 } else if (status == 2) {

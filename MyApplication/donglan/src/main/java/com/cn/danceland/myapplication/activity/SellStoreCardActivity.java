@@ -31,6 +31,7 @@ import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestConsultantInfoBean;
 import com.cn.danceland.myapplication.bean.RequestOrderPayInfoBean;
+import com.cn.danceland.myapplication.bean.RequestPayWayBean;
 import com.cn.danceland.myapplication.bean.SijiaoOrderConfirmBean;
 import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.bean.explain.Explain;
@@ -45,6 +46,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.CommitButton;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -82,7 +84,7 @@ public class SellStoreCardActivity extends BaseActivity {
     CheckBox btn_weixin, btn_zhifubao, cb_shuoming;
     TextView storecard_tv, tv_price;
     DongLanTitleView storecard_title;
-    String zhifu;
+    String zhifu="0";
     public static final int SDK_PAY_FLAG = 0x1001;
     private List<RequestConsultantInfoBean.Data> consultantListInfo = new ArrayList<>();
     private Handler mHandler = new Handler() {
@@ -103,6 +105,7 @@ public class SellStoreCardActivity extends BaseActivity {
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             break;
                         case "5000":
@@ -111,11 +114,13 @@ public class SellStoreCardActivity extends BaseActivity {
                         case "6001":
                             ToastUtils.showToastShort("已取消支付");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             break;
                         case "6002":
                             ToastUtils.showToastShort("网络连接出错");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             break;
                         case "6004":
@@ -124,6 +129,7 @@ public class SellStoreCardActivity extends BaseActivity {
                         default:
                             ToastUtils.showToastShort("支付失败");
                             btn_repay.setVisibility(View.VISIBLE);
+                            isRepay = true;
                             btn_weixin.setClickable(false);
                             break;
                     }
@@ -137,6 +143,9 @@ public class SellStoreCardActivity extends BaseActivity {
         }
     };
     private SijiaoOrderConfirmBean sijiaoOrderConfirmBean;
+    private LinearLayout ll_02, ll_alipay, ll_weixin;
+    private CommitButton commitButton;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +158,7 @@ public class SellStoreCardActivity extends BaseActivity {
         initHost();
         initView();
         queryList();
-
+        find_pay_way();
     }
 
     //even事件处理
@@ -162,19 +171,20 @@ public class SellStoreCardActivity extends BaseActivity {
         if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             btn_zhifubao.setClickable(false);
+            isRepay = true;
             btn_repay.setVisibility(View.VISIBLE);
         }
     }
 
     private void showpayresult() {
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(SellStoreCardActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SellStoreCardActivity.this);
         builder.setMessage("支付完成");
         builder.setPositiveButton("查看订单", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                startActivity(new Intent(SellStoreCardActivity.this,XiaoFeiRecordActivity.class));
+                startActivity(new Intent(SellStoreCardActivity.this, XiaoFeiRecordActivity.class));
                 finish();
             }
         });
@@ -197,6 +207,33 @@ public class SellStoreCardActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void find_pay_way() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PAY_WAYS_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestPayWayBean payWayBean = new Gson().fromJson(s, RequestPayWayBean.class);
+                if (payWayBean.getData().getAlipay_enable() == 1) {
+                    ll_alipay.setVisibility(View.VISIBLE);
+                }
+                if (payWayBean.getData().getWxpay_enable() == 1) {
+                    ll_weixin.setVisibility(View.VISIBLE);
+                }
+                if (payWayBean.getData().getXypay_enable() == 1) {
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        });
+
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     /**
@@ -287,7 +324,7 @@ public class SellStoreCardActivity extends BaseActivity {
 
     private ListPopup listPopup;
     private TextView tv_counselor;
-
+    private boolean isRepay = false;
     private void initView() {
         myPopupListAdapter = new MyPopupListAdapter(this);
         listPopup = new ListPopup(this);
@@ -306,10 +343,35 @@ public class SellStoreCardActivity extends BaseActivity {
         tv_price = findViewById(R.id.tv_price);
         cb_shuoming = findViewById(R.id.cb_shuoming);
         btn_repay = findViewById(R.id.btn_repay);
+        ll_alipay = findViewById(R.id.ll_alipay);
+        ll_weixin = findViewById(R.id.ll_weixin);
 
-        btn_zhifubao.setChecked(true);
-        zhifu = "2";
+        commitButton = findViewById(R.id.dlbtn_commit);
+        commitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRepay){
+                    if ("2".equals(zhifu)) {
+                        alipay(unpaidOrder);
+                    } else if ("3".equals(zhifu)) {
+                        wxPay(unpaidOrder);
+                    }
+                    return;
+                }
+                if ("0".equals(zhifu)){
+                    ToastUtils.showToastShort("请选择支付方式");
+                    return;
+                }
 
+                if (cardid != null) {
+                    confirmOrder(cardid.getFace() + "");
+                } else {
+                    ToastUtils.showToastShort("获取面额失败");
+                }
+
+
+            }
+        });
         btn_zhifubao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -358,6 +420,7 @@ public class SellStoreCardActivity extends BaseActivity {
         });
         if (cardid != null) {
             tv_price.setText("待支付：￥" + cardid.getFace() + "元");
+            commitButton.setText("待支付：￥"+ cardid.getFace() + "元");
         }
         //findById();
     }

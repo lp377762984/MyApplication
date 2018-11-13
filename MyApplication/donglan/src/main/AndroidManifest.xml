@@ -702,6 +702,9 @@
             android:name=".activity.LoginNumberActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.AddTuiJianRenActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.BlackListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -783,6 +786,10 @@
             android:theme="@style/DialogStyle" />
         <activity
             android:name=".activity.AlertDialogSelectTimeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog" />
+        <activity
+            android:name=".activity.AlertDialogTuiJianActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialog" />
 

@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -79,7 +80,8 @@ public class RecommendActivity extends BaseActivity implements View.OnClickListe
             }
         });
         if (   SPUtils.getBoolean("tuijian_show",true)){
-            showTuiJianDialog();
+            startActivity(new Intent(RecommendActivity.this,AlertDialogTuiJianActivity.class));
+         //   showTuiJianDialog();
         }
 
     }

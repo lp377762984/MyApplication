@@ -1,24 +1,17 @@
 package com.cn.danceland.myapplication.bean.store.storebill;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @友情提示: 请清理掉用不到的代码包括这段注释
@@ -41,7 +34,7 @@ public class StoreBillRequest {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeBill/save", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeBill/queryList_v2", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}
@@ -94,7 +87,7 @@ public class StoreBillRequest {
 			// LogUtil.i(storeBill.toString());
 			e.printStackTrace();
 		}
-		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeBill/queryList", json, listener, new Response.ErrorListener() {
+		MyJsonObjectRequest request = new MyJsonObjectRequest(1, Constants.HOST + "storeBill/queryList_v2", json, listener, new Response.ErrorListener() {
 			public void onErrorResponse(VolleyError error) {
 				ToastUtils.showToastShort("请检查手机网络！");
 			}

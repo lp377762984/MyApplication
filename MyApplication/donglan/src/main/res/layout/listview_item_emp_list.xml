@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/ll_item"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:roundiv="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:background="#fff">
 
     <android.support.v7.widget.CardView
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

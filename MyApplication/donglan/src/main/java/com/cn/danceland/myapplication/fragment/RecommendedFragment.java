@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -12,8 +11,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
@@ -22,9 +19,8 @@ import com.cn.danceland.myapplication.bean.RequstRecommendBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -149,12 +145,11 @@ public class RecommendedFragment extends BaseFragment {
             TextView tv_name = view.findViewById(R.id.tv_name);
             TextView tv_phone = view.findViewById(R.id.tv_phone);
             TextView tv_time = view.findViewById(R.id.tv_time);
-            Button tv_status = view.findViewById(R.id.tv_status);
+            TextView tv_status = view.findViewById(R.id.tv_status);
             ImageView iv_sex = view.findViewById(R.id.iv_sex);
-
             tv_name.setText(dataList.get(i).getName());
-            tv_phone.setText(dataList.get(i).getMember_name());
-            tv_time.setText(TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy-MM-dd")));
+            tv_phone.setText("联系电话:"+dataList.get(i).getMember_no());
+            tv_time.setText("推荐时间:"+TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy.MM.dd")));
             if (dataList.get(i).getGender() == 1) {
 
                 iv_sex.setImageResource(R.drawable.img_sex1);
@@ -165,32 +160,33 @@ public class RecommendedFragment extends BaseFragment {
 
 
             if (dataList.get(i).getStatus() == 0) {
-                tv_status.setVisibility(View.VISIBLE);
+                tv_status.setText("确认");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+                tv_status.setTextColor(getResources().getColor(R.color.white));
+                tv_status.setEnabled(true);
+                tv_status.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        introduce_confirm(dataList.get(i).getId());
+                    }
+                });
             } else if (dataList.get(i).getStatus() == 1) {
-                tv_status.setVisibility(View.INVISIBLE);
+                tv_status.setText("已确认");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                tv_status.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
+                tv_status.setEnabled(false);
             } else if (dataList.get(i).getStatus() == 2) {
-
-            }
-            for (int j = 0; j < dataList.size(); j++) {
-                if (dataList.get(j).getStatus() == 2) {
-                    tv_status.setVisibility(View.INVISIBLE);
-
-                }
-
+                tv_status.setText("确认");
+                tv_status.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                tv_status.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
+                tv_status.setEnabled(false);
             }
 
 
             final Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-            tv_status.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
-//                    if (TextUtils.equals(data.getMember().getAuth(),"1")){
-//                        return;
-//                    }
-                    introduce_confirm(dataList.get(i).getId());
-                }
-            });
             return view;
         }
     }

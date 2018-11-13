@@ -235,6 +235,14 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==202){
+            finish();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dlbtn_commit:
@@ -255,10 +263,10 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
                     return;
                 }
 
-                startActivity(new Intent(SetRegisterInfoActivity.this, SetRegisterInfoSaveActivity.class)
+                startActivityForResult(new Intent(SetRegisterInfoActivity.this, SetRegisterInfoSaveActivity.class)
                         .putExtra("gender", gender)
                         .putExtra("name", et_nickname.getText().toString())
-                        .putExtra("birthday", strBirthday));
+                        .putExtra("birthday", strBirthday),201);
 
 
                 break;

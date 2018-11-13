@@ -17,8 +17,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
@@ -32,6 +30,7 @@ import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
@@ -66,9 +65,9 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
     private ImageView iv_avatar;
     private TextView tv_nick_name;
 
-    private TextView tv_dyn;
-    private TextView tv_gauzhu_num, tv_message, tv_guanzhu;
-    private TextView tv_fans;
+//    private TextView tv_dyn;
+//    private TextView tv_gauzhu_num, tv_message, tv_guanzhu;
+//    private TextView tv_fans;
     private ScaleRatingBar sr_pingfen;//评分
     private float pingfen;
     private MyListView lv_hypf;
@@ -76,12 +75,14 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
     MyPingJiaAdapter myPingJiaAdapter = new MyPingJiaAdapter();
     MyZzrzAdapter myZzrzAdapter = new MyZzrzAdapter();
     private TextView tv_pingfen;
-    private ImageView iv_guanzhu;
+    private ImageView iv_sex;
     private TextView tv_honor;
     private TextView tv_sign;
     private TextView tv_goodat;
 
     private String person_id,employee_id,branch_id;
+    private String avatar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,29 +102,26 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
     private List<RequestZzrzLIstBean.Data> zzrz_data = new ArrayList<>();
 
     private void initView() {
-        findViewById(ll_my_dyn).setOnClickListener(this);
-        findViewById(ll_my_guanzhu).setOnClickListener(this);
-        findViewById(ll_my_fans).setOnClickListener(this);
-        findViewById(R.id.ll_guanzhu).setOnClickListener(this);
-        findViewById(R.id.ll_sixin).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
+
         person_id=getIntent().getStringExtra("person_id");
         employee_id=getIntent().getStringExtra("employee_id");
         branch_id=getIntent().getStringExtra("branch_id");
+        avatar = getIntent().getStringExtra("avatar");
         sr_pingfen = findViewById(R.id.sr_pingfen);
-        tv_dyn = findViewById(R.id.tv_dyn);
-        tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
-        tv_fans = findViewById(R.id.tv_fans);
+//        tv_dyn = findViewById(R.id.tv_dyn);
+//        tv_gauzhu_num = findViewById(R.id.tv_gauzhu_num);
+//        tv_fans = findViewById(R.id.tv_fans);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         iv_avatar = findViewById(R.id.iv_avatar);
+        iv_sex = findViewById(R.id.iv_sex);
         iv_avatar.setOnClickListener(this);
         lv_hypf = findViewById(R.id.lv_hypf);
         lv_zzrz = findViewById(R.id.lv_zzrz);
         lv_hypf.setAdapter(myPingJiaAdapter);
         lv_zzrz.setAdapter(myZzrzAdapter);
         tv_pingfen = findViewById(R.id.tv_pingfen);
-        tv_guanzhu = findViewById(R.id.tv_guanzhu);
-        iv_guanzhu = findViewById(R.id.iv_guanzhu);
+//        tv_guanzhu = findViewById(R.id.tv_guanzhu);
+//        iv_guanzhu = findViewById(R.id.iv_guanzhu);
         tv_honor = findViewById(R.id.tv_honor);
         tv_sign = findViewById(R.id.tv_sign);
         tv_goodat = findViewById(R.id.tv_goodat);
@@ -174,24 +172,29 @@ public class EmpUserHomeActivty extends BaseActivity implements View.OnClickList
     };
 
     private void setData() {
-        tv_gauzhu_num.setText(userInfo.getFollow_no() + "");
+//        tv_gauzhu_num.setText(userInfo.getFollow_no() + "");
+//
+//        tv_fans.setText(userInfo.getFanse_no() + "");
+//        tv_dyn.setText(userInfo.getDyn_no() + "");
+        tv_nick_name.setText(userInfo.getPerson().getCname());
 
-        tv_fans.setText(userInfo.getFanse_no() + "");
-        tv_dyn.setText(userInfo.getDyn_no() + "");
-        tv_nick_name.setText(userInfo.getPerson().getNick_name());
-        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(EmpUserHomeActivty.this, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
         Glide.with(EmpUserHomeActivty.this)
-                .load(userInfo.getPerson().getSelf_avatar_path())
+                .load(avatar)
                 .apply(options)
                 .into(iv_avatar);
-        if (userInfo.getIs_follow()){
-            tv_guanzhu.setText("已关注");
-            iv_guanzhu.setImageResource(R.drawable.img_xin1);
-        }else {
-            tv_guanzhu.setText("+关注");
-            iv_guanzhu.setImageResource(R.drawable.img_xin);
-        }
-
+//        if (userInfo.getIs_follow()){
+//            tv_guanzhu.setText("已关注");
+//            iv_guanzhu.setImageResource(R.drawable.img_xin1);
+//        }else {
+//            tv_guanzhu.setText("+关注");
+//            iv_guanzhu.setImageResource(R.drawable.img_xin);
+//        }
+            if (TextUtils.equals(userInfo.getPerson().getGender(),"1")){
+                iv_sex.setImageResource(R.drawable.img_sex1);
+            }else {
+                iv_sex.setImageResource(R.drawable.img_sex2);
+            }
         if (!TextUtils.isEmpty(userInfo.getPerson().getSign())){
             tv_sign.setText(userInfo.getPerson().getSign());
         }

@@ -13,8 +13,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
@@ -34,6 +36,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
     private String id;
     private EditText mEtPsw;
     private EditText mEtConfirmPsd;
+    private Data data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
     private void initData() {
         id = getIntent().getStringExtra("id");
         LogUtil.i(id);
-
+        data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
     }
 
     private void initView() {
@@ -109,6 +112,8 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
                 RequestSimpleBean simpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (simpleBean.getSuccess()) {
                     ToastUtils.showToastShort("密码设置成功");
+                    data.setHasPwd(true);
+                    DataInfoCache.saveOneCache(data,Constants.MY_INFO);
                     finish();
                 }
             }
