@@ -857,7 +857,6 @@ public class ShopFragment extends BaseFragment {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
             if (data != null) {
-
                 switch (data.get(i).getId()) {
                     case 1://在线售卡
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "在线售卡");
@@ -903,7 +902,7 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的订单");
                         startActivity(new Intent(mActivity, MyOrderActivity.class));
                         break;
-                    case 12://体测
+                    case 12://客户体测
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "体侧");
                         Intent intent = new Intent(mActivity, AddFriendsActivity.class);
                         intent.putExtra("from", "体测");

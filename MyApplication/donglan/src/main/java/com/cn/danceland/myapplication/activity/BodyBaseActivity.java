@@ -152,10 +152,6 @@ public class BodyBaseActivity extends BaseActivity {
         bodyBaseAdapter = new BodyBaseAdapter();
         listView.setAdapter(bodyBaseAdapter);
 
-//        circle_image = hearerView.findViewById(R.id.circle_image);
-//        tv_nick_name = hearerView.findViewById(R.id.tv_nick_name);
-//        tv_male_age = hearerView.findViewById(R.id.tv_male_age);
-//        tv_phone = hearerView.findViewById(R.id.tv_phone);
         circle_image = findViewById(R.id.circle_image);
         tv_nick_name = findViewById(R.id.tv_nick_name);
         tv_male_age = findViewById(R.id.tv_male_age);

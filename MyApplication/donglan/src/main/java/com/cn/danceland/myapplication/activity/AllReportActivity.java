@@ -7,6 +7,7 @@ import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class AllReportActivity extends BaseActivity {
     MyListView mv_01,mv_02,mv_03,mv_04;
     String role,target_role_type;
     Gson gson;
-    RelativeLayout btn_date;
+    LinearLayout btn_date;
     String nowDate,selectDate;
     TextView tv_date;
     DongLanTitleView report_all_title;

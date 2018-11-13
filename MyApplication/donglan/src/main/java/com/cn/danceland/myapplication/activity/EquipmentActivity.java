@@ -35,12 +35,11 @@ import java.util.Map;
  */
 
 public class EquipmentActivity extends BaseActivity {
-    ImageView equ_back;
     ListView lv_equ;
     Data info;
     String branchId;
     Gson gson;
-    String memberId,member_no;
+    String memberId, member_no;
     List<EquipmentBean.Data.Content> content;
     TextView tv_ticeyi;
 
@@ -57,28 +56,19 @@ public class EquipmentActivity extends BaseActivity {
         lv_equ = findViewById(R.id.lv_equ);
         tv_ticeyi = findViewById(R.id.tv_ticeyi);
 
-
-        equ_back = findViewById(R.id.equ_back);
-        equ_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         initData();
 
         lv_equ.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(content!=null&&content.get(position)!=null){
+                if (content != null && content.get(position) != null) {
 
-                    if(content.get(position).getStatus()==1){
+                    if (content.get(position).getStatus() == 1) {
                         commitEquNo(content.get(position).getBca_no());
-                    }else if(content.get(position).getStatus()==2){
+                    } else if (content.get(position).getStatus() == 2) {
                         ToastUtils.showToastShort("该体测仪已被占用！");
-                    }else{
-                       ToastUtils.showToastShort("请确认体测仪是否工作正常！");
+                    } else {
+                        ToastUtils.showToastShort("请确认体测仪是否工作正常！");
                     }
 
                 }
@@ -92,10 +82,10 @@ public class EquipmentActivity extends BaseActivity {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.CONNECTEQU, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                if(s.contains("连接失败")){
+                if (s.contains("连接失败")) {
                     ToastUtils.showToastShort("连接失败！");
-                }else {
-                    startActivity(new Intent(EquipmentActivity.this,TestingActivity.class).putExtra("deviceId",eqn).putExtra("memberId",memberId).putExtra("member_no",member_no));
+                } else {
+                    startActivity(new Intent(EquipmentActivity.this, TestingActivity.class).putExtra("deviceId", eqn).putExtra("memberId", memberId).putExtra("member_no", member_no));
                     finish();
                 }
             }
@@ -104,12 +94,12 @@ public class EquipmentActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请检查手机网络！");
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("deviceId",eqn);
-                map.put("memberId",memberId);
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("deviceId", eqn);
+                map.put("memberId", memberId);
                 return map;
             }
 
@@ -123,10 +113,10 @@ public class EquipmentActivity extends BaseActivity {
             @Override
             public void onResponse(String s) {
                 EquipmentBean equipmentBean = gson.fromJson(s, EquipmentBean.class);
-                if (equipmentBean!=null&&equipmentBean.getData()!=null){
+                if (equipmentBean != null && equipmentBean.getData() != null) {
                     content = equipmentBean.getData().getContent();
                     lv_equ.setAdapter(new MyListAdapter(content));
-                }else{
+                } else {
                     tv_ticeyi.setVisibility(View.VISIBLE);
                 }
             }
@@ -135,41 +125,36 @@ public class EquipmentActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("请检查手机网络连接！");
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
-                HashMap<String,String> map = new HashMap<String,String>();
-                map.put("page","0");
-                map.put("branch_id",info.getPerson().getDefault_branch());
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put("page", "0");
+                map.put("branch_id", info.getPerson().getDefault_branch());
 
                 return map;
             }
-
-
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
-
 
     private void initHost() {
 
         memberId = getIntent().getStringExtra("memberId");
         member_no = getIntent().getStringExtra("member_no");
         gson = new Gson();
-        info = (Data)DataInfoCache.loadOneCache(Constants.MY_INFO);
-        if(info!=null){
+        info = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+        if (info != null) {
             branchId = info.getPerson().getDefault_branch();
         }
     }
 
-
-
-    private class MyListAdapter extends BaseAdapter{
+    private class MyListAdapter extends BaseAdapter {
         List<EquipmentBean.Data.Content> list;
 
-        MyListAdapter(List<EquipmentBean.Data.Content> list){
+        MyListAdapter(List<EquipmentBean.Data.Content> list) {
             this.list = list;
         }
 
@@ -190,18 +175,24 @@ public class EquipmentActivity extends BaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            convertView =  LayoutInflater.from(EquipmentActivity.this).inflate(R.layout.equip_item,null);
+            convertView = LayoutInflater.from(EquipmentActivity.this).inflate(R.layout.equip_item, null);
             TextView equ_item = convertView.findViewById(R.id.equ_item);
             TextView equ_status = convertView.findViewById(R.id.equ_status);
 
-            if(list.get(position)!=null){
+            if (list.get(position) != null) {
                 equ_item.setText(list.get(position).getBca_name());
-                if(list.get(position).getStatus()==1){
-                    equ_status.setText("可用");
-                }else if(list.get(position).getStatus()==2){
+                if (list.get(position).getStatus() == 1) {
+                    equ_status.setText("体测");
+                    equ_status.setTextColor(getResources().getColor(R.color.white));
+                    equ_status.setBackground(getResources().getDrawable(R.drawable.adcise_status_red_bg));
+                } else if (list.get(position).getStatus() == 2) {
                     equ_status.setText("占用");
-                }else if(list.get(position).getStatus()==3){
+                    equ_status.setTextColor(getResources().getColor(R.color.white));
+                    equ_status.setBackground(getResources().getDrawable(R.drawable.adcise_status_gary_bg));
+                } else if (list.get(position).getStatus() == 3) {
                     equ_status.setText("离线");
+                    equ_status.setTextColor(getResources().getColor(R.color.colorGray22));
+                    equ_status.setBackground(getResources().getDrawable(R.drawable.adcise_status_white_bg));
                 }
             }
 

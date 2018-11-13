@@ -181,7 +181,9 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                     if (responseBean.getData().getTest_time() != null && responseBean.getData().getTest_time().length() > 0) {
                         date_tv.setText(TimeUtils.millToDate(Long.valueOf(responseBean.getData().getTest_time())));//体测日期
                     }
-                    stores_tv.setText(infoData.getMember().getBranch_name() + "");//体测门店
+                    if(infoData.getEmployee().getBranch_name() !=null&&infoData.getEmployee().getBranch_name().length()>0){
+                        stores_tv.setText(infoData.getEmployee().getBranch_name() + "");//体测门店
+                    }
 
                     if (content != null && content.length() > 0) {//综合评价
                         content_tv.setText(content);
