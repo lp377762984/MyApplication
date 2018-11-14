@@ -62,12 +62,12 @@ public class RequstRecommendBean {
         private int delete_remark;
         private String phone_no;
         private String member_name;
-
+        private String member_phone;
 
         @Override
         public String toString() {
             return "Data{" +
-                    "id=" + id +
+                    "id='" + id + '\'' +
                     ", branch_id=" + branch_id +
                     ", member_id=" + member_id +
                     ", member_no='" + member_no + '\'' +
@@ -80,7 +80,16 @@ public class RequstRecommendBean {
                     ", delete_remark=" + delete_remark +
                     ", phone_no='" + phone_no + '\'' +
                     ", member_name='" + member_name + '\'' +
+                    ", member_phone='" + member_phone + '\'' +
                     '}';
+        }
+
+        public String getMember_phone() {
+            return member_phone;
+        }
+
+        public void setMember_phone(String member_phone) {
+            this.member_phone = member_phone;
         }
 
         public void setId(String id) {

@@ -5,11 +5,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_white">
 
-    <com.cn.danceland.myapplication.view.DongLanTitleView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleText="门店详情"></com.cn.danceland.myapplication.view.DongLanTitleView>
 
     <ScrollView
 
@@ -17,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/dlbtn_commit"
-        android:layout_below="@+id/title">
+      >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="20dp"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -57,7 +53,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="30dp"
-                        android:background="@drawable/img_gps_white" />
+                        android:background="@drawable/img_gps_yellow" />
 
 
                     <ImageButton
@@ -66,7 +62,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="20dp"
-                        android:background="@drawable/img_call_phone_white" />
+                        android:background="@drawable/img_call_phone" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -131,45 +127,17 @@
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.cn.danceland.myapplication.view.DongLanTransparentTitleView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:titleText="门店详情"></com.cn.danceland.myapplication.view.DongLanTransparentTitleView>
 
-                <!--
-                                <com.zhouwei.mzbanner.MZBannerView
-                                    android:id="@+id/shop_banner"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="220dp"
-                                    app:canLoop="true"
-                                    app:indicatorAlign="center"
-                                    app:indicatorPaddingLeft="10dp"
-                                    app:open_mz_mode="false" />
+                </FrameLayout>
 
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="35dp"
-                                    android:layout_alignBottom="@+id/shop_banner"
-                                    android:background="#7f808080">
-
-                                    <TextView
-                                        android:id="@+id/store_name"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginLeft="15sp"
-                                        android:text="门店名称"
-                                        android:textColor="#ffffff"
-                                        android:textSize="15sp" />
-
-                                    <Button
-                                        android:id="@+id/join_button"
-                                        style="@style/BtnCommitStyle"
-                                        android:layout_width="70dp"
-                                        android:layout_height="28dp"
-                                        android:layout_alignParentRight="true"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginRight="15dp"
-                                        android:text="加入"
-                                        android:textSize="15sp"
-                                        android:visibility="gone" />
-                                </RelativeLayout>-->
             </RelativeLayout>
 
             <RelativeLayout

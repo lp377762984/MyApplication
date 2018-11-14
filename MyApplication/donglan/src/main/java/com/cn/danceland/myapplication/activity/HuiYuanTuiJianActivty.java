@@ -212,7 +212,7 @@ public class HuiYuanTuiJianActivty extends BaseActivity implements View.OnClickL
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                LogUtil.e(volleyError.toString());
                 //  ToastUtils.showToastShort(volleyError.toString());
                 imageView.setImageResource(R.drawable.img_error7);
                 tv_error.setText("网络异常");
@@ -289,7 +289,9 @@ public class HuiYuanTuiJianActivty extends BaseActivity implements View.OnClickL
             vh.tv_phone1.setText(datalist.get(position).getPhone_no());
             if (datalist.get(position).getStatus() == 1) {
                 vh.tv_type.setText("推荐成功");
-            } else {
+            } else if(datalist.get(position).getStatus() == 2){
+                vh.tv_type.setText("失败");
+            }else if (datalist.get(position).getStatus() == 0){
                 vh.tv_type.setText("推荐中");
             }
             vh.tv_time.setText(TimeUtils.timeStamp2Date(datalist.get(position).getCreate_date() + "", "yyyy-MM-dd"));

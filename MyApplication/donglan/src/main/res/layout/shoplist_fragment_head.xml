@@ -16,8 +16,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="50dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
         <ImageButton
@@ -26,7 +26,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_marginRight="30dp"
-            android:background="@drawable/img_gps_white" />
+            android:background="@drawable/img_gps_yellow" />
 
 
         <ImageButton
@@ -35,7 +35,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_marginRight="20dp"
-            android:background="@drawable/img_call_phone_white" />
+            android:background="@drawable/img_call_phone" />
     </LinearLayout>
 
     <LinearLayout
@@ -74,20 +74,7 @@
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tv_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1"
-
-                android:gravity="center_vertical|right"
-                android:text="详情"
-                android:textColor="@color/color_dl_yellow"
-                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -101,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/img_time"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="17dp"
         />
     <TextView
@@ -109,9 +97,21 @@
         android:layout_marginLeft="5dp"
         android:layout_height="wrap_content"
         android:text="9:00-22:00"
+        android:layout_gravity="center_vertical"
         android:textSize="14sp"
         android:textColor="#fff"
         />
+    <TextView
+        android:id="@+id/tv_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="1"
+        android:text="详情"
+        android:textColor="@color/color_dl_yellow"
+        android:textSize="16sp" />
 </LinearLayout>
     </LinearLayout>
 
