@@ -23,7 +23,6 @@ public class ShopListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_list);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         shopListFragment = new ShopListFragment();
         Bundle bundle = new Bundle();
