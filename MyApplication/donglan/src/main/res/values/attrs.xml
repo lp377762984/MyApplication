@@ -93,4 +93,14 @@
         <attr name="left_bottom_radius" format="dimension"/>
     </declare-styleable>
     <!--2.0版本结束-->
+    <string-array name="chinese_week_string_array">
+        <item>周日</item>
+        <item>周一</item>
+        <item>周二</item>
+        <item>周三</item>
+        <item>周四</item>
+        <item>周五</item>
+        <item>周六</item>
+    </string-array>
+
 </resources>

@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -34,10 +33,9 @@ import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-import com.necer.ncalendar.calendar.NCalendar;
-import com.necer.ncalendar.listener.OnCalendarChangedListener;
+import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarView;
 
-import org.joda.time.DateTime;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,17 +50,18 @@ import java.util.List;
 
 public class CourseActivity extends BaseActivity {
     FragmentManager fragmentManager;
+    SiJiaoFragment siJiaoFragment;
     TuanKeFragment tuanKeFragment;
     SiJiaoRecordFragment siJiaoRecordFragment;
     TuanKeRecordFragment tuanKeRecordFragment;
     ImageView course_back;
-    NCalendar nccalendar;
+  //  NCalendar nccalendar;
     TextView tv_date;
-    RelativeLayout rl_nv,rl_tuanke_record,date;
+    RelativeLayout rl_nv,rl_tuanke_record;
     LinearLayout week;
     TabLayout.Tab tab1,tab2;
     TabLayout tablayout;
-    SiJiaoFragment siJiaoFragment;
+
     String type;//0是列表，1是记录，2是小团课课程表
     String startTime,endTime;
     int id,course_type_id;
@@ -74,7 +73,7 @@ public class CourseActivity extends BaseActivity {
     Gson gson;
     ArrayList<String> yuyueTimeList;
     String from;
-
+    CalendarView mCalendarView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +90,7 @@ public class CourseActivity extends BaseActivity {
 
     private void setPoint(){
 
-        nccalendar.setPoint(yuyueTimeList);
+  //      nccalendar.setPoint(yuyueTimeList);
         yuyueTimeList.clear();
     }
 
@@ -193,49 +192,76 @@ public class CourseActivity extends BaseActivity {
         });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
-
+    private int mYear;
+    CalendarLayout mCalendarLayout;
 
     private void setOnclick() {
-
-        nccalendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
+        mYear = mCalendarView.getCurYear();
+        mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
             @Override
-            public void onCalendarChanged(DateTime dateTime) {
-                if(dateTime!=null){
-                    LogUtil.e("zzf",dateTime.toString());
-                    String[] ts = dateTime.toString().split("T");
-                    tv_date.setText(ts[0]);
+            public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
 
-                    startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd HH:mm:ss")+"";
-                    endTime = (Long.valueOf(startTime)+86400000)+"";
-                    if("0".equals(isTuanke)||"1".equals(type)){
-                        showFragment(type,isTuanke);
-                    }else if("2".equals(type)){
-                        showFragment(type,isTuanke);
-                    }
-
-
-                    if("0".equals(isTuanke)){
-                        getTuanKeRecordTime();
-                    }else {
-                        if(startTime!=null){
-                            getSiJiaoRecordTime();
-                        }
-                    }
-
-                }
             }
 
+            @Override
+            public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
+                LogUtil.i(calendar.getYear()+"年"+calendar+"月"+calendar.getDay()+b);
+                tv_date.setText(calendar.getYear()+"."+calendar.getMonth()+"."+calendar.getDay()+"");
+                mYear = calendar.getYear();
 
+            }
         });
-
-        nccalendar.setOnClickListener(new View.OnClickListener() {
+        tv_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(CourseActivity.this,SiJiaoOrderActivity.class));
-
+                if (!mCalendarLayout.isExpand()) {
+                    mCalendarView.showYearSelectLayout(mYear);
+                    return;
+                }
+                mCalendarView.showYearSelectLayout(mYear);
             }
+
         });
+//
+//        nccalendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
+//            @Override
+//            public void onCalendarChanged(DateTime dateTime) {
+//                if(dateTime!=null){
+//                    LogUtil.e("zzf",dateTime.toString());
+//                    String[] ts = dateTime.toString().split("T");
+//                    tv_date.setText(ts[0]);
+//
+//                    startTime = TimeUtils.date2TimeStamp(ts[0]+" 00:00:00", "yyyy-MM-dd HH:mm:ss")+"";
+//                    endTime = (Long.valueOf(startTime)+86400000)+"";
+//                    if("0".equals(isTuanke)||"1".equals(type)){
+//                        showFragment(type,isTuanke);
+//                    }else if("2".equals(type)){
+//                        showFragment(type,isTuanke);
+//                    }
+//
+//
+//                    if("0".equals(isTuanke)){
+//                        getTuanKeRecordTime();
+//                    }else {
+//                        if(startTime!=null){
+//                            getSiJiaoRecordTime();
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//
+//        });
+//
+//        nccalendar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                startActivity(new Intent(CourseActivity.this,SiJiaoOrderActivity.class));
+//
+//            }
+//        });
 
     }
 
@@ -282,17 +308,11 @@ public class CourseActivity extends BaseActivity {
 
     private void initView() {
         rl_tuanke_record = findViewById(R.id.rl_tuanke_record);
-        course_back = findViewById(R.id.course_back);
-        course_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    finish();
-            }
-        });
-
-        nccalendar = findViewById(R.id.nccalendar);
+        mCalendarLayout = (CalendarLayout) findViewById(R.id.calendarLayout);
+        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+      //  nccalendar = findViewById(nccalendar);
         tv_date = findViewById(R.id.tv_date);
-        date = findViewById(R.id.date);
+        //date = findViewById(date);
         week = findViewById(R.id.week);
         tablayout = findViewById(R.id.tablayout);
         tab1 = tablayout.getTabAt(0);
@@ -342,9 +362,11 @@ public class CourseActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if("0".equals(type)){//列表
             if("0".equals(isTuanke)){//团课
-                date.setVisibility(View.VISIBLE);
+          //      date.setVisibility(View.VISIBLE);
                 week.setVisibility(View.VISIBLE);
-                nccalendar.setVisibility(View.VISIBLE);
+           //     nccalendar.setVisibility(View.VISIBLE);
+                mCalendarView.setVisibility(View.VISIBLE);
+
                 rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
                 tuanKeFragment = new TuanKeFragment();
@@ -361,9 +383,10 @@ public class CourseActivity extends BaseActivity {
         }else if("1".equals(type)){
 
             if("0".equals(isTuanke)){
-                date.setVisibility(View.GONE);
+           //     date.setVisibility(View.GONE);
                 week.setVisibility(View.GONE);
-                nccalendar.setVisibility(View.GONE);
+            //    nccalendar.setVisibility(View.GONE);
+              mCalendarView.setVisibility(View.GONE);
                 rl_tuanke_record.setVisibility(View.VISIBLE);
                 tuanKeRecordFragment = new TuanKeRecordFragment();
                 tuanKeRecordFragment.getStartTime(startTime);

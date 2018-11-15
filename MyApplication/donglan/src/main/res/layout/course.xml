@@ -1,42 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    >
 
-    <RelativeLayout
-        android:id="@+id/course_title"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/dl_gery"
-        >
+    android:background="@color/color_bg_mianlayout">
 
-        <ImageView
-            android:id="@+id/course_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="30dp"
-            android:src="@drawable/img_back"
-            android:layout_centerVertical="true"
-            android:paddingLeft="15dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="课程预约"
-            android:textColor="@color/color_white"
-            android:textSize="18sp"
-            android:layout_centerInParent="true"
-            />
-
-
-    </RelativeLayout>
+<com.cn.danceland.myapplication.view.DongLanTitleView
+    android:id="@+id/course_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:titleText="课程预约"></com.cn.danceland.myapplication.view.DongLanTitleView>
     <RelativeLayout
         android:id="@+id/rl_tablayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:background="@color/white"
         android:layout_below="@+id/course_title">
 
         <android.support.design.widget.TabLayout
@@ -75,94 +55,90 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:layout_below="@+id/rl_tablayout"
-        android:background="#f5f5f5"
-        >
-
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:text="日期"
-            android:textSize="12sp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/color_dl_black"
+            android:textSize="36sp"
             />
 
 
 
-    </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/week"
-        android:layout_below="@+id/date"
+
+
+    <com.haibin.calendarview.CalendarLayout
+        android:layout_below="@+id/week"
+        android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:orientation="horizontal"
-        android:background="#f5f5f5"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="日"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="一"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="二"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="三"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="四"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="五"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="六"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical"
+        app:calendar_content_view_id="@+id/ns_view">
 
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            app:current_month_lunar_text_color="@color/transparent"
+            app:current_month_text_color="#333333"
+            app:max_year="2030"
+            app:min_year="2004"
+            app:week_view="com.cn.danceland.myapplication.view.CustomWeekView"
+            app:week_bar_view="com.cn.danceland.myapplication.view.CustomWeekBar"
+            app:month_view="com.cn.danceland.myapplication.view.CustomMonthView"
+            app:month_view_show_mode="mode_fix"
+            app:other_month_lunar_text_color="#e1e1e1"
+            app:other_month_text_color="#e1e1e1"
+            app:scheme_text="假"
+            app:scheme_text_color="#333"
+            app:scheme_theme_color="#128c4b"
+            app:selected_lunar_text_color="#fff"
+            app:selected_text_color="#fff"
+            app:selected_theme_color="#6D819C"
+            app:week_background="#fff"
+            app:week_start_with="sun"
+            app:week_text_color="#e1e1e1"
+
+            app:year_view_day_text_color="#333333"
+            app:year_view_day_text_size="9sp"
+            app:year_view_month_text_color="@color/color_dl_yellow"
+            app:year_view_month_text_size="20sp"
+            app:year_view_scheme_color="#f17706" />
+
+ <!--       <com.haibin.calendarviewproject.group.GroupRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/content_background"
+            app:group_background="@color/content_background"
+            app:group_center="false"
+            app:group_has_header="false"
+            app:group_height="42dp"
+            app:group_padding_left="16dp"
+            app:group_padding_right="16dp"
+            app:group_text_color="#555555"
+            app:group_text_size="14sp" />-->
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/ns_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <RelativeLayout
+                android:id="@+id/rl_nv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+         </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </com.haibin.calendarview.CalendarLayout>
+
+<!--
     <com.necer.ncalendar.calendar.NCalendar
         android:id="@+id/nccalendar"
         android:layout_below="@+id/week"
@@ -175,26 +151,20 @@
         app:selectCircleRadius="30"
         app:pointColor="@color/color_dl_yellow"
         app:pointSize="4dp"
+        android:visibility="gone"
         >
         <android.support.v4.widget.NestedScrollView
-            android:id="@+id/ns_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            >
-            <RelativeLayout
-                android:id="@+id/rl_nv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </RelativeLayout>
-        </android.support.v4.widget.NestedScrollView>
+            ></android.support.v4.widget.NestedScrollView>
 
-    </com.necer.ncalendar.calendar.NCalendar>
-    <View
+    </com.necer.ncalendar.calendar.NCalendar>-->
+ <!--   <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@+id/nccalendar"
+        android:layout_below="@+id/calendarLayout"
         android:background="#f5f5f5"
-        />
+        />-->
 
-</RelativeLayout>
+</LinearLayout>

@@ -8,9 +8,12 @@
 <com.cn.danceland.myapplication.view.DongLanTitleView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:titleText="我的联系人"></com.cn.danceland.myapplication.view.DongLanTitleView>
+    app:titleText="我的联系人">
+</com.cn.danceland.myapplication.view.DongLanTitleView>
     <ListView
         android:id="@+id/list"
+        android:divider="@color/transparent"
+        android:dividerHeight="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <include layout="@layout/no_info_layout"
