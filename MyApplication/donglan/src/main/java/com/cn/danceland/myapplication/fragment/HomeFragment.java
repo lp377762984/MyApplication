@@ -48,6 +48,7 @@ import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
+import com.cn.danceland.myapplication.view.ClassicsHeader;
 import com.cn.danceland.myapplication.view.NumberAnimTextView;
 import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
@@ -269,7 +270,8 @@ public class HomeFragment extends BaseFragment {
         dialog.setMessage("加载中……");
 
         refreshLayout.setPrimaryColorsId(R.color.home_top_bg_color, R.color.white_color80);//下拉刷新主题颜色 前面背景色 后面图色
-        refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置 Header 为 贝塞尔雷达 样式
+//        refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置 Header 为 贝塞尔雷达 样式
+        refreshLayout.setRefreshHeader(new ClassicsHeader(mActivity));//设置 Header 为 贝塞尔雷达 样式
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
         refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
         refreshLayout.setEnableHeaderTranslationContent(false);//拖动Header的时候是否同时拖动内容（默认true）
