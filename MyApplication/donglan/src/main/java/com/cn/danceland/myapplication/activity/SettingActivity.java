@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import com.cn.danceland.myapplication.db.Donglan;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
 import com.cn.danceland.myapplication.db.WearFitSleepHelper;
 import com.cn.danceland.myapplication.db.WearFitStepHelper;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.model.GroupInfo;
@@ -46,6 +48,8 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.AlertDialogCustom;
+import com.cn.danceland.myapplication.view.AlertDialogCustomToEditText;
 import com.google.gson.Gson;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
@@ -89,6 +93,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     List<Donglan> cityList;
     ArrayList<String> proList;
     String zone = null;
+
+    private Dialog dialog;
+
+
     static String emailFormat = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
     private boolean isLoaded = false;
     private Handler handler = new Handler() {
@@ -145,7 +153,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         }
                         tx_location.setText(zone);
                     }
-
 
 
                     break;
@@ -228,9 +235,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             String msg = event.getMsg();
 
             tv_phone.setText(msg);
-            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
-
     }
 
     private void initHost() {
@@ -397,50 +403,88 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     public void showName(final int i) {
-        //i==0是编辑微信 i==1表示邮箱
-        android.support.v7.app.AlertDialog.Builder normalDialog =
-                new android.support.v7.app.AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this)
-                .inflate(R.layout.edit_name, null);
-
-        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
-        final EditText ed = dialogView.findViewById(R.id.edit_name);
+        String text = "输入微信号";
+        int edittextLength = 20;
         if (i == 0) {
-            dialogTitleName.setText("输入微信号");
-            InputFilter[] lengthFilter = {new InputFilter.LengthFilter(20)};
-            ed.setFilters(lengthFilter);
+            text = "输入微信号";
+            edittextLength = 20;
         } else {
-            dialogTitleName.setText("输入邮箱");
+            text = "输入邮箱";
+            edittextLength = 100;
         }
-        //normalDialog.setTitle("编辑昵称");
+        dialog = new AlertDialogCustomToEditText("确定", "取消").CreateDialog(
+                SettingActivity.this, "提示", text, edittextLength, new AlertDialogCustomToEditText.Click() {
 
-        normalDialog.setView(dialogView);
-        normalDialog.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String s = ed.getText().toString();
+                    public void ok_bt(int dialogOKB, String DialogEdittextStr) {
+                        dialog.dismiss();
                         if (i == 0) {
-                            tv_weixin.setText(s);
-                            commitSelf(Constants.MODIFY_WEIXIN, "weichat_no", s);
-                            mInfo.getPerson().setWeichat_no(s);
+                            tv_weixin.setText(DialogEdittextStr);
+                            commitSelf(Constants.MODIFY_WEIXIN, "weichat_no", DialogEdittextStr);
+                            mInfo.getPerson().setWeichat_no(DialogEdittextStr);
                             DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                         } else {
-                            if (s.matches(emailFormat)) {
-                                tv_email.setText(s);
-                                commitSelf(Constants.MODIFY_MAIL, "mail", s);
-                                mInfo.getPerson().setMail(s);
+                            if (DialogEdittextStr.matches(emailFormat)) {
+                                tv_email.setText(DialogEdittextStr);
+                                commitSelf(Constants.MODIFY_MAIL, "mail", DialogEdittextStr);
+                                mInfo.getPerson().setMail(DialogEdittextStr);
                                 DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
                             } else {
                                 ToastUtils.showToastShort("请输入合法邮箱地址");
                             }
                         }
                     }
+
+                    @Override
+                    public void cancle_bt(int btn_cancel) {
+                        dialog.dismiss();
+                    }
                 });
-        // 显示
-        normalDialog.show();
+
+
+//        //i==0是编辑微信 i==1表示邮箱
+//        android.support.v7.app.AlertDialog.Builder normalDialog =
+//                new android.support.v7.app.AlertDialog.Builder(this);
+//        View dialogView = LayoutInflater.from(this)
+//                .inflate(R.layout.edit_name, null);
+//
+//        TextView dialogTitleName = dialogView.findViewById(R.id.tv_nick_name);
+//        final EditText ed = dialogView.findViewById(R.id.edit_name);
+//        if (i == 0) {
+//            dialogTitleName.setText("输入微信号");
+//            InputFilter[] lengthFilter = {new InputFilter.LengthFilter(20)};
+//            ed.setFilters(lengthFilter);
+//        } else {
+//            dialogTitleName.setText("输入邮箱");
+//        }
+//        //normalDialog.setTitle("编辑昵称");
+//
+//        normalDialog.setView(dialogView);
+//        normalDialog.setPositiveButton("确定",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        String s = ed.getText().toString();
+//                        if (i == 0) {
+//                            tv_weixin.setText(s);
+//                            commitSelf(Constants.MODIFY_WEIXIN, "weichat_no", s);
+//                            mInfo.getPerson().setWeichat_no(s);
+//                            DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//                        } else {
+//                            if (s.matches(emailFormat)) {
+//                                tv_email.setText(s);
+//                                commitSelf(Constants.MODIFY_MAIL, "mail", s);
+//                                mInfo.getPerson().setMail(s);
+//                                DataInfoCache.saveOneCache(mInfo, Constants.MY_INFO);
+//                            } else {
+//                                ToastUtils.showToastShort("请输入合法邮箱地址");
+//                            }
+//                        }
+//                    }
+//                });
+//        // 显示
+//        normalDialog.show();
 
     }
 
@@ -485,49 +529,37 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         startActivity(intent);
     }
 
-
     /**
      * 设置手机号
      */
     private void showSettingPhoneDialog() {
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        dialog.setTitle("提示");
-        dialog.setMessage("是否重新绑定手机号");
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustom("确认", "取消").CreateDialog(SettingActivity.this, "提示", "是否重新绑定手机号", new AlertDialogCustom.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
                 startActivity(new Intent(SettingActivity.this, ConfirmPasswordActivity.class).putExtra("phone", tv_phone.getText().toString()));
             }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
 
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        dialog.show();
     }
-
 
     /**
      * 清除缓存
      */
     private void showClearDialog() {
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        dialog.setTitle("提示");
-        dialog.setMessage("是否清除全部缓存");
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustom("确认", "取消").CreateDialog(SettingActivity.this, "提示", "是否清除全部缓存", new AlertDialogCustom.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
                 Message msg = Message.obtain();
                 try {
                     //清理内部缓存
                     DataCleanManager.cleanInternalCache(getApplicationContext());
                     DataCleanManager.cleanExternalCache(getApplicationContext());
-                    // LogUtil.i(getApplicationContext().getCacheDir().getPath());
                     msg.what = 0x01;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -535,14 +567,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 }
                 handler.sendMessageDelayed(msg, 1000);
             }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
 
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        dialog.show();
     }
 
     /**
@@ -876,5 +906,4 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 //            SocializeUtils.safeCloseDialog(dialog);
         }
     };
-
 }

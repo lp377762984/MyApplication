@@ -18,7 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
         android:background="@drawable/white_rounded_corners_bg"
-        app:cardCornerRadius="6dp"
+        app:cardCornerRadius="30dp"
         app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false">
 

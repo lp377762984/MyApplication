@@ -118,6 +118,7 @@
     <color name="colorGray24">#332c2837</color>
     <color name="colorGray25">#cccccc</color>
     <color name="colorGray26">#8B8B8B</color>
+    <color name="colorGray27">#2c2837</color>
 
     <color name="home_bottom_text_color">#ffb5a6</color>
     <color name="home_top_bg_color">#FF345F</color>

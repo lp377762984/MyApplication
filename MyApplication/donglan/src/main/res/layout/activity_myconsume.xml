@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorGray23">
 
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/consume_title"
@@ -13,19 +15,19 @@
     <ListView
         android:id="@+id/lv_consume"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/history_title">
+
         <include
             android:id="@+id/rl_error"
-            layout="@layout/no_info_layout"
-            android:visibility="gone"
-            />
+            layout="@layout/no_data_layout"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

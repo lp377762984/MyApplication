@@ -537,7 +537,6 @@ public class HomeFragment extends BaseFragment {
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
             meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_two_bg));
-            meun_cradview.setBackground(getResources().getDrawable(R.drawable.white_rounded_corners_three_bg));
             fitness_diary_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_pink_two_img));
             punch_list_pink_iv.setImageDrawable(getResources().getDrawable(R.drawable.punch_list_pink_two_img));
             fitness_diary_white_iv.setImageDrawable(getResources().getDrawable(R.drawable.fitness_diary_white_eight_img));

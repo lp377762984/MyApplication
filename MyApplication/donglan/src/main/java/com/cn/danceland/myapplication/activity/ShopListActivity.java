@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
@@ -22,17 +23,12 @@ public class ShopListActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_list);
-        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        shopListFragment = new ShopListFragment();
-        Bundle bundle=new Bundle();
-        bundle.putString("jingdu", SPUtils.getString("jingdu","0"));
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        bundle.putString("weidu",SPUtils.getString("weidu","0"));
+        shopListFragment = new ShopListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("jingdu", SPUtils.getString("jingdu", "0"));
+        bundle.putString("weidu", SPUtils.getString("weidu", "0"));
         shopListFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().add(R.id.container, shopListFragment).commit();

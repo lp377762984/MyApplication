@@ -41,7 +41,8 @@ public class AlertDialogActivity extends BaseActivity {
     private TextView gym_join_tv;
     private TextView gym_jteamwork_tv;
     private TextView gym_admin_tv;
-    private Button btn_consult;
+    private TextView btn_consult;
+    private LinearLayout btn_consult_layout;
     private ImageView close_img;//关闭
     private LinearLayout dialog_consult_layout;//咨询
     private LinearLayout dialog_recommend_layout;//推荐
@@ -77,6 +78,7 @@ public class AlertDialogActivity extends BaseActivity {
         gym_jteamwork_tv = findViewById(R.id.gym_jteamwork_tv);
         gym_admin_tv = findViewById(R.id.gym_admin_tv);
         btn_consult = findViewById(R.id.btn_consult);
+        btn_consult_layout = findViewById(R.id.btn_consult_layout);
         close_img = findViewById(R.id.close_img);
 
         text_male = findViewById(R.id.text_male);
@@ -118,7 +120,7 @@ public class AlertDialogActivity extends BaseActivity {
         gym_join_tv.setOnClickListener(onClickListener);
         gym_jteamwork_tv.setOnClickListener(onClickListener);
         gym_admin_tv.setOnClickListener(onClickListener);
-        btn_consult.setOnClickListener(onClickListener);
+        btn_consult_layout.setOnClickListener(onClickListener);
         close_img.setOnClickListener(onClickListener);
 
         text_male.setOnClickListener(onClickListener);
@@ -133,23 +135,32 @@ public class AlertDialogActivity extends BaseActivity {
                 // 意向子类型
                 case R.id.gym_join_tv:
                     sub_type = "1";
-                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_blue));
-                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
-                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
+                    gym_join_tv.setTextColor(context.getResources().getColor(R.color.white));
+                    gym_jteamwork_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_admin_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_shade_pink_bg));
+                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
+                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
                     break;
                 case R.id.gym_jteamwork_tv:
                     sub_type = "2";
-                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
-                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_blue));
-                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
+                    gym_join_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_jteamwork_tv.setTextColor(context.getResources().getColor(R.color.white));
+                    gym_admin_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
+                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_shade_pink_bg));
+                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
                     break;
                 case R.id.gym_admin_tv:
                     sub_type = "3";
-                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
-                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_yellow_empty_deep));
-                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_blue));
+                    gym_join_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_jteamwork_tv.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                    gym_admin_tv.setTextColor(context.getResources().getColor(R.color.white));
+                    gym_join_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
+                    gym_jteamwork_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
+                    gym_admin_tv.setBackground(context.getResources().getDrawable(R.drawable.btn_shade_pink_bg));
                     break;
-                case R.id.btn_consult:
+                case R.id.btn_consult_layout:
                     if (!TextUtils.isEmpty(from) && from.equals("咨询列表")) {
                         if (sub_type.equals("-1")) {
                             Toast.makeText(context, "请选择", Toast.LENGTH_SHORT).show();
@@ -188,11 +199,11 @@ public class AlertDialogActivity extends BaseActivity {
                     break;
                 case R.id.text_male:
                     text_male.setBackgroundResource(R.drawable.male_blue);
-                    text_female.setBackgroundResource(R.drawable.female_gray);
+                    text_female.setBackgroundResource(R.drawable.img_sex2);
                     strSex = "男";
                     break;
                 case R.id.text_female:
-                    text_male.setBackgroundResource(R.drawable.male_gray);
+                    text_male.setBackgroundResource(R.drawable.img_sex1);
                     text_female.setBackgroundResource(R.drawable.female_blue);
                     strSex = "女";
                     break;

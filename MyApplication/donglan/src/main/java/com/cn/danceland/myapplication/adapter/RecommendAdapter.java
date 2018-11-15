@@ -69,39 +69,47 @@ public class RecommendAdapter extends BaseAdapter {
             viewHolder.time_tv = (TextView) view.findViewById(R.id.time_tv);
             viewHolder.btn_consult_state = (Button) view.findViewById(R.id.btn_consult_state);
             viewHolder.recommend_icon_image = (ImageView) view.findViewById(R.id.recommend_icon_image);
+            viewHolder.consult_title_tv =  view.findViewById(R.id.consult_title_tv);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
         viewHolder.name_tv.setText(datas.get(i).getCname() + "");
-        viewHolder.sex_tv.setText(datas.get(i).getGender() + "");
         viewHolder.tel_tv.setText(datas.get(i).getPhone_no() + "");
-        String time = TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy年MM月dd日");
+        String time = TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy.MM.dd");
         viewHolder.time_tv.setText(time);
+        if(datas.get(i).getGender().equals("男")){
+            viewHolder.sex_tv.setBackground(context.getResources().getDrawable(R.drawable.img_sex1));
+        }else if(datas.get(i).getGender().equals("女")){
+            viewHolder.sex_tv.setBackground(context.getResources().getDrawable(R.drawable.img_sex2));
+        }
         if (!TextUtils.isEmpty(datas.get(i).getType()))
             switch (datas.get(i).getType()) {
                 case "1"://加盟
-                    viewHolder.recommend_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_join));
+                    viewHolder.consult_title_tv.setText("开店托管");
+                    viewHolder.recommend_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_join));
                     break;
                 case "2"://培训
-                    viewHolder.recommend_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_train));
+                    viewHolder.consult_title_tv.setText("培训教练");
+                    viewHolder.recommend_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_train));
                     break;
                 case "3"://购买
-                    viewHolder.recommend_icon_image.setImageDrawable(context.getDrawable(R.drawable.img_buy));
+                    viewHolder.consult_title_tv.setText("购买软件");
+                    viewHolder.recommend_icon_image.setImageDrawable(context.getResources().getDrawable(R.drawable.img_buy));
                     break;
             }
         switch (datas.get(i).getStatus()) {
             case "0"://0=推广中
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_in_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_square_blue));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_red_bg));
                 break;
             case "1"://1 = 完成
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_succeed_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_blue_square_deep));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_white_bg));
                 break;
             case "2"://2 = 失败
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_fails_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_square_gary));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_gary_bg));
                 break;
         }
         return view;
@@ -112,6 +120,7 @@ public class RecommendAdapter extends BaseAdapter {
         TextView sex_tv;
         TextView tel_tv;
         TextView time_tv;
+        TextView consult_title_tv;
         Button btn_consult_state;
         ImageView recommend_icon_image;
     }
