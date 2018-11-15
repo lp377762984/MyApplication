@@ -403,10 +403,10 @@ public class SiJiaoFragment extends BaseFragment {
                 }
             });
             viewHolder.sijiao_title.setText(list.get(groupPosition).getCourse_type_name());
-            viewHolder.sijiao_num.setText("购买节数：" + list.get(groupPosition).getCount() + "节");
-            viewHolder.sijiao_shengyu.setText("剩余节数：" + list.get(groupPosition).getSurplus_count() + "节");
+            viewHolder.sijiao_num.setText( list.get(groupPosition).getCount() + "节");
+            viewHolder.sijiao_shengyu.setText( + list.get(groupPosition).getSurplus_count() + "节");
 
-            viewHolder.sijiao_date.setText("有效期：" + startTime + "至" + endTime);
+            viewHolder.sijiao_date.setText(  startTime + "至" + endTime);
             //     LogUtil.i("有效期：" + startTime + "至" + endTime);
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");

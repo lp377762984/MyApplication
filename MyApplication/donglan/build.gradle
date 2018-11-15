@@ -195,5 +195,5 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'//没有使用特殊Header，可以不加这行
     //easyrecyclerview
    // compile 'com.jude:easyrecyclerview:4.4.2'
-
+    compile 'com.haibin:calendarview:3.4.8'//日历控件
 }

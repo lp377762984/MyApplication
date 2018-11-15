@@ -148,7 +148,7 @@ public class RecommendedFragment extends BaseFragment {
             TextView tv_status = view.findViewById(R.id.tv_status);
             ImageView iv_sex = view.findViewById(R.id.iv_sex);
             tv_name.setText(dataList.get(i).getName());
-            tv_phone.setText("联系电话:"+dataList.get(i).getMember_no());
+            tv_phone.setText("联系电话:"+dataList.get(i).getMember_phone());
             tv_time.setText("推荐时间:"+TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy.MM.dd")));
             if (dataList.get(i).getGender() == 1) {
 
