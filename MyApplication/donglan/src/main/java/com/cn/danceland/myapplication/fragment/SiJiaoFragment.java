@@ -729,7 +729,7 @@ public class SiJiaoFragment extends BaseFragment {
                 // viewHolder1.tv_pingfen.setText("小团课无法评分");
                 viewHolder1.tv_pingfen.setText("无法评分");
                 if (status == 1) {
-                    viewHolder1.tv_status.setText("已过期");
+                    viewHolder1.tv_status.setText("未签到");
                 } else if (status == 2) {
                     viewHolder1.tv_status.setText("未签到");
                 } else if (status == 3) {

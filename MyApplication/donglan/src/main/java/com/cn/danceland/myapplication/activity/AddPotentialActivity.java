@@ -273,6 +273,7 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
                 }
                 if (!PhoneFormatCheckUtils.isPhoneLegal(et_phone.getText().toString())) {
                     ToastUtils.showToastShort("请填写正确的手机号");
+                    return;
                 }
                 potentialInfo.setPhone_no(et_phone.getText().toString());
                 if (TextUtils.isEmpty(potentialInfo.getGender())) {
