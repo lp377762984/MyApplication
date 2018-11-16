@@ -24,6 +24,7 @@ import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -236,9 +237,7 @@ public class MyCardFragment extends BaseFragment {
                     startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                 }
             });
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,10));
-
-
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,6));
 
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
@@ -250,7 +249,7 @@ public class MyCardFragment extends BaseFragment {
             TextView tv_time;
             TextView tv_cardtype;
             Button btn_commit;
-           ImageView iv_card;
+            RoundImageView iv_card;
         }
 
     }

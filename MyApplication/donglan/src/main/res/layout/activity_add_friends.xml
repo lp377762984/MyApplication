@@ -41,7 +41,7 @@
                 style="@style/EtStyle"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:hint="请输入手机号或会员号"
+                android:hint="请输入会员姓名/手机号/会员号"
                 android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:textColor="@color/colorGray21"
