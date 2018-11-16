@@ -69,11 +69,11 @@ public class ClassicsHeader extends LinearLayout implements com.scwang.smartrefr
     @Override
     public int onFinish(RefreshLayout layout, boolean success) {
         ((AnimationDrawable) mProgressView.getBackground()).stop();//停止动画
-        if (success){
-            mHeaderText.setText("刷新完成");
-        } else {
-            mHeaderText.setText("刷新失败");
-        }
+//        if (success){
+//            mHeaderText.setText("刷新完成");
+//        } else {
+//            mHeaderText.setText("刷新失败");
+//        }
         return 500;//延迟500毫秒之后再弹回
     }
     public void onStateChanged(RefreshLayout refreshLayout, RefreshState oldState, RefreshState newState) {
