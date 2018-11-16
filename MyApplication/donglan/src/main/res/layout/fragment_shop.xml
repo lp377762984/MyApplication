@@ -116,7 +116,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="16dp"
-                    android:text="详情"
+                    android:text="门店详情"
                     android:textColor="@color/color_dl_yellow"
                     android:textSize="16sp" />
             </LinearLayout>
