@@ -3,6 +3,13 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/white"
     >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@drawable/edit_bg_phone"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_time"
@@ -10,8 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:text="时间"
-        android:paddingLeft="20dp"
-        android:textSize="14sp"
+        android:paddingLeft="16dp"
+        style="@style/DL_blueText14Style"
+
         android:gravity="center_vertical"
         />
 
@@ -23,7 +31,7 @@
         android:layout_marginRight="15dp"
         android:text=""
         android:layout_marginTop="5dp"
-        android:textSize="14sp"
+        style="@style/DL_blueText14Style"
         android:gravity="center_vertical"
         />
 
@@ -39,6 +47,8 @@
         android:textSize="14sp"
         android:gravity="center_vertical"
         />
+</RelativeLayout>
+
 
 
 </RelativeLayout>

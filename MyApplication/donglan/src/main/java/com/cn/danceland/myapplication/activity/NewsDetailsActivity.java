@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -33,20 +32,13 @@ public class NewsDetailsActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         View view = View.inflate(this, R.layout.activity_news_detail, null);
         setContentView(view);
-//        YoYo.with(Techniques.BounceIn)
-//                .duration(1000)
-//                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-//                //  .repeat(5)
-//                .playOn(view);
         initView();
         initData();
-    //    setEnterSwichLayout();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // setExitSwichLayout();
     }
 
     private void initView() {
@@ -125,25 +117,9 @@ public class NewsDetailsActivity extends BaseActivity implements View.OnClickLis
             case R.id.tv_colse:
                 finish();
                 break;
-//            case R.id.iv_back:
-//                break;
             default:
                 break;
         }
 
     }
-
-//    @Override
-//    public void setEnterSwichLayout() {
-//        SwitchLayout.RotateCenterIn(this, false, null);
-//
-//    }
-//
-//    @Override
-//    public void setExitSwichLayout() {
-//
-//                SwitchLayout.RotateCenterOut(this, true, null);
-//
-//
-//    }
 }

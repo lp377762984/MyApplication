@@ -115,7 +115,6 @@ public class CourseActivity extends BaseActivity {
 
     }
 
-
     private void getSiJiaoRecordTime(){
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
@@ -149,7 +148,6 @@ public class CourseActivity extends BaseActivity {
                                 String s1 = TimeUtils.timeStamp2Date(content.get(i).getCourse_date() + "", "yyyy-MM-dd");
                                 yuyueTimeList.add(s1);
                             }
-
                         }
                     }
                 }
@@ -202,13 +200,11 @@ public class CourseActivity extends BaseActivity {
             public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
 
             }
-
             @Override
             public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
                 LogUtil.i(calendar.getYear()+"年"+calendar+"月"+calendar.getDay()+b);
                 tv_date.setText(calendar.getYear()+"."+calendar.getMonth()+"."+calendar.getDay()+"");
                 mYear = calendar.getYear();
-
             }
         });
         tv_date.setOnClickListener(new View.OnClickListener() {
