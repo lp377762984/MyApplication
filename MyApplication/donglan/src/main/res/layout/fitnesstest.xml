@@ -22,7 +22,7 @@
 
             <include
                 android:id="@+id/rl_error"
-                layout="@layout/no_info_layout"
+                layout="@layout/no_data_layout"
                 android:visibility="gone" />
         </RelativeLayout>
 

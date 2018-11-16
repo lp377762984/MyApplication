@@ -303,7 +303,7 @@ public class NoticeFragment extends BaseFragment {
                 vh.tv_status.setText("未读");
                 vh.tv_status.setTextColor(getResources().getColor(R.color.red));
             } else {
-                vh.tv_status.setTextColor(getResources().getColor(R.color.black));
+                vh.tv_status.setTextColor(getResources().getColor(R.color.colorGray22));
                 vh.tv_status.setText("已读");
             }
             vh.item_layout.setOnClickListener(new View.OnClickListener() {

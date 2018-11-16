@@ -278,19 +278,15 @@ public class MeFragment extends BaseFragment {
                 }
                 startActivity(new Intent(mActivity, MyShopActivity.class));
                 break;
-            case R.id.ll_my_xiaofei:
+            case R.id.ll_my_xiaofei://我的消费
                 startActivity(new Intent(mActivity, MyConsumeActivity.class));
                 break;
             case R.id.ll_my_shouhuan://我的手环
-
-//                ToastUtils.showToastShort("功能正在开发中");
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     startActivity(new Intent(mActivity, WearFitActivity.class));
                 } else {
                     ToastUtils.showToastShort("您的手机Android版本过低，手环功能需要Android4.4版本以上才能使用");
                 }
-
                 break;
             case R.id.ll_consult://我想咨询
                 startActivity(new Intent(mActivity, ConsultListActivity.class));

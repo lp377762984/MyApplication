@@ -96,6 +96,7 @@ public class SystemMessageFragment extends BaseFragment {
 //        init_pullToRefresh();
         return v;
     }
+
     /**
      * 加载数据
      */
@@ -107,6 +108,7 @@ public class SystemMessageFragment extends BaseFragment {
 //            e.printStackTrace();
 //        }
     }
+
     /**
      * 下拉刷新
      */
@@ -183,7 +185,7 @@ public class SystemMessageFragment extends BaseFragment {
     public void find_all_data(final int pageCount) throws JSONException {
 
         StrBean strBean = new StrBean();
-        strBean.page = pageCount  + "";
+        strBean.page = pageCount + "";
         String s = gson.toJson(strBean);
 
         JSONObject jsonObject = new JSONObject(s.toString());
@@ -222,7 +224,7 @@ public class SystemMessageFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
@@ -280,9 +282,11 @@ public class SystemMessageFragment extends BaseFragment {
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
             vh.tv_time.setText(datalist.get(position).getPush_date());
-            if(datalist.get(position).getStatus().equals("0")){
+            if (datalist.get(position).getStatus().equals("0")) {
                 vh.tv_status.setText("未读");
-            }else{
+                vh.tv_status.setTextColor(getResources().getColor(R.color.red));
+            } else {
+                vh.tv_status.setTextColor(getResources().getColor(R.color.colorGray22));
                 vh.tv_status.setText("已读");
             }
             return convertView;

@@ -163,7 +163,11 @@
                />
         </LinearLayout>
 
-
+        <ImageView
+            android:id="@+id/status_bar_iv"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@color/colorGray24" />
     </FrameLayout>
     <!--<RelativeLayout-->
     <!--android:layout_width="match_parent"-->

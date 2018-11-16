@@ -29,6 +29,8 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -38,23 +40,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.cn.danceland.myapplication.R.id.tv_shoplist;
-
 /**
  * Created by shy on 2017/12/13 10:15
  * Email:644563767@qq.com
  */
-
-
 public class MyShopActivity extends BaseActivity implements View.OnClickListener {
-
-    //   @BindView(R.id.lv_myshop)  ListView lv_myshop;
-
     private MyListViewAdapter listViewAdapter;
     private List<MyJionShopList.Data> data = new ArrayList<>();
     private PullToRefreshListView lv_myshop;
     private String defaultshopId;
     private Data userInfo;
+    private DongLanTitleView title;
+    private TextView right_tv;
 
     private TextView tv_error;
     private ImageView imageView;
@@ -64,15 +61,18 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_shop);
         initView();
-        initData();
+//        initData();
     }
 
     private void initView() {
         userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         defaultshopId = userInfo.getPerson().getDefault_branch();
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        findViewById(tv_shoplist).setOnClickListener(this);
         lv_myshop = findViewById(R.id.lv_myshop);
+        title = findViewById(R.id.title);
+        right_tv = title.findViewById(R.id.donglan_right_tv);
+        right_tv.setText("附近门店");
+        right_tv.setVisibility(View.VISIBLE);
+        right_tv.setOnClickListener(this);
 
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
@@ -90,28 +90,31 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
         lv_myshop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                LogUtil.i(i+"!!!!!!!!");
-                LogUtil.i(defaultshopId+"-------"+data.get(i-1).getBranch_id());
-                if (!TextUtils.equals(defaultshopId, data.get(i-1).getBranch_id())) {
-                    showMYDialog(i-1);
+                LogUtil.i(i + "!!!!!!!!");
+                LogUtil.i(defaultshopId + "-------" + data.get(i - 1).getBranch_id());
+                if (!TextUtils.equals(defaultshopId, data.get(i - 1).getBranch_id())) {
+                    showMYDialog(i - 1);
                 }
 
             }
         });
     }
 
-    private void initData() {
+//    private void initData() {
+//        findJoinSHOP();
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         findJoinSHOP();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.tv_shoplist:
-                startActivity(new Intent(MyShopActivity.this,ShopListActivity.class));
+            case R.id.donglan_right_tv:
+                startActivity(new Intent(MyShopActivity.this, ShopListActivity.class));
                 break;
             default:
                 break;
@@ -141,13 +144,11 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 listViewAdapter.notifyDataSetChanged();
             }
         });
-
-
         dialog.show();
     }
 
     private void showdialog_xz(final int pos) {
-        final String[] items = {"切换门店","退出门店"};
+        final String[] items = {"切换门店", "退出门店"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(this);
         //listDialog.setTitle("我是一个列表Dialog");
@@ -183,18 +184,16 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 if (loginInfoBean.getSuccess()) {
                     DataInfoCache.saveOneCache(loginInfoBean.getData(), Constants.MY_INFO);
                     userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-                    defaultshopId=userInfo.getPerson().getDefault_branch();
-                //    ToastUtils.showToastShort("加入成功！");
+                    defaultshopId = userInfo.getPerson().getDefault_branch();
+                    //    ToastUtils.showToastShort("加入成功！");
 //                    setName(111);
-                //    finish();
+                    //    finish();
                     listViewAdapter.notifyDataSetChanged();
-                 //   lv_myshop.setAdapter(listViewAdapter);
-                 //   lv_myshop.setAdapter(new MyListViewAdapter());
+                    //   lv_myshop.setAdapter(listViewAdapter);
+                    //   lv_myshop.setAdapter(new MyListViewAdapter());
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -227,8 +226,6 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 } else {
                     ToastUtils.showToastShort(shopListInfo.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -236,15 +233,11 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 ToastUtils.showToastShort(volleyError.toString());
             }
         }) {
-
-
         };
         MyApplication.getHttpQueues().add(request);
     }
 
     private void changeShop(final String BranchId) {
-
-
         MyStringRequest stringRequest1 = new MyStringRequest(Request.Method.PUT, Constants.CHANGE_CURRENT_SHOP_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -258,12 +251,9 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 //                    DataInfoCache.saveOneCache(userInfo, Constants.MY_INFO);
                     reloadInfo();
 
-
                 } else {
                     ToastUtils.showToastShort(shopListInfo.getErrorMsg());
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -275,13 +265,10 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> hashMap = new HashMap<String, String>();
                 hashMap.put("branch_id", BranchId);
-
                 return hashMap;
             }
 
         };
-
-
         MyApplication.getHttpQueues().add(stringRequest1);
     }
 
@@ -308,7 +295,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
         public View getView(final int i, View view, ViewGroup viewGroup) {
             view = View.inflate(MyShopActivity.this, R.layout.listview_item_my_shop, null);
 
-            ImageView iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
+            RoundImageView iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
             TextView tv_name = view.findViewById(R.id.tv_name);
             TextView tv_time = view.findViewById(R.id.tv_time);
             TextView tv_role = view.findViewById(R.id.tv_role);
@@ -317,56 +304,55 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
             Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(iv_shop_logo);
             tv_name.setText(data.get(i).getName());
             if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
-            //    tv_default.setText("当前门店");
+                //    tv_default.setText("当前门店");
                 //   cb_default.setImageResource(R.drawable.img_cb1);
                 iv_default.setImageResource(R.drawable.img_current_shop);
             } else {
-
-                  iv_default.setImageResource(R.drawable.img_change_shop);
-
+//                iv_default.setImageResource(R.drawable.img_change_shop);
+                iv_default.setVisibility(View.INVISIBLE);
             }
             String[] b = data.get(i).getCreate_time().toString().split(" ");
-            tv_time.setText("加入时间："+b[0]);
-            if (data.get(i).getAuths().size()==1){
-                String s="我的角色：";
-                if (TextUtils.equals(data.get(i).getAuths().get(0),"1")){
-                    s=s+"准会员";
+            tv_time.setText("加入时间：" + b[0]);
+            if (data.get(i).getAuths().size() == 1) {
+                String s = "我的角色：";
+                if (TextUtils.equals(data.get(i).getAuths().get(0), "1")) {
+                    s = s + "准会员";
                 }
-                if (TextUtils.equals(data.get(i).getAuths().get(0),"2")){
-                    s=s+"会员";
+                if (TextUtils.equals(data.get(i).getAuths().get(0), "2")) {
+                    s = s + "会员";
                 }
-                if (TextUtils.equals(data.get(i).getAuths().get(0),"3")){
-                    s=s+"员工";
+                if (TextUtils.equals(data.get(i).getAuths().get(0), "3")) {
+                    s = s + "员工";
                 }
                 tv_role.setText(s);
             }
-            if (data.get(i).getAuths().size()==2){
-                String s="我的角色：";
-                for (int j=0;j<data.get(i).getAuths().size();j++){
+            if (data.get(i).getAuths().size() == 2) {
+                String s = "我的角色：";
+                for (int j = 0; j < data.get(i).getAuths().size(); j++) {
 //                    LogUtil.i(j+"");
 //                    LogUtil.i(data.get(i).getAuths().get(j));
-                    if (TextUtils.equals(data.get(i).getAuths().get(j),"1")){
-                        if (j==0){
-                            s=s+"准会员";
-                        }else {
-                            s=s+"/准会员";
+                    if (TextUtils.equals(data.get(i).getAuths().get(j), "1")) {
+                        if (j == 0) {
+                            s = s + "准会员";
+                        } else {
+                            s = s + "/准会员";
                         }
 
                     }
-                    if (TextUtils.equals(data.get(i).getAuths().get(j),"2")){
+                    if (TextUtils.equals(data.get(i).getAuths().get(j), "2")) {
 
-                        if (j==0){
-                            s=s+"会员";
-                        }else {
-                            s=s+"/会员";
+                        if (j == 0) {
+                            s = s + "会员";
+                        } else {
+                            s = s + "/会员";
                         }
                     }
-                    if (TextUtils.equals(data.get(i).getAuths().get(j),"3")){
+                    if (TextUtils.equals(data.get(i).getAuths().get(j), "3")) {
 
-                        if (j==0){
-                            s=s+"员工";
-                        }else {
-                            s=s+"/员工";
+                        if (j == 0) {
+                            s = s + "员工";
+                        } else {
+                            s = s + "/员工";
                         }
                     }
 

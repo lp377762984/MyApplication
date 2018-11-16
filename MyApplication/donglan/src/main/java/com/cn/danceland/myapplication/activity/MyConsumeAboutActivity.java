@@ -57,7 +57,7 @@ public class MyConsumeAboutActivity extends BaseActivity {
 
     }
 
-    private void initView(){
+    private void initView() {
         lv_consume = findViewById(R.id.lv_consume);
         consume_title = findViewById(R.id.consume_title);
         consume_title.setTitle("相关订单");
@@ -66,16 +66,16 @@ public class MyConsumeAboutActivity extends BaseActivity {
     private void initData() {
         MyConsumeCon myConsumeCon = new MyConsumeCon();
         myConsumeCon.setPage(0);
-        myConsumeCon.setSize(15);
+        myConsumeCon.setSize(14);
         myConsumeCon.setRoot_opt_no(root_opt_no);
         String s = gson.toJson(myConsumeCon);
 
-        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
                 MyConSumeBean myConSumeBean = gson.fromJson(jsonObject.toString(), MyConSumeBean.class);
-                if(myConSumeBean!=null && myConSumeBean.getData()!=null&&myConSumeBean.getData().getContent()!=null){
+                if (myConSumeBean != null && myConSumeBean.getData() != null && myConSumeBean.getData().getContent() != null) {
                     List<MyConSumeBean.Content> content = myConSumeBean.getData().getContent();
                     lv_consume.setAdapter(new ConsumeAdapter(content));
                 }
@@ -117,7 +117,7 @@ public class MyConsumeAboutActivity extends BaseActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(MyConsumeAboutActivity.this, R.layout.item_myconsume, null);
                 viewHolder.xc_img = convertView.findViewById(R.id.xc_img);
@@ -128,12 +128,12 @@ public class MyConsumeAboutActivity extends BaseActivity {
                 viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
                 viewHolder.tv_time = convertView.findViewById(R.id.tv_time);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             MyConSumeBean.Content contentItem = content.get(position);
 
-            switch (contentItem.getPay_way()){
+            switch (contentItem.getPay_way()) {
                 case "1":
                     Glide.with(MyConsumeAboutActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
@@ -152,26 +152,26 @@ public class MyConsumeAboutActivity extends BaseActivity {
             }
 
             viewHolder.tv_type.setText(contentItem.getProduct_type());
-            if(contentItem.getProduct_name()!=null){
+            if (contentItem.getProduct_name() != null) {
                 viewHolder.tv_name.setText(contentItem.getProduct_name());
-            }else{
+            } else {
                 viewHolder.tv_name.setText("");
             }
 
-            if("3".equals(contentItem.getPlatform())){
+            if ("3".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("PC端");
-            }else if( "1".equals(contentItem.getPlatform())|| "2".equals(contentItem.getPlatform())){
+            } else if ("1".equals(contentItem.getPlatform()) || "2".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("App端");
-            }else if ("4".equals(contentItem.getPlatform())){
+            } else if ("4".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("微信公众号");
             }
 
-            viewHolder.tv_price.setText("金额: " + contentItem.getReceive()+"元");
-            viewHolder.tv_status.setTextColor(Color.parseColor("#ff000000"));
-            switch (contentItem.getStatus()){
+            viewHolder.tv_price.setText("金额: " + contentItem.getReceive() + "元");
+            viewHolder.tv_status.setTextColor(MyConsumeAboutActivity.this.getResources().getColor(R.color.colorGray22));
+            switch (contentItem.getStatus()) {
                 case "1":
                     viewHolder.tv_status.setText("未支付");
-                    viewHolder.tv_status.setTextColor(Color.parseColor("#ff6600"));
+                    viewHolder.tv_status.setTextColor(MyConsumeAboutActivity.this.getResources().getColor(R.color.home_enter_total_text_color));
                     break;
                 case "2":
                     viewHolder.tv_status.setText("未发货");
@@ -196,9 +196,9 @@ public class MyConsumeAboutActivity extends BaseActivity {
         }
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         XCRoundRectImageView xc_img;
-        TextView tv_type,tv_name,tv_platform,tv_price,tv_status,tv_time;
+        TextView tv_type, tv_name, tv_platform, tv_price, tv_status, tv_time;
     }
 
 }

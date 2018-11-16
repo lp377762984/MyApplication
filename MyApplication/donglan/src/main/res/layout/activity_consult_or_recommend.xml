@@ -9,7 +9,6 @@
     <com.cn.danceland.myapplication.view.DongLanTitleView
         android:id="@+id/title"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
@@ -29,18 +28,26 @@
 
     <include
         android:id="@+id/rl_no_info"
-        layout="@layout/no_info_layout"
+        layout="@layout/no_data_layout"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btn_want"
-        style="@style/BtnCommitStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:text="@string/consult_text"
-        android:textSize="14sp" />
+    <LinearLayout
+        android:id="@+id/btn_want_layout"
+        style="@style/BtnCommitStyle1"
+        android:layout_width="327dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_want"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/consult_text"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+    </LinearLayout>
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -44,10 +45,11 @@ public class ConsultListActivity extends BaseActivity {
     private DongLanTitleView title;//title
     private PullToRefreshListView mListView;
     private ProgressDialog dialog;
-    private Button btn_want;
+    private TextView btn_want;
     private ConsultAdapter adapter;
     private TextView tv_error;
     private ImageView imageView;
+    private LinearLayout btn_want_layout;
 
     private List<ConsultBean> datas = new ArrayList<>();
 
@@ -65,6 +67,7 @@ public class ConsultListActivity extends BaseActivity {
         mListView = findViewById(R.id.pullToRefresh1);
         dialog = new ProgressDialog(context);
         btn_want = findViewById(R.id.btn_want);
+        btn_want_layout = findViewById(R.id.btn_want_layout);
 
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
@@ -83,7 +86,7 @@ public class ConsultListActivity extends BaseActivity {
             adapter = new ConsultAdapter(context, datas);
         }
         mListView.setAdapter(adapter);
-        btn_want.setOnClickListener(new View.OnClickListener() {
+        btn_want_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddConsultOrRecommendActivity.class);
@@ -122,8 +125,6 @@ public class ConsultListActivity extends BaseActivity {
                 HashMap<String, String> map = new HashMap<>();
                 return map;
             }
-
-
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }

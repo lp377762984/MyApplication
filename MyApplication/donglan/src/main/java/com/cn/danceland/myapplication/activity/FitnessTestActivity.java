@@ -81,8 +81,10 @@ public class FitnessTestActivity extends BaseActivity {
         if (bcaId != null) {
             rl_age.setClickable(false);
             initHistory();
+            history.setVisibility(View.GONE);
         } else {
             initData();
+            history.setVisibility(View.VISIBLE);
         }
     }
 

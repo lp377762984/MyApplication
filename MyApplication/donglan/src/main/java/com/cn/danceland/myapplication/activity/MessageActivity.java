@@ -25,6 +25,7 @@ import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,6 +39,7 @@ public class MessageActivity extends BaseActivity {
     int fansNum;
     RelativeLayout zan_message;
     ListView lv_message;
+    DongLanTitleView dongLanTitleView;
     ImageView im_back;
     TabLayout tablayout;
     FragmentManager fragmentManager;
@@ -48,7 +50,7 @@ public class MessageActivity extends BaseActivity {
     TabItem tab2;
     TabItem tab3;
     TabItem tab4;
-    private int currentTabIndex=0;
+    private int currentTabIndex = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void setOnclick() {
+
         im_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,18 +77,19 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             SPUtils.setInt("pinglunNum", 0);
             SPUtils.setInt("dianzanNum", 0);
             SPUtils.setInt("fansNum", 0);
             EventBus.getDefault().post(new StringEvent(0 + "", 101));
             finish();
             return true;
-        }else{
+        } else {
             return super.onKeyDown(keyCode, event);
         }
 
     }
+
     private void initViews() {
         pinglunNum = SPUtils.getInt("pinglunNum", 0);
         dianzanNum = SPUtils.getInt("dianzanNum", 0);
@@ -96,7 +100,7 @@ public class MessageActivity extends BaseActivity {
 //        tab2 = findViewById(R.id.tab2);
 //        tab3 = findViewById(R.id.tab3);
 //        tab4 = findViewById(R.id.tab4);
-        if (pinglunNum + dianzanNum + fansNum> 0) {
+        if (pinglunNum + dianzanNum + fansNum > 0) {
             tablayout.addTab(tablayout.newTab().setText("通知" + "(" + (pinglunNum + dianzanNum + fansNum) + ")"));
         } else {
             tablayout.addTab(tablayout.newTab().setText("通知"));
@@ -112,7 +116,7 @@ public class MessageActivity extends BaseActivity {
 //            tablayout.addTab(tablayout.newTab().setText("粉丝"));
 //        }
         tablayout.addTab(tablayout.newTab().setText("系统消息"));
-     //   tablayout.addTab(tablayout.newTab().setText("私信"));
+        //   tablayout.addTab(tablayout.newTab().setText("私信"));
 
 //        if(pinglunNum>0){
 //            new QBadgeView(MessageActivity.this).bindTarget(tab2).setBadgeNumber(pinglunNum).setBadgeGravity(Gravity.RIGHT);
@@ -163,8 +167,8 @@ public class MessageActivity extends BaseActivity {
         });
 //        zan_message = findViewById(R.id.zan_message);
 //        lv_message = findViewById(R.id.lv_message);
-        im_back = findViewById(R.id.im_back);
-
+        dongLanTitleView = findViewById(R.id.title);
+        im_back = dongLanTitleView.findViewById(R.id.iv_back);
     }
 
     public void showFragment(String str) {
@@ -179,15 +183,15 @@ public class MessageActivity extends BaseActivity {
 //        commentFragment.setArguments(bundle);
         noticeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LogUtil.i("str"+str);
+        LogUtil.i("str" + str);
         if (TextUtils.equals(str, "1")) {
             fragmentTransaction.replace(R.id.message_fragment, noticeFragment).commit();
-        }else{
+        } else {
             fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
         }
 //        if (TextUtils.equals(str, "5")) {
 //            LogUtil.i("显示对话列表");
-    //        fragmentTransaction
+        //        fragmentTransaction
 //                    .replace(R.id.message_fragment, myConversationListFragment)
 ////                    .add(R.id.message_fragment, myConversationListFragment)
 ////                    .show(myConversationListFragment)
@@ -209,7 +213,6 @@ public class MessageActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -223,6 +226,7 @@ public class MessageActivity extends BaseActivity {
 
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
+
     private void registerBroadcastReceiver() {
         broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -233,12 +237,12 @@ public class MessageActivity extends BaseActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 LogUtil.i("收到广播");
-              //  updateUnreadLabel();
-             //   updateUnreadAddressLable();
+                //  updateUnreadLabel();
+                //   updateUnreadAddressLable();
                 if (currentTabIndex == 4) {
                     // refresh conversation list
-                    }
                 }
+            }
 //                else if (currentTabIndex == 1) {
 //                    if(contactListFragment != null) {
 //                        contactListFragment.refresh();
@@ -253,7 +257,7 @@ public class MessageActivity extends BaseActivity {
         };
     }
 
-    private void unregisterBroadcastReceiver(){
+    private void unregisterBroadcastReceiver() {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 

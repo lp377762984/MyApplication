@@ -13,9 +13,12 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -40,6 +43,7 @@ import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
 import com.cn.danceland.myapplication.bean.ShopPictrueBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
@@ -89,10 +93,16 @@ public class ShopDetailedActivity extends BaseActivity {
     private TextView tv_more_jiaolian;
     private List<ShopJiaoLianBean.Data> jiaolianList;
 
+    private ImageView status_bar_iv;
+    private TextView donglan_title;//新增详情布局
+    private ScrollView sc_view;
+    private RelativeLayout titleView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shopdetailed);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         initHost();
         initView();
     }
@@ -222,6 +232,10 @@ public class ShopDetailedActivity extends BaseActivity {
 //        join_button = findViewById(R.id.join_button);
 
         bt_back = findViewById(R.id.iv_back);
+        status_bar_iv = findViewById(R.id.status_bar_iv);
+        donglan_title = findViewById(R.id.donglan_title);
+        titleView = findViewById(R.id.title);
+        sc_view = findViewById(R.id.sc_view);
         bt_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,11 +308,66 @@ public class ShopDetailedActivity extends BaseActivity {
                 dialog.show();
             }
         });
+        sc_view.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                LogUtil.i("scrollX=" + scrollX + ",scrollY=" + scrollY + ",oldScrollX=" + oldScrollX + ",oldScrollY=" + oldScrollY);
+                setFoldView(oldScrollY);
+            }
+        });
         setBannner();
         getShopDetail();
         getShopPictrue();
         getJiaolian(branchID);
         getHuiJi(branchID);
+    }
+
+    /**
+     * 本Activity透明度刷新有问题，所以如下这么写
+     */
+    public void setFoldView(int offsetNum) {
+        int headerMaxOffset = DensityUtils.dp2px(ShopDetailedActivity.this, 130f);//header 最大偏移   220-24-44   banner-top-title-半个title（提前变换）
+         LogUtil.i("headerMaxOffset="+headerMaxOffset);
+        if (offsetNum <= headerMaxOffset) {
+            status_bar_iv.setBackgroundColor(getResources().getColor(R.color.colorGray27));
+            donglan_title.setTextColor(getResources().getColor(R.color.white));
+            bt_back.setImageDrawable(getResources().getDrawable(R.drawable.img_white_back));
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color80));
+        } else {
+            status_bar_iv.setBackgroundColor(getResources().getColor(R.color.colorGray0));
+            donglan_title.setTextColor(getResources().getColor(R.color.colorGray21));
+            bt_back.setImageDrawable(getResources().getDrawable(R.drawable.img_back));
+            titleView.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+//        if (0 <= offsetNum && offsetNum <= headerMaxOffset) {
+//            setMeunCradview(offsetNum);
+//        } else {
+//            titleView.setBackgroundColor(getResources().getColor(R.color.white));
+//            status_bar_iv.setBackgroundColor(getResources().getColor(R.color.colorGray27));
+//        }
+//        LogUtil.i("总偏移量-----(" + offsetNum);
+    }
+
+    private void setMeunCradview(int offsetNum) {
+        if (0 <= offsetNum && offsetNum < 25) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color80));
+        } else if (24 <= offsetNum && offsetNum < 50) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color80));
+        } else if (50 <= offsetNum && offsetNum < 75) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color70));
+        } else if (75 <= offsetNum && offsetNum < 100) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color60));
+        } else if (100 <= offsetNum && offsetNum < 125) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color50));
+        } else if (125 <= offsetNum && offsetNum < 150) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color40));
+        } else if (150 <= offsetNum && offsetNum < 175) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color30));
+        } else if (175 <= offsetNum && offsetNum < 200) {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white_color20));
+        } else {
+            titleView.setBackgroundColor(getResources().getColor(R.color.white));
+        }
     }
 
     private void setBannner() {
@@ -386,12 +455,9 @@ public class ShopDetailedActivity extends BaseActivity {
                 map.put("join", "true");
                 return map;
             }
-
-
         };
 
         requestQueue.add(stringRequest);
-
     }
 
 
@@ -670,10 +736,10 @@ public class ShopDetailedActivity extends BaseActivity {
                 public void onClick(View v) {
 
                     startActivity(new Intent(ShopDetailedActivity.this, EmpUserHomeActivty.class)
-                            .putExtra("person_id", jiaolianList.get(position).getPerson_id()+"")
-                            .putExtra("employee_id", jiaolianList.get(position).getId()+"")
-                            .putExtra("branch_id", jiaolianList.get(position).getBranch_id()+"")
-                            .putExtra("avatar",jiaolianList.get(position).getSelf_avatar_path())
+                            .putExtra("person_id", jiaolianList.get(position).getPerson_id() + "")
+                            .putExtra("employee_id", jiaolianList.get(position).getId() + "")
+                            .putExtra("branch_id", jiaolianList.get(position).getBranch_id() + "")
+                            .putExtra("avatar", jiaolianList.get(position).getSelf_avatar_path())
                     );
                 }
             });

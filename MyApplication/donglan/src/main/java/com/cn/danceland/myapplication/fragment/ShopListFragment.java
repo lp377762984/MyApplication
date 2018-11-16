@@ -178,7 +178,7 @@ public class ShopListFragment extends BaseFragment {
                         }else{
                             tv_shopAddress.setText("距我 "+i1+" m");
                         }
-                        tv_detail.setVisibility(View.VISIBLE);
+//                        tv_detail.setVisibility(View.VISIBLE);
                         //tv_shopAddress.setText(itemsList.get(0).getAddress());
                         getBanner(itemsList.get(0).getBranch_id() + "");
 

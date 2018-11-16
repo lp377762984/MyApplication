@@ -22,6 +22,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.EquipmentBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -92,6 +93,7 @@ public class EquipmentActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i("volleyError"+volleyError);
                 ToastUtils.showToastShort("请检查手机网络！");
             }
         }) {
@@ -123,17 +125,16 @@ public class EquipmentActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i("volleyError"+volleyError);
                 ToastUtils.showToastShort("请检查手机网络连接！");
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put("page", "0");
                 map.put("branch_id", info.getPerson().getDefault_branch());
-
                 return map;
             }
         };

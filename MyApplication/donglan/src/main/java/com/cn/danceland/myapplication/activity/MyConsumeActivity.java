@@ -337,8 +337,6 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         }
     }
 
-
-
     private class ConsumeAdapter extends BaseAdapter{
 
 //        List<MyConSumeBean.Content> content;
@@ -415,11 +413,11 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
             }
 
             viewHolder.tv_price.setText("金额: " + contentItem.getReceive()+"元");
-            viewHolder.tv_status.setTextColor(Color.parseColor("#ff000000"));
+            viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
             switch (contentItem.getStatus()){
                 case "1":
                     viewHolder.tv_status.setText("未支付");
-                    viewHolder.tv_status.setTextColor(Color.parseColor("#ff6600"));
+                    viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.home_enter_total_text_color));
                     break;
                 case "2":
                     viewHolder.tv_status.setText("未发货");
@@ -438,7 +436,6 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
 
             String payTime = TimeUtils.timeStamp2Date(contentItem.getPay_time(), "yyyy-MM-dd HH:mm:ss");
             viewHolder.tv_time.setText(contentItem.getOrder_time());
-
 
             return convertView;
         }

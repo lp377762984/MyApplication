@@ -27,6 +27,7 @@ package com.cn.danceland.myapplication.bean;
 public class ConsultBean {
     private String status;//状态
     private String create_time;//咨询时间
+    private String accept_time;//认领时间
     private String type;// 意向类型  1 2 3
     private String sub_type;// sub_type 意向子类型
     private String cname;// 姓名
@@ -98,17 +99,26 @@ public class ConsultBean {
         this.sub_type = sub_type;
     }
 
+    public String getAccept_time() {
+        return accept_time;
+    }
+
+    public void setAccept_time(String accept_time) {
+        this.accept_time = accept_time;
+    }
+
     @Override
     public String toString() {
         return "ConsultBean{" +
-                "status=" + status +
-                ", create_time=" + create_time +
-                ", type=" + type +
-                ", sub_type=" + sub_type +
-                ", cname=" + cname +
-                ", gender=" + gender +
-                ", phone_no=" + phone_no +
-                ", remark=" + remark +
+                "status='" + status + '\'' +
+                ", create_time='" + create_time + '\'' +
+                ", accept_time='" + accept_time + '\'' +
+                ", type='" + type + '\'' +
+                ", sub_type='" + sub_type + '\'' +
+                ", cname='" + cname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phone_no='" + phone_no + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

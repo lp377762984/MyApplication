@@ -33,10 +33,9 @@ import java.util.Map;
 
 
 /**
- * Created by shy on 2017/11/21 09:36
- * Email:644563767@qq.com
+ * 热门话题adapter
+ * Created by yxx on 2018/11/15.
  */
-
 public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapter.ViewHolder> {
     public static final int TYPE_HEADER = 0;
     public static final int TYPE_NORMAL = 1;

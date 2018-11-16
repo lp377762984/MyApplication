@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 /**
@@ -45,6 +47,9 @@ public class AddConsultOrRecommendActivity extends BaseActivity {
         item_join_layout = findViewById(R.id.item_join_layout);
         item_buy_layout = findViewById(R.id.item_buy_layout);
         item_train_layout = findViewById(R.id.item_train_layout);
+        item_join_layout = (ImageView) UIUtils.setViewRatio(context, item_join_layout, 750, 450);
+        item_buy_layout = (ImageView) UIUtils.setViewRatio(context, item_buy_layout, 750, 450);
+        item_train_layout = (ImageView) UIUtils.setViewRatio(context, item_train_layout, 750, 450);
 
         item_join_layout.setOnClickListener(onClickListener);
         item_buy_layout.setOnClickListener(onClickListener);

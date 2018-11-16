@@ -25,6 +25,8 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -40,17 +42,24 @@ import com.tencent.imsdk.TIMCallBack;
 import com.tencent.qcloud.presentation.business.LoginBusiness;
 import com.tencent.qcloud.tlslibrary.service.TLSService;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.Request.Method.GET;
 
+/**
+ * 绑定新手机号
+ * form 1 设置-手机号过来的
+ */
 public class ResetPhoneActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTvGetsms;
     private EditText mEtSms;
     private String smsCode = "";
     private String password = "";
     private EditText mEtPhone;
+    private int form = 0;//form
     private int recLen = 30;//倒计时时长
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
@@ -76,7 +85,8 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_phone);
-        password=getIntent().getStringExtra("password");
+        password = getIntent().getStringExtra("password");
+        form = getIntent().getIntExtra("form", 0);
         initView();
     }
 
@@ -87,7 +97,6 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
 
         mEtSms = findViewById(R.id.et_sms);
         findViewById(R.id.btn_commit).setOnClickListener(this);
-        findViewById(R.id.iv_back).setOnClickListener(this);
 
 
         mEtPhone.addTextChangedListener(new TextWatcher() {
@@ -133,7 +142,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 //设置不能点击
                 mTvGetsms.setFocusable(false);
                 mTvGetsms.setClickable(false);
-                mTvGetsms.setTextColor(Color.GRAY);
+                mTvGetsms.setTextColor(Color.WHITE);
                 recLen = 30;
                 mTvGetsms.setText("" + recLen + "秒后重试");
                 //设置倒计时
@@ -143,24 +152,21 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.btn_commit:
                 //判断验证码是否为空
-                if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
-                    Toast.makeText(ResetPhoneActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
+                    ToastUtils.showToastShort("请输入要绑定的新手机号");
                     return;
                 }
+                //判断验证码是否为空
+                if (TextUtils.isEmpty(mEtSms.getText().toString().trim())) {
+                    ToastUtils.showToastShort("请输入验证码");
+                    return;
+                }
+                if (form == 1) {
+                    resetPhoneToOKToken();//重置手机号
+                } else {
+                    resetPhone();//重置手机号
+                }
 
-//                if (!TextUtils.equals(smsCode, mEtSms.getText().toString().trim())) {
-//
-//                    ToastUtils.showToastShort("验证码有误，请重新输入");
-//                    return;
-//                }
-
-
-                resetPhone();//重置手机号
-
-
-                break;
-            case R.id.iv_back://返回
-                finish();
                 break;
             default:
                 break;
@@ -187,7 +193,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 requestInfoBean = gson.fromJson(s, RequestInfoBean.class);
                 if (requestInfoBean.getSuccess()) {
                     smsCode = requestInfoBean.getData().getVerCode();
-                    if (Constants.DEV_CONFIG){
+                    if (Constants.DEV_CONFIG) {
                         ToastUtils.showToastLong("验证码是："
                                 + smsCode);
                     }
@@ -249,6 +255,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 map.put("validateCode", mEtSms.getText().toString().trim());
                 return map;
             }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -260,6 +267,44 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
             }
         };
 
+        MyApplication.getHttpQueues().add(jsonRequest);
+    }
+
+    //有效token请求
+    private void resetPhoneToOKToken() {
+        MyStringRequest jsonRequest = new MyStringRequest(Request.Method.PUT, Constants.RESET_PHONE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                Gson gson = new Gson();
+                RequestInfoBean infoBean = new RequestInfoBean();
+                infoBean = gson.fromJson(s, RequestInfoBean.class);
+                if (infoBean.getSuccess()) {
+                    ToastUtils.showToastShort("手机号修改成功");
+                    Data infoData = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+                    infoData.getPerson().setPhone_no(mEtPhone.getText().toString().trim());
+                    DataInfoCache.saveOneCache(infoData, Constants.MY_INFO);
+                    EventBus.getDefault().post(new StringEvent(mEtPhone.getText().toString().trim(), 99)); //发送事件
+                    ResetPhoneActivity.this.finish();
+                } else {
+                    ToastUtils.showToastShort("修改失败，原因：" + infoBean.getErrorMsg());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                ToastUtils.showToastShort("请查看网络连接");
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("phone", mEtPhone.getText().toString().trim());
+                map.put("validateCode", mEtSms.getText().toString().trim());
+                return map;
+            }
+        };
         MyApplication.getHttpQueues().add(jsonRequest);
     }
 
@@ -276,15 +321,15 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
-                if(loginInfoBean.getCode() == 6){//如手机号被解绑,立刻绑定手机号
+                if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
                     SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
                     startActivity(new Intent(ResetPhoneActivity.this, ResetPhoneActivity.class));
-                }else{
+                } else {
                     if (loginInfoBean.getSuccess()) {
                         SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
 
                         SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
-                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(phoneNum.toString().trim()));//保存id\
+                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(password.trim()));//保存id\
                         if (loginInfoBean.getData().getMember() != null) {
                             SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
                         }
@@ -292,7 +337,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                         DataInfoCache.saveOneCache(data, Constants.MY_INFO);
 
 //                        //查询信息
-                        queryUserInfo(loginInfoBean.getData().getPerson().getId(),loginInfoBean.getCode()+"");
+                        queryUserInfo(loginInfoBean.getData().getPerson().getId(), loginInfoBean.getCode() + "");
                         if (Constants.DEV_CONFIG) {
                             login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
                         } else {
@@ -316,7 +361,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                                 }
                             });
                             builder.show();
-                        } else{
+                        } else {
                             ToastUtils.showToastShort("用户名或密码错误");
                         }
                     }
@@ -325,6 +370,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i("onErrorResponse-" + volleyError);
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
             }
         }) {
@@ -335,7 +381,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                 map.put("password", password);
                 map.put("terminal", "1");
                 map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
-                LogUtil.i(AppUtils.getDeviceId(MyApplication.getContext()));
+                LogUtil.i(map.toString());
                 return map;
             }
         };
@@ -348,7 +394,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
         MyApplication.getHttpQueues().add(request);
     }
 
-    private void queryUserInfo(String id , final String loginCode) {
+    private void queryUserInfo(String id, final String loginCode) {
         String params = id;
         String url = Constants.QUERY_USER_DYN_INFO_URL + params;
         MyStringRequest request = new MyStringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -361,7 +407,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
                     SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
-                    startActivity(new Intent(ResetPhoneActivity.this, HomeActivity.class).putExtra("loginCode",loginCode));
+                    startActivity(new Intent(ResetPhoneActivity.this, HomeActivity.class).putExtra("loginCode", loginCode));
                     finish();
                 } else {
                     ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
@@ -381,6 +427,7 @@ public class ResetPhoneActivity extends BaseActivity implements View.OnClickList
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
     }
+
     /**
      * 登录腾讯im
      *

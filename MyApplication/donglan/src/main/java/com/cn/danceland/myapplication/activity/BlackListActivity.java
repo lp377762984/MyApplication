@@ -65,7 +65,7 @@ public class BlackListActivity extends BaseActivity {
         listView.setMode(PullToRefreshBase.Mode.DISABLED);//DISABLED和普通listView一样用
 
         findBlack();
-        myAdapter=new MyAdapter();
+        myAdapter = new MyAdapter();
         listView.setAdapter(myAdapter);
 
 
@@ -82,7 +82,7 @@ public class BlackListActivity extends BaseActivity {
             public void onResponse(JSONObject jsonObject) {
 
                 BlackListBean blackListBean = new Gson().fromJson(jsonObject.toString(), BlackListBean.class);
-                dataList=blackListBean.getData();
+                dataList = blackListBean.getData();
                 myAdapter.notifyDataSetChanged();
 
             }
@@ -91,17 +91,18 @@ public class BlackListActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.e(volleyError.toString());
             }
-        }) ;
+        });
         MyApplication.getHttpQueues().add(request);
 
     }
+
     private void delBlack(final int pos) {
 
-        MyStringRequest request=new MyStringRequest(Request.Method.POST, Constants.DEL_BLACKLIST_URL, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.DEL_BLACKLIST_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                RequestSimpleBean simpleBean=new Gson().fromJson(s,RequestSimpleBean.class);
-                if (simpleBean.getSuccess()){
+                RequestSimpleBean simpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
+                if (simpleBean.getSuccess()) {
                     dataList.remove(pos);
                     myAdapter.notifyDataSetChanged();
 
@@ -113,15 +114,13 @@ public class BlackListActivity extends BaseActivity {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
-
-
+        }) {
 
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
-                map.put("id", dataList.get(pos).getId()+"");
+                map.put("id", dataList.get(pos).getId() + "");
                 return map;
             }
         };
@@ -129,6 +128,7 @@ public class BlackListActivity extends BaseActivity {
         MyApplication.getHttpQueues().add(request);
 
     }
+
     class MyAdapter extends BaseAdapter {
 
         @Override

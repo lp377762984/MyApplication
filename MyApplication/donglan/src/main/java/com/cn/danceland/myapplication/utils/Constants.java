@@ -338,6 +338,9 @@ public class Constants {
     //新增问题题干
     public static String PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
 
+    //验证手机号与密码是否一致
+    public static String PUSH_VERIFY_PHONE_PASS = HOST + "/person/verifyPhonePass";//验证手机号与密码是否一致
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -688,6 +691,9 @@ public class Constants {
 
         //新增问题题干
        PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
+
+        //验证手机号与密码是否一致
+        PUSH_VERIFY_PHONE_PASS = HOST + "/person/verifyPhonePass";//验证手机号与密码是否一致
 
     }
 }
