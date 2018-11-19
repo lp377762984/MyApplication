@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="金额：2000元"
+                        android:text="金额：0元"
                         android:textColor="@color/colorGray22"
                         android:textSize="12sp" />
                 </LinearLayout>
