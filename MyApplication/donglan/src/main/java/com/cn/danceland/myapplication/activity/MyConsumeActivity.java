@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,10 +32,13 @@ import com.cn.danceland.myapplication.bean.MyConsumeCon;
 import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataCleanManager;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.AlertDialogCustom;
+import com.cn.danceland.myapplication.view.AlertDialogCustomToHint;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
@@ -55,19 +59,20 @@ import java.util.Map;
  * Created by feng on 2018/5/2.
  */
 
-public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScrollListener{
+public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScrollListener {
     private String unpaidOrder;
     DongLanTitleView consume_title;
     ListView lv_consume;
     Gson gson;
     List<MyConSumeBean.Content> content;
     public static final int SDK_PAY_FLAG = 0x1001;
-    int page = 0,totalPages;
+    int page = 0, totalPages;
     ConsumeAdapter consumeAdapter;
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
 
+    private Dialog dialog;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -87,7 +92,6 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                         case "4000":
                             ToastUtils.showToastShort("订单支付失败");
                             //btn_repay.setVisibility(View.VISIBLE);
-
                             break;
                         case "5000":
                             ToastUtils.showToastShort("重复请求");
@@ -164,16 +168,16 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         lv_consume.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if("1".equals(content.get(position).getStatus())){
+                if ("1".equals(content.get(position).getStatus())) {
 //                    if("2".equals(content.get(position).getPay_way())){
 //                        alipay(content.get(position).getPay_params());
 //                    }else if("3".equals(content.get(position).getPay_way())){
 //                        wxPay(content.get(position).getPay_params());
 //                    }
                     showWindow(position);
-                }else{
-                    if(content.get(position).getRoot_opt_no()!=null){
-                        startActivity(new Intent(MyConsumeActivity.this,MyConsumeAboutActivity.class).putExtra("root_opt_no",content.get(position).getRoot_opt_no()));
+                } else {
+                    if (content.get(position).getRoot_opt_no() != null) {
+                        startActivity(new Intent(MyConsumeActivity.this, MyConsumeAboutActivity.class).putExtra("root_opt_no", content.get(position).getRoot_opt_no()));
                     }
                 }
             }
@@ -189,40 +193,53 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         initData(page);
     }
 
-    private void showWindow(final int position){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("是否继续支付");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    private void showWindow(final int position) {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(MyConsumeActivity.this,  "支付金额："+content.get(position).getReceive() + "元", new AlertDialogCustomToHint.Click() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if("2".equals(content.get(position).getPay_way())){
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
+                if ("2".equals(content.get(position).getPay_way())) {
                     alipay(content.get(position).getPay_params());
-                }else if("3".equals(content.get(position).getPay_way())){
+                } else if ("3".equals(content.get(position).getPay_way())) {
                     wxPay(content.get(position).getPay_params());
                 }
             }
-        });
 
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
+            }
+        });
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("是否继续支付");
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if ("2".equals(content.get(position).getPay_way())) {
+//                    alipay(content.get(position).getPay_params());
+//                } else if ("3".equals(content.get(position).getPay_way())) {
+//                    wxPay(content.get(position).getPay_params());
+//                }
+//            }
+//        });
 //        builder.setNegativeButton("查看相关订单", new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {
 //                startActivity(new Intent(MyConsumeActivity.this,MyConsumeAboutActivity.class).putExtra("root_opt_no",content.get(position).getRoot_opt_no()));
 //            }
 //        });
-
-        builder.show();
+//        builder.show();
 
     }
 
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        if (event.getEventCode()==40001){
+        if (event.getEventCode() == 40001) {
             ToastUtils.showToastShort("支付成功");
             finish();
         }
-        if (event.getEventCode()==40002){
+        if (event.getEventCode() == 40002) {
             ToastUtils.showToastShort("支付失败");
             //btn_repay.setVisibility(View.VISIBLE);
         }
@@ -287,16 +304,16 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         myConsumeCon.setSize(15);
         String s = gson.toJson(myConsumeCon);
 
-        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.MYCONSUME, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 LogUtil.i(jsonObject.toString());
                 MyConSumeBean myConSumeBean = gson.fromJson(jsonObject.toString(), MyConSumeBean.class);
-                if(myConSumeBean!=null && myConSumeBean.getData()!=null&&myConSumeBean.getData().getContent()!=null){
+                if (myConSumeBean != null && myConSumeBean.getData() != null && myConSumeBean.getData().getContent() != null) {
                     totalPages = myConSumeBean.getData().getTotalPages();
                     totalElements = myConSumeBean.getData().getTotalElements();
                     content.addAll(myConSumeBean.getData().getContent());
-                    if(content!=null){
+                    if (content != null) {
                         consumeAdapter.notifyDataSetChanged();
                         page++;
                     }
@@ -324,20 +341,22 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
     }
 
     private int lastVisibleItem;//最后一个可见的item
-    private int totalItemCount,totalElements;//总的item
+    private int totalItemCount, totalElements;//总的item
+
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         this.lastVisibleItem = firstVisibleItem + visibleItemCount;
         this.totalItemCount = totalItemCount;
     }
+
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        if(lastVisibleItem == totalItemCount && scrollState==SCROLL_STATE_IDLE && page<=totalPages&&totalItemCount<totalElements){
+        if (lastVisibleItem == totalItemCount && scrollState == SCROLL_STATE_IDLE && page <= totalPages && totalItemCount < totalElements) {
             initData(page);
         }
     }
 
-    private class ConsumeAdapter extends BaseAdapter{
+    private class ConsumeAdapter extends BaseAdapter {
 
 //        List<MyConSumeBean.Content> content;
 //
@@ -363,7 +382,7 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(MyConsumeActivity.this, R.layout.item_myconsume, null);
                 viewHolder.xc_img = convertView.findViewById(R.id.xc_img);
@@ -374,12 +393,12 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                 viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
                 viewHolder.tv_time = convertView.findViewById(R.id.tv_time);
                 convertView.setTag(viewHolder);
-            }else{
-                viewHolder = (ViewHolder)convertView.getTag();
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
             MyConSumeBean.Content contentItem = content.get(position);
 
-            switch (contentItem.getPay_way()){
+            switch (contentItem.getPay_way()) {
                 case "1"://现金
                     Glide.with(MyConsumeActivity.this).load(R.drawable.cash_logo).into(viewHolder.xc_img);
                     break;
@@ -398,23 +417,23 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
             }
 
             viewHolder.tv_type.setText(contentItem.getProduct_type());
-            if(contentItem.getProduct_name()!=null){
+            if (contentItem.getProduct_name() != null) {
                 viewHolder.tv_name.setText(contentItem.getProduct_name());
-            }else{
+            } else {
                 viewHolder.tv_name.setText("");
             }
 
-            if("3".equals(contentItem.getPlatform())){
+            if ("3".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("PC端");
-            }else if( "1".equals(contentItem.getPlatform())|| "2".equals(contentItem.getPlatform())){
+            } else if ("1".equals(contentItem.getPlatform()) || "2".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("App端");
-            }else if ("4".equals(contentItem.getPlatform())){
+            } else if ("4".equals(contentItem.getPlatform())) {
                 viewHolder.tv_platform.setText("微信公众号");
             }
 
-            viewHolder.tv_price.setText("金额: " + contentItem.getReceive()+"元");
+            viewHolder.tv_price.setText("金额: " + contentItem.getReceive() + "元");
             viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
-            switch (contentItem.getStatus()){
+            switch (contentItem.getStatus()) {
                 case "1":
                     viewHolder.tv_status.setText("未支付");
                     viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.home_enter_total_text_color));
@@ -433,7 +452,6 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                     break;
 
             }
-
             String payTime = TimeUtils.timeStamp2Date(contentItem.getPay_time(), "yyyy-MM-dd HH:mm:ss");
             viewHolder.tv_time.setText(contentItem.getOrder_time());
 
@@ -441,8 +459,8 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
         }
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         XCRoundRectImageView xc_img;
-        TextView tv_type,tv_name,tv_platform,tv_price,tv_status,tv_time;
+        TextView tv_type, tv_name, tv_platform, tv_price, tv_status, tv_time;
     }
 }
