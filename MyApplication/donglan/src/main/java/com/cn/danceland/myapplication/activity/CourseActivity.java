@@ -22,6 +22,7 @@ import com.cn.danceland.myapplication.bean.GroupRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeRecordBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoRecordFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeFragment;
@@ -36,12 +37,16 @@ import com.google.gson.Gson;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.R.attr.value;
 
 
 /**
@@ -70,6 +75,7 @@ public class CourseActivity extends BaseActivity {
     String nowTime,nowTimeLen,role,auth;
     Data data;
     long monthFirstDay,monthLastDay;
+    String currentSelectDate;//当前日期
     Gson gson;
     ArrayList<String> yuyueTimeList;
     String from;
@@ -78,6 +84,7 @@ public class CourseActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.course);
+        EventBus.getDefault().register(this);
         initHost();
         initView();
         setOnclick();
@@ -86,6 +93,24 @@ public class CourseActivity extends BaseActivity {
 //            setPoint();
 //        }
 
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch(event.getEventCode()){
+        case value:
+        break;
+        default:
+        break;
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void setPoint(){
@@ -204,6 +229,8 @@ public class CourseActivity extends BaseActivity {
             public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
                 LogUtil.i(calendar.getYear()+"年"+calendar+"月"+calendar.getDay()+b);
                 tv_date.setText(calendar.getYear()+"."+calendar.getMonth()+"."+calendar.getDay()+"");
+                currentSelectDate =calendar.getYear()+"-"+calendar.getMonth()+"-"+calendar.getDay()+"";
+                EventBus.getDefault().post(new StringEvent(currentSelectDate,4331));
                 mYear = calendar.getYear();
             }
         });

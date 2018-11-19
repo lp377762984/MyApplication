@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.bean.GroupRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.YuYueResultBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -33,6 +34,7 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ import static com.cn.danceland.myapplication.R.id.course_num;
  * Created by feng on 2018/3/7.
  */
 
-public class SiJiaoRecordFragment extends BaseFragment {
+public class SiJiaoRecordFragment extends BaseFragmentEventBus {
 
     MyListView lv_tuanke;
     View inflate;
@@ -75,11 +77,28 @@ public class SiJiaoRecordFragment extends BaseFragment {
         gson = new Gson();
 
         initView();
-        initData();
+        initData(TimeUtils.timeStamp2Date(startTime,"yyyy-MM-dd"));
 
 
         return inflate;
     }
+
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        LogUtil.i(event.getMsg());
+        switch(event.getEventCode()){
+
+            case 4331:
+                initData(event.getMsg());
+                break;
+            default:
+                break;
+        }
+    }
+
+
 
     public void getStartTime(String startTime) {
         this.startTime = startTime;
@@ -93,8 +112,22 @@ public class SiJiaoRecordFragment extends BaseFragment {
 
     }
 
-    private void getGroupData(String s) {
-        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST, s, new Response.Listener<JSONObject>() {
+    private void getGroupData(String startTime) {
+
+        SiJiaoYuYueConBean xiaotuankejilubean = new SiJiaoYuYueConBean();
+        if (role != null) {
+            xiaotuankejilubean.setEmployee_id(data.getEmployee().getId());
+        } else {
+            xiaotuankejilubean.setMember_no(data.getPerson().getMember_no());
+        }
+        if (startTime != null) {
+            xiaotuankejilubean.setDate(startTime);
+        } else {
+            xiaotuankejilubean.setDate(TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd"));
+        }
+
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST,
+                gson.toJson(xiaotuankejilubean).toString(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 //if("2".equals(course_category)){
@@ -138,7 +171,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
         MyApplication.getHttpQueues().add(jsonObjectRequest);
     }
 
-    private void initData() {
+    private void initData(final String startTime) {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         if (role != null) {
@@ -148,18 +181,23 @@ public class SiJiaoRecordFragment extends BaseFragment {
         }
 
         if (startTime != null) {
-            siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
+            siJiaoYuYueConBean.setCourse_date(startTime);
         } else {
-            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis());
+            siJiaoYuYueConBean.setCourse_date(TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd"));
         }
+
 
         //siJiaoYuYueConBean.setEmployee_id(32);
         final String s = gson.toJson(siJiaoYuYueConBean);
 
+
+
+
+
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                LogUtil.e("zzf", jsonObject.toString());
+                LogUtil.e( jsonObject.toString());
                 LogUtil.i(jsonObject.toString());
                 if (contentList == null) {
                     contentList = new ArrayList<>();
@@ -175,7 +213,7 @@ public class SiJiaoRecordFragment extends BaseFragment {
                     }
                 }
 
-                getGroupData(s);
+                getGroupData(startTime);
 
             }
         }, new Response.ErrorListener() {

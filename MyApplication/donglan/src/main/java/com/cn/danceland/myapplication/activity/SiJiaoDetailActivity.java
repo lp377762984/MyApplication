@@ -545,7 +545,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
             siJiaoYuYueConBean.setEmployee_id(item.getEmployee_id());
             siJiaoYuYueConBean.setMember_course_id(item.getId());
         }
-        siJiaoYuYueConBean.setCourse_date(Long.valueOf(startTime));
+        siJiaoYuYueConBean.setCourse_date(startTime);
         siJiaoYuYueConBean.setStart_time(startM);
         siJiaoYuYueConBean.setEnd_time(endM);
 

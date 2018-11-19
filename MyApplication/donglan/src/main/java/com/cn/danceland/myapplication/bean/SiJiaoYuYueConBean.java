@@ -15,7 +15,7 @@ public class SiJiaoYuYueConBean implements Serializable {
     private Date confirm_date;
     private Integer confirm_id;
     private String confirm_name;
-    private Long course_date;
+    private String course_date;
     private Integer course_type_id;
     private String course_type_name;
     private Integer employee_id;
@@ -158,10 +158,10 @@ public class SiJiaoYuYueConBean implements Serializable {
         return confirm_name;
     }
 
-    public void setCourse_date(Long course_date) {
+    public void setCourse_date(String course_date) {
         this.course_date = course_date;
     }
-    public Long getCourse_date() {
+    public String getCourse_date() {
         return course_date;
     }
 
