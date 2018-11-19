@@ -47,14 +47,15 @@ public class ClassicsHeader extends LinearLayout implements com.scwang.smartrefr
         mHeaderText = new TextView(context);
         mProgressView = new ImageView(context);
         mProgressView.setBackground(getResources().getDrawable(R.drawable.listview_loading_anim));
-        mHeaderText.setTextColor(Color.WHITE);
+        mHeaderText.setTextColor(getResources().getColor(R.color.white));
         addView(mProgressView, DensityUtil.dp2px(40), DensityUtil.dp2px(40));
-        addView(new View(context), DensityUtil.dp2px(40), DensityUtil.dp2px(40));
+        addView(new View(context), DensityUtil.dp2px(16), DensityUtil.dp2px(16));
         addView(mHeaderText, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         setMinimumHeight(DensityUtil.dp2px(60));
     }
     @NonNull
     public View getView() {
+
         return this;//真实的视图就是自己，不能返回null
     }
     @Override

@@ -426,13 +426,13 @@ public class ShopFragment extends BaseFragment {
 
     public void refresh() {
         if (myAdapter != null) {
-            TranslateAnimation animation = new TranslateAnimation(0, -5, 0, 0);
-            animation.setInterpolator(new OvershootInterpolator());
-            animation.setDuration(100);
-            animation.setRepeatCount(3);
-            animation.setRepeatMode(Animation.REVERSE);
-            mGridView.startAnimation(animation);
-            myAdapter.notifyDataSetChanged();
+//            TranslateAnimation animation = new TranslateAnimation(0, -5, 0, 0);
+//            animation.setInterpolator(new OvershootInterpolator());
+//            animation.setDuration(100);
+//            animation.setRepeatCount(3);
+//            animation.setRepeatMode(Animation.REVERSE);
+//            mGridView.startAnimation(animation);
+//            myAdapter.notifyDataSetChanged();
             //     LogUtil.i("刷新");
         }
 
@@ -1187,8 +1187,8 @@ public class ShopFragment extends BaseFragment {
 //            animation.setInterpolator(new AccelerateDecelerateInterpolator());
 //            animation.setRepeatMode(Animation.REVERSE);
 
-            rl_item.startAnimation(smallAnimationSet);
-            tv_dcs.startAnimation(smallAnimationSet);
+//            rl_item.startAnimation(smallAnimationSet);
+//            tv_dcs.startAnimation(smallAnimationSet);
 
 
             tv_dcs.setText(menuList.get(i).getName());

@@ -20,6 +20,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -180,7 +181,7 @@ public class MySendCardFragment extends BaseFragment {
 ////通过RequestOptions扩展功能
 //            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300).placeholder(R.drawable.sijiao_card);
             //第一个是上下文，第二个是圆角的弧度
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,10));
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,6));
 
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
@@ -193,7 +194,7 @@ public class MySendCardFragment extends BaseFragment {
             TextView tv_cardtype;
             TextView tv_order_name;
             TextView tv_phone;
-            ImageView iv_card;
+            RoundImageView iv_card;
         }
 
     }

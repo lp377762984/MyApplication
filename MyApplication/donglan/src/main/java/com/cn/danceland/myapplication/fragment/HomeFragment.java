@@ -627,7 +627,6 @@ public class HomeFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            LogUtil.i("刷新111");
             newsListviewAdapter.notifyDataSetChanged();
             refreshLayout.finishRefresh(0, false);//传入false表示刷新失败
         }
