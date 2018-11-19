@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.cn.danceland.myapplication.R;
 
 /**
- * 统一提示框
+ * 统一提示框 居中有个hint
  * Created by yxx on 2018-11-13.
  */
 
