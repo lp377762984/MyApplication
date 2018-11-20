@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -30,7 +31,9 @@ import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.view.AlertDialogCustomToHint;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -46,7 +49,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
     public static final int SELECT_HAND_DATA = 0x1001;
     private Context context;
     private DongLanTitleView title;//数据title
-    private ImageView icon_iv;//icon
+    private RoundImageView icon_iv;//icon
     private TextView name_tv;//姓名
     private TextView sex_tv;//性别
     private TextView tel_tv;//电话
@@ -55,8 +58,8 @@ public class ScanerCodeDetailActivity extends BaseActivity {
     private TextView effective_date_tv;//有效日期
     private TextView sum_tv;//剩余次数
     private TextView hand_tv;//手牌号
-    private TextView btn_cancel;
-    private TextView btn_ok;
+    private LinearLayout btn_cancel;
+    private LinearLayout btn_ok;
 
     private RequestScanerCodeBean.Data memberData = new RequestScanerCodeBean.Data();
 
@@ -69,6 +72,8 @@ public class ScanerCodeDetailActivity extends BaseActivity {
     private String selectId = "";
     private String selectCode = "";
     private String selectArea = "";
+
+    private AlertDialogCustomToHint.MyDialog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -182,9 +187,9 @@ public class ScanerCodeDetailActivity extends BaseActivity {
                         cardid_tv.setText(memberData.getCard_no());
                         effective_date_tv.setText(TimeUtils.timeStamp2Date(memberData.getOpen_date() + "", "yyyy.MM.dd")
                                 + "-" + TimeUtils.timeStamp2Date(memberData.getEnd_date() + "", "yyyy.MM.dd"));
-                        if(memberData.getTotal_count()!=null&&memberData.getTotal_count().length()>0){
+                        if (memberData.getTotal_count() != null && memberData.getTotal_count().length() > 0) {
                             sum_tv.setText(memberData.getTotal_count() + "次");
-                        }else{
+                        } else {
                             sum_tv.setText("无");
                         }
                         if ((memberData.getHand_card_code() != null && memberData.getHand_card_code().length() > 0)
@@ -287,50 +292,41 @@ public class ScanerCodeDetailActivity extends BaseActivity {
      * 显示结果对话
      */
     private void showResultDialog(final String result) {
-        final AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        //   dialog.setTitle("提示");
-        dialog.setMessage(result);
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(context, result, new AlertDialogCustomToHint.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                finish();
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        dialog.show();
     }
 
     /**
      * 确认对话
      */
     private void showConfirmDialog() {
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
+        String hintStr ;
         if (memberData.getEnter()) {//已连接手牌
-            dialog.setMessage("是否离场");
+            hintStr = "是否离场";
         } else {//未连接手牌
-            dialog.setMessage("是否入场");
+            hintStr = "是否入场";
         }
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(context, hintStr, new AlertDialogCustomToHint.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
                 scan_qrcode();
             }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        dialog.show();
     }
 
     /**

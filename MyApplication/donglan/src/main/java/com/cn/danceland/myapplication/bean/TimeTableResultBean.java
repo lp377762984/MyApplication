@@ -92,7 +92,7 @@ public class TimeTableResultBean implements Serializable {
         private String appoint_count;
         private String branch_id;
         private String branch_name;
-        private String course_category;
+        private String course_category;//1	一对一私教 2	小团体私教 3	免费团课
         private String course_date;
         private String course_describe;
         private String course_img_path_1;
@@ -120,6 +120,15 @@ public class TimeTableResultBean implements Serializable {
         private String start_date;
         private String start_time;
         private String week;
+        private String color;
+
+        public String getColor() {
+            return color;
+        }
+
+        public void setColor(String color) {
+            this.color = color;
+        }
 
         public String getAppoint_count() {
             return appoint_count;
@@ -367,6 +376,44 @@ public class TimeTableResultBean implements Serializable {
 
         public void setWeek(String week) {
             this.week = week;
+        }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "appoint_count='" + appoint_count + '\'' +
+                    ", branch_id='" + branch_id + '\'' +
+                    ", branch_name='" + branch_name + '\'' +
+                    ", course_category='" + course_category + '\'' +
+                    ", course_date='" + course_date + '\'' +
+                    ", course_describe='" + course_describe + '\'' +
+                    ", course_img_path_1='" + course_img_path_1 + '\'' +
+                    ", course_img_path_2='" + course_img_path_2 + '\'' +
+                    ", course_img_path_3='" + course_img_path_3 + '\'' +
+                    ", course_img_url_1='" + course_img_url_1 + '\'' +
+                    ", course_img_url_2='" + course_img_url_2 + '\'' +
+                    ", course_img_url_3='" + course_img_url_3 + '\'' +
+                    ", course_type_id='" + course_type_id + '\'' +
+                    ", course_type_name='" + course_type_name + '\'' +
+                    ", cover_img_path='" + cover_img_path + '\'' +
+                    ", cover_img_url='" + cover_img_url + '\'' +
+                    ", delete_remark='" + delete_remark + '\'' +
+                    ", employee_avatar_path='" + employee_avatar_path + '\'' +
+                    ", employee_id='" + employee_id + '\'' +
+                    ", employee_name='" + employee_name + '\'' +
+                    ", end_date='" + end_date + '\'' +
+                    ", end_time='" + end_time + '\'' +
+                    ", id='" + id + '\'' +
+                    ", level='" + level + '\'' +
+                    ", max_count='" + max_count + '\'' +
+                    ", room_id='" + room_id + '\'' +
+                    ", room_name='" + room_name + '\'' +
+                    ", self_appoint_count='" + self_appoint_count + '\'' +
+                    ", start_date='" + start_date + '\'' +
+                    ", start_time='" + start_time + '\'' +
+                    ", week='" + week + '\'' +
+                    ", color='" + color + '\'' +
+                    '}';
         }
     }
 }

@@ -320,7 +320,6 @@
     <style name="Theme.UMDefault" parent="android:style/Theme.NoTitleBar"></style>
 
     <!--2.0版本开始-->
-
     <!--2.0版本结束-->
 
 </resources>
