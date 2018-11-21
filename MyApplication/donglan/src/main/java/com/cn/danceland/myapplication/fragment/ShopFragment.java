@@ -985,7 +985,7 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "体侧分析");
                         startActivity(new Intent(mActivity, SearchFriendsActivity.class).putExtra("from", "体测").putExtra("isAnalysis", "true"));
                         break;
-                    case 28://
+                    case 28://服务报表
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务报表");
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "3"));
                         break;
