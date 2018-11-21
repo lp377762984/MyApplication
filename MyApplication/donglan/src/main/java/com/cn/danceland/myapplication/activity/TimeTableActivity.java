@@ -76,7 +76,6 @@ public class TimeTableActivity extends BaseActivity {
     private ScrollView wholeView;
 
     private DongLanTitleView donglantitle;
-    //    private List<List<TimeTableResultBean.DataBean>> childListMap;//时间条目
     private String shopName = "";
 
     @Override
@@ -122,9 +121,7 @@ public class TimeTableActivity extends BaseActivity {
         sevenStart.set(Calendar.MINUTE, 0);
         sevenStart.set(Calendar.SECOND, 0);
         sevenStart.set(Calendar.MILLISECOND, 0);
-        LogUtil.i(" todayStart.getTime()" + new SimpleDateFormat("yyyy-MM-dd").format(todayStart.getTime()));
-        time_tv.setText("时间：" + new SimpleDateFormat("yyyy-MM-dd").format(todayStart.getTime())
-                + "-" + new SimpleDateFormat("yyyy-MM-dd").format(sevenStart.getTime()));
+        time_tv.setText("时间：" + new SimpleDateFormat("yyyy-MM-dd").format(todayStart.getTime()));
         StrBean strBean = new StrBean();
         strBean.date_gt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(todayStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
         strBean.date_lt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sevenStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
@@ -448,19 +445,8 @@ public class TimeTableActivity extends BaseActivity {
             TextView time_tv = inflate.findViewById(R.id.time_tv);
             View isfree_view = inflate.findViewById(R.id.isfree_view);
             if (listItem.get(i).getCourse_type_name() != null) {
-                String startTime, endTime;
                 int startInt = Integer.valueOf(listItem.get(i).getStart_time());
                 int entInt = Integer.valueOf(listItem.get(i).getEnd_time());
-                if (startInt % 60 == 0) {
-                    startTime = startInt / 60 + ":00";
-                } else {
-                    startTime = startInt / 60 + ":" + startInt % 60;
-                }
-                if (entInt % 60 == 0) {
-                    endTime = entInt / 60 + ":00";
-                } else {
-                    endTime = entInt / 60 + ":" + entInt % 60;
-                }
                 time_tv.setText((entInt - startInt) + "分钟");
                 RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
                 Glide.with(TimeTableActivity.this).load(listItem.get(i).getCover_img_url()).apply(options).into(gv_img);
