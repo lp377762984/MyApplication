@@ -158,7 +158,6 @@ public class MyCardFragment extends BaseFragment {
                 } else {
                     viewHolder.btn_commit.setVisibility(View.INVISIBLE);
                 }
-
             }
             if (mCardList.get(i).getCharge_mode() == 3) {//储值卡
                 viewHolder.tv_cardtype.setText("卡类型：储值卡");

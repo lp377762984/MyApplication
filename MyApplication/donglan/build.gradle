@@ -187,13 +187,16 @@ dependencies {
     compile files('libs/umeng-share-sina-simplify-6.9.3.jar')
     compile files('libs/umeng-shareboard-widget-6.9.3.jar')
     compile files('libs/umeng-sharetool-6.9.3.jar')
-
-        //阴影控件
-     // compile 'com.sdsmdg.harjot:materialshadows:1.2.5'
-   // compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
+    //阴影控件
+    // compile 'com.sdsmdg.harjot:materialshadows:1.2.5'
+    // compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'//没有使用特殊Header，可以不加这行
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+    //没有使用特殊Header，可以不加这行
     //easyrecyclerview
-   // compile 'com.jude:easyrecyclerview:4.4.2'
-    compile 'com.haibin:calendarview:3.4.8'//日历控件
+    // compile 'com.jude:easyrecyclerview:4.4.2'
+    compile 'com.haibin:calendarview:3.4.8'
+    //日历控件
+
+    compile 'com.google.zxing:core:3.3.0'
 }
