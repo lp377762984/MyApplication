@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
@@ -90,9 +91,10 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_HEADER) return;
         final int pos = getRealPosition(holder);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
         Glide.with(context)
                 .load(data.get(pos).getImg_url())
-                //  .apply(options)
+                  .apply(options)
                 .into(holder.iv_image);
         holder.tv_title.setText(data.get(pos).getTitle());
         holder.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(pos).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
@@ -174,7 +176,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_title;
-        ImageView iv_image;//头像
+        ImageView iv_image;//
         TextView tv_time;//时间
         TextView tv_content;//内容
         ImageView collect_iv;//收藏

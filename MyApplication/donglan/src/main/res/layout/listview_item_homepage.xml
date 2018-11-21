@@ -35,7 +35,8 @@
                 android:layout_height="100dp"
                 android:scaleType="centerCrop"
                 roundiv:left_bottom_radius="6dp"
-                roundiv:left_top_radius="6dp" />
+                roundiv:left_top_radius="6dp"
+                android:src="@drawable/loading_img"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

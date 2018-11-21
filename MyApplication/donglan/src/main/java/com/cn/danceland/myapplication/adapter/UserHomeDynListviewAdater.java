@@ -404,12 +404,11 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                         "");
                 Glide.with(convertView.getContext())
                         .load(data.get(position).getVedioImg())
-                        .into(viewHolder.jzVideoPlayer.thumbImageView);
+                        .apply(new RequestOptions().placeholder(R.drawable.loading_img)).into(viewHolder.jzVideoPlayer.thumbImageView);
                 viewHolder.jzVideoPlayer.positionInList = position;
             } else {
                 viewHolder.jzVideoPlayer.setVisibility(View.GONE);
             }
-
 
             if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
@@ -423,8 +422,8 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                     //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                     RequestOptions options1 = new RequestOptions()
-                            //  .placeholder(R.drawable.img_loading)//加载占位图
-                            .error(R.drawable.img_loadfail)//
+                            .placeholder(R.drawable.loading_img)//加载占位图
+//                            .error(R.drawable.img_loadfail)//
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .priority(Priority.HIGH);
 
@@ -460,7 +459,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
                     Glide.with(context)
                             .load(sb.toString())
-                            // .apply(options1)
+                             .apply(options1)
                             .into(viewHolder.iv_pic);
                     viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -471,7 +470,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                                     .setDownloadPath("DCIM")//图片下载文件夹地址
                                     .setIsShowNumber(false)//是否显示数字下标
                                     .needDownload(true)//是否支持图片下载
-                                    .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                    .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                                     .build();
                             ImagePagerActivity.startActivity(context, config);
                         }
@@ -519,7 +518,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                                 .setDownloadPath("DCIM")//图片下载文件夹地址
                                 .setIsShowNumber(true)//是否显示数字下标
                                 .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                                 .build();
                         ImagePagerActivity.startActivity(context, config);
 

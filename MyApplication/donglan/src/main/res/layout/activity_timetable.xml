@@ -30,9 +30,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="@color/white"
+                android:minHeight="60dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
@@ -41,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <TextView
@@ -49,13 +51,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="time"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:textColor="@color/colorGray22"
                         android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="12dp"
                         android:layout_height="12dp"
-                        android:layout_gravity="center"
                         android:background="@color/color_dl_yellow" />
 
                     <TextView
@@ -69,7 +72,6 @@
                     <TextView
                         android:layout_width="12dp"
                         android:layout_height="12dp"
-                        android:layout_gravity="center"
                         android:layout_marginLeft="16dp"
                         android:background="@color/blue_color3" />
 

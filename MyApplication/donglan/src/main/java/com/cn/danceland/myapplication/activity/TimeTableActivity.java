@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
@@ -47,9 +48,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -100,11 +104,30 @@ public class TimeTableActivity extends BaseActivity {
     }
 
     private void initData() {
+//        time_tv.setText("时间：" + TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy-MM-dd")
+//                + "-" + TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy-MM-dd"));
+//        StrBean strBean = new StrBean();
+//        strBean.date_gt = TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "";
+//        strBean.date_lt = TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "";
+
+        Calendar todayStart = Calendar.getInstance();
+        todayStart.set(Calendar.HOUR_OF_DAY, 0);
+        todayStart.set(Calendar.MINUTE, 0);
+        todayStart.set(Calendar.SECOND, 0);
+        todayStart.set(Calendar.MILLISECOND, 0);
+        Calendar sevenStart = Calendar.getInstance(); // 当时的日期和时间
+        int day = sevenStart.get(Calendar.DAY_OF_MONTH) + 6;
+        sevenStart.set(Calendar.DAY_OF_MONTH, day);
+        sevenStart.set(Calendar.HOUR_OF_DAY, 0);
+        sevenStart.set(Calendar.MINUTE, 0);
+        sevenStart.set(Calendar.SECOND, 0);
+        sevenStart.set(Calendar.MILLISECOND, 0);
+        LogUtil.i(" todayStart.getTime()" + new SimpleDateFormat("yyyy-MM-dd").format(todayStart.getTime()));
+        time_tv.setText("时间：" + new SimpleDateFormat("yyyy-MM-dd").format(todayStart.getTime())
+                + "-" + new SimpleDateFormat("yyyy-MM-dd").format(sevenStart.getTime()));
         StrBean strBean = new StrBean();
-        time_tv.setText("时间：" + TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy-MM-dd")
-                + "-" + TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy-MM-dd"));
-        strBean.date_gt = TimeUtils.date2TimeStamp(TimeUtils.getWeekStartTime(), "yyyy-MM-dd HH:mm:ss") + "";
-        strBean.date_lt = TimeUtils.date2TimeStamp(TimeUtils.getWeekEndTime(), "yyyy-MM-dd HH:mm:ss") + "";
+        strBean.date_gt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(todayStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
+        strBean.date_lt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sevenStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
         String s = gson.toJson(strBean);
 
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.TIMETABLES, s, new Response.Listener<JSONObject>() {
@@ -439,7 +462,8 @@ public class TimeTableActivity extends BaseActivity {
                     endTime = entInt / 60 + ":" + entInt % 60;
                 }
                 time_tv.setText((entInt - startInt) + "分钟");
-                Glide.with(TimeTableActivity.this).load(listItem.get(i).getCover_img_url()).into(gv_img);
+                RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
+                Glide.with(TimeTableActivity.this).load(listItem.get(i).getCover_img_url()).apply(options).into(gv_img);
                 tv_name.setText(listItem.get(i).getCourse_type_name());
                 tv_name.setTextColor(Color.parseColor(listItem.get(i).getColor()));
                 tv_emp_name.setText(listItem.get(i).getEmployee_name());

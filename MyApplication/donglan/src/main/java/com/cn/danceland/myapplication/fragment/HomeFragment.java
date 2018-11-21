@@ -241,7 +241,9 @@ public class HomeFragment extends BaseFragment {
         newsListviewAdapter.setOnItemClickListener(new NewsListviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, List<RequestNewsDataBean.Data.Items> data) {
-                setReadNum(data.get(position).getId(), position);
+
+                LogUtil.i(data.size()+"position"+position);
+                setReadNum(data,data.get(position).getId(), position);
                 mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
             }
         });
@@ -743,8 +745,9 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onBind(Context context, int position, RequestImageNewsDataBean.Data data) {
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
             if (context != null)
-                Glide.with(context).load(data.getImg_url()).into(mImageView);
+                Glide.with(context).load(data.getImg_url()).apply(options).into(mImageView);
         }
     }
 
@@ -828,6 +831,7 @@ public class HomeFragment extends BaseFragment {
                         newsListviewAdapter.addLastList(data);
                         newsListviewAdapter.notifyDataSetChanged();
                     }
+                    LogUtil.i(data.size()+"");
                     if (data.size() > 0 && data.size() < 10) {
                         setEnd();
                     } else {
@@ -932,7 +936,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     //增加阅读数
-    private void setReadNum(final String news_id, final int pos) {
+    private void setReadNum(final List<RequestNewsDataBean.Data.Items> dataList, final String news_id, final int pos) {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.PUSH_READ_NUMBER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -940,10 +944,10 @@ public class HomeFragment extends BaseFragment {
                 Gson gson = new Gson();
                 RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
                 if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
-                    if(data.get(pos).getRead_number()!=null&&data.get(pos).getRead_number().length()>0){
-                        data.get(pos).setRead_number((Integer.valueOf(data.get(pos).getRead_number())+ 1) +"");//增加阅读数
+                    if(dataList.get(pos).getRead_number()!=null&&dataList.get(pos).getRead_number().length()>0){
+                        dataList.get(pos).setRead_number((Integer.valueOf(dataList.get(pos).getRead_number())+ 1) +"");//增加阅读数
                     }
-                    newsListviewAdapter.setData(data);
+                    newsListviewAdapter.setData(dataList);
                     newsListviewAdapter.notifyDataSetChanged();
                 }
 
@@ -958,7 +962,7 @@ public class HomeFragment extends BaseFragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("id", news_id);
-                LogUtil.i("map--" + map.toString());
+//                LogUtil.i("map--" + map.toString());
                 return map;
             }
         };
