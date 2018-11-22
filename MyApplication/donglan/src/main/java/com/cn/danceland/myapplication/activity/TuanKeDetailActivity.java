@@ -3,6 +3,8 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +19,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.adapter.TuankeRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
 import com.cn.danceland.myapplication.bean.CourseFindPerson;
 import com.cn.danceland.myapplication.bean.Data;
@@ -32,13 +33,14 @@ import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -53,6 +55,9 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.cn.danceland.myapplication.R.id.course_place;
+import static com.cn.danceland.myapplication.R.id.pic_01;
+import static com.cn.danceland.myapplication.R.id.pic_02;
+import static com.cn.danceland.myapplication.R.id.pic_03;
 
 /**
  * Created by feng on 2018/1/12.
@@ -73,6 +78,8 @@ public class TuanKeDetailActivity extends BaseActivity {
     List<CourseFindPerson.DataBean> headList,childList;
     RelativeLayout rl_button_yuyue;
     private TuanKeBean.Data detailData;
+    RecyclerView my_recycler_view;
+    private TuankeRecylerViewAdapter mRecylerViewAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +105,17 @@ public class TuanKeDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        my_recycler_view = findViewById(R.id.my_recycler_view);
+        //创建默认的线性LayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        my_recycler_view.setLayoutManager(linearLayoutManager);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        my_recycler_view.setHasFixedSize(true);
+
+
+
         course_renshu = findViewById(R.id.course_renshu);
         rl_button_yuyue = findViewById(R.id.rl_button_yuyue);
         tv_status = findViewById(R.id.tv_status);
@@ -117,13 +135,6 @@ public class TuanKeDetailActivity extends BaseActivity {
         course_jiaolian_huiyuan_circle = findViewById(R.id.course_jiaolian_huiyuan_circle);
 
 
-        tuanke_back = findViewById(R.id.small_back);
-        tuanke_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         tv_kecheng_fenshu = findViewById(R.id.tv_kecheng_fenshu);
         tv_jiaolian_fenshu = findViewById(R.id.tv_jiaolian_fenshu);
         tv_changdi_fenshu = findViewById(R.id.tv_changdi_fenshu);
@@ -135,14 +146,15 @@ public class TuanKeDetailActivity extends BaseActivity {
         kecheng_room = findViewById(R.id.course_room);
         tv_jieshao = findViewById(R.id.tv_content);
         course_type = findViewById(R.id.course_type);
-        tv_tuanke_title = findViewById(R.id.tv_tuanke_title);
-        tv_tuanke_title.setText("免费团课");
+        DongLanTitleView titleView=findViewById(R.id.dl_title);
+      //  tv_tuanke_title = findViewById(R.id.tv_tuanke_title);
+        titleView.setTitle("免费团课");
         course_type.setText("免费团课");
 
 
-        img_1 = findViewById(R.id.pic_01);
-        img_2 = findViewById(R.id.pic_02);
-        img_3 = findViewById(R.id.pic_03);
+        img_1 = findViewById(pic_01);
+        img_2 = findViewById(pic_02);
+        img_3 = findViewById(pic_03);
 
 
         kecheng_ex = findViewById(R.id.my_expanda);
@@ -220,10 +232,14 @@ public class TuanKeDetailActivity extends BaseActivity {
     public void initData(final TuanKeBean.Data detailData){
 
         RequestOptions  options =new RequestOptions().placeholder(R.drawable.piping);
+
+        course_jiaolian_huiyuan_name.setText(detailData.getEmployee_name());
+        RequestOptions options1 = new RequestOptions()
+                .transform(new GlideRoundTransform(TuanKeDetailActivity.this,10));
         Glide.with(TuanKeDetailActivity.this).load(detailData.getCover_img_url()).apply(options).into(kecheng_img);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).apply(options).into(img_1);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options).into(img_2);
-        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).apply(options).into(img_3);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_1()).apply(options1).into(img_1);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options1).into(img_2);
+        Glide.with(TuanKeDetailActivity.this).load(detailData.getCourse_img_url_3()).apply(options1).into(img_3);
 
         img_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,17 +278,17 @@ public class TuanKeDetailActivity extends BaseActivity {
         kecheng_place.setText("上课场馆:"+data.getMember().getBranch_name());
         kecheng_room.setText("上课场地:"+detailData.getRoom_name());
         kecheng_name.setText(detailData.getCourse_type_name());
-        tv_jieshao.setText(detailData.getCourse_describe());
+        tv_jieshao.setText("课程介绍："+detailData.getCourse_describe());
         if(item!=null){
 
             if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
                 if(item.getSelf_appoint_count()>0){
                     tv_status.setText("已预约");
-                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));
                 }
             }else{
                 tv_status.setText("已过期");
-                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));
             }
 
         }
@@ -367,6 +383,8 @@ public class TuanKeDetailActivity extends BaseActivity {
                             }
                             course_renshu.setText("上课会员("+ totalList.size()+")");
                             kecheng_ex.setAdapter(new MyAdapter());
+                            mRecylerViewAdapter = new TuankeRecylerViewAdapter(TuanKeDetailActivity.this, totalList);
+                            my_recycler_view.setAdapter(mRecylerViewAdapter);
                         }
 
                     }else {

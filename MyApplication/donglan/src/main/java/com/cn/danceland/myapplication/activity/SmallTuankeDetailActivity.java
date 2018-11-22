@@ -3,6 +3,8 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +19,11 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.adapter.XiaoTuankeRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
 import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -32,11 +34,11 @@ import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -81,7 +83,8 @@ public class SmallTuankeDetailActivity extends BaseActivity {
     //SiJiaoRecordBean.Content record;
     String record_id;
     String emp_id,room_id,courseTypeId,branchId;
-
+    RecyclerView my_recycler_view;
+    private XiaoTuankeRecylerViewAdapter mRecylerViewAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,8 +180,16 @@ public class SmallTuankeDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        my_recycler_view = findViewById(R.id.my_recycler_view);
+        //创建默认的线性LayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-        small_back = findViewById(R.id.small_back);
+        my_recycler_view.setLayoutManager(linearLayoutManager);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        my_recycler_view.setHasFixedSize(true);
+
+
         my_expanda = findViewById(R.id.my_expanda);
         myAdapter = new MyAdapter();
         //my_expanda.setAdapter(myAdapter);
@@ -219,7 +230,7 @@ public class SmallTuankeDetailActivity extends BaseActivity {
         });
         tv_status = findViewById(R.id.tv_status);
 
-        tv_content.setText(item.getCourse_describe());
+        tv_content.setText("课程介绍："+item.getCourse_describe());
 
         setclick();
 
@@ -283,9 +294,12 @@ public class SmallTuankeDetailActivity extends BaseActivity {
         }
 
         course_jiaolian_huiyuan_name.setText(detailData.getEmployee_name());
-        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_1()).into(pic_01);
-        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_2()).into(pic_02);
-        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_3()).into(pic_03);
+        RequestOptions options = new RequestOptions()
+                .transform(new GlideRoundTransform(SmallTuankeDetailActivity.this,10));
+
+        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_1()).apply(options).into(pic_01);
+        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_2()).apply(options).into(pic_02);
+        Glide.with(SmallTuankeDetailActivity.this).load(detailData.getCourse_img_url_3()).apply(options).into(pic_03);
         pic_01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -328,12 +342,6 @@ public class SmallTuankeDetailActivity extends BaseActivity {
 //            }
 //        });
 
-        small_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,17 +360,17 @@ public class SmallTuankeDetailActivity extends BaseActivity {
             if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
                 if(item.getSelf_appoint_count()>0){
                     tv_status.setText("已预约");
-                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                    rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));
                 }
             }else{
                 tv_status.setText("已过期");
-                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));
             }
 
         }else{
             tv_status.setText("已结束");
             rl_button_yuyue.setClickable(false);
-            rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+            rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));
         }
 
 
@@ -451,6 +459,8 @@ public class SmallTuankeDetailActivity extends BaseActivity {
                             headList = data.getContent();
 
                             my_expanda.setAdapter(myAdapter);
+                            mRecylerViewAdapter = new XiaoTuankeRecylerViewAdapter(SmallTuankeDetailActivity.this, headList);
+                            my_recycler_view.setAdapter(mRecylerViewAdapter);
                         }
 
                     }

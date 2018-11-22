@@ -60,11 +60,22 @@ public class SiJiaoRecordBean implements Serializable{
         private int confirm_id;
         private int start_time;
         private String member_name;
+        private String phone_no;
         private String cancel_date;
+        private String category;
         private int week;
         private int evaluate_id;
-        private String category;
+        private String employee_birthday;
+        private String employee_gender;
+        private String employee_avatar_url;
 
+        public String getPhone_no() {
+            return phone_no;
+        }
+
+        public void setPhone_no(String phone_no) {
+            this.phone_no = phone_no;
+        }
 
         @Override
         public String toString() {
@@ -94,11 +105,39 @@ public class SiJiaoRecordBean implements Serializable{
                     ", confirm_id=" + confirm_id +
                     ", start_time=" + start_time +
                     ", member_name='" + member_name + '\'' +
+                    ", phone_no='" + phone_no + '\'' +
                     ", cancel_date='" + cancel_date + '\'' +
+                    ", category='" + category + '\'' +
                     ", week=" + week +
                     ", evaluate_id=" + evaluate_id +
-                    ", category='" + category + '\'' +
+                    ", employee_birthday='" + employee_birthday + '\'' +
+                    ", employee_gender='" + employee_gender + '\'' +
+                    ", employee_avatar_url='" + employee_avatar_url + '\'' +
                     '}';
+        }
+
+        public String getEmployee_birthday() {
+            return employee_birthday;
+        }
+
+        public void setEmployee_birthday(String employee_birthday) {
+            this.employee_birthday = employee_birthday;
+        }
+
+        public String getEmployee_gender() {
+            return employee_gender;
+        }
+
+        public void setEmployee_gender(String employee_gender) {
+            this.employee_gender = employee_gender;
+        }
+
+        public String getEmployee_avatar_url() {
+            return employee_avatar_url;
+        }
+
+        public void setEmployee_avatar_url(String employee_avatar_url) {
+            this.employee_avatar_url = employee_avatar_url;
         }
 
         public String getCategory() {

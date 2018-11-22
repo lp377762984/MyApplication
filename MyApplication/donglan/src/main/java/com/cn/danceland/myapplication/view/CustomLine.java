@@ -3,17 +3,18 @@ package com.cn.danceland.myapplication.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.PxUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,12 +73,14 @@ public class CustomLine extends View {
 
         paintRectSure = new Paint();//已确认颜色的画笔
         paintRectSure.setAntiAlias(true);
-        paintRectSure.setColor(getResources().getColor(R.color.color_dl_yellow));
+        paintRectSure.setColor(getResources().getColor(R.color.color_dl_deep_blue));
         paintRectSure.setStyle(Paint.Style.FILL);
 
         paintRectNoSure = new Paint();//等待确认颜色的画笔
         paintRectNoSure.setAntiAlias(true);
         paintRectNoSure.setColor(Color.parseColor("#87CEFA"));
+
+
         paintRectNoSure.setStyle(Paint.Style.FILL);
 
         paintRectCancel = new Paint();//已取消和已签到颜色的画笔
@@ -90,13 +93,13 @@ public class CustomLine extends View {
         paintText.setColor(getResources().getColor(R.color.white));
         paintText.setStyle(Paint.Style.FILL);
         paintText.setTextAlign(Paint.Align.CENTER);
-        paintText.setTextSize(30);
+        paintText.setTextSize(DensityUtils.sp2px(context,14f));
 
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int expandSpec = MeasureSpec.makeMeasureSpec(1800,
+        int expandSpec = MeasureSpec.makeMeasureSpec(DensityUtils.dp2px(context,84*10f+50),
                 MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, expandSpec);
         width = getMeasuredWidth();
@@ -116,6 +119,8 @@ public class CustomLine extends View {
             if (positionList != null && statusList != null && roleList != null) {
                 if (positionList.get(i) != 999) {
                     if (statusList.get(i) == 1) {
+                        Shader mShader = new LinearGradient(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), new int[]{ Color.parseColor("#FF6243"),Color.parseColor("#FF0072")}, new float[]{0,1.0f}, Shader.TileMode.CLAMP);
+                        paintRectNoSure.setShader(mShader);
                         canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectNoSure);
                     } else if (statusList.get(i) == 2) {
                         canvas.drawRect(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding) + PxUtils.dp2px(context, 10), paintRectSure);
@@ -137,6 +142,7 @@ public class CustomLine extends View {
                 }
             }
             padding = padding + 10;
+            LogUtil.i(i+"跟线");
         }
         canvas.drawLine(0, PxUtils.dp2px(context, padding), width, PxUtils.dp2px(context, padding), paintLine);
 

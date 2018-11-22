@@ -144,7 +144,7 @@ public class LoginBindActivity extends BaseActivity implements View.OnClickListe
                 //设置不能点击
                 mTvGetsms.setFocusable(false);
                 mTvGetsms.setClickable(false);
-                mTvGetsms.setTextColor(Color.GRAY);
+                mTvGetsms.setTextColor(Color.parseColor("#e9e9e9"));
                 recLen = 30;
                 mTvGetsms.setText("" + recLen + "秒后重试");
                 //设置倒计时

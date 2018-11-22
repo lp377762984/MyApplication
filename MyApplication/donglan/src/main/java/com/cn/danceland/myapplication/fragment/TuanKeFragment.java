@@ -23,15 +23,16 @@ import com.cn.danceland.myapplication.activity.TuanKeDetailActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
-import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ import java.util.List;
  * Created by feng on 2018/1/11.
  */
 
-public class TuanKeFragment extends BaseFragment {
+public class TuanKeFragment extends BaseFragmentEventBus {
     FragmentManager fragmentManager;
     MyListView lv_tuanke;
     Gson gson = new Gson();
@@ -104,6 +105,19 @@ public class TuanKeFragment extends BaseFragment {
         return view;
     }
 
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        LogUtil.i(event.getMsg());
+        switch (event.getEventCode()) {
+            case 4331:
+//                initData(event.getMsg());
+//                currentSelectDate=event.getMsg();
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -161,8 +175,8 @@ public class TuanKeFragment extends BaseFragment {
                             self_appoint = 1;
                         }
                         rl.setClickable(false);
-                        rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
-                        tv.setTextColor(Color.parseColor("#FF8C00"));
+                        rl.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                        tv.setTextColor(Color.WHITE);
                         tv.setText("已预约");
                         ToastUtils.showToastShort("预约成功！");
                     } else {
@@ -204,6 +218,7 @@ public class TuanKeFragment extends BaseFragment {
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, url, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
                 KeChengBiaoBean keChengBiaoBean = gson.fromJson(jsonObject.toString(), KeChengBiaoBean.class);
                 if (keChengBiaoBean != null) {
                     if (xiaoTuanList != null) {
@@ -259,7 +274,7 @@ public class TuanKeFragment extends BaseFragment {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(mActivity, R.layout.tuanke_item, null);
-                viewHolder.tuanke_img = convertView.findViewById(R.id.tuanke_img);
+            //    viewHolder.tuanke_img = convertView.findViewById(R.id.tuanke_img);
                 viewHolder.tuanke_jibie = convertView.findViewById(R.id.tuanke_jibie);
                 viewHolder.tuanke_leibie = convertView.findViewById(R.id.tuanke_leibie);
                 viewHolder.tuanke_room = convertView.findViewById(R.id.tuanke_room);
@@ -287,7 +302,7 @@ public class TuanKeFragment extends BaseFragment {
             endTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getEnd_time() + ""));
             viewHolder.tuanke_time.setText(startTime + "-" + endTime);
             viewHolder.tuanke_leibie.setText(xiaoTuanList.get(position).getCourse_type_name());
-            viewHolder.tuanke_name.setText(xiaoTuanList.get(position).getEmployee_name());
+            viewHolder.tuanke_name.setText("上课教练:" +xiaoTuanList.get(position).getEmployee_name());
 
             if (xiaoTuanList.get(position).getLevel() != null) {
                 viewHolder.tuanke_jibie.setText("课程级别:" + xiaoTuanList.get(position).getLevel());
@@ -321,12 +336,12 @@ public class TuanKeFragment extends BaseFragment {
                     yuyue = false;//有预约项，无法点击
                     //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));
                     //viewHolder.tuanke_yuyue.setTextAppearance(mActivity,R.style.YiYuYue);
-                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_white));
-                    viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_dl_yellow));
+                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                    viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.white));
                     viewHolder.tv_yuyue.setText("已预约");
                 } else {
                     yuyue = true;
-                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
+                    viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
                     viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
                     viewHolder.tv_yuyue.setText("预约");
                 }
@@ -335,7 +350,7 @@ public class TuanKeFragment extends BaseFragment {
 //                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_blue));
 //                viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
 //                viewHolder.tv_yuyue.setText("预约");
-                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                viewHolder.tuanke_yuyue.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
                 viewHolder.tv_yuyue.setTextColor(getResources().getColor(R.color.color_white));
                 viewHolder.tv_yuyue.setText("已过期");
             }
@@ -359,11 +374,11 @@ public class TuanKeFragment extends BaseFragment {
                 }
             });
 
-            if (StringUtils.isNullorEmpty(xiaoTuanList.get(position).getCover_img_url())) {
-                Glide.with(mActivity).load(R.drawable.sijiao_card).into(viewHolder.tuanke_img);
-            } else {
-                Glide.with(mActivity).load(xiaoTuanList.get(position).getCover_img_url()).into(viewHolder.tuanke_img);
-            }
+//            if (StringUtils.isNullorEmpty(xiaoTuanList.get(position).getCover_img_url())) {
+//                Glide.with(mActivity).load(R.drawable.sijiao_card).into(viewHolder.tuanke_img);
+//            } else {
+//                Glide.with(mActivity).load(xiaoTuanList.get(position).getCover_img_url()).into(viewHolder.tuanke_img);
+//            }
 
             return convertView;
         }

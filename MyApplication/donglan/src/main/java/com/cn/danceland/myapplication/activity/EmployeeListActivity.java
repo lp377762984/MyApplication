@@ -109,7 +109,7 @@ public class EmployeeListActivity extends BaseActivity {
             }
             //第一个是上下文，第二个是圆角的弧度
             RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(context, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
-            Glide.with(context).load(huijiList.get(position).getSelf_avatar_path()).apply(options).into(vh.iv_avatar);
+            Glide.with(context).load(huijiList.get(position).getAvatar_url()).apply(options).into(vh.iv_avatar);
             if (huijiList.get(position).getGender() == 1) {
                 vh.iv_sex.setImageResource(R.drawable.img_sex1);
             } else {

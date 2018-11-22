@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.MyQRCodeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cn.danceland.myapplication.R.id.course_num;
+import static com.cn.danceland.myapplication.R.id.rl_button_tv;
 
 /**
  * Created by feng on 2018/3/7.
@@ -60,7 +62,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
-
+    String currentSelectDate;//当前选择日期
+    RecordAdapter recordAdapter;
     @Override
     public View initViews() {
 
@@ -77,7 +80,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         gson = new Gson();
 
         initView();
-        initData(TimeUtils.timeStamp2Date(startTime,"yyyy-MM-dd"));
+        currentSelectDate=((CourseActivity)mActivity).getCurrentSelectDate();
+        initData(((CourseActivity)mActivity).getCurrentSelectDate());
 
 
         return inflate;
@@ -88,16 +92,15 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
     @Subscribe
     public void onEventMainThread(StringEvent event) {
         LogUtil.i(event.getMsg());
-        switch(event.getEventCode()){
-
+        switch (event.getEventCode()) {
             case 4331:
                 initData(event.getMsg());
+                currentSelectDate=event.getMsg();
                 break;
             default:
                 break;
         }
     }
-
 
 
     public void getStartTime(String startTime) {
@@ -121,9 +124,9 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
             xiaotuankejilubean.setMember_no(data.getPerson().getMember_no());
         }
         if (startTime != null) {
-            xiaotuankejilubean.setDate(startTime);
+            xiaotuankejilubean.setDate(TimeUtils.date2TimeStamp(startTime,"yyyy-MM-dd")+"");
         } else {
-            xiaotuankejilubean.setDate(TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd"));
+            xiaotuankejilubean.setDate(System.currentTimeMillis() + "");
         }
 
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST,
@@ -154,7 +157,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
 
                         }
                         if (contentList != null) {
-                            lv_tuanke.setAdapter(new RecordAdapter(contentList));
+                            recordAdapter=new RecordAdapter(contentList);
+                            lv_tuanke.setAdapter(recordAdapter);
                         } else {
                             ToastUtils.showToastShort("当天无预约记录");
                         }
@@ -181,9 +185,9 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         }
 
         if (startTime != null) {
-            siJiaoYuYueConBean.setCourse_date(startTime);
+            siJiaoYuYueConBean.setCourse_date(TimeUtils.date2TimeStamp(startTime,"yyyy-MM-dd")+"");
         } else {
-            siJiaoYuYueConBean.setCourse_date(TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd"));
+            siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis() +"");
         }
 
 
@@ -191,13 +195,11 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         final String s = gson.toJson(siJiaoYuYueConBean);
 
 
-
-
-
+        LogUtil.i(s);
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                LogUtil.e( jsonObject.toString());
+                LogUtil.e(jsonObject.toString());
                 LogUtil.i(jsonObject.toString());
                 if (contentList == null) {
                     contentList = new ArrayList<>();
@@ -219,7 +221,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtil.e("zzf", volleyError.toString());
+                LogUtil.e(volleyError.toString());
             }
         });
         MyApplication.getHttpQueues().add(jsonObjectRequest);
@@ -272,7 +274,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                 viewHolder.course_type = convertView.findViewById(R.id.course_type);
                 viewHolder.course_jiaolian = convertView.findViewById(R.id.course_jiaolian);
                 viewHolder.rl_button = convertView.findViewById(R.id.rl_button);
-                viewHolder.rl_button_tv = convertView.findViewById(R.id.rl_button_tv);
+                viewHolder.rl_button_tv = convertView.findViewById(rl_button_tv);
                 viewHolder.rl_qiandao = convertView.findViewById(R.id.rl_qiandao);
                 viewHolder.rl_qiandao_tv = convertView.findViewById(R.id.rl_qiandao_tv);
                 viewHolder.tv_ok = convertView.findViewById(R.id.tv_ok);
@@ -335,17 +337,18 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    showDialog(true, list.get(position).getId(),position);
+                                    showDialog(true, list.get(position).getId(), position);
                                 }
                             });
 
                             viewHolder.rl_button.setVisibility(View.VISIBLE);
                             viewHolder.rl_button_tv.setText("取消");
+                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                             viewHolder.rl_button_tv.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
                             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    showDialog(false, list.get(position).getId(),position);
+                                    showDialog(false, list.get(position).getId(), position);
                                 }
                             });
 
@@ -356,14 +359,14 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             viewHolder.rl_button.setVisibility(View.GONE);
                             if (list.get(position).getCourse_date() < System.currentTimeMillis() &&
                                     System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {//是否是今天
-                                viewHolder.rl_button_tv.setText("签到");
-                                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+                                viewHolder.rl_qiandao_tv.setText("签到");
+                                viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                                viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
 
                             } else {
-                                viewHolder.rl_button_tv.setText("签到");
-                                viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                                viewHolder.rl_qiandao_tv.setText("签到");
+                                viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                                viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
                             }
 
                             viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
@@ -389,16 +392,16 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             break;
 
                         case 3:
-                            viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
-                            viewHolder.rl_button.setVisibility(View.GONE);
+                            viewHolder.rl_qiandao.setVisibility(View.GONE);
+                            viewHolder.rl_button.setVisibility(View.VISIBLE);
                             viewHolder.rl_button_tv.setText("已取消");
-                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
                             viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
                             break;
 
                         case 4:
-                            viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
-                            viewHolder.rl_button.setVisibility(View.GONE);
+                            viewHolder.rl_qiandao.setVisibility(View.GONE);
+                            viewHolder.rl_button.setVisibility(View.VISIBLE);
                             viewHolder.rl_button_tv.setText("已签到");
                             viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                             viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
@@ -669,7 +672,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                 YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
                 if (yuYueResultBean != null && yuYueResultBean.getData() > 0) {
                     ToastUtils.showToastShort("确认成功！");
-
+                    initData(currentSelectDate);
 
 //                    tv.setText("签到");
 //                    tv.setTextColor(getResources().getColor(R.color.white));
@@ -795,10 +798,12 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.APPOINTCANCEL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf", s);
+                LogUtil.i( s);
                 YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
                 if (yuYueResultBean != null && yuYueResultBean.getData() > 0) {
                     ToastUtils.showToastShort("取消成功！");
+                    initData(currentSelectDate);
+
 //                    tv.setText("已取消");
 //                    tv.setTextColor(getResources().getColor(R.color.white));
 //                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));

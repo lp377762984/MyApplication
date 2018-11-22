@@ -730,7 +730,7 @@ public class ShopDetailedActivity extends BaseActivity {
             ImageView iv_avatar = convertView.findViewById(R.id.iv_avatar);
             tv_name.setText(jiaolianList.get(position).getCname());
             RequestOptions options = new RequestOptions().transform(new GlideRoundTransform(ShopDetailedActivity.this, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
-            Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getSelf_avatar_path()).apply(options).into(iv_avatar);
+            Glide.with(ShopDetailedActivity.this).load(jiaolianList.get(position).getAvatar_url()).apply(options).into(iv_avatar);
             iv_avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

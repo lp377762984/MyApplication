@@ -153,6 +153,7 @@ public class TuanKeRecordFragment extends BaseFragment {
                 convertView = View.inflate(mActivity,R.layout.sijiaorecord_item, null);
                 viewHolder.course_name = convertView.findViewById(R.id.course_name);
                 viewHolder.course_date = convertView.findViewById(R.id.course_date);
+                viewHolder.course_num = convertView.findViewById(R.id.course_num);
                 viewHolder.course_type = convertView.findViewById(R.id.course_type);
                 viewHolder.course_jiaolian = convertView.findViewById(R.id.course_jiaolian);
                 viewHolder.rl_button = convertView.findViewById(R.id.rl_button);
@@ -164,11 +165,11 @@ public class TuanKeRecordFragment extends BaseFragment {
 
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
 //            LogUtil.i(list.get(position).getDate() + "   "list.get(position).getCreate_date());
-            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date()+ "", null);
+            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date()+ "", "yyyy.MM.dd HH:mm");
             viewHolder.course_date.setText("预约时间:"+time);
             viewHolder.course_type.setText("免费团课");
             viewHolder.course_jiaolian.setText("");
-
+          viewHolder.course_num.setText("预约时间:"+"接口没加呢");
             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -180,7 +181,7 @@ public class TuanKeRecordFragment extends BaseFragment {
             });
             if(list.get(position).getStatus()==2){
                 viewHolder.rl_button_tv.setText("已取消");
-                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
             }
 
             return convertView;
@@ -188,7 +189,7 @@ public class TuanKeRecordFragment extends BaseFragment {
     }
 
     class ViewHolder{
-        TextView course_name,course_date,course_type,course_jiaolian,rl_button_tv;
+        TextView course_name,course_date,course_type,course_jiaolian,rl_button_tv,course_num;
         RelativeLayout rl_button;
     }
 

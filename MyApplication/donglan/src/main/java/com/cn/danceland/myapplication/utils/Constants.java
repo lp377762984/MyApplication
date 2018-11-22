@@ -256,6 +256,10 @@ public class Constants {
     public static String FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
     public static String FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
     public static String QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
+    public static String QUERY_TEACH_CALENDAR = HOST + "appCourse/queryTeachCalendar";//返回教练私教界面查询日历红点数据
+    public static String QUERY_MEMBER_CALENDAR = HOST + "appCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
+    public static String GROUP_QUERY_MEMBER_CALENDAR = HOST + "appFreeGroupCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
+
 
 
     public static String YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务
@@ -607,6 +611,9 @@ public class Constants {
         FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
         FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
         QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
+       QUERY_TEACH_CALENDAR = HOST + "appCourse/queryTeachCalendar";//返回教练私教界面查询日历红点数据
+        QUERY_MEMBER_CALENDAR = HOST + "appCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
+          GROUP_QUERY_MEMBER_CALENDAR = HOST + "appFreeGroupCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
 
 
         YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务

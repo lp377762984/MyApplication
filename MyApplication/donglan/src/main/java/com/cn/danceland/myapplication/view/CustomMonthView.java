@@ -179,7 +179,7 @@ public class CustomMonthView extends MonthView {
             paint.setAntiAlias(true);
             paint.setStyle(Paint.Style.FILL);
           //  paint.setColor(0xFFeaeaea);
-            Shader mShader = new LinearGradient(0, mRadius, mRadius*2, mRadius, new int[]{ Color.parseColor("#FF0072"),Color.parseColor("#FF6243")}, null, Shader.TileMode.MIRROR);
+            Shader mShader = new LinearGradient(cx-mRadius,cy , cx+mRadius, cy, new int[]{Color.parseColor("#FF6243"), Color.parseColor("#FF0072")}, new float[]{0,1.0f}, Shader.TileMode.CLAMP);
             paint.setShader(mShader);
             canvas.drawCircle(cx, cy, mRadius, paint);
         }

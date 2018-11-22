@@ -553,7 +553,18 @@ public class SiJiaoFragment extends BaseFragment {
                                 putExtra("endTime", endTime)
                                 .putExtra("role", role)
                                 .putExtra("auth", auth));
-                    } else if (list.get(groupPosition).getCourse_category() == 2) {
+                    } else if (list.get(groupPosition).getCourse_category() == 2) {//小团课
+
+//                        startActivityForResult(new Intent(mActivity, TuanKeDetailActivity.class).putExtra("groupId", xiaoTuanList.get(position).getId()).
+//                                putExtra("yuyueStartTime", yuyueStartTime).putExtra("item", xiaoTuanList.get(position)), 223);
+//
+//
+//                        startActivity(new Intent(mActivity, SmallTuankeDetailActivity.class).
+//                                putExtra("item", list.get(groupPosition)).
+//                                putExtra("startTime", startTime).
+//                                putExtra("endTime", endTime)
+//                                .putExtra("role", role)
+//                                .putExtra("auth", auth));
                         CourseActivity activity = (CourseActivity) getActivity();
                         if (activity != null) {
                             activity.getItemId(list.get(groupPosition).getId(), list.get(groupPosition).getCourse_type_id(), "2");
@@ -567,7 +578,7 @@ public class SiJiaoFragment extends BaseFragment {
             viewHolder.sijiao_shengyu.setText(list.get(groupPosition).getSurplus_count() + "节");
 
             viewHolder.sijiao_date.setText(startTime + "至" + endTime);
-            viewHolder.sijiao_date.setTextColor(Color.GRAY);
+            viewHolder.sijiao_date.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
 
             if (list.get(groupPosition).getCourse_category() == 1) {
                 viewHolder.sijiao_fangshi.setText("单人私教");

@@ -3,25 +3,24 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.adapter.SiJiaoRecylerViewAdapter;
 import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
 import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -34,9 +33,8 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.view.CommitButton;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -64,14 +62,16 @@ public class CourseDetailActivity extends BaseActivity {
             tv_content;
     ImageView course_img, course_back;
     CircleImageView course_jiaolian_huiyuan_circle;
-    RelativeLayout rl_button_yuyue;
-    NestedExpandaleListView my_expanda;
+    CommitButton rl_button_yuyue;
+  // NestedExpandaleListView my_expanda;
     ImageView down_img, up_img;
     Gson gson;
     CourseMemberBean courseMemberBean;
     List<CourseMemberBean.Content> headList, childList;
     MyAdapter myAdapter;
     String emp_id, room_id, courseTypeId, branchId;
+    RecyclerView my_recycler_view;
+    private SiJiaoRecylerViewAdapter mRecylerViewAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -292,48 +292,57 @@ public class CourseDetailActivity extends BaseActivity {
 
     private void initView() {
 
-        course_back = findViewById(R.id.course_back);
 
         course_name = findViewById(R.id.course_name);
         course_length = findViewById(R.id.course_length);
         course_place = findViewById(R.id.course_place);
         course_room = findViewById(R.id.course_room);
         course_img = findViewById(R.id.course_img);
+
         course_jiaolian_huiyuan_name = findViewById(R.id.course_jiaolian_huiyuan_name);
         course_jiaolian_huiyuan_circle = findViewById(R.id.course_jiaolian_huiyuan_circle);
         course_renshu = findViewById(R.id.course_renshu);
-        rl_button_yuyue = findViewById(R.id.rl_button_yuyue);
+        rl_button_yuyue = findViewById(R.id.dlbtn_commit);
         tv_kecheng_fenshu = findViewById(R.id.tv_kecheng_fenshu);
         tv_jiaolian_fenshu = findViewById(R.id.tv_jiaolian_fenshu);
         tv_changdi_fenshu = findViewById(R.id.tv_changdi_fenshu);
         tv_content = findViewById(R.id.tv_content);
-        my_expanda = findViewById(R.id.my_expanda);
-        my_expanda.setGroupIndicator(null);
-        my_expanda.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                down_img = v.findViewById(R.id.down_img);
-                up_img = v.findViewById(R.id.up_img);
-                if (down_img.getVisibility() == View.GONE) {
-                    down_img.setVisibility(View.VISIBLE);
-                    up_img.setVisibility(View.GONE);
-                } else {
-                    down_img.setVisibility(View.GONE);
-                    up_img.setVisibility(View.VISIBLE);
-                }
-                return false;
-            }
-        });
+//        my_expanda = findViewById(my_expanda);
+//        my_expanda.setGroupIndicator(null);
+//        my_expanda.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+//            @Override
+//            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+//                down_img = v.findViewById(R.id.down_img);
+//                up_img = v.findViewById(R.id.up_img);
+//                if (down_img.getVisibility() == View.GONE) {
+//                    down_img.setVisibility(View.VISIBLE);
+//                    up_img.setVisibility(View.GONE);
+//                } else {
+//                    down_img.setVisibility(View.GONE);
+//                    up_img.setVisibility(View.VISIBLE);
+//                }
+//                return false;
+//            }
+//        });
 
         if (role != null) {
 
-            tv_content.setText(item1.getCourse_type_describe());
+            tv_content.setText("课程介绍："+item1.getCourse_type_describe());
 
         } else {
 
-            tv_content.setText(item.getCourse_type_describe());
+            tv_content.setText("课程介绍："+item.getCourse_type_describe());
         }
 
+        my_recycler_view = findViewById(R.id.my_recycler_view);
+        //创建默认的线性LayoutManager
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        my_recycler_view.setLayoutManager(linearLayoutManager);
+        //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
+        my_recycler_view.setHasFixedSize(true);
+        //创建并设置Adapter
 
 
 
@@ -363,12 +372,6 @@ public class CourseDetailActivity extends BaseActivity {
             }
         });
 
-        course_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
     }
 
@@ -402,15 +405,17 @@ public class CourseDetailActivity extends BaseActivity {
                         if (data.getTotalElements() > 6) {
                             getTotlePeple();
                         } else if (data.getTotalElements() < 1) {
-                            my_expanda.setVisibility(View.GONE);
+                     //       my_expanda.setVisibility(View.GONE);
                         }
                         course_renshu.setText("购买会员(" + data.getTotalElements() + ")");
                         headList = data.getContent();
-                        my_expanda.setAdapter(myAdapter);
+                        mRecylerViewAdapter = new SiJiaoRecylerViewAdapter(CourseDetailActivity.this, headList);
+                        my_recycler_view.setAdapter(mRecylerViewAdapter);
+                   //     my_expanda.setAdapter(myAdapter);
                     }
 
                 } else {
-                    my_expanda.setVisibility(View.GONE);
+              //      my_expanda.setVisibility(View.GONE);
                     course_renshu.setText("购买会员(0)");
                 }
 

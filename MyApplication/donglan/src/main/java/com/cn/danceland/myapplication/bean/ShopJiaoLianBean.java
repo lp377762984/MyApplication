@@ -40,12 +40,48 @@ public class ShopJiaoLianBean implements Serializable{
         private String member_no;
         private String nick_name;
         private String password;
+        private String avatar_url;
         private int person_id;
         private String phone_no;
         private int platform;
         private long reg_date;
         private String remark;
         private String self_avatar_path;
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "auth=" + auth +
+                    ", avatar_path='" + avatar_path + '\'' +
+                    ", branch_id=" + branch_id +
+                    ", cname='" + cname + '\'' +
+                    ", default_branch=" + default_branch +
+                    ", department_id=" + department_id +
+                    ", enabled=" + enabled +
+                    ", gender=" + gender +
+                    ", id=" + id +
+                    ", identity_card='" + identity_card + '\'' +
+                    ", member_no='" + member_no + '\'' +
+                    ", nick_name='" + nick_name + '\'' +
+                    ", password='" + password + '\'' +
+                    ", avatar_url='" + avatar_url + '\'' +
+                    ", person_id=" + person_id +
+                    ", phone_no='" + phone_no + '\'' +
+                    ", platform=" + platform +
+                    ", reg_date=" + reg_date +
+                    ", remark='" + remark + '\'' +
+                    ", self_avatar_path='" + self_avatar_path + '\'' +
+                    '}';
+        }
+
+        public String getAvatar_url() {
+            return avatar_url;
+        }
+
+        public void setAvatar_url(String avatar_url) {
+            this.avatar_url = avatar_url;
+        }
+
         public void setAuth(int auth) {
             this.auth = auth;
         }

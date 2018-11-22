@@ -32,6 +32,8 @@ import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomLine;
 import com.google.gson.Gson;
+import com.haibin.calendarview.CalendarLayout;
+import com.haibin.calendarview.CalendarView;
 import com.necer.ncalendar.calendar.NCalendar;
 import com.necer.ncalendar.listener.OnCalendarChangedListener;
 import com.weigan.loopview.LoopView;
@@ -47,6 +49,7 @@ import java.util.List;
 
 /**
  * Created by feng on 2018/1/13.
+ * 预约课程
  */
 
 public class SiJiaoDetailActivity extends BaseActivity {
@@ -91,6 +94,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
     private int courseLength;
     private ArrayList<Integer> endMinuteList;
     private ArrayList<Integer> jiaolianMinuteList;
+    CalendarView mCalendarView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -237,15 +241,61 @@ public class SiJiaoDetailActivity extends BaseActivity {
         loopview = inflate.findViewById(R.id.loopview);
         over_time = inflate.findViewById(R.id.over_time);
 
-        sijiao_back = findViewById(R.id.sijiao_back);
-        sijiao_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         tv_date = findViewById(R.id.tv_date);
+        mCalendarLayout = (CalendarLayout) findViewById(R.id.calendarLayout);
+        //mCalendarLayout.shrink();//收起来
+        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+        mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
+            @Override
+            public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
+
+            }
+
+            @Override
+            public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
+     //           LogUtil.i(calendar.getYear() + "年" + calendar + "月" + calendar.getDay() + b);
+                tv_date.setText(calendar.getYear() + "." + calendar.getMonth() + "." + calendar.getDay() + "");
+             String  currentSelectDate = calendar.getYear() + "-" + calendar.getMonth() + "-" + calendar.getDay() + "";
+//                EventBus.getDefault().post(new StringEvent(currentSelectDate, 4331));
+//                mYear = calendar.getYear();
+//
+//
+//                startTime = TimeUtils.date2TimeStamp(currentSelectDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss")+"";
+//                endTime = (Long.valueOf(startTime)+86400000)+"";
+//                if("0".equals(isTuanke)||"1".equals(type)){
+//                    showFragment(type,isTuanke);
+//                }else if("2".equals(type)){
+//                    showFragment(type,isTuanke);
+//                }
+                    positionList.clear();
+                    statusList.clear();
+                    roleList.clear();
+                    textPositionList.clear();
+                    for (int i = 0; i < 84; i++) {
+                        positionList.add(999);
+                    }
+                    for (int i = 0; i < 84; i++) {
+                        statusList.add(999);
+                    }
+                    for (int i = 0; i < 84; i++) {
+                        roleList.add(999);
+                    }
+//                    for (int i = 0; i < 84; i++) {
+//                        textPositionList.add(999);
+//                    }
+
+                    startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
+                    LogUtil.i(currentSelectDate + " 00:00:00");
+                    endTime = (Long.valueOf(startTime) + 86399) + "";
+                    weekDay = TimeUtils.dateToWeek(currentSelectDate);
+                    getData();
+                }
+
+
+
+
+        });
 
         getData();
     }
@@ -345,7 +395,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
         alertdialog.show();
 
     }
-
+    CalendarLayout mCalendarLayout;
     class StrBean {
 
 
