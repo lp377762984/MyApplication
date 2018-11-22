@@ -844,6 +844,11 @@
             android:name=".activity.SearchFriendsActivity"
             android:screenOrientation="portrait" />
 
+        <!--设置  我的消息-->
+        <activity
+            android:name=".activity.SettingMessageActivity"
+            android:screenOrientation="portrait" />
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

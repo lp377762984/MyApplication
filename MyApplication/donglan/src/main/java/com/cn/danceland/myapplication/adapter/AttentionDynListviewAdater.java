@@ -439,6 +439,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
             Glide.with(convertView.getContext())
                     .load(data.get(position).getVedioImg())
+                    .apply(new RequestOptions().placeholder(R.drawable.loading_img))
                     .into(viewHolder.jzVideoPlayer.thumbImageView);
             //  viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
             viewHolder.jzVideoPlayer.positionInList = position;
@@ -466,8 +467,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 RequestOptions options1 = new RequestOptions()
-                        //  .placeholder(R.drawable.img_loading)//加载占位图
-                        .error(R.drawable.img_loadfail)//
+                        .placeholder(R.drawable.loading_img)//加载占位图
+//                        .error(R.drawable.img_loadfail)//
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .priority(Priority.HIGH);
 
@@ -499,7 +500,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 
                 Glide.with(context)
                         .load(sb.toString())
-                        // .apply(options1)
+                        .apply(options1)
                         .into(viewHolder.iv_pic);
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -896,8 +897,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 LogUtil.i(volleyError.toString());
             }
         }) {
-
-
 
 
         };

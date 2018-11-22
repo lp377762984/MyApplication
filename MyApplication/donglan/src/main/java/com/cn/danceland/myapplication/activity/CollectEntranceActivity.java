@@ -52,7 +52,6 @@ public class CollectEntranceActivity extends BaseActivity {
     private ProgressDialog dialog;
     private RelativeLayout rl_error;
 
-
     private CollectListviewAdapter collectListviewAdapter;
     public List<RequestCollectDataBean.Data.Content> data = new ArrayList<RequestCollectDataBean.Data.Content>();
     private int mCurrentPage = 0;//当前请求页

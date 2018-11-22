@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.view.AlertDialogCustomToHint;
 import com.google.gson.Gson;
 import com.umeng.analytics.MobclickAgent;
 import com.vondear.rxtools.activity.ActivityScanerCode;
@@ -28,9 +30,9 @@ import java.util.Map;
  * 扫码并处理
  */
 
-
 public class ScanerCodeActivity extends ActivityScanerCode {
     private String from = "";
+    private AlertDialogCustomToHint.MyDialog dialog;
 
     @Override
     public void do_result(String result) {
@@ -153,49 +155,37 @@ public class ScanerCodeActivity extends ActivityScanerCode {
      * 确认对话
      */
     private void showConfirmDialog(final String result) {
-        AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        //   dialog.setTitle("提示");
-        dialog.setMessage("是否入场");
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(ScanerCodeActivity.this, "是否入场", new AlertDialogCustomToHint.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void ok_bt(int dialogOKB) {
                 scan_qrcode(result);
+                dialog.dismiss();
+            }
 
-            }
-        });
-        dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        dialog.show();
     }
 
     /**
      * 显示结果对话
      */
     private void showResultDialog(final String result, boolean cancel) {
-        final AlertDialog.Builder dialog =
-                new AlertDialog.Builder(this);
-        //   dialog.setTitle("提示");
-        dialog.setMessage(result);
-        dialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(ScanerCodeActivity.this, result, new AlertDialogCustomToHint.Click() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                finish();
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
             }
         });
-        if (cancel) {
-            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
+        if (!cancel) {
+            dialog.GoneCancel();
         }
-        dialog.show();
     }
 }

@@ -100,7 +100,7 @@ public class AlertDialogToListActivity extends BaseActivity {
         tv_error.setText("暂无数据");
 
         if (!TextUtils.isEmpty(from) && from.equals("扫码入场")) {
-            dialog_title_tv.setText("扫码入场");
+            dialog_title_tv.setText("选择手牌");
             ok_tv.setVisibility(View.GONE);
             cancel_tv.setVisibility(View.GONE);
         } else {
@@ -246,9 +246,9 @@ public class AlertDialogToListActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("size", 10+"");
-                map.put("page", pageCount+"");
-                map.put("gender", genderStr+"");
+                map.put("size", 10 + "");
+                map.put("page", pageCount + "");
+                map.put("gender", genderStr + "");
                 return map;
             }
         };
@@ -326,7 +326,7 @@ public class AlertDialogToListActivity extends BaseActivity {
             ListAdapter.ViewHolder vh = null;
             if (convertView == null) {
                 vh = new ListAdapter.ViewHolder();
-                convertView = View.inflate(context, R.layout.fitness_test_notice_item, null);
+                convertView = View.inflate(context, R.layout.list_dialog_notice_item, null);
                 vh.title_tv = convertView.findViewById(R.id.title_tv);
                 vh.item_layout = convertView.findViewById(R.id.item_layout);
                 convertView.setTag(vh);
@@ -337,7 +337,7 @@ public class AlertDialogToListActivity extends BaseActivity {
             vh.item_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    selectIdx = position ;
+                    selectIdx = position;
                     Intent intent = new Intent(context, ScanerCodeDetailActivity.class);
                     intent.putExtra("selectId", handsListData.get(selectIdx).getId() + "");//返回选中数据
                     intent.putExtra("selectCode", handsListData.get(selectIdx).getCode());//返回选中数据

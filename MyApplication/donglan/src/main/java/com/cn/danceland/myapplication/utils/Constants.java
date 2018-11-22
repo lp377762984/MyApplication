@@ -20,18 +20,18 @@ public class Constants {
 //    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
 //    public static final String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
-        public static  String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
+    public static String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
 //   public static  String HOST_SERVICE = "http://39.104.188.91:6003/";//审核服务器
 
 
     public static String HOST = HOST_SERVICE;
     public static boolean DEV_CONFIG = true;//是否是开发模式、连接阿里云必须改成false
 
-    public static String APP_ID_UMENG="5ba1ee11f1f5569f370000f7";//第三方AppId   友盟
-    public static String APP_ID_WEIXIN="wx530b17b3c2de2e0d";//第三方AppId   微信
-    public static String APP_SECRET_WEIXIN="a8887e732c374dbffc37cd1390cf8bce";//第三方AppSecret   微信
-    public static String APP_ID_QQ_ZONE="101506602";//第三方AppId   QQ
-    public static String APP_SECRET_QQ_ZONE="";//第三方AppSecret   QQ
+    public static String APP_ID_UMENG = "5ba1ee11f1f5569f370000f7";//第三方AppId   友盟
+    public static String APP_ID_WEIXIN = "wx530b17b3c2de2e0d";//第三方AppId   微信
+    public static String APP_SECRET_WEIXIN = "a8887e732c374dbffc37cd1390cf8bce";//第三方AppSecret   微信
+    public static String APP_ID_QQ_ZONE = "101506602";//第三方AppId   QQ
+    public static String APP_SECRET_QQ_ZONE = "";//第三方AppSecret   QQ
 
     public static String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -345,6 +345,13 @@ public class Constants {
     //验证手机号与密码是否一致
     public static String PUSH_VERIFY_PHONE_PASS = HOST + "/person/verifyPhonePass";//验证手机号与密码是否一致
 
+    //获取推送设置列表
+    public static String PUSH_RECEIVE_LIST = HOST + "/pushReceive/list";//获取推送设置列表
+
+    //设置某个类型推送是否接收
+    public static String PUSH_RECEIVE_SAVE = HOST + "/pushReceive/save";//设置某个类型推送是否接收
+
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -437,7 +444,7 @@ public class Constants {
         SAVE_REPORT = HOST + "/appReport/saveReport";//举报动态
         ISJOINBRANCH = HOST + "/branch/iSJoinBranch";//判断是否加入该门店
 
-       PAY_WAYS_URL = HOST + "/payConf/findById";//支持哪种支付方式
+        PAY_WAYS_URL = HOST + "/payConf/findById";//支持哪种支付方式
         FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
 
         //报表相关
@@ -550,7 +557,7 @@ public class Constants {
         INTRODUCE_QUERYLIST = HOST + "/introduce/queryList";//查询推荐和被推荐
 
         SELL_CARD_PRARMS = "http://192.168.1.93/test.txt";//买卡参数
-       BRANCH_PICTURE_URL = HOST + "/branch/queryBranchPicture";//门店介绍图片列表
+        BRANCH_PICTURE_URL = HOST + "/branch/queryBranchPicture";//门店介绍图片列表
         ISLOGINED = "islogined";//是否登录
         MY_USERID = "my_userid";//我的ID
 
@@ -691,16 +698,21 @@ public class Constants {
         PUSH_READ_NUMBER = HOST + "/appHome/updateReadNumber";//更新新闻资讯的阅读数
 
         //修改个人资料(v 2.0增加接口)
-       PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
+        PUSH_MODIFY_PERSON_DATA = HOST + "/person/modifyPersonData_v2";//修改个人资料(v 2.0增加接口)
 
         //更新会送动态的阅读数
         PUSH_CLUB_READ_NUMBER = HOST + "/clubDynamic/updateReadNumber";//更新会送动态的阅读数
 
         //新增问题题干
-       PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
+        PUSH_BAC_QUESTION_SAVE = HOST + "bcaQuestion/save";//新增问题题干
 
         //验证手机号与密码是否一致
         PUSH_VERIFY_PHONE_PASS = HOST + "/person/verifyPhonePass";//验证手机号与密码是否一致
 
+        //获取推送设置列表
+        PUSH_RECEIVE_LIST = HOST + "/pushReceive/list";//获取推送设置列表
+
+        //设置某个类型推送是否接收
+        PUSH_RECEIVE_SAVE = HOST + "/pushReceive/save";//设置某个类型推送是否接收
     }
 }

@@ -47,7 +47,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
  * Created by yxx on 2018-09-06.
  */
 
-public class NoticeFragment extends BaseFragment {
+public class FoundFragment extends BaseFragment {
     private Context context;
     private PullToRefreshListView mListView;
     private RelativeLayout rl_error;
@@ -105,9 +105,6 @@ public class NoticeFragment extends BaseFragment {
                 timer.schedule(task, 1000);
             }
         });
-
-        init_pullToRefresh();
-
 
         return v;
     }
@@ -198,50 +195,50 @@ public class NoticeFragment extends BaseFragment {
      */
     public void find_all_data(final int pageCount) throws JSONException {
 
-        StrBean strBean = new StrBean();
-        strBean.page = pageCount + "";
-        String s = gson.toJson(strBean);
-        LogUtil.i("gson-" + s);
-        JSONObject jsonObject = new JSONObject(s.toString());
-
-        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                LogUtil.i(jsonObject.toString());
-                RequestNoticeListBean datainfo = new RequestNoticeListBean();
-                Gson gson = new Gson();
-                datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
-
-                if (datainfo.getSuccess()) {
-
-                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
-                        isEnd = true;
-                        setEnd();
-                    } else {
-                        isEnd = false;
-                        init_pullToRefresh();
-                    }
-
-                    if (mCurrentPage == 0) {
-                        datalist = datainfo.getData().getContent();
-                        myListAatapter.notifyDataSetChanged();
-                    } else {
-                        datalist.addAll(datainfo.getData().getContent());
-                        myListAatapter.notifyDataSetChanged();
-                    }
-                    mCurrentPage = mCurrentPage + 1;
-                } else {
-                    ToastUtils.showToastLong(datainfo.getErrorMsg());
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                ToastUtils.showToastShort(volleyError.toString());
-            }
-        });
-        MyApplication.getHttpQueues().add(stringRequest);
+//        StrBean strBean = new StrBean();
+//        strBean.page = pageCount + "";
+//        String s = gson.toJson(strBean);
+//        LogUtil.i("gson-" + s);
+//        JSONObject jsonObject = new JSONObject(s.toString());
+//
+//        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject jsonObject) {
+//                LogUtil.i(jsonObject.toString());
+//                RequestNoticeListBean datainfo = new RequestNoticeListBean();
+//                Gson gson = new Gson();
+//                datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
+//
+//                if (datainfo.getSuccess()) {
+//
+//                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
+//                        isEnd = true;
+//                        setEnd();
+//                    } else {
+//                        isEnd = false;
+//                        init_pullToRefresh();
+//                    }
+//
+//                    if (mCurrentPage == 0) {
+//                        datalist = datainfo.getData().getContent();
+//                        myListAatapter.notifyDataSetChanged();
+//                    } else {
+//                        datalist.addAll(datainfo.getData().getContent());
+//                        myListAatapter.notifyDataSetChanged();
+//                    }
+//                    mCurrentPage = mCurrentPage + 1;
+//                } else {
+//                    ToastUtils.showToastLong(datainfo.getErrorMsg());
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                ToastUtils.showToastShort(volleyError.toString());
+//            }
+//        });
+//        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void setEnd() {

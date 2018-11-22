@@ -97,6 +97,7 @@ public class ShopDetailedActivity extends BaseActivity {
     private TextView donglan_title;//新增详情布局
     private ScrollView sc_view;
     private RelativeLayout titleView;
+    private String shopName="";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,7 +182,7 @@ public class ShopDetailedActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (isjion == true) {
-                    startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class));
+                    startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class).putExtra("shopName",shopName));
                 } else {
                     ToastUtils.showToastShort("请先加入门店");
                 }
@@ -616,7 +617,7 @@ public class ShopDetailedActivity extends BaseActivity {
                 ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data != null) {
 
-
+                    shopName=data.getName();
                     store_name.setText(data.getName());
 
                     LatLng latLng = new LatLng(Double.valueOf(data.getLat()), Double.valueOf(data.getLng()));

@@ -345,9 +345,9 @@
                         android:hint="请填写今日会议"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -376,9 +376,9 @@
                         android:hint="请填写卫生打扫"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -407,9 +407,9 @@
                         android:hint="请填写物品摆放"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -438,9 +438,9 @@
                         android:hint="请填写健身器械"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -469,9 +469,9 @@
                         android:hint="请填写场地设备"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -500,9 +500,9 @@
                         android:hint="请填写团课上课"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -531,9 +531,9 @@
                         android:hint="请填写私教上课"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -562,9 +562,9 @@
                         android:hint="请填写关闭水电"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -593,9 +593,9 @@
                         android:hint="请填写关闭门窗"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -625,9 +625,9 @@
                         android:hint="请填写备注"
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
-                        android:textColor="@color/colorGray22"
-                        android:textColorHint="@color/colorGray22"
-                        android:textSize="14sp" />
+                        android:textColor="@color/colorGray21"
+                        android:textColorHint="@color/colorGray21"
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
 

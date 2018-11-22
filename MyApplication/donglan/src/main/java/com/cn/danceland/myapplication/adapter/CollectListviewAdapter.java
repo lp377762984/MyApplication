@@ -17,10 +17,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.CollectEntranceActivity;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
+import com.cn.danceland.myapplication.activity.TimeTableActivity;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestCollectDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
@@ -112,10 +114,10 @@ public class CollectListviewAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        //  RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
         Glide.with(context)
                 .load(data.get(position).getImg_url())
-                //  .apply(options)
+                  .apply(options)
                 .into(viewHolder.iv_image);
         viewHolder.tv_title.setText(data.get(position).getTitle());
         viewHolder.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(data.get(position).getPublish_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));

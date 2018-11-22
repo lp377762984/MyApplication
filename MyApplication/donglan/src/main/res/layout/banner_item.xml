@@ -10,5 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        roundiv:radius="7dp" />
+        roundiv:radius="7dp"
+        android:background="@drawable/loading_img"/>
 </LinearLayout>

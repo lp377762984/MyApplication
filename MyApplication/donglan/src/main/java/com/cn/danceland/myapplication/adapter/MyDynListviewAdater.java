@@ -283,19 +283,13 @@ public class MyDynListviewAdater extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 //点赞
-
-
                 if (data.get(position).isPraise()) {//已点赞
-
-
                     int pos = position;
                     try {
                         addZan(data.get(position).getId(), false, pos);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 } else {//未点赞
 
                     data.get(position).setAnimationFlag(true);
@@ -307,8 +301,6 @@ public class MyDynListviewAdater extends BaseAdapter {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-
                 }
 
                 notifyDataSetChanged();
@@ -405,9 +397,6 @@ public class MyDynListviewAdater extends BaseAdapter {
 //            @Override
 //            public void onClick(View view) {
 //                //   ToastUtils.showToastShort("点击了关注");
-//
-//
-//
 //            }
 //        });
 
@@ -444,7 +433,6 @@ public class MyDynListviewAdater extends BaseAdapter {
         Glide.with(context)
                 .load(data.get(position).getSelfUrl())
                 .apply(options)
-
                 .into(viewHolder.iv_avatar);
         viewHolder.iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -472,7 +460,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 
             Glide.with(convertView.getContext())
                     .load(data.get(position).getVedioImg())
-                    .into(viewHolder.jzVideoPlayer.thumbImageView);
+                    .apply(new RequestOptions().placeholder(R.drawable.loading_img)).into(viewHolder.jzVideoPlayer.thumbImageView);
             //  viewHolder.jzVideoPlayer.loop  = true;//是否循环播放
             viewHolder.jzVideoPlayer.positionInList = position;
             //   LogUtil.i(position + "");
@@ -501,8 +489,8 @@ public class MyDynListviewAdater extends BaseAdapter {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 RequestOptions options1 = new RequestOptions()
-                        //  .placeholder(R.drawable.img_loading)//加载占位图
-                        .error(R.drawable.img_loadfail)//
+                          .placeholder(R.drawable.loading_img)//加载占位图
+//                        .error(R.drawable.img_loadfail)//
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .priority(Priority.HIGH);
 
@@ -536,7 +524,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 
                 Glide.with(context)
                         .load(sb.toString())
-                        // .apply(options1)
+                         .apply(options1)
                         .into(viewHolder.iv_pic);
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -547,7 +535,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                                 .setDownloadPath("DCIM")//图片下载文件夹地址
                                 .setIsShowNumber(false)//是否显示数字下标
                                 .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                                 .build();
                         ImagePagerActivity.startActivity(context, config);
                     }
@@ -593,7 +581,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                             .setDownloadPath("DCIM")//图片下载文件夹地址
                             .setIsShowNumber(true)//是否显示数字下标
                             .needDownload(true)//是否支持图片下载
-                            .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                            .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                             .build();
                     ImagePagerActivity.startActivity(context, config);
 

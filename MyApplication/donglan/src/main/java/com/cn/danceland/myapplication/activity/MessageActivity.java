@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.FoundFragment;
 import com.cn.danceland.myapplication.fragment.NoticeFragment;
 import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -45,6 +46,7 @@ public class MessageActivity extends BaseActivity {
     FragmentManager fragmentManager;
     //CommentFragment commentFragment;//不用了
     NoticeFragment noticeFragment;//yxx 通知
+    FoundFragment foundFragment;//发现
     SystemMessageFragment systemMessageFragment;//yxx 系统消息
     TabItem tab1;
     TabItem tab2;
@@ -100,6 +102,7 @@ public class MessageActivity extends BaseActivity {
 //        tab2 = findViewById(R.id.tab2);
 //        tab3 = findViewById(R.id.tab3);
 //        tab4 = findViewById(R.id.tab4);
+        tablayout.addTab(tablayout.newTab().setText("发现"));
         if (pinglunNum + dianzanNum + fansNum > 0) {
             tablayout.addTab(tablayout.newTab().setText("通知" + "(" + (pinglunNum + dianzanNum + fansNum) + ")"));
         } else {
@@ -115,7 +118,8 @@ public class MessageActivity extends BaseActivity {
 //        } else {
 //            tablayout.addTab(tablayout.newTab().setText("粉丝"));
 //        }
-        tablayout.addTab(tablayout.newTab().setText("系统消息"));
+        tablayout.addTab(tablayout.newTab().setText("系统"));
+
         //   tablayout.addTab(tablayout.newTab().setText("私信"));
 
 //        if(pinglunNum>0){
@@ -126,18 +130,15 @@ public class MessageActivity extends BaseActivity {
 //            new QBadgeView(MessageActivity.this).bindTarget(tab4).setBadgeNumber(fansNum).setBadgeGravity(Gravity.RIGHT);
 //        }
 
-        showFragment("1");
+        showFragment("0");
         //SPUtils.setInt("pinglunNum", 0);
         tablayout.getTabAt(0).select();
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 currentTabIndex = tab.getPosition();
-                if (currentTabIndex == 0) {
-                    SPUtils.setInt("pinglunNum", 0);
-                    SPUtils.setInt("dianzanNum", 0);
-                    SPUtils.setInt("fansNum", 0);
-                    showFragment("1");//评论
+                if (currentTabIndex == 0) {//发现
+                    showFragment("0");
                 }
 //                else if (currentTabIndex == 1) {
 //                    SPUtils.setInt("dianzanNum", 0);
@@ -147,7 +148,13 @@ public class MessageActivity extends BaseActivity {
 //                    showFragment("2");//关注
 //                }
                 else if (currentTabIndex == 1) {
-                    showFragment("4");
+                    SPUtils.setInt("pinglunNum", 0);
+                    SPUtils.setInt("dianzanNum", 0);
+                    SPUtils.setInt("fansNum", 0);
+                    showFragment("1");//评论
+
+                } else if (currentTabIndex == 2){
+                    showFragment("2");
                     //ToastUtils.showToastShort("没有系统消息");
                 }
 //                else if (currentTabIndex == 4) {//私信对话列表
@@ -169,11 +176,20 @@ public class MessageActivity extends BaseActivity {
 //        lv_message = findViewById(R.id.lv_message);
         dongLanTitleView = findViewById(R.id.title);
         im_back = dongLanTitleView.findViewById(R.id.iv_back);
+        ImageView iv_more = dongLanTitleView.findViewById(R.id.iv_more);
+        iv_more.setImageDrawable(getResources().getDrawable(R.drawable.message_icon));
+        iv_more.setVisibility(View.VISIBLE);
+        iv_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MessageActivity.this, SettingMessageActivity.class));
+            }
+        });
     }
 
     public void showFragment(String str) {
         fragmentManager = getSupportFragmentManager();
-//        commentFragment = new CommentFragment();
+        foundFragment = new FoundFragment();
         noticeFragment = new NoticeFragment();
         systemMessageFragment = new SystemMessageFragment();
 
@@ -184,9 +200,11 @@ public class MessageActivity extends BaseActivity {
         noticeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         LogUtil.i("str" + str);
-        if (TextUtils.equals(str, "1")) {
+        if (TextUtils.equals(str, "0")) {
+            fragmentTransaction.replace(R.id.message_fragment, foundFragment).commit();
+        } else if (TextUtils.equals(str, "1")) {
             fragmentTransaction.replace(R.id.message_fragment, noticeFragment).commit();
-        } else {
+        } else if (TextUtils.equals(str, "2")) {
             fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
         }
 //        if (TextUtils.equals(str, "5")) {
