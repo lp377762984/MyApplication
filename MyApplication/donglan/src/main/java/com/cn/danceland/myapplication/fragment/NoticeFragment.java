@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -21,6 +22,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
@@ -292,10 +294,20 @@ public class NoticeFragment extends BaseFragment {
                 vh.tv_time = convertView.findViewById(R.id.tv_time);
                 vh.tv_status = convertView.findViewById(R.id.tv_status);
                 vh.item_layout = convertView.findViewById(R.id.item_layout);
+                vh.item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
                 convertView.setTag(vh);
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            } else if (position == datalist.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            }
+            vh.item_layout_cv.setLayoutParams(layoutParams);
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
             vh.tv_time.setText(datalist.get(position).getPush_date());
@@ -355,6 +367,7 @@ public class NoticeFragment extends BaseFragment {
             public TextView tv_content;
             public TextView tv_status;
             public LinearLayout item_layout;
+            public CardView item_layout_cv;
         }
     }
 }

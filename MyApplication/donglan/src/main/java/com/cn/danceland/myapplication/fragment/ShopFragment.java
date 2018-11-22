@@ -1057,7 +1057,6 @@ public class ShopFragment extends BaseFragment {
                         break;
                 }
             }
-
         }
     }
 

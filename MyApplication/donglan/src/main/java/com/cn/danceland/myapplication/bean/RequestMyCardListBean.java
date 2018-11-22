@@ -13,9 +13,11 @@ public class RequestMyCardListBean {
     private boolean success;
     private String errorMsg;
     private List<Data> data;
+
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
     public boolean getSuccess() {
         return success;
     }
@@ -23,6 +25,7 @@ public class RequestMyCardListBean {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
+
     public String getErrorMsg() {
         return errorMsg;
     }
@@ -30,6 +33,7 @@ public class RequestMyCardListBean {
     public void setData(List<Data> data) {
         this.data = data;
     }
+
     public List<Data> getData() {
         return data;
     }
@@ -74,7 +78,8 @@ public class RequestMyCardListBean {
         private String able_up;
         private String old_card_id;
         private String deposit;
-        private String  img_url;
+        private String img_url;
+        private int card_status;//1:可用2:未发卡3:未开卡4:挂失5:退卡6:被升级7:停卡8:过期
 
         @Override
         public String toString() {
@@ -117,7 +122,16 @@ public class RequestMyCardListBean {
                     ", old_card_id='" + old_card_id + '\'' +
                     ", deposit='" + deposit + '\'' +
                     ", img_url='" + img_url + '\'' +
+                    ", card_status='" + card_status + '\'' +
                     '}';
+        }
+
+        public int getCard_status() {
+            return card_status;
+        }
+
+        public void setCard_status(int card_status) {
+            this.card_status = card_status;
         }
 
         public String getImg_url() {

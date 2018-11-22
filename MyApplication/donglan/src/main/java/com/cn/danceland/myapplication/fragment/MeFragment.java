@@ -265,7 +265,7 @@ public class MeFragment extends BaseFragment {
             case R.id.iv_avatar://头像
                 startActivity(new Intent(mActivity, UserSelfHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
-            case R.id.ll_my_data://数据中心
+            case R.id.ll_my_data://体测数据
                 Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);
                 startActivity(intent2);
                 break;

@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -26,6 +29,7 @@ import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequestShopListInfo;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -272,9 +276,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
         MyApplication.getHttpQueues().add(stringRequest1);
     }
 
-
     class MyListViewAdapter extends BaseAdapter {
-
 
         @Override
         public int getCount() {
@@ -293,26 +295,40 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
-            view = View.inflate(MyShopActivity.this, R.layout.listview_item_my_shop, null);
+            ViewHolder viewHolder = null;
+            if (view == null) {
+                viewHolder = new ViewHolder();
+                view = View.inflate(MyShopActivity.this, R.layout.listview_item_my_shop, null);
+                viewHolder.iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
+                viewHolder.tv_name = view.findViewById(R.id.tv_name);
+                viewHolder.tv_time = view.findViewById(R.id.tv_time);
 
-            RoundImageView iv_shop_logo = view.findViewById(R.id.iv_shop_logo);
-            TextView tv_name = view.findViewById(R.id.tv_name);
-            TextView tv_time = view.findViewById(R.id.tv_time);
-            TextView tv_role = view.findViewById(R.id.tv_role);
-            ImageView iv_default = view.findViewById(R.id.iv_default);
-
-            Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(iv_shop_logo);
-            tv_name.setText(data.get(i).getName());
-            if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
-                //    tv_default.setText("当前门店");
-                //   cb_default.setImageResource(R.drawable.img_cb1);
-                iv_default.setImageResource(R.drawable.img_current_shop);
+                viewHolder.tv_role = view.findViewById(R.id.tv_role);
+                viewHolder.iv_default = view.findViewById(R.id.iv_default);
+                viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
+                view.setTag(viewHolder);
             } else {
-//                iv_default.setImageResource(R.drawable.img_change_shop);
-                iv_default.setVisibility(View.INVISIBLE);
+                viewHolder = (ViewHolder) view.getTag();
+            }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(MyShopActivity.this, 100f));
+            if (i == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 11f));
+            } else if (i == data.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 5f), DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 5f), DensityUtils.dp2px(MyShopActivity.this, 16f), DensityUtils.dp2px(MyShopActivity.this, 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
+
+            Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(viewHolder.iv_shop_logo);
+            viewHolder.tv_name.setText(data.get(i).getName());
+            if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
+                viewHolder.iv_default.setImageResource(R.drawable.img_current_shop);
+            } else {
+                viewHolder.iv_default.setVisibility(View.INVISIBLE);
             }
             String[] b = data.get(i).getCreate_time().toString().split(" ");
-            tv_time.setText("加入时间：" + b[0]);
+            viewHolder.tv_time.setText("加入时间：" + b[0]);
             if (data.get(i).getAuths().size() == 1) {
                 String s = "我的角色：";
                 if (TextUtils.equals(data.get(i).getAuths().get(0), "1")) {
@@ -324,13 +340,11 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 if (TextUtils.equals(data.get(i).getAuths().get(0), "3")) {
                     s = s + "员工";
                 }
-                tv_role.setText(s);
+                viewHolder.tv_role.setText(s);
             }
             if (data.get(i).getAuths().size() == 2) {
                 String s = "我的角色：";
                 for (int j = 0; j < data.get(i).getAuths().size(); j++) {
-//                    LogUtil.i(j+"");
-//                    LogUtil.i(data.get(i).getAuths().get(j));
                     if (TextUtils.equals(data.get(i).getAuths().get(j), "1")) {
                         if (j == 0) {
                             s = s + "准会员";
@@ -340,7 +354,6 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 
                     }
                     if (TextUtils.equals(data.get(i).getAuths().get(j), "2")) {
-
                         if (j == 0) {
                             s = s + "会员";
                         } else {
@@ -348,23 +361,28 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                         }
                     }
                     if (TextUtils.equals(data.get(i).getAuths().get(j), "3")) {
-
                         if (j == 0) {
                             s = s + "员工";
                         } else {
                             s = s + "/员工";
                         }
                     }
-
-
                 }
-                tv_role.setText(s);
+                viewHolder.tv_role.setText(s);
             }
-
-
             return view;
         }
     }
 
+    class ViewHolder {
+        RoundImageView iv_shop_logo;
+        TextView tv_name;
+        TextView tv_time;
+        TextView tv_role;
+        ImageView iv_default;
+        Button btn_commit;
+        RoundImageView iv_card;
+        CardView item_layout_cv;
+    }
 
 }

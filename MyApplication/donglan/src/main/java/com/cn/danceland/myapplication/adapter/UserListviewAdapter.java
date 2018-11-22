@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -25,6 +27,7 @@ import com.cn.danceland.myapplication.bean.RequsetUserListBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -107,10 +110,21 @@ public class UserListviewAdapter extends BaseAdapter {
             viewHolder.ll_guanzhu = view.findViewById(R.id.ll_guanzhu);
             viewHolder.iv_guanzhu = view.findViewById(R.id.iv_guanzhu);
             viewHolder.tv_guanzhu = view.findViewById(R.id.tv_guanzhu);
+            viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(context, 80f));
+        if (position == 0) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        } else if (position == data.size() - 1) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f));
+        } else {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        }
+        viewHolder.item_layout_cv.setLayoutParams(layoutParams);
+
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
         LogUtil.i(type + "");
         if (type == 3) {//如果是点赞
@@ -270,5 +284,6 @@ public class UserListviewAdapter extends BaseAdapter {
         LinearLayout ll_guanzhu;
         ImageView iv_guanzhu;
         TextView tv_guanzhu;
+        CardView item_layout_cv;
     }
 }

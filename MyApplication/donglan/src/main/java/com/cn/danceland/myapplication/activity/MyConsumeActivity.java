@@ -9,12 +9,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import com.cn.danceland.myapplication.bean.WeiXinBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataCleanManager;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -392,10 +395,22 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                 viewHolder.tv_price = convertView.findViewById(R.id.tv_price);
                 viewHolder.tv_status = convertView.findViewById(R.id.tv_status);
                 viewHolder.tv_time = convertView.findViewById(R.id.tv_time);
+                viewHolder.item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(MyConsumeActivity.this, 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 11f));
+            } else if (position == content.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 5f), DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 5f), DensityUtils.dp2px(MyConsumeActivity.this, 16f), DensityUtils.dp2px(MyConsumeActivity.this, 11f));
+            }
+
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
+
             MyConSumeBean.Content contentItem = content.get(position);
 
             switch (contentItem.getPay_way()) {
@@ -462,5 +477,6 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
     private class ViewHolder {
         XCRoundRectImageView xc_img;
         TextView tv_type, tv_name, tv_platform, tv_price, tv_status, tv_time;
+        CardView item_layout_cv;
     }
 }

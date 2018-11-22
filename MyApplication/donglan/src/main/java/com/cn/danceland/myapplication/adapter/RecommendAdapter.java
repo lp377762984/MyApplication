@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.ConsultBean;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 
 import java.util.List;
@@ -70,10 +73,21 @@ public class RecommendAdapter extends BaseAdapter {
             viewHolder.btn_consult_state = (Button) view.findViewById(R.id.btn_consult_state);
             viewHolder.recommend_icon_image = (ImageView) view.findViewById(R.id.recommend_icon_image);
             viewHolder.consult_title_tv =  view.findViewById(R.id.consult_title_tv);
+            viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(context, 80f));
+        if (i == 0) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        } else if (i == datas.size() - 1) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f));
+        } else {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        }
+
+        viewHolder.item_layout_cv.setLayoutParams(layoutParams);
         viewHolder.name_tv.setText(datas.get(i).getCname() + "");
         viewHolder.tel_tv.setText(datas.get(i).getPhone_no() + "");
         String time = TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy.MM.dd");
@@ -123,5 +137,6 @@ public class RecommendAdapter extends BaseAdapter {
         TextView consult_title_tv;
         Button btn_consult_state;
         ImageView recommend_icon_image;
+        CardView item_layout_cv;
     }
 }

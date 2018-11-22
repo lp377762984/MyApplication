@@ -7,12 +7,14 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.StoreBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -298,7 +301,6 @@ public class ShopListFragment extends BaseFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder = null;
             StoreBean.DataBean items;
-
             if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(mActivity, R.layout.store_item, null);
@@ -310,12 +312,20 @@ public class ShopListFragment extends BaseFragment {
                 viewHolder.img_phone = convertView.findViewById(R.id.img_phone);
                 viewHolder.img_join = convertView.findViewById(R.id.img_join);
                 viewHolder.clickitem = convertView.findViewById(R.id.clickitem);
-                //iewById(R.id.unread_msg_number);
+                viewHolder.item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 11f));
+            } else if (position == itemsArrayList.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 5f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 5f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
 
             if (itemsArrayList != null) {
                 items = itemsArrayList.get(position);
@@ -438,6 +448,7 @@ public class ShopListFragment extends BaseFragment {
         ImageView store_item_img, img_location, img_phone, img_join;
         TextView store_address, distance, unread_msg_number,tv_item_time;
         RelativeLayout clickitem;
+        CardView item_layout_cv;
     }
 
 
