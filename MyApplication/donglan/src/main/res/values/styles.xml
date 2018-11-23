@@ -96,7 +96,7 @@
     </style>
     <style name="BtnCommitStyle1">
         <item name="android:layout_width">327dp</item>
-        <item name="android:layout_height">62.5dp</item>
+        <item name="android:layout_height">70dp</item>
         <item name="android:background">@drawable/img_btn_commit_bg</item>
         <item name="android:layout_marginLeft">25dp</item>
         <item name="android:layout_marginRight">25dp</item>

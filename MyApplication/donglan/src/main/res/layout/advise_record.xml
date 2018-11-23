@@ -16,24 +16,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/advise_record_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:scrollbars="none">
+        <!--<ListView-->
+            <!--android:id="@+id/advise_record_lv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:divider="@android:color/transparent"-->
+            <!--android:dividerHeight="0dp"-->
+            <!--android:scrollbars="none">-->
 
-        </ListView>
+        <!--</ListView>-->
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-            <include
-                android:id="@+id/rl_error"
-                layout="@layout/no_info_layout"
-                android:visibility="gone" />
-        </RelativeLayout>
+            <!--<include-->
+                <!--android:id="@+id/rl_error"-->
+                <!--layout="@layout/no_info_layout"-->
+                <!--android:visibility="gone" />-->
+        <!--</RelativeLayout>-->
+    <com.handmark.pulltorefresh.library.PullToRefreshListView xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/pullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none"
+        android:headerDividersEnabled="false"
+        android:scrollingCache="false"
+        ptr:ptrDrawable="@drawable/listview_loading_anim"
+        ptr:ptrHeaderBackground="#00000000"
+        ptr:ptrHeaderTextColor="#999999"
+        ptr:ptrRefreshableViewBackground="#00000000"
+        ptr:ptrScrollingWhileRefreshingEnabled="true" />
+
+    <include
+        android:id="@+id/rl_no_info"
+        layout="@layout/no_data_layout"
+        android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>
