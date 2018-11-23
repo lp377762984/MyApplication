@@ -1,10 +1,12 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -19,6 +21,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.BlackListBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
@@ -153,6 +156,17 @@ public class BlackListActivity extends BaseActivity {
             TextView name = view.findViewById(R.id.name);
             TextView tv_cancel = view.findViewById(R.id.tv_cancel);
             CircleImageView avatar = view.findViewById(R.id.avatar);
+            CardView item_layout_cv = view.findViewById(R.id.item_layout_cv);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(BlackListActivity.this, 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 11f));
+            } else if (position == dataList.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 5f), DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 5f), DensityUtils.dp2px(BlackListActivity.this, 16f), DensityUtils.dp2px(BlackListActivity.this, 11f));
+            }
+            item_layout_cv.setLayoutParams(layoutParams);
+
             Glide.with(BlackListActivity.this).load(dataList.get(position).getSelf_avatar_path()).into(avatar);
             name.setText(dataList.get(position).getNick_name());
             tv_cancel.setOnClickListener(new View.OnClickListener() {
