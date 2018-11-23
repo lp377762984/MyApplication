@@ -117,6 +117,7 @@ public class FitnessTestActivity extends BaseActivity {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FINDONEHISTORY, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 if (s.contains("true")) {
                     FitnessTestBean fitnessTestBean = gson.fromJson(s, FitnessTestBean.class);
                     if (fitnessTestBean != null) {
@@ -137,6 +138,7 @@ public class FitnessTestActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
                 rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
                 volleyError.printStackTrace();
@@ -158,6 +160,7 @@ public class FitnessTestActivity extends BaseActivity {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FIND_BC_DATA, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 if (s.contains("true")) {
                     FitnessTestBean fitnessTestBean = gson.fromJson(s, FitnessTestBean.class);
                     if (fitnessTestBean != null) {
@@ -178,6 +181,7 @@ public class FitnessTestActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
                 rl_error.setVisibility(View.VISIBLE);
                 ToastUtils.showToastShort("请检查网络！");
                 volleyError.printStackTrace();
@@ -235,7 +239,7 @@ public class FitnessTestActivity extends BaseActivity {
             height = data.getHeight();
         }
         if (xingbie == null) {
-            xingbie = data.getMember_sex()+ "";
+            xingbie = data.getMember_sex() + "";
         }
         if (weight != null || height != null) {
             setLine("体重", data.getWeight());
@@ -261,13 +265,15 @@ public class FitnessTestActivity extends BaseActivity {
         double h = Double.valueOf(height);
         double sm1 = 0.00344 * h * h - 0.37678 * h + 14.40021;
         double sm2 = 0.00351 * h * h - 0.4661 * h + 23.04821;
-
         if ("体重".equals(type)) {
             tv_line1.setText(value);
             String mi = TimeUtils.convertMi(height);//转换成米
             double m = Double.valueOf(mi);
             double min = m * m * 18.5;
             double max = m * m * 23.9;
+//            double standard = min + (max - min) / 2;
+//            int progress = (int) ((realValue - standard) / 10 + standard);
+//            LogUtil.i("体重min=" + min + "max=" + max + "value=" + value+"pro="+progress);
             if (realValue < min) {
                 setLowLine(base_line1, tv_line1, tv_tizhong);
                 tv_tizhong.setText("偏低");
@@ -440,6 +446,14 @@ public class FitnessTestActivity extends BaseActivity {
         tv2.setTextColor(getResources().getColor(R.color.blue_color1));
     }
 
+    private void setLowLine2(ProgressBar pb, TextView tv, TextView tv2, int progress) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.blue_horizontal_progressbar));
+        pb.setProgress(progress);
+        tv.setPadding(low, 0, 0, 0);
+        tv.setTextColor(getResources().getColor(R.color.blue_color1));
+        tv2.setTextColor(getResources().getColor(R.color.blue_color1));
+    }
+
     private void setNormalLine(ProgressBar pb, TextView tv, TextView tv2) {
         pb.setProgressDrawable(getResources().getDrawable(R.drawable.green_horizontal_progressbar));
         pb.setProgress(50);
@@ -448,9 +462,25 @@ public class FitnessTestActivity extends BaseActivity {
         tv2.setTextColor(getResources().getColor(R.color.green_color1));
     }
 
+    private void setNormalLine2(ProgressBar pb, TextView tv, TextView tv2, int progress) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.green_horizontal_progressbar));
+        pb.setProgress(progress);
+        tv.setPadding(normal, 0, 0, 0);
+        tv.setTextColor(getResources().getColor(R.color.green_color1));
+        tv2.setTextColor(getResources().getColor(R.color.green_color1));
+    }
+
     private void setHighLine(ProgressBar pb, TextView tv, TextView tv2) {
         pb.setProgressDrawable(getResources().getDrawable(R.drawable.red_horizontal_progressbar));
         pb.setProgress(75);
+        tv.setPadding(high, 0, 0, 0);
+        tv.setTextColor(getResources().getColor(R.color.red_color1));
+        tv2.setTextColor(getResources().getColor(R.color.red_color1));
+    }
+
+    private void setHighLine2(ProgressBar pb, TextView tv, TextView tv2, int progress) {
+        pb.setProgressDrawable(getResources().getDrawable(R.drawable.red_horizontal_progressbar));
+        pb.setProgress(progress);
         tv.setPadding(high, 0, 0, 0);
         tv.setTextColor(getResources().getColor(R.color.red_color1));
         tv2.setTextColor(getResources().getColor(R.color.red_color1));
@@ -564,7 +594,7 @@ public class FitnessTestActivity extends BaseActivity {
         pieChardata.setSlicesSpacing(0);
         if (data.getWater() != null && data.getFat() != null && data.getBone() != null && data.getProtein() != null) {
             Double[] lv = {Double.valueOf(data.getWater()), Double.valueOf(data.getFat()), Double.valueOf(data.getBone()), Double.valueOf(data.getProtein())};
-            Integer[] color = {getResources().getColor(R.color.blue_color2),getResources().getColor(R.color.yellow_color1), getResources().getColor(R.color.purple_color1),getResources().getColor(R.color.green_color2)};
+            Integer[] color = {getResources().getColor(R.color.blue_color2), getResources().getColor(R.color.yellow_color1), getResources().getColor(R.color.purple_color1), getResources().getColor(R.color.green_color2)};
             String[] str = {"水分", "脂肪", "骨质", "蛋白质"};
             for (int i = 0; i <= 3; i++) {
                 SliceValue sliceValue = new SliceValue(lv[i].floatValue(), color[i]);//这里的颜色是我写了一个工具类 是随机选择颜色的

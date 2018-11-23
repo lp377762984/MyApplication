@@ -12,6 +12,8 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,6 +49,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by feng on 2018/4/12.
@@ -100,6 +104,9 @@ public class BodyZongHeActivity extends BaseActivity {
         et_content = findViewById(R.id.et_content);
         btn_commit = findViewById(R.id.btn_commit);
 
+
+
+        et_content.setFilters(new InputFilter[]{inputFilter, new InputFilter.LengthFilter(10)});//禁止输入表情以及限制输入长度为10
         rl_01 = findViewById(R.id.rl_01);
         rl_02 = findViewById(R.id.rl_02);
         rl_03 = findViewById(R.id.rl_03);
@@ -391,6 +398,22 @@ public class BodyZongHeActivity extends BaseActivity {
             isClick = true;
         }
     }
+
+    InputFilter inputFilter=new InputFilter() {
+
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
+        @Override
+        public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+            Matcher matcher=  pattern.matcher(charSequence);
+            if(!matcher.find()){
+                return null;
+            }else{
+//                ToastUtils.showToastShort("只能输入汉字、英文、数字");
+                return "";
+            }
+
+        }
+    };
 
     Handler handler = new Handler() {
         @Override

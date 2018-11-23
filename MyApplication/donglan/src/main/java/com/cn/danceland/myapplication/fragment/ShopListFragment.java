@@ -317,7 +317,7 @@ public class ShopListFragment extends BaseFragment {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             if (position == 0) {
                 layoutParams.setMargins(DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 16f), DensityUtils.dp2px(mContext, 11f));
             } else if (position == itemsArrayList.size() - 1) {
