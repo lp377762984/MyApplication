@@ -1,11 +1,14 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -17,6 +20,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestSendCardBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
@@ -136,13 +140,22 @@ public class MySendCardFragment extends BaseFragment {
                 viewHolder.tv_order_name = view.findViewById(R.id.tv_order_name);
                 viewHolder.tv_phone = view.findViewById(R.id.tv_phone);
                 viewHolder.iv_card = view.findViewById(R.id.iv_card);
+                viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
 
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
 
-
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), 100f));
+            if (i == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            } else if (i == mCardList.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
             if (mCardList.get(i).getCharge_mode() == 1) {//计时卡
                 viewHolder.tv_cardtype.setText("卡类型：计时卡");
             }
@@ -181,7 +194,7 @@ public class MySendCardFragment extends BaseFragment {
 ////通过RequestOptions扩展功能
 //            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners).override(300, 300).placeholder(R.drawable.sijiao_card);
             //第一个是上下文，第二个是圆角的弧度
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity,6));
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.sijiao_card).transform(new GlideRoundTransform(mActivity, 6));
 
             Glide.with(mActivity).load(mCardList.get(i).getImg_url()).apply(options).into(viewHolder.iv_card);
             return view;
@@ -195,6 +208,7 @@ public class MySendCardFragment extends BaseFragment {
             TextView tv_order_name;
             TextView tv_phone;
             RoundImageView iv_card;
+            CardView item_layout_cv;
         }
 
     }

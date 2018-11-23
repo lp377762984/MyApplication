@@ -1,12 +1,14 @@
 package com.cn.danceland.myapplication.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +23,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -106,6 +109,17 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
         } else {
             holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
         }
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(context, 100f));
+        if (position == 0) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 0f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        } else if (position == data.size() - 1) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f));
+        } else {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        }
+        holder.item_layout_cv.setLayoutParams(layoutParams);
+
         if (mListener == null) return;
         holder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +195,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
         TextView tv_content;//内容
         ImageView collect_iv;//收藏
         TextView read_number_tv;//阅读数
-
+        CardView item_layout_cv;
         LinearLayout ll_item;
 
         public ViewHolder(View itemView) {
@@ -193,6 +207,7 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
             ll_item = itemView.findViewById(R.id.ll_item);
             collect_iv = itemView.findViewById(R.id.collect_iv);
             read_number_tv = itemView.findViewById(R.id.read_number_tv);
+            item_layout_cv = itemView.findViewById(R.id.item_layout_cv);
         }
     }
 

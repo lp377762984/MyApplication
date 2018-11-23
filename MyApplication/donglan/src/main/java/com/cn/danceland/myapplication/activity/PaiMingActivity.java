@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetAllPaiMingBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.UIUtils;
@@ -49,8 +51,9 @@ public class PaiMingActivity extends BaseActivity {
     private ImageView header_background_iv;//打卡排行 菜单 粉色布局
 
     private PullToRefreshListView pullToRefresh;
-    MyUserListviewAdapter myUserListviewAdapter;
-    List<RequsetAllPaiMingBean.Data> data = new ArrayList<>();
+    private MyUserListviewAdapter myUserListviewAdapter;
+    private List<RequsetAllPaiMingBean.Data> data = new ArrayList<>();//全部的
+    private List<RequsetAllPaiMingBean.Data> dataList = new ArrayList<>();//不算前三个
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -122,9 +125,9 @@ public class PaiMingActivity extends BaseActivity {
 
         ImageView iv_avatar = findViewById(R.id.iv_avatar);
         tv_daka_num.setText(cishu + "次");
-        if(paiming==0){
+        if (paiming == 0) {
             tv_paiming.setText("NO.--");
-        }else{
+        } else {
             tv_paiming.setText("NO." + paiming);
         }
 
@@ -183,6 +186,7 @@ public class PaiMingActivity extends BaseActivity {
         iv_avatar_top3 = v.findViewById(R.id.iv_avatar_top3);
         tv_nick_name3 = v.findViewById(R.id.tv_nick_name3);
         tv_daka_nun3 = v.findViewById(R.id.tv_daka_nun3);
+
         return v;
     }
 
@@ -197,7 +201,12 @@ public class PaiMingActivity extends BaseActivity {
 
                 if (myPaiMingBean.getSuccess()) {
                     data = myPaiMingBean.getData();
-                    myUserListviewAdapter.setData(data);
+                    for (int i = 0; i < data.size(); i++) {
+                        if (i >= 3) {
+                            dataList.add(data.get(i));
+                        }
+                    }
+                    myUserListviewAdapter.setData(dataList);
                     myUserListviewAdapter.notifyDataSetChanged();
                     Message message = Message.obtain();
                     message.what = 1;
@@ -237,16 +246,12 @@ public class PaiMingActivity extends BaseActivity {
             this.data.addAll(bean);
         }
 
-
         public void setData(List<RequsetAllPaiMingBean.Data> bean) {
-
             this.data = bean;
         }
 
-
         @Override
         public int getCount() {
-            // return data.size();
             return data.size();
         }
 
@@ -261,8 +266,7 @@ public class PaiMingActivity extends BaseActivity {
         }
 
         @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-
+        public View getView(final int position, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder = null;
             if (view == null) {
                 viewHolder = new ViewHolder();
@@ -272,20 +276,30 @@ public class PaiMingActivity extends BaseActivity {
                 viewHolder.tv_daka_nun = view.findViewById(R.id.tv_daka_nun);
                 viewHolder.ll_item = view.findViewById(R.id.ll_item);
                 viewHolder.tv_paiming = view.findViewById(R.id.tv_paiming);
-
+                viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
-            viewHolder.tv_nickname.setText(data.get(i).getNick_name());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(context, 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+            } else if (position == data.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 96f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
+
+            viewHolder.tv_nickname.setText(data.get(position).getNick_name());
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
             Glide.with(context)
-                    .load(data.get(i).getSelf_avatar_url())
+                    .load(data.get(position).getSelf_avatar_url())
                     .apply(options)
                     .into(viewHolder.iv_avatar);
-            viewHolder.tv_daka_nun.setText(data.get(i).getBranchScore() + "次");
-            viewHolder.tv_paiming.setText("NO." + data.get(i).getBranchRanking());
+            viewHolder.tv_daka_nun.setText(data.get(position).getBranchScore() + "次");
+            viewHolder.tv_paiming.setText("NO." + data.get(position).getBranchRanking());
             return view;
         }
 
@@ -296,6 +310,7 @@ public class PaiMingActivity extends BaseActivity {
             LinearLayout ll_item;
             TextView tv_daka_nun;
             TextView tv_paiming;
+            CardView item_layout_cv;
         }
     }
 }

@@ -52,6 +52,7 @@ import com.vondear.rxtools.view.likeview.RxShineButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -75,8 +76,7 @@ import static com.cn.danceland.myapplication.R.id.tv_nickname;
 
 public class UserHomeActivity extends BaseActivity {
     private PullToRefreshListView pullToRefresh;
-    //  private List<PullBean> data = new ArrayList<PullBean>();
-    public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
+    public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<>();
     UserHomeDynListviewAdater myDynListviewAdater;
     private RecyclerView mRecyclerView;
     ProgressDialog dialog;
@@ -110,32 +110,11 @@ public class UserHomeActivity extends BaseActivity {
         userId = getIntent().getStringExtra("id");
         isdyn = getIntent().getBooleanExtra("isdyn", false);
         from = getIntent().getIntExtra("from", -1);//6个人主页
-        //    LogUtil.i("userid:" + userId);
-        //  userId="74";
 
         initView();
         initData();
 
     }
-
-//    @Override
-//    protected View createSuccessView() {
-//
-//        View inflate = UIUtils.inflate(R.layout.activity_user_home);
-//
-//
-//        return inflate;
-//
-//
-//    }
-//
-//    @Override
-//    protected LoadingPager.LoadResult load() {
-//   //     initData();
-//        SystemClock.sleep(2000);
-//        return LoadingPager.LoadResult.SUCCESS;
-//
-//    }
 
     @Override
     protected void onDestroy() {
@@ -160,25 +139,50 @@ public class UserHomeActivity extends BaseActivity {
         pullToRefresh.setAdapter(myDynListviewAdater);
         //加入头布局
         //      pullToRefresh.getRefreshableView().addHeaderView(initHeadview(userInfo));
-
+        pullToRefresh.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
-        pullToRefresh.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
-        init();
-
-
-        pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
+        pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+            public void onPullDownToRefresh(
+                    PullToRefreshBase<ListView> refreshView) {
+
                 TimerTask task = new TimerTask() {
                     public void run() {
-                        new FinishRefresh().execute();
+                        new DownRefresh().execute();
                     }
                 };
                 Timer timer = new Timer();
                 timer.schedule(task, 1000);
+            }
 
+            @Override
+            public void onPullUpToRefresh(
+                    PullToRefreshBase<ListView> refreshView) {
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
             }
         });
+
+
+//        pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+//            @Override
+//            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+//                TimerTask task = new TimerTask() {
+//                    public void run() {
+//                        new FinishRefresh().execute();
+//                    }
+//                };
+//                Timer timer = new Timer();
+//                timer.schedule(task, 1000);
+//
+//            }
+//        });
         pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -187,19 +191,61 @@ public class UserHomeActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                //    JZVideoPlayer.onScrollReleaseAllVideos(view, firstVisibleItem, visibleItemCount, totalItemCount);
-                //   LogUtil.i("firstVisibleItem="+firstVisibleItem+"visibleItemCount="+visibleItemCount+"totalItemCount="+totalItemCount);
-
-
                 JZVideoPlayer.onScrollAutoTiny(view, firstVisibleItem, visibleItemCount, 1);
+
             }
         });
+    }
+    /**
+     * 下拉刷新
+     */
+    private class DownRefresh extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            init();
+            mCurrentPage = 0;
+            data = new ArrayList<>();
+            initData();
+            dialog.dismiss();
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dialog.dismiss();
+            myDynListviewAdater.notifyDataSetChanged();
+            pullToRefresh.onRefreshComplete();
+        }
+    }
+    /**
+     * 上拉拉刷新
+     */
+    private class UpRefresh extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                if (!isEnd) {//还有数据请求
+                    findSelfDT();
+                }
+                dialog.dismiss();
+
+            } catch (Exception e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            pullToRefresh.onRefreshComplete();
+            if (isEnd) {//没数据了
+                pullToRefresh.onRefreshComplete();
+            }
+        }
     }
 
     private void setHeadViewData(final RequsetUserDynInfoBean.Data data) {
-
 
         if (TextUtils.equals(data.getPerson().getGender(), "1")) {
             iv_sex.setImageResource(R.drawable.img_sex1);
@@ -217,13 +263,6 @@ public class UserHomeActivity extends BaseActivity {
                 startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
             }
         });
-//        tv_guanzhu_num.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {//查看关注
-//                startActivity(new Intent(UserHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1));
-//
-//            }
-//        });
         tv_fans.setText("" + data.getFanse_no());
         ll_my_fans.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -543,9 +582,7 @@ public class UserHomeActivity extends BaseActivity {
                 Gson gson = new Gson();
                 requestInfoBean = gson.fromJson(s, RequsetUserDynInfoBean.class);
 
-
                 userInfo = requestInfoBean.getData();
-
 
                 if (TextUtils.equals(id, SPUtils.getString(Constants.MY_USERID, null))) {
                     //如果是本人更新本地缓存
@@ -555,7 +592,6 @@ public class UserHomeActivity extends BaseActivity {
                     SPUtils.setInt(Constants.MY_DYN, requestInfoBean.getData().getDyn_no());
                     SPUtils.setInt(Constants.MY_FANS, requestInfoBean.getData().getFanse_no());
                     SPUtils.setInt(Constants.MY_FOLLOWS, requestInfoBean.getData().getFollow_no());
-
 
                     EventBus.getDefault().post(new StringEvent("", EventConstants.UPDATE_USER_INFO));
 
@@ -574,8 +610,6 @@ public class UserHomeActivity extends BaseActivity {
                 //   msg.obj = data;
                 msg.what = 2; //标志消息的标志
                 handler.sendMessage(msg);
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -585,7 +619,6 @@ public class UserHomeActivity extends BaseActivity {
                 ToastUtils.showToastShort("请查看网络连接");
 
             }
-
         }
         ) {
 
@@ -597,7 +630,6 @@ public class UserHomeActivity extends BaseActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
-
     }
 
     private void setEnd() {
@@ -647,9 +679,7 @@ public class UserHomeActivity extends BaseActivity {
                             message.what = 3;
                             handler.sendMessage(message);
 
-
                         }
-
 
                         setEnd();
                     }

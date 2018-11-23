@@ -12,6 +12,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,6 +41,8 @@ import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
@@ -68,6 +71,9 @@ import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,7 +192,14 @@ public class HomeFragment extends BaseFragment {
 //    int i = 255;
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public View initViews() {
+        EventBus.getDefault().register(this);
         LogUtil.i(Constants.HOST);
         View v = View.inflate(mActivity, R.layout.fragment_home_header_view, null);
 
@@ -215,7 +228,6 @@ public class HomeFragment extends BaseFragment {
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         //设置头像
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-
         Glide.with(mActivity).load(mInfo.getPerson().getSelf_avatar_path()).apply(options).into(iv_avatar);
         tv_nick_name.setText("Hello " + mInfo.getPerson().getNick_name());
 
@@ -242,8 +254,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(int position, List<RequestNewsDataBean.Data.Items> data) {
 
-                LogUtil.i(data.size()+"position"+position);
-                setReadNum(data,data.get(position).getId(), position);
+                LogUtil.i(data.size() + "position" + position);
+                setReadNum(data, data.get(position).getId(), position);
                 mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
             }
         });
@@ -453,16 +465,16 @@ public class HomeFragment extends BaseFragment {
             if (listMaxOffset <= offsetNum && offsetNum <= ggg) {
                 lppTemp.setMargins(headerMarginLeft, headerOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.GONE);
-                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f),DensityUtils.dp2px(mActivity, 30f)));
+                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f), DensityUtils.dp2px(mActivity, 30f)));
             } else if (offsetNum == 0) {
                 lppTemp.setMargins(headerMarginLeft, headerMaxOffset, headerMarginRight, 0);
                 in_the_cumulative_tv.setVisibility(View.VISIBLE);
-                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 21f),DensityUtils.dp2px(mActivity, 21f)));
+                cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 21f), DensityUtils.dp2px(mActivity, 21f)));
             }
         } else {
             lppTemp.setMargins(headerMarginLeft, 0, headerMarginRight, 0);
             in_the_cumulative_tv.setVisibility(View.GONE);
-            cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f),DensityUtils.dp2px(mActivity, 30f)));
+            cumulative_num_tv.setLayoutParams(new LinearLayout.LayoutParams(DensityUtils.dp2px(mActivity, 30f), DensityUtils.dp2px(mActivity, 30f)));
             meun_cradview.setVisibility(View.GONE);//改变日记、排行布局
             fitness_diary_white_iv.setVisibility(View.VISIBLE);
             punch_list_white_iv.setVisibility(View.VISIBLE);
@@ -567,15 +579,15 @@ public class HomeFragment extends BaseFragment {
                     if (TextUtils.isEmpty(mInfo.getPerson().getDefault_branch())) {
                         ToastUtils.showToastShort("您还没有参加健身运动");
                         return;
-                    }
-                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (myPaiMingBean == null) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
+                    }//2018-11-22 高威 只需要门店就可以
+//                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
+//                        ToastUtils.showToastShort("您还没有参加健身运动");
+//                        return;
+//                    }
+//                    if (myPaiMingBean == null) {
+//                        ToastUtils.showToastShort("您还没有参加健身运动");
+//                        return;
+//                    }
                     startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
 
                     break;
@@ -831,7 +843,7 @@ public class HomeFragment extends BaseFragment {
                         newsListviewAdapter.addLastList(data);
                         newsListviewAdapter.notifyDataSetChanged();
                     }
-                    LogUtil.i(data.size()+"");
+                    LogUtil.i(data.size() + "");
                     if (data.size() > 0 && data.size() < 10) {
                         setEnd();
                     } else {
@@ -944,8 +956,8 @@ public class HomeFragment extends BaseFragment {
                 Gson gson = new Gson();
                 RequestCollectBean requestInfoBean = gson.fromJson(s, RequestCollectBean.class);
                 if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
-                    if(dataList.get(pos).getRead_number()!=null&&dataList.get(pos).getRead_number().length()>0){
-                        dataList.get(pos).setRead_number((Integer.valueOf(dataList.get(pos).getRead_number())+ 1) +"");//增加阅读数
+                    if (dataList.get(pos).getRead_number() != null && dataList.get(pos).getRead_number().length() > 0) {
+                        dataList.get(pos).setRead_number((Integer.valueOf(dataList.get(pos).getRead_number()) + 1) + "");//增加阅读数
                     }
                     newsListviewAdapter.setData(dataList);
                     newsListviewAdapter.notifyDataSetChanged();
@@ -971,5 +983,21 @@ public class HomeFragment extends BaseFragment {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // 将请求加入全局队列中
         MyApplication.getHttpQueues().add(request);
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+          LogUtil.i("收到消息" + event.getEventCode());
+
+        if (99 == event.getEventCode()) {
+            String msg = event.getMsg();
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+            Glide.with(mActivity).load(msg).apply(options).into(iv_avatar);
+
+        }
+        if (100 == event.getEventCode()) {
+            tv_nick_name.setText("Hello " + event.getMsg());
+        }
     }
 }

@@ -4,20 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorGray23"
     tools:context=".im.ui.ConversationFragment">
 
     <com.tencent.qcloud.ui.TemplateTitle
         android:id="@+id/TT_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:titleText="@string/home_conversation_tab"
         app:canBack="true"
-        />
-    <ListView
+        app:titleText="@string/home_conversation_tab" />
 
+    <ListView
         android:id="@id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp">
 
     </ListView>
 

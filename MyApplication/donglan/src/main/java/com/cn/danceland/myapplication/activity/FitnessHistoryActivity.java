@@ -3,12 +3,14 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.FitnessHistoryBean;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
 
@@ -143,9 +146,19 @@ public class FitnessHistoryActivity extends BaseActivity {
             View inflate = LayoutInflater.from(FitnessHistoryActivity.this).inflate(R.layout.history_item, null);
             TextView cishu = inflate.findViewById(R.id.cishu);
             TextView time = inflate.findViewById(R.id.time);
+            CardView item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
             cishu.setText("第"+(list.size()-position)+"次");
             time.setText(list.get(position).getDate());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(FitnessHistoryActivity.this, 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 11f));
+            } else if (position == content.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 5f), DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 5f), DensityUtils.dp2px(FitnessHistoryActivity.this, 16f), DensityUtils.dp2px(FitnessHistoryActivity.this, 11f));
+            }
 
+            item_layout_cv.setLayoutParams(layoutParams);
             return inflate;
         }
     }

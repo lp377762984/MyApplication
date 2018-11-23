@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:maxLength="12"
         android:singleLine="true"
         android:textColor="@color/black"/>
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="16sp"
-            android:textColor="@color/text_blue1"/>
+            android:textColor="#FF5E3A"/>
     </LinearLayout>
     <View android:layout_width="match_parent"
         android:layout_height="1px"

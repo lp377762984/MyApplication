@@ -2,16 +2,20 @@ package com.cn.danceland.myapplication.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.FitnessHistoryActivity;
 import com.cn.danceland.myapplication.bean.ConsultBean;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 
 import java.util.List;
@@ -68,10 +72,21 @@ public class ConsultAdapter extends BaseAdapter {
             viewHolder.consult_icon_image =  view.findViewById(R.id.consult_icon_image);
             viewHolder.consult_title_tv =  view.findViewById(R.id.consult_title_tv);
             viewHolder.consult_accept_tv =  view.findViewById(R.id.consult_accept_tv);
+            viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(context, 60f));
+        if (i == 0) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        } else if (i == datas.size() - 1) {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f));
+        } else {
+            layoutParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 11f));
+        }
+
+        viewHolder.item_layout_cv.setLayoutParams(layoutParams);
         viewHolder.consult_reply_tv.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
         if(datas.get(i).getAccept_time()!=null){
             viewHolder.consult_accept_tv.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getAccept_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
@@ -115,5 +130,6 @@ public class ConsultAdapter extends BaseAdapter {
         TextView consult_accept_tv;
         Button btn_consult_state;
         ImageView consult_icon_image;
+        CardView item_layout_cv;
     }
 }

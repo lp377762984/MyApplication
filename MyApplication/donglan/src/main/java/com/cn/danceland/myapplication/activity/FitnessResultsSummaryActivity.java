@@ -177,6 +177,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                         age_tv.setText(age + "岁");//年龄
                     }
                     tel_tv.setText(requsetInfo.getPhone_no() + "");//电话
+                    if(infoData.getPerson().getCname()!= null&&infoData.getPerson().getCname().length()>0)
                     operator_tv.setText(infoData.getPerson().getCname() + "");//操作人员
                     if (responseBean.getData().getTest_time() != null && responseBean.getData().getTest_time().length() > 0) {
                         date_tv.setText(TimeUtils.millToDate(Long.valueOf(responseBean.getData().getTest_time())));//体测日期
