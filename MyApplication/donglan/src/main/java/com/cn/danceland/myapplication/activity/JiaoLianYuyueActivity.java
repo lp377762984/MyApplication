@@ -56,7 +56,7 @@ import java.util.Map;
  * 预约课程
  */
 
-public class SiJiaoDetailActivity extends BaseActivity {
+public class JiaoLianYuyueActivity extends BaseActivity {
     //ArrayList<Integer> arrPositionF, arrPositionS;
     ArrayList<Integer> arrStatusF, arrStatusS;
     //HashMap<Integer, Integer> arrPosition, arrStatus;
@@ -210,7 +210,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
             }
         });
         ns_view = findViewById(R.id.ns_view);
-        inflate = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.timeselect, null);
+        inflate = LayoutInflater.from(JiaoLianYuyueActivity.this).inflate(R.layout.timeselect, null);
 
         detail_img = findViewById(R.id.detail_img);
         course_name = findViewById(R.id.course_name);
@@ -227,7 +227,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
             }
             buy.setText("购买节数：" + item.getCount());
             course_shengyu.setText("剩余节数：" + item.getSurplus_count());
-            Glide.with(SiJiaoDetailActivity.this).load(item.getImg_url()).into(detail_img);
+            Glide.with(JiaoLianYuyueActivity.this).load(item.getImg_url()).into(detail_img);
         } else {
             course_name.setText(item1.getCourse_type_name());
             if (item1.getEmployee_name() != null) {
@@ -237,7 +237,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
             }
             buy.setText("购买节数：" + item1.getCount());
             course_shengyu.setText("剩余节数：" + item1.getSurplus_count());
-            Glide.with(SiJiaoDetailActivity.this).load(item1.getImg_url()).into(detail_img);
+            Glide.with(JiaoLianYuyueActivity.this).load(item1.getImg_url()).into(detail_img);
         }
         course_length.setText("有效期：" + startTimeTv + "至" + endTimeTv);
 
@@ -284,14 +284,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 endTime = (Long.valueOf(startTime) + 86399) + "";
                 weekDay = TimeUtils.dateToWeek(currentSelectDate);
              //   getData();
-
-                if (item!=null){
-                    getMemberLine(item.getMember_id() + "", item.getEmployee_id() + "", startTime);
-                }
-                if (item1!=null){
-                    getMemberLine(item1.getMember_id() + "", item1.getEmployee_id() + "", startTime);
-                }
-
+                getMemberLine(item1.getMember_id() + "", item1.getEmployee_id() + "", startTime);
             }
 
 
@@ -301,7 +294,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
     }
 
     private void showTime() {
-        alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
+        alertdialog = new AlertDialog.Builder(JiaoLianYuyueActivity.this);
         ViewGroup parent = (ViewGroup) inflate.getParent();
         if (parent != null) {
             parent.removeAllViews();
@@ -408,14 +401,8 @@ public class SiJiaoDetailActivity extends BaseActivity {
     }
 
     private void getMemberLine(final String member_id, final String employee_id, final String date) {
-        String url;
-        if (item1!=null){//教练约会员时间轴
-            url= Constants.TEACH_TIME_LINE;
-        }else {
-            url= Constants.MEMBER_TIME_LINE;
-        }
 
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST,url, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.TEACH_TIME_LINE, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -448,7 +435,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+                CustomLine customLine = new CustomLine(JiaoLianYuyueActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
                 ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
@@ -635,7 +622,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+                CustomLine customLine = new CustomLine(JiaoLianYuyueActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
                 ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
@@ -702,7 +689,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
                         if (ll_01.getChildCount() > 0) {
                             ll_01.removeAllViews();
                         }
-                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+                        CustomLine customLine = new CustomLine(JiaoLianYuyueActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
                         ll_01.addView(customLine);
                         ToastUtils.showToastShort("预约成功！");
                     } else {

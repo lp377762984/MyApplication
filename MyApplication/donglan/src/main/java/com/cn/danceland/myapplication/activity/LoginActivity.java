@@ -725,7 +725,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 
                 Gson gson = new Gson();
 
-                RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+                final RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
                 if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
@@ -763,7 +763,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                             builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", mEtPhone.getText().toString()));
+                                    startActivity(new Intent(LoginActivity.this, LoginBindActivity.class).putExtra("phone", loginInfoBean.getData().getPhone()));
                                 }
                             });
                             builder.show();

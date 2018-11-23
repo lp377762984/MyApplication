@@ -224,7 +224,8 @@ public class TuanKeRecordFragment extends BaseFragment {
                 if(s.contains("1")){
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
-                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+                    tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
+                    rl.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
                     rl.setClickable(false);
                 }else{
                     ToastUtils.showToastShort("取消失败！请重新操作");

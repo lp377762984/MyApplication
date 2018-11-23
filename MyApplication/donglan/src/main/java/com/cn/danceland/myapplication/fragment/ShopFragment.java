@@ -6,14 +6,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,10 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.OvershootInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -59,6 +54,7 @@ import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.HuiYuanTuiJianActivty;
+import com.cn.danceland.myapplication.activity.JiaoLianCourseActivity;
 import com.cn.danceland.myapplication.activity.LoginNumberActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
@@ -111,9 +107,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.R.attr.resource;
-import static com.cn.danceland.myapplication.R.id.dlbtn_commit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -1005,7 +998,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 33://预约会员
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约会员");
-                        Intent intent2 = new Intent(mActivity, CourseActivity.class);
+                        Intent intent2 = new Intent(mActivity, JiaoLianCourseActivity.class);
                         intent2.putExtra("isTuanke", "1");
                         if (role != null && !role.equals("准会员") && !role.equals("会员")) {
                             intent2.putExtra("role", role);

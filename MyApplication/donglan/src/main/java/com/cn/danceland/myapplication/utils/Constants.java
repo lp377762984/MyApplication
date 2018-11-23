@@ -233,6 +233,9 @@ public class Constants {
     public static String FINDMEMBERCOURSE = HOST + "appCourse/findMemberCourse";//我的私教
     public static String FINDEMPCOURSE = HOST + "appCourse/findEmployeeCourse";//教练的私教
     public static String FINDAVAI = HOST + "/appCourse/queryTimelineList";//我的私教预约记录
+    public static String MEMBER_TIME_LINE = HOST + "timeline/memberTimeline";//会员约教练时间轴
+    public static String TEACH_TIME_LINE = HOST + "timeline/teachTimeline";//教练约会员时间轴
+
     public static String COURSEAPPOIN = HOST + "appCourse/courseAppoint";//预约私教
     public static String QUERYKECHENGBIAO = HOST + "/appGroupCourse/queryGroupCourseByDate";//小团课课程表
     public static String GROUPAPPOINT = HOST + "appGroupCourse/groupAppoint";//预约小团课
@@ -241,7 +244,8 @@ public class Constants {
     public static String FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
     public static String FreeCourse = HOST + "appFreeGroupCourse/queryFreeGroupCourseByDate";//查询某会员某天的团课课程表
     public static String FreeCourseApply = HOST + "appFreeGroupCourse/freeGroupApply";//报名小团课
-    public static String APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取自己的一对一预约记录
+    public static String APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取会员的预约记录
+    public static String FIND_TEACH_COURSELIST = HOST + "appCourse/findTeachCourseList";//获取教练预约记录
     public static String APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
     public static String FREECOURSELIST = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyList";//免费团课记录
     public static String FREECANCELGROUP = HOST + "appFreeGroupCourse/freeGroupCancelApply";//取消免费团课报名
@@ -602,6 +606,8 @@ public class Constants {
         FREEGROUPCOURSE = HOST + "appFreeGroupCourse/findById";//免费团课详情
         FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
         FreeCourse = HOST + "appFreeGroupCourse/queryFreeGroupCourseByDate";//查询某会员某天的团课课程表
+        MEMBER_TIME_LINE = HOST + "timeline/memberTimeline";//会员约教练时间轴
+       TEACH_TIME_LINE = HOST + "timeline/teachTimeline";//教练约会员时间轴
         FreeCourseApply = HOST + "appFreeGroupCourse/freeGroupApply";//报名小团课
         APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取自己的一对一预约记录
         APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教

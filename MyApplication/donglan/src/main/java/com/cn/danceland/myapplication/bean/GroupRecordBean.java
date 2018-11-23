@@ -66,18 +66,14 @@ public class GroupRecordBean implements Serializable {
         private String sign_date;
         private String status;
         private String employee_name;
+        private String count;
 
-
-
-
-
-
-        public long getStart_time() {
-            return start_time;
+        public String getCount() {
+            return count;
         }
 
-        public void setStart_time(long start_time) {
-            this.start_time = start_time;
+        public void setCount(String count) {
+            this.count = count;
         }
 
         @Override
@@ -106,7 +102,16 @@ public class GroupRecordBean implements Serializable {
                     ", sign_date='" + sign_date + '\'' +
                     ", status='" + status + '\'' +
                     ", employee_name='" + employee_name + '\'' +
+                    ", count='" + count + '\'' +
                     '}';
+        }
+
+        public long getStart_time() {
+            return start_time;
+        }
+
+        public void setStart_time(long start_time) {
+            this.start_time = start_time;
         }
 
         public String getEmployee_name() {

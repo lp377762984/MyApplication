@@ -50,6 +50,7 @@ public class SiJiaoRecordBean implements Serializable{
         private int branch_id;
         private String branch_name;
         private String course_type_name;
+        private String count;
         private int status;
         private long course_date;
         private int member_id;
@@ -77,6 +78,14 @@ public class SiJiaoRecordBean implements Serializable{
             this.phone_no = phone_no;
         }
 
+        public String getCount() {
+            return count;
+        }
+
+        public void setCount(String count) {
+            this.count = count;
+        }
+
         @Override
         public String toString() {
             return "Content{" +
@@ -95,6 +104,7 @@ public class SiJiaoRecordBean implements Serializable{
                     ", branch_id=" + branch_id +
                     ", branch_name='" + branch_name + '\'' +
                     ", course_type_name='" + course_type_name + '\'' +
+                    ", count='" + count + '\'' +
                     ", status=" + status +
                     ", course_date=" + course_date +
                     ", member_id=" + member_id +

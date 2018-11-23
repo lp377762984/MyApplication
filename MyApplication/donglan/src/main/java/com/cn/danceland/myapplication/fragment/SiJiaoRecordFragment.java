@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.CourseActivity;
 import com.cn.danceland.myapplication.activity.MyQRCodeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
@@ -80,8 +79,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         gson = new Gson();
 
         initView();
-        currentSelectDate=((CourseActivity)mActivity).getCurrentSelectDate();
-        initData(((CourseActivity)mActivity).getCurrentSelectDate());
+        currentSelectDate=getArguments().getString("currentSelectDate");
+        initData(currentSelectDate);
 
 
         return inflate;
@@ -128,7 +127,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         } else {
             xiaotuankejilubean.setDate(System.currentTimeMillis() + "");
         }
-
+        xiaotuankejilubean.setPage(0);
+        xiaotuankejilubean.setSize(100);
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FINDGROUPCOURSEAPPOINTLIST,
                 gson.toJson(xiaotuankejilubean).toString(), new Response.Listener<JSONObject>() {
             @Override
@@ -152,6 +152,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             content.setStatus(Integer.valueOf(data.get(i).getStatus()));
                             content.setMember_name(data.get(i).getMember_name());
                             content.setStart_time((int) data.get(i).getStart_time());
+                            content.setCount( data.get(i).getCount());
                             //   LogUtil.i( data.get(i).getStart_time()+"");
                             contentList.add(content);
 
@@ -189,7 +190,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         } else {
             siJiaoYuYueConBean.setCourse_date(System.currentTimeMillis() +"");
         }
-
+        siJiaoYuYueConBean.setPage(0);
+        siJiaoYuYueConBean.setSize(100);
 
         //siJiaoYuYueConBean.setEmployee_id(32);
         final String s = gson.toJson(siJiaoYuYueConBean);
@@ -199,7 +201,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.APPOINTLIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                LogUtil.e(jsonObject.toString());
+             //   LogUtil.e(jsonObject.toString());
                 LogUtil.i(jsonObject.toString());
                 if (contentList == null) {
                     contentList = new ArrayList<>();
@@ -250,6 +252,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
 
         @Override
         public int getCount() {
+            LogUtil.i(list.size()+"");
             return list.size();
         }
 
@@ -302,38 +305,12 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
             if (!"2".equals(list.get(position).getCategory())) {//单人私教
                 viewHolder.course_type.setText("单人私教");
                 if (list.get(position).getAppointment_type() == 2) {//教练视角
-                    viewHolder.course_jiaolian.setText("上课会员:" + list.get(position).getMember_name());
-                    viewHolder.course_num.setText("没加呢");
-                    switch (list.get(position).getStatus()) {
-                        case 1:
-
-                            break;
-
-                        case 2:
-
-                            break;
-
-                        case 3:
-
-                            break;
-
-                        case 4:
-
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                }
-
-                if (list.get(position).getAppointment_type() == 1) {//会员视角
                     viewHolder.course_jiaolian.setText("上课教练:" + list.get(position).getEmployee_name());
-                    viewHolder.course_num.setText("没加呢");
+                    viewHolder.course_num.setText("购买节数:" +list.get(position).getCount()+"节");
 
                     switch (list.get(position).getStatus()) {
                         case 1:
-                            viewHolder.tv_ok.setVisibility(View.VISIBLE);
+                            viewHolder.tv_ok.setVisibility(View.GONE);
                             viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -344,7 +321,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             viewHolder.rl_button.setVisibility(View.VISIBLE);
                             viewHolder.rl_button_tv.setText("取消");
                             viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
-                            viewHolder.rl_button_tv.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+                            viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
                             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -357,6 +334,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                         case 2:
                             viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
                             viewHolder.rl_button.setVisibility(View.GONE);
+                            viewHolder.tv_ok.setVisibility(View.GONE);
                             if (list.get(position).getCourse_date() < System.currentTimeMillis() &&
                                     System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {//是否是今天
                                 viewHolder.rl_qiandao_tv.setText("签到");
@@ -392,16 +370,110 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                             break;
 
                         case 3:
+                            viewHolder.tv_ok.setVisibility(View.GONE);
                             viewHolder.rl_qiandao.setVisibility(View.GONE);
                             viewHolder.rl_button.setVisibility(View.VISIBLE);
                             viewHolder.rl_button_tv.setText("已取消");
                             viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
                             viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                            viewHolder.rl_button.setOnClickListener(null);
                             break;
 
                         case 4:
+                            viewHolder.tv_ok.setVisibility(View.GONE);
                             viewHolder.rl_qiandao.setVisibility(View.GONE);
                             viewHolder.rl_button.setVisibility(View.VISIBLE);
+                            viewHolder.rl_button.setOnClickListener(null);
+                            viewHolder.rl_button_tv.setText("已签到");
+                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                            viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+                if (list.get(position).getAppointment_type() == 1) {//教练约会员
+                    viewHolder.course_jiaolian.setText("上课教练:" + list.get(position).getEmployee_name());
+                    viewHolder.course_num.setText("购买节数:" +list.get(position).getCount()+"节");
+
+                    switch (list.get(position).getStatus()) {
+                        case 1:
+                            viewHolder.tv_ok.setVisibility(View.VISIBLE);
+                            viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showDialog(true, list.get(position).getId(), position);
+                                }
+                            });
+
+                            viewHolder.rl_button.setVisibility(View.VISIBLE);
+                            viewHolder.rl_button_tv.setText("取消");
+                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                            viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+                            viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showDialog(false, list.get(position).getId(), position);
+                                }
+                            });
+
+                            break;
+
+                        case 2:
+                            viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
+                            viewHolder.rl_button.setVisibility(View.GONE);
+                            viewHolder.tv_ok.setVisibility(View.GONE);
+                            if (list.get(position).getCourse_date() < System.currentTimeMillis() &&
+                                    System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {//是否是今天
+                                viewHolder.rl_qiandao_tv.setText("签到");
+                                viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                                viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+
+                            } else {
+                                viewHolder.rl_qiandao_tv.setText("签到");
+                                viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                                viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                            }
+
+                            viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+
+                                    if (list.get(position).getCourse_date() < System.currentTimeMillis() && System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {
+                                        //只有在当天可以签到
+                                        if ("2".equals(list.get(position).getCategory())) {
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                                        } else {
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                                        }
+                                    } else {
+                                        ToastUtils.showToastShort("预约时间当天才可以签到");
+                                    }
+
+                                }
+                            });
+                            break;
+
+                        case 3:
+                            viewHolder.tv_ok.setVisibility(View.GONE);
+                            viewHolder.rl_qiandao.setVisibility(View.GONE);
+                            viewHolder.rl_button.setVisibility(View.VISIBLE);
+                            viewHolder.rl_button_tv.setText("已取消");
+                            viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
+                            viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
+                            viewHolder.rl_button.setOnClickListener(null);
+                            break;
+
+                        case 4:
+                            viewHolder.tv_ok.setVisibility(View.GONE);
+                            viewHolder.rl_qiandao.setVisibility(View.GONE);
+                            viewHolder.rl_button.setVisibility(View.VISIBLE);
+                            viewHolder.rl_button.setOnClickListener(null);
                             viewHolder.rl_button_tv.setText("已签到");
                             viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
                             viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
@@ -416,22 +488,78 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
 
             } else {
                 viewHolder.course_type.setText("小团体");
-                viewHolder.course_num.setText("没加呢");
+                viewHolder.course_num.setText("购买节数:" +list.get(position).getCount()+"节");
                 switch (list.get(position).getStatus()) {
-                    case 1:
 
+                    case 1:
+                        viewHolder.rl_qiandao.setVisibility(View.VISIBLE);
+                        viewHolder.rl_button.setVisibility(View.GONE);
+
+                        viewHolder.rl_button.setVisibility(View.VISIBLE);
+                        viewHolder.rl_button_tv.setText("取消");
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+                        viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showCancelGroup( list.get(position).getId(), position);
+                            }
+                        });
+
+
+
+                        if (list.get(position).getCourse_date() < System.currentTimeMillis() &&
+                                System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {//是否是今天
+                            viewHolder.rl_qiandao_tv.setText("签到");
+                            viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                            viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_sell_card));
+
+                        } else {
+                            viewHolder.rl_qiandao_tv.setText("签到");
+                            viewHolder.rl_qiandao_tv.setTextColor(getResources().getColor(R.color.white));
+                            viewHolder.rl_qiandao.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+                        }
+
+                        viewHolder.rl_qiandao.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+                                if (list.get(position).getCourse_date() < System.currentTimeMillis() && System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {
+                                    //只有在当天可以签到
+                                    if ("2".equals(list.get(position).getCategory())) {
+                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                                    } else {
+                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                        startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
+                                    }
+                                } else {
+                                    ToastUtils.showToastShort("预约时间当天才可以签到");
+                                }
+
+                            }
+                        });
                         break;
 
                     case 2:
-
+                        viewHolder.tv_ok.setVisibility(View.GONE);
+                        viewHolder.rl_qiandao.setVisibility(View.GONE);
+                        viewHolder.rl_button.setVisibility(View.VISIBLE);
+                        viewHolder.rl_button_tv.setText("已取消");
+                        viewHolder.rl_button.setOnClickListener(null);
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
                         break;
 
                     case 3:
-
-                        break;
-
-                    case 4:
-
+                        viewHolder.tv_ok.setVisibility(View.GONE);
+                        viewHolder.rl_qiandao.setVisibility(View.GONE);
+                        viewHolder.rl_button.setVisibility(View.VISIBLE);
+                        viewHolder.rl_button.setOnClickListener(null);
+                        viewHolder.rl_button_tv.setText("已签到");
+                        viewHolder.rl_button_tv.setTextColor(getResources().getColor(R.color.white));
+                        viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
                         break;
 
                     default:
@@ -707,7 +835,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
 
     }
 
-    private void cancelGroup(final int id, final RelativeLayout rl, final TextView tv, final RelativeLayout rl1) {
+    private void cancelGroup(final int id, final int pos) {
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.GROUPCOURSEAPPOINTCANCEL, new Response.Listener<String>() {
             @Override
@@ -715,11 +843,12 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                 YuYueResultBean yuYueResultBean = gson.fromJson(s, YuYueResultBean.class);
                 if (yuYueResultBean != null && yuYueResultBean.getData() > 0) {
                     ToastUtils.showToastShort("取消成功！");
-                    rl1.setVisibility(View.GONE);
-                    tv.setText("已取消");
-                    tv.setTextColor(getResources().getColor(R.color.white));
-                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
-                    rl.setClickable(false);
+                    initData(currentSelectDate);
+//                    rl1.setVisibility(View.GONE);
+//                    tv.setText("已取消");
+//                    tv.setTextColor(getResources().getColor(R.color.white));
+//                    rl.setBackground(getResources().getDrawable(R.drawable.btn_bg_gray));
+//                    rl.setClickable(false);
                 } else {
                     ToastUtils.showToastShort("取消失败！请重新操作");
                 }
@@ -742,7 +871,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         MyApplication.getHttpQueues().add(stringRequest);
     }
 
-    private void showCancelGroup(final int id, final RelativeLayout rl, final TextView tv, final RelativeLayout rl1) {
+    private void showCancelGroup(final int id, final int pos) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
         dialog.setMessage("确定取消预约吗");
@@ -750,7 +879,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cancelGroup(id, rl, tv, rl1);
+                cancelGroup(id,pos);
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

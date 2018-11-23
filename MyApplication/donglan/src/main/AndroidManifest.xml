@@ -585,6 +585,9 @@
         <activity
             android:name=".activity.CourseActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.JiaoLianCourseActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.SetPswdActivity"

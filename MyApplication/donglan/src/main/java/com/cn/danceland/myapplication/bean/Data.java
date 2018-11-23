@@ -19,6 +19,15 @@ public class Data implements Serializable {
     private String verCode;
     private Branch branch;
     private Boolean hasPwd;
+    private String phone_no;
+
+    public String getPhone() {
+        return phone_no;
+    }
+
+    public void setPhone(String phone) {
+        this.phone_no = phone;
+    }
 
     public Boolean getHasPwd() {
         return hasPwd;

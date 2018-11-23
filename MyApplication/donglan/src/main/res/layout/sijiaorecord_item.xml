@@ -156,7 +156,7 @@
                             android:layout_centerInParent="true"
                             android:text="签到"
                             android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
 
                     </RelativeLayout>
 

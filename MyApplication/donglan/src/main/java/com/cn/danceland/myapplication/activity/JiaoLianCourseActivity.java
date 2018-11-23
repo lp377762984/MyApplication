@@ -27,8 +27,8 @@ import com.cn.danceland.myapplication.bean.SiJiaoRecordBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeRecordBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.JiaolianSiJiaoRecordFragment;
 import com.cn.danceland.myapplication.fragment.SiJiaoFragment;
-import com.cn.danceland.myapplication.fragment.SiJiaoRecordFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeFragment;
 import com.cn.danceland.myapplication.fragment.TuanKeRecordFragment;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -57,14 +57,14 @@ import static android.R.attr.value;
 
 
 /**
- * Created by feng on 2018/1/11.
+ * 预约会员
  */
 
-public class CourseActivity extends BaseActivity {
+public class JiaoLianCourseActivity extends BaseActivity {
     FragmentManager fragmentManager;
     SiJiaoFragment siJiaoFragment;
     TuanKeFragment tuanKeFragment;
-    SiJiaoRecordFragment siJiaoRecordFragment;
+    JiaolianSiJiaoRecordFragment siJiaoRecordFragment;
     TuanKeRecordFragment tuanKeRecordFragment;
     ImageView course_back;
     //  NCalendar nccalendar;
@@ -131,7 +131,7 @@ public class CourseActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.course);
+        setContentView(R.layout.jiaolian_course);
         EventBus.getDefault().register(this);
         initHost();
         initView();
@@ -166,15 +166,9 @@ public class CourseActivity extends BaseActivity {
     }
 
     private void loadCalendar() {
-        String url;
-        if (!isTuanke.equals("0")){//不是团课
-            url=Constants.QUERY_MEMBER_CALENDAR;
 
-        }else {
-            url=Constants.GROUP_QUERY_MEMBER_CALENDAR;
-        }
 
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_TEACH_CALENDAR, new Response.Listener<String>() {
 
 
 
@@ -182,8 +176,6 @@ public class CourseActivity extends BaseActivity {
             public void onResponse(String s) {
                 LogUtil.i(s);
                 calendarPointBean = new Gson().fromJson(s,CalendarPointBean.class);
-//                Message message=Message.obtain();
-//                message.what=100;
                 handler.sendEmptyMessage(100);
 
 
@@ -197,7 +189,7 @@ public class CourseActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("memberId", data.getMember().getId());
+                map.put("employeeId", data.getEmployee().getId()+"");
                 map.put("date", startTime);
                 return map;
 
@@ -341,12 +333,12 @@ public class CourseActivity extends BaseActivity {
         //   mCalendarLayout.shrink();
         mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
             @Override
-            public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
+            public void onCalendarOutOfRange(Calendar calendar) {
 
             }
 
             @Override
-            public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
+            public void onCalendarSelect(Calendar calendar, boolean b) {
                 LogUtil.i(calendar.getYear() + "年" + calendar + "月" + calendar.getDay() + b);
                 tv_date.setText(calendar.getYear() + "." + calendar.getMonth() + "." + calendar.getDay() + "");
                 currentSelectDate = calendar.getYear() + "-" + calendar.getMonth() + "-" + calendar.getDay() + "";
@@ -356,11 +348,11 @@ public class CourseActivity extends BaseActivity {
 
                 startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss") + "";
                 endTime = (Long.valueOf(startTime) + 86400000) + "";
-                if ("0".equals(isTuanke) || "1".equals(type)) {
+               // if ("0".equals(isTuanke) || "1".equals(type)) {
                     showFragment(type, isTuanke);
-                } else if ("2".equals(type)) {
-                    showFragment(type, isTuanke);
-                }
+           //     } else if ("2".equals(type)) {
+             //       showFragment(type, isTuanke);
+             //   }
 
 
             }
@@ -473,7 +465,7 @@ public class CourseActivity extends BaseActivity {
         tab2 = tablayout.getTabAt(1);
         rl_nv = findViewById(R.id.rl_nv);
         if (type == null) {
-            type = "0";
+            type = "1";
         }
         showFragment(type, isTuanke);
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -481,11 +473,11 @@ public class CourseActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        type = "0";
+                        type = "1";
                         showFragment(type, isTuanke);
                         break;
                     case 1:
-                        type = "1";
+                        type = "0";
                         showFragment(type, isTuanke);
                         break;
                 }
@@ -523,11 +515,7 @@ public class CourseActivity extends BaseActivity {
 
                 rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
-                if (tuanKeFragment==null){
-                    tuanKeFragment = new TuanKeFragment();
-                }
-
-
+                tuanKeFragment = new TuanKeFragment();
                 from = "免费团课";
                 tuanKeFragment.refresh(from, startTime, endTime, course_type_id, id);
 
@@ -557,9 +545,8 @@ public class CourseActivity extends BaseActivity {
                 fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
             } else {
                 if (siJiaoRecordFragment==null){
-                    siJiaoRecordFragment = new SiJiaoRecordFragment();
+                    siJiaoRecordFragment = new JiaolianSiJiaoRecordFragment();
                 }
-
 
                 siJiaoRecordFragment.getStartTime(startTime);
                 siJiaoRecordFragment.getRoles(role, auth);
@@ -570,10 +557,7 @@ public class CourseActivity extends BaseActivity {
             }
 
         } else if ("2".equals(type)) {
-            if (tuanKeFragment==null){
-                tuanKeFragment = new TuanKeFragment();
-            }
-
+            tuanKeFragment = new TuanKeFragment();
             from = "小团课";
             tuanKeFragment.refresh(from, startTime, endTime, course_type_id, id);
 

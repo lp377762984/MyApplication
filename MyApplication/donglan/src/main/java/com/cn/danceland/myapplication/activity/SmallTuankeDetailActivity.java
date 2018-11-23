@@ -429,7 +429,7 @@ public class SmallTuankeDetailActivity extends BaseActivity {
             siJiaoYuYueConBean.setGroup_course_id(item.getId());
             url = Constants.QUERYGROUPCOURSE;
             siJiaoYuYueConBean.setPage(0);
-            siJiaoYuYueConBean.setSize(6);
+            siJiaoYuYueConBean.setSize(100);
         }else{
             siJiaoYuYueConBean.setGroup_course_id(Integer.valueOf(record_id));
             url = Constants.FINDGROUPCOURSEAPPOINTPERSON;
@@ -451,15 +451,15 @@ public class SmallTuankeDetailActivity extends BaseActivity {
                                 my_expanda.setVisibility(View.GONE);
                             }
                             if(item!=null){
-                                course_renshu.setText("购买会员("+data.getTotalElements()+")");
+                                course_renshu.setText("购买会员("+data.getContent().size()+")");
                             }else{
-                                course_renshu.setText("上课会员("+data.getTotalElements()+")");
+                                course_renshu.setText("上课会员("+data.getContent().size()+")");
                             }
 
                             headList = data.getContent();
 
                             my_expanda.setAdapter(myAdapter);
-                            mRecylerViewAdapter = new XiaoTuankeRecylerViewAdapter(SmallTuankeDetailActivity.this, headList);
+                            mRecylerViewAdapter = new XiaoTuankeRecylerViewAdapter(SmallTuankeDetailActivity.this, data.getContent());
                             my_recycler_view.setAdapter(mRecylerViewAdapter);
                         }
 
@@ -504,6 +504,8 @@ public class SmallTuankeDetailActivity extends BaseActivity {
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
                 if(courseMemberBean!=null&&courseMemberBean.getData()!=null){
                     childList = courseMemberBean.getData().getContent();
+
+
                 }
 
                 LogUtil.e("zzf",jsonObject.toString());
