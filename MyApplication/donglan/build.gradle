@@ -198,5 +198,5 @@ dependencies {
     compile 'com.haibin:calendarview:3.4.8'
     //日历控件
 
-    compile 'com.google.zxing:core:3.3.0'
+//    compile 'com.google.zxing:core:3.3.0'
 }
