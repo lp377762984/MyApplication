@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +45,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
     public ProgressBar bottomProgressBar, loadingProgressBar;
     public TextView titleTextView;
     public ImageView thumbImageView;
+    public ImageView thumbMaskImageView;
     public ImageView tinyBackImageView;
     public LinearLayout batteryTimeLayout;
     public ImageView batteryLevel;
@@ -108,6 +110,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         titleTextView = findViewById(R.id.title);
         backButton = findViewById(R.id.back);
         thumbImageView = findViewById(R.id.thumb);
+        thumbMaskImageView = findViewById(R.id.thumbmask);
         loadingProgressBar = findViewById(R.id.loading);
         tinyBackImageView = findViewById(R.id.back_tiny);
         batteryLevel = findViewById(R.id.battery_level);
@@ -116,6 +119,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         clarity = findViewById(R.id.clarity);
 
         thumbImageView.setOnClickListener(this);
+        thumbMaskImageView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         tinyBackImageView.setOnClickListener(this);
         clarity.setOnClickListener(this);
@@ -193,6 +197,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         super.onStatePreparingChangingUrl(urlMapIndex, seekToInAdvance);
         loadingProgressBar.setVisibility(VISIBLE);
         startButton.setVisibility(INVISIBLE);
+        thumbMaskImageView.setVisibility(GONE);
     }
 
     @Override
@@ -262,6 +267,23 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         super.onClick(v);
         int i = v.getId();
         if (i == R.id.thumb) {
+            if (urlMap == null || TextUtils.isEmpty(JZUtils.getCurrentUrlFromMap(urlMap, currentUrlMapIndex))) {
+                Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (currentState == CURRENT_STATE_NORMAL) {
+                if (!JZUtils.getCurrentUrlFromMap(urlMap, currentUrlMapIndex).startsWith("file") &&
+                        !JZUtils.getCurrentUrlFromMap(urlMap, currentUrlMapIndex).startsWith("/") &&
+                        !JZUtils.isWifiConnected(getContext()) && !WIFI_TIP_DIALOG_SHOWED) {
+                    showWifiDialog(JZUserActionStandard.ON_CLICK_START_THUMB);
+                    return;
+                }
+                onEvent(JZUserActionStandard.ON_CLICK_START_THUMB);
+                startVideo();
+            } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
+                onClickUiToggle();
+            }
+        } else if (i == R.id.thumbmask) {
             if (urlMap == null || TextUtils.isEmpty(JZUtils.getCurrentUrlFromMap(urlMap, currentUrlMapIndex))) {
                 Toast.makeText(getContext(), getResources().getString(R.string.no_url), Toast.LENGTH_SHORT).show();
                 return;
@@ -617,21 +639,26 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         loadingProgressBar.setVisibility(loadingPro);
         thumbImageView.setVisibility(thumbImg);
         bottomProgressBar.setVisibility(bottomPro);
+        thumbMaskImageView.setVisibility(startBtn);
     }
 
     public void updateStartImage() {
         if (currentState == CURRENT_STATE_PLAYING) {
             startButton.setImageResource(R.drawable.jz_click_pause_selector);
             retryTextView.setVisibility(INVISIBLE);
+            thumbMaskImageView.setVisibility(GONE);
         } else if (currentState == CURRENT_STATE_ERROR) {
             startButton.setImageResource(R.drawable.jz_click_error_selector);
             retryTextView.setVisibility(INVISIBLE);
+//            thumbMaskImageView.setVisibility(VISIBLE);
         } else if (currentState == CURRENT_STATE_AUTO_COMPLETE) {
             startButton.setImageResource(R.drawable.jz_click_replay_selector);
             retryTextView.setVisibility(VISIBLE);
+//            thumbMaskImageView.setVisibility(VISIBLE);
         } else {
             startButton.setImageResource(R.drawable.jz_click_play_selector);
             retryTextView.setVisibility(INVISIBLE);
+//            thumbMaskImageView.setVisibility(VISIBLE);
         }
     }
 
@@ -800,6 +827,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
                         bottomContainer.setVisibility(View.INVISIBLE);
                         topContainer.setVisibility(View.INVISIBLE);
                         startButton.setVisibility(View.INVISIBLE);
+                        thumbMaskImageView.setVisibility(GONE);
                         if (clarityPopWindow != null) {
                             clarityPopWindow.dismiss();
                         }

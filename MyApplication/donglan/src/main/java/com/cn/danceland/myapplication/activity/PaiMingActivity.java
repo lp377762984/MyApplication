@@ -54,6 +54,7 @@ public class PaiMingActivity extends BaseActivity {
     private MyUserListviewAdapter myUserListviewAdapter;
     private List<RequsetAllPaiMingBean.Data> data = new ArrayList<>();//全部的
     private List<RequsetAllPaiMingBean.Data> dataList = new ArrayList<>();//不算前三个
+    private List<RequsetAllPaiMingBean.Data> headData = new ArrayList<>();//前三个
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -68,32 +69,58 @@ public class PaiMingActivity extends BaseActivity {
     };
 
     private void setHeadView() {
-        if (data.size() > 2) {
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
-
+        RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
+        switch (headData.size()) {
+            case 0:
+                top1_layout.setVisibility(View.INVISIBLE);
+                top2_layout.setVisibility(View.INVISIBLE);
+                top3_layout.setVisibility(View.INVISIBLE);
+                break;
+            case 1:
+                top1_layout.setVisibility(View.VISIBLE);
+                top2_layout.setVisibility(View.INVISIBLE);
+                top3_layout.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                top1_layout.setVisibility(View.VISIBLE);
+                top2_layout.setVisibility(View.VISIBLE);
+                top3_layout.setVisibility(View.INVISIBLE);
+                break;
+            case 3:
+                top1_layout.setVisibility(View.VISIBLE);
+                top2_layout.setVisibility(View.VISIBLE);
+                top3_layout.setVisibility(View.VISIBLE);
+                break;
+        }
+        if (headData.size() > 0) {
             Glide.with(this)
-                    .load(data.get(0).getSelf_avatar_url())
+                    .load(headData.get(0).getSelf_avatar_url())
                     .apply(options)
                     .into(iv_avatar_top1);
-            tv_nick_name1.setText(data.get(0).getNick_name());
-            tv_daka_nun1.setText(data.get(0).getBranchScore() + "次");
-
+            tv_nick_name1.setText(headData.get(0).getNick_name());
+            tv_daka_nun1.setText(headData.get(0).getBranchScore() + "次");
+        }
+        if (headData.size() > 1) {
             Glide.with(this)
-                    .load(data.get(1).getSelf_avatar_url())
+                    .load(headData.get(1).getSelf_avatar_url())
                     .apply(options)
                     .into(iv_avatar_top2);
-            tv_nick_name2.setText(data.get(1).getNick_name());
-            tv_daka_nun2.setText(data.get(1).getBranchScore() + "次");
-
+            tv_nick_name2.setText(headData.get(1).getNick_name());
+            tv_daka_nun2.setText(headData.get(1).getBranchScore() + "次");
+        }
+        if (headData.size() > 2) {
             Glide.with(this)
-                    .load(data.get(2).getSelf_avatar_url())
+                    .load(headData.get(2).getSelf_avatar_url())
                     .apply(options)
                     .into(iv_avatar_top3);
-            tv_nick_name3.setText(data.get(2).getNick_name());
-            tv_daka_nun3.setText(data.get(2).getBranchScore() + "次");
+            tv_nick_name3.setText(headData.get(2).getNick_name());
+            tv_daka_nun3.setText(headData.get(2).getBranchScore() + "次");
         }
     }
 
+    private LinearLayout top1_layout;
+    private LinearLayout top2_layout;
+    private LinearLayout top3_layout;
     private TextView tv_nick_name1;
     private ImageView iv_avatar_top1;
     private TextView tv_daka_nun1;
@@ -177,12 +204,15 @@ public class PaiMingActivity extends BaseActivity {
 
     private View initHeadview() {
         View v = View.inflate(this, R.layout.headview_my_paiming, null);
+        top1_layout = v.findViewById(R.id.top1_layout);
         iv_avatar_top1 = v.findViewById(R.id.iv_avatar_top1);
         tv_nick_name1 = v.findViewById(R.id.tv_nick_name1);
         tv_daka_nun1 = v.findViewById(R.id.tv_daka_nun1);
+        top2_layout = v.findViewById(R.id.top2_layout);
         iv_avatar_top2 = v.findViewById(R.id.iv_avatar_top2);
         tv_nick_name2 = v.findViewById(R.id.tv_nick_name2);
         tv_daka_nun2 = v.findViewById(R.id.tv_daka_nun2);
+        top3_layout = v.findViewById(R.id.top3_layout);
         iv_avatar_top3 = v.findViewById(R.id.iv_avatar_top3);
         tv_nick_name3 = v.findViewById(R.id.tv_nick_name3);
         tv_daka_nun3 = v.findViewById(R.id.tv_daka_nun3);
@@ -204,6 +234,8 @@ public class PaiMingActivity extends BaseActivity {
                     for (int i = 0; i < data.size(); i++) {
                         if (i >= 3) {
                             dataList.add(data.get(i));
+                        } else {
+                            headData.add(data.get(i));
                         }
                     }
                     myUserListviewAdapter.setData(dataList);
@@ -211,8 +243,6 @@ public class PaiMingActivity extends BaseActivity {
                     Message message = Message.obtain();
                     message.what = 1;
                     mHandler.sendMessage(message);
-                } else {
-
                 }
 
             }
