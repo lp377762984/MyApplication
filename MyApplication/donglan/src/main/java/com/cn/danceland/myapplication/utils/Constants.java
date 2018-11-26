@@ -186,7 +186,7 @@ public class Constants {
     public static String FIND_UPCOMING_MATTER = HOST + "/api/work/queryWorkPage";//查询待办列表
     public static String UPDATE_MATTER_STATUS = HOST + "/api/work/updateWorkStatus";//处理待办
     public static String FIND_NOT_UPCOMINGMATTER = HOST + "/api/work/queryWorkCount";//查询未处理待办
-    public static String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
+    public static String UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential_V1_7";//编辑潜客资料
 
     public static String INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
     public static String INTRODUCE_QUERYPAGEBYEMPLOYEE = HOST + "/introduce/queryPageByEmployee";//会员推荐
@@ -553,7 +553,7 @@ public class Constants {
         FIND_UPCOMING_MATTER = HOST + "/api/work/queryWorkPage";//查询待办列表
         UPDATE_MATTER_STATUS = HOST + "/api/work/updateWorkStatus";//处理待办
         FIND_NOT_UPCOMINGMATTER = HOST + "/api/work/queryWorkCount";//查询未处理待办
-        UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential";//编辑潜客资料
+        UPDATE_POTENTIAL = HOST + "/appPotential/updatePotential_V1_7";//编辑潜客资料
 
         INTRODUCE_SAVE = HOST + "/introduce/save";//推荐好友
         INTRODUCE_QUERYPAGEBYEMPLOYEE = HOST + "/introduce/queryPageByEmployee";//会员推荐

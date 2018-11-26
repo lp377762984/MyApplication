@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
+import com.cn.danceland.myapplication.utils.PriceUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -120,8 +121,8 @@ public class XiaoFeiRecordActivity extends BaseActivity {
 
 
                         }
-                        tv_leijichongzhi.setText(allchongzhi+"元");
-                        tv_leijixiaofei.setText(allxiaofei+"元");
+                        tv_leijichongzhi.setText(PriceUtils.formatPrice2String(allchongzhi)+"元");
+                        tv_leijixiaofei.setText(PriceUtils.formatPrice2String(allxiaofei)+"元");
                         lv_xiaofei.setAdapter(new MyAdapter(list));
                     }
                 }

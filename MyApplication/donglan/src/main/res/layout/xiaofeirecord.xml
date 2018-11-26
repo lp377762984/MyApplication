@@ -41,6 +41,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_marginTop="5dp"
+                       android:layout_marginLeft="15dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     >
@@ -50,7 +51,7 @@
                         android:id="@+id/rl_leijichongzhi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                    android:visibility="gone"
                         android:text="¥ "
                         android:textColor="@color/color_dl_yellow"
                         android:textSize="24sp" />
@@ -96,6 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="¥ "
+                        android:visibility="gone"
                         android:textColor="@color/color_dl_deep_blue"
                         android:textSize="24sp" />
 

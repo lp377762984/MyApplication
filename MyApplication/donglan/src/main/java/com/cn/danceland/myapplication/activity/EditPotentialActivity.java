@@ -51,7 +51,6 @@ import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
     public static final int TARGET = 8;//健身目的
     public static final int LIKE = 7;//喜欢项目
     public static final int MEDICAL = 11;//病史
-    private ContainsEmojiEditText et_remark,et_biaoqian;//备注
+    private ContainsEmojiEditText et_remark, et_biaoqian;//备注
     private TextView tv_medical_history;//慢性病史
     private ContainsEmojiEditText et_phone;//电话
     private EditText et_name;//名字
@@ -204,7 +203,21 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
         }
         et_nationality.setText(info.getNationality());
         tv_certificate_type.setText(info.getCertificate_type());
-        et_certificate_no.setText(info.getIdentity_card());
+
+        if (info.getIdentity_card() != null && info.getIdentity_card().length() > 3) {
+//            for(int i;i<info.getIdentity_card().length();i++){
+//
+//            }
+            String a = info.getIdentity_card().substring(1, info.getIdentity_card().length() - 1);
+            String b = info.getIdentity_card().replace(a, "************");
+
+            et_certificate_no.setText(b);
+        } else {
+            et_certificate_no.setText("");
+        }
+
+
+        //   et_certificate_no.setText(info.getIdentity_card());
         et_emergency_name.setText(info.getEmergency_name());
         et_emergency_phone.setText(info.getEmergency_phone());
         et_height.setText(info.getHeight());
@@ -419,7 +432,7 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                     ToastUtils.showToastShort("请选择证件类型");
                     return;
                 }
-                if (TextUtils.equals(tv_certificate_type.getText().toString(), "身份证") && !TextUtils.isEmpty(et_certificate_no.getText().toString())) {
+                if (TextUtils.equals(tv_certificate_type.getText().toString(), "身份证") && !TextUtils.isEmpty(et_certificate_no.getText().toString()) && info.getIdentity_card() == null) {
 
                     try {
                         if (!PhoneFormatCheckUtils.isIDNumber(et_certificate_no.getText().toString())) {
@@ -438,8 +451,10 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                 info.setWeichat_no(et_weixin_no.getText().toString());
                 Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                 info.setDefault_branch(data.getPerson().getDefault_branch());
+                if (info.getIdentity_card() == null) {
+                    info.setIdentity_card(et_certificate_no.getText().toString().trim());
+                }
 
-                info.setIdentity_card(et_certificate_no.getText().toString().trim());
                 info.setEmergency_name(et_emergency_name.getText().toString().trim());
                 info.setEmergency_phone(et_emergency_phone.getText().toString().trim());
                 info.setHeight(et_height.getText().toString().trim());
@@ -456,11 +471,14 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
                 }
 
                 LogUtil.i(gson.toJson(info).toString());
-                try {
-                    update_potential(gson.toJson(info).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                //          try {
+                info.setChonicList(null);
+                info.setProjectList(null);
+                info.setTargetList(null);
+                update_potential(gson.toJson(info).toString(), info);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
                 break;
             default:
                 break;
@@ -820,22 +838,104 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
 
     }
 
+
     /**
      * 编辑资料
      *
      * @param data
-     * @throws JSONException
      */
-    public void update_potential(final String data) throws JSONException {
+    public void update_potential(final String data, final PotentialInfo info) {
+//        final Map<String, Object> strmap = gson.fromJson(data, Map.class);
+//        final Map<String, String> reqmap = new HashMap<>();
+//        for (Map.Entry<String, Object> entry : strmap.entrySet()) {
+//            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+//            String key = entry.getKey();
+//            if (key.equals("target_ids")
+//                    || key.equals("project_ids")
+//                    || key.equals("chronic_ids")
+//                    || key.equals("chonicList")
+//                    || key.equals("projectList")
+//                    || key.equals("targetList")) {
+//                String value = strmap.get(key).toString().replace("[", "").replace("]", "");
+//
+//                strmap.put(key, value);
+//                if (TextUtils.isEmpty(strmap.get(key).toString())){
+//                    strmap.remove(key);
+//                }
+//            }else {
+//                String value = strmap.get(key).toString();
+//                strmap.put(key, value);
+//            }
+//
+//        }
+//        for (Map.Entry<String, Object> entry : strmap.entrySet()) {
+//            String key = entry.getKey();
+//            reqmap.put(key, strmap.get(key).toString());
+//        }
+//
+//
+//
+//        LogUtil.i(strmap.toString());
 
+        //    FormRequest formRequest = new FormRequest(Constants.UPDATE_POTENTIAL, strmap, new FormRequest.SuccessListener() {
+//            @Override
+//            public void onResponse(Object o) {
+//                //原始的接口成功的回调
+//
+        //  LogUtil.i(o.toString());
+//                RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+//                if (requestOrderBean.isSuccess()) {
+//                    ToastUtils.showToastShort("保存成功");
+//                    EventBus.getDefault().post(new IntEvent(0, 211));//更新资料详情页面
+//                    finish();
+//                } else {
+//                    ToastUtils.showToastShort("保存失败");
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onResponses(String responseDate, Map header) {
+//                //自定义的的接口成功的回调，可以获取header信息
+//
+//                LogUtil.i(responseDate);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                //接口调用失败的回调
+//                LogUtil.i(volleyError.toString());
+//            }
+//        }) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//
+//                map.put("Authorization", SPUtils.getString(Constants.MY_TOKEN, null));
+//                // LogUtil.e( SPUtils.getString(Constants.MY_TOKEN, null));
+//                map.put("version", Constants.getVersion());
+//                map.put("platform", Constants.getPlatform());
+//                map.put("channel", AppUtils.getChannelCode());
+//
+//                return map;
+//            }
+//        };
+////设置缓存，默认为true
+//        formRequest.setShouldCache(false);
+////设置请求超时和超时重试参数
+//        formRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                60000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        JSONObject jsonObject = new JSONObject(data);
-
-        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.PUT, Constants.UPDATE_POTENTIAL, jsonObject, new Response.Listener<JSONObject>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.UPDATE_POTENTIAL, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject jsonObject) {
-                LogUtil.i(jsonObject.toString());
-                RequsetSimpleBean requestOrderBean = gson.fromJson(jsonObject.toString(), RequsetSimpleBean.class);
+            public void onResponse(String s) {
+                LogUtil.i(s);
+
+
+                RequsetSimpleBean requestOrderBean = gson.fromJson(s, RequsetSimpleBean.class);
                 if (requestOrderBean.isSuccess()) {
                     ToastUtils.showToastShort("保存成功");
                     EventBus.getDefault().post(new IntEvent(0, 211));//更新资料详情页面
@@ -848,11 +948,154 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
-                ToastUtils.showToastShort(volleyError.toString());
-
+                LogUtil.i(volleyError.toString() + "");
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("id", info.getId());
+                map.put("member_no", info.getMember_no());
+                map.put("person_id", info.getPerson_id());
+                map.put("phone_no", info.getPhone_no());
+                map.put("cname", info.getCname());
+                map.put("gender", info.getGender());
+                if (!TextUtils.isEmpty(info.getCertificate_type())) {
+                    map.put("certificate_type", info.getCertificate_type());
+                }
+
+                if (!TextUtils.isEmpty(info.getIdentity_card())) {
+                    map.put("identity_card", info.getIdentity_card());
+                }
+                if (!TextUtils.isEmpty(info.getWeichat_no())) {
+                    map.put("weichat_no", info.getWeichat_no());
+                }
+                if (!TextUtils.isEmpty(info.getCompany())) {
+                    map.put("company", info.getCompany());
+                }
+                if (!TextUtils.isEmpty(info.getAddress())) {
+                    map.put("address", info.getAddress());
+                }
+                if (!TextUtils.isEmpty(info.getMail())) {
+                    map.put("mail", info.getMail());
+                }
+                if (!TextUtils.isEmpty(info.getNationality())) {
+                    map.put("nationality", info.getNationality());
+                }
+                if (!TextUtils.isEmpty(info.getEmergency_name())) {
+                    map.put("emergency_name", info.getEmergency_name());
+                }
+                if (!TextUtils.isEmpty(info.getEmergency_phone())) {
+                    map.put("emergency_phone", info.getEmergency_phone());
+                }
+                if (!TextUtils.isEmpty(info.getBirthday())) {
+                    map.put("birthday", info.getBirthday());
+                }
+
+                if (!TextUtils.isEmpty(info.getHeight())) {
+                    map.put("height", info.getHeight());
+                }
+
+                if (!TextUtils.isEmpty(info.getWeight())) {
+                    map.put("weight", info.getWeight());
+                }
+
+                if (!TextUtils.isEmpty(info.getTeach_emp_id())) {
+                    map.put("teach_emp_id", info.getTeach_emp_id());
+                }
+
+                if (!TextUtils.isEmpty(info.getAdmin_emp_id())) {
+                    map.put("admin_emp_id", info.getAdmin_emp_id());
+                }
+
+                if (!TextUtils.isEmpty(info.getFinal_teach_id())) {
+                    map.put("final_teach_id", info.getFinal_teach_id());
+                }
+
+
+                if (!TextUtils.isEmpty(info.getFinal_admin_id())) {
+                    map.put("final_admin_id", info.getFinal_admin_id());
+                }
+
+
+                if (!TextUtils.isEmpty(info.getGuest_aware_way())) {
+                    map.put("guest_aware_way", info.getGuest_aware_way());
+                }
+
+                if (!TextUtils.isEmpty(info.getFitness_level())) {
+                    map.put("fitness_level", info.getFitness_level());
+                }
+
+                if (!TextUtils.isEmpty(info.getFollow_level())) {
+                    map.put("follow_level", info.getFollow_level());
+                }
+
+
+                if (!TextUtils.isEmpty(info.getCard_type())) {
+                    map.put("card_type", info.getCard_type());
+                }
+
+
+                if (!TextUtils.isEmpty(info.getAdmin_mark())) {
+                    map.put("admin_mark", info.getAdmin_mark());
+                }
+
+                if (!TextUtils.isEmpty(info.getTeach_mark())) {
+                    map.put("teach_mark", info.getTeach_mark());
+                }
+                if (!TextUtils.isEmpty(info.getRemark())) {
+                    map.put("remark", info.getRemark());
+                }
+
+                if (info.getTarget_ids() != null && info.getTarget_ids().size() > 0) {
+                    String Target = "";
+                    for (int i = 0; i < info.getTarget_ids().size(); i++) {
+                        if (i != 0) {
+                            Target = Target + "," + info.getTarget_ids().get(i);
+                        } else {
+                            Target = info.getTarget_ids().get(i);
+                        }
+
+                    }
+
+                    map.put("target_ids", Target);
+                }
+
+
+                if (info.getProject_ids() != null && info.getProject_ids().size() > 0) {
+                    String Target = "";
+                    for (int i = 0; i < info.getProject_ids().size(); i++) {
+                        if (i != 0) {
+                            Target = Target + "," + info.getProject_ids().get(i);
+                        } else {
+                            Target = info.getProject_ids().get(i);
+                        }
+
+                    }
+                    map.put("project_ids", Target);
+                }
+                if (info.getChronic_ids() != null && info.getChronic_ids().size() > 0) {
+                    String Target = "";
+                    for (int i = 0; i < info.getChronic_ids().size(); i++) {
+                        if (i != 0) {
+                            Target = Target + "," + info.getChronic_ids().get(i);
+                        } else {
+                            Target = info.getChronic_ids().get(i);
+                        }
+
+                    }
+
+
+                    map.put("chronic_ids", Target);
+                }
+
+
+                LogUtil.i(map.toString());
+                return map;
+            }
+        };
+
         MyApplication.getHttpQueues().add(stringRequest);
     }
 

@@ -258,7 +258,20 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 
         tv_nationality.setText(info.getNationality());
         tv_certificate_type.setText(info.getCertificate_type());
-        tv_certificate_no.setText(info.getIdentity_card());
+
+        if (info.getIdentity_card()!=null&&info.getIdentity_card().length()>3){
+//            for(int i;i<info.getIdentity_card().length();i++){
+//
+//            }
+            String a=info.getIdentity_card().substring(1, info.getIdentity_card().length()-1);
+            String b=info.getIdentity_card().replace(a,"**************");
+
+            tv_certificate_no.setText(b);
+        }else {
+            tv_certificate_no.setText("");
+        }
+
+
         tv_emergency_name.setText(info.getEmergency_name());
         tv_emergency_phone.setText(info.getEmergency_name());
         tv_birthday.setText(info.birthday);
