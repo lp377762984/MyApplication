@@ -2,12 +2,14 @@ package com.cn.danceland.myapplication.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.cn.danceland.myapplication.im.model.FriendProfile;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.ui.ChatActivity;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -84,7 +87,6 @@ public class MyContactsActivity extends BaseActivity {
         iv_error.setImageResource(R.drawable.img_error14);
         tv_error.setText("您没有联系人");
         listView.setEmptyView(listEmptyView);
-
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -283,6 +285,7 @@ public class MyContactsActivity extends BaseActivity {
                 viewHolder.des = (TextView) view.findViewById(R.id.description);
                 view.setTag(viewHolder);
             }
+
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
             viewHolder.name.setText(dataList.get(position).getName());
