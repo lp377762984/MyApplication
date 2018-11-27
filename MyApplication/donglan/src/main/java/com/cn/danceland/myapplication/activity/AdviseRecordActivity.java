@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,11 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.feedback.FeedBack;
 import com.cn.danceland.myapplication.bean.feedback.FeedBackCond;
 import com.cn.danceland.myapplication.bean.feedback.FeedBackRequest;
@@ -82,12 +79,12 @@ public class AdviseRecordActivity extends BaseActivity {
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
         dialog.setMessage("正在加载……");
-        pullToRefresh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(AdviseRecordActivity.this, AdviseDetailActivity.class).putExtra("id", list.get(position).getId()));
-            }
-        });
+//        pullToRefresh.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//        });
 //        rl_error = findViewById(R.id.rl_error);
 //        iv_error = rl_error.findViewById(R.id.iv_error);
 //        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
@@ -95,7 +92,7 @@ public class AdviseRecordActivity extends BaseActivity {
 //        tv_error.setText("您还没有反馈任何信息");
 //        pullToRefresh.getRefreshableView().setEmptyView(tv_error);
 
-        list=new ArrayList<>();
+        list = new ArrayList<>();
         adapter = new RecordAdapter(list);
         pullToRefresh.setAdapter(adapter);
 //        pullToRefresh.setEmptyView(rl_error);
@@ -236,6 +233,7 @@ public class AdviseRecordActivity extends BaseActivity {
         public void addLastList(List<FeedBack> lists) {
             list.addAll(lists);
         }
+
         @Override
         public int getCount() {
             return list.size();
@@ -252,7 +250,7 @@ public class AdviseRecordActivity extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
             if (convertView == null) {
                 convertView = View.inflate(AdviseRecordActivity.this, R.layout.advise_record_item, null);
@@ -313,7 +311,12 @@ public class AdviseRecordActivity extends BaseActivity {
             if (list.get(position).getReply_date() != null) {
                 viewHolder.huifu_time.setText("回复时间：" + TimeUtils.dateToString(list.get(position).getReply_date()));
             }
-
+            viewHolder.item_layout_cv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AdviseRecordActivity.this, AdviseDetailActivity.class).putExtra("id", list.get(position).getId()));
+                }
+            });
             return convertView;
         }
     }

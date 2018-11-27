@@ -54,7 +54,7 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
 
     private ImageView iv_fenlie;
     private LinearLayout ll_fenlie;
-//    private TextView tv_tiltle;
+   private TextView tv_fenlie;
     private ListView listView;
     private RequestSellCardsTypeBean sellCardsTypeBean = new RequestSellCardsTypeBean();
     private RequestSellCardsInfoBean sellCardsInfoBean = new RequestSellCardsInfoBean();
@@ -84,7 +84,7 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
         dialog = new ProgressDialog(this);
         dialog.setMessage("加载中……");
         listView = findViewById(R.id.listview);
-//        tv_tiltle = findViewById(R.id.tv_tiltle);
+        tv_fenlie = findViewById(R.id.tv_fenlie);
         findViewById(R.id.iv_back).setOnClickListener(this);
         myListAdapter = new MyListAdapter();
 
@@ -160,11 +160,11 @@ public class SellCardActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
                 if (i == 0) {
-//                    tv_tiltle.setText("全部");
+                    tv_fenlie.setText("全部");
                     findCardsByCardId("");
                 } else {
                     //LogUtil.i(cardTypeData.get(id - 1).getName());
-//                    tv_tiltle.setText(cardTypeData.get(i - 1).getName());
+                    tv_fenlie.setText(cardTypeData.get(i - 1).getName());
                     findCardsByCardId(cardTypeData.get(i - 1).getId() + "");
                 }
                 popupWindow.dismiss();

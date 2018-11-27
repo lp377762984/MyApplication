@@ -26,8 +26,6 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by feng on 2018/1/31.
  */
@@ -120,7 +118,7 @@ public class CabinetActivity extends BaseActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             View inflate = LayoutInflater.from(CabinetActivity.this).inflate(R.layout.cabinet_item, null);
-            CircleImageView img_guizi = inflate.findViewById(R.id.img_guizi);
+           ImageView img_guizi = inflate.findViewById(R.id.img_guizi);
             TextView cabinet_num = inflate.findViewById(R.id.cabinet_num);
             TextView starttime = inflate.findViewById(R.id.starttime);
             TextView overtime = inflate.findViewById(R.id.overtime);

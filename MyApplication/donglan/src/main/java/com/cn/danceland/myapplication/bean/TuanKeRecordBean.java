@@ -51,7 +51,17 @@ public class TuanKeRecordBean implements Serializable {
         private String course_type_name;
         private int start_time;
         private int end_time;
+        private String room_name;
         private String member_name;
+
+        public String getRoom_name() {
+            return room_name;
+        }
+
+        public void setRoom_name(String room_name) {
+            this.room_name = room_name;
+        }
+
         public void setId(int id) {
             this.id = id;
         }

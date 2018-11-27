@@ -166,10 +166,10 @@ public class TuanKeRecordFragment extends BaseFragment {
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
 //            LogUtil.i(list.get(position).getDate() + "   "list.get(position).getCreate_date());
             String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date()+ "", "yyyy.MM.dd HH:mm");
-            viewHolder.course_date.setText("预约时间:"+time);
+            viewHolder.course_date.setText("预约时间："+time);
             viewHolder.course_type.setText("免费团课");
             viewHolder.course_jiaolian.setText("");
-          viewHolder.course_num.setText("预约时间:"+"接口没加呢");
+          viewHolder.course_num.setText("上课场地："+list.get(position).getRoom_name());
             viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
