@@ -124,7 +124,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private HomeFragment homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
-//    private NewHomeFragment discoverFragment;
+    //    private NewHomeFragment discoverFragment;
     private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;
@@ -139,15 +139,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private Animation animation;
 
     private CommandManager commandManager;//手环
-    private String  address1="";
+    private String address1 = "";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //不处理崩溃时页面保存信息
         // super.onSaveInstanceState(outState);
     }
-
-
 
 
     //even事件处理
@@ -160,6 +158,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     shopFragment.refresh();
                 }
                 //setMsgUnread(getTotalUnreadNum() == 0);
+                break;
+            case 20002://切换门店重新加载门店页
+//LogUtil.i("收到消息");
+                if (shopFragment != null) {
+                    shopFragment = new ShopFragment();
+                    fragments = new Fragment[]{homeFragment, shopFragment, discoverFragment, meFragment};
+                }
                 break;
             default:
                 break;
@@ -200,7 +205,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         ScaleAnimation mScaleAnimation = new ScaleAnimation(0.8f, 1.4f, 0.8f, 1.4f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation.setDuration(300);
-       mScaleAnimation.setInterpolator(new AccelerateInterpolator());
+        mScaleAnimation.setInterpolator(new AccelerateInterpolator());
         mScaleAnimation.setFillAfter(true);
         mScaleAnimation.setRepeatCount(1);
         mScaleAnimation.setRepeatMode(REVERSE);
@@ -209,11 +214,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation1.setDuration(1000);
         mScaleAnimation1.setInterpolator(new AccelerateDecelerateInterpolator());
-    //    mScaleAnimation.setFillAfter(true);
+        //    mScaleAnimation.setFillAfter(true);
         ScaleAnimation mScaleAnimation2 = new ScaleAnimation(0.8f, 1.2f, 0.8f, 1.2f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
         mScaleAnimation2.setDuration(1000);
-    //    mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        //    mScaleAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         mScaleAnimation2.setFillAfter(true);
 
 //        AlphaAnimation mAlphaAnimation = new AlphaAnimation(1, .2f);
@@ -229,7 +234,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //        mAnimationSet.addAnimation(mScaleAnimation2);
         mAnimationSet.setRepeatCount(1);
         mAnimationSet.setRepeatMode(REVERSE);
-     //   mAnimationSet.addAnimation(mAlphaAnimation);
+        //   mAnimationSet.addAnimation(mAlphaAnimation);
         mAnimationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -254,7 +259,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         EventBus.getDefault().register(this);
-        View view=View.inflate(this,R.layout.activity_home,null);
+        View view = View.inflate(this, R.layout.activity_home, null);
         setContentView(view);
 
         //    requestPermissions();//请求权限
@@ -332,14 +337,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //        startActivity(new Intent(this, SetRegisterInfoActivity.class));
 
         if (myInfo != null) {//判断资料是否全
-            if (myInfo.getHasPwd()!=null&&!myInfo.getHasPwd()){
+            if (myInfo.getHasPwd() != null && !myInfo.getHasPwd()) {
                 ToastUtils.showToastShort("请您设置密码");
-                startActivity(new Intent(HomeActivity.this, SetPswdActivity.class).putExtra("id",myInfo.getPerson().getId()));
+                startActivity(new Intent(HomeActivity.this, SetPswdActivity.class).putExtra("id", myInfo.getPerson().getId()));
 
             }
 
             LogUtil.i(myInfo.toString());
-            if (TextUtils.isEmpty(myInfo.getPerson().getNick_name())||TextUtils.isEmpty(myInfo.getPerson().getBirthday())||TextUtils.isEmpty(myInfo.getPerson().getHeight())||TextUtils.isEmpty(myInfo.getPerson().getWeight())) {
+            if (TextUtils.isEmpty(myInfo.getPerson().getNick_name()) || TextUtils.isEmpty(myInfo.getPerson().getBirthday()) || TextUtils.isEmpty(myInfo.getPerson().getHeight()) || TextUtils.isEmpty(myInfo.getPerson().getWeight())) {
                 startActivity(new Intent(this, SetRegisterInfoActivity.class));
                 ToastUtils.showToastShort("请您填写个人信息");
                 finish();
@@ -415,7 +420,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                                SPUtils.setBoolean(Constants.ISLOGINED,false);
+                                SPUtils.setBoolean(Constants.ISLOGINED, false);
                                 finish();
                             }
                         });
@@ -543,8 +548,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 LogUtil.i("Response--" + s);
                 CornerMarkMessageBean responseBean = new Gson().fromJson(s, CornerMarkMessageBean.class);
                 if (responseBean.getCode() != null && responseBean.getCode().equals("0")) {
-                    int message_sum = Integer.valueOf(responseBean.getData()+"");
-                    SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum+"");//应用消息总数 用于桌面icon显示
+                    int message_sum = Integer.valueOf(responseBean.getData() + "");
+                    SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
                     ShortcutBadger.applyCount(HomeActivity.this, message_sum); //for 1.1.4+
                 }
             }
@@ -616,8 +621,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 if (checkUpdateBean != null && checkUpdateBean.getData() != null) {
                     String status = checkUpdateBean.getData().getStatus();
                     LogUtil.i(status);
-                    if (TextUtils.equals("2",status)&& checkUpdateBean.getData().getUrl() != null) {
-                       // LogUtil.i(status+"!!!!"+checkUpdateBean.getData().getUrl());
+                    if (TextUtils.equals("2", status) && checkUpdateBean.getData().getUrl() != null) {
+                        // LogUtil.i(status+"!!!!"+checkUpdateBean.getData().getUrl());
 
                         showDialog(checkUpdateBean.getData().getUrl());
                     }
@@ -687,14 +692,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
         mTabs = new TextView[4];
         mTabs[0] = findViewById(R.id.tv_home);
-        mTabs[1] =  findViewById(R.id.tv_shop);
-        mTabs[2] =  findViewById(R.id.tv_discover);
-        mTabs[3] =  findViewById(R.id.tv_me);
-        mmTabsImgs=new ImageView[4];
+        mTabs[1] = findViewById(R.id.tv_shop);
+        mTabs[2] = findViewById(R.id.tv_discover);
+        mTabs[3] = findViewById(R.id.tv_me);
+        mmTabsImgs = new ImageView[4];
         mmTabsImgs[0] = findViewById(R.id.iv_home);
-        mmTabsImgs[1] =  findViewById(R.id.iv_shop);
-        mmTabsImgs[2] =  findViewById(R.id.iv_discover);
-        mmTabsImgs[3] =  findViewById(R.id.iv_me);
+        mmTabsImgs[1] = findViewById(R.id.iv_shop);
+        mmTabsImgs[2] = findViewById(R.id.iv_discover);
+        mmTabsImgs[3] = findViewById(R.id.iv_me);
 
 //        for (int i = 0; i < mTabs.length; i++) {
 //            mTabs[i].setOnClickListener(this);
@@ -863,7 +868,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.ll_home:
                 mmTabsImgs[0].clearAnimation();
                 mmTabsImgs[0].startAnimation(mAnimationSet);
-             //   mAnimationSet.start();
+                //   mAnimationSet.start();
                 index = 0;
                 break;
 
@@ -883,9 +888,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mmTabsImgs[3].clearAnimation();
                 mmTabsImgs[3].startAnimation(mAnimationSet);
                 break;
-
-
-
 
 
         }
@@ -1054,7 +1056,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     //连接手环
     private void initConnWearFit() {
         address1 = SPUtils.getString(Constants.ADDRESS, "");
-        LogUtil.i("ADDRESS"+address1);
+        LogUtil.i("ADDRESS" + address1);
 
         if (!MyApplication.mBluetoothConnected && !StringUtils.isNullorEmpty(address1) && address1.length() > 0) {
             try {
@@ -1111,7 +1113,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 final byte[] txValue = intent
                         .getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 List<Integer> datas = DataHandlerUtils.bytesToArrayList(txValue);
-                LogUtil.i("接收的数据：" +datas.toString());
+                LogUtil.i("接收的数据：" + datas.toString());
                 //心率传感器
                 if (datas.get(4) == 0XB4) {//[171, 0, 4, 255, 180, 128, 1]
                     Integer integer = datas.get(6);
@@ -1130,7 +1132,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                     heartRateHelper.insert(heartRate);//心率
                     SharedPreferences bus_type = getSharedPreferences("wear_fit_home_data", MODE_PRIVATE);
                     SharedPreferences.Editor edit = bus_type.edit();
-                    edit.putInt("heart_rate",  datas.get(11));//item 心率
+                    edit.putInt("heart_rate", datas.get(11));//item 心率
                     edit.apply();
                 }
                 //拉取睡眠数据
@@ -1175,7 +1177,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
                     SharedPreferences bus_type = getSharedPreferences("wear_fit_home_data", MODE_PRIVATE);
                     SharedPreferences.Editor edit = bus_type.edit();
-                    edit.putInt( "step", step);
+                    edit.putInt("step", step);
                     edit.putInt("kcal", cal);
 //                    edit.putInt("heart_rate",  datas.get(11));//item 心率  上面有心率
                     edit.putInt("sleep", deepSleep + ligthSleep);//item 睡眠
@@ -1194,6 +1196,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 提供给Fragment通过getActivity()方法来注册自己的触摸事件的方法
+     *
      * @param listener
      */
     public void registerMyTouchListener(MyTouchListener listener) {
@@ -1202,10 +1205,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 提供给Fragment通过getActivity()方法来取消注册自己的触摸事件的方法
+     *
      * @param listener
      */
     public void unRegisterMyTouchListener(MyTouchListener listener) {
-        myTouchListeners.remove( listener );
+        myTouchListeners.remove(listener);
     }
 
     /**

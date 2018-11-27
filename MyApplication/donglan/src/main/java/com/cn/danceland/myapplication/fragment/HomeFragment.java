@@ -12,11 +12,9 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,7 +39,6 @@ import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
-import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -57,14 +54,10 @@ import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
@@ -176,20 +169,6 @@ public class HomeFragment extends BaseFragment {
 
     private MZBannerView mMZBanner;
 
-//    private static CollapsingToolbarLayoutState state;
-//    AppBarLayout appBarLayout;
-//    LinearLayout toolbarone;
-//    CollapsingToolbarLayout collapsingToolbarLayout;
-//
-//
-//    private enum CollapsingToolbarLayoutState {
-//        EXPANDED,
-//        COLLAPSED,
-//        INTERNEDIATE
-//    }
-//
-//    private int alphaNum = 0;//透明度
-//    int i = 255;
 
     @Override
     public void onDestroy() {

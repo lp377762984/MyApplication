@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -71,7 +70,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
     private ImageView iv_avatar;
     private TextView tv_guanzhu;
     private TextView tv_title;
-   // private RequsetUserDynInfoBean userInfo;
+    // private RequsetUserDynInfoBean userInfo;
     private List<RequsetFindUserBean.Data> dataList = new ArrayList<>();
 
     private String from;
@@ -140,6 +139,12 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    if (TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
+
+                        return false;
+                    }
+
                     if ("体测".equals(from)) {
                         searchMember(mEtPhone.getText().toString().trim());
                     } else {
@@ -193,11 +198,10 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.iv_del:
                 mEtPhone.setText("");
-                if ("体测".equals(from)) {
-                    searchMember(mEtPhone.getText().toString().trim());
-                } else {
-                    findUser(mEtPhone.getText().toString().trim());
-                }
+                dataList=new ArrayList<>();
+
+                myListAatapter.notifyDataSetChanged();
+
                 break;
 //            case R.id.iv_back://返回
 //                finish();
@@ -209,7 +213,10 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
                 break;
             case R.id.ll_search://搜索
+                if (TextUtils.isEmpty(mEtPhone.getText().toString().trim())) {
 
+                    return;
+                }
                 if ("体测".equals(from)) {
                     searchMember(mEtPhone.getText().toString().trim());
                 } else {
@@ -236,7 +243,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
 
                     //finish();
                 } else {
-                 //   startActivity(new Intent(AddFriendsActivity.this, UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
+                    //   startActivity(new Intent(AddFriendsActivity.this, UserSelfHomeActivity.class).putExtra("id", userInfo.getData().getPerson().getId()));
                 }
                 break;
             default:
@@ -314,9 +321,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 RequsetFindUserBean infoBean = gson.fromJson(s, RequsetFindUserBean.class);
 
                 if (infoBean.getSuccess()) {
-                    dataList=infoBean.getData();
+                    dataList = infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
-                    if(dataList.size()==0){
+                    if (dataList.size() == 0) {
                         ToastUtils.showToastShort("无结果");
                     }
                 }
@@ -353,9 +360,9 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 RequsetFindUserBean infoBean = gson.fromJson(s, RequsetFindUserBean.class);
 
                 if (infoBean.getSuccess()) {
-                    dataList=infoBean.getData();
+                    dataList = infoBean.getData();
                     myListAatapter.notifyDataSetChanged();
-                    if(dataList.size()==0){
+                    if (dataList.size() == 0) {
                         ToastUtils.showToastShort("无结果");
                     }
                 }
@@ -367,7 +374,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
                 LogUtil.i(volleyError.toString() + volleyError.networkResponse.statusCode);
 
             }
-        } ) {
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -420,10 +427,10 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             }
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
-            if ("体测".equals(from)){
+            if ("体测".equals(from)) {
                 vh.tv_name.setText(dataList.get(position).getCname());
-                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getAvatar_url() ).apply(options).into(vh.iv_avatar);
-            }else {
+                Glide.with(AddFriendsActivity.this).load(dataList.get(position).getAvatar_url()).apply(options).into(vh.iv_avatar);
+            } else {
                 vh.tv_name.setText(dataList.get(position).getNick_name());
                 Glide.with(AddFriendsActivity.this).load(dataList.get(position).getSelf_avatar_url()).apply(options).into(vh.iv_avatar);
             }
@@ -437,6 +444,7 @@ public class AddFriendsActivity extends BaseActivity implements View.OnClickList
             return convertView;
         }
     }
+
     class ViewHolder {
         public ImageView iv_callphone;
         public ImageView iv_sex;
