@@ -28,8 +28,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -66,6 +64,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -268,7 +267,6 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.rx_zan.setChecked(true);
         } else {
             viewHolder.iv_zan.setImageResource(R.drawable.img_zan);
-
             viewHolder.rx_zan.setChecked(false);
         }
 
@@ -521,11 +519,16 @@ public class MyDynListviewAdater extends BaseAdapter {
                     }
                 }
 
-
-                Glide.with(context)
-                        .load(sb.toString())
-                         .apply(options1)
-                        .into(viewHolder.iv_pic);
+                LogUtil.i("houzhui="+houzhui);
+                LogUtil.i("sb.toString()="+sb.toString());
+//                if(houzhui.equals("gif")){
+//                    Glide.with(context).load(sb.toString()).asGif().into(viewHolder.iv_pic);
+//                }else{
+                    Glide.with(context)
+                            .load(sb.toString())
+                            .apply(options1)
+                            .into(viewHolder.iv_pic);
+//                }
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

@@ -124,7 +124,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private HomeFragment homeFragment;
     private ShopFragment shopFragment;
     private ShopListFragment shopListFragment;
-//    private NewHomeFragment discoverFragment;
     private DiscoverFragment discoverFragment;
     private MeFragment meFragment;
     public static HomeActivity instance = null;

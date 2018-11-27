@@ -106,6 +106,7 @@ public class RequsetFindUserBean {
 
         private String avatar_url;
         private String self_avatar_url;
+        private String teach_name;
 
         public String getId() {
             return id;
@@ -570,7 +571,78 @@ public class RequsetFindUserBean {
         public void setSelf_avatar_url(String self_avatar_url) {
             this.self_avatar_url = self_avatar_url;
         }
+
+        public String getTeach_name() {
+            return teach_name;
+        }
+
+        public void setTeach_name(String teach_name) {
+            this.teach_name = teach_name;
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "id='" + id + '\'' +
+                    ", person_id='" + person_id + '\'' +
+                    ", admin_emp_id='" + admin_emp_id + '\'' +
+                    ", teach_emp_id=" + teach_emp_id +
+                    ", branch_id=" + branch_id +
+                    ", enabled=" + enabled +
+                    ", auth=" + auth +
+                    ", branch_name='" + branch_name + '\'' +
+                    ", guest_recom='" + guest_recom + '\'' +
+                    ", member_recom='" + member_recom + '\'' +
+                    ", guest_aware_way='" + guest_aware_way + '\'' +
+                    ", member_aware_way='" + member_aware_way + '\'' +
+                    ", card_type='" + card_type + '\'' +
+                    ", total_money='" + total_money + '\'' +
+                    ", type='" + type + '\'' +
+                    ", create_time=" + create_time +
+                    ", final_admin_id='" + final_admin_id + '\'' +
+                    ", final_teach_id=" + final_teach_id +
+                    ", last_time='" + last_time + '\'' +
+                    ", maintain_status='" + maintain_status + '\'' +
+                    ", remark='" + remark + '\'' +
+                    ", cname='" + cname + '\'' +
+                    ", member_no='" + member_no + '\'' +
+                    ", phone_no='" + phone_no + '\'' +
+                    ", gender=" + gender +
+                    ", nick_name='" + nick_name + '\'' +
+                    ", height='" + height + '\'' +
+                    ", weight='" + weight + '\'' +
+                    ", birthday='" + birthday + '\'' +
+                    ", reg_date='" + reg_date + '\'' +
+                    ", password='" + password + '\'' +
+                    ", default_branch='" + default_branch + '\'' +
+                    ", zone_code='" + zone_code + '\'' +
+                    ", platform=" + platform +
+                    ", avatar_path='" + avatar_path + '\'' +
+                    ", self_avatar_path='" + self_avatar_path + '\'' +
+                    ", reg_id='" + reg_id + '\'' +
+                    ", identity_card='" + identity_card + '\'' +
+                    ", login_name='" + login_name + '\'' +
+                    ", terminal=" + terminal +
+                    ", department_id='" + department_id + '\'' +
+                    ", weichat_no='" + weichat_no + '\'' +
+                    ", mail='" + mail + '\'' +
+                    ", follow_level='" + follow_level + '\'' +
+                    ", fitness_level='" + fitness_level + '\'' +
+                    ", emergency_name='" + emergency_name + '\'' +
+                    ", address='" + address + '\'' +
+                    ", company='" + company + '\'' +
+                    ", nationality='" + nationality + '\'' +
+                    ", certificate_type='" + certificate_type + '\'' +
+                    ", sys_role='" + sys_role + '\'' +
+                    ", emergency_phone='" + emergency_phone + '\'' +
+                    ", member_name='" + member_name + '\'' +
+                    ", m_consume='" + m_consume + '\'' +
+                    ", become_member_time='" + become_member_time + '\'' +
+                    ", repeat_phone='" + repeat_phone + '\'' +
+                    ", avatar_url='" + avatar_url + '\'' +
+                    ", self_avatar_url='" + self_avatar_url + '\'' +
+                    ", teach_name='" + teach_name + '\'' +
+                    '}';
+        }
     }
-
-
 }

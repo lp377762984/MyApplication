@@ -153,8 +153,10 @@ public class CollectListviewAdapter extends BaseAdapter {
                         if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
                             data.get(position).setIs_collect(!data.get(position).is_collect());
                             if (data.get(position).is_collect()) {
+                                ToastUtils.showToastShort("收藏成功");
                                 finalViewHolder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
                             } else {
+                                ToastUtils.showToastShort("取消收藏成功");
                                 data.remove(position);
                                 finalViewHolder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
                             }

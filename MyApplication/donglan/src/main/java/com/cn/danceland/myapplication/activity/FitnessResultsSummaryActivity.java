@@ -106,7 +106,7 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
         ok_btn = findViewById(R.id.ok_btn);
 
         frontal_iv = (ImageView) UIUtils.setViewRatio(context, frontal_iv, 316, 400);
-        side_iv = (ImageView) UIUtils.setViewRatio(context, side_iv,316, 400);
+        side_iv = (ImageView) UIUtils.setViewRatio(context, side_iv, 316, 400);
         behind_iv = (ImageView) UIUtils.setViewRatio(context, behind_iv, 316, 400);
 
         questionTypesList = new ArrayList<>();
@@ -146,23 +146,23 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
      * 查询数据
      */
     private void queryData() {
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID , new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_BCAQUESTION_FIND_BYID, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i("Response--" + s);
                 FitnessResultsSummaryBean responseBean = new Gson().fromJson(s, FitnessResultsSummaryBean.class);
                 List<FitnessResultsSummaryBean.QuestionTypes> data = responseBean.getData().getQuestionTypes();
-                String frontal_path =responseBean.getData().getFrontal_url();// 正面照
-                String side_path =responseBean.getData().getSide_url();// 侧面照
+                String frontal_path = responseBean.getData().getFrontal_url();// 正面照
+                String side_path = responseBean.getData().getSide_url();// 侧面照
                 String behind_path = responseBean.getData().getBehind_url();// 背后照
                 String content = responseBean.getData().getContent();//综合评价
                 if (data != null && data.size() != 0) {
                     LogUtil.i("data.size()" + data.size());
                     questionTypesList.clear();
                     name_tv.setText(requsetInfo.getCname() + "");//姓名
-                    if (requsetInfo.getGender()==1) {
+                    if (requsetInfo.getGender() == 1) {
                         iv_sex.setImageDrawable(getResources().getDrawable(R.drawable.img_sex1));
-                    } else if (requsetInfo.getGender()==2) {
+                    } else if (requsetInfo.getGender() == 2) {
                         iv_sex.setImageDrawable(getResources().getDrawable(R.drawable.img_sex2));
                     }
 //                    if (requsetInfo.getGender()==1) {
@@ -177,15 +177,13 @@ public class FitnessResultsSummaryActivity extends BaseActivity {
                         age_tv.setText(age + "岁");//年龄
                     }
                     tel_tv.setText(requsetInfo.getPhone_no() + "");//电话
-                    if(infoData.getPerson().getCname()!= null&&infoData.getPerson().getCname().length()>0)
-                    operator_tv.setText(infoData.getPerson().getCname() + "");//操作人员
+                    //-------操作人员模块
+                    operator_tv.setText(responseBean.getData().getTeach_name() + "");//操作人员
                     if (responseBean.getData().getTest_time() != null && responseBean.getData().getTest_time().length() > 0) {
                         date_tv.setText(TimeUtils.millToDate(Long.valueOf(responseBean.getData().getTest_time())));//体测日期
                     }
-                    if(infoData.getEmployee().getBranch_name() !=null&&infoData.getEmployee().getBranch_name().length()>0){
-                        stores_tv.setText(infoData.getEmployee().getBranch_name() + "");//体测门店
-                    }
-
+                    stores_tv.setText(responseBean.getData().getBranch_name() + "");//体测门店
+                    //-------操作人员模块
                     if (content != null && content.length() > 0) {//综合评价
                         content_tv.setText(content);
                         content_tv.setVisibility(View.VISIBLE);

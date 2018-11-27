@@ -50,6 +50,24 @@ public class FitnessResultsSummaryBean {
 
         private String content;//综合评价
         private List<QuestionTypes> questionTypes;// 问题列表
+        private String teach_name;
+        private String branch_name;
+
+        public String getTeach_name() {
+            return teach_name;
+        }
+
+        public void setTeach_name(String teach_name) {
+            this.teach_name = teach_name;
+        }
+
+        public String getBranch_name() {
+            return branch_name;
+        }
+
+        public void setBranch_name(String branch_name) {
+            this.branch_name = branch_name;
+        }
 
         public Long getId() {
             return id;
@@ -154,6 +172,8 @@ public class FitnessResultsSummaryBean {
                     ", member_id=" + member_id +
                     ", content='" + content + '\'' +
                     ", questionTypes=" + questionTypes +
+                    ", teach_name='" + teach_name + '\'' +
+                    ", branch_name='" + branch_name + '\'' +
                     '}';
         }
     }

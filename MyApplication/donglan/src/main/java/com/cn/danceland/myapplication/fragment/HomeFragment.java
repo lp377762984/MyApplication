@@ -603,14 +603,14 @@ public class HomeFragment extends BaseFragment {
                         ToastUtils.showToastShort("您还没有参加健身运动");
                         return;
                     }
-                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
-                    if (myPaiMingBean == null) {
-                        ToastUtils.showToastShort("您还没有参加健身运动");
-                        return;
-                    }
+//                    if (mInfo.getMember() == null || TextUtils.equals(mInfo.getMember().getAuth(), "1")) {
+//                        ToastUtils.showToastShort("您还没有参加健身运动");
+//                        return;
+//                    }
+//                    if (myPaiMingBean == null) {
+//                        ToastUtils.showToastShort("您还没有参加健身运动");
+//                        return;
+//                    }
                     startActivity(new Intent(mActivity, PaiMingActivity.class).putExtra("paiming", myPaiMingBean.getData().getBranchRanking()).putExtra("cishu", myPaiMingBean.getData().getBranchScore()));
                     break;
             }

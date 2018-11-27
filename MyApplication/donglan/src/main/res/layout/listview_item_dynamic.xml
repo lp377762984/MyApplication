@@ -297,30 +297,34 @@
                             android:textSize="12sp" />
                     </LinearLayout>
 
-
                     <LinearLayout
-                        android:id="@id/ll_comment"
-                        android:layout_width="82.5dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="16dp"
-                        android:gravity="left">
+                        android:layout_weight="1">
 
-                        <ImageView
-                            android:id="@+id/iv_comment"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="center"
+                        <LinearLayout
+                            android:id="@id/ll_comment"
+                            android:layout_width="82.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="16dp"
+                            android:gravity="left">
 
-                            android:src="@drawable/img_msg" />
+                            <ImageView
+                                android:id="@+id/iv_comment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/img_msg" />
 
-                        <TextView
-                            android:id="@+id/tv_pinglun"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="5dp"
-                            android:text="123"
-                            android:textSize="12sp" />
+                            <TextView
+                                android:id="@+id/tv_pinglun"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="5dp"
+                                android:text="123"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </LinearLayout>
 
                     <ImageView
@@ -334,11 +338,10 @@
 
                     <RelativeLayout
                         android:id="@+id/rl_more"
-                        android:layout_width="82.5dp"
+                        android:layout_width="40.5dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_marginRight="40dp"
-                        android:layout_weight="1">
+                        android:layout_marginRight="40dp">
 
                         <ImageView
                             android:id="@+id/iv_more"

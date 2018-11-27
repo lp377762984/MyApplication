@@ -152,7 +152,7 @@ public class PaiMingActivity extends BaseActivity {
 
         ImageView iv_avatar = findViewById(R.id.iv_avatar);
         tv_daka_num.setText(cishu + "次");
-        if (paiming == 0) {
+        if (cishu == 0 || paiming == 0) {
             tv_paiming.setText("NO.--");
         } else {
             tv_paiming.setText("NO." + paiming);

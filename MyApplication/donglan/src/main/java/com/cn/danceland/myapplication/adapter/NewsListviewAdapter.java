@@ -140,8 +140,10 @@ public class NewsListviewAdapter extends RecyclerView.Adapter<NewsListviewAdapte
                         if (requestInfoBean.getSuccess() && requestInfoBean.getCode() == 0) {
                             data.get(pos).setIs_collect(!data.get(pos).is_collect());
                             if (data.get(pos).is_collect()) {
+                                ToastUtils.showToastShort("收藏成功");
                                 holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_on_collect_icon));
                             } else {
+                                ToastUtils.showToastShort("取消收藏成功");
                                 holder.collect_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.home_item_collect_icon));
                             }
                         } else {

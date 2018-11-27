@@ -15,6 +15,16 @@ public class PhysicalTestBean implements Serializable {
     private String main_pic_path;
     private String main_pic_url;
     private String main_title;
+    private String steps;
+
+    public String getSteps() {
+        return steps;
+    }
+
+    public void setSteps(String steps) {
+        this.steps = steps;
+    }
+
     public void setSecond_title(String second_title) {
         this.second_title = second_title;
     }
@@ -57,6 +67,18 @@ public class PhysicalTestBean implements Serializable {
         return main_title;
     }
 
+    @Override
+    public String toString() {
+        return "PhysicalTestBean{" +
+                "second_title='" + second_title + '\'' +
+                ", attention=" + attention +
+                ", action_detail=" + action_detail +
+                ", main_pic_path='" + main_pic_path + '\'' +
+                ", main_pic_url='" + main_pic_url + '\'' +
+                ", main_title='" + main_title + '\'' +
+                ", steps='" + steps + '\'' +
+                '}';
+    }
 
     public class Action_detail {
 
@@ -84,6 +106,14 @@ public class PhysicalTestBean implements Serializable {
             return pic_url;
         }
 
+        @Override
+        public String toString() {
+            return "Action_detail{" +
+                    "note='" + note + '\'' +
+                    ", pic_path='" + pic_path + '\'' +
+                    ", pic_url='" + pic_url + '\'' +
+                    '}';
+        }
     }
 
 }

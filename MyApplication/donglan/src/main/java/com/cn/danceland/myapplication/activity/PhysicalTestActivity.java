@@ -183,6 +183,8 @@ public class PhysicalTestActivity extends BaseActivity {
             TextView tv_buzhou_02 = v.findViewById(R.id.tv_buzhou_02);
             TextView tv_buzhou_03 = v.findViewById(R.id.tv_buzhou_03);
             TextView[] arrText = {tv_buzhou_01, tv_buzhou_02, tv_buzhou_03};
+            LogUtil.i("size="+physicalTestBean.getAction_detail().size());
+            LogUtil.i("tos="+physicalTestBean.getAction_detail().toString());
             List<PhysicalTestBean.Action_detail> action_detail = physicalTestBean.getAction_detail();
             StringBuilder stringBuilder = new StringBuilder();
             StringBuilder stringBuilder1 = new StringBuilder();
@@ -200,7 +202,8 @@ public class PhysicalTestActivity extends BaseActivity {
                         arrText[j].setText(action_detail.get(j).getNote());
                     }
                 }
-                tv_buzhou.setText(stringBuilder.toString());
+//                tv_buzhou.setText(stringBuilder.toString());
+                tv_buzhou.setText(physicalTestBean.getSteps()+"");
             }
 
             TextView tv_zhuyi = v.findViewById(R.id.tv_zhuyi);

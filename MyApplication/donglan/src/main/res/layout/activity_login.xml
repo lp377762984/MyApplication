@@ -307,7 +307,6 @@
 
                     <TextView
                         android:id="@+id/tv_register"
-
                         style="@style/TextViewTitileStyle"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="5dp"

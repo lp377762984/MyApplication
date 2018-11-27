@@ -30,7 +30,7 @@
                 android:id="@+id/content_one_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2018-01-01"
+                android:text="date"
                 android:textColor="@color/colorGray21"
                 android:textSize="14sp" />
 
@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:singleLine="true"
-                android:text="动岚系统消息"
+                android:text="content"
                 android:textColor="@color/colorGray21"
                 android:textSize="14sp" />
 
