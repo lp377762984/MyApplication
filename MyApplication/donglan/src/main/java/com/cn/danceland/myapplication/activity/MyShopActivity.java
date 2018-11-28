@@ -27,6 +27,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MyJionShopList;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequestShopListInfo;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
@@ -38,6 +39,8 @@ import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,6 +198,8 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                     listViewAdapter.notifyDataSetChanged();
                     //   lv_myshop.setAdapter(listViewAdapter);
                     //   lv_myshop.setAdapter(new MyListViewAdapter());
+
+                    EventBus.getDefault().post(new StringEvent("",20002));//刷新shopfragment
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
                 }
@@ -328,7 +333,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 viewHolder.iv_default.setVisibility(View.INVISIBLE);
             }
             String[] b = data.get(i).getCreate_time().toString().split(" ");
-            viewHolder.tv_time.setText("加入时间：" + b[0]);
+            viewHolder.tv_time.setText("加入时间：" + b[0].replace("-","."));
             if (data.get(i).getAuths().size() == 1) {
                 String s = "我的角色：";
                 if (TextUtils.equals(data.get(i).getAuths().get(0), "1")) {
