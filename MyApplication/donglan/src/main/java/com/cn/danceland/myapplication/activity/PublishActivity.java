@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -537,18 +537,63 @@ public class PublishActivity extends BaseActivity {
     }
 
     int maptag = 0;
-
+   // int ystag=0;
     //压缩图片
     private void compressImg(final List<File> files) {
-        List<String> paths = new ArrayList<>();
+        final List<String> paths = new ArrayList<>();
+        final List<String> ystags=new ArrayList<>();
+    //    List<Map<String,String>> pathsmaps=new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
-//            try {
-//                LogUtil.i("压缩前大小" + SDCardUtils.formatFileSize(files.get(i)));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-            paths.add(files.get(i).getAbsolutePath());
+
+            String houzhui = files.get(i).getAbsolutePath().substring(files.get(i).getAbsolutePath().lastIndexOf(".") + 1);
+            if (TextUtils.equals(houzhui.toLowerCase(),"gif")){
+                arrayFileMap.put(i+"", files.get(i));
+            }else {
+
+                paths.add(files.get(i).getAbsolutePath());
+                ystags.add(""+i);
+
+            }
+
         }
+
+        if (paths.size()==0&&files.size()>0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String s = null;
+                    try {
+                        s = UpLoadUtils.postUPloadIamges(Constants.UPLOAD_FILES_URL, null, arrayFileMap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                    if (upImagesBean.getSuccess()) {
+                        List<UpImagesBean.Data> beanList = upImagesBean.getData();
+
+                        arrImgUrl = new ArrayList<String>();
+                        arrImgPath = new ArrayList<String>();
+                        if (beanList != null && beanList.size() > 0) {
+                            for (int k = 0; k < beanList.size(); k++) {
+                                arrImgUrl.add(beanList.get(k).getImgUrl());
+                                arrImgPath.add(beanList.get(k).getImgPath());
+                            }
+                        }
+
+                        Message message = new Message();
+                        message.what = 2;
+                        handler.sendMessage(message);
+                        maptag = 0;
+                    } else {
+                        LogUtil.i("图片上传失败");
+                    }
+
+                }
+            }).start();
+            return;
+        }
+
+
         Luban.with(this)
                 .load(paths)                                   // 传人要压缩的图片列表
                 .ignoreBy(100)                                  // 忽略不压缩图片的大小
@@ -564,7 +609,11 @@ public class PublishActivity extends BaseActivity {
                     public void onSuccess(File file) {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         //         LogUtil.i(file.getAbsolutePath());
-                        arrayFileMap.put(maptag + "", file);
+
+                        if (maptag<paths.size()){
+                            arrayFileMap.put(ystags.get(maptag), file);
+                        }
+
                         maptag++;
 //                        try {
 //                            LogUtil.i("压缩后大小" + SDCardUtils.formatFileSize(file));
@@ -572,7 +621,7 @@ public class PublishActivity extends BaseActivity {
 //                            e.printStackTrace();
 //                        }
 
-                        if (files.size() == maptag) {
+                        if (paths.size() == maptag) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {

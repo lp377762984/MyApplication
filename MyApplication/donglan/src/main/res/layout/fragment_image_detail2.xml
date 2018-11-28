@@ -16,6 +16,13 @@
         />
 -->
 
+    <ImageView
+        android:id="@+id/iv_gif"
+        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent" />
+
     <com.github.piasy.biv.view.BigImageView
         android:id="@+id/mBigImage"
         android:layout_width="match_parent"

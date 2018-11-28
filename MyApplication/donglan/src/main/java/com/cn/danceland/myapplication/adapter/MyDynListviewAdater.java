@@ -34,7 +34,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
-import com.cn.danceland.myapplication.activity.PreviewPicActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -42,6 +41,8 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
+import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -521,9 +522,15 @@ public class MyDynListviewAdater extends BaseAdapter {
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(context, PreviewPicActivity.class);
-                        intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
-                        context.startActivity(intent);
+                        PictureConfig config = new PictureConfig.Builder()
+                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+                                .setDownloadPath("DCIM")//图片下载文件夹地址
+                                .setIsShowNumber(false)//是否显示数字下标
+                                .needDownload(true)//是否支持图片下载
+                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                                .build();
+                        ImagePagerActivity.startActivity(context, config);
                     }
                 });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -553,10 +560,15 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(context, PreviewPicActivity.class);
-                    intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
-                    intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
-                    context.startActivity(intent);
+                    PictureConfig config = new PictureConfig.Builder()
+                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+                            .setPosition(i)//图片下标（从第position张图片开始浏览）
+                            .setDownloadPath("DCIM")//图片下载文件夹地址
+                            .setIsShowNumber(true)//是否显示数字下标
+                            .needDownload(true)//是否支持图片下载
+                            .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                            .build();
+                    ImagePagerActivity.startActivity(context, config);
                 }
             });
         } else {

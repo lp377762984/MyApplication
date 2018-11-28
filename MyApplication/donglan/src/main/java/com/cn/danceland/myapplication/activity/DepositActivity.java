@@ -199,10 +199,10 @@ public class DepositActivity extends BaseActivity implements View.OnClickListene
                 vh.tv_name.setText("会员卡定金");
                 vh.iv_type.setImageResource(R.drawable.img_dingjin1);
             }
-            if (mDepositList.get(position).getBus_type() == 2) {
-                vh.tv_name.setText("租柜定金");
-                vh.iv_type.setImageResource(R.drawable.img_dingjin2);
-            }
+//            if (mDepositList.get(position).getBus_type() == 2) {
+//                vh.tv_name.setText("租柜定金");
+//                vh.iv_type.setImageResource(R.drawable.img_dingjin2);
+//            }
             if (mDepositList.get(position).getBus_type() == 3) {
                 vh.tv_name.setText("私教定金");
                 vh.iv_type.setImageResource(R.drawable.img_dingjin3);
