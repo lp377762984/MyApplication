@@ -235,14 +235,6 @@ public class NoticeFragment extends BaseFragment {
                         myListAatapter.notifyDataSetChanged();
                     }
                     mCurrentPage = mCurrentPage + 1;
-                    int notReadNum = 0;
-                    for (RequestNoticeListBean.Data.Content mes : datalist
-                            ) {
-                        if (mes.getStatus().equals("0")) {//未读
-                            notReadNum += 1;
-                        }
-                    }
-                    EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
                 } else {
                     ToastUtils.showToastLong(datainfo.getErrorMsg());
                 }
@@ -341,6 +333,7 @@ public class NoticeFragment extends BaseFragment {
                                 int message_sum = (Integer.valueOf(message_sum_str) - 1);
                                 SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
                                 ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
+                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
                             }
                             datalist.get(position).setStatus("1");
                             myListAatapter.notifyDataSetChanged();

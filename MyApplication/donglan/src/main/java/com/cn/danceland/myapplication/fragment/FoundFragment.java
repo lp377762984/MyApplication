@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,6 +24,7 @@ import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
@@ -230,14 +232,6 @@ public class FoundFragment extends BaseFragment {
 //                        myListAatapter.notifyDataSetChanged();
 //                    }
 //                    mCurrentPage = mCurrentPage + 1;
-//                    int notReadNum = 0;
-//                    for (RequestNoticeListBean.Data.Content mes : datalist
-//                            ) {
-//                        if (mes.getStatus().equals("0")) {//未读
-//                            notReadNum += 1;
-//                        }
-//                    }
-//                    EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_FOUND_NUM));
 //                } else {
 //                    ToastUtils.showToastLong(datainfo.getErrorMsg());
 //                }
@@ -300,9 +294,18 @@ public class FoundFragment extends BaseFragment {
                 vh.tv_time = convertView.findViewById(R.id.tv_time);
                 vh.tv_status = convertView.findViewById(R.id.tv_status);
                 vh.item_layout = convertView.findViewById(R.id.item_layout);
+                vh.item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
                 convertView.setTag(vh);
             } else {
-                vh = (ViewHolder) convertView.getTag();
+                vh = (NoticeAdapter.ViewHolder) convertView.getTag();
+            }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            } else if (position == datalist.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
             }
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
@@ -327,6 +330,7 @@ public class FoundFragment extends BaseFragment {
                                 int message_sum = (Integer.valueOf(message_sum_str) - 1);
                                 SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
                                 ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
+                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_FOUND_NUM));
                             }
                             datalist.get(position).setStatus("1");
                             myListAatapter.notifyDataSetChanged();
@@ -363,6 +367,7 @@ public class FoundFragment extends BaseFragment {
             public TextView tv_content;
             public TextView tv_status;
             public LinearLayout item_layout;
+            public CardView item_layout_cv;
         }
     }
 }

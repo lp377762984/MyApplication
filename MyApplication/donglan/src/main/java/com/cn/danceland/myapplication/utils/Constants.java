@@ -352,9 +352,11 @@ public class Constants {
     //获取推送设置列表
     public static String PUSH_RECEIVE_LIST = HOST + "/pushReceive/list";//获取推送设置列表
 
-    //设置某个类型推送是否接收
+    //我的-我的通知
     public static String PUSH_RECEIVE_SAVE = HOST + "/pushReceive/save";//设置某个类型推送是否接收
 
+    //我的-我的通知
+    public static String QUERY_COUNT = HOST + "/pushRecord/queryCount";// 查询当前登录的人未读的通知数量
 
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
@@ -718,7 +720,10 @@ public class Constants {
         //获取推送设置列表
         PUSH_RECEIVE_LIST = HOST + "/pushReceive/list";//获取推送设置列表
 
-        //设置某个类型推送是否接收
+        //我的-我的通知
         PUSH_RECEIVE_SAVE = HOST + "/pushReceive/save";//设置某个类型推送是否接收
+
+        //我的-我的通知
+        QUERY_COUNT = HOST + "/pushRecord/queryCount";// 查询当前登录的人未读的通知数量
     }
 }

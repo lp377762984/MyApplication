@@ -2,25 +2,32 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -32,7 +39,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 /**
  * 系统消息
@@ -217,14 +228,6 @@ public class SystemMessageFragment extends BaseFragment {
                         myListAatapter.notifyDataSetChanged();
                     }
                     mCurrentPage = mCurrentPage + 1;
-                    int notReadNum = 0;
-                    for (RequestNoticeListBean.Data.Content mes : datalist
-                            ) {
-                        if (mes.getStatus().equals("0")) {//未读
-                            notReadNum += 1;
-                        }
-                    }
-                    EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_SYSTEM_NUM));
                 } else {
                     ToastUtils.showToastLong(datainfo.getErrorMsg());
                 }
@@ -286,9 +289,19 @@ public class SystemMessageFragment extends BaseFragment {
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
                 vh.tv_time = convertView.findViewById(R.id.tv_time);
                 vh.tv_status = convertView.findViewById(R.id.tv_status);
+                vh.item_layout = convertView.findViewById(R.id.item_layout);
+                vh.item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
                 convertView.setTag(vh);
             } else {
-                vh = (ViewHolder) convertView.getTag();
+                vh = (NoticeAdapter.ViewHolder) convertView.getTag();
+            }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getActivity(), 80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
+            } else if (position == datalist.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
             }
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
@@ -300,6 +313,46 @@ public class SystemMessageFragment extends BaseFragment {
                 vh.tv_status.setTextColor(getResources().getColor(R.color.colorGray22));
                 vh.tv_status.setText("已读");
             }
+            vh.item_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PUSH_RECORD_SET_BADGE, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String s) {
+                            LogUtil.i("Response--" + s);
+                            CornerMarkMessageBean responseBean = new Gson().fromJson(s, CornerMarkMessageBean.class);
+                            if (responseBean.getCode() != null && responseBean.getCode().equals("0")) {
+                                String message_sum_str = SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, "0");//应用消息总数 用于桌面icon显示
+                                int message_sum = (Integer.valueOf(message_sum_str) - 1);
+                                SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
+                                ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
+                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_SYSTEM_NUM));
+                            }
+                            datalist.get(position).setStatus("1");
+                            myListAatapter.notifyDataSetChanged();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            if (volleyError != null) {
+                                LogUtil.i(volleyError.toString());
+                            } else {
+                                LogUtil.i("NULL");
+                            }
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("badge", SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, ""));//应用消息总数 用于桌面icon显示);
+                            map.put("recordId", datalist.get(position).getId());
+                            LogUtil.i("finalMap--" + map.toString());
+                            return map;
+                        }
+                    };
+                    MyApplication.getHttpQueues().add(stringRequest);
+                }
+            });
             return convertView;
         }
 
@@ -308,6 +361,8 @@ public class SystemMessageFragment extends BaseFragment {
             public TextView tv_time;
             public TextView tv_content;
             public TextView tv_status;
+            public LinearLayout item_layout;
+            public CardView item_layout_cv;
         }
     }
 }

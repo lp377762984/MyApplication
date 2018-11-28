@@ -672,12 +672,14 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
 
                     if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                        linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f), DensityUtils.dp2px(this, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+//                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        linearParams.setMargins(DensityUtils.dp2px(this, 16f), DensityUtils.dp2px(this, 10f), DensityUtils.dp2px(this, 16f), 0);
                         iv_pic.setLayoutParams(linearParams);
                     } else {
-                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                        linearParams.setMargins(DensityUtils.dp2px(this, 5f), DensityUtils.dp2px(this, 5f), 0, 0);
+                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(this, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(this, 200f));
+//                        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 10f), (int) ((ScreenUtils.getScreenWidth(DynHomeActivity.this) - DensityUtils.dp2px(this, 30f)) * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+                        linearParams.setMargins(DensityUtils.dp2px(this, 16f), DensityUtils.dp2px(this, 10f), DensityUtils.dp2px(this, 16f), 0);
                         iv_pic.setLayoutParams(linearParams);
                     }
                 }
@@ -691,10 +693,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Intent intent = new Intent(DynHomeActivity.this, PreviewPicActivity.class);
-//                        intent.putStringArrayListExtra("photos", (ArrayList<String>)  oneDynInfo.getImgList());
-//                        DynHomeActivity.this.startActivity(intent);
-
                         PictureConfig config = new PictureConfig.Builder()
                                 .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
                                 .setPosition(0)//图片下标（从第position张图片开始浏览）
@@ -704,32 +702,27 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                                 .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                                 .build();
                         ImagePagerActivity.startActivity(  DynHomeActivity.this, config);
-
                     }
                 });
 
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 5f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
+                linearParams1.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 10f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
 
             } else if (oneDynInfo.getImgList().size() == 4) {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 gridView.setNumColumns(2);
-
-
                 int width = (DensityUtils.dp2px(DynHomeActivity.this, AppUtils.getScreenWidth()) - DensityUtils.dp2px(DynHomeActivity.this, 32f)) / 3 * 2;
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 10f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
             } else {
                 gridView.setNumColumns(3);
-
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
+                linearParams.setMargins(DensityUtils.dp2px(DynHomeActivity.this, 16f), DensityUtils.dp2px(DynHomeActivity.this, 10f), DensityUtils.dp2px(DynHomeActivity.this, 16f), 0);
                 gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
             }
-
 
             gridView.setAdapter(new ImageGridAdapter(DynHomeActivity.this, oneDynInfo.getImgList()));
             /**
@@ -738,11 +731,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                    Intent intent = new Intent(DynHomeActivity.this, PreviewPicActivity.class);
-//                    intent.putStringArrayListExtra("photos", (ArrayList<String>) oneDynInfo.getImgList());
-//                    intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
-//                    DynHomeActivity.this.startActivity(intent);
-
                     PictureConfig config = new PictureConfig.Builder()
                             .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
                             .setPosition(i)//图片下标（从第position张图片开始浏览）
@@ -752,7 +740,6 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                             .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                             .build();
                     ImagePagerActivity.startActivity(  DynHomeActivity.this, config);
-
                 }
             });
         } else {
