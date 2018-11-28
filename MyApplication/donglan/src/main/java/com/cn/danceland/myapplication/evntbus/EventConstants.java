@@ -24,4 +24,7 @@ public class EventConstants {
     public static final int ADD_ZAN_DYN_HOME = 8114;//在动态主页给动态点赞
     public static final int DEL_ZAN_DYN_HOME = 8115;//在动态主页给动态取消点赞
     public static final int UPDATE_USER_INFO= 8116;//更新用户本地信息
+    public static final int MY_MESSAGE_FOUND_NUM= 8117;//我的通知发现数
+    public static final int MY_MESSAGE_NOTICE_NUM= 8118;//我的通知发现数
+    public static final int MY_MESSAGE_SYSTEM_NUM= 8119;//我的通知发现数
 }

@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,6 +34,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
+import com.cn.danceland.myapplication.activity.PreviewPicActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -42,8 +42,6 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
-import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -64,11 +62,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.jzvd.JZVideoPlayer;
 import cn.jzvd.JZVideoPlayerStandard;
@@ -487,7 +482,7 @@ public class MyDynListviewAdater extends BaseAdapter {
                 //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 RequestOptions options1 = new RequestOptions()
-                          .placeholder(R.drawable.loading_img)//加载占位图
+                        .placeholder(R.drawable.loading_img)//加载占位图
 //                        .error(R.drawable.img_loadfail)//
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .priority(Priority.HIGH);
@@ -519,28 +514,16 @@ public class MyDynListviewAdater extends BaseAdapter {
                     }
                 }
 
-                LogUtil.i("houzhui="+houzhui);
-                LogUtil.i("sb.toString()="+sb.toString());
-//                if(houzhui.equals("gif")){
-//                    Glide.with(context).load(sb.toString()).asGif().into(viewHolder.iv_pic);
-//                }else{
-                    Glide.with(context)
-                            .load(sb.toString())
-                            .apply(options1)
-                            .into(viewHolder.iv_pic);
-//                }
+                Glide.with(context)
+                        .load(sb.toString())
+                        .apply(options1)
+                        .into(viewHolder.iv_pic);
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                                .setPosition(0)//图片下标（从第position张图片开始浏览）
-                                .setDownloadPath("DCIM")//图片下载文件夹地址
-                                .setIsShowNumber(false)//是否显示数字下标
-                                .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                .build();
-                        ImagePagerActivity.startActivity(context, config);
+                        Intent intent = new Intent(context, PreviewPicActivity.class);
+                        intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
+                        context.startActivity(intent);
                     }
                 });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -570,25 +553,10 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-//                Intent intent = new Intent(context, ImagePagerActivity.class);
-//                //intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, (Parcelable) list);
-//                intent.putStringArrayListExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, (ArrayList<String>) list);
-//                intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, i);
-//                context.startActivity(intent);
-
-                    PictureConfig config = new PictureConfig.Builder()
-                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                            .setPosition(i)//图片下标（从第position张图片开始浏览）
-                            .setDownloadPath("DCIM")//图片下载文件夹地址
-                            .setIsShowNumber(true)//是否显示数字下标
-                            .needDownload(true)//是否支持图片下载
-                            .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                            .build();
-                    ImagePagerActivity.startActivity(context, config);
-
-
+                    Intent intent = new Intent(context, PreviewPicActivity.class);
+                    intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
+                    intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
+                    context.startActivity(intent);
                 }
             });
         } else {

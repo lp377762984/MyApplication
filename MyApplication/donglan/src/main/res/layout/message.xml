@@ -19,7 +19,6 @@
         android:layout_centerHorizontal="true"
         android:background="@color/white"
         app:tabIndicatorColor="@color/home_enter_total_text_color"
-
         app:tabSelectedTextColor="@color/home_enter_total_text_color"
         app:tabTextColor="@color/colorGray22"
         app:tabTextAppearance="@style/TabLayoutTextStyle"

@@ -69,8 +69,7 @@ public class TimeTableActivity extends BaseActivity {
     private TextView time_tv;
     private TextView hint_tv;
     private Gson gson;
-    private ArrayList<String> placeList;
-    private HashSet<String> placeSet;
+    private ArrayList<String> roomnameList;
     private ArrayList<List<TimeTableResultBean.DataBean>> listViewList;
     private ArrayList<ArrayList<TimeTableResultBean.DataBean>> allGridViewList;
     private ScrollView wholeView;
@@ -89,8 +88,8 @@ public class TimeTableActivity extends BaseActivity {
 
     private void initHost() {
         gson = new Gson();
-        placeList = new ArrayList<>();
-        placeSet = new HashSet<>();
+        roomnameList = new ArrayList<>();
+
         listViewList = new ArrayList<>();
         allGridViewList = new ArrayList<>();
 
@@ -126,7 +125,7 @@ public class TimeTableActivity extends BaseActivity {
         strBean.date_gt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(todayStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
         strBean.date_lt = TimeUtils.date2TimeStamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sevenStart.getTime()), "yyyy-MM-dd HH:mm:ss") + "";
         String s = gson.toJson(strBean);
-
+        LogUtil.i("pra--" + s);
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.TIMETABLES, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -136,15 +135,25 @@ public class TimeTableActivity extends BaseActivity {
                     List<TimeTableResultBean.DataBean> data = timeTableResultBean.getData();
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
-                            placeList.add(data.get(i).getRoom_name());
+                            if (roomnameList.size() == 0) {
+                                roomnameList.add(data.get(i).getRoom_name());
+                            } else {
+                                boolean isEquals = false;//是否有相同元素
+                                for (String rnameStr : roomnameList) {
+                                    if (rnameStr.equals(data.get(i).getRoom_name())) {
+                                        isEquals = true;
+                                    }
+                                }
+                                if (!isEquals) {
+                                    roomnameList.add(data.get(i).getRoom_name());
+                                }
+                            }
                         }
-                        placeSet.addAll(placeList);
 
-                        String[] placeArr = placeSet.toArray(new String[placeSet.size()]);
-                        for (int j = 0; j < placeArr.length; j++) {
+                        for (int j = 0; j < roomnameList.size(); j++) {
                             ArrayList<TimeTableResultBean.DataBean> placeList = new ArrayList<>();
                             for (int i = 0; i < data.size(); i++) {//如果是一个课室
-                                if (placeArr[j].equals(data.get(i).getRoom_name())) {
+                                if (roomnameList.get(j).equals(data.get(i).getRoom_name())) {
                                     placeList.add(data.get(i));
                                 }
                             }
@@ -162,22 +171,19 @@ public class TimeTableActivity extends BaseActivity {
                             });
                             listViewList.add(placeList);
                         }
-                        Collections.reverse(listViewList);//倒序
-
-
-                        for (List<TimeTableResultBean.DataBean> list : listViewList) {//输出打印
-                            for (TimeTableResultBean.DataBean databen : list) {//
-                                String startTime;
-                                int startInt = Integer.valueOf(databen.getStart_time());
-                                if (startInt % 60 == 0) {
-                                    startTime = startInt / 60 + ":00";
-                                } else {
-                                    startTime = startInt / 60 + ":" + startInt % 60;
-                                }
-                                LogUtil.i("房间" + databen.getRoom_name() + "课程" + databen.getCourse_type_name() + "时间" + startTime);
-                            }
-                            LogUtil.i("-----");
-                        }
+//                        for (List<TimeTableResultBean.DataBean> list : listViewList) {//输出打印
+//                            for (TimeTableResultBean.DataBean databen : list) {//专为打印
+//                                String startTime;
+//                                int startInt = Integer.valueOf(databen.getStart_time());
+//                                if (startInt % 60 == 0) {
+//                                    startTime = startInt / 60 + ":00";
+//                                } else {
+//                                    startTime = startInt / 60 + ":" + startInt % 60;
+//                                }
+//                                LogUtil.i("房间" + databen.getRoom_name() + "课程" + databen.getCourse_type_name() + "时间" + startTime);
+//                            }
+//                            LogUtil.i("-----");
+//                        }
 
 
                         TimeTableAdapter timeTableAdapter = new TimeTableAdapter(listViewList);
@@ -448,8 +454,14 @@ public class TimeTableActivity extends BaseActivity {
                 int startInt = Integer.valueOf(listItem.get(i).getStart_time());
                 int entInt = Integer.valueOf(listItem.get(i).getEnd_time());
                 time_tv.setText((entInt - startInt) + "分钟");
+
+                StringBuilder sb = new StringBuilder(listItem.get(i).getCover_img_url());
+                String houzhui = listItem.get(i).getCover_img_url().substring(listItem.get(i).getCover_img_url().lastIndexOf(".") + 1);
+                sb.insert(listItem.get(i).getCover_img_url().length() - houzhui.length() - 1, "_400X400");
+
                 RequestOptions options = new RequestOptions().placeholder(R.drawable.loading_img);
-                Glide.with(TimeTableActivity.this).load(listItem.get(i).getCover_img_url()).apply(options).into(gv_img);
+                Glide.with(TimeTableActivity.this).load(sb.toString()).apply(options).into(gv_img);
+
                 tv_name.setText(listItem.get(i).getCourse_type_name());
                 tv_name.setTextColor(Color.parseColor(listItem.get(i).getColor()));
                 tv_emp_name.setText(listItem.get(i).getEmployee_name());

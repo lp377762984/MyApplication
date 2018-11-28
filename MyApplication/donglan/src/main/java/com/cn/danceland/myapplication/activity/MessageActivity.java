@@ -17,18 +17,34 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.FoundFragment;
 import com.cn.danceland.myapplication.fragment.NoticeFragment;
 import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by feng on 2017/12/11.
@@ -53,11 +69,21 @@ public class MessageActivity extends BaseActivity {
     TabItem tab3;
     TabItem tab4;
     private int currentTabIndex = 0;
+    private View foundView;
+    private TextView foundContent;
+    private TextView foundNum;
+    private View messageView;
+    private TextView messageContent;
+    private TextView messageNum;
+    private View systemView;
+    private TextView systemContent;
+    private TextView systemNum;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.message);
+        EventBus.getDefault().register(this);//注册event事件
         initViews();
         setOnclick();
     }
@@ -89,7 +115,6 @@ public class MessageActivity extends BaseActivity {
         } else {
             return super.onKeyDown(keyCode, event);
         }
-
     }
 
     private void initViews() {
@@ -102,12 +127,31 @@ public class MessageActivity extends BaseActivity {
 //        tab2 = findViewById(R.id.tab2);
 //        tab3 = findViewById(R.id.tab3);
 //        tab4 = findViewById(R.id.tab4);
-        tablayout.addTab(tablayout.newTab().setText("发现"));
-        if (pinglunNum + dianzanNum + fansNum > 0) {
-            tablayout.addTab(tablayout.newTab().setText("通知" + "(" + (pinglunNum + dianzanNum + fansNum) + ")"));
-        } else {
-            tablayout.addTab(tablayout.newTab().setText("通知"));
-        }
+        foundView = View.inflate(this, R.layout.message_item_tab, null);
+        foundContent = foundView.findViewById(R.id.content_tv);
+        foundNum = foundView.findViewById(R.id.num_tv);
+        foundContent.setText("发现");
+        tablayout.addTab(tablayout.newTab().setCustomView(foundView));
+        messageView = View.inflate(this, R.layout.message_item_tab, null);
+        messageContent = messageView.findViewById(R.id.content_tv);
+        messageNum = messageView.findViewById(R.id.num_tv);
+        messageContent.setText("通知");
+        tablayout.addTab(tablayout.newTab().setCustomView(messageView));
+        systemView = View.inflate(this, R.layout.message_item_tab, null);
+        systemContent = systemView.findViewById(R.id.content_tv);
+        systemNum = systemView.findViewById(R.id.num_tv);
+        systemContent.setText("系统");
+        tablayout.addTab(tablayout.newTab().setCustomView(systemView));
+
+        find_notice_data();//请求后面数据，刷新未读数  通知
+//        tablayout.addTab(tablayout.newTab().setText("发现"));
+//        tablayout.addTab(tablayout.newTab().setText("通知"));
+//        tablayout.addTab(tablayout.newTab().setText("系统"));
+//        if (pinglunNum + dianzanNum + fansNum > 0) {
+//            tablayout.addTab(tablayout.newTab().setText("通知" + "(" + (pinglunNum + dianzanNum + fansNum) + ")"));
+//        } else {
+//            tablayout.addTab(tablayout.newTab().setText("通知"));
+//        }
 //        if (dianzanNum > 0) {
 //            tablayout.addTab(tablayout.newTab().setText("点赞" + "(" + dianzanNum + ")"));
 //        } else {
@@ -118,10 +162,7 @@ public class MessageActivity extends BaseActivity {
 //        } else {
 //            tablayout.addTab(tablayout.newTab().setText("粉丝"));
 //        }
-        tablayout.addTab(tablayout.newTab().setText("系统"));
-
         //   tablayout.addTab(tablayout.newTab().setText("私信"));
-
 //        if(pinglunNum>0){
 //            new QBadgeView(MessageActivity.this).bindTarget(tab2).setBadgeNumber(pinglunNum).setBadgeGravity(Gravity.RIGHT);
 //        }else if(dianzanNum>0){
@@ -153,7 +194,7 @@ public class MessageActivity extends BaseActivity {
                     SPUtils.setInt("fansNum", 0);
                     showFragment("1");//评论
 
-                } else if (currentTabIndex == 2){
+                } else if (currentTabIndex == 2) {
                     showFragment("2");
                     //ToastUtils.showToastShort("没有系统消息");
                 }
@@ -199,7 +240,6 @@ public class MessageActivity extends BaseActivity {
 //        commentFragment.setArguments(bundle);
         noticeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LogUtil.i("str" + str);
         if (TextUtils.equals(str, "0")) {
             fragmentTransaction.replace(R.id.message_fragment, foundFragment).commit();
         } else if (TextUtils.equals(str, "1")) {
@@ -279,4 +319,100 @@ public class MessageActivity extends BaseActivity {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
+    private List<RequestNoticeListBean.Data.Content> noticeData = new ArrayList<>();
+
+    /**
+     * 查询数据
+     *
+     * @throws JSONException
+     */
+    public void find_notice_data() {
+
+        StrBean strBean = new StrBean();
+        strBean.page = 0 + "";
+        String s = new Gson().toJson(strBean);
+        try {
+            MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, new JSONObject(s.toString()), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject jsonObject) {
+                    LogUtil.i(jsonObject.toString());
+                    RequestNoticeListBean datainfo = new RequestNoticeListBean();
+                    Gson gson = new Gson();
+                    datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
+
+                    if (datainfo.getSuccess()) {
+                        noticeData = datainfo.getData().getContent();
+                        int notReadNum = 0;
+                        for (RequestNoticeListBean.Data.Content mes : noticeData
+                                ) {
+                            if (mes.getStatus().equals("0")) {//未读
+                                notReadNum += 1;
+                            }
+                        }
+                        EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
+                    } else {
+                        ToastUtils.showToastLong(datainfo.getErrorMsg());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    ToastUtils.showToastShort(volleyError.toString());
+                }
+            });
+            MyApplication.getHttpQueues().add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class StrBean {
+        public String page;
+    }
+
+    //even事件处理
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
+        switch (event.getEventCode()) {
+            case EventConstants.MY_MESSAGE_FOUND_NUM:
+                if (event.getMsg().equals("0")) {
+                    foundNum.setVisibility(View.GONE);
+                } else {
+                    foundNum.setVisibility(View.VISIBLE);
+                }
+                if (Integer.valueOf(event.getMsg()) > 99) {
+                    foundNum.setText(99 + "");
+                } else {
+                    foundNum.setText(event.getMsg());
+                }
+                break;
+            case EventConstants.MY_MESSAGE_NOTICE_NUM:
+                if (event.getMsg().equals("0")) {
+                    messageNum.setVisibility(View.GONE);
+                } else {
+                    messageNum.setVisibility(View.VISIBLE);
+                }
+                if (Integer.valueOf(event.getMsg()) > 99) {
+                    messageNum.setText(99 + "");
+                } else {
+                    messageNum.setText(event.getMsg());
+                }
+                break;
+            case EventConstants.MY_MESSAGE_SYSTEM_NUM:
+                if (event.getMsg().equals("0")) {
+                    systemNum.setVisibility(View.GONE);
+                } else {
+                    systemNum.setVisibility(View.VISIBLE);
+                }
+                if (Integer.valueOf(event.getMsg()) > 99) {
+                    systemNum.setText(99 + "");
+                } else {
+                    systemNum.setText(event.getMsg());
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
 }

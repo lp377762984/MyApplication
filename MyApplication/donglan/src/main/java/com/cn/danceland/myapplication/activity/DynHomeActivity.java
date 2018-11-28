@@ -101,7 +101,6 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
  * 动态详情页
  */
 
-
 public class DynHomeActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView pullToRefresh;
     private List<RequstCommentInfoBean.Content> data = new ArrayList<RequstCommentInfoBean.Content>();
@@ -694,15 +693,9 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
-                                .setPosition(0)//图片下标（从第position张图片开始浏览）
-                                .setDownloadPath("DCIM")//图片下载文件夹地址
-                                .setIsShowNumber(false)//是否显示数字下标
-                                .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                .build();
-                        ImagePagerActivity.startActivity(DynHomeActivity.this, config);
+                        Intent intent = new Intent(DynHomeActivity.this, PreviewPicActivity.class);
+                        intent.putStringArrayListExtra("photos", (ArrayList<String>)  oneDynInfo.getImgList());
+                        DynHomeActivity.this.startActivity(intent);
                     }
                 });
 //                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -748,27 +741,15 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-                    PictureConfig config = new PictureConfig.Builder()
-                            .setListData((ArrayList<String>) oneDynInfo.getImgList())//图片数据List<String> list
-                            .setPosition(i)//图片下标（从第position张图片开始浏览）
-                            .setDownloadPath("donglan")//图片下载文件夹地址
-                            .setIsShowNumber(true)//是否显示数字下标
-                            .needDownload(true)//是否支持图片下载
-                            .setPlacrHolder(R.drawable.img_loading)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                            .build();
-                    ImagePagerActivity.startActivity(DynHomeActivity.this, config);
-
-
+                    Intent intent = new Intent(DynHomeActivity.this, PreviewPicActivity.class);
+                    intent.putStringArrayListExtra("photos", (ArrayList<String>) oneDynInfo.getImgList());
+                    intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
+                    DynHomeActivity.this.startActivity(intent);
                 }
             });
         } else {
             gridView.setVisibility(View.GONE);
-
-
         }
-
     }
 
     private View initHeadview() {

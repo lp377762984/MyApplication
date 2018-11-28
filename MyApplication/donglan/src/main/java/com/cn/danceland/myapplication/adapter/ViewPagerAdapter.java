@@ -1,7 +1,5 @@
 package com.cn.danceland.myapplication.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -9,6 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cn.danceland.myapplication.utils.LogUtil;
+
+import java.util.List;
+
+/**
+ * 预览图片GIF等adapter
+ * Created by ${yxx} on 2018/11/27.
+ */
 public class ViewPagerAdapter extends PagerAdapter {
 	public Context context;
 	public List<View> pgview;
@@ -32,7 +38,6 @@ public class ViewPagerAdapter extends PagerAdapter {
 
 	@Override
 	public Object instantiateItem(ViewGroup collection, int position) {
-
 		if (position >= pgview.size()) {
 			int newPosition = position % pgview.size();
 			position = newPosition;

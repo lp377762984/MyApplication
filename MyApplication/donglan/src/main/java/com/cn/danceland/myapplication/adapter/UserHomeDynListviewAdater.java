@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -27,8 +26,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -36,6 +33,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
+import com.cn.danceland.myapplication.activity.PreviewPicActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
@@ -43,8 +41,6 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.pictureviewer.ImagePagerActivity;
-import com.cn.danceland.myapplication.pictureviewer.PictureConfig;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -74,7 +70,6 @@ import cn.jzvd.JZVideoPlayerStandard;
 import static com.cn.danceland.myapplication.R.id.iv_comment;
 import static com.cn.danceland.myapplication.R.id.iv_transpond;
 import static com.cn.danceland.myapplication.R.id.iv_zan;
-import static com.cn.danceland.myapplication.R.id.tv_guanzhu;
 
 /**
  * 健身日记adapter
@@ -464,15 +459,9 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            PictureConfig config = new PictureConfig.Builder()
-                                    .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                                    .setPosition(0)//图片下标（从第position张图片开始浏览）
-                                    .setDownloadPath("DCIM")//图片下载文件夹地址
-                                    .setIsShowNumber(false)//是否显示数字下标
-                                    .needDownload(true)//是否支持图片下载
-                                    .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                    .build();
-                            ImagePagerActivity.startActivity(context, config);
+                            Intent intent = new Intent(context, PreviewPicActivity.class);
+                            intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
+                            context.startActivity(intent);
                         }
                     });
                     LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -504,25 +493,10 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                 viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-//                Intent intent = new Intent(context, ImagePagerActivity.class);
-//                //intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, (Parcelable) list);
-//                intent.putStringArrayListExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, (ArrayList<String>) list);
-//                intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, i);
-//                context.startActivity(intent);
-
-                        PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                                .setPosition(i)//图片下标（从第position张图片开始浏览）
-                                .setDownloadPath("DCIM")//图片下载文件夹地址
-                                .setIsShowNumber(true)//是否显示数字下标
-                                .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                .build();
-                        ImagePagerActivity.startActivity(context, config);
-
-
+                        Intent intent = new Intent(context, PreviewPicActivity.class);
+                        intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
+                        intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
+                        context.startActivity(intent);
                     }
                 });
             } else {
@@ -531,11 +505,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
             }
         }
-
-
         return convertView;
-
-
     }
 
     class ViewHolder {

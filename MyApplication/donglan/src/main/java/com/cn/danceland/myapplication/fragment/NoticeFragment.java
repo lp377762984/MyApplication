@@ -21,6 +21,8 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
+import com.cn.danceland.myapplication.evntbus.EventConstants;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -33,6 +35,7 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -232,10 +235,17 @@ public class NoticeFragment extends BaseFragment {
                         myListAatapter.notifyDataSetChanged();
                     }
                     mCurrentPage = mCurrentPage + 1;
+                    int notReadNum = 0;
+                    for (RequestNoticeListBean.Data.Content mes : datalist
+                            ) {
+                        if (mes.getStatus().equals("0")) {//未读
+                            notReadNum += 1;
+                        }
+                    }
+                    EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
                 } else {
                     ToastUtils.showToastLong(datainfo.getErrorMsg());
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override

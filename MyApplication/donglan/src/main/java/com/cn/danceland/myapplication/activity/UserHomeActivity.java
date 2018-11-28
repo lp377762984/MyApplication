@@ -168,21 +168,6 @@ public class UserHomeActivity extends BaseActivity {
                 timer.schedule(task, 1000);
             }
         });
-
-
-//        pullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-//            @Override
-//            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-//                TimerTask task = new TimerTask() {
-//                    public void run() {
-//                        new FinishRefresh().execute();
-//                    }
-//                };
-//                Timer timer = new Timer();
-//                timer.schedule(task, 1000);
-//
-//            }
-//        });
         pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

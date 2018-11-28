@@ -852,6 +852,11 @@
             android:name=".activity.SettingMessageActivity"
             android:screenOrientation="portrait" />
 
+        <!--预览-图片查看 预览图片GIF等-->
+        <activity
+            android:name=".activity.PreviewPicActivity"
+            android:screenOrientation="portrait" />
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
