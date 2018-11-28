@@ -728,6 +728,7 @@ public class PublishActivity extends BaseActivity {
 //                            } catch (Exception e) {
 //                                e.printStackTrace();
 //                            }
+
                             if (length < (5 * 1024 * 1024)) {
                                 SPUtils.setInt("imgN", 100);
                                 List<Bitmap> thumbnailList = new ArrayList<>();//缩略图
@@ -765,8 +766,6 @@ public class PublishActivity extends BaseActivity {
                     for (int i = 0; i < uris.size(); i++) {
                         arrayList.add(PictureUtil.getRealPath(getApplicationContext(), uris.get(i)));
                     }
-
-
                     grid_view.setAdapter(new SmallGridAdapter(PublishActivity.this, arrayList));
                 }
             }
