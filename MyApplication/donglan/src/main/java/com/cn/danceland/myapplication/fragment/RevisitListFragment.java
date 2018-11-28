@@ -124,8 +124,11 @@ public class RevisitListFragment extends BaseFragment {
                 strBean = new StrBean(auth);
                 mCurrentPage = 1;
                 StrBean.Order order = new StrBean.Order();
-                order.setLast_time("desc");//最近维护
-                strBean.setOrder(order);
+                order.setName("last_time");
+                order.setValue("desc");//最近维护
+                List<StrBean.Order> oders=new ArrayList<>();
+                oders.add(order);
+                strBean.setOrder(oders);
                 strBean.searchInfo = event.getMsg();
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
@@ -139,8 +142,11 @@ public class RevisitListFragment extends BaseFragment {
                 strBean.searchInfo = event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order1 = new StrBean.Order();
-                order1.setLast_time("asc");
-                strBean.setOrder(order1);
+                order1.setName("last_time");
+                order1.setValue("asc");//最wan
+                List<StrBean.Order> oders1=new ArrayList<>();
+                oders1.add(order1);
+                strBean.setOrder(oders1);
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
                 } catch (JSONException e) {
@@ -153,9 +159,16 @@ public class RevisitListFragment extends BaseFragment {
                 strBean.searchInfo = event.getMsg();
                 strBean.setPage(mCurrentPage - 1 + "");
                 StrBean.Order order2 = new StrBean.Order();
-                order2.setLast_time("desc");
-                order2.setFitness_level("desc");
-                strBean.setOrder(order2);
+                order2.setName("last_time");
+                order2.setValue("desc");
+                StrBean.Order order3 = new StrBean.Order();
+                order3.setName("fitness_level");
+                order3.setValue("desc");
+                List<StrBean.Order> oders2=new ArrayList<>();
+
+                oders2.add(order3);
+                oders2.add(order2);
+                strBean.setOrder(oders2);
 
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
@@ -168,10 +181,21 @@ public class RevisitListFragment extends BaseFragment {
                 strBean.searchInfo = event.getMsg();
                 mCurrentPage = 1;
                 strBean.setPage(mCurrentPage - 1 + "");
-                StrBean.Order order3 = new StrBean.Order();
-                order3.setLast_time("desc");//最近维护
-                order3.setFollow_level("desc");
-                strBean.setOrder(order3);
+
+
+
+                StrBean.Order order4= new StrBean.Order();
+                order4.setName("last_time");
+                order4.setValue("desc");
+                StrBean.Order order5 = new StrBean.Order();
+                order5.setName("follow_level");
+                order5.setValue("desc");
+                List<StrBean.Order> oders3=new ArrayList<>();
+                oders3.add(order5);
+                oders3.add(order4);
+                strBean.setOrder(oders3);
+
+
 
                 try {
                     find_potential_list(gson.toJson(strBean).toString());
@@ -262,8 +286,11 @@ public class RevisitListFragment extends BaseFragment {
         mCurrentPage = 1;
         strBean.setPage(mCurrentPage - 1 + "");
         StrBean.Order order = new StrBean.Order();
-        order.setLast_time("desc");//最近维护
-        strBean.setOrder(order);
+        order.setName("last_time");
+        order.setValue("desc");//最近维护
+        List<StrBean.Order> oders=new ArrayList<>();
+        oders.add(order);
+        strBean.setOrder(oders);
 
         try {
             find_potential_list(gson.toJson(strBean).toString());
@@ -403,7 +430,8 @@ public class RevisitListFragment extends BaseFragment {
         public String auth;
         public String searchInfo;
 
-        public Order order;
+    //    public Order order;
+        public  List<Order> order;
 
         @Override
         public String toString() {
@@ -430,52 +458,88 @@ public class RevisitListFragment extends BaseFragment {
             this.auth = auth;
         }
 
-        public Order getOrder() {
+//        public Order getOrder() {
+//            return order;
+//        }
+//
+//        public void setOrder(Order order) {
+//            this.order = order;
+//        }
+
+        public String getSearchInfo() {
+            return searchInfo;
+        }
+
+        public void setSearchInfo(String searchInfo) {
+            this.searchInfo = searchInfo;
+        }
+
+        public List<Order> getOrder() {
             return order;
         }
 
-        public void setOrder(Order order) {
+        public void setOrder(List<Order> order) {
             this.order = order;
         }
 
         public static class Order {
 
-            public String fitness_level;
-            public String follow_level;
-            public String last_time;
+//            public String fitness_level;
+//            public String follow_level;
+//            public String last_time;
+            public String name;
+            public String value;
 
             @Override
             public String toString() {
                 return "Order{" +
-                        "fitness_level='" + fitness_level + '\'' +
-                        ", follow_level='" + follow_level + '\'' +
-                        ", last_time='" + last_time + '\'' +
+//                        "fitness_level='" + fitness_level + '\'' +
+//                        ", follow_level='" + follow_level + '\'' +
+//                        ", last_time='" + last_time + '\'' +
+                        ", name='" + name + '\'' +
+                        ", value='" + value + '\'' +
                         '}';
             }
 
-            public String getFitness_level() {
-                return fitness_level;
+            public String getName() {
+                return name;
             }
 
-            public void setFitness_level(String fitness_level) {
-                this.fitness_level = fitness_level;
+            public void setName(String name) {
+                this.name = name;
             }
 
-            public String getFollow_level() {
-                return follow_level;
+            public String getValue() {
+                return value;
             }
 
-            public void setFollow_level(String follow_level) {
-                this.follow_level = follow_level;
+            public void setValue(String value) {
+                this.value = value;
             }
 
-            public String getLast_time() {
-                return last_time;
-            }
-
-            public void setLast_time(String last_time) {
-                this.last_time = last_time;
-            }
+//            public String getFitness_level() {
+//                return fitness_level;
+//            }
+//
+//            public void setFitness_level(String fitness_level) {
+//                this.fitness_level = fitness_level;
+//            }
+//
+//            public String getFollow_level() {
+//                return follow_level;
+//            }
+//
+//            public void setFollow_level(String follow_level) {
+//                this.follow_level = follow_level;
+//            }
+//
+//            public String getLast_time() {
+//                return last_time;
+//            }
+//
+//            public void setLast_time(String last_time) {
+//                this.last_time = last_time;
+//            }
         }
     }
 
@@ -569,7 +633,7 @@ public class RevisitListFragment extends BaseFragment {
                 vh.iv_sex.setImageResource(R.drawable.img_sex2);
             }
             if (datalist.get(position).getLast_time() != null) {
-                vh.tv_lasttime.setText(datalist.get(position).getLast_time());
+                vh.tv_lasttime.setText(datalist.get(position).getLast_time().replace("-","."));
             } else {
                 vh.tv_lasttime.setText("最近未维护");
             }

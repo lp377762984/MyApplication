@@ -381,7 +381,7 @@ public class RevisiterRecordAllFragment extends BaseFragmentEventBus {
             vh.tv_content.setText(datalist.get(position).getContent());
             //    LogUtil.i(      TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(),"yyyy-MM-dd HH:mm:ss")+"","yy-MM-dd HH:mm"));
 
-            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(), "yyyy-MM-dd HH:mm:ss") + "", "yy-MM-dd HH:mm"));
+            vh.tv_lasttime.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getMaintain_time(), "yyyy-MM-dd HH:mm:ss") + "", "yy.MM.dd HH:mm"));
             vh.tv_member.setText(datalist.get(position).getMember_no());
             vh.tv_username.setText(datalist.get(position).getMember_name());
             return convertView;

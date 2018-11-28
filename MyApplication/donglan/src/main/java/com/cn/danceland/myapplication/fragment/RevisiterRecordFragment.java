@@ -359,7 +359,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
                 vh.tv_time.setVisibility(View.GONE);
             }
             vh.tv_content.setText(datalist.get(position).getContent());
-            vh.tv_lasttime.setText(datalist.get(position).getMaintain_time());
+            vh.tv_lasttime.setText(datalist.get(position).getMaintain_time().replace("-","."));
             return convertView;
 
         }

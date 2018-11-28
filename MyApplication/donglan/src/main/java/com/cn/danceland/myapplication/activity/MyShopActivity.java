@@ -333,7 +333,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 viewHolder.iv_default.setVisibility(View.INVISIBLE);
             }
             String[] b = data.get(i).getCreate_time().toString().split(" ");
-            viewHolder.tv_time.setText("加入时间：" + b[0]);
+            viewHolder.tv_time.setText("加入时间：" + b[0].replace("-","."));
             if (data.get(i).getAuths().size() == 1) {
                 String s = "我的角色：";
                 if (TextUtils.equals(data.get(i).getAuths().get(0), "1")) {
