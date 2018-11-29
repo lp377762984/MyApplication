@@ -55,7 +55,7 @@ public class CabinetActivity extends BaseActivity {
         cabinet_lv = findViewById(R.id.cabinet_lv);
         rl_error = findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(this).load(R.drawable.img_error16).into(iv_error);
+        Glide.with(this).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("如需购买租柜，请到门店前台");
 

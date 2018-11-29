@@ -84,7 +84,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error5);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("没有数据");
         lv_myshop.getRefreshableView().setEmptyView(listEmptyView);
         lv_myshop.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
@@ -198,7 +198,6 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                     listViewAdapter.notifyDataSetChanged();
                     //   lv_myshop.setAdapter(listViewAdapter);
                     //   lv_myshop.setAdapter(new MyListViewAdapter());
-
                     EventBus.getDefault().post(new StringEvent("",20002));//刷新shopfragment
                 } else {
                     ToastUtils.showToastShort("加入失败！请检查网络！");
@@ -327,8 +326,11 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
 
             Glide.with(MyShopActivity.this).load(data.get(i).getLogo()).into(viewHolder.iv_shop_logo);
             viewHolder.tv_name.setText(data.get(i).getName());
+            LogUtil.i("defaultshopId="+defaultshopId);
+            LogUtil.i("data.get(i).getBranch_id()="+data.get(i).getBranch_id());
             if (TextUtils.equals(defaultshopId, data.get(i).getBranch_id())) {
                 viewHolder.iv_default.setImageResource(R.drawable.img_current_shop);
+                viewHolder.iv_default.setVisibility(View.VISIBLE);
             } else {
                 viewHolder.iv_default.setVisibility(View.INVISIBLE);
             }

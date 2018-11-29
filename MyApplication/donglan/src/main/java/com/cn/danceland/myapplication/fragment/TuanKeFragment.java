@@ -74,7 +74,7 @@ public class TuanKeFragment extends BaseFragmentEventBus {
 //        }
         rl_error = view.findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("店内还没有安排团课，请联系工作人员");
         lv_tuanke = view.findViewById(R.id.lv_tuanke);

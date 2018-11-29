@@ -54,7 +54,7 @@ public class RecommendedFragment extends BaseFragment {
         View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
-        iv_error.setImageResource(R.drawable.img_error14);
+        iv_error.setImageResource(R.drawable.img_error);
         tv_error.setText("还没有朋友推荐您");
         listView.setEmptyView(listEmptyView);
 

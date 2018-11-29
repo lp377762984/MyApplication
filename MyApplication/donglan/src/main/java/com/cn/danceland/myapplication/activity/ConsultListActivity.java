@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -72,7 +71,7 @@ public class ConsultListActivity extends BaseActivity {
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error5);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("没有数据");
         mListView.getRefreshableView().setEmptyView(listEmptyView);
         dialog.setMessage("加载中……");

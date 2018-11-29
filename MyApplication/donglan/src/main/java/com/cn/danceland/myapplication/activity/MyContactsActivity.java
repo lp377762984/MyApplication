@@ -84,7 +84,7 @@ public class MyContactsActivity extends BaseActivity {
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
-        iv_error.setImageResource(R.drawable.img_error14);
+        iv_error.setImageResource(R.drawable.img_error);
         tv_error.setText("您没有联系人");
         listView.setEmptyView(listEmptyView);
 

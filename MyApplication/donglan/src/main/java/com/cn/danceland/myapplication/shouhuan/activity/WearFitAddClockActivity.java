@@ -7,11 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +21,6 @@ import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -71,7 +68,7 @@ public class WearFitAddClockActivity extends Activity {
         View listEmptyView = findViewById(R.id.rl_error);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error5);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("没有数据");
         lv_clock.getRefreshableView().setEmptyView(listEmptyView);
         lv_clock.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影

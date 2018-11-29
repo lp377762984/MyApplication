@@ -87,7 +87,7 @@ public class HuiYuanTuiJianActivty extends BaseActivity implements View.OnClickL
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error5);
+        imageView.setImageResource(R.drawable.img_error);
 
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         dialog = new ProgressDialog(this);
