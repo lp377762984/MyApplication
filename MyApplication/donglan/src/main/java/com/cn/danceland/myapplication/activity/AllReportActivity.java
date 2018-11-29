@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -22,7 +21,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyListView;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.XCRoundRectImageView;
 import com.google.gson.Gson;
@@ -98,13 +97,13 @@ public class AllReportActivity extends BaseActivity {
 
     private void showDate() {
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "选择日期");
-        customDatePicker.setGoneHourAndMinute();
-        customDatePicker.setMax((time.month + 1),time.monthDay);
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "选择日期");
+        customDateAndTimePicker.setGoneHourAndMinute();
+        customDateAndTimePicker.setMax((time.month + 1),time.monthDay);
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                selectDate = customDatePicker.getDateStringF();
+                selectDate = customDateAndTimePicker.getDateStringF();
                 tv_date.setText(selectDate);
                 initScoreData(selectDate,role,target_role_type,null);
                 initBusData(selectDate,"1",null);
@@ -114,7 +113,7 @@ public class AllReportActivity extends BaseActivity {
             }
         });
 
-        customDatePicker.showWindow();
+        customDateAndTimePicker.showWindow();
 
     }
 

@@ -21,7 +21,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -157,14 +157,14 @@ public class WearFitLongSitActivity extends Activity {
             hourStrTemp = Integer.valueOf(times[0]);
             minuteStrTemp = Integer.valueOf(times[1]);
         }
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
-        customDatePicker.setGoneYearAndMounth();
-        customDatePicker.showWindow(hourStrTemp,minuteStrTemp);
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, str);
+        customDateAndTimePicker.setGoneYearAndMounth();
+        customDateAndTimePicker.showWindow(hourStrTemp,minuteStrTemp);
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String hourStr = customDatePicker.getHour();
-                String minuteStr = customDatePicker.getMinute();
+                String hourStr = customDateAndTimePicker.getHour();
+                String minuteStr = customDateAndTimePicker.getMinute();
                 if ("开始时间".equals(str)) {
                     tv_start.setText(hourStr + ":" + minuteStr);
                     longSit.setStartHour(Integer.valueOf(hourStr));

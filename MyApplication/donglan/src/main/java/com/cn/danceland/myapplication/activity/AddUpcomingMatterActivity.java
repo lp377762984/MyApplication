@@ -26,7 +26,7 @@ import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -114,9 +114,10 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
                 }
                 requsetBean.content = et_content.getText().toString();
 
-                if (!TextUtils.equals(tv_date.getText().toString(), "请选择日期") && !TextUtils.equals(tv_time.getText().toString(), "请选择时间")) {
-                    requsetBean.warn_time = tv_date.getText().toString() + " " + tv_time.getText().toString();
-
+                if (TextUtils.equals(tv_date.getText().toString(), "请选择时间") ) {
+               //     requsetBean.warn_time = tv_date.getText().toString() ;
+                    ToastUtils.showToastShort("请选择待办时间");
+                    return;
                 }
 
                 requsetBean.role_type = SPUtils.getString("role_type", "");
@@ -149,12 +150,12 @@ public class AddUpcomingMatterActivity extends BaseActivity implements View.OnCl
 
     private void showDate() {
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择日期");
-        customDatePicker.showWindow();
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择时间");
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getTimeString();
+                String dateString = customDateAndTimePicker.getTimeString();
                 tv_date.setText(dateString);
 
                 requsetBean.warn_time = dateString.replace("年", "-").replace("月", "-").replace("日", " ").replace("时", ":").replace("分", ":00");

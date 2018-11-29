@@ -16,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="年"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         />
         <com.weigan.loopview.LoopView
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="月"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         />
         <com.weigan.loopview.LoopView
@@ -42,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="日"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         />
     <com.weigan.loopview.LoopView
@@ -55,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="时"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         />
     <com.weigan.loopview.LoopView
@@ -69,6 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="分"
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         />
 

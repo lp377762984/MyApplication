@@ -44,7 +44,7 @@ import com.cn.danceland.myapplication.utils.PhoneFormatCheckUtils;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
 import com.willy.ratingbar.BaseRatingBar;
@@ -608,13 +608,13 @@ public class EditPotentialActivity extends BaseActivity implements OnClickListen
 //            }
 //        });
 //        alertdialog.show();
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择日期");
-        customDatePicker.setGoneHourAndMinute();
-        customDatePicker.showWindow();
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期");
+        customDateAndTimePicker.setGoneHourAndMinute();
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getHorizongtal();
+                String dateString = customDateAndTimePicker.getHorizongtal();
                 tv_birthday.setText(dateString);
                 info.setBirthday(dateString);
             }

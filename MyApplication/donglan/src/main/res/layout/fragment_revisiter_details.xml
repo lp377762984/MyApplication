@@ -607,7 +607,7 @@
 
                     <LinearLayout
                         android:id="@+id/ll_final_admin"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:visibility="gone">
@@ -634,8 +634,8 @@
                             <TextView
                                 android:id="@+id/tv_final_teach_name"
                                 style="@style/DL_blueText12Style"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="1"
@@ -646,9 +646,11 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-
                             android:layout_height="40dp"
-                            android:background="#fff"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/edit_bg_phone"
                             android:orientation="horizontal">
 
                             <TextView
@@ -662,8 +664,8 @@
                             <TextView
                                 android:id="@+id/tv_final_admin_name"
                                 style="@style/DL_blueText12Style"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="10dp"
                                 android:layout_weight="1"
@@ -763,6 +765,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:text="推荐人："
+                            android:textSize="14sp"
                             android:textColor="@color/color_dl_deep_blue" />
 
                         <TextView
