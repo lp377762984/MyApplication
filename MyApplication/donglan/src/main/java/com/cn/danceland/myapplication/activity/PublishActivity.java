@@ -586,6 +586,7 @@ public class PublishActivity extends BaseActivity {
                         maptag = 0;
                     } else {
                         LogUtil.i("图片上传失败");
+                     //   ToastUtils.showToastShort("图片过大，上传失败");
                     }
 
                 }
