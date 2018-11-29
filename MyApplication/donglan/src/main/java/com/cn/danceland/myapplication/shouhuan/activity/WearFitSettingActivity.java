@@ -38,7 +38,7 @@ import com.cn.danceland.myapplication.utils.StringUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.BatteryView;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.PickerViewDialog;
 import com.google.gson.Gson;
@@ -617,14 +617,14 @@ public class WearFitSettingActivity extends Activity {
     }
 
     private void showTimeSelect(final String str, int lookHour, int lookMinute) {
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, str);
-        customDatePicker.setGoneYearAndMounth();
-        customDatePicker.showWindow(lookHour, lookMinute);
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, str);
+        customDateAndTimePicker.setGoneYearAndMounth();
+        customDateAndTimePicker.showWindow(lookHour, lookMinute);
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String hourStr = customDatePicker.getHour();
-                String minuteStr = customDatePicker.getMinute();
+                String hourStr = customDateAndTimePicker.getHour();
+                String minuteStr = customDateAndTimePicker.getMinute();
                 if ("入睡时间".equals(str)) {
                     tv_rushui.setText(hourStr + ":" + minuteStr);
                     sleepTime.setStartHour(Integer.valueOf(hourStr));

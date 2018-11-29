@@ -453,7 +453,9 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
             vh.tv_content.setText("待办内容："+datalist.get(position).getContent());
             vh.tv_lasttime.setText(datalist.get(position).getRecord_time().replace("-","."));
             vh.tv_upcoming_name.setText(datalist.get(position).getMember_name());
-            vh.tv_upcoming_time.setText(datalist.get(position).getWarn_time().replace("-","."));
+            if (!TextUtils.isEmpty(datalist.get(position).getWarn_time())){
+                vh.tv_upcoming_time.setText(datalist.get(position).getWarn_time().replace("-","."));
+            }
             if (TextUtils.equals(datalist.get(position).getStatus(), "1")) {
                 vh.iv_done.setImageResource(R.drawable.img_isdone_off);
             } else {

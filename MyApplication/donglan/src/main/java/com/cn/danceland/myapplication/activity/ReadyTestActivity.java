@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -29,7 +28,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.weigan.loopview.LoopView;
@@ -39,8 +38,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 客户体测
@@ -156,12 +153,12 @@ public class ReadyTestActivity extends BaseActivity {
 
     private void showDate() {
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择生日");
-        customDatePicker.showWindow();
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择生日");
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getDateStringF();
+                String dateString = customDateAndTimePicker.getDateStringF();
                 ed_birthday.setText(dateString);
             }
         });

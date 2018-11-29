@@ -47,7 +47,7 @@
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="张三"
+                        android:text=""
                         style="@style/DL_blueText14Style" />
 
 
@@ -69,7 +69,7 @@
                         android:id="@+id/tv_upcoming_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="到店"
+                        android:text=""
                         style="@style/DL_blueText14Style" />
 
 
@@ -133,7 +133,7 @@
                     android:id="@+id/tv_upcoming_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12-23-231"
+                    android:text=""
                   style="@style/DL_blueText14Style" />
 
 
@@ -157,7 +157,7 @@
                     android:id="@+id/tv_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="到店"
+                    android:text=""
                     style="@style/DL_blueText14Style" />
 
 
@@ -177,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
-                    android:text="待办内容：电大萨达所多爱上萨达话"
+                    android:text=""
                     style="@style/DL_blueText14Style" />
                 <TextView
                     android:layout_width="wrap_content"

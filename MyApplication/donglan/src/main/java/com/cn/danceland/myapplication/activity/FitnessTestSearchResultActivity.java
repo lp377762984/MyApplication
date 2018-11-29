@@ -28,7 +28,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.CustomDatePicker;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
@@ -192,12 +192,13 @@ public class FitnessTestSearchResultActivity extends BaseActivity {
 
     private void showDate() {
 
-        final CustomDatePicker customDatePicker = new CustomDatePicker(this, "请选择生日");
-        customDatePicker.showWindow();
-        customDatePicker.setDialogOnClickListener(new CustomDatePicker.OnClickEnter() {
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择生日");
+        customDateAndTimePicker.setGoneHourAndMinute();//
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
             @Override
             public void onClick() {
-                String dateString = customDatePicker.getDateStringF();
+                String dateString = customDateAndTimePicker.getDateStringF();
                 birthday_ev.setText(dateString);
             }
         });
