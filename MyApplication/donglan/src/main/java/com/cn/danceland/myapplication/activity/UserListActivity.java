@@ -154,7 +154,7 @@ public class UserListActivity extends BaseActivity implements View.OnClickListen
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error5);
+        imageView.setImageResource(R.drawable.img_error);
         switch (type) {
             case 1:
                 tv_error.setText("你还没有关注的人");

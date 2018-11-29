@@ -39,7 +39,7 @@
 //        lv_message = v.findViewById(R.id.lv_message);
 //        rl_error = v.findViewById(R.id.rl_error);
 //        iv_error = rl_error.findViewById(R.id.iv_error);
-//        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+//        Glide.with(mActivity).load(R.drawable.img_error).into(iv_error);
 //        tv_error = rl_error.findViewById(R.id.tv_error);
 //        tv_error.setText("您还未收到任何通知");
 //

@@ -69,7 +69,7 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         inflate = View.inflate(mActivity, R.layout.tuanke, null);//界面类似，使用团课列表布局
         rl_error = inflate.findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(mActivity).load(R.drawable.img_error4).into(iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("您还没有预约私教");
 

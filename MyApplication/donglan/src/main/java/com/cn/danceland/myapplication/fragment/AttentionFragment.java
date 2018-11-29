@@ -306,7 +306,7 @@ public class AttentionFragment extends BaseFragment {
         View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error2);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("您还没有关注的人，去精选动态里关注一下吧");
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
 

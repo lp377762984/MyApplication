@@ -87,7 +87,7 @@ public class AdviseRecordActivity extends BaseActivity {
 //        });
 //        rl_error = findViewById(R.id.rl_error);
 //        iv_error = rl_error.findViewById(R.id.iv_error);
-//        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
+//        Glide.with(this).load(R.drawable.img_error).into(iv_error);
 //        tv_error = rl_error.findViewById(R.id.tv_error);
 //        tv_error.setText("您还没有反馈任何信息");
 //        pullToRefresh.getRefreshableView().setEmptyView(tv_error);

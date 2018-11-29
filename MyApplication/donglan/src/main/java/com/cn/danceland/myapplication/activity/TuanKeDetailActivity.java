@@ -231,7 +231,7 @@ public class TuanKeDetailActivity extends BaseActivity {
 
     public void initData(final TuanKeBean.Data detailData){
 
-        RequestOptions  options =new RequestOptions().placeholder(R.drawable.piping);
+        RequestOptions  options =new RequestOptions().placeholder(R.drawable.loading_img);
 
         course_jiaolian_huiyuan_name.setText(detailData.getEmployee_name());
         RequestOptions options1 = new RequestOptions()

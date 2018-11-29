@@ -54,7 +54,7 @@ public class SellStoreCardFragment extends BaseFragment {
         lv_storecard = view.findViewById(R.id.lv_storecard);
         rl_error = view.findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(mActivity).load(R.drawable.img_error1).into(iv_error);
+        Glide.with(mActivity).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("暂无储值卡");
 

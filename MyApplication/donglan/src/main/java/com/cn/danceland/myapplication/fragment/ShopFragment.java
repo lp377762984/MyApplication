@@ -985,7 +985,7 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务报表");
                         startActivity(new Intent(mActivity, ReportFormActivity.class).putExtra("role_type", role).putExtra("target_role_type", "3"));
                         break;
-                    case 29://私信
+                    case 29://私信 我的消息
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "私信");
                         startActivity(new Intent(mActivity, ConversationActivity.class));
                         //  startActivity(new Intent(mActivity, TXIMHomeActivity.class));

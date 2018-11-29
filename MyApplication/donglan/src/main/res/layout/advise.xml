@@ -82,7 +82,9 @@
                 android:drawablePadding="6dp"
                 android:drawableTop="@drawable/rbtn_advise_praise_bg_selected"
                 android:gravity="center"
-                android:text="表扬" />
+                android:text="表扬"
+                android:textColor="@color/radiobutton_text_color_selector"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/rb_1"
@@ -93,7 +95,9 @@
                 android:drawablePadding="6dp"
                 android:drawableTop="@drawable/rbtn_advise_bg_selected"
                 android:gravity="center"
-                android:text="建议" />
+                android:text="建议"
+                android:textColor="@color/radiobutton_text_color_selector"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/rb_2"
@@ -104,7 +108,9 @@
                 android:drawablePadding="6dp"
                 android:drawableTop="@drawable/rbtn_advise_criticism_bg_selected"
                 android:gravity="center"
-                android:text="批评" />
+                android:text="批评"
+                android:textColor="@color/radiobutton_text_color_selector"
+                android:textSize="14sp" />
 
             <RadioButton
                 android:id="@+id/rb_3"
@@ -115,7 +121,9 @@
                 android:drawablePadding="6dp"
                 android:drawableTop="@drawable/rbtn_advise_complaint_bg_selected"
                 android:gravity="center"
-                android:text="投诉" />
+                android:text="投诉"
+                android:textColor="@color/radiobutton_text_color_selector"
+                android:textSize="14sp" />
         </RadioGroup>
     </FrameLayout>
 

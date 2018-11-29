@@ -111,7 +111,7 @@ public class FitnessHistoryActivity extends BaseActivity {
         });
         rl_error = findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(this).load(R.drawable.img_error4).into(iv_error);
+        Glide.with(this).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("暂无体测记录");
         lv_history.setEmptyView(rl_error);

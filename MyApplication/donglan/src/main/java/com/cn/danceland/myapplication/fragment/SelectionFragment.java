@@ -310,7 +310,7 @@ public class SelectionFragment extends BaseFragment {
         View    listEmptyView= v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error2);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("精选动态无内容");
         pullToRefresh.getRefreshableView().setEmptyView(listEmptyView);
         headView = initHeadview();

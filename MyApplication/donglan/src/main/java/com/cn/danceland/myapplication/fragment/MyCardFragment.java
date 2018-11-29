@@ -60,7 +60,7 @@ public class MyCardFragment extends BaseFragment {
 
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
-        iv_error.setImageResource(R.drawable.img_error3);
+        iv_error.setImageResource(R.drawable.img_error);
         tv_error.setText("请您先购买会员卡");
         mListView.setEmptyView(listEmptyView);
 

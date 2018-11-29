@@ -84,7 +84,7 @@ public class MyContactsActivity extends BaseActivity {
         View listEmptyView = findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         iv_error = listEmptyView.findViewById(R.id.iv_error);
-        iv_error.setImageResource(R.drawable.img_error14);
+        iv_error.setImageResource(R.drawable.img_error);
         tv_error.setText("您没有联系人");
         listView.setEmptyView(listEmptyView);
 
@@ -283,9 +283,18 @@ public class MyContactsActivity extends BaseActivity {
                 viewHolder.avatar = (CircleImageView) view.findViewById(R.id.avatar);
                 viewHolder.name = (TextView) view.findViewById(R.id.name);
                 viewHolder.des = (TextView) view.findViewById(R.id.description);
+                viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
                 view.setTag(viewHolder);
             }
-
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(MyContactsActivity.this,80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 11f));
+            } else if (position == dataList.size() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 11f), DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 11f), DensityUtils.dp2px(MyContactsActivity.this, 16f), DensityUtils.dp2px(MyContactsActivity.this, 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
 
             viewHolder.name.setText(dataList.get(position).getName());
@@ -299,6 +308,7 @@ public class MyContactsActivity extends BaseActivity {
             public ImageView avatar;
             public TextView name;
             public TextView des;
+            public CardView item_layout_cv;
         }
     }
 }

@@ -419,7 +419,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                     //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                     RequestOptions options1 = new RequestOptions()
                             .placeholder(R.drawable.loading_img)//加载占位图
-//                            .error(R.drawable.img_loadfail)//
+//                            .error(R.drawable.loading_img)//
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .priority(Priority.HIGH);
 

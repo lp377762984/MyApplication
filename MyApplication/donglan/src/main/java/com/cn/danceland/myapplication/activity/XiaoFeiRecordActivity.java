@@ -85,7 +85,7 @@ public class XiaoFeiRecordActivity extends BaseActivity {
 
         rl_error = findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(this).load(R.drawable.img_error1).into(iv_error);
+        Glide.with(this).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("请先购买储值卡");
         lv_xiaofei.setEmptyView(rl_error);

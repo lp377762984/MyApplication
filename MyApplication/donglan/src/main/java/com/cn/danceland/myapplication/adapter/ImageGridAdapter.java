@@ -57,7 +57,7 @@ public class ImageGridAdapter extends BaseAdapter {
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.loading_img)//加载占位图
-                .error(R.drawable.img_loadfail)//
+                .error(R.drawable.loading_img)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .priority(Priority.HIGH);
         StringBuilder sb = new StringBuilder(imgUrls.get(position));

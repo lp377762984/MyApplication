@@ -490,7 +490,7 @@ public class FitnessTestActivity extends BaseActivity {
         //no_data = findViewById(R.id.no_data);
         rl_error = findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
-        Glide.with(this).load(R.drawable.img_error13).into(iv_error);
+        Glide.with(this).load(R.drawable.img_error).into(iv_error);
         tv_error = rl_error.findViewById(R.id.tv_error);
         tv_error.setText("请联系您的会籍或教练为您体测");
         sv = findViewById(R.id.sv);

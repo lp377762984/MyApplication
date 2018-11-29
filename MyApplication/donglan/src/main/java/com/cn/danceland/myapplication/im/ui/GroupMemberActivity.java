@@ -3,10 +3,12 @@ package com.cn.danceland.myapplication.im.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.MyContactsActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupMemeberInfo;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
@@ -27,6 +30,7 @@ import com.cn.danceland.myapplication.im.model.GroupMemberProfile;
 import com.cn.danceland.myapplication.im.model.ProfileSummary;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.google.gson.Gson;
@@ -215,8 +219,18 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
                 viewHolder.avatar = (CircleImageView) view.findViewById(R.id.avatar);
                 viewHolder.name = (TextView) view.findViewById(R.id.name);
                 viewHolder.des = (TextView) view.findViewById(R.id.description);
+                viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
                 view.setTag(viewHolder);
             }
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(GroupMemberActivity.this,80f));
+            if (position == 0) {
+                layoutParams.setMargins(DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 11f));
+            } else if (position == getCount() - 1) {
+                layoutParams.setMargins(DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 11f), DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 16f));
+            } else {
+                layoutParams.setMargins(DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 11f), DensityUtils.dp2px(GroupMemberActivity.this, 16f), DensityUtils.dp2px(GroupMemberActivity.this, 11f));
+            }
+            viewHolder.item_layout_cv.setLayoutParams(layoutParams);
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar);
             Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         //    LogUtil.i(data.getImgUrl() + listGroupMember.get(position).getAppMemberDefinedData().get(0).getValue());
@@ -227,13 +241,11 @@ public class GroupMemberActivity extends Activity implements TIMValueCallBack<Li
             return view;
         }
 
-
         public class ViewHolder {
             public ImageView avatar;
             public TextView name;
             public TextView des;
+            public CardView item_layout_cv;
         }
     }
-
-
 }

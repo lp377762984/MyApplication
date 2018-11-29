@@ -63,7 +63,7 @@ public class RecommendFragment extends BaseFragment {
         View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
-        imageView.setImageResource(R.drawable.img_error14);
+        imageView.setImageResource(R.drawable.img_error);
         tv_error.setText("您还没有推荐过任何人，点击右下角推荐好友");
         listView.setEmptyView(listEmptyView);
 
