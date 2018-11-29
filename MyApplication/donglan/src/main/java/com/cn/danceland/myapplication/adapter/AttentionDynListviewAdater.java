@@ -453,9 +453,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         }
 
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
-
             viewHolder.gridView.setVisibility(View.VISIBLE);
-
 
             if (data.get(position).getImgList().size() == 1) {
                 viewHolder.gridView.setVisibility(View.GONE);
@@ -483,11 +481,11 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
                     if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
                         LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                        linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
+                        linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
                         viewHolder.iv_pic.setLayoutParams(linearParams);
                     } else {
                         LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                        linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
+                        linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
                         viewHolder.iv_pic.setLayoutParams(linearParams);
                     }
                 }
@@ -500,10 +498,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Intent intent = new Intent(context, PreviewPicActivity.class);
-//                        intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
-//                        context.startActivity(intent);
-
                         PictureConfig config = new PictureConfig.Builder()
                                 .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
                                 .setPosition(0)//图片下标（从第position张图片开始浏览）
@@ -513,24 +507,22 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                                 .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                                 .build();
                         ImagePagerActivity.startActivity(context, config);
-
-
                     }
                 });
                 LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 5f), DensityUtils.dp2px(context, 16f), 0);
+                linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
                 viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
             } else if (data.get(position).getImgList().size() == 4) {
                 viewHolder.gridView.setNumColumns(2);
                 int width = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 32f)) / 3 * 2;//此处的宽度需要动态计算
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
                 viewHolder.iv_pic.setVisibility(View.GONE);
             } else {
                 viewHolder.gridView.setNumColumns(3);
                 LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 16f), 0);
+                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
                 viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
                 viewHolder.iv_pic.setVisibility(View.GONE);
             }
@@ -542,11 +534,6 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                    Intent intent = new Intent(context, PreviewPicActivity.class);
-//                    intent.putStringArrayListExtra("photos", (ArrayList<String>) data.get(position).getImgList());
-//                    intent.putExtra("lookIdx",i);//图片下标（从第position张图片开始浏览）
-//                    context.startActivity(intent);
-
                     PictureConfig config = new PictureConfig.Builder()
                             .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
                             .setPosition(i)//图片下标（从第position张图片开始浏览）
@@ -556,14 +543,11 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                             .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                             .build();
                     ImagePagerActivity.startActivity(context, config);
-
-
                 }
             });
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
             viewHolder.iv_pic.setVisibility(View.GONE);
-
         }
         return convertView;
     }

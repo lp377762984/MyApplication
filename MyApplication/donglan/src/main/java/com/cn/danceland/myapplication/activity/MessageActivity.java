@@ -19,11 +19,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.RequestMessageNumBean;
 import com.cn.danceland.myapplication.bean.RequestNoticeListBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -31,8 +35,12 @@ import com.cn.danceland.myapplication.fragment.FoundFragment;
 import com.cn.danceland.myapplication.fragment.NoticeFragment;
 import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MD5Utils;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -44,7 +52,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by feng on 2017/12/11.
@@ -143,7 +153,7 @@ public class MessageActivity extends BaseActivity {
         systemContent.setText("系统");
         tablayout.addTab(tablayout.newTab().setCustomView(systemView));
 
-        find_notice_data();//请求后面数据，刷新未读数  通知
+        queryCount();//请求后面数据，刷新未读数  通知
 //        tablayout.addTab(tablayout.newTab().setText("发现"));
 //        tablayout.addTab(tablayout.newTab().setText("通知"));
 //        tablayout.addTab(tablayout.newTab().setText("系统"));
@@ -319,55 +329,55 @@ public class MessageActivity extends BaseActivity {
         broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
-    private List<RequestNoticeListBean.Data.Content> noticeData = new ArrayList<>();
 
     /**
      * 查询数据
      *
      * @throws JSONException
      */
-    public void find_notice_data() {
-
-        StrBean strBean = new StrBean();
-        strBean.page = 0 + "";
-        String s = new Gson().toJson(strBean);
-        try {
-            MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, new JSONObject(s.toString()), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject jsonObject) {
-                    LogUtil.i(jsonObject.toString());
-                    RequestNoticeListBean datainfo = new RequestNoticeListBean();
-                    Gson gson = new Gson();
-                    datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
-
-                    if (datainfo.getSuccess()) {
-                        noticeData = datainfo.getData().getContent();
-                        int notReadNum = 0;
-                        for (RequestNoticeListBean.Data.Content mes : noticeData
-                                ) {
-                            if (mes.getStatus().equals("0")) {//未读
-                                notReadNum += 1;
-                            }
-                        }
-                        EventBus.getDefault().post(new StringEvent(notReadNum + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
+    public void queryCount() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_COUNT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i("Response--" + s);
+                RequestMessageNumBean infoBean = new Gson().fromJson(s, RequestMessageNumBean.class);
+                LogUtil.i(infoBean.toString());
+                LogUtil.i("code--" + infoBean.getCode());
+                if (infoBean.getSuccess() && infoBean.getCode() == 0) {
+                    if (infoBean.getData().equals("0")) {
+                        messageNum.setVisibility(View.GONE);
                     } else {
-                        ToastUtils.showToastLong(datainfo.getErrorMsg());
+                        messageNum.setVisibility(View.VISIBLE);
+                    }
+                    if (Integer.valueOf(infoBean.getData()) > 99) {
+                        messageNum.setText(99 + "");
+                    } else {
+                        messageNum.setText(infoBean.getData());
                     }
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    ToastUtils.showToastShort(volleyError.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError != null) {
+                    LogUtil.i(volleyError.toString());
+                } else {
+                    LogUtil.i("NULL");
                 }
-            });
-            MyApplication.getHttpQueues().add(stringRequest);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type", "0");//目前传啥都一样 2018-11-28 敬请期待后续版本
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     class StrBean {
-        public String page;
+        public String type;
     }
 
     //even事件处理
@@ -387,16 +397,7 @@ public class MessageActivity extends BaseActivity {
                 }
                 break;
             case EventConstants.MY_MESSAGE_NOTICE_NUM:
-                if (event.getMsg().equals("0")) {
-                    messageNum.setVisibility(View.GONE);
-                } else {
-                    messageNum.setVisibility(View.VISIBLE);
-                }
-                if (Integer.valueOf(event.getMsg()) > 99) {
-                    messageNum.setText(99 + "");
-                } else {
-                    messageNum.setText(event.getMsg());
-                }
+                queryCount();
                 break;
             case EventConstants.MY_MESSAGE_SYSTEM_NUM:
                 if (event.getMsg().equals("0")) {
