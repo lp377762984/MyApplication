@@ -652,7 +652,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                 //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
                 RequestOptions options1 = new RequestOptions()
                         //  .placeholder(R.drawable.img_loading)//加载占位图
-                        .error(R.drawable.img_loadfail)//
+                        .error(R.drawable.loading_img)
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .priority(Priority.HIGH);
                 iv_pic.setVisibility(View.VISIBLE);
