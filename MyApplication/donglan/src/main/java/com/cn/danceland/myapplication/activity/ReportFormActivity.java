@@ -819,7 +819,7 @@ public class ReportFormActivity extends BaseActivity {
             LogUtil.i("avatar=" + data.get(position).getAvatar_url());
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1);
             Glide.with(ReportFormActivity.this).load(data.get(position).getAvatar_url()).apply(options).into(holder.img_touxiang);
-            if (click != -1 && click == position) {
+            if (click != -1 && click == position && emp_id.equals(data.get(position).getId() + "")) {
                 holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);
                 holder.tv_name.setTextColor(Color.parseColor("#FF5E3A"));
             }
@@ -860,7 +860,7 @@ public class ReportFormActivity extends BaseActivity {
             item_layout = itemView.findViewById(R.id.item_layout);
             img_touxiang = itemView.findViewById(R.id.img_touxiang);
             tv_name = itemView.findViewById(R.id.tv_name);
-            img_touxiang_stroke_bg=itemView.findViewById(R.id.img_touxiang_stroke_bg);
+            img_touxiang_stroke_bg = itemView.findViewById(R.id.img_touxiang_stroke_bg);
         }
     }
 
