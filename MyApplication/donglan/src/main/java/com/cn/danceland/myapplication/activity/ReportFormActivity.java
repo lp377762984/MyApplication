@@ -837,10 +837,11 @@ public class ReportFormActivity extends BaseActivity {
                     holder.tv_name.setTextColor(Color.parseColor("#FF5E3A"));
                     holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);
                     emp_id = data.get(position).getId() + "";
-                    getPeople();
+//                    getPeople();
                     initBusData(selectDate, role, emp_id);
                     initScoreData(selectDate, role, target_role_type, emp_id);
                     initReportData(selectDate, emp_id);
+                    notifyDataSetChanged();
                 }
             });
             holder.tv_name.setText(data.get(position).getCname());
