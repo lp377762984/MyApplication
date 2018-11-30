@@ -455,15 +455,19 @@ public class MyConsumeActivity extends BaseActivity implements AbsListView.OnScr
                     break;
                 case "2":
                     viewHolder.tv_status.setText("未发货");
+                    viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
                     break;
                 case "3":
                     viewHolder.tv_status.setText("已完成");
+                    viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
                     break;
                 case "4":
                     viewHolder.tv_status.setText("已取消");
+                    viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
                     break;
                 case "5":
                     viewHolder.tv_status.setText("已退");
+                    viewHolder.tv_status.setTextColor(MyConsumeActivity.this.getResources().getColor(R.color.colorGray22));
                     break;
 
             }

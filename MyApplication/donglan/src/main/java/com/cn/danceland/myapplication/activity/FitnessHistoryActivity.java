@@ -146,7 +146,7 @@ public class FitnessHistoryActivity extends BaseActivity {
             View inflate = LayoutInflater.from(FitnessHistoryActivity.this).inflate(R.layout.history_item, null);
             TextView cishu = inflate.findViewById(R.id.cishu);
             TextView time = inflate.findViewById(R.id.time);
-            CardView item_layout_cv = convertView.findViewById(R.id.item_layout_cv);
+            CardView item_layout_cv = inflate.findViewById(R.id.item_layout_cv);
             cishu.setText("第"+(list.size()-position)+"次");
             time.setText(list.get(position).getDate());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.dp2px(FitnessHistoryActivity.this, 80f));

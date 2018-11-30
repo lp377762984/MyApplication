@@ -271,9 +271,21 @@ public class FitnessTestActivity extends BaseActivity {
             double m = Double.valueOf(mi);
             double min = m * m * 18.5;
             double max = m * m * 23.9;
-//            double standard = min + (max - min) / 2;
-//            int progress = (int) ((realValue - standard) / 10 + standard);
-//            LogUtil.i("体重min=" + min + "max=" + max + "value=" + value+"pro="+progress);
+//            double centre = min + (max - min) / 2;//标体的中线
+//            int progress = (int) ((realValue - centre) / 10 + centre);
+//            LogUtil.i("centre=" + centre);
+//            LogUtil.i("体重min=" + min + "max=" + max + "value=" + value + "pro=" + progress);
+//
+//            if (realValue < min) {
+//                setLowLine2(base_line1, tv_line1, tv_tizhong, progress);
+//                tv_tizhong.setText("偏低");
+//            } else if (realValue >= min && realValue <= max) {
+//                setNormalLine2(base_line1, tv_line1, tv_tizhong, progress);
+//                tv_tizhong.setText("正常");
+//            } else {
+//                setHighLine2(base_line1, tv_line1, tv_tizhong, progress);
+//                tv_tizhong.setText("偏高");
+//            }
             if (realValue < min) {
                 setLowLine(base_line1, tv_line1, tv_tizhong);
                 tv_tizhong.setText("偏低");
@@ -287,6 +299,20 @@ public class FitnessTestActivity extends BaseActivity {
         } else if ("肌肉".equals(type)) {
             tv_line2.setText(value);
             if ("1".equals(xingbie)) {
+//                double centre = (sm1 - 5) + ((sm1 - 5) - (sm1 - 5)) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 1 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < (sm1 - 5)) {
+//                    setLowLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("偏低");
+//                } else if (realValue >= (sm1 - 5) && realValue <= (sm1 - 5)) {
+//                    setNormalLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("正常");
+//                } else {
+//                    setHighLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("偏高");
+//                }
                 if (realValue < (sm1 - 5)) {
                     setLowLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏低");
@@ -298,6 +324,20 @@ public class FitnessTestActivity extends BaseActivity {
                     tv_jirou.setText("偏高");
                 }
             } else if ("2".equals(xingbie)) {
+//                double centre = (sm2 - 3) + ((sm2 - 3) - (sm2 - 3)) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 1 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < (sm2 - 3)) {
+//                    setLowLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("偏低");
+//                } else if (realValue >= (sm2 - 3) && realValue <= (sm2 - 3)) {
+//                    setNormalLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("正常");
+//                } else {
+//                    setHighLine2(base_line2, tv_line2, tv_jirou, progress);
+//                    tv_jirou.setText("偏高");
+//                }
                 if (realValue < (sm2 - 3)) {
                     setLowLine(base_line2, tv_line2, tv_jirou);
                     tv_jirou.setText("偏低");
@@ -313,6 +353,20 @@ public class FitnessTestActivity extends BaseActivity {
         } else if ("体脂百分比".equals(type)) {
             tv_line3.setText(value);
             if ("1".equals(xingbie)) {
+//                double centre = 10 + (10 - 20) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 0.5 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < 10) {
+//                    setLowLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("偏低");
+//                } else if (realValue > 20) {
+//                    setHighLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("偏高");
+//                } else {
+//                    setNormalLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("正常");
+//                }
                 if (realValue < 10) {
                     setLowLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏低");
@@ -323,8 +377,21 @@ public class FitnessTestActivity extends BaseActivity {
                     setNormalLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("正常");
                 }
-
             } else if ("2".equals(xingbie)) {
+//                double centre = 18+ (18 - 28) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 0.5 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < 18) {
+//                    setLowLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("偏低");
+//                } else if (realValue > 28) {
+//                    setHighLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("偏高");
+//                } else {
+//                    setNormalLine2(base_line3, tv_line3, tv_tizhilv, progress);
+//                    tv_tizhilv.setText("正常");
+//                }
                 if (realValue < 18) {
                     setLowLine(base_line3, tv_line3, tv_tizhilv);
                     tv_tizhilv.setText("偏低");
@@ -340,6 +407,20 @@ public class FitnessTestActivity extends BaseActivity {
             tv_line4.setText(value);
             double min = 0.045 * dw;
             double max = 0.055 * dw;
+//            double centre = min+ (min - max) / 2;//标体的中线
+//            int progress = (int) ((realValue - centre) / 1 + centre);
+//            LogUtil.i("centre=" + centre);
+//            LogUtil.i(type + "value=" + value + "pro=" + progress);
+//            if (realValue < min) {
+//                setLowLine2(base_line4, tv_line4, tv_guzhi, progress);
+//                tv_guzhi.setText("偏低");
+//            } else if (realValue > max) {
+//                setHighLine2(base_line4, tv_line4, tv_guzhi, progress);
+//                tv_guzhi.setText("偏高");
+//            } else {
+//                setNormalLine2(base_line4, tv_line4, tv_guzhi, progress);
+//                tv_guzhi.setText("正常");
+//            }
             if (realValue < min) {
                 setLowLine(base_line4, tv_line4, tv_guzhi);
                 tv_guzhi.setText("偏低");
@@ -350,11 +431,24 @@ public class FitnessTestActivity extends BaseActivity {
                 setNormalLine(base_line4, tv_line4, tv_guzhi);
                 tv_guzhi.setText("正常");
             }
-
         } else if ("总水分".equals(type)) {
             tv_line5.setText(value);
             double min = 0.54 * dw;
             double max = 0.66 * dw;
+//            double centre = min+ (min - max) / 2;//标体的中线
+//            int progress = (int) ((realValue - centre) / 1 + centre);
+//            LogUtil.i("centre=" + centre);
+//            LogUtil.i(type + "value=" + value + "pro=" + progress);
+//            if (realValue < min) {
+//                setLowLine2(base_line5, tv_line5, tv_zongshuifen, progress);
+//                tv_zongshuifen.setText("偏低");
+//            } else if (realValue > max) {
+//                setHighLine2(base_line5, tv_line5, tv_zongshuifen, progress);
+//                tv_zongshuifen.setText("偏高");
+//            } else {
+//                setNormalLine2(base_line5, tv_line5, tv_zongshuifen, progress);
+//                tv_zongshuifen.setText("正常");
+//            }
             if (realValue < min) {
                 setLowLine(base_line5, tv_line5, tv_zongshuifen);
                 tv_zongshuifen.setText("偏低");
@@ -365,12 +459,25 @@ public class FitnessTestActivity extends BaseActivity {
                 setNormalLine(base_line5, tv_line5, tv_zongshuifen);
                 tv_zongshuifen.setText("正常");
             }
-
         } else if ("骨骼肌".equals(type)) {
             tv_line6.setText(value);
             if ("1".equals(xingbie)) {
                 double min = (sm1 - 5) * 0.75;
                 double max = (sm1 + 5) * 0.75;
+//                double centre = min+ (min - max) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 1 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < min) {
+//                    setLowLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("偏低");
+//                } else if (realValue > max) {
+//                    setHighLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("偏高");
+//                } else {
+//                    setNormalLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("正常");
+//                }
                 if (realValue < min) {
                     setLowLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏低");
@@ -384,6 +491,20 @@ public class FitnessTestActivity extends BaseActivity {
             } else if ("2".equals(xingbie)) {
                 double min = (sm2 - 3) * 0.75;
                 double max = (sm2 + 3) * 0.75;
+//                double centre = min+ (min - max) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 1 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < min) {
+//                    setLowLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("偏低");
+//                } else if (realValue > max) {
+//                    setHighLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("偏高");
+//                } else {
+//                    setNormalLine2(base_line6, tv_line6, tv_gugeji, progress);
+//                    tv_gugeji.setText("正常");
+//                }
                 if (realValue < min) {
                     setLowLine(base_line6, tv_line6, tv_gugeji);
                     tv_gugeji.setText("偏低");
@@ -398,6 +519,20 @@ public class FitnessTestActivity extends BaseActivity {
 
         } else if ("体质指数".equals(type)) {
             tv_line7.setText(value);
+//            double centre = 18.5+ (18.5 - 23.9) / 2;//标体的中线
+//            int progress = (int) ((realValue - centre) / 0.3 + centre);
+//            LogUtil.i("centre=" + centre);
+//            LogUtil.i(type + "value=" + value + "pro=" + progress);
+//            if (realValue < 18.5) {
+//                setLowLine2(base_line7, tv_line7, tv_tizhishu, progress);
+//                tv_tizhishu.setText("体重较轻");
+//            } else if (realValue > 23.9) {
+//                setHighLine2(base_line7, tv_line7, tv_tizhishu, progress);
+//                tv_tizhishu.setText("超重");
+//            } else {
+//                setNormalLine2(base_line7, tv_line7, tv_tizhishu, progress);
+//                tv_tizhishu.setText("正常");
+//            }
             if (realValue < 18.5) {
                 setLowLine(base_line7, tv_line7, tv_tizhishu);
                 tv_tizhishu.setText("体重较轻");
@@ -408,10 +543,23 @@ public class FitnessTestActivity extends BaseActivity {
                 setNormalLine(base_line7, tv_line7, tv_tizhishu);
                 tv_tizhishu.setText("正常");
             }
-
         } else if ("腰臀比".equals(type)) {
             tv_line8.setText(value);
             if ("1".equals(xingbie)) {
+//                double centre = 0.85+ (0.85 - 0.95) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) /0.05 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < 0.85) {
+//                    setLowLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("梨型");
+//                } else if (realValue > 0.95) {
+//                    setHighLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("苹果型");
+//                } else {
+//                    setNormalLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("正常");
+//                }
                 if (realValue < 0.85) {
                     setLowLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("梨型");
@@ -422,8 +570,21 @@ public class FitnessTestActivity extends BaseActivity {
                     setNormalLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("正常");
                 }
-
             } else if ("2".equals(xingbie)) {
+//                double centre = 0.7+ (0.7 - 0.8) / 2;//标体的中线
+//                int progress = (int) ((realValue - centre) / 0.05 + centre);
+//                LogUtil.i("centre=" + centre);
+//                LogUtil.i(type + "value=" + value + "pro=" + progress);
+//                if (realValue < 0.7) {
+//                    setLowLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("梨型");
+//                } else if (realValue > 0.8) {
+//                    setHighLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("苹果型");
+//                } else {
+//                    setNormalLine2(base_line8, tv_line8, tv_yaotunbi, progress);
+//                    tv_yaotunbi.setText("正常");
+//                }
                 if (realValue < 0.7) {
                     setLowLine(base_line8, tv_line8, tv_yaotunbi);
                     tv_yaotunbi.setText("梨型");
