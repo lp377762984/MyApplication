@@ -346,7 +346,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -377,7 +376,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -408,7 +406,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -439,7 +436,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp"/>
                 </LinearLayout>
 
@@ -470,7 +466,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp"/>
                 </LinearLayout>
 
@@ -501,7 +496,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -532,7 +526,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -563,7 +556,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -594,7 +586,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -626,7 +617,6 @@
                         android:paddingLeft="2dp"
                         android:paddingRight="2dp"
                         android:textColor="@color/colorGray21"
-                        android:textColorHint="@color/colorGray21"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>

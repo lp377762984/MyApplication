@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -787,18 +789,17 @@ public class ReportFormActivity extends BaseActivity {
             List<RequestConsultantInfoBean.Data> data = new ArrayList<>();
             RequestConsultantInfoBean.Data data1 = new RequestConsultantInfoBean.Data();
             data1.setCname(myInfo.getEmployee().getCname());
-            data1.setSelf_avatar_path(Constants.HOST+myInfo.getEmployee().getSelf_avatar_path());
+            data1.setSelf_avatar_path(Constants.HOST + myInfo.getEmployee().getSelf_avatar_path());
             data.add(data1);
             report_rv.setAdapter(new MyRecyclerViewAdapter(data));
         }
     }
 
     TextView PreclickText;
+    int click = -1;
 
     public class MyRecyclerViewAdapter extends RecyclerView.Adapter<ReportFormActivity.ViewHolder> {
         List<RequestConsultantInfoBean.Data> data;
-        int click;
-
 
         MyRecyclerViewAdapter(List<RequestConsultantInfoBean.Data> data) {
             this.data = data;
@@ -815,24 +816,30 @@ public class ReportFormActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            LogUtil.i("avatar="+data.get(position).getSelf_avatar_path());
+            LogUtil.i("avatar=" + data.get(position).getAvatar_url());
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1);
-            Glide.with(ReportFormActivity.this).load(data.get(position).getSelf_avatar_path()).apply(options).into(holder.img_touxiang);
-//            holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (click != position && PreclickText != null) {
-//                        PreclickText.setTextColor(Color.parseColor("#808080"));
-//                    }
-//                    click = position;
-//                    PreclickText = holder.tv_name;
-//                    holder.tv_name.setTextColor(Color.parseColor("#ff6600"));
-//                    emp_id = data.get(position).getId() + "";
-//                    initBusData(selectDate, role, emp_id);
-//                    initScoreData(selectDate, role, target_role_type, emp_id);
-//                    initReportData(selectDate, emp_id);
-//                }
-//            });
+            Glide.with(ReportFormActivity.this).load(data.get(position).getAvatar_url()).apply(options).into(holder.img_touxiang);
+            if (click != -1 && click == position) {
+                holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);
+                holder.tv_name.setTextColor(Color.parseColor("#FF5E3A"));
+            }
+            holder.item_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (click != position && PreclickText != null) {
+                        PreclickText.setTextColor(Color.parseColor("#FF5E3A"));
+                    }
+                    click = position;
+                    PreclickText = holder.tv_name;
+                    holder.tv_name.setTextColor(Color.parseColor("#FF5E3A"));
+                    holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);
+                    emp_id = data.get(position).getId() + "";
+                    getPeople();
+                    initBusData(selectDate, role, emp_id);
+                    initScoreData(selectDate, role, target_role_type, emp_id);
+                    initReportData(selectDate, emp_id);
+                }
+            });
             holder.tv_name.setText(data.get(position).getCname());
         }
 
@@ -840,18 +847,20 @@ public class ReportFormActivity extends BaseActivity {
         public int getItemCount() {
             return data.size();
         }
-
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
         XCRoundRectImageView img_touxiang;
+        ImageView img_touxiang_stroke_bg;
+        RelativeLayout item_layout;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            item_layout = itemView.findViewById(R.id.item_layout);
             img_touxiang = itemView.findViewById(R.id.img_touxiang);
             tv_name = itemView.findViewById(R.id.tv_name);
+            img_touxiang_stroke_bg=itemView.findViewById(R.id.img_touxiang_stroke_bg);
         }
     }
 
