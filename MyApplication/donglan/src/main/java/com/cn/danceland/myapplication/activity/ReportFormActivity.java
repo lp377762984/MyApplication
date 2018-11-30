@@ -816,12 +816,15 @@ public class ReportFormActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            LogUtil.i("avatar=" + data.get(position).getAvatar_url());
+//            LogUtil.i("avatar=" + data.get(position).getAvatar_url());
             RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1);
             Glide.with(ReportFormActivity.this).load(data.get(position).getAvatar_url()).apply(options).into(holder.img_touxiang);
             if (click != -1 && click == position && emp_id.equals(data.get(position).getId() + "")) {
                 holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);
                 holder.tv_name.setTextColor(Color.parseColor("#FF5E3A"));
+            } else{
+                holder.img_touxiang_stroke_bg.setVisibility(View.GONE);
+                holder.tv_name.setTextColor(Color.parseColor("#6D819C"));
             }
             holder.item_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
