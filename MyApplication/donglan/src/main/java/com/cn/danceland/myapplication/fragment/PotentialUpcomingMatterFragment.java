@@ -441,6 +441,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
                 vh.tv_lasttime = convertView.findViewById(tv_lasttime);
                 vh.iv_done = convertView.findViewById(R.id.iv_done);
                 vh.tv_result = convertView.findViewById(R.id.tv_result);
+                vh.tv_no = convertView.findViewById(R.id.tv_no);
                 convertView.setTag(vh);
 
             } else {
@@ -449,6 +450,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
             }
             vh.tv_name.setText(datalist.get(position).getEmployee_name());
+            vh.tv_no.setText(position+1+"");
             vh.tv_type.setText(datalist.get(position).getWork_type_name());
             vh.tv_content.setText("待办内容："+datalist.get(position).getContent());
             vh.tv_lasttime.setText(datalist.get(position).getRecord_time().replace("-","."));
@@ -499,6 +501,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
             public LinearLayout ll_item;
             public ImageView iv_done;
             public TextView tv_result;
+            public TextView tv_no;
         }
 
     }
