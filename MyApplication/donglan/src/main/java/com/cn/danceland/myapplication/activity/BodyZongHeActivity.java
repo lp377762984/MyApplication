@@ -104,8 +104,6 @@ public class BodyZongHeActivity extends BaseActivity {
         et_content = findViewById(R.id.et_content);
         btn_commit = findViewById(R.id.btn_commit);
 
-
-
         et_content.setFilters(new InputFilter[]{inputFilter, new InputFilter.LengthFilter(10)});//禁止输入表情以及限制输入长度为10
         rl_01 = findViewById(R.id.rl_01);
         rl_02 = findViewById(R.id.rl_02);
