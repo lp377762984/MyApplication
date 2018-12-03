@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.utils;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +9,6 @@ import android.support.v7.app.AlertDialog;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.bean.UpdateBean;
 import com.google.gson.Gson;
-
-import java.util.List;
 
 /**
  * Created by feng on 2018/5/12.
@@ -41,7 +38,7 @@ public class ForceUpdateUtil {
     }
 
     private void showDialog(final String url){
-
+     //   LogUtil.i(url);
         AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getCurrentActivity());
         builder.setMessage("您的应用版本过低，系统将为您强制升级");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
