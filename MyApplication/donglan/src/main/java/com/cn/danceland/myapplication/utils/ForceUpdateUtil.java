@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.AlertDialogUpdateActivity;
 import com.cn.danceland.myapplication.bean.UpdateBean;
 import com.google.gson.Gson;
 
@@ -47,9 +48,16 @@ public class ForceUpdateUtil {
     public void paseResult() {
 
         Gson gson = new Gson();
+        LogUtil.i(result);
         UpdateBean updateBean = gson.fromJson(result, UpdateBean.class);
         if (updateBean != null && updateBean.getData() != null) {
-            showDialog(updateBean.getData().getUrl());
+//            MyApplication.getCurrentActivity().startActivity(new Intent(MyApplication.getCurrentActivity(),
+//                    AlertDialogUpdateActivity.class).putExtra("url","http://cdn.dljsgw.com/webcenter/download/donglan-v2.0.0.apk"));
+            MyApplication.getCurrentActivity().startActivity(new Intent(MyApplication.getCurrentActivity(),
+                    AlertDialogUpdateActivity.class).putExtra("url",updateBean.getData().getUrl()));
+
+
+           // showDialog(updateBean.getData().getUrl());
         } else {
             return;
         }
@@ -59,31 +67,41 @@ public class ForceUpdateUtil {
 
     private void showDialog(final String url) {
         //   LogUtil.i(url);
-        AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getCurrentActivity());
-        builder.setMessage("您的应用版本过低，系统将为您强制升级");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-//                Uri uri;
-//                if (HttpUtils.IsUrl(url)) {
-//                    uri = Uri.parse(url);
-//                } else {
-//                    uri = Uri.parse("https://www.baidu.com/");
-//                }
-//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(intent);
+        AlertDialog dialog= new AlertDialog.Builder(MyApplication.getCurrentActivity()).setMessage("您的应用版本过低，系统将为您强制升级")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                showDownloadProgressDialog(MyApplication.getCurrentActivity(), "http://cdn.dljsgw.com/webcenter/download/donglan-v2.0.0.apk");
+                    }
+                }).create();
 
-
-            }
-        });
-
-
-        builder.setCancelable(false);
-
-        builder.show();
+        dialog.show();
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(MyApplication.getCurrentActivity());
+//        builder.setMessage("您的应用版本过低，系统将为您强制升级");
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+////                Uri uri;
+////                if (HttpUtils.IsUrl(url)) {
+////                    uri = Uri.parse(url);
+////                } else {
+////                    uri = Uri.parse("https://www.baidu.com/");
+////                }
+////                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+////                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////                context.startActivity(intent);
+//
+//                showDownloadProgressDialog(MyApplication.getCurrentActivity(), "http://cdn.dljsgw.com/webcenter/download/donglan-v2.0.0.apk");
+//
+//
+//            }
+//        });
+//
+//
+//        builder.setCancelable(false);
+//        builder.create();
+//        builder.show();
     }
 
     private void showDownloadProgressDialog(Context context, String downloadUrl) {

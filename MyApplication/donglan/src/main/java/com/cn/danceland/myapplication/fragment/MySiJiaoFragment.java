@@ -58,11 +58,11 @@ public class MySiJiaoFragment extends BaseFragment {
 
         gson = new Gson();
 
-        initData();
+       // initData();
         return inflate;
     }
-
-    private void initData() {
+    @Override
+    public void initData() {
         MyCourseConBean myCourseConBean = new MyCourseConBean();
         myCourseConBean.setBranch_id(Integer.valueOf(personInfo.getPerson().getDefault_branch()));
         myCourseConBean.setPage(0);

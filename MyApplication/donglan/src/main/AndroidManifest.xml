@@ -346,6 +346,9 @@
             android:name=".activity.ShopListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.YeJiZhanBanActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.YeWuActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -434,6 +437,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
+            android:theme="@style/MyTheme"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -810,6 +814,10 @@
             android:theme="@style/dialog" />
         <activity
             android:name=".activity.AlertDialogTuiJianActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog" />
+        <activity
+            android:name=".activity.AlertDialogUpdateActivity"
             android:screenOrientation="portrait"
             android:theme="@style/dialog" />
 

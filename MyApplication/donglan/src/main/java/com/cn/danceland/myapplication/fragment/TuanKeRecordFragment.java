@@ -55,7 +55,7 @@ public class TuanKeRecordFragment extends BaseFragment {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         initView();
-        initData();
+     //   initData();
 
 
         return view;
@@ -65,8 +65,8 @@ public class TuanKeRecordFragment extends BaseFragment {
         this.startTime =startTime;
 
     }
-
-    private void initData() {
+    @Override
+    public void initData() {
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
         siJiaoYuYueConBean.setMember_no(data.getPerson().getMember_no());
         //siJiaoYuYueConBean.setDate(startTime);

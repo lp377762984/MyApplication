@@ -613,18 +613,21 @@ public class ShopFragment extends BaseFragment {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtil.i(jsonObject.toString());
-                        if (jsonObject.toString().contains("true")) {
+                        if (jsonObject!=null){
+                            if (jsonObject.toString().contains("true")) {
 
-                            MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
-                            data = menusBean.getData();
-                            if (data != null) {
-                                LogUtil.i(data.toString());
-                                myAdapter = new MyAdapter(data);
-                                mGridView.setAdapter(myAdapter);
+                                MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
+                                data = menusBean.getData();
+                                if (data != null) {
+                                    LogUtil.i(data.toString());
+                                    myAdapter = new MyAdapter(data);
+                                    mGridView.setAdapter(myAdapter);
+                                }
+                            } else {
+                                ToastUtils.showToastShort("请查看网络连接");
                             }
-                        } else {
-                            ToastUtils.showToastShort("请查看网络连接");
                         }
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -1047,6 +1050,10 @@ public class ShopFragment extends BaseFragment {
                                 }
                             }, new String[]{Manifest.permission.CAMERA}, false, null);
                         }
+                        break;
+                    case 41://业绩展板
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
+
                         break;
                     default:
                         ToastUtils.showToastShort("该功能正在研发中");
