@@ -198,7 +198,7 @@ public class DiscoverFragment extends BaseFragment {
 
 
     @Override
-    public void initDta() {
+    public void initData() {
 
     }
 

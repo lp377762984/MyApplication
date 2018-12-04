@@ -77,7 +77,7 @@ public class MyCardFragment extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
+    public void initData() {
         findAllCard();
     }
 

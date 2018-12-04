@@ -277,7 +277,7 @@ public class YeWuRevisitListFragment extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
+    public void initData() {
         strBean = new StrBean(auth);
         mCurrentPage = 1;
         strBean.setPage(mCurrentPage - 1 + "");

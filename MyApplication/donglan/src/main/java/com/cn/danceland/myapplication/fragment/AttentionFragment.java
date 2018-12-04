@@ -402,7 +402,7 @@ public class AttentionFragment extends BaseFragment {
      * 加载数据
      */
     @Override
-    public void initDta() {
+    public void initData() {
 
         //  userInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
 

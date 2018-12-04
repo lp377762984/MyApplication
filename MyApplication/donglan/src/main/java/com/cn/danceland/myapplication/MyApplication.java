@@ -57,8 +57,6 @@ import com.tencent.qcloud.sdk.Constant;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareConfig;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
@@ -400,7 +398,7 @@ public void initchannel(){
                 public void handleNotification(TIMOfflinePushNotification timOfflinePushNotification) {
                     if (timOfflinePushNotification.getGroupReceiveMsgOpt() == TIMGroupReceiveMessageOpt.ReceiveAndNotify) {
                         //消息被设置为需要需要提醒
-                        timOfflinePushNotification.doNotify(getApplicationContext(), R.mipmap.app_launcher);
+                        timOfflinePushNotification.doNotify(getApplicationContext(), R.mipmap.ic_launcher);
                         //注册推送服务
                     }
                 }

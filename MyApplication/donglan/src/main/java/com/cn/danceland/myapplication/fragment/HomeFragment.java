@@ -725,7 +725,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
+    public void initData() {
         dialog.show();
         findNews(mCurrentPage);
         findImageNews();

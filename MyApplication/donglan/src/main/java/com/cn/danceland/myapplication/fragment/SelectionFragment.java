@@ -413,7 +413,7 @@ public class SelectionFragment extends BaseFragment {
      * 加载数据
      */
     @Override
-    public void initDta() {
+    public void initData() {
         dialog.show();
         findSelectionDyn_Down(mCurrentPage-1);
         // findPushUser();
