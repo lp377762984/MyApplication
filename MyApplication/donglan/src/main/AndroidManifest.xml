@@ -852,6 +852,16 @@
             android:name=".activity.SettingMessageActivity"
             android:screenOrientation="portrait" />
 
+        <!--我的 运动数据-->
+        <activity
+            android:name=".activity.MotionDataActivity"
+            android:screenOrientation="portrait" />
+
+        <!--我的 运动数据-数据总览-->
+        <activity
+            android:name=".activity.DataScreenActivity"
+            android:screenOrientation="portrait" />
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

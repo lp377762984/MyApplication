@@ -334,7 +334,7 @@
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
                                 android:layout_weight="1"
-                                android:text="体测数据"
+                                android:text="运动数据"
                                 android:textColor="@color/color_content_text"
                                 android:textSize="16sp" />
 
