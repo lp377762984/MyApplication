@@ -175,7 +175,7 @@ public class UpcomingMatterFragment extends BaseFragment {
 
 
     @Override
-    public void initDta() {
+    public void initData() {
         mCurrentPage = 1;
       //  status=null;
         try {

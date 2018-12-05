@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,7 +84,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginActivity extends BaseActivity implements OnClickListener {
+public class LoginActivity extends AppCompatActivity implements OnClickListener {
 
 
     private EditText mEtPhone;
@@ -161,20 +162,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         findViewById(R.id.tv_login_sms).setOnClickListener(this);
         findViewById(R.id.btn_login).setOnClickListener(this);
         findViewById(R.id.tv_forgetpsw).setOnClickListener(this);
-        btn_login = findViewById(R.id.btn_login);
+        btn_login = (LinearLayout) findViewById(R.id.btn_login);
         findViewById(R.id.logo).setOnClickListener(this);
 //        iv_pswd_see = findViewById(R.id.iv_pswd_see);
 //        iv_pswd_see.setOnClickListener(this);
-        mEtPhone = findViewById(R.id.et_phone);
-        mEtPsw = findViewById(R.id.et_password);
-        cb_agreement = findViewById(R.id.cb_agreement);
+        mEtPhone = (EditText) findViewById(R.id.et_phone);
+        mEtPsw = (EditText) findViewById(R.id.et_password);
+        cb_agreement = (CheckBox) findViewById(R.id.cb_agreement);
         findViewById(R.id.tv_agreemnet).setOnClickListener(this);
         //腾讯云im
         tlsService = TLSService.getInstance();
 //        tlsService.initAccountLoginService(this,mEtPhone,mEtPsw,btn_login);
 //        tlsService.init
-        iv_login_wx = findViewById(R.id.iv_login_wx);
-        iv_login_qq = findViewById(R.id.iv_login_qq);
+        iv_login_wx = (ImageView) findViewById(R.id.iv_login_wx);
+        iv_login_qq = (ImageView) findViewById(R.id.iv_login_qq);
         iv_login_wx.setOnClickListener(this);
         iv_login_qq.setOnClickListener(this);
 
@@ -326,7 +327,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                     ToastUtils.showToastShort("请开启权限后登录");
                     return;
                 }
-                dialog.show();
+             //   dialog.show();
                 login();
                 LogUtil.i(MD5Utils.encode(mEtPsw.getText().toString().trim()));
                 break;
@@ -720,14 +721,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                dialog.dismiss();
+     //           dialog.dismiss();
                 LogUtil.i(s);
 
                 Gson gson = new Gson();
 
                 final RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+
                 LogUtil.i(loginInfoBean.toString());
                 LogUtil.i(loginInfoBean.getCode() + "");
+
                 if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
                     SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
                     startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password", MD5Utils.encode(mEtPsw.getText().toString().trim())));
@@ -776,7 +779,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                dialog.dismiss();
+         //       dialog.dismiss();
                 LogUtil.e(volleyError.toString());
                 ToastUtils.showToastShort("请求失败，请查看网络连接");
 

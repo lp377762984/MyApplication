@@ -64,7 +64,7 @@ public class RecommendedFragment extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
+    public void initData() {
         strBean1 = new StrBean();
         Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         strBean1.introduce_member_no = data.getPerson().getMember_no();
@@ -96,7 +96,7 @@ public class RecommendedFragment extends BaseFragment {
                 RequestSimpleBean simpleBean = gson.fromJson(s.toString(), RequestSimpleBean.class);
                 if (simpleBean.getSuccess()) {
                     ToastUtils.showToastShort("确认推荐成功");
-                    initDta();
+                    initData();
                 }
 
             }

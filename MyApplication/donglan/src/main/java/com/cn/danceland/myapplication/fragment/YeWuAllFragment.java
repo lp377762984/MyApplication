@@ -201,7 +201,7 @@ public class YeWuAllFragment extends BaseFragment {
 
 
     @Override
-    public void initDta() {
+    public void initData() {
 
         yewumap.put(11, "买定金");
         yewumap.put(12, "用定金");

@@ -46,7 +46,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public abstract View initViews();
 
     // 初始化数据
-    public void initDta() {
+    public void initData() {
 
     }
 
@@ -62,7 +62,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initDta();
+        initData();
     }
 
 

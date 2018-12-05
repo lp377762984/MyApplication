@@ -73,8 +73,8 @@ public class RecommendFragment extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
-        super.initDta();
+    public void initData() {
+        super.initData();
         strBean.gender = 1;
         strBean1 = new StrBean();
         Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);

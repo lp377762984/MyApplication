@@ -116,7 +116,7 @@ public class MeFragment extends BaseFragment {
 
 
     @Override
-    public void initDta() {
+    public void initData() {
         //获取本地用户信息缓存
         mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         LogUtil.i(mInfo.getPerson().getSelf_avatar_path());

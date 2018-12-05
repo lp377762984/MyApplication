@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -115,13 +114,14 @@ public class ShopListFragment extends BaseFragment {
 //                startActivityForResult(intent, 111);
 //            }
 //        });
-        initData();
+     //   initData();
 
         return inflate;
     }
 
 
-    private void initData() {
+    @Override
+    public void initData() {
         if(getArguments()!=null){
             jingdu = getArguments().getString("jingdu");
             weidu = getArguments().getString("weidu");

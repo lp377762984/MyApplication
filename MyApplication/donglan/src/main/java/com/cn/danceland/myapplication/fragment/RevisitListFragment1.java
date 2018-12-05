@@ -216,7 +216,7 @@ public class RevisitListFragment1 extends BaseFragment {
     }
 
     @Override
-    public void initDta() {
+    public void initData() {
         // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();

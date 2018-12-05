@@ -57,11 +57,11 @@ public class ForOtherSiJiaoFragment extends BaseFragment {
 
         gson = new Gson();
 
-        initData();
+      //  initData();
         return inflate;
     }
-
-    private void initData() {
+    @Override
+    public void initData() {
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FOROTHERSIJIAOLIST, new Response.Listener<String>() {
             @Override

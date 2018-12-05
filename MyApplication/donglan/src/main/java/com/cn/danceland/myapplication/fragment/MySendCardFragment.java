@@ -69,7 +69,7 @@ public class MySendCardFragment extends BaseFragment {
 
 
     @Override
-    public void initDta() {
+    public void initData() {
         findAllCard();
     }
 

@@ -118,7 +118,7 @@ public class FoundFragment extends BaseFragment {
      * 加载数据
      */
     @Override
-    public void initDta() {
+    public void initData() {
         try {
             find_all_data(mCurrentPage);
         } catch (JSONException e) {
