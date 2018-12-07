@@ -2,13 +2,10 @@ package com.cn.danceland.myapplication.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
-import android.text.TextUtils;
-import android.text.format.Time;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -22,21 +19,18 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.MotionBean;
 import com.cn.danceland.myapplication.bean.TextPushListBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.cn.danceland.myapplication.view.RoundImageView;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -45,7 +39,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONException;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,9 +53,6 @@ import java.util.TimerTask;
 
 public class TextPushListActivity extends BaseActivity {
     private Context context;
-    private RoundImageView circle_image;
-    private TextView tv_nick_name, tv_male_age, tv_phone;
-    private ImageView iv_sex;
     private PullToRefreshListView pullToRefresh;
     private ProgressDialog dialog;
     private RelativeLayout rl_error;
@@ -253,6 +243,7 @@ public class TextPushListActivity extends BaseActivity {
                 Map<String, String> map = new HashMap<>();
                 map.put("push_range", from + "");
                 map.put("page", pageCount + "");
+                map.put("size", 10 + "");
                 LogUtil.i(map.toString());
                 return map;
             }
@@ -313,20 +304,20 @@ public class TextPushListActivity extends BaseActivity {
             }
             switch (from) { //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
                 case 100:
-                    vh.icon_iv.setImageDrawable(getResources().getDrawable(R.drawable.text_push_whole_shop_icon));
+                    vh.icon_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.text_push_whole_shop_icon));
                     break;
                 case 101:
-                    vh.icon_iv.setImageDrawable(getResources().getDrawable(R.drawable.text_push_membership_icon));
+                    vh.icon_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.text_push_membership_icon));
                     break;
                 case 102:
-                    vh.icon_iv.setImageDrawable(getResources().getDrawable(R.drawable.text_push_coach_icon));
+                    vh.icon_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.text_push_coach_icon));
                     break;
                 case 103:
-                    vh.icon_iv.setImageDrawable(getResources().getDrawable(R.drawable.text_push_service_icon));
+                    vh.icon_iv.setImageDrawable(context.getResources().getDrawable(R.drawable.text_push_service_icon));
                     break;
             }
             vh.item_layout_cv.setLayoutParams(layoutParams);
-            vh.tv_time.setText(datalist.get(position).getPush_time());
+            vh.tv_time.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datalist.get(position).getPush_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
 
