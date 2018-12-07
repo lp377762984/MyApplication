@@ -34,6 +34,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="动岚系统消息"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/colorGray21"
                     android:textSize="18sp" />
 
@@ -41,7 +44,6 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="right"
                     android:text="2018-01-01"
                     android:textColor="@color/colorGray22"
@@ -60,6 +62,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="动岚系统消息"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColor="@color/colorGray22"
                     android:textSize="12sp" />
 
