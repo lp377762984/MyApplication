@@ -118,17 +118,19 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
 
     @Override
     public void upDownRefreshData() {
-        if ((mCurrentPage + 1) < datainfo.getData().getTotalPages()) {
+        if ((mCurrentPage +1) == datainfo.getData().getTotalPages()) {
+            setOnlyDownReresh();
+        }else{
             mCurrentPage = +1;
             try {
                 find_all_data(mCurrentPage);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else {
-            setOnlyDownReresh();
         }
     }
+
+
 
     class MotionDataAdapter extends CommonAdapter<TextPushListBean.Data.Content> {
 
