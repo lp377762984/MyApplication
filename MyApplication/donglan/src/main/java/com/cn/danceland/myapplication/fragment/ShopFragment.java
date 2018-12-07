@@ -72,6 +72,7 @@ import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.YeJiZhanBanActivity;
 import com.cn.danceland.myapplication.activity.YeWuActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -1053,7 +1054,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 41://业绩展板
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
-
+                        startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
                         break;
                     default:
                         ToastUtils.showToastShort("该功能正在研发中");

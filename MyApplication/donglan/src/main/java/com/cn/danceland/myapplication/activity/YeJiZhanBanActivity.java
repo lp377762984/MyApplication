@@ -12,8 +12,7 @@ import android.view.View;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.MyCardFragment;
-import com.cn.danceland.myapplication.fragment.MySendCardFragment;
+import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -60,19 +59,18 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        switch (event.getEventCode()) {
-            case 6881://入场成功
-                finish();
-
-                break;
-            default:
-                break;
-        }
+//        switch (event.getEventCode()) {
+//            case 6881://入场成功
+//                finish();
+//
+//                break;
+//            default:
+//                break;
+//        }
 
     }
 
     private void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(this);
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
@@ -176,12 +174,12 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 //            bundle.putString("id", id);
 //            bundle.putString("auth",auth);
             if (arg0 == 0) {
-                MyCardFragment fragment = new MyCardFragment();
+                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
 
                 //  fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                MySendCardFragment fragment = new MySendCardFragment();
+                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
                 //   fragment.setArguments(bundle);
                 return fragment;
             }

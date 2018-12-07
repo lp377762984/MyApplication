@@ -36,7 +36,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 6
-        versionName "1.0.0"
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
     multiDexEnabled true
@@ -197,6 +197,7 @@ dependencies {
     // compile 'com.jude:easyrecyclerview:4.4.2'
     compile 'com.haibin:calendarview:3.4.8'
     //日历控件
+    //compile 'com.zhy:base-adapter:3.0.3'//万能lsitview适配器
 
 //    compile 'com.google.zxing:core:3.3.0'
 }

@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -28,13 +29,14 @@ public abstract class BaseRefreshFragment extends BaseFragment {
     private PullToRefreshListView pullToRefresh;
     private boolean isEnd;
     private int mCurrentPage=0;
+    ListAdapter listAdapter;
     @Override
     public View initViews() {
         View view =View.inflate(mActivity, R.layout.fragment_base_refresh,null);
         tv_tiltle =view. findViewById(R.id.donglan_title);
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
-        View listEmptyView = view.findViewById(R.id.rl_no_info);
+        View listEmptyView = view.findViewById(R.id.rl_error);
         listEmptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +46,11 @@ public abstract class BaseRefreshFragment extends BaseFragment {
         TextView tv_error = listEmptyView.findViewById(R.id.tv_error);
         ImageView imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error);
-        pullToRefresh.setAdapter(setAtapter());
+        if (setAtapter()==null){
+            LogUtil.i("adapter is null");
+        }
+        listAdapter=setAtapter();
+        pullToRefresh.setAdapter(listAdapter);
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
         init();
@@ -75,6 +81,27 @@ public abstract class BaseRefreshFragment extends BaseFragment {
             }
         });
         return view;
+    }
+
+    public ListAdapter getlistadapter(){
+        return this.listAdapter;
+    }
+
+    public ListAdapter getListAdapter() {
+        return listAdapter;
+    }
+
+    public PullToRefreshListView getPullToRefresh() {
+        return pullToRefresh;
+    }
+
+    public void setPullToRefresh(PullToRefreshListView pullToRefresh) {
+        this.pullToRefresh = pullToRefresh;
+    }
+
+    public void setListAdapter(ListAdapter listAdapter) {
+        this.listAdapter = listAdapter;
+        pullToRefresh.setAdapter(listAdapter);
     }
 
     /**

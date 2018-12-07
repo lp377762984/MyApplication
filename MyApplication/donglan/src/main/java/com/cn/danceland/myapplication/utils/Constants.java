@@ -358,6 +358,10 @@ public class Constants {
     //我的-我的通知
     public static String QUERY_COUNT = HOST + "/pushRecord/queryCount";// 查询当前登录的人未读的通知数量
 
+    public static String QUERY_HUIJI = HOST + "/panel/queryHuiJi";// 查询会籍业绩
+
+
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -452,7 +456,7 @@ public class Constants {
 
         PAY_WAYS_URL = HOST + "/payConf/findById";//支持哪种支付方式
         FINDMyLOCKERS = HOST + "appLocker/findMyLockers";//我的租柜
-
+        QUERY_HUIJI = HOST + "/panel/queryHuiJi";// 查询会籍业绩
         //报表相关
         BUSSTATISTICSREPORT = HOST + "statistics/busStatisticsReport";//业务报表
         SCORESTATISTICSREPORT = HOST + "statistics/scoreStatisticsReport";//业绩报表

@@ -8,7 +8,7 @@
 
 <com.cn.danceland.myapplication.view.DongLanTitleView
     android:layout_width="match_parent"
-    app:titleText="会员卡"
+    app:titleText="业绩展板"
     android:layout_height="wrap_content"/>
 
     <net.lucode.hackware.magicindicator.MagicIndicator
