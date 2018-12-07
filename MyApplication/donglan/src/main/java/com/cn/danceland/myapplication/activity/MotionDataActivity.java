@@ -511,41 +511,6 @@ public class MotionDataActivity extends BaseActivity {
             vh.item_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.PUSH_RECORD_SET_BADGE, new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String s) {
-//                            LogUtil.i("Response--" + s);
-//                            CornerMarkMessageBean responseBean = new Gson().fromJson(s, CornerMarkMessageBean.class);
-//                            if (responseBean.getCode() != null && responseBean.getCode().equals("0")) {
-//                                String message_sum_str = SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, "0");//应用消息总数 用于桌面icon显示
-//                                int message_sum = (Integer.valueOf(message_sum_str) - 1);
-//                                SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
-//                                ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
-//                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
-//                            }
-//                            datalist.get(position).setStatus("1");
-//                            myListAatapter.notifyDataSetChanged();
-//                        }
-//                    }, new Response.ErrorListener() {
-//                        @Override
-//                        public void onErrorResponse(VolleyError volleyError) {
-//                            if (volleyError != null) {
-//                                LogUtil.i(volleyError.toString());
-//                            } else {
-//                                LogUtil.i("NULL");
-//                            }
-//                        }
-//                    }) {
-//                        @Override
-//                        protected Map<String, String> getParams() throws AuthFailureError {
-//                            Map<String, String> map = new HashMap<String, String>();
-//                            map.put("badge", SPUtils.getString(Constants.MY_APP_MESSAGE_SUM, ""));//应用消息总数 用于桌面icon显示);
-//                            map.put("recordId", datalist.get(position).getId());
-//                            LogUtil.i("finalMap--" + map.toString());
-//                            return map;
-//                        }
-//                    };
-//                    MyApplication.getHttpQueues().add(stringRequest);
                 }
             });
             return convertView;
