@@ -87,7 +87,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
 
         refreshLayout.setRefreshHeader(new ClassicsHeader(mActivity));//设置 Header 为 贝塞尔雷达 样式
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
-        refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
+        refreshLayout.setEnableAutoLoadMore(true);//是否启用列表惯性滑动到底部时自动加载更多
         refreshLayout.setEnableHeaderTranslationContent(true);//拖动Header的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableFooterTranslationContent(true);//拖动Footer的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableOverScrollDrag(false);//禁止越界拖动（1.0.4以上版本）
@@ -98,6 +98,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+                refreshlayout.setNoMoreData(false);//恢复加载更多的状态
                 TimerTask task = new TimerTask() {
                     public void run() {
                         new DownRefresh().execute();
