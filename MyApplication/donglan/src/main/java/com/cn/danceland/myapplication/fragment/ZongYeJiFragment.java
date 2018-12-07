@@ -16,7 +16,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.listview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.listview.ViewHolder;
 import com.cn.danceland.myapplication.bean.HuiJiYeJiBean;
-import com.cn.danceland.myapplication.fragment.base.BaseRefreshFragment;
+import com.cn.danceland.myapplication.fragment.base.BaseListViewRefreshFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -38,7 +38,7 @@ import java.util.Map;
  */
 
 
-public class ZongYeJiFragment extends BaseRefreshFragment {
+public class ZongYeJiFragment extends BaseListViewRefreshFragment {
 
     private List<HuiJiYeJiBean.Data> dataList = new ArrayList<>();
     private MylistAtapter mylistAtapter= new MylistAtapter(mActivity, R.layout.listview_item_jinriyeji, dataList);
