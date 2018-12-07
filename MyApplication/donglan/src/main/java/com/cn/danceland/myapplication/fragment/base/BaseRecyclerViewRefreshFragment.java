@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.recyclerview.CommonAdapter;
+import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.view.ClassicsHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -19,6 +20,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,7 +46,6 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }
-
 
 
     @Override
@@ -90,7 +91,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
         refreshLayout.setEnableHeaderTranslationContent(true);//拖动Header的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableFooterTranslationContent(true);//拖动Footer的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableOverScrollDrag(false);//禁止越界拖动（1.0.4以上版本）
-        ClassicsFooter classicsFooter=new ClassicsFooter(mActivity);
+        ClassicsFooter classicsFooter = new ClassicsFooter(mActivity);
         classicsFooter.setProgressDrawable(getResources().getDrawable(R.drawable.listview_loading_anim));
         refreshLayout.setRefreshFooter(classicsFooter);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -134,7 +135,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
     }
 
 
-    public void setOnlyDownReresh(){
+    public void setOnlyDownReresh() {
         refreshLayout.finishLoadMoreWithNoMoreData();
     }
 
@@ -200,7 +201,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
     }
 
 
-//    public void setpullToRefreshEnd() {
+    //    public void setpullToRefreshEnd() {
 //        isEnd = true;//没数据了
 //        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
 //                false, true);
@@ -210,12 +211,18 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
 //        endLabels.setLoadingDrawable(null);
 //        pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);
 //    }
+    @Subscribe
+    public void onEventMainThread(IntEvent event) {
 
-    public abstract void onEventMainThread(StringEvent event);
+    }
+    @Subscribe
+    public void onEventMainThread(StringEvent event) {
 
+    }
     public abstract CommonAdapter setAtapter();
 
     public abstract void initDownRefreshData();
+
     public abstract void upDownRefreshData();
 
     @Override
