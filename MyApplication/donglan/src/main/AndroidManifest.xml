@@ -887,6 +887,8 @@
             android:name=".activity.DataScreenActivity"
             android:screenOrientation="portrait" />
 
+        <!--我的 运动数据-数据总览-->
+
         <!--QQ登录配置 start-->
         <activity
             android:name="com.tencent.tauth.AuthActivity"

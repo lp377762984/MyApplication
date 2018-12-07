@@ -304,7 +304,8 @@ public class MyCardFragment extends BaseFragment {
             viewHolder.btn_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(mCardList.get(i).getId());
+                    StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(mCardList.get(i).getId()).append(",").append(Calendar.getInstance().getTimeInMillis());
+                    LogUtil.i("" + data.toString());
                     startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                 }
             });

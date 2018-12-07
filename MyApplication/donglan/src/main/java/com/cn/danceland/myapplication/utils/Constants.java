@@ -17,7 +17,7 @@ public class Constants {
     //  public static  String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
 //   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static  String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
-    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
+//    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
 //    public static final String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
     public static String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
@@ -254,6 +254,7 @@ public class Constants {
     public static String FINDPINGJIA = HOST + "evaluate/findById/";//查询一条评价
     public static String ENTERCOURSE = HOST + "appCourse/courseAppointConfirm ";//确认私教
     public static String SCAN_QRCODE = HOST + "qrcode";//扫码入场
+    public static String SCAN_QRCODE_ENTER_V2 = HOST + "/qrcode/enter_v2";//扫码处理工作 扫码入场升级版
     public static String QUERYGROUPCOURSE = HOST + "appGroupCourse/queryBuyCoursePersonInfo";//查询购买此小团课的人
     public static String FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
     public static String QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
@@ -327,9 +328,12 @@ public class Constants {
 
     //新增[收藏表
     public static String PUSH_COLLECT_SAVE = HOST + "/collect/save";//新增[收藏表
+
     //扫码训练
     public static String PUSH_SCANER_TRAIN = HOST + "/SHDevice/openSHDevice";//扫码训练
 
+    //扫码训练 查询是否占用健身设备
+    public static String QUERY_SCANER_TRAIN_STATUS = HOST + "/SHDevice/queryStatus";//扫码训练 查询是否占用健身设备
 
     //分页查询当前登录的人收藏的新闻列表
     public static String PUSH_COLLECT_QUERY = HOST + "/collect/queryCollect";//分页查询当前登录的人收藏的新闻列表
@@ -413,6 +417,7 @@ public class Constants {
     public final static String ADDRESS = "address";//手环
     public final static String NAME = "name";
     public final static String MY_TXIM_ADMIN = "my_txim_admin";
+    public final static String SCANER_CODE_TRAIN_ISLOOK = "scaner_code_train_islook";//扫码训练  true最后一条没看
 
 
     public static void setHost(String hostip) {
@@ -631,6 +636,7 @@ public class Constants {
         FINDPINGJIA = HOST + "evaluate/findById/";//查询一条评价
         ENTERCOURSE = HOST + "appCourse/courseAppointConfirm ";//确认私教
         SCAN_QRCODE = HOST + "qrcode";//扫码入场
+        SCAN_QRCODE_ENTER_V2 = HOST + "/qrcode/enter_v2";//扫码处理工作 扫码入场升级版
         QUERYGROUPCOURSE = HOST + "appGroupCourse/queryBuyCoursePersonInfo";//查询购买此小团课的人
         FINDGROUPCOURSEAPPOINTPERSON = HOST + "appGroupCourse/findGroupCourseAppointPerson";//查看某节小团课参与成员
         QUERYBUYCOURSEPERSONINFO = HOST + "appCourse/queryBuyCoursePersonInfo";//查询购买此一对一课种的人
@@ -703,6 +709,9 @@ public class Constants {
 
         //扫码训练
         PUSH_SCANER_TRAIN = HOST + "/SHDevice/openSHDevice";//扫码训练
+
+        //扫码训练 查询是否占用健身设备
+         QUERY_SCANER_TRAIN_STATUS = HOST + "/SHDevice/queryStatus";//扫码训练 查询是否占用健身设备
 
         //新增[收藏表
         PUSH_COLLECT_SAVE = HOST + "/collect/save";//新增[收藏表

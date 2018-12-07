@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
@@ -8,6 +9,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
+import com.cn.danceland.myapplication.bean.MotionVerifyBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -30,6 +32,13 @@ import java.util.Map;
 public class ScanerCodeActivity extends ActivityScanerCode {
     private String from = "";
     private AlertDialogCustomToHint.MyDialog dialog;
+    private boolean isScaner = true;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        verifyStatus();
+    }
 
     @Override
     public void do_result(String result) {
@@ -53,10 +62,13 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                     }
                     break;
                 case "train"://扫码训练
-                    if (result != null && result.length() > 0) {//开启后结果  0成功   1失败
-                        scan_train(result);
-                    } else {
-                        showResultDialog("扫码失败", false);
+                    LogUtil.i("isScaner"+isScaner);
+                    if (isScaner) {
+                        if (result != null && result.length() > 0) {//开启后结果  0成功   1失败
+                            scan_train(result);
+                        } else {
+                            showResultDialog("扫码失败", false);
+                        }
                     }
                     break;
             }
@@ -78,7 +90,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
     }
 
     private void scan_qrcode(final String result) {//扫码入场
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE_ENTER_V2, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -119,21 +131,22 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 RequestSimpleBean requsetSimpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (requsetSimpleBean.getSuccess()) {
                     if (TextUtils.equals(requsetSimpleBean.getCode(), "0")) {
-                        showResultDialog("扫码成功，开始训练", false);
+                        showResultDialog2("扫码成功，开始训练", false);
                     } else if (TextUtils.equals(requsetSimpleBean.getCode(), "1")) {
-                        showResultDialog("开启失败", false);
+                        showResultDialog2("开启失败", false);
                     } else {
-                        showResultDialog("扫码失败", false);
+                        SPUtils.setBoolean(Constants.SCANER_CODE_TRAIN_ISLOOK, true);
+                        showResultDialog2("扫码失败", false);
                     }
                 } else {
-                    showResultDialog(requsetSimpleBean.getErrorMsg(), false);
+                    showResultDialog2(requsetSimpleBean.getErrorMsg(), false);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtil.i(volleyError.toString());
-                showResultDialog("扫码失败", false);
+                showResultDialog2("扫码失败", false);
             }
         }) {
             @Override
@@ -164,6 +177,7 @@ public class ScanerCodeActivity extends ActivityScanerCode {
                 dialog.dismiss();
             }
         });
+        dialog.setCanceledOnTouchOutside(true);
     }
 
     /**
@@ -184,5 +198,108 @@ public class ScanerCodeActivity extends ActivityScanerCode {
         if (!cancel) {
             dialog.GoneCancel();
         }
+        dialog.setCanceledOnTouchOutside(true);
+    }
+
+    /**
+     * 显示结果对话
+     */
+    private void showResultDialog2(final String result, boolean cancel) {
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(ScanerCodeActivity.this, result, new AlertDialogCustomToHint.Click() {
+            @Override
+            public void ok_bt(int dialogOKB) {
+                SPUtils.setBoolean(Constants.SCANER_CODE_TRAIN_ISLOOK, true);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                dialog.dismiss();
+            }
+        });
+        if (!cancel) {
+            dialog.GoneCancel();
+        }
+        dialog.setCanceledOnTouchOutside(true);
+    }
+
+    /**
+     * 显示结果对话 是否查看最后一条训练数据
+     */
+    private void showResultDialog3(final boolean isAerobic) {
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+        isScaner = false;
+        dialog = new AlertDialogCustomToHint("确认", "取消").CreateDialog(ScanerCodeActivity.this, "是否查看最后一条训练数据？", new AlertDialogCustomToHint.Click() {
+            @Override
+            public void ok_bt(int dialogOKB) {
+                dialog.dismiss();
+                Intent intent2 = new Intent(ScanerCodeActivity.this, MotionDataActivity.class);
+                intent2.putExtra("isAerobic", isAerobic);
+                startActivity(intent2);
+                finish();
+            }
+
+            @Override
+            public void cancle_bt(int btn_cancel) {
+                SPUtils.setBoolean(Constants.SCANER_CODE_TRAIN_ISLOOK, false);
+                dialog.dismiss();
+                isScaner = true;
+            }
+        });
+        dialog.setCanceledOnTouchOutside(false);
+    }
+
+    /**
+     * 扫码训练 查询是否占用健身设备
+     */
+    private void verifyStatus() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_SCANER_TRAIN_STATUS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                MotionVerifyBean requsetBean = new Gson().fromJson(s, MotionVerifyBean.class);
+                if (requsetBean.getSuccess()) {
+                    if (TextUtils.equals(requsetBean.getCode(), "0")) {
+                        if (requsetBean.getData().getIsOccupy() == 1) {//是否占用设备(1：占用 0：未占用)
+                            isScaner = false;
+                            showResultDialog2("训练中，无法同时开启多台设备", false);
+                        } else {
+
+                            boolean isAerobic = true;
+                            if (requsetBean.getData().getLastData() != null) {
+                                if (requsetBean.getData().getLastData().getSub_type() < 5) {
+                                    isAerobic = true;
+                                } else {
+                                    isAerobic = false;
+                                }
+                            }
+                            boolean islook = SPUtils.getBoolean(Constants.SCANER_CODE_TRAIN_ISLOOK, false);//扫码训练  true最后一条没看
+                            if (islook) {
+                                showResultDialog3(isAerobic);
+                            }
+                        }
+                    } else {
+                        showResultDialog2(requsetBean.getErrorMsg(), false);
+                    }
+                } else {
+                    showResultDialog2(requsetBean.getErrorMsg(), false);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.i(volleyError.toString());
+                showResultDialog2("请求失败", false);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 }

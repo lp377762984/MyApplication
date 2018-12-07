@@ -71,6 +71,9 @@ public class DongLanTitleView extends RelativeLayout {
     public ImageView getMoreIv() {
         return donglan_more;
     }
+    public ImageView getBackIv() {
+        return donglan_back;
+    }
 
     public void setTitle(String s) {
         donglan_title.setText(s);
