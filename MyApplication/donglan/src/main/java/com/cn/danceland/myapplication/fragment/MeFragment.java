@@ -17,6 +17,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.ConsultListActivity;
 import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.MessageActivity;
+import com.cn.danceland.myapplication.activity.MotionDataActivity;
 import com.cn.danceland.myapplication.activity.MyConsumeActivity;
 import com.cn.danceland.myapplication.activity.MyProActivity;
 import com.cn.danceland.myapplication.activity.MyShopActivity;
@@ -35,6 +36,7 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -58,6 +60,7 @@ public class MeFragment extends BaseFragment {
     Badge badge;
 
     private DongLanTransparentTitleView dongLanTitleView;
+    private ImageView header_background_iv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,8 @@ public class MeFragment extends BaseFragment {
 
         dongLanTitleView = v.findViewById(R.id.title);
         ImageView more_iv = dongLanTitleView.findViewById(R.id.iv_more);
+        header_background_iv = v.findViewById(R.id.header_background_iv);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(mActivity, header_background_iv, (float) 187.5, 110);
 
         tv_dyn = v.findViewById(R.id.tv_dyn);
         tv_guanzhu = v.findViewById(R.id.tv_gauzhu_num);
@@ -265,9 +270,11 @@ public class MeFragment extends BaseFragment {
             case R.id.iv_avatar://头像
                 startActivity(new Intent(mActivity, UserSelfHomeActivity.class).putExtra("id", SPUtils.getString(Constants.MY_USERID, null)));
                 break;
-            case R.id.ll_my_data://体测数据
-                Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);
+            case R.id.ll_my_data:
+                Intent intent2 = new Intent(mActivity, MotionDataActivity.class);
                 startActivity(intent2);
+//                Intent intent2 = new Intent(mActivity, FitnessTestActivity.class);//体测数据
+//                startActivity(intent2);
                 break;
             case R.id.ll_my_shop://我的门店
                 mInfo = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);

@@ -226,7 +226,7 @@ public class HomeFragment extends BaseFragment {
         mRecycler.setHasFixedSize(true);//刷新最重要的这句
 //        RecyclerView.Adapter.n
 //        RecyclerView.Adapter.notifyItemInserted(getItemCount());//必须用此方法才能进行recycleview的刷新。（末尾刷新）
-        header_background_iv = (ImageView) UIUtils.setViewRatio(mActivity, header_background_iv, (float) 187.5, 118);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(mActivity, header_background_iv, (float) 187.5, 110);
 
         newsListviewAdapter.setHeaderView(initBanner());
         newsListviewAdapter.setOnItemClickListener(new NewsListviewAdapter.OnItemClickListener() {

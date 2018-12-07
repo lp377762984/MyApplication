@@ -126,7 +126,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         tv_sign = findViewById(R.id.tv_sign);
 
         header_background_iv = findViewById(R.id.header_background_iv);
-        header_background_iv = (ImageView) UIUtils.setViewRatio(UserSelfHomeActivity.this, header_background_iv, (float) 187.5, 118);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(UserSelfHomeActivity.this, header_background_iv, (float) 187.5, 110);
 
         dongLanTitleView = findViewById(R.id.title);
         ImageView more_iv = dongLanTitleView.getRightIv();

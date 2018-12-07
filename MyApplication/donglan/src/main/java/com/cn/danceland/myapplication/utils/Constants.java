@@ -362,6 +362,17 @@ public class Constants {
 
 
 
+    //我的-运动数据
+    public static String QUERY_SH_AEROBIC = HOST + "/shData/queryAerobicTraining";// 分页查询有氧运动数据列表
+
+    //我的-运动数据
+    public static String QUERY_SH_WEIGHT = HOST + "/shData/queryWeightTraining";// 分页查询无氧运动数据列表
+
+    //我的-运动数据
+    public static String QUERY_SH_TOTAL = HOST + "/shData/queryTotalData";// 查询数据总览数据列表
+
+
+
     //环信相关
     public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
     public static final String GROUP_USERNAME = "item_groups";
@@ -729,5 +740,14 @@ public class Constants {
 
         //我的-我的通知
         QUERY_COUNT = HOST + "/pushRecord/queryCount";// 查询当前登录的人未读的通知数量
+
+        //我的-运动数据
+        QUERY_SH_AEROBIC = HOST + "/shData/queryAerobicTraining";// 分页查询有氧运动数据列表
+
+        //我的-运动数据
+        QUERY_SH_WEIGHT = HOST + "/shData/queryWeightTraining";// 分页查询无氧运动数据列表
+
+        //我的-运动数据
+        QUERY_SH_TOTAL = HOST + "/shData/queryTotalData";// 分页查询数据总览数据列表
     }
 }

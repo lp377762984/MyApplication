@@ -170,7 +170,7 @@ public class PaiMingActivity extends BaseActivity {
     private void initView() {
         pullToRefresh = findViewById(R.id.pullToRefresh);
         header_background_iv = findViewById(R.id.header_background_iv);
-        header_background_iv = (ImageView) UIUtils.setViewRatio(PaiMingActivity.this, header_background_iv, (float) 187.5, 118);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(PaiMingActivity.this, header_background_iv, (float) 187.5, 110);
         init();
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.DISABLED);

@@ -59,6 +59,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.PictureUtil;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequest;
 import com.cn.danceland.myapplication.utils.multipartrequest.MultipartRequestParams;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
@@ -141,7 +142,7 @@ public class MyProActivity extends BaseActivity {
     private String gender;//保存提交参数
     private String hobby;//保存提交参数
     private String sign;//保存提交参数
-
+    private ImageView header_background_iv;
 
     private Handler handler = new Handler() {
         @Override
@@ -191,6 +192,8 @@ public class MyProActivity extends BaseActivity {
         loopview = inflate.findViewById(R.id.loopview);
         over_time = inflate.findViewById(R.id.over_time);
         over_time.setVisibility(View.GONE);
+        header_background_iv = findViewById(R.id.header_background_iv);
+        header_background_iv = (ImageView) UIUtils.setViewRatio(MyProActivity.this, header_background_iv, (float) 187.5, 110);
 
         alertdialog = new android.support.v7.app.AlertDialog.Builder(MyProActivity.this);
 
