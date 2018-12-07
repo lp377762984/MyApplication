@@ -15,6 +15,7 @@ import com.cn.danceland.myapplication.adapter.recyclerview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.recyclerview.base.ViewHolder;
 import com.cn.danceland.myapplication.bean.HuiJiYeJiBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseRecyclerViewRefreshFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -47,7 +48,10 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
         switch (event.getEventCode()) {
 
 
-            case 210://刷新页面
+            case 7100://刷新页面
+                if (event.getMsg()!=null){
+                    findhjyj(event.getMsg(),event.getMsg());
+                }
 
             default:
                 break;
@@ -66,7 +70,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     @Override
     public void initDownRefreshData() {
         mCurrentPage = 0;
-        findhjyj();
+        findhjyj( "2017-01-01","2019-01-01");
         setOnlyDownReresh();
     }
 
@@ -77,7 +81,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     }
 
 
-    private void findhjyj() {
+    private void findhjyj(final String start, final String end ) {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJI, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -97,8 +101,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("start", "2017-01-01");
-                map.put("end", "2019-01-01");
+                map.put("start",start);
+                map.put("end",end );
                 return map;
             }
         };

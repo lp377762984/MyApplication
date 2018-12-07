@@ -3,35 +3,10 @@ package com.cn.danceland.myapplication.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.text.format.Time;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.MotionTotalBean;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
-import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.cn.danceland.myapplication.view.RoundImageView;
-import com.google.gson.Gson;
-
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 
 /**
  * 门店 文字推送

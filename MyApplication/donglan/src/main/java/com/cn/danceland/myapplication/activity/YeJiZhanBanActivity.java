@@ -11,8 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -69,7 +71,21 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 //        }
 
     }
+    private void showDate() {
 
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期");
+        customDateAndTimePicker.setGoneHourAndMinute();
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
+            @Override
+            public void onClick() {
+                String dateString = customDateAndTimePicker.getHorizongtal();
+//                tv_birthday.setText(dateString);
+//                potentialInfo.setBirthday(dateString);
+                EventBus.getDefault().post(new StringEvent(dateString,7100));
+            }
+        });
+    }
     private void initView() {
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);

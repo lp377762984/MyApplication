@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.fragment.ForOtherSiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.MySiJiaoFragment;
 import com.cn.danceland.myapplication.view.DongLanTitleView;

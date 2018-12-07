@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.model.GroupInfo;

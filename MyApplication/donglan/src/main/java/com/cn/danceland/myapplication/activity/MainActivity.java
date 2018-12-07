@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.activity;
 import android.os.Bundle;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.view.SwitchButton;
 
 public class MainActivity extends BaseActivity {

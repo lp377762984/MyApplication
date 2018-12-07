@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.QrCodeUtil;
 

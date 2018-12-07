@@ -1,4 +1,4 @@
-package com.cn.danceland.myapplication.activity;
+package com.cn.danceland.myapplication.activity.base;
 
 
 import android.os.AsyncTask;

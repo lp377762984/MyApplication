@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.utils.LogUtil;
 
 import java.io.BufferedInputStream;

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 
 import java.io.File;
 import java.io.IOException;

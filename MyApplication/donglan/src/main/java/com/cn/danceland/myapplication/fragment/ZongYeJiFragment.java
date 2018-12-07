@@ -16,6 +16,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.listview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.listview.ViewHolder;
 import com.cn.danceland.myapplication.bean.HuiJiYeJiBean;
+import com.cn.danceland.myapplication.fragment.base.BaseRefreshFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;

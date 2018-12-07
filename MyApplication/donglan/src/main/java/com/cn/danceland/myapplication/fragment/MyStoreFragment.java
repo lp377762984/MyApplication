@@ -15,6 +15,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccount;
 import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountCond;
 import com.cn.danceland.myapplication.bean.store.storeaccount.StoreAccountRequest;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;

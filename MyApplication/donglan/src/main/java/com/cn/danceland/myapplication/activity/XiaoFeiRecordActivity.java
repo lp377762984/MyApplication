@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.XiaoFeiJiLvBean;
 import com.cn.danceland.myapplication.bean.store.storebill.StoreBillCond;

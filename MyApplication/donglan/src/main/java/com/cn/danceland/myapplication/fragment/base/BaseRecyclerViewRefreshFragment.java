@@ -1,4 +1,4 @@
-package com.cn.danceland.myapplication.fragment;
+package com.cn.danceland.myapplication.fragment.base;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

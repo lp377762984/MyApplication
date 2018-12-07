@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.fragment.RecommendFragment;
 import com.cn.danceland.myapplication.fragment.RecommendedFragment;
 import com.cn.danceland.myapplication.utils.SPUtils;
