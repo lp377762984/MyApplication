@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -13,11 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.scwang.smartrefresh.header.internal.pathview.PathsView;
-import com.scwang.smartrefresh.layout.api.*;
+import com.scwang.smartrefresh.layout.api.RefreshKernel;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.internal.ProgressDrawable;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 
 /**
@@ -42,13 +40,24 @@ public class ClassicsHeader extends LinearLayout implements com.scwang.smartrefr
         super(context, attrs, defStyleAttr);
         this.initView(context);
     }
+    public void setHeaderTextColor(int color){
+        this.mHeaderText.setTextColor(color);
+    }
     private void initView(Context context) {
         setGravity(Gravity.CENTER);
         mHeaderText = new TextView(context);
         mProgressView = new ImageView(context);
-        mProgressView.setBackground(getResources().getDrawable(R.drawable.listview_loading_anim));
-        mHeaderText.setTextColor(getResources().getColor(R.color.white));
-        addView(mProgressView, DensityUtil.dp2px(40), DensityUtil.dp2px(40));
+        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT );
+//        android.widget.RelativeLayout.LayoutParams lpProgress = new android.widget.RelativeLayout.LayoutParams(lpArrow);
+//        lpProgress.addRule(15);
+//        lpProgress.addRule(0, 16908312);
+
+     //   mProgressView.setPadding(this.getPaddingLeft(), DensityUtil.dp2px(20f), this.getPaddingRight(),  DensityUtil.dp2px(20f));
+        mProgressView.setLayoutParams(linearParams);
+        mProgressView.setImageResource(R.drawable.listview_loading_anim);
+        mHeaderText.setTextColor(getResources().getColor(R.color.color_dl_black));
+        addView(mProgressView,DensityUtil.dp2px(20f),DensityUtil.dp2px(20f));
         addView(new View(context), DensityUtil.dp2px(16), DensityUtil.dp2px(16));
         addView(mHeaderText, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         setMinimumHeight(DensityUtil.dp2px(60));
@@ -64,11 +73,11 @@ public class ClassicsHeader extends LinearLayout implements com.scwang.smartrefr
     }
     @Override
     public void onStartAnimator(RefreshLayout layout, int headHeight, int maxDragHeight) {
-        ((AnimationDrawable) mProgressView.getBackground()).start();//开始动画
+        ((AnimationDrawable) mProgressView.getDrawable()).start();//开始动画
     }
     @Override
     public int onFinish(RefreshLayout layout, boolean success) {
-        ((AnimationDrawable) mProgressView.getBackground()).stop();//停止动画
+        ((AnimationDrawable) mProgressView.getDrawable()).stop();//停止动画
 //        if (success){
 //            mHeaderText.setText("刷新完成");
 //        } else {

@@ -3,7 +3,6 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -17,6 +16,7 @@ import com.cn.danceland.myapplication.activity.PublishActivity;
 import com.cn.danceland.myapplication.adapter.TabAdapter;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.ToastUtils;

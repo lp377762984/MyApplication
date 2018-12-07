@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 
 /**
  * Created by shy on 2017/12/8 15:32

@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
@@ -109,145 +108,6 @@ public class CustomDateAndTimePicker extends AlertDialog {
         final ArrayList<String> dateList = new ArrayList<String>();
         int n = 1900;
         int len = year - n;
-//        for (int i = 0; i <= len; i++) {
-//            yearList.add((n + i) + "");
-//        }
-//        if (maxMonth == 0) {
-//            for (int j = 0; j < 12; j++) {
-//                monthList.add((1 + j) + "");
-//            }
-//        } else {
-//            for (int j = 0; j < (time.month + 1); j++) {
-//                monthList.add((1 + j) + "");
-//            }
-//        }
-//
-//        lp_year.setNotLoop();
-//        lp_date.setNotLoop();
-//        lp_month.setNotLoop();
-//        lp_year.setItems(yearList);
-//        lp_month.setItems(monthList);
-//
-//        syear = year + "";
-//        smonth = (time.month + 1) + "";
-//        sdate = time.monthDay + "";
-//
-//        for (int i = 0; i < yearList.size(); i++) {
-//            if (syear.equals(yearList.get(i))) {
-//                lp_year.setInitPosition(i);
-//            }
-//        }
-//
-//        for (int i = 0; i < monthList.size(); i++) {
-//            if (smonth.equals(monthList.get(i))) {
-//                lp_month.setInitPosition(i);
-//            }
-//        }
-//
-//
-//        if (maxDate == 0) {
-//            daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//            dateList.clear();
-//            for (int z = 1; z <= daysByYearMonth; z++) {
-//                dateList.add(z + "");
-//            }
-//        } else {
-//            for (int z = 1; z <= Integer.valueOf(sdate); z++) {
-//                dateList.add(z + "");
-//            }
-//        }
-//
-//        lp_date.setItems(dateList);
-//
-//        for (int i = 0; i < dateList.size(); i++) {
-//            if (sdate.equals(dateList.get(i))) {
-//                lp_date.setInitPosition(i);
-//            }
-//        }
-//
-//
-//        //设置字体大小
-//        lp_year.setTextSize(16);
-//        lp_month.setTextSize(16);
-//        lp_date.setTextSize(16);
-//
-//        lp_year.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                monthList.clear();
-//                if (maxMonth == 0) {
-//                    for (int j = 0; j < 12; j++) {
-//                        monthList.add((1 + j) + "");
-//                    }
-//                } else {
-//                    if (year != Integer.valueOf(yearList.get(index))) {
-//                        for (int j = 0; j < 12; j++) {
-//                            monthList.add((1 + j) + "");
-//                        }
-//                    } else {
-//                        for (int j = 0; j < maxMonth; j++) {
-//                            monthList.add((1 + j) + "");
-//                        }
-//                    }
-//                }
-//
-//                lp_month.setItems(monthList);
-//                syear = yearList.get(index);
-//                dateList.clear();
-//                if (maxDate == 0) {
-//                    daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                    for (int z = 1; z <= daysByYearMonth; z++) {
-//                        dateList.add(z + "");
-//                    }
-//                } else {
-//                    if ((time.month + 1) == Integer.valueOf(smonth) && time.year == Integer.valueOf(syear)) {
-//                        for (int z = 1; z <= maxDate; z++) {
-//                            dateList.add(z + "");
-//                        }
-//                    } else {
-//                        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                        for (int z = 1; z <= daysByYearMonth; z++) {
-//                            dateList.add(z + "");
-//                        }
-//                    }
-//                }
-//                lp_date.setItems(dateList);
-//            }
-//        });
-//
-//        lp_month.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                smonth = monthList.get(index);
-//                dateList.clear();
-//                if (maxDate == 0) {
-//                    daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                    for (int z = 1; z <= daysByYearMonth; z++) {
-//                        dateList.add(z + "");
-//                    }
-//                } else {
-//                    if ((time.month + 1) == Integer.valueOf(smonth) && time.year == Integer.valueOf(syear)) {
-//                        for (int z = 1; z <= maxDate; z++) {
-//                            dateList.add(z + "");
-//                        }
-//                    } else {
-//                        daysByYearMonth = TimeUtils.getDaysByYearMonth(Integer.valueOf(syear), Integer.valueOf(smonth));
-//                        for (int z = 1; z <= daysByYearMonth; z++) {
-//                            dateList.add(z + "");
-//                        }
-//                    }
-//                }
-//
-//                lp_date.setItems(dateList);
-//            }
-//        });
-//
-//        lp_date.setListener(new OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(int index) {
-//                sdate = dateList.get(index);
-//            }
-//        });
 
         for (int i = 0; i <= len; i++) {
             yearList.add((n + i) + "年");
@@ -363,8 +223,8 @@ public class CustomDateAndTimePicker extends AlertDialog {
             }
 
         }
-        LogUtil.i(hourList.toString());
-        LogUtil.i(minuteList.toString());
+//        LogUtil.i(hourList.toString());
+//        LogUtil.i(minuteList.toString());
         lp_hour.setItems(hourList);
         lp_minute.setItems(minuteList);
         shour = time.hour + "";

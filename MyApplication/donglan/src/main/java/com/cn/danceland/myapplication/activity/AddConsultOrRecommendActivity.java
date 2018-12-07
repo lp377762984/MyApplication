@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 

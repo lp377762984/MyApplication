@@ -73,6 +73,7 @@ import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.activity.TextPushActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.YeJiZhanBanActivity;
 import com.cn.danceland.myapplication.activity.YeWuActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -81,6 +82,7 @@ import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.im.ui.ConversationActivity;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
@@ -1053,6 +1055,7 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 41://业绩展板
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
+                        startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
                         break;
                     case 42://会籍推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍推送");

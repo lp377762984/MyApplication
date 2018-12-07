@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.MyConSumeBean;
 import com.cn.danceland.myapplication.bean.MyConsumeCon;
 import com.cn.danceland.myapplication.utils.Constants;

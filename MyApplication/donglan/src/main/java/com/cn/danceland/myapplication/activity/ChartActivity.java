@@ -4,6 +4,8 @@ package com.cn.danceland.myapplication.activity;
 //import lecho.lib.hellocharts.model.SliceValue;
 //import lecho.lib.hellocharts.view.PieChartView;
 
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
+
 /**
  * Created by 64456 on 2017/9/21.
  */

@@ -16,6 +16,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequstRecommendBean;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -147,7 +148,7 @@ public class RecommendedFragment extends BaseFragment {
             TextView tv_time = view.findViewById(R.id.tv_time);
             TextView tv_status = view.findViewById(R.id.tv_status);
             ImageView iv_sex = view.findViewById(R.id.iv_sex);
-            tv_name.setText(dataList.get(i).getName());
+            tv_name.setText(dataList.get(i).getMember_name());
             tv_phone.setText("联系电话:"+dataList.get(i).getMember_phone());
             tv_time.setText("推荐时间:"+TimeUtils.timeStamp2Date(dataList.get(i).getCreate_date() + "", new String("yyyy.MM.dd")));
             if (dataList.get(i).getGender() == 1) {

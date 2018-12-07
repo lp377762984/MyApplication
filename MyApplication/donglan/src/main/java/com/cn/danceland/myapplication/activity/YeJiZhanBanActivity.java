@@ -11,9 +11,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.MyCardFragment;
-import com.cn.danceland.myapplication.fragment.MySendCardFragment;
+import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
+import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -46,7 +47,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_card);
+        setContentView(R.layout.activity_yjzb);
         EventBus.getDefault().register(this);
         initView();
     }
@@ -60,20 +61,34 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-        switch (event.getEventCode()) {
-            case 6881://入场成功
-                finish();
-
-                break;
-            default:
-                break;
-        }
+//        switch (event.getEventCode()) {
+//            case 6881://入场成功
+//                finish();
+//
+//                break;
+//            default:
+//                break;
+//        }
 
     }
+    private void showDate() {
 
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期");
+        customDateAndTimePicker.setGoneHourAndMinute();
+        customDateAndTimePicker.showWindow();
+        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
+            @Override
+            public void onClick() {
+                String dateString = customDateAndTimePicker.getHorizongtal();
+//                tv_birthday.setText(dateString);
+//                potentialInfo.setBirthday(dateString);
+                EventBus.getDefault().post(new StringEvent(dateString,7100));
+            }
+        });
+    }
     private void initView() {
-        findViewById(R.id.iv_back).setOnClickListener(this);
-        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        findViewById(R.id.iv_rili).setOnClickListener(this);
+         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(myViewPagerAdapter);
@@ -158,6 +173,9 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.iv_rili:
+                showDate();
+                break;
             default:
                 break;
         }
@@ -176,12 +194,12 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 //            bundle.putString("id", id);
 //            bundle.putString("auth",auth);
             if (arg0 == 0) {
-                MyCardFragment fragment = new MyCardFragment();
+                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
 
                 //  fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                MySendCardFragment fragment = new MySendCardFragment();
+                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
                 //   fragment.setArguments(bundle);
                 return fragment;
             }

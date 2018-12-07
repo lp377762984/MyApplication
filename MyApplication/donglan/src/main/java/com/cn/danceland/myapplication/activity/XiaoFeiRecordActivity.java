@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.XiaoFeiJiLvBean;
 import com.cn.danceland.myapplication.bean.store.storebill.StoreBillCond;
@@ -239,6 +240,7 @@ public class XiaoFeiRecordActivity extends BaseActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             int type = list.get(position).getBus_type();
+            viewHolder.tv_time.setVisibility(View.VISIBLE);
             if (list.get(position).getType() == 1) {//充钱
                 viewHolder.tv_ac.setText("充");
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#ff5e3a"));
@@ -255,6 +257,7 @@ public class XiaoFeiRecordActivity extends BaseActivity {
                 viewHolder.tv_xiaofei.setTextColor(Color.parseColor("#6d819c"));
                 viewHolder.tv_ac.setBackground(getResources().getDrawable(R.drawable.circle_deep_red));
                 viewHolder.tv_xiaofei.setText("¥ " + list.get(position).getPrice() + "元");
+                viewHolder.tv_time.setVisibility(View.GONE);
             }
             if (list.get(position).getGiving() != 0) {
                 viewHolder.tv_time.setText("¥+ " +list.get(position).getGiving() + "元");

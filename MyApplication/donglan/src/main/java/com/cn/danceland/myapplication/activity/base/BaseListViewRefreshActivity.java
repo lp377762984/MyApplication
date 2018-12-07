@@ -1,6 +1,9 @@
-package com.cn.danceland.myapplication.fragment;
+package com.cn.danceland.myapplication.activity.base;
+
 
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -16,25 +19,31 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by shy on 2018/12/4 10:18
+ * Created by shy on 2018/12/4 09:22
  * Email:644563767@qq.com
- * 下拉刷新基类
  */
 
 
-public abstract class BaseRefreshFragment extends BaseFragment {
+public abstract class BaseListViewRefreshActivity extends BaseActivity {
 
     private TextView tv_tiltle;
     private PullToRefreshListView pullToRefresh;
     private boolean isEnd;
     private int mCurrentPage=0;
+
     @Override
-    public View initViews() {
-        View view =View.inflate(mActivity, R.layout.fragment_base_refresh,null);
-        tv_tiltle =view. findViewById(R.id.donglan_title);
-        pullToRefresh = view.findViewById(R.id.pullToRefresh);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base_refresh);
+        initView();
+        initData();
+    }
+
+    public void initView() {
+        tv_tiltle = findViewById(R.id.donglan_title);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
         //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
-        View listEmptyView = view.findViewById(R.id.rl_no_info);
+        View listEmptyView = findViewById(R.id.rl_no_info);
         listEmptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,9 +83,8 @@ public abstract class BaseRefreshFragment extends BaseFragment {
                 timer.schedule(task, 1000);
             }
         });
-        return view;
-    }
 
+    }
     /**
      * 下拉刷新
      */
@@ -109,7 +117,7 @@ public abstract class BaseRefreshFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-                initData();
+              initData();
             }
 
 
@@ -124,8 +132,8 @@ public abstract class BaseRefreshFragment extends BaseFragment {
         }
     }
 
-
     private void init() {
+        isEnd=true;
         // 设置下拉刷新文本
         ILoadingLayout startLabels = pullToRefresh
                 .getLoadingLayoutProxy(true, false);
@@ -163,15 +171,7 @@ public abstract class BaseRefreshFragment extends BaseFragment {
 
     public abstract ListAdapter setAtapter();
 
-    public abstract void initRereshData();
+    public abstract void initData();
 
-    @Override
-    public void initData() {
-        initRereshData();
-    }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.ImageFolder;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.zhihu.matisse.Matisse;
@@ -38,7 +39,7 @@ import java.util.List;
  * Created by feng on 2017/10/24.
  */
 
-public class ImagesActivity extends BaseActivity{
+public class ImagesActivity extends BaseActivity {
     Uri uri;
     GridView photo_grid;
     ContentResolver contentResolver;

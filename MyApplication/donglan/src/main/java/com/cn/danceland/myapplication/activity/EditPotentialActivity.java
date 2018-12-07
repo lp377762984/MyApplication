@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.ParamInfoBean;
 import com.cn.danceland.myapplication.bean.PotentialInfo;

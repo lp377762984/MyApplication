@@ -34,7 +34,7 @@ public class MyStringRequest extends StringRequest {
         map.put("version", Constants.getVersion());
         map.put("platform", Constants.getPlatform());
         map.put("channel", AppUtils.getChannelCode());
-      //  LogUtil.e(map.toString());
+    //    LogUtil.e(map.toString());
         return map;
 
     }

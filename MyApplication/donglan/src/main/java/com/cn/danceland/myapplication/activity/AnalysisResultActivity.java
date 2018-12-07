@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.DLResult;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysis;
 import com.cn.danceland.myapplication.bean.bca.bcaanalysis.BcaAnalysisCond;

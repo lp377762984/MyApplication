@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.widget.ListView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 
 /**
  * Created by feng on 2018/3/30.

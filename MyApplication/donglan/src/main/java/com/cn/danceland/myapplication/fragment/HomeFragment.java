@@ -40,6 +40,7 @@ import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.DensityUtils;
@@ -246,7 +247,9 @@ public class HomeFragment extends BaseFragment {
 
         refreshLayout.setPrimaryColorsId(R.color.home_top_bg_color, R.color.white_color80);//下拉刷新主题颜色 前面背景色 后面图色
 //        refreshLayout.setRefreshHeader(new BezierRadarHeader(mActivity).setEnableHorizontalDrag(true));//设置 Header 为 贝塞尔雷达 样式
-        refreshLayout.setRefreshHeader(new ClassicsHeader(mActivity));//设置 Header 为 贝塞尔雷达 样式
+        ClassicsHeader header=new ClassicsHeader(mActivity);
+        header.setHeaderTextColor(getResources().getColor(R.color.white));
+        refreshLayout.setRefreshHeader(header);//设置 Header 为 贝塞尔雷达 样式
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
         refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
         refreshLayout.setEnableHeaderTranslationContent(false);//拖动Header的时候是否同时拖动内容（默认true）

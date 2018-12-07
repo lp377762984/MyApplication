@@ -1,9 +1,6 @@
-package com.cn.danceland.myapplication.activity;
-
+package com.cn.danceland.myapplication.fragment.base;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -11,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.utils.LogUtil;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -19,31 +17,26 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by shy on 2018/12/4 09:22
+ * Created by shy on 2018/12/4 10:18
  * Email:644563767@qq.com
+ * 下拉刷新基类
  */
 
 
-public abstract class BaseRefreshActivity extends BaseActivity {
+public abstract class BaseListViewRefreshFragment extends BaseFragment {
 
     private TextView tv_tiltle;
     private PullToRefreshListView pullToRefresh;
     private boolean isEnd;
     private int mCurrentPage=0;
-
+    ListAdapter listAdapter;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_refresh);
-        initView();
-        initData();
-    }
-
-    public void initView() {
-        tv_tiltle = findViewById(R.id.donglan_title);
-        pullToRefresh = findViewById(R.id.pullToRefresh);
+    public View initViews() {
+        View view =View.inflate(mActivity, R.layout.fragment_base_refresh,null);
+        tv_tiltle =view. findViewById(R.id.donglan_title);
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
         //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
-        View listEmptyView = findViewById(R.id.rl_no_info);
+        View listEmptyView = view.findViewById(R.id.rl_error);
         listEmptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +46,11 @@ public abstract class BaseRefreshActivity extends BaseActivity {
         TextView tv_error = listEmptyView.findViewById(R.id.tv_error);
         ImageView imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error);
-        pullToRefresh.setAdapter(setAtapter());
+        if (setAtapter()==null){
+            LogUtil.i("adapter is null");
+        }
+        listAdapter=setAtapter();
+        pullToRefresh.setAdapter(listAdapter);
         //设置下拉刷新模式both是支持下拉和上拉
         pullToRefresh.setMode(PullToRefreshBase.Mode.BOTH);
         init();
@@ -83,8 +80,30 @@ public abstract class BaseRefreshActivity extends BaseActivity {
                 timer.schedule(task, 1000);
             }
         });
-
+        return view;
     }
+
+    public ListAdapter getlistadapter(){
+        return this.listAdapter;
+    }
+
+    public ListAdapter getListAdapter() {
+        return listAdapter;
+    }
+
+    public PullToRefreshListView getPullToRefresh() {
+        return pullToRefresh;
+    }
+
+    public void setPullToRefresh(PullToRefreshListView pullToRefresh) {
+        this.pullToRefresh = pullToRefresh;
+    }
+
+    public void setListAdapter(ListAdapter listAdapter) {
+        this.listAdapter = listAdapter;
+        pullToRefresh.setAdapter(listAdapter);
+    }
+
     /**
      * 下拉刷新
      */
@@ -117,7 +136,7 @@ public abstract class BaseRefreshActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isEnd) {//还有数据请求
-              initData();
+                initData();
             }
 
 
@@ -132,8 +151,8 @@ public abstract class BaseRefreshActivity extends BaseActivity {
         }
     }
 
+
     private void init() {
-        isEnd=true;
         // 设置下拉刷新文本
         ILoadingLayout startLabels = pullToRefresh
                 .getLoadingLayoutProxy(true, false);
@@ -171,7 +190,15 @@ public abstract class BaseRefreshActivity extends BaseActivity {
 
     public abstract ListAdapter setAtapter();
 
-    public abstract void initData();
+    public abstract void initRereshData();
 
+    @Override
+    public void initData() {
+        initRereshData();
+    }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.activity.EditPotentialActivity;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
 import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseFragmentEventBus;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;

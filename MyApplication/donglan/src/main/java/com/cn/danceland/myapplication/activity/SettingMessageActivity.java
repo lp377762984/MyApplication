@@ -1,7 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -13,24 +12,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.app.AppManager;
-import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.FitnessResultsSummaryBean;
-import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.SettingMessageBean;
 import com.cn.danceland.myapplication.bean.SettingMessageSaveBean;
 import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MD5Utils;
-import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
-import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

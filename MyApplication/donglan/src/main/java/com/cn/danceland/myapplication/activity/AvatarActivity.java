@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.pictureviewer.ImageDetailFragment2;
 
 /**

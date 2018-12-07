@@ -32,6 +32,7 @@ import com.cn.danceland.myapplication.activity.PotentialDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.im.model.FriendProfile;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.ui.ChatActivity;
