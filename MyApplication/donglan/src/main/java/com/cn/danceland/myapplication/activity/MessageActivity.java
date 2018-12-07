@@ -143,7 +143,6 @@ public class MessageActivity extends BaseActivity {
         systemContent.setText("系统");
         tablayout.addTab(tablayout.newTab().setCustomView(systemView));
 
-        queryCount();//请求后面数据，刷新未读数  通知
 //        tablayout.addTab(tablayout.newTab().setText("发现"));
 //        tablayout.addTab(tablayout.newTab().setText("通知"));
 //        tablayout.addTab(tablayout.newTab().setText("系统"));
@@ -180,15 +179,7 @@ public class MessageActivity extends BaseActivity {
                 currentTabIndex = tab.getPosition();
                 if (currentTabIndex == 0) {//发现
                     showFragment("0");
-                }
-//                else if (currentTabIndex == 1) {
-//                    SPUtils.setInt("dianzanNum", 0);
-//                    showFragment("1");//点赞
-//                } else if (currentTabIndex == 2) {
-//                    SPUtils.setInt("fansNum", 0);
-//                    showFragment("2");//关注
-//                }
-                else if (currentTabIndex == 1) {
+                } else if (currentTabIndex == 1) {
                     SPUtils.setInt("pinglunNum", 0);
                     SPUtils.setInt("dianzanNum", 0);
                     SPUtils.setInt("fansNum", 0);
@@ -247,6 +238,9 @@ public class MessageActivity extends BaseActivity {
         } else if (TextUtils.equals(str, "2")) {
             fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
         }
+        queryCount("1");//请求后面数据，刷新未读数  通知
+        queryCount("2");//请求后面数据，刷新未读数  通知
+        queryCount("3");//请求后面数据，刷新未读数  通知
 //        if (TextUtils.equals(str, "5")) {
 //            LogUtil.i("显示对话列表");
         //        fragmentTransaction
@@ -323,9 +317,9 @@ public class MessageActivity extends BaseActivity {
     /**
      * 查询数据
      *
-     * @throws JSONException
+     * @param type 类型(1=>发现,2=>日常,3=>系统)0所有
      */
-    public void queryCount() {
+    public void queryCount(final String type) {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.QUERY_COUNT, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -334,15 +328,43 @@ public class MessageActivity extends BaseActivity {
                 LogUtil.i(infoBean.toString());
                 LogUtil.i("code--" + infoBean.getCode());
                 if (infoBean.getSuccess() && infoBean.getCode() == 0) {
-                    if (infoBean.getData().equals("0")) {
-                        messageNum.setVisibility(View.GONE);
-                    } else {
-                        messageNum.setVisibility(View.VISIBLE);
-                    }
-                    if (Integer.valueOf(infoBean.getData()) > 99) {
-                        messageNum.setText(99 + "");
-                    } else {
-                        messageNum.setText(infoBean.getData());
+                    switch (type) {
+                        case "1":
+                            if (infoBean.getData().equals("0")) {
+                                foundNum.setVisibility(View.GONE);
+                            } else {
+                                foundNum.setVisibility(View.VISIBLE);
+                            }
+                            if (Integer.valueOf(infoBean.getData()) > 99) {
+                                foundNum.setText(99 + "");
+                            } else {
+                                foundNum.setText(infoBean.getData());
+                            }
+                            break;
+                        case "2":
+                            if (infoBean.getData().equals("0")) {
+                                messageNum.setVisibility(View.GONE);
+                            } else {
+                                messageNum.setVisibility(View.VISIBLE);
+                            }
+                            if (Integer.valueOf(infoBean.getData()) > 99) {
+                                messageNum.setText(99 + "");
+                            } else {
+                                messageNum.setText(infoBean.getData());
+                            }
+                            break;
+                        case "3":
+                            if (infoBean.getData().equals("0")) {
+                                systemNum.setVisibility(View.GONE);
+                            } else {
+                                systemNum.setVisibility(View.VISIBLE);
+                            }
+                            if (Integer.valueOf(infoBean.getData()) > 99) {
+                                systemNum.setText(99 + "");
+                            } else {
+                                systemNum.setText(infoBean.getData());
+                            }
+                            break;
                     }
                 }
             }
@@ -359,7 +381,7 @@ public class MessageActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("type", "0");//目前传啥都一样 2018-11-28 敬请期待后续版本
+                map.put("type", type);//类型(1=>发现,2=>日常,3=>系统)0所有
                 return map;
             }
         };
@@ -374,36 +396,17 @@ public class MessageActivity extends BaseActivity {
     @Subscribe
     public void onEventMainThread(StringEvent event) {
         switch (event.getEventCode()) {
-            case EventConstants.MY_MESSAGE_FOUND_NUM:
-                if (event.getMsg().equals("0")) {
-                    foundNum.setVisibility(View.GONE);
-                } else {
-                    foundNum.setVisibility(View.VISIBLE);
-                }
-                if (Integer.valueOf(event.getMsg()) > 99) {
-                    foundNum.setText(99 + "");
-                } else {
-                    foundNum.setText(event.getMsg());
-                }
+            case EventConstants.MY_MESSAGE_FOUND_NUM://我的通知发现未读数
+                queryCount("1");//(1=>发现,2=>日常,3=>系统)0所有
                 break;
-            case EventConstants.MY_MESSAGE_NOTICE_NUM:
-                queryCount();
+            case EventConstants.MY_MESSAGE_DAILY_NUM://我的通知日常未读数
+                queryCount("2");//(1=>发现,2=>日常,3=>系统)0所有
                 break;
-            case EventConstants.MY_MESSAGE_SYSTEM_NUM:
-                if (event.getMsg().equals("0")) {
-                    systemNum.setVisibility(View.GONE);
-                } else {
-                    systemNum.setVisibility(View.VISIBLE);
-                }
-                if (Integer.valueOf(event.getMsg()) > 99) {
-                    systemNum.setText(99 + "");
-                } else {
-                    systemNum.setText(event.getMsg());
-                }
+            case EventConstants.MY_MESSAGE_SYSTEM_NUM://我的通知系统未读数
+                queryCount("3");//(1=>发现,2=>日常,3=>系统)0所有
                 break;
             default:
                 break;
         }
-
     }
 }

@@ -16,7 +16,7 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_bg_mianlayout"
+        android:background="@color/transparent"
         app:srlPrimaryColor="#444444"
         app:srlAccentColor="@color/color_dl_black"
         app:srlEnablePreviewInEditMode="true">

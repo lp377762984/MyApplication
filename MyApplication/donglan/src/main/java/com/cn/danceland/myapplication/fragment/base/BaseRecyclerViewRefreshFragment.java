@@ -98,7 +98,7 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-                refreshLayout.setNoMoreData(false);//恢复没有更多数据的原始状态
+                refreshlayout.setNoMoreData(false);//恢复加载更多的状态
                 TimerTask task = new TimerTask() {
                     public void run() {
                         new DownRefresh().execute();
@@ -135,10 +135,8 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
         mRecycler.setAdapter(listAdapter);
     }
 
+
     public void setOnlyDownReresh() {
-
-
-
         refreshLayout.finishLoadMoreWithNoMoreData();
     }
 

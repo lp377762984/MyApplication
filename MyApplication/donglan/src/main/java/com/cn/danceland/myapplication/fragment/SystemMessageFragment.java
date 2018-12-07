@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -62,7 +65,7 @@ public class SystemMessageFragment extends BaseFragment {
     private Gson gson = new Gson();
 
     private List<RequestNoticeListBean.Data.Content> datalist = new ArrayList<>();
-    private int mCurrentPage = 1;//起始请求页
+    private int mCurrentPage = 0;//起始请求页
     private boolean isEnd = false;
 
     @Override
@@ -73,42 +76,43 @@ public class SystemMessageFragment extends BaseFragment {
         rl_error = v.findViewById(R.id.rl_error);
         iv_error = rl_error.findViewById(R.id.iv_error);
         Glide.with(mActivity).load(R.drawable.img_error).into(iv_error);
+
         tv_error = rl_error.findViewById(R.id.tv_error);
-        tv_error.setText("您还未收到任何消息");
+        tv_error.setText("您还未收到任何通知");
 
         mListView.getRefreshableView().setEmptyView(rl_error);
         myListAatapter = new NoticeAdapter();
         mListView.setAdapter(myListAatapter);
+        mListView.getRefreshableView().setOverScrollMode(View.OVER_SCROLL_NEVER);//去掉下拉阴影
         //设置下拉刷新模式both是支持下拉和上拉
-        mListView.setMode(PullToRefreshBase.Mode.DISABLED);
-//        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(
-//                    PullToRefreshBase<ListView> refreshView) {
-//
-//                TimerTask task = new TimerTask() {
-//                    public void run() {
-//                        new DownRefresh().execute();
-//                    }
-//                };
-//                Timer timer = new Timer();
-//                timer.schedule(task, 1000);
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(
-//                    PullToRefreshBase<ListView> refreshView) {
-//                TimerTask task = new TimerTask() {
-//                    public void run() {
-//                        new UpRefresh().execute();
-//                    }
-//                };
-//                Timer timer = new Timer();
-//                timer.schedule(task, 1000);
-//            }
-//        });
-//
-//        init_pullToRefresh();
+        mListView.setMode(PullToRefreshBase.Mode.BOTH);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(
+                    PullToRefreshBase<ListView> refreshView) {
+
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new DownRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
+            }
+
+            @Override
+            public void onPullUpToRefresh(
+                    PullToRefreshBase<ListView> refreshView) {
+                TimerTask task = new TimerTask() {
+                    public void run() {
+                        new UpRefresh().execute();
+                    }
+                };
+                Timer timer = new Timer();
+                timer.schedule(task, 1000);
+            }
+        });
+
         return v;
     }
 
@@ -117,11 +121,13 @@ public class SystemMessageFragment extends BaseFragment {
      */
     @Override
     public void initData() {
-//        try {
-//            find_all_data(mCurrentPage-1);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        mCurrentPage=0;
+        datalist = new ArrayList<>();
+        try {
+            find_all_data(mCurrentPage);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -132,7 +138,8 @@ public class SystemMessageFragment extends BaseFragment {
         @Override
         protected Void doInBackground(Void... voids) {
             init_pullToRefresh();
-            mCurrentPage = 1;
+            mCurrentPage = 0;
+            datalist = new ArrayList<>();
             try {
                 find_all_data(mCurrentPage);
             } catch (JSONException e) {
@@ -168,7 +175,7 @@ public class SystemMessageFragment extends BaseFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             mListView.onRefreshComplete();
-            myListAatapter.notifyDataSetChanged();
+//            myListAatapter.notifyDataSetChanged();
             if (isEnd) {//没数据了
                 mListView.onRefreshComplete();
             }
@@ -176,7 +183,6 @@ public class SystemMessageFragment extends BaseFragment {
     }
 
     private void init_pullToRefresh() {
-        mListView.setMode(PullToRefreshBase.Mode.BOTH);
         // 设置下拉刷新文本
         ILoadingLayout startLabels = mListView
                 .getLoadingLayoutProxy(true, false);
@@ -201,9 +207,11 @@ public class SystemMessageFragment extends BaseFragment {
 
         StrBean strBean = new StrBean();
         strBean.page = pageCount + "";
+        strBean.type = 3 + "";
         String s = gson.toJson(strBean);
-
+        LogUtil.i("gson-" + s);
         JSONObject jsonObject = new JSONObject(s.toString());
+
         MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
@@ -213,7 +221,8 @@ public class SystemMessageFragment extends BaseFragment {
                 datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
 
                 if (datainfo.getSuccess()) {
-                    if (datainfo.getData().getLast()) {
+
+                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
                         isEnd = true;
                         setEnd();
                     } else {
@@ -221,7 +230,7 @@ public class SystemMessageFragment extends BaseFragment {
                         init_pullToRefresh();
                     }
 
-                    if (mCurrentPage == 1) {
+                    if (mCurrentPage == 0) {
                         datalist = datainfo.getData().getContent();
                         myListAatapter.notifyDataSetChanged();
                     } else {
@@ -256,6 +265,7 @@ public class SystemMessageFragment extends BaseFragment {
 
     class StrBean {
         public String page;
+        public String type;
     }
 
     @Override
@@ -304,6 +314,7 @@ public class SystemMessageFragment extends BaseFragment {
             } else {
                 layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
             }
+            vh.item_layout_cv.setLayoutParams(layoutParams);
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
             vh.tv_time.setText(datalist.get(position).getPush_date());

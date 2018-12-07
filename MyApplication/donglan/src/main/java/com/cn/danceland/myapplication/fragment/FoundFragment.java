@@ -27,8 +27,10 @@ import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
+import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -36,6 +38,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,50 +201,51 @@ public class FoundFragment extends BaseFragment {
      */
     public void find_all_data(final int pageCount) throws JSONException {
 
-//        StrBean strBean = new StrBean();
-//        strBean.page = pageCount + "";
-//        String s = gson.toJson(strBean);
-//        LogUtil.i("gson-" + s);
-//        JSONObject jsonObject = new JSONObject(s.toString());
-//
-//        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject jsonObject) {
-//                LogUtil.i(jsonObject.toString());
-//                RequestNoticeListBean datainfo = new RequestNoticeListBean();
-//                Gson gson = new Gson();
-//                datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
-//
-//                if (datainfo.getSuccess()) {
-//
-//                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
-//                        isEnd = true;
-//                        setEnd();
-//                    } else {
-//                        isEnd = false;
-//                        init_pullToRefresh();
-//                    }
-//
-//                    if (mCurrentPage == 0) {
-//                        datalist = datainfo.getData().getContent();
-//                        myListAatapter.notifyDataSetChanged();
-//                    } else {
-//                        datalist.addAll(datainfo.getData().getContent());
-//                        myListAatapter.notifyDataSetChanged();
-//                    }
-//                    mCurrentPage = mCurrentPage + 1;
-//                } else {
-//                    ToastUtils.showToastLong(datainfo.getErrorMsg());
-//                }
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                ToastUtils.showToastShort(volleyError.toString());
-//            }
-//        });
-//        MyApplication.getHttpQueues().add(stringRequest);
+        StrBean strBean = new StrBean();
+        strBean.page = pageCount + "";
+        strBean.type = 1 + "";
+        String s = gson.toJson(strBean);
+        LogUtil.i("gson-" + s);
+        JSONObject jsonObject = new JSONObject(s.toString());
+
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERY_QUERY_PAGE, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                RequestNoticeListBean datainfo = new RequestNoticeListBean();
+                Gson gson = new Gson();
+                datainfo = gson.fromJson(jsonObject.toString(), RequestNoticeListBean.class);
+
+                if (datainfo.getSuccess()) {
+
+                    if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
+                        isEnd = true;
+                        setEnd();
+                    } else {
+                        isEnd = false;
+                        init_pullToRefresh();
+                    }
+
+                    if (mCurrentPage == 0) {
+                        datalist = datainfo.getData().getContent();
+                        myListAatapter.notifyDataSetChanged();
+                    } else {
+                        datalist.addAll(datainfo.getData().getContent());
+                        myListAatapter.notifyDataSetChanged();
+                    }
+                    mCurrentPage = mCurrentPage + 1;
+                } else {
+                    ToastUtils.showToastLong(datainfo.getErrorMsg());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                ToastUtils.showToastShort(volleyError.toString());
+            }
+        });
+        MyApplication.getHttpQueues().add(stringRequest);
     }
 
     private void setEnd() {
@@ -257,6 +261,7 @@ public class FoundFragment extends BaseFragment {
 
     class StrBean {
         public String page;
+        public String type;
     }
 
     @Override
@@ -305,6 +310,7 @@ public class FoundFragment extends BaseFragment {
             } else {
                 layoutParams.setMargins(DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 5f), DensityUtils.dp2px(getActivity(), 16f), DensityUtils.dp2px(getActivity(), 11f));
             }
+            vh.item_layout_cv.setLayoutParams(layoutParams);
             vh.tv_title.setText(datalist.get(position).getTitle());
             vh.tv_content.setText(datalist.get(position).getContent());
             vh.tv_time.setText(datalist.get(position).getPush_date());

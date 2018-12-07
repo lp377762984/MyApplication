@@ -206,6 +206,7 @@ public class NoticeFragment extends BaseFragment {
 
         StrBean strBean = new StrBean();
         strBean.page = pageCount + "";
+        strBean.type = 2 + "";
         String s = gson.toJson(strBean);
         LogUtil.i("gson-" + s);
         JSONObject jsonObject = new JSONObject(s.toString());
@@ -262,6 +263,7 @@ public class NoticeFragment extends BaseFragment {
 
     class StrBean {
         public String page;
+        public String type;
     }
 
     @Override
@@ -334,7 +336,7 @@ public class NoticeFragment extends BaseFragment {
                                 int message_sum = (Integer.valueOf(message_sum_str) - 1);
                                 SPUtils.setString(Constants.MY_APP_MESSAGE_SUM, message_sum + "");//应用消息总数 用于桌面icon显示
                                 ShortcutBadger.applyCount(context, message_sum); //for 1.1.4+
-                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_NOTICE_NUM));
+                                EventBus.getDefault().post(new StringEvent(0 + "", EventConstants.MY_MESSAGE_DAILY_NUM));
                             }
                             datalist.get(position).setStatus("1");
                             myListAatapter.notifyDataSetChanged();
