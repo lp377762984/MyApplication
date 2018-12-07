@@ -15,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Checkable;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ViewHolder extends RecyclerView.ViewHolder
@@ -237,6 +240,13 @@ public class ViewHolder extends RecyclerView.ViewHolder
     {
         Checkable view = (Checkable) getView(viewId);
         view.setChecked(checked);
+        return this;
+    }
+
+    public ViewHolder setLayoutParams(int viewId, ViewGroup.LayoutParams layoutParams)
+    {
+        View view = getView(viewId);
+        view.setLayoutParams(layoutParams);
         return this;
     }
 

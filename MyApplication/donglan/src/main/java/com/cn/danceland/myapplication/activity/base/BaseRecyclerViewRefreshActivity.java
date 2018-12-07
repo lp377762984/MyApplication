@@ -57,13 +57,13 @@ public abstract class BaseRecyclerViewRefreshActivity extends BaseActivity imple
 
         refreshLayout = findViewById(R.id.refreshLayout);
         //   View listEmptyView = View.inflate(this, R.layout.no_info_layout, (ViewGroup) pullToRefresh.getRefreshableView().getParent());
-        View listEmptyView = findViewById(R.id.rl_error);
-        listEmptyView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initData();
-            }
-        });
+        View listEmptyView = findViewById(R.id.rl_no_info);
+//        listEmptyView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                initData();
+//            }
+//        });
         TextView tv_error = listEmptyView.findViewById(R.id.tv_error);
         ImageView imageView = listEmptyView.findViewById(R.id.iv_error);
         imageView.setImageResource(R.drawable.img_error);
