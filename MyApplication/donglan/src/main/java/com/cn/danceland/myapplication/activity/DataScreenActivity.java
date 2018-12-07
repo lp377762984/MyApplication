@@ -108,7 +108,6 @@ public class DataScreenActivity extends BaseActivity {
     }
 
     private void initData() {
-        LogUtil.i("token=" + SPUtils.getString(Constants.MY_TOKEN, null));
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_SH_TOTAL, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {

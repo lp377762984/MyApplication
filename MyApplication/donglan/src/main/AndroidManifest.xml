@@ -887,6 +887,16 @@
             android:name=".activity.DataScreenActivity"
             android:screenOrientation="portrait" />
 
+        <!--门店 文字推送-->
+        <activity
+            android:name=".activity.TextPushActivity"
+            android:screenOrientation="portrait" />
+
+        <!--门店 文字推送列表-->
+        <activity
+            android:name=".activity.TextPushListActivity"
+            android:screenOrientation="portrait" />
+
         <!--我的 运动数据-数据总览-->
 
         <!--QQ登录配置 start-->
