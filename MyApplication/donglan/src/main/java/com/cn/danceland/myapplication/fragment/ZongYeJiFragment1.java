@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -68,8 +69,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 //        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
 //        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
         mylistAtapter.setEmptyView(R.layout.no_info_layout);
-//        mylistAtapter.addHeaderView(View.inflate(mActivity,R.layout.no_info_layout,null));
-//        mylistAtapter.addFootView(View.inflate(mActivity,R.layout.no_info_layout,null));
+        mylistAtapter.addHeaderView(View.inflate(mActivity,R.layout.empty_8dp_layout,null));
+        mylistAtapter.addFootView(View.inflate(mActivity,R.layout.empty_8dp_layout,null));
         return mylistAtapter;
     }
 

@@ -14,7 +14,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -43,6 +45,8 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     private ViewPager mViewPager;
 
     public String[] mTitleDataList = new String[]{"今日总业绩", "今日总业务"};
+    private DongLanTitleView titleView;
+   private String mDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_yjzb);
         EventBus.getDefault().register(this);
         initView();
+        mDate = TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd");
     }
 
     @Override
@@ -71,9 +76,9 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 //        }
 
     }
-    private void showDate() {
+    private void showDate(String date) {
 
-        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期");
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期",date);
         customDateAndTimePicker.setGoneHourAndMinute();
         customDateAndTimePicker.showWindow();
         customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
@@ -82,12 +87,15 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
                 String dateString = customDateAndTimePicker.getHorizongtal();
 //                tv_birthday.setText(dateString);
 //                potentialInfo.setBirthday(dateString);
+               mDate=dateString;
                 EventBus.getDefault().post(new StringEvent(dateString,7100));
+                titleView.setTitle("业绩展板("+dateString.replace("-",".")+")");
             }
         });
     }
     private void initView() {
         findViewById(R.id.iv_rili).setOnClickListener(this);
+        titleView = findViewById(R.id.dl_title);
          MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
@@ -174,7 +182,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.iv_rili:
-                showDate();
+                showDate(mDate);
                 break;
             default:
                 break;

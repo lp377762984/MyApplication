@@ -191,7 +191,7 @@ public class JiaoLianCourseActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("employeeId", data.getEmployee().getId()+"");
-                map.put("date", startTime);
+                map.put("mDate", startTime);
                 return map;
 
             }
@@ -459,7 +459,7 @@ public class JiaoLianCourseActivity extends BaseActivity {
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         //  nccalendar = findViewById(nccalendar);
         tv_date = findViewById(R.id.tv_date);
-        //date = findViewById(date);
+        //mDate = findViewById(mDate);
         week = findViewById(R.id.week);
         tablayout = findViewById(R.id.tablayout);
         tab1 = tablayout.getTabAt(0);
@@ -509,7 +509,7 @@ public class JiaoLianCourseActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if ("0".equals(type)) {//列表
             if ("0".equals(isTuanke)) {//团课
-                //      date.setVisibility(View.VISIBLE);
+                //      mDate.setVisibility(View.VISIBLE);
                 //     week.setVisibility(View.VISIBLE);
                 //     nccalendar.setVisibility(View.VISIBLE);
                 mCalendarView.setVisibility(View.VISIBLE);
@@ -533,7 +533,7 @@ public class JiaoLianCourseActivity extends BaseActivity {
         } else if ("1".equals(type)) {
 
             if ("0".equals(isTuanke)) {
-                //     date.setVisibility(View.GONE);
+                //     mDate.setVisibility(View.GONE);
                 //  week.setVisibility(View.GONE);
                 //    nccalendar.setVisibility(View.GONE);
                 mCalendarView.setVisibility(View.GONE);

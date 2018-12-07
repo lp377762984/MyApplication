@@ -35,6 +35,10 @@ public class CustomDateAndTimePicker extends AlertDialog {
     private final TextView tv_year;
     private final TextView tv_mounth;
     private final TextView tv_date;
+    private String CurrentDate;
+    ArrayList<String> yearList;
+    ArrayList<String> monthList;
+    ArrayList<String> dateList;
 
     public CustomDateAndTimePicker(Context context, String title) {
         super(context);
@@ -58,6 +62,31 @@ public class CustomDateAndTimePicker extends AlertDialog {
             }
         });
     }
+
+    public CustomDateAndTimePicker(Context context, String title, String date) {
+        super(context);
+        this.CurrentDate = date;
+        this.title = title;
+        inflate1 = LayoutInflater.from(context).inflate(R.layout.datepicker, null);
+        lp_year = inflate1.findViewById(R.id.lp_year);
+        tv_year = inflate1.findViewById(R.id.tv_year);
+        lp_month = inflate1.findViewById(R.id.lp_month);
+        tv_mounth = inflate1.findViewById(R.id.tv_mounth);
+        lp_date = inflate1.findViewById(R.id.lp_date);
+        tv_date = inflate1.findViewById(R.id.tv_date);
+        lp_hour = inflate1.findViewById(R.id.lp_hour);
+        lp_minute = inflate1.findViewById(R.id.lp_minute);
+        tv_hour = inflate1.findViewById(R.id.tv_hour);
+        tv_minute = inflate1.findViewById(R.id.tv_minute);
+        alertdialog = new AlertDialog.Builder(context);
+        alertdialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onClickEnter.onClick();
+            }
+        });
+    }
+
 
     public interface OnClickEnter {
         public void onClick();
@@ -97,15 +126,15 @@ public class CustomDateAndTimePicker extends AlertDialog {
     private void showDate() {
         time = new Time();
         time.setToNow();
-        final int year = time.year+10;
+        final int year = time.year + 10;
         ViewGroup parent = (ViewGroup) inflate1.getParent();
         if (parent != null) {
             parent.removeAllViews();
         }
 
-        final ArrayList<String> yearList = new ArrayList<String>();
-        final ArrayList<String> monthList = new ArrayList<String>();
-        final ArrayList<String> dateList = new ArrayList<String>();
+        yearList = new ArrayList<String>();
+        monthList = new ArrayList<String>();
+        dateList = new ArrayList<String>();
         int n = 1900;
         int len = year - n;
 
@@ -126,8 +155,8 @@ public class CustomDateAndTimePicker extends AlertDialog {
         lp_year.setItems(yearList);
         lp_month.setItems(monthList);
 
-        lp_year.setInitPosition(yearList.size()-11);
-        syear = yearList.get(yearList.size()-11).replace("年", "");
+        lp_year.setInitPosition(yearList.size() - 11);
+        syear = yearList.get(yearList.size() - 11).replace("年", "");
         lp_month.setInitPosition(0);
         smonth = monthList.get(0).replace("月", "");
         sdate = "1";
@@ -204,20 +233,19 @@ public class CustomDateAndTimePicker extends AlertDialog {
         });
 
 
-
         final ArrayList<String> hourList = new ArrayList<String>();
         final ArrayList<String> minuteList = new ArrayList<String>();
 
         for (int x = 0; x < 24; x++) {
             if (x < 10) {
-                hourList.add("0" + x+"时");
+                hourList.add("0" + x + "时");
             } else {
                 hourList.add(x + "时");
             }
         }
         for (int y = 0; y < 60; y++) {
             if (y < 10) {
-                minuteList.add("0" + y+"分");
+                minuteList.add("0" + y + "分");
             } else {
                 minuteList.add(y + "分");
             }
@@ -228,20 +256,20 @@ public class CustomDateAndTimePicker extends AlertDialog {
         lp_hour.setItems(hourList);
         lp_minute.setItems(minuteList);
         shour = time.hour + "";
-        if(shour.length()==1){
-            shour="0"+time.hour;
+        if (shour.length() == 1) {
+            shour = "0" + time.hour;
         }
         for (int i = 0; i < hourList.size(); i++) {
-            if (shour.equals(hourList.get(i).replace("时",""))) {
+            if (shour.equals(hourList.get(i).replace("时", ""))) {
                 lp_hour.setInitPosition(i);
             }
         }
         sminute = time.minute + "";
-        if(sminute.length()==1){
-            sminute="0"+time.minute;
+        if (sminute.length() == 1) {
+            sminute = "0" + time.minute;
         }
         for (int i = 0; i < minuteList.size(); i++) {
-            if (sminute.equals(minuteList.get(i).replace("分",""))) {
+            if (sminute.equals(minuteList.get(i).replace("分", ""))) {
                 lp_minute.setInitPosition(i);
             }
         }
@@ -261,15 +289,19 @@ public class CustomDateAndTimePicker extends AlertDialog {
         lp_hour.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                shour = hourList.get(index).replace("时","");
+                shour = hourList.get(index).replace("时", "");
             }
         });
         lp_minute.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                sminute = minuteList.get(index).replace("分","");
+                sminute = minuteList.get(index).replace("分", "");
             }
         });
+
+        if (CurrentDate!=null){
+            setdate(CurrentDate);
+        }
 
 
         alertdialog.setTitle(title);
@@ -297,9 +329,9 @@ public class CustomDateAndTimePicker extends AlertDialog {
             parent.removeAllViews();
         }
 
-        final ArrayList<String> yearList = new ArrayList<String>();
-        final ArrayList<String> monthList = new ArrayList<String>();
-        final ArrayList<String> dateList = new ArrayList<String>();
+        yearList = new ArrayList<String>();
+        monthList = new ArrayList<String>();
+        dateList = new ArrayList<String>();
         int n = 1900;
         int len = year - n;
         for (int i = 0; i <= len; i++) {
@@ -447,36 +479,36 @@ public class CustomDateAndTimePicker extends AlertDialog {
 
         for (int x = 0; x < 24; x++) {
             if (x < 10) {
-                hourList.add("0" + x+"时");
+                hourList.add("0" + x + "时");
             } else {
-                hourList.add(x + ""+"时");
+                hourList.add(x + "" + "时");
             }
         }
         for (int y = 0; y < 60; y++) {
             if (y < 10) {
-                minuteList.add("0" + y+"分");
+                minuteList.add("0" + y + "分");
             } else {
-                minuteList.add(y + ""+"分");
+                minuteList.add(y + "" + "分");
             }
 
         }
         lp_hour.setItems(hourList);
         lp_minute.setItems(minuteList);
         shour = time.hour + "";
-        if(shour.length()==1){
-            shour="0"+time.hour;
+        if (shour.length() == 1) {
+            shour = "0" + time.hour;
         }
         for (int i = 0; i < hourList.size(); i++) {
-            if (shour.equals(hourList.get(i).replace("时",""))) {
+            if (shour.equals(hourList.get(i).replace("时", ""))) {
                 lp_hour.setInitPosition(i);
             }
         }
         sminute = time.minute + "";
-        if(sminute.length()==1){
-            sminute="0"+time.minute;
+        if (sminute.length() == 1) {
+            sminute = "0" + time.minute;
         }
         for (int i = 0; i < minuteList.size(); i++) {
-            if (sminute.equals(minuteList.get(i).replace("分",""))) {
+            if (sminute.equals(minuteList.get(i).replace("分", ""))) {
                 lp_minute.setInitPosition(i);
             }
         }
@@ -494,16 +526,20 @@ public class CustomDateAndTimePicker extends AlertDialog {
         lp_hour.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                shour = hourList.get(index).replace("时","");
+                shour = hourList.get(index).replace("时", "");
             }
         });
         lp_minute.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                sminute = minuteList.get(index).replace("分","");
+                sminute = minuteList.get(index).replace("分", "");
             }
         });
 
+
+        if (CurrentDate!=null){
+            setdate(CurrentDate);
+        }
 
         alertdialog.setTitle(title);
         alertdialog.setView(inflate1);
@@ -512,6 +548,21 @@ public class CustomDateAndTimePicker extends AlertDialog {
 
     }
 
+    private void setdate(String date) {
+        String[] dates = date.split("-");
+
+        int yearpos = yearList.indexOf(dates[0] + "年");
+        lp_year.setCurrentPosition(yearpos);
+        syear = yearList.get(yearpos).replace("年", "");
+
+        int monthpos = monthList.indexOf(dates[1] + "月");
+        lp_month.setCurrentPosition(monthpos);
+        smonth = monthList.get(monthpos).replace("月", "");
+        int datepos = dateList.indexOf(dates[2] + "日");
+        lp_date.setCurrentPosition(datepos);
+        //    LogUtil.e(datepos+"");
+        sdate = dateList.get(datepos).replace("日", "");
+    }
 
     public String getYear() {
 

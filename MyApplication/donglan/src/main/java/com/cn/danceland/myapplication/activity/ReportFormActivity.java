@@ -188,7 +188,7 @@ public class ReportFormActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("employee_id", emp_id);
-                map.put("date", selectDate);
+                map.put("mDate", selectDate);
 
                 return map;
             }
@@ -223,7 +223,7 @@ public class ReportFormActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("date", date);
+                map.put("mDate", date);
                 map.put("current_role_type", current_role_type);
                 //map.put("target_role_type",target_role_type);
                 if (employee_id != null) {
@@ -264,7 +264,7 @@ public class ReportFormActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("date", date);
+                map.put("mDate", date);
                 map.put("current_role_type", current_role_type);
                 map.put("target_role_type", target_role_type);
                 if (employee_id != null) {
@@ -528,7 +528,7 @@ public class ReportFormActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("employee_id", emp_id);
-                map.put("date", selectDate);
+                map.put("mDate", selectDate);
 
                 return map;
             }
