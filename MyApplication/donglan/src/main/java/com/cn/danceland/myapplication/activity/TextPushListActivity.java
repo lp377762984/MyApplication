@@ -53,6 +53,7 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
         if (this.getIntent() != null) {
             from = this.getIntent().getIntExtra("from", 0);
         }
+        setTitle("推送记录");
     }
 
     /**
@@ -129,8 +130,6 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
             }
         }
     }
-
-
 
     class MotionDataAdapter extends CommonAdapter<TextPushListBean.Data.Content> {
 
