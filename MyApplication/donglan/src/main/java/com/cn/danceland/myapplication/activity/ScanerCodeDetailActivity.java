@@ -82,13 +82,14 @@ public class ScanerCodeDetailActivity extends BaseActivity {
         context = this;
 
         message = getIntent().getStringExtra("message");
+        LogUtil.i("message--" + message);
         String[] resultA = message.toString().split("\\,");
         if (resultA != null && resultA.length > 1) {
             StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_CARD_ENTER).append(",").append(resultA[resultA.length - 1]);
-            qrcode = data.toString();
-            codeId = resultA[resultA.length - 1];
+            codeId = resultA[resultA.length - 2];
         }
-        LogUtil.i("qrcode--" + qrcode);
+        qrcode = message.toString();
+        LogUtil.i("codeId--" + codeId);
         initView();
     }
 
@@ -160,7 +161,7 @@ public class ScanerCodeDetailActivity extends BaseActivity {
      * 查询数据
      */
     private void queryData() {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.SCAN_QRCODE_ENTER_V2, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);

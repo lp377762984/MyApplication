@@ -144,6 +144,4 @@ public class AlertDialogCustomToHint {
 
         void ok_bt(int dialogOKB);//点击OK 1 点击取消 0
     }
-
-    ;
 }

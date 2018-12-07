@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 我的 运动数据
+ * 我的 运动数据 验证Obj
  * Created by yxx on 2018-12-04.
  */
 
-public class MotionBean implements Serializable {
+public class MotionVerifyBean implements Serializable {
 
     private boolean success;
     private String errorMsg;
@@ -17,7 +17,7 @@ public class MotionBean implements Serializable {
 
     @Override
     public String toString() {
-        return "MotionBean{" +
+        return "MotionVerifyBean{" +
                 "success=" + success +
                 ", errorMsg='" + errorMsg + '\'' +
                 ", code='" + code + '\'' +
@@ -58,82 +58,31 @@ public class MotionBean implements Serializable {
     }
 
     public class Data implements Serializable {
-
-        private List<Data.Content> content;
-        private int number;
-        private int size;
-        private int totalElements;
-        private int numberOfElements;
-        private int totalPages;
-        private boolean last;
+        private int isOccupy;//是否占用设备(1：占用 0：未占用) ,
+        private Content lastData;//最后一条运动数据
 
         @Override
         public String toString() {
             return "Data{" +
-                    "content=" + content +
-                    ", number=" + number +
-                    ", size=" + size +
-                    ", totalElements=" + totalElements +
-                    ", numberOfElements=" + numberOfElements +
-                    ", totalPages=" + totalPages +
-                    ", last=" + last +
+                    "isOccupy=" + isOccupy +
+                    ", lastData=" + lastData +
                     '}';
         }
 
-        public List<Content> getContent() {
-            return content;
+        public int getIsOccupy() {
+            return isOccupy;
         }
 
-        public void setContent(List<Content> content) {
-            this.content = content;
+        public void setIsOccupy(int isOccupy) {
+            this.isOccupy = isOccupy;
         }
 
-        public int getNumber() {
-            return number;
+        public Content getLastData() {
+            return lastData;
         }
 
-        public void setNumber(int number) {
-            this.number = number;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
-
-        public int getTotalElements() {
-            return totalElements;
-        }
-
-        public void setTotalElements(int totalElements) {
-            this.totalElements = totalElements;
-        }
-
-        public int getNumberOfElements() {
-            return numberOfElements;
-        }
-
-        public void setNumberOfElements(int numberOfElements) {
-            this.numberOfElements = numberOfElements;
-        }
-
-        public int getTotalPages() {
-            return totalPages;
-        }
-
-        public void setTotalPages(int totalPages) {
-            this.totalPages = totalPages;
-        }
-
-        public boolean isLast() {
-            return last;
-        }
-
-        public void setLast(boolean last) {
-            this.last = last;
+        public void setLastData(Content lastData) {
+            this.lastData = lastData;
         }
 
         public class Content implements Serializable {
@@ -149,7 +98,7 @@ public class MotionBean implements Serializable {
             private String person_id;// 人员id ,
             private String speed;// 当前阶段平均速度 ,
             private String start_time;// 用户点击开始运动的时间 ,
-            private String sub_type;// 舒华设备小类型 ,
+            private Integer sub_type;// 舒华设备小类型 ,
             private String time;// 运动时长(秒) ,
             private String times;// 总次数 ,
             private String type;// 舒华设备大类型 1:跑步机 2:磁控车 3:无氧设备
@@ -273,11 +222,11 @@ public class MotionBean implements Serializable {
                 this.start_time = start_time;
             }
 
-            public String getSub_type() {
+            public Integer getSub_type() {
                 return sub_type;
             }
 
-            public void setSub_type(String sub_type) {
+            public void setSub_type(Integer sub_type) {
                 this.sub_type = sub_type;
             }
 

@@ -71,6 +71,7 @@ import com.cn.danceland.myapplication.activity.SearchFriendsActivity;
 import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
+import com.cn.danceland.myapplication.activity.TextPushActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.YeJiZhanBanActivity;
 import com.cn.danceland.myapplication.activity.YeWuActivity;
@@ -855,7 +856,6 @@ public class ShopFragment extends BaseFragment {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
             if (data != null) {
                 switch (data.get(i).getId()) {
                     case 1://在线售卡
@@ -1055,6 +1055,26 @@ public class ShopFragment extends BaseFragment {
                     case 41://业绩展板
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
                         startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
+                        break;
+                    case 42://会籍推送
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍推送");
+                        //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",101));
+                        break;
+                    case 43://教练推送
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "教练推送");
+                        //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",102));
+                        break;
+                    case 44://全店推送
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "全店推送");
+                        //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",100));
+                        break;
+                    case 45://服务部推送
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务部推送");
+                        //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",103));
                         break;
                     default:
                         ToastUtils.showToastShort("该功能正在研发中");

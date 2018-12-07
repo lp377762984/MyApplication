@@ -255,6 +255,7 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setEnableFooterTranslationContent(true);//拖动Footer的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableOverScrollDrag(false);//禁止越界拖动（1.0.4以上版本）
         refreshLayout.setRefreshFooter(new BallPulseFooter(mActivity).setSpinnerStyle(SpinnerStyle.Scale));
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -370,6 +371,12 @@ public class HomeFragment extends BaseFragment {
 //            }
 
         });//设置多功能监听器
+
+        //////////test
+
+
+
+
         return v;
     }
 
