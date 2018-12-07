@@ -14,7 +14,7 @@ import com.cn.danceland.myapplication.adapter.recyclerview.utils.WrapperUtils;
 import java.util.List;
 
 /**
- * Created by zhy on 16/4/9.
+ * Created by shy on 16/4/9.
  */
 public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     protected Context mContext;
@@ -130,26 +130,6 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
             });
             gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
         }
-
-
-
-//        WrapperUtils.onAttachedToRecyclerView(this, recyclerView, new WrapperUtils.SpanSizeCallback()
-//        {
-//            @Override
-//            public int getSpanSize(GridLayoutManager gridLayoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position)
-//            {
-//                if (isEmpty())
-//                {
-//                    return gridLayoutManager.getSpanCount();
-//                }
-//                if (oldLookup != null)
-//                {
-//                    return oldLookup.getSpanSize(position);
-//                }
-//                return 1;
-//            }
-//        });
-
 
     }
 

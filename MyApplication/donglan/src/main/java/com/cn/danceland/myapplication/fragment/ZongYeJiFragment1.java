@@ -20,6 +20,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     private List<HuiJiYeJiBean.Data> dataList = new ArrayList<>();
     private MylistAtapter mylistAtapter;
     private int mCurrentPage = 0;
-
+    private String mCurrentDate =null;
 
     @Override
     public void onEventMainThread(StringEvent event) {
@@ -50,6 +51,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 
             case 7100://刷新页面
                 if (event.getMsg() != null) {
+                    mCurrentDate=event.getMsg();
                     findhjyj(event.getMsg(), event.getMsg());
                 }
 
@@ -59,12 +61,15 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     }
 
 
+
     @Override
     public CommonAdapter setAtapter() {
         mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyeji, dataList);
 //        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
 //        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
         mylistAtapter.setEmptyView(R.layout.no_info_layout);
+//        mylistAtapter.addHeaderView(View.inflate(mActivity,R.layout.no_info_layout,null));
+//        mylistAtapter.addFootView(View.inflate(mActivity,R.layout.no_info_layout,null));
         return mylistAtapter;
     }
 
@@ -72,7 +77,10 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     @Override
     public void initDownRefreshData() {
         mCurrentPage = 0;
-        findhjyj("2017-01-01", "2019-01-01");
+        if (mCurrentDate==null){
+            mCurrentDate= TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd");
+        }
+        findhjyj(mCurrentDate, mCurrentDate);
         setOnlyDownReresh();
     }
 

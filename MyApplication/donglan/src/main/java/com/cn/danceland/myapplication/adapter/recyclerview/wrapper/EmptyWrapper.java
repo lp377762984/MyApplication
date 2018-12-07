@@ -10,7 +10,7 @@ import com.cn.danceland.myapplication.adapter.recyclerview.utils.WrapperUtils;
 
 
 /**
- * Created by zhy on 16/6/23.
+ * Created by shy on 16/6/23.
  */
 public class EmptyWrapper<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
