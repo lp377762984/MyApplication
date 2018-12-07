@@ -19,6 +19,7 @@ public abstract class CommonAdapter<T> extends MultiItemTypeAdapter<T>
     protected LayoutInflater mInflater;
 
 
+
     public CommonAdapter(final Context context, final int layoutId, List<T> datas)
     {
         super(context, datas);

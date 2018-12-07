@@ -47,7 +47,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_card);
+        setContentView(R.layout.activity_yjzb);
         EventBus.getDefault().register(this);
         initView();
     }
@@ -87,7 +87,8 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         });
     }
     private void initView() {
-        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        findViewById(R.id.iv_rili).setOnClickListener(this);
+         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(myViewPagerAdapter);
@@ -171,6 +172,9 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.iv_rili:
+                showDate();
                 break;
             default:
                 break;

@@ -49,8 +49,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 
 
             case 7100://刷新页面
-                if (event.getMsg()!=null){
-                    findhjyj(event.getMsg(),event.getMsg());
+                if (event.getMsg() != null) {
+                    findhjyj(event.getMsg(), event.getMsg());
                 }
 
             default:
@@ -61,16 +61,18 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 
     @Override
     public CommonAdapter setAtapter() {
-
-        return mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyeji, dataList);
+        mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyeji, dataList);
+//        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
+//        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
+        mylistAtapter.setEmptyView(R.layout.no_info_layout);
+        return mylistAtapter;
     }
-
 
 
     @Override
     public void initDownRefreshData() {
         mCurrentPage = 0;
-        findhjyj( "2017-01-01","2019-01-01");
+        findhjyj("2017-01-01", "2019-01-01");
         setOnlyDownReresh();
     }
 
@@ -81,7 +83,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
     }
 
 
-    private void findhjyj(final String start, final String end ) {
+    private void findhjyj(final String start, final String end) {
         MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJI, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -101,8 +103,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("start",start);
-                map.put("end",end );
+                map.put("start", start);
+                map.put("end", end);
                 return map;
             }
         };
