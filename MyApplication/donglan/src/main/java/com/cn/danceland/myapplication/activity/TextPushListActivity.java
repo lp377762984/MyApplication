@@ -38,7 +38,6 @@ import java.util.Map;
 
 public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
     private Context context;
-    private MotionDataAdapter myListAatapter;
     private List<TextPushListBean.Data.Content> datalist = new ArrayList<>();
 
     private int mCurrentPage = 0;//当前请求页
@@ -48,7 +47,6 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_text_push_list);
         context = this;
         if (this.getIntent() != null) {
             from = this.getIntent().getIntExtra("from", 0);
@@ -101,9 +99,9 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
 
     @Override
     public CommonAdapter setAtapter() {
-        myListAatapter = new MotionDataAdapter(this, R.layout.item_text_push, datalist);
-        myListAatapter.setEmptyView(R.layout.no_info_layout);
-        return myListAatapter;
+        MotionDataAdapter adapter = new MotionDataAdapter(this, R.layout.item_text_push, datalist);
+        adapter.setEmptyView(R.layout.no_info_layout);
+        return adapter;
     }
 
     @Override
@@ -119,9 +117,9 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
 
     @Override
     public void upDownRefreshData() {
-        if ((mCurrentPage +1) == datainfo.getData().getTotalPages()) {
+        if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
             setOnlyDownReresh();
-        }else{
+        } else {
             mCurrentPage = +1;
             try {
                 find_all_data(mCurrentPage);
