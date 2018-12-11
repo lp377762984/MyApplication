@@ -15,16 +15,21 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestMyYeWuBean;
+import com.cn.danceland.myapplication.bean.RequsetPotentialListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
@@ -43,8 +48,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.cn.danceland.myapplication.R.id.tv_lasttime;
-import static com.cn.danceland.myapplication.R.id.tv_name;
 import static com.cn.danceland.myapplication.utils.Constants.YEWU_URL;
 
 /**
@@ -113,8 +116,78 @@ public class YeWuOfMeFragment extends BaseFragment {
         init_pullToRefresh();
         id = getArguments().getString("id");
         auth = getArguments().getString("auth");
+
+        mListView.getRefreshableView().addHeaderView(addheaderview());
+        info= (RequsetPotentialListBean.Data.Content) getArguments().getSerializable("info");
+        setHeaderview(info);
+
         return v;
     }
+    private RequsetPotentialListBean.Data.Content info;
+
+
+    private void setHeaderview(RequsetPotentialListBean.Data.Content info) {
+        if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
+            String S = info.getAvatar_url();
+            Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
+        }
+
+        if (TextUtils.equals(info.getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        }
+        if (TextUtils.equals(info.getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        }
+        tv_name.setText(info.getCname());
+        if (info.getLast_time()!=null){
+            tv_lasttime.setText("最后维护时间：" + info.getLast_time());
+        }else {
+            tv_lasttime.setText("最后维护时间：" + "最近未维护");
+        }
+
+        //会籍或会籍主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+            if (TextUtils.isEmpty(info.getAdmin_mark())){
+                tv_biaoqian.setText(info.getAdmin_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getAdmin_mark()+")");
+            }
+
+
+        }
+        //教练或教练主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+            if (TextUtils.isEmpty(info.getTeach_mark())){
+                tv_biaoqian.setText(info.getTeach_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getTeach_mark()+")");
+            }
+        }
+
+    }
+
+    private ImageView iv_avatar;
+    private ImageView iv_more;
+    private TextView tv_biaoqian;
+    private ImageView iv_sex;
+    private TextView tv_name;
+    private TextView tv_lasttime;
+
+    private View addheaderview() {
+        View v = View.inflate(mActivity, R.layout.listview_header_qianke, null);
+        iv_avatar = v.findViewById(R.id.iv_avatar);
+        iv_more = v.findViewById(R.id.iv_more);
+        tv_biaoqian = v.findViewById(R.id.tv_biaoqian);
+        iv_sex = v.findViewById(R.id.iv_sex);
+        tv_name = v.findViewById(R.id.tv_name);
+        tv_lasttime = v.findViewById(R.id.tv_lasttime);
+        v.findViewById(R.id.iv_more).setVisibility(View.GONE);
+        return v;
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -458,12 +531,12 @@ public class YeWuOfMeFragment extends BaseFragment {
                 vh.ll_code = convertView.findViewById(R.id.ll_code);
                 vh.ll_admin = convertView.findViewById(R.id.ll_admin);
 
-                vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_name = convertView.findViewById(R.id.tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
-                vh.tv_lasttime = convertView.findViewById(tv_lasttime);
+                vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
                 vh.tv_money = convertView.findViewById(R.id.tv_money);
                 vh.tv_admin_name = convertView.findViewById(R.id.tv_admin_name);
                 vh.tv_code = convertView.findViewById(R.id.tv_code);

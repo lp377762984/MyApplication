@@ -1,6 +1,12 @@
 package com.cn.danceland.myapplication.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +19,21 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.EditPotentialActivity;
+import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetRevisiterRecordListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragmentEventBus;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -34,9 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.cn.danceland.myapplication.R.id.tv_lasttime;
-import static com.cn.danceland.myapplication.R.id.tv_name;
 
 /**
  * Created by shy on 2018/1/11 17:18
@@ -58,6 +68,23 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
     private String id;
     private TextView tv_error;
     private ImageView imageView;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    setHeaderview(userinfo);
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+    };
+
 
     @Override
     public View initViews() {
@@ -65,7 +92,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
 //        v.findViewById(R.id.btn_add).setOnClickListener(this);
         mListView = v.findViewById(R.id.pullToRefresh);
 
-        View    listEmptyView=v.findViewById(R.id.rl_no_info);
+        View listEmptyView = v.findViewById(R.id.rl_no_info);
         tv_error = listEmptyView.findViewById(R.id.tv_error);
         imageView = listEmptyView.findViewById(R.id.iv_error);
         mListView.setEmptyView(listEmptyView);
@@ -77,8 +104,8 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         new DownRefresh().execute();
                     }
                 };
@@ -90,8 +117,8 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 
-                TimerTask task = new TimerTask(){
-                    public void run(){
+                TimerTask task = new TimerTask() {
+                    public void run() {
                         new UpRefresh().execute();
                     }
                 };
@@ -100,15 +127,81 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             }
         });
         init_pullToRefresh();
-
+        mListView.getRefreshableView().addHeaderView(addheaderview());
 
         return v;
+    }
+
+    private void setHeaderview(RequsetPotentialInfoBean.Data info) {
+        if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
+            String S = info.getAvatar_url();
+            Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
+        }
+
+        if (TextUtils.equals(info.getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        }
+        if (TextUtils.equals(info.getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        }
+        tv_name.setText(info.getCname());
+        if (info.getLast_time()!=null){
+            tv_lasttime.setText("最后维护时间：" + info.getLast_time());
+        }else {
+            tv_lasttime.setText("最后维护时间：" + "最近未维护");
+        }
+
+        //会籍或会籍主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+            if (TextUtils.isEmpty(info.getAdmin_mark())){
+                tv_biaoqian.setText(info.getAdmin_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getAdmin_mark()+")");
+            }
+
+
+        }
+        //教练或教练主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+            if (TextUtils.isEmpty(info.getTeach_mark())){
+                tv_biaoqian.setText(info.getTeach_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getTeach_mark()+")");
+            }
+        }
+
+    }
+
+    private ImageView iv_avatar;
+    private ImageView iv_more;
+    private TextView tv_biaoqian;
+    private ImageView iv_sex;
+    private TextView tv_name;
+    private TextView tv_lasttime;
+
+    private View addheaderview() {
+        View v = View.inflate(mActivity, R.layout.listview_header_qianke, null);
+        iv_avatar = v.findViewById(R.id.iv_avatar);
+        iv_more = v.findViewById(R.id.iv_more);
+        tv_biaoqian = v.findViewById(R.id.tv_biaoqian);
+        iv_sex = v.findViewById(R.id.iv_sex);
+        tv_name = v.findViewById(R.id.tv_name);
+        tv_lasttime = v.findViewById(R.id.tv_lasttime);
+        v.findViewById(R.id.iv_more).setOnClickListener(this);
+        return v;
+
     }
 
 
     @Override
     public void onEventMainThread(IntEvent event) {
         switch (event.getEventCode()) {
+
+            case 211://刷新页面
+                find_by_id_potential(id);
+                break;
 
 
             case 210://刷新页面
@@ -127,6 +220,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
     @Override
     public void initDta() {
         id = getArguments().getString("id");
+        find_by_id_potential(id);
         try {
             find_record_list(id, mCurrentPage);
         } catch (JSONException e) {
@@ -137,14 +231,46 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.btn_add:
-//
-//                break;
+            case R.id.iv_more:
+                showListDialog();
+                break;
             default:
                 break;
         }
     }
 
+
+    private void showListDialog() {
+        final String[] items = {"编辑资料"};
+        //final String[] items = {"编辑资料", "转让", "放弃维护"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(mActivity);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("info", userinfo);
+                        startActivity(new Intent(mActivity, EditPotentialActivity.class).putExtras(bundle));
+
+                    case 1:
+
+
+                        break;
+                    case 2:
+
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
     private void init_pullToRefresh() {
         mListView.setMode(PullToRefreshBase.Mode.BOTH);
         // 设置下拉刷新文本
@@ -238,6 +364,45 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
         public String member_id;
     }
 
+    private RequsetPotentialInfoBean.Data userinfo;
+
+    /**
+     * 查询潜客详情
+     *
+     * @param id
+     */
+    private void find_by_id_potential(String id) {
+
+
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL + id, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequsetPotentialInfoBean potentialInfoBean = new RequsetPotentialInfoBean();
+                potentialInfoBean = gson.fromJson(s, RequsetPotentialInfoBean.class);
+                if (potentialInfoBean.getSuccess()) {
+                    userinfo = potentialInfoBean.getData();
+                    Message message = Message.obtain();
+                    message.what = 1;
+                    handler.sendMessage(message);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
 
     /**
      * 查询回访记录
@@ -328,14 +493,14 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
 
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
 
-                vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_name = convertView.findViewById(R.id.tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
 
                 vh.tv_time = convertView.findViewById(R.id.tv_time);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
-                vh.tv_lasttime = convertView.findViewById(tv_lasttime);
+                vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
                 vh.tv_result = convertView.findViewById(R.id.tv_result);
                 convertView.setTag(vh);
 
@@ -346,7 +511,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
             }
             vh.tv_name.setText(datalist.get(position).getOperate_name());
             vh.tv_type.setText(datalist.get(position).getType());
-            vh.tv_result.setText("回访结果："+datalist.get(position).getResult());
+            vh.tv_result.setText("回访结果：" + datalist.get(position).getResult());
             if (TextUtils.equals(datalist.get(position).getType(), "电话")) {
 
                 vh.tv_time.setVisibility(View.VISIBLE);
@@ -360,7 +525,7 @@ public class RevisiterRecordFragment extends BaseFragmentEventBus {
                 vh.tv_time.setVisibility(View.GONE);
             }
             vh.tv_content.setText(datalist.get(position).getContent());
-            vh.tv_lasttime.setText(datalist.get(position).getMaintain_time().replace("-","."));
+            vh.tv_lasttime.setText(datalist.get(position).getMaintain_time().replace("-", "."));
             return convertView;
 
         }

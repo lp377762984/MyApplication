@@ -935,6 +935,8 @@
 
     <string name="hot_topic_text">热门话题</string>
     <string name="collect_text">收藏</string>
+    <string name="cardnumber">卡&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;号：</string>
+    <string name="boxnmumber">柜&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;号：</string>
     <!--2.0版本结束-->
 
 </resources>

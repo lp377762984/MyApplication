@@ -2,8 +2,11 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +20,22 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.EditPotentialActivity;
+import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUpcomingMaterListBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
+import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.ContainsEmojiEditText;
 import com.google.gson.Gson;
@@ -43,8 +53,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.cn.danceland.myapplication.R.id.tv_lasttime;
-import static com.cn.danceland.myapplication.R.id.tv_name;
 import static com.cn.danceland.myapplication.R.id.tv_result;
 
 /**
@@ -68,7 +76,22 @@ public class UpcomingMatterFragment extends BaseFragment {
     private String auth="1";
     private TextView tv_error;
     private ImageView imageView;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    setHeaderview(userinfo);
 
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+    };
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_upcoming_matter_list, null);
@@ -111,9 +134,71 @@ public class UpcomingMatterFragment extends BaseFragment {
         init_pullToRefresh();
         id = getArguments().getString("id");
         auth=getArguments().getString("auth");
+        mListView.getRefreshableView().addHeaderView(addheaderview());
         return v;
     }
 
+    private void setHeaderview(RequsetPotentialInfoBean.Data info) {
+        if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
+            String S = info.getAvatar_url();
+            Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
+        }
+
+        if (TextUtils.equals(info.getGender(), "1")) {
+            iv_sex.setImageResource(R.drawable.img_sex1);
+        }
+        if (TextUtils.equals(info.getGender(), "2")) {
+            iv_sex.setImageResource(R.drawable.img_sex2);
+        }
+        tv_name.setText(info.getCname());
+        if (info.getLast_time()!=null){
+            tv_lasttime.setText("最后维护时间：" + info.getLast_time());
+        }else {
+            tv_lasttime.setText("最后维护时间：" + "最近未维护");
+        }
+
+        //会籍或会籍主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+            if (TextUtils.isEmpty(info.getAdmin_mark())){
+                tv_biaoqian.setText(info.getAdmin_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getAdmin_mark()+")");
+            }
+
+
+        }
+        //教练或教练主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+            if (TextUtils.isEmpty(info.getTeach_mark())){
+                tv_biaoqian.setText(info.getTeach_mark());
+            }else {
+                tv_biaoqian.setText("("+info.getTeach_mark()+")");
+            }
+        }
+
+    }
+
+    private ImageView iv_avatar;
+    private ImageView iv_more;
+    private TextView tv_biaoqian;
+    private ImageView iv_sex;
+    private TextView tv_name;
+    private TextView tv_lasttime;
+
+    private View addheaderview() {
+        View v = View.inflate(mActivity, R.layout.listview_header_qianke, null);
+        iv_avatar = v.findViewById(R.id.iv_avatar);
+        iv_more = v.findViewById(R.id.iv_more);
+        tv_biaoqian = v.findViewById(R.id.tv_biaoqian);
+        iv_sex = v.findViewById(R.id.iv_sex);
+        tv_name = v.findViewById(R.id.tv_name);
+        tv_lasttime = v.findViewById(R.id.tv_lasttime);
+        v.findViewById(R.id.iv_more).setOnClickListener(this);
+        return v;
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +216,9 @@ public class UpcomingMatterFragment extends BaseFragment {
     public void onEventMainThread(IntEvent event) {
 
         switch (event.getEventCode()) {
-
+            case 211://刷新页面
+                find_by_id_potential(getArguments().getString("id"));
+                break;
             case 151://刷新页面
                 mCurrentPage = 1;
                 try {
@@ -179,6 +266,7 @@ public class UpcomingMatterFragment extends BaseFragment {
     public void initData() {
         mCurrentPage = 1;
       //  status=null;
+        find_by_id_potential(id);
         try {
             find_upcoming_list(id, mCurrentPage,done);
         } catch (JSONException e) {
@@ -186,16 +274,91 @@ public class UpcomingMatterFragment extends BaseFragment {
         }
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.btn_add:
-//
-//                break;
+            case R.id.iv_more:
+                showListDialog();
+                break;
             default:
                 break;
         }
     }
+
+
+    private void showListDialog() {
+        final String[] items = {"编辑资料"};
+        //final String[] items = {"编辑资料", "转让", "放弃维护"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(mActivity);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("info", userinfo);
+                        startActivity(new Intent(mActivity, EditPotentialActivity.class).putExtras(bundle));
+
+                    case 1:
+
+
+                        break;
+                    case 2:
+
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+
+    private RequsetPotentialInfoBean.Data userinfo;
+
+    /**
+     * 查询潜客详情
+     *
+     * @param id
+     */
+    private void find_by_id_potential(String id) {
+
+
+        MyStringRequest request = new MyStringRequest(Request.Method.GET, Constants.FIND_BY_ID_POTENTIAL + id, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequsetPotentialInfoBean potentialInfoBean = new RequsetPotentialInfoBean();
+                potentialInfoBean = gson.fromJson(s, RequsetPotentialInfoBean.class);
+                if (potentialInfoBean.getSuccess()) {
+                    userinfo = potentialInfoBean.getData();
+                    Message message = Message.obtain();
+                    message.what = 1;
+                    handler.sendMessage(message);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        }) {
+
+        };
+        MyApplication.getHttpQueues().add(request);
+    }
+
 
     private void init_pullToRefresh() {
         mListView.setMode(PullToRefreshBase.Mode.BOTH);
@@ -422,14 +585,14 @@ public class UpcomingMatterFragment extends BaseFragment {
 
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
 
-                vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_name = convertView.findViewById(R.id.tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
                 vh.tv_upcoming_name = convertView.findViewById(R.id.tv_upcoming_name);
                 vh.tv_upcoming_time = convertView.findViewById(R.id.tv_upcoming_time);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
-                vh.tv_lasttime = convertView.findViewById(tv_lasttime);
+                vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
                 vh.iv_done = convertView.findViewById(R.id.iv_done);
                 vh.tv_result = convertView.findViewById(tv_result);
 

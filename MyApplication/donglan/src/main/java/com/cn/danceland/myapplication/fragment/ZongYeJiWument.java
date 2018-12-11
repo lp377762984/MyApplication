@@ -16,7 +16,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.GeRenYeJiActivity;
 import com.cn.danceland.myapplication.adapter.recyclerview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.recyclerview.base.ViewHolder;
-import com.cn.danceland.myapplication.bean.HuiJiYeJiBean;
+import com.cn.danceland.myapplication.bean.HuiJiYeWuBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseRecyclerViewRefreshFragment;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -42,9 +42,9 @@ import java.util.Map;
  */
 
 
-public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
+public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
 
-    private List<HuiJiYeJiBean.Data> dataList = new ArrayList<>();
+    private List<HuiJiYeWuBean.Data> dataList = new ArrayList<>();
     private MylistAtapter mylistAtapter;
     private int mCurrentPage = 0;
     private String mCurrentDate =null;
@@ -69,7 +69,7 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 
     @Override
     public CommonAdapter setAtapter() {
-        mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyeji, dataList);
+        mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyewu, dataList);
 //        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
 //        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
         mylistAtapter.setEmptyView(R.layout.no_info_layout);
@@ -97,27 +97,21 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 
 
     private void findhjyj(final String start, final String end) {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJI, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJIYEWU, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                HuiJiYeJiBean huiJiYeJiBean = new Gson().fromJson(s, HuiJiYeJiBean.class);
+                HuiJiYeWuBean huiJiYeJiBean = new Gson().fromJson(s, HuiJiYeWuBean.class);
+                dataList = huiJiYeJiBean.getData();
 
-                if(huiJiYeJiBean.getData().size()>0){
-                    dataList = huiJiYeJiBean.getData();
-                    getListAdapter().setDatas(dataList);
-                    getListAdapter().notifyDataSetChanged();
-                    float zongyeji=0;
-                    for (int i=0;i<dataList.size();i++ ){
-                        zongyeji=zongyeji+dataList.get(i).getTotal();
+                getListAdapter().setDatas(dataList);
+                getListAdapter().notifyDataSetChanged();
+                double zongyeji=0;
+                for (int i=0;i<dataList.size();i++ ){
+                    zongyeji=zongyeji+dataList.get(i).getTotal();
 
-                    }
-                    EventBus.getDefault().post(new StringEvent(zongyeji+"",7101));
-                }else {
-                    EventBus.getDefault().post(new StringEvent("0",7101));
                 }
-
-
+                EventBus.getDefault().post(new StringEvent(zongyeji+"",7102));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -136,40 +130,29 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
         MyApplication.getHttpQueues().add(request);
     }
 
-    class MylistAtapter extends CommonAdapter<HuiJiYeJiBean.Data> {
+    class MylistAtapter extends CommonAdapter<HuiJiYeWuBean.Data> {
 
-        private List<HuiJiYeJiBean.Data> datas;
+        private List<HuiJiYeWuBean.Data> datas;
 
 
-        public MylistAtapter(Context context, int layoutId, List<HuiJiYeJiBean.Data> datas) {
+        public MylistAtapter(Context context, int layoutId, List<HuiJiYeWuBean.Data> datas) {
             super(context, layoutId, datas);
             this.datas = datas;
         }
 
 
         @Override
-        public void convert(ViewHolder viewHolder, final HuiJiYeJiBean.Data data, final int position) {
+        public void convert(ViewHolder viewHolder, HuiJiYeWuBean.Data data, int position) {
             viewHolder.setText(R.id.tv_name, data.getEmp_name());
-            viewHolder.setText(R.id.tv_sum, "总业绩：" + data.getTotal() + "元");
-            viewHolder.setText(R.id.tv_yewu1, "办卡：" + data.getNewcard());
-            viewHolder.setText(R.id.tv_yewu2, "租柜：" + data.getLeaselocker());
+            viewHolder.setText(R.id.tv_sum, "总业务：" + data.getTotal() + "个");
+            viewHolder.setText(R.id.tv_yewu1, "潜客增加：" + data.getNewGuest());
+            viewHolder.setText(R.id.tv_yewu2, "潜客回访：" + data.getVisitGuest());
+            viewHolder.setText(R.id.tv_yewu3, "会员回访：" + data.getVisitMember());
             RequestOptions options = new RequestOptions()
                     .transform(new GlideRoundTransform(mActivity, 10));
 
             Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-            viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Bundle bundle=new Bundle();
-//                    HuiJiYeJiBean.Data data1=dataList.get(position);
-//                    bundle.putSerializable(data1);
 
-                    startActivity(new Intent(mActivity, GeRenYeJiActivity.class)
-                            .putExtra("date",mCurrentDate)
-                            .putExtra("id",data.getEmployee_id())
-                            .putExtra("data",data));
-                }
-            });
         }
 
 

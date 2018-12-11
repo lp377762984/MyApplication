@@ -1,6 +1,5 @@
 package com.cn.danceland.myapplication.bean;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +8,7 @@ import java.util.List;
  */
 
 
-public class HuiJiYeJiBean implements Serializable{
+public class HuiJiYeWuBean {
     private boolean success;
     private String errorMsg;
     private int code;
@@ -52,43 +51,46 @@ public class HuiJiYeJiBean implements Serializable{
                 '}';
     }
 
-    public static class Data implements Serializable {
+    public class Data {
 
-        private float newcard;
-        private float leaselocker;
+//        private float newcard;
+//        private float leaselocker;
         private String emp_name;
         private String employee_id;
         private String avatar_path;
         private String avatar_url;
-        private float total;
+        private long total;
 
-        @Override
-        public String toString() {
-            return "Data{" +
-                    "newcard=" + newcard +
-                    ", leaselocker=" + leaselocker +
-                    ", emp_name='" + emp_name + '\'' +
-                    ", employee_id='" + employee_id + '\'' +
-                    ", avatar_path='" + avatar_path + '\'' +
-                    ", avatar_url='" + avatar_url + '\'' +
-                    ", total=" + total +
-                    '}';
+        private   long   newGuest;
+        private    long     visitGuest;
+        private    long    visitMember ;
+
+        public void setTotal(long total) {
+            this.total = total;
         }
 
-        public float getNewcard() {
-            return newcard;
+        public long getNewGuest() {
+            return newGuest;
         }
 
-        public void setNewcard(float newcard) {
-            this.newcard = newcard;
+        public void setNewGuest(long newGuest) {
+            this.newGuest = newGuest;
         }
 
-        public float getLeaselocker() {
-            return leaselocker;
+        public long getVisitGuest() {
+            return visitGuest;
         }
 
-        public void setLeaselocker(float leaselocker) {
-            this.leaselocker = leaselocker;
+        public void setVisitGuest(long visitGuest) {
+            this.visitGuest = visitGuest;
+        }
+
+        public long getVisitMember() {
+            return visitMember;
+        }
+
+        public void setVisitMember(long visitMember) {
+            this.visitMember = visitMember;
         }
 
         public String getEmp_name() {
@@ -123,12 +125,8 @@ public class HuiJiYeJiBean implements Serializable{
             this.avatar_url = avatar_url;
         }
 
-        public float getTotal() {
+        public long getTotal() {
             return total;
-        }
-
-        public void setTotal(float total) {
-            this.total = total;
         }
     }
 }

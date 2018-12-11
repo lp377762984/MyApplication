@@ -235,4 +235,5 @@ public abstract class BaseRecyclerViewRefreshFragment extends BaseFragment {
     public void onClick(View v) {
 
     }
+
 }

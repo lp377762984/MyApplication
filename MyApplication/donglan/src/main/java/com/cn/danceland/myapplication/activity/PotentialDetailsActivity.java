@@ -389,6 +389,7 @@ public class PotentialDetailsActivity extends BaseActivity implements View.OnCli
     }
 
 
+
     public class MyViewPagerAdapter extends FragmentPagerAdapter {
 
 

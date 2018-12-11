@@ -9,11 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
+import com.cn.danceland.myapplication.fragment.ZongYeJiWument;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -43,10 +45,11 @@ import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
 public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-
+    private TextView tv_zongyeji;
     public String[] mTitleDataList = new String[]{"今日总业绩", "今日总业务"};
     private DongLanTitleView titleView;
-   private String mDate;
+    private String mDate, zongyeji, zongyewu;
+    private int crrentpage = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +57,10 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_yjzb);
         EventBus.getDefault().register(this);
         initView();
-        mDate = TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd");
+        mDate = TimeUtils.timeStamp2Date(System.currentTimeMillis() + "", "yyyy-MM-dd");
+        zongyewu="0";
+        zongyeji="0";
+        showZongyeji( zongyeji);
     }
 
     @Override
@@ -66,19 +72,42 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
-//        switch (event.getEventCode()) {
-//            case 6881://入场成功
-//                finish();
-//
-//                break;
-//            default:
-//                break;
-//        }
+        switch (event.getEventCode()) {
+            case 7101://刷新总数
+                zongyeji = event.getMsg();
+
+                if (crrentpage == 0) {
+                    showZongyeji(zongyeji);
+                } else {
+                    showZongyewu(zongyewu);
+                }
+                break;
+            case 7102://刷新总数
+                zongyewu = event.getMsg();
+
+                if (crrentpage == 0) {
+                    showZongyeji(zongyeji);
+                } else {
+                    showZongyewu(zongyewu);
+                }
+                break;
+            default:
+                break;
+        }
 
     }
+
+    private void showZongyeji(String zongyeji) {
+        tv_zongyeji.setText("今日会籍总业绩：" + zongyeji + "元");
+    }
+
+    private void showZongyewu(String zongyewu) {
+        tv_zongyeji.setText("今日会籍总业务：" + zongyewu + "个");
+    }
+
     private void showDate(String date) {
 
-        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期",date);
+        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期", date);
         customDateAndTimePicker.setGoneHourAndMinute();
         customDateAndTimePicker.showWindow();
         customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
@@ -87,16 +116,18 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
                 String dateString = customDateAndTimePicker.getHorizongtal();
 //                tv_birthday.setText(dateString);
 //                potentialInfo.setBirthday(dateString);
-               mDate=dateString;
-                EventBus.getDefault().post(new StringEvent(dateString,7100));
-                titleView.setTitle("业绩展板("+dateString.replace("-",".")+")");
+                mDate = dateString;
+                EventBus.getDefault().post(new StringEvent(dateString, 7100));
+                titleView.setTitle("业绩展板(" + dateString.replace("-", ".") + ")");
             }
         });
     }
+
     private void initView() {
         findViewById(R.id.iv_rili).setOnClickListener(this);
         titleView = findViewById(R.id.dl_title);
-         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        tv_zongyeji = findViewById(R.id.tv_zongyeji);
+        MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(myViewPagerAdapter);
@@ -110,12 +141,13 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onPageSelected(int position) {
+                crrentpage = position;
 //                current_page = position;
-//                if (position == 0) {
-//                    btn_add.setVisibility(View.GONE);
-//                } else {
-//                    btn_add.setVisibility(View.VISIBLE);
-//                }
+                if (position == 0) {
+                    showZongyeji(zongyeji);
+                } else {
+                    showZongyewu(zongyewu);
+                }
             }
 
             @Override
@@ -123,8 +155,8 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
-        if (getIntent().getIntExtra("issend",0)==1){
-            mViewPager.setCurrentItem(1,false);
+        if (getIntent().getIntExtra("issend", 0) == 1) {
+            mViewPager.setCurrentItem(1, false);
         }
 
     }
@@ -207,7 +239,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
                 //  fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
+                ZongYeJiWument fragment = new ZongYeJiWument();
                 //   fragment.setArguments(bundle);
                 return fragment;
             }

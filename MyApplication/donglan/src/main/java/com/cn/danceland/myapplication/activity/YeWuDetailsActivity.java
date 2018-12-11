@@ -445,11 +445,12 @@ public class YeWuDetailsActivity extends BaseActivity implements View.OnClickLis
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
+                bundle.putSerializable("info",info);
                 YeWuAllFragment fragment = new YeWuAllFragment();
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
-
+                bundle.putSerializable("info",info);
                 YeWuOfMeFragment fragment = new YeWuOfMeFragment();
                 fragment.setArguments(bundle);
                 return fragment;

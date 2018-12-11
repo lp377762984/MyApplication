@@ -45,8 +45,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.cn.danceland.myapplication.R.id.pullToRefresh;
-import static com.cn.danceland.myapplication.R.id.tv_lasttime;
-import static com.cn.danceland.myapplication.R.id.tv_name;
 
 /**
  * Created by shy on 2018/1/11 17:18
@@ -119,6 +117,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
         return v;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -195,16 +194,7 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-//            case R.id.btn_add:
-//
-//                break;
-            default:
-                break;
-        }
-    }
+
 
     private void init_pullToRefresh() {
         mListView.setMode(PullToRefreshBase.Mode.BOTH);
@@ -232,6 +222,11 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
         endLabels.setReleaseLabel("—我是有底线的—");// 下来达到一定距离时，显示的提示
         endLabels.setLoadingDrawable(null);
         //  mListView.setMode(PullToRefreshBase.Mode.DISABLED);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 
     /**
@@ -432,14 +427,14 @@ public class PotentialUpcomingMatterFragment extends BaseFragment {
 
                 vh.tv_content = convertView.findViewById(R.id.tv_content);
 
-                vh.tv_name = convertView.findViewById(tv_name);
+                vh.tv_name = convertView.findViewById(R.id.tv_name);
 
                 vh.tv_type = convertView.findViewById(R.id.tv_type);
                 vh.tv_upcoming_name = convertView.findViewById(R.id.tv_upcoming_name);
                 vh.tv_upcoming_time = convertView.findViewById(R.id.tv_upcoming_time);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
-                vh.tv_lasttime = convertView.findViewById(tv_lasttime);
+                vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
                 vh.iv_done = convertView.findViewById(R.id.iv_done);
                 vh.tv_result = convertView.findViewById(R.id.tv_result);
                 vh.tv_no = convertView.findViewById(R.id.tv_no);
