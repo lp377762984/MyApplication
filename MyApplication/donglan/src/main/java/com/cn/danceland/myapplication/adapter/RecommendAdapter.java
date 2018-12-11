@@ -72,7 +72,7 @@ public class RecommendAdapter extends BaseAdapter {
             viewHolder.time_tv = (TextView) view.findViewById(R.id.time_tv);
             viewHolder.btn_consult_state = (Button) view.findViewById(R.id.btn_consult_state);
             viewHolder.recommend_icon_image = (ImageView) view.findViewById(R.id.recommend_icon_image);
-            viewHolder.consult_title_tv =  view.findViewById(R.id.consult_title_tv);
+            viewHolder.consult_title_tv = view.findViewById(R.id.consult_title_tv);
             viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
             view.setTag(viewHolder);
         } else {
@@ -92,9 +92,9 @@ public class RecommendAdapter extends BaseAdapter {
         viewHolder.tel_tv.setText(datas.get(i).getPhone_no() + "");
         String time = TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss") + "", "yyyy.MM.dd");
         viewHolder.time_tv.setText(time);
-        if(datas.get(i).getGender().equals("男")){
+        if (datas.get(i).getGender().equals("男")) {
             viewHolder.sex_tv.setBackground(context.getResources().getDrawable(R.drawable.img_sex1));
-        }else if(datas.get(i).getGender().equals("女")){
+        } else if (datas.get(i).getGender().equals("女")) {
             viewHolder.sex_tv.setBackground(context.getResources().getDrawable(R.drawable.img_sex2));
         }
         if (!TextUtils.isEmpty(datas.get(i).getType()))
@@ -115,15 +115,18 @@ public class RecommendAdapter extends BaseAdapter {
         switch (datas.get(i).getStatus()) {
             case "0"://0=推广中
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_in_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_red_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.white));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_shade_pink_bg));
                 break;
             case "1"://1 = 完成
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_succeed_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_white_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
                 break;
             case "2"://2 = 失败
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.recommend_state_fails_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_gary_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.white));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_deep));
                 break;
         }
         return view;

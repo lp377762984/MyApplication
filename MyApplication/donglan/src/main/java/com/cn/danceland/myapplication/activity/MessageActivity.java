@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.bean.RequestMessageNumBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.FoundFragment;
+import com.cn.danceland.myapplication.fragment.MessageFragment;
 import com.cn.danceland.myapplication.fragment.NoticeFragment;
 import com.cn.danceland.myapplication.fragment.SystemMessageFragment;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -224,19 +225,31 @@ public class MessageActivity extends BaseActivity {
         foundFragment = new FoundFragment();
         noticeFragment = new NoticeFragment();
         systemMessageFragment = new SystemMessageFragment();
-
+        MessageFragment messageFragment1=new MessageFragment();
+        MessageFragment messageFragment2=new MessageFragment();
+        MessageFragment messageFragment3=new MessageFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("type", str);
 //        commentFragment.setArguments(bundle);
         noticeFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        if (TextUtils.equals(str, "0")) {
+//            fragmentTransaction.replace(R.id.message_fragment, foundFragment).commit();
+//        } else if (TextUtils.equals(str, "1")) {
+//            fragmentTransaction.replace(R.id.message_fragment, noticeFragment).commit();
+//        } else if (TextUtils.equals(str, "2")) {
+//            fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
+//        }
         if (TextUtils.equals(str, "0")) {
-            fragmentTransaction.replace(R.id.message_fragment, foundFragment).commit();
+            messageFragment1.setType("1");//类型(1=>发现,2=>日常,3=>系统)
+            fragmentTransaction.replace(R.id.message_fragment, messageFragment1).commit();
         } else if (TextUtils.equals(str, "1")) {
-            fragmentTransaction.replace(R.id.message_fragment, noticeFragment).commit();
+            messageFragment2.setType("2");//类型(1=>发现,2=>日常,3=>系统)
+            fragmentTransaction.replace(R.id.message_fragment, messageFragment2).commit();
         } else if (TextUtils.equals(str, "2")) {
-            fragmentTransaction.replace(R.id.message_fragment, systemMessageFragment).commit();
+            messageFragment3.setType("3");//类型(1=>发现,2=>日常,3=>系统)
+            fragmentTransaction.replace(R.id.message_fragment, messageFragment3).commit();
         }
         queryCount("1");//请求后面数据，刷新未读数  通知
         queryCount("2");//请求后面数据，刷新未读数  通知

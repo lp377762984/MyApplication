@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.FitnessHistoryActivity;
 import com.cn.danceland.myapplication.bean.ConsultBean;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -67,11 +66,11 @@ public class ConsultAdapter extends BaseAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.listitem_consult, null);
             viewHolder = new ViewHolder();
             viewHolder.consult_reply_tv = view.findViewById(R.id.consult_reply_tv);
-            viewHolder.first_reply_tv =  view.findViewById(R.id.first_reply_tv);
-            viewHolder.btn_consult_state =  view.findViewById(R.id.btn_consult_state);
-            viewHolder.consult_icon_image =  view.findViewById(R.id.consult_icon_image);
-            viewHolder.consult_title_tv =  view.findViewById(R.id.consult_title_tv);
-            viewHolder.consult_accept_tv =  view.findViewById(R.id.consult_accept_tv);
+            viewHolder.first_reply_tv = view.findViewById(R.id.first_reply_tv);
+            viewHolder.btn_consult_state = view.findViewById(R.id.btn_consult_state);
+            viewHolder.consult_icon_image = view.findViewById(R.id.consult_icon_image);
+            viewHolder.consult_title_tv = view.findViewById(R.id.consult_title_tv);
+            viewHolder.consult_accept_tv = view.findViewById(R.id.consult_accept_tv);
             viewHolder.item_layout_cv = view.findViewById(R.id.item_layout_cv);
             view.setTag(viewHolder);
         } else {
@@ -88,7 +87,7 @@ public class ConsultAdapter extends BaseAdapter {
 
         viewHolder.item_layout_cv.setLayoutParams(layoutParams);
         viewHolder.consult_reply_tv.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getCreate_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
-        if(datas.get(i).getAccept_time()!=null){
+        if (datas.get(i).getAccept_time() != null) {
             viewHolder.consult_accept_tv.setText(TimeUtils.timeStamp2Date(TimeUtils.date2TimeStamp(datas.get(i).getAccept_time(), "yyyy-MM-dd HH:mm:ss").toString(), "yyyy.MM.dd"));
         }
 //        viewHolder.first_reply_tv.setText(new SimpleDateFormat("HH:mm").format(new Date(datas.get(i).getEndTime())).toString());//暂时没有此处
@@ -109,15 +108,18 @@ public class ConsultAdapter extends BaseAdapter {
         switch (datas.get(i).getStatus()) {
             case "0"://0=咨询中
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.consult_state_in_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_red_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.white));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_shade_pink_bg));
                 break;
             case "1"://1 = 完成
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.consult_state_succeed_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_white_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.colorGray22));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_empty_deep));
                 break;
             case "2"://2 = 失败
                 viewHolder.btn_consult_state.setText(context.getResources().getString(R.string.consult_state_fails_text));
-                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.adcise_status_gary_bg));
+                viewHolder.btn_consult_state.setTextColor(context.getResources().getColor(R.color.white));
+                viewHolder.btn_consult_state.setBackground(context.getResources().getDrawable(R.drawable.btn_bg_gray_deep));
                 break;
         }
         return view;
