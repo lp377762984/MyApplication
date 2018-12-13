@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -215,6 +216,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             viewHolder.iv_comment = convertView.findViewById(iv_comment);
             viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
+            viewHolder.videoplayer_cv = convertView.findViewById(R.id.videoplayer_cv);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
             viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
@@ -419,7 +421,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         });
 
         if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
-            viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+            viewHolder.videoplayer_cv.setVisibility(View.VISIBLE);
 
             HttpProxyCacheServer proxy = MyApplication.getProxy(context);//增加视频缓存
             String proxyUrl = proxy.getProxyUrl(data.get(position).getVedioUrl());
@@ -449,7 +451,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
 //            });
 
         } else {
-            viewHolder.jzVideoPlayer.setVisibility(View.GONE);
+            viewHolder.videoplayer_cv.setVisibility(View.GONE);
         }
 
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
@@ -567,6 +569,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         LinearLayout ll_location;
         NoScrollGridView gridView;
         JZVideoPlayerStandard jzVideoPlayer;
+        CardView videoplayer_cv;
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多

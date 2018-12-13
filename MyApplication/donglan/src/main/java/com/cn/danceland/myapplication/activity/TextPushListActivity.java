@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
     private Context context;
-    private List<TextPushListBean.Data.Content> datalist = new ArrayList<>();
+    private List<TextPushListBean.Data.Content> dataList = new ArrayList<>();
 
     private int mCurrentPage = 0;//当前请求页
     private int from;
@@ -68,11 +68,11 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
                 datainfo = new Gson().fromJson(s.toString(), TextPushListBean.class);
                 if (datainfo.getSuccess()) {
                     if (pageCount == 0) {
-                        datalist = datainfo.getData().getContent();
+                        dataList = datainfo.getData().getContent();
                     } else {
-                        datalist.addAll(datainfo.getData().getContent());
+                        dataList.addAll(datainfo.getData().getContent());
                     }
-                    getListAdapter().setDatas(datalist);
+                    getListAdapter().setDatas(dataList);
                     getListAdapter().notifyDataSetChanged();
                 } else {
                     ToastUtils.showToastLong(datainfo.getErrorMsg());
@@ -99,7 +99,7 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
 
     @Override
     public CommonAdapter setAtapter() {
-        MotionDataAdapter adapter = new MotionDataAdapter(this, R.layout.item_text_push, datalist);
+        MotionDataAdapter adapter = new MotionDataAdapter(this, R.layout.item_text_push, dataList);
         adapter.setEmptyView(R.layout.no_info_layout);
         return adapter;
     }
@@ -107,7 +107,7 @@ public class TextPushListActivity extends BaseRecyclerViewRefreshActivity {
     @Override
     public void initDownRefreshData() {
         mCurrentPage = 0;
-        datalist = new ArrayList<>();
+        dataList = new ArrayList<>();
         try {
             find_all_data(mCurrentPage);
         } catch (JSONException e) {

@@ -41,7 +41,7 @@ public class GroupRecordBean implements Serializable {
         return success;
     }
 
-    public class Data implements Serializable{
+    public static class Data implements Serializable{
 
         private int branch_id;
         private String branch_name;

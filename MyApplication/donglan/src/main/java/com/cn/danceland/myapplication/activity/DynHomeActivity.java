@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -128,6 +129,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     private ImageView iv_avatar;
     private NoScrollGridView gridView;
     private JZVideoPlayerStandard jzVideoPlayer;
+    private CardView videoplayer_cv;
     private RecyclerView mRecyclerView;
     private boolean init;
     private int replypos = -1;
@@ -627,7 +629,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         });
 
         if (oneDynInfo.getVedioUrl() != null && oneDynInfo.getMsgType() == 1) {//如果是视频消息
-            jzVideoPlayer.setVisibility(View.VISIBLE);
+            videoplayer_cv.setVisibility(View.VISIBLE);
 
             jzVideoPlayer.setUp(
                     oneDynInfo.getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,
@@ -637,7 +639,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                     .into(jzVideoPlayer.thumbImageView);
             //jzVideoPlayer.positionInList = position;
         } else {
-            jzVideoPlayer.setVisibility(View.GONE);
+            videoplayer_cv.setVisibility(View.GONE);
         }
 
         if (oneDynInfo.getImgList() != null && oneDynInfo.getImgList().size() > 0) {
@@ -760,6 +762,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         iv_avatar = headview.findViewById(R.id.iv_avatar);
         gridView = headview.findViewById(R.id.gridview);
         jzVideoPlayer = headview.findViewById(R.id.videoplayer);
+        videoplayer_cv = headview.findViewById(R.id.videoplayer_cv);
         rx_guanzhu = headview.findViewById(R.id.rx_guanzhu);
 
         iv_pic = headview.findViewById(R.id.iv_pic);

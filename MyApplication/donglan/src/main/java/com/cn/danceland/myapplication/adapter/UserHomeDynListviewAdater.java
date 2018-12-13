@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -77,8 +78,6 @@ import static com.cn.danceland.myapplication.R.id.iv_zan;
  * Created by shy on 2017/10/24 17:40
  * Email:644563767@qq.com
  */
-
-
 public class UserHomeDynListviewAdater extends BaseAdapter {
     public List<RequsetDynInfoBean.Data.Content> data = new ArrayList<RequsetDynInfoBean.Data.Content>();
     private LayoutInflater mInflater;
@@ -214,6 +213,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             viewHolder.iv_transpond = convertView.findViewById(iv_transpond);
             viewHolder.gridView = convertView.findViewById(R.id.gridview);
             viewHolder.jzVideoPlayer = convertView.findViewById(R.id.videoplayer);
+            viewHolder.videoplayer_cv = convertView.findViewById(R.id.videoplayer_cv);
             viewHolder.ll_item = convertView.findViewById(R.id.ll_item);
             viewHolder.ll_zan = convertView.findViewById(R.id.ll_zan);
             viewHolder.tv_pinglun = convertView.findViewById(R.id.tv_pinglun);
@@ -393,7 +393,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 //        });
 
             if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
-                viewHolder.jzVideoPlayer.setVisibility(View.VISIBLE);
+                viewHolder.videoplayer_cv.setVisibility(View.VISIBLE);
 
                 viewHolder.jzVideoPlayer.setUp(
                         data.get(position).getVedioUrl(), JZVideoPlayer.SCREEN_WINDOW_LIST,
@@ -403,7 +403,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                         .apply(new RequestOptions().placeholder(R.drawable.loading_img)).into(viewHolder.jzVideoPlayer.thumbImageView);
                 viewHolder.jzVideoPlayer.positionInList = position;
             } else {
-                viewHolder.jzVideoPlayer.setVisibility(View.GONE);
+                viewHolder.videoplayer_cv.setVisibility(View.GONE);
             }
 
             if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
@@ -533,6 +533,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         LinearLayout ll_location;
         NoScrollGridView gridView;
         JZVideoPlayerStandard jzVideoPlayer;
+        CardView videoplayer_cv;
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
         RelativeLayout rl_more;//更多
