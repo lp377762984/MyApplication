@@ -9,16 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.bean.HuiJiYeWuBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
-import com.cn.danceland.myapplication.fragment.ZongYeJiWument;
-import com.cn.danceland.myapplication.utils.TimeUtils;
-import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
-import com.cn.danceland.myapplication.view.DongLanTitleView;
+import com.cn.danceland.myapplication.fragment.QianKeHuiFangFragment;
+import com.cn.danceland.myapplication.fragment.QianKeZengJiaFragment;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -32,54 +29,35 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import static com.cn.danceland.myapplication.R.id.iv_rili;
-import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
-
 
 /**
  * Created by shy on 2017/12/19 09:34
  * Email:644563767@qq.com
- * 业绩展板
+ * 会籍个人业务
  */
 
 
-public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickListener {
+public class GeRenYeWuActivity extends BaseActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    private TextView tv_zongyeji;
-    public String[] mTitleDataList = new String[]{"今日总业绩", "今日总业务"};
-    private DongLanTitleView titleView;
-    private String mDate, zongyeji, zongyewu;
-    private int crrentpage = 0;
-    private boolean isjiaolian=false;
+
+    public String[] mTitleDataList = new String[]{"潜客添加", "潜客回访", "会员回访"};
+
+    private String id;
+    private String auth;
+    private String date;
+    HuiJiYeWuBean.Data data;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_yjzb);
+        setContentView(R.layout.activity_my_card);
         EventBus.getDefault().register(this);
+        id=getIntent().getStringExtra("id");
+        auth=getIntent().getStringExtra("auth");
+        date=getIntent().getStringExtra("date");
+        data= (HuiJiYeWuBean.Data) getIntent().getSerializableExtra("data");
         initView();
-        mDate = TimeUtils.timeStamp2Date(System.currentTimeMillis() + "", "yyyy-MM-dd");
-        zongyewu="0";
-        zongyeji="0";
-        showZongyeji( zongyeji);
-        isjiaolian=getIntent().getBooleanExtra("isjiaolian",false);
 
-//        //会籍主管或会籍主管
-//        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
-//
-//            tv_zongyeji.setVisibility(View.VISIBLE);
-//            findViewById(iv_rili).setVisibility(View.VISIBLE);
-//        }else {
-//            tv_zongyeji.setVisibility(View.GONE);
-//            findViewById(iv_rili).setVisibility(View.GONE);
-//        }
-
-
-        if (isjiaolian){
-            titleView.setTitle("教练展板(" + mDate.replace("-", ".") + ")");
-        }else {
-            titleView.setTitle("会籍展板(" + mDate.replace("-", ".") + ")");
-        }
     }
 
     @Override
@@ -92,23 +70,9 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
     @Subscribe
     public void onEventMainThread(StringEvent event) {
         switch (event.getEventCode()) {
-            case 7101://刷新总数
-                zongyeji = event.getMsg();
+            case 6881://入场成功
+                finish();
 
-                if (crrentpage == 0) {
-                    showZongyeji(zongyeji);
-                } else {
-                    showZongyewu(zongyewu);
-                }
-                break;
-            case 7102://刷新总数
-                zongyewu = event.getMsg();
-
-                if (crrentpage == 0) {
-                    showZongyeji(zongyeji);
-                } else {
-                    showZongyewu(zongyewu);
-                }
                 break;
             default:
                 break;
@@ -116,51 +80,8 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
     }
 
-    private void showZongyeji(String zongyeji) {
-        if (isjiaolian){
-            tv_zongyeji.setText("今日教练总业绩：" + zongyeji + "元");
-        }else {
-            tv_zongyeji.setText("今日会籍总业绩：" + zongyeji + "元");
-        }
-
-    }
-
-    private void showZongyewu(String zongyewu) {
-        if (isjiaolian){
-            tv_zongyeji.setText("今日教练总业务：" + zongyewu + "个");
-        }else {
-            tv_zongyeji.setText("今日会籍总业务：" + zongyewu + "个");
-        }
-
-    }
-
-    private void showDate(String date) {
-
-        final CustomDateAndTimePicker customDateAndTimePicker = new CustomDateAndTimePicker(this, "请选择日期", date);
-        customDateAndTimePicker.setGoneHourAndMinute();
-        customDateAndTimePicker.showWindow();
-        customDateAndTimePicker.setDialogOnClickListener(new CustomDateAndTimePicker.OnClickEnter() {
-            @Override
-            public void onClick() {
-                String dateString = customDateAndTimePicker.getHorizongtal();
-//                tv_birthday.setText(dateString);
-//                potentialInfo.setBirthday(dateString);
-                mDate = dateString;
-                EventBus.getDefault().post(new StringEvent(dateString, 7100));
-                if (isjiaolian){
-                    titleView.setTitle("教练展板(" + dateString.replace("-", ".") + ")");
-                }else {
-                    titleView.setTitle("会籍展板(" + dateString.replace("-", ".") + ")");
-                }
-
-            }
-        });
-    }
-
     private void initView() {
-        findViewById(iv_rili).setOnClickListener(this);
-        titleView = findViewById(R.id.dl_title);
-        tv_zongyeji = findViewById(R.id.tv_zongyeji);
+        findViewById(R.id.iv_back).setOnClickListener(this);
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);
@@ -175,13 +96,12 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onPageSelected(int position) {
-                crrentpage = position;
 //                current_page = position;
-                if (position == 0) {
-                    showZongyeji(zongyeji);
-                } else {
-                    showZongyewu(zongyewu);
-                }
+//                if (position == 0) {
+//                    btn_add.setVisibility(View.GONE);
+//                } else {
+//                    btn_add.setVisibility(View.VISIBLE);
+//                }
             }
 
             @Override
@@ -189,9 +109,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
-        if (getIntent().getIntExtra("issend", 0) == 1) {
-            mViewPager.setCurrentItem(1, false);
-        }
+
 
     }
 
@@ -227,6 +145,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 //                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
 //                return indicator;
 //            }
+
             @Override
             public IPagerIndicator getIndicator(Context context) {
                 LinePagerIndicator indicator = new LinePagerIndicator(context);
@@ -247,9 +166,6 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
             case R.id.iv_back:
                 finish();
                 break;
-            case iv_rili:
-                showDate(mDate);
-                break;
             default:
                 break;
         }
@@ -265,16 +181,24 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         @Override
         public Fragment getItem(int arg0) {
             Bundle bundle = new Bundle();
-            bundle.putBoolean("isjiaolian", isjiaolian);
-//            bundle.putString("auth",auth);
+            bundle.putString("id", id);
+
+            bundle.putString("date",date);
+            bundle.putSerializable("data",data);
             if (arg0 == 0) {
-                ZongYeJiFragment1 fragment = new ZongYeJiFragment1();
+                QianKeZengJiaFragment fragment = new QianKeZengJiaFragment();
 
                  fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                ZongYeJiWument fragment = new ZongYeJiWument();
-                 fragment.setArguments(bundle);
+                QianKeHuiFangFragment fragment = new QianKeHuiFangFragment();
+                bundle.putString("auth","1");
+                fragment.setArguments(bundle);
+                return fragment;
+            }else if (arg0 == 2){
+                QianKeHuiFangFragment fragment = new QianKeHuiFangFragment();
+                bundle.putString("auth","2");
+                fragment.setArguments(bundle);
                 return fragment;
             }
             return null;
@@ -283,12 +207,12 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public int getCount() {
-            return TITLES.length;
+            return mTitleDataList.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return TITLES[position];
+            return mTitleDataList[position];
         }
 
     }

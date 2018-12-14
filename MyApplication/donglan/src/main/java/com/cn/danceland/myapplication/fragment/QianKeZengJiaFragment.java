@@ -2,18 +2,24 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.adapter.recyclerview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.recyclerview.base.ViewHolder;
-import com.cn.danceland.myapplication.bean.RequestHuiJiYeWuBean;
+import com.cn.danceland.myapplication.bean.HuiJiYeWuBean;
+import com.cn.danceland.myapplication.bean.RequestQianKeZengJiaBean;
 import com.cn.danceland.myapplication.fragment.base.BaseRecyclerViewRefreshFragment;
 import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
@@ -28,18 +34,18 @@ import java.util.Map;
 /**
  * Created by shy on 2018/12/5 10:37
  * Email:644563767@qq.com
- * 个人业绩
+ * 潜客增加
  */
 
 
-public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
+public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
 
-    private List<RequestHuiJiYeWuBean.Data.Content> dataList = new ArrayList<>();
+    private List<RequestQianKeZengJiaBean.Data.Content> dataList = new ArrayList<>();
     private MylistAtapter mylistAtapter;
     private int mCurrentPage = 0;
     private String mCurrentDate = null;
-    Map<Integer,String> yewumap=new HashMap<>();
     private String id;
+    HuiJiYeWuBean.Data data;
 //    @Override
 //    public void onEventMainThread(StringEvent event) {
 //        switch (event.getEventCode()) {
@@ -62,16 +68,38 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
 
         mCurrentDate = getArguments().getString("date");
         id=getArguments().getString("id");
+        data= (HuiJiYeWuBean.Data) getArguments().getSerializable("data");
         return super.initViews();
     }
 
     @Override
     public CommonAdapter setAtapter() {
-        mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_huiji_yewu, dataList);
+        mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_xzhj, dataList);
 //        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
 //        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
         mylistAtapter.setEmptyView(R.layout.no_info_layout);
-        mylistAtapter.addHeaderView(View.inflate(mActivity, R.layout.empty_8dp_layout, null));
+       View view= View.inflate(mActivity,R.layout.headview_jinriyewu,null);
+             TextView tv_name =view.findViewById(R.id.tv_name);
+             TextView tv_sum =view.findViewById(R.id.tv_sum);
+             TextView tv_yewu1 =view.findViewById(R.id.tv_yewu1);
+             TextView tv_yewu2 =view.findViewById(R.id.tv_yewu2);
+             TextView tv_yewu3 =view.findViewById(R.id.tv_yewu3);
+            ImageView iv_avatar =view.findViewById(R.id.iv_avatar);
+        tv_name.setText( data.getEmp_name());
+        tv_sum.setText("总业务：" + data.getTotal() + "个");
+        tv_yewu1.setText("潜客增加：" + data.getNewGuest());
+        tv_yewu2.setText( "潜客回访：" + data.getVisitGuest());
+        tv_yewu3.setText("会员回访：" + data.getVisitMember());
+        RequestOptions options = new RequestOptions()
+                .transform(new GlideRoundTransform(mActivity, 10));
+
+        Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into(iv_avatar);
+
+
+
+
+
+        mylistAtapter.addHeaderView(view);
         mylistAtapter.addFootView(View.inflate(mActivity, R.layout.empty_8dp_layout, null));
         return mylistAtapter;
     }
@@ -80,37 +108,6 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
     @Override
     public void initDownRefreshData() {
 
-        yewumap.put(11,"买定金");
-        yewumap.put(12,"用定金");
-        yewumap.put(13,"退定金");
-        yewumap.put(14,"充储值");
-        yewumap.put(15,"退储值");
-        yewumap.put(100,"花储值");
-        yewumap.put(21,"买卡");
-        yewumap.put(22,"卡升级");
-        yewumap.put(23,"续卡");
-        yewumap.put(24,"补卡");
-        yewumap.put(25,"转卡");
-        yewumap.put(26,"退卡");
-        yewumap.put(27,"停卡");
-        yewumap.put(28,"卡延期");
-        yewumap.put(29,"卡挂失");
-        yewumap.put(30,"卡加次");
-        yewumap.put(41,"租柜");
-        yewumap.put(42,"续柜");
-        yewumap.put(43,"退柜");
-        yewumap.put(44,"转柜");
-        yewumap.put(45,"换柜");
-        yewumap.put(51,"购买私教");
-        yewumap.put(52,"私教转会员");
-        yewumap.put(53,"私教换教练");
-        yewumap.put(61,"退私教");
-
-        yewumap.put(1,"定金业务");
-        yewumap.put(2,"储值业务");
-        yewumap.put(3,"卡业务");
-        yewumap.put(4,"租柜业务");
-        yewumap.put(5,"私教业务");
 
         mCurrentPage = 0;
 //        if (mCurrentDate == null) {
@@ -128,11 +125,11 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
 
 
     private void findhjyj(final String start, final String end, final String employee_id) {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJIYEJIMINGXI, new Response.Listener<String>() {
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_XINQIANKE , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                RequestHuiJiYeWuBean huiJiYeWuBean = new Gson().fromJson(s, RequestHuiJiYeWuBean.class);
+                RequestQianKeZengJiaBean huiJiYeWuBean = new Gson().fromJson(s, RequestQianKeZengJiaBean.class);
                 dataList = huiJiYeWuBean.getData().getContent();
                 if (mCurrentPage == 0) {
                     getListAdapter().setDatas(dataList);
@@ -168,32 +165,29 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
         MyApplication.getHttpQueues().add(request);
     }
 
-    class MylistAtapter extends CommonAdapter<RequestHuiJiYeWuBean.Data.Content> {
+    class MylistAtapter extends CommonAdapter<RequestQianKeZengJiaBean.Data.Content> {
 
 
-        public MylistAtapter(Context context, int layoutId, List<RequestHuiJiYeWuBean.Data.Content> datas) {
+        public MylistAtapter(Context context, int layoutId, List<RequestQianKeZengJiaBean.Data.Content> datas) {
             super(context, layoutId, datas);
         }
 
 
         @Override
-        public void convert(ViewHolder viewHolder, RequestHuiJiYeWuBean.Data.Content data, int position) {
-            viewHolder.setText(R.id.tv_name, data.getEmployee_name());
-            viewHolder.setText(R.id.tv_admin_name, data.getMember_name());
-            viewHolder.setText(R.id.tv_code, data.getCode());
-            viewHolder.setText(R.id.tv_type, yewumap.get(data.getBig_type()) + "、" + yewumap.get(data.getBus_type()));
-            if (data.getBig_type()==3){
-                viewHolder.setText(R.id.tv_kahao,getString(R.string.cardnumber));
+        public void convert(ViewHolder viewHolder, RequestQianKeZengJiaBean.Data.Content data, int position) {
+            viewHolder.setText(R.id.tv_name, data.getMember_name());
+            if (data.getCount_date() != null) {
+                viewHolder.setText(R.id.tv_lasttime, TimeUtils.timeStamp2Date(data.getCount_date(),"yyyy.MM.dd HH:mm:ss"));
+            } else {
+                viewHolder.setText(R.id.tv_lasttime,"最近未维护");
             }
-            if (data.getBig_type()==4){
-                viewHolder.setText(R.id.tv_kahao, getString(R.string.boxnmumber));
-            }
-//            RequestOptions options = new RequestOptions()
-//                    .transform(new GlideRoundTransform(mActivity, 10));
-//
-//            Glide.with(mActivity).load(data.get).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-            viewHolder.setText(R.id.tv_money,"¥" + data.getMoney());
-            viewHolder.setText(R.id.tv_lasttime,TimeUtils.timeStamp2Date(data.getOrder_time() + "", "yyyy.MM.dd HH:mm"));
+
+            RequestOptions options = new RequestOptions()
+                    .transform(new GlideRoundTransform(mActivity, 10))
+                    .error(R.drawable.img_avatar1);
+
+            Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
+
 
 
         }

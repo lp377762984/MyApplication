@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.GeRenYeJiActivity;
+import com.cn.danceland.myapplication.activity.GeRenYeWuActivity;
 import com.cn.danceland.myapplication.adapter.recyclerview.CommonAdapter;
 import com.cn.danceland.myapplication.adapter.recyclerview.base.ViewHolder;
 import com.cn.danceland.myapplication.bean.HuiJiYeWuBean;
@@ -142,7 +142,7 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
 
 
         @Override
-        public void convert(ViewHolder viewHolder, HuiJiYeWuBean.Data data, int position) {
+        public void convert(ViewHolder viewHolder, final HuiJiYeWuBean.Data data, int position) {
             viewHolder.setText(R.id.tv_name, data.getEmp_name());
             viewHolder.setText(R.id.tv_sum, "总业务：" + data.getTotal() + "个");
             viewHolder.setText(R.id.tv_yewu1, "潜客增加：" + data.getNewGuest());
@@ -152,7 +152,15 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
                     .transform(new GlideRoundTransform(mActivity, 10));
 
             Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-
+            viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+               startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
+                       .putExtra("date",mCurrentDate)
+                       .putExtra("data",data)
+               );
+                }
+            });
         }
 
 
