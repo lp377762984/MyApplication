@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.SparseBooleanArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -228,7 +229,34 @@ public class MyDynListviewAdater extends BaseAdapter {
             viewHolder.ll_guanzhu = convertView.findViewById(R.id.ll_guanzhu);
             viewHolder.rx_guanzhu = convertView.findViewById(R.id.rx_guanzhu);
             viewHolder.iv_guanzhu = convertView.findViewById(R.id.iv_guanzhu);
-            viewHolder.expandableTextView = (ExpandableTextView) convertView.findViewById(R.id.expand_text_view);
+            viewHolder.expandableTextView = convertView.findViewById(R.id.expand_text_view);
+            viewHolder.iv_pic_cv = convertView.findViewById(R.id.iv_pic_cv);
+            viewHolder.img_layout2 = convertView.findViewById(R.id.img_layout2);
+            viewHolder.iv_pic2_1 = convertView.findViewById(R.id.iv_pic2_1);
+            viewHolder.iv_pic2_2 = convertView.findViewById(R.id.iv_pic2_2);
+            viewHolder.img_layout3 = convertView.findViewById(R.id.img_layout3);
+            viewHolder.iv_pic3_1 = convertView.findViewById(R.id.iv_pic3_1);
+            viewHolder.iv_pic3_2 = convertView.findViewById(R.id.iv_pic3_2);
+            viewHolder.iv_pic3_3 = convertView.findViewById(R.id.iv_pic3_3);
+            viewHolder.img_layout4 = convertView.findViewById(R.id.img_layout4);
+            viewHolder.iv_pic4_1 = convertView.findViewById(R.id.iv_pic4_1);
+            viewHolder.iv_pic4_2 = convertView.findViewById(R.id.iv_pic4_2);
+            viewHolder.iv_pic4_3 = convertView.findViewById(R.id.iv_pic4_3);
+            viewHolder.iv_pic4_4 = convertView.findViewById(R.id.iv_pic4_4);
+            viewHolder.img_layout5 = convertView.findViewById(R.id.img_layout5);
+            viewHolder.iv_pic5_1 = convertView.findViewById(R.id.iv_pic5_1);
+            viewHolder.iv_pic5_2 = convertView.findViewById(R.id.iv_pic5_2);
+            viewHolder.iv_pic5_3 = convertView.findViewById(R.id.iv_pic5_3);
+            viewHolder.iv_pic5_4 = convertView.findViewById(R.id.iv_pic5_4);
+            viewHolder.iv_pic5_5 = convertView.findViewById(R.id.iv_pic5_5);
+            viewHolder.img_layout6 = convertView.findViewById(R.id.img_layout6);
+            viewHolder.iv_pic6_1 = convertView.findViewById(R.id.iv_pic6_1);
+            viewHolder.iv_pic6_2 = convertView.findViewById(R.id.iv_pic6_2);
+            viewHolder.iv_pic6_3 = convertView.findViewById(R.id.iv_pic6_3);
+            viewHolder.iv_pic6_4 = convertView.findViewById(R.id.iv_pic6_4);
+            viewHolder.iv_pic6_5 = convertView.findViewById(R.id.iv_pic6_5);
+            viewHolder.iv_pic6_6 = convertView.findViewById(R.id.iv_pic6_6);
+            viewHolder.iv_pic6_6_meng = convertView.findViewById(R.id.iv_pic6_6_meng);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -442,7 +470,12 @@ public class MyDynListviewAdater extends BaseAdapter {
 
         if (data.get(position).getVedioUrl() != null && data.get(position).getMsgType() == 1) {//如果是视频消息
             viewHolder.videoplayer_cv.setVisibility(View.VISIBLE);
-            viewHolder.iv_pic.setVisibility(View.GONE);
+            viewHolder.iv_pic_cv.setVisibility(View.GONE);
+            viewHolder.img_layout2.setVisibility(View.GONE);
+            viewHolder.img_layout3.setVisibility(View.GONE);
+            viewHolder.img_layout4.setVisibility(View.GONE);
+            viewHolder.img_layout5.setVisibility(View.GONE);
+            viewHolder.img_layout6.setVisibility(View.GONE);
             HttpProxyCacheServer proxy = MyApplication.getProxy(context);//增加视频缓存
             String proxyUrl = proxy.getProxyUrl(data.get(position).getVedioUrl());
 
@@ -476,108 +509,211 @@ public class MyDynListviewAdater extends BaseAdapter {
         if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 
             viewHolder.gridView.setVisibility(View.VISIBLE);
-//            if (data.get(position).getImgList().size() == 1) {
-//                viewHolder.gridView.setVisibility(View.GONE);
-//            }
-
             if (data.get(position).getImgList().size() == 1) {
                 viewHolder.gridView.setVisibility(View.GONE);
-                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-                RequestOptions options1 = new RequestOptions()
-                        .placeholder(R.drawable.loading_img)//加载占位图
-//                        .error(R.drawable.loading_img)//
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .priority(Priority.HIGH);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.GONE);
 
-                viewHolder.iv_pic.setVisibility(View.VISIBLE);
-                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+                viewHolder.iv_pic_cv.setVisibility(View.VISIBLE);
 
-                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
-                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
-                String[] b = sb.toString().split("_");
-                String[] c = b[1].toString().split("X");
+                int screenWidth = (AppUtils.getWidth() - DensityUtils.dp2px(context, 32f));
 
-//                LogUtil.i(b[2].toString());
-//
-//                LogUtil.i(c[0]);
-//                LogUtil.i(c[1]);
-//                LogUtil.i(sb.toString());
-                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
-                    if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
-                        if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-                            linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-                            viewHolder.iv_pic.setLayoutParams(linearParams);
-                        } else {
-                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-                            linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-                            viewHolder.iv_pic.setLayoutParams(linearParams);
-                        }
-                    }
-                }
+                setImg(viewHolder.iv_pic, data.get(position).getImgList(), screenWidth, 0);
 
-                Glide.with(context)
-                        .load(sb.toString())
-                        .apply(options1)
-                        .into(viewHolder.iv_pic);
-                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PictureConfig config = new PictureConfig.Builder()
-                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                                .setPosition(0)//图片下标（从第position张图片开始浏览）
-                                .setDownloadPath("DCIM")//图片下载文件夹地址
-                                .setIsShowNumber(false)//是否显示数字下标
-                                .needDownload(true)//是否支持图片下载
-                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                                .build();
-                        ImagePagerActivity.startActivity(context, config);
-                    }
-                });
-                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+            } else if (data.get(position).getImgList().size() == 2) {
+
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.VISIBLE);
+
+                int screenWidth = (AppUtils.getWidth() - DensityUtils.dp2px(context, 39f)) / 2;
+
+                setImg(viewHolder.iv_pic2_1, data.get(position).getImgList(), screenWidth, 0);
+                setImg(viewHolder.iv_pic2_2, data.get(position).getImgList(), screenWidth, 1);
+
+            } else if (data.get(position).getImgList().size() == 3) {
+
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.VISIBLE);
+                int screenWidth = AppUtils.getWidth() - DensityUtils.dp2px(context, 32f);
+                int screenWidth2 = (AppUtils.getWidth() - DensityUtils.dp2px(context, 39f)) / 2;
+                setImg(viewHolder.iv_pic3_1, data.get(position).getImgList(), screenWidth, 0);
+                setImg(viewHolder.iv_pic3_2, data.get(position).getImgList(), screenWidth2, 1);
+                setImg(viewHolder.iv_pic3_3, data.get(position).getImgList(), screenWidth2, 2);
+
             } else if (data.get(position).getImgList().size() == 4) {
-                viewHolder.iv_pic.setVisibility(View.GONE);
-                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-                viewHolder.gridView.setNumColumns(2);
-                int width = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 32f)) / 3 * 2;//此处的宽度需要动态计算
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
 
-            } else {
-                viewHolder.iv_pic.setVisibility(View.GONE);
-                viewHolder.gridView.setNumColumns(3);
-                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-            }
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.VISIBLE);
+                int screenWidth = (AppUtils.getWidth() - DensityUtils.dp2px(context, 39f)) / 2;
+                setImg(viewHolder.iv_pic4_1, data.get(position).getImgList(), screenWidth, 0);
+                setImg(viewHolder.iv_pic4_2, data.get(position).getImgList(), screenWidth, 1);
+                setImg(viewHolder.iv_pic4_3, data.get(position).getImgList(), screenWidth, 2);
+                setImg(viewHolder.iv_pic4_4, data.get(position).getImgList(), screenWidth, 3);
 
-            viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
-            /**
-             * 图片列表点击事件
-             */
-            viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    PictureConfig config = new PictureConfig.Builder()
-                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-                            .setPosition(i)//图片下标（从第position张图片开始浏览）
-                            .setDownloadPath("DCIM")//图片下载文件夹地址
-                            .setIsShowNumber(true)//是否显示数字下标
-                            .needDownload(true)//是否支持图片下载
-                            .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-                            .build();
-                    ImagePagerActivity.startActivity(context, config);
+            } else if (data.get(position).getImgList().size() == 5) {
+
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.VISIBLE);
+                int screenWidth = (AppUtils.getWidth() - DensityUtils.dp2px(context, 46f)) / 5;
+                setImg(viewHolder.iv_pic5_1, data.get(position).getImgList(), screenWidth * 3 + DensityUtils.dp2px(context, 3.5f), 0);
+                setImg(viewHolder.iv_pic5_2, data.get(position).getImgList(), screenWidth * 3 + DensityUtils.dp2px(context, 3.5f), 1);
+                setImg(viewHolder.iv_pic5_3, data.get(position).getImgList(), screenWidth * 2, 2);
+                setImg(viewHolder.iv_pic5_4, data.get(position).getImgList(), screenWidth * 2, 3);
+                setImg(viewHolder.iv_pic5_5, data.get(position).getImgList(), screenWidth * 2, 4);
+
+            } else if (data.get(position).getImgList().size() >= 6) {
+
+                viewHolder.gridView.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.VISIBLE);
+                if (data.get(position).getImgList().size() > 6) {
+                    viewHolder.iv_pic6_6_meng.setVisibility(View.VISIBLE);
+                    viewHolder.iv_pic6_6_meng.setText("+" + (data.get(position).getImgList().size() - 6));
                 }
-            });
+                int screenWidth = (AppUtils.getWidth() - DensityUtils.dp2px(context, 46f)) / 3;
+                setImg(viewHolder.iv_pic6_1, data.get(position).getImgList(), screenWidth * 2 + DensityUtils.dp2px(context, 7f), 0);
+                setImg(viewHolder.iv_pic6_2, data.get(position).getImgList(), screenWidth, 1);
+                setImg(viewHolder.iv_pic6_3, data.get(position).getImgList(), screenWidth, 2);
+                setImg(viewHolder.iv_pic6_4, data.get(position).getImgList(), screenWidth, 3);
+                setImg(viewHolder.iv_pic6_5, data.get(position).getImgList(), screenWidth, 4);
+                setImg(viewHolder.iv_pic6_6, data.get(position).getImgList(), screenWidth, 5);
+            }
         } else {
             viewHolder.gridView.setVisibility(View.GONE);
             viewHolder.iv_pic.setVisibility(View.GONE);
-
         }
+
+//        if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
+//
+//            viewHolder.gridView.setVisibility(View.VISIBLE);
+////            if (data.get(position).getImgList().size() == 1) {
+////                viewHolder.gridView.setVisibility(View.GONE);
+////            }
+//
+//            if (data.get(position).getImgList().size() == 1) {
+//                viewHolder.gridView.setVisibility(View.GONE);
+//                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+//                //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
+//                RequestOptions options1 = new RequestOptions()
+//                        .placeholder(R.drawable.loading_img)//加载占位图
+////                        .error(R.drawable.loading_img)//
+//                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+//                        .priority(Priority.HIGH);
+//
+//                viewHolder.iv_pic.setVisibility(View.VISIBLE);
+//                StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
+//
+//                String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
+//                sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
+//                String[] b = sb.toString().split("_");
+//                String[] c = b[1].toString().split("X");
+//
+////                LogUtil.i(b[2].toString());
+////
+////                LogUtil.i(c[0]);
+////                LogUtil.i(c[1]);
+////                LogUtil.i(sb.toString());
+//                if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
+//                    if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
+//                        if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
+//                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
+//                            linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
+//                            viewHolder.iv_pic.setLayoutParams(linearParams);
+//                        } else {
+//                            LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
+//                            linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
+//                            viewHolder.iv_pic.setLayoutParams(linearParams);
+//                        }
+//                    }
+//                }
+//
+//                Glide.with(context)
+//                        .load(sb.toString())
+//                        .apply(options1)
+//                        .into(viewHolder.iv_pic);
+//                viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        PictureConfig config = new PictureConfig.Builder()
+//                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+//                                .setPosition(0)//图片下标（从第position张图片开始浏览）
+//                                .setDownloadPath("DCIM")//图片下载文件夹地址
+//                                .setIsShowNumber(false)//是否显示数字下标
+//                                .needDownload(true)//是否支持图片下载
+//                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+//                                .build();
+//                        ImagePagerActivity.startActivity(context, config);
+//                    }
+//                });
+//                LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
+//                viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
+//            } else if (data.get(position).getImgList().size() == 4) {
+//                viewHolder.iv_pic.setVisibility(View.GONE);
+//                //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
+//                viewHolder.gridView.setNumColumns(2);
+//                int width = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 32f)) / 3 * 2;//此处的宽度需要动态计算
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
+//                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//
+//            } else {
+//                viewHolder.iv_pic.setVisibility(View.GONE);
+//                viewHolder.gridView.setNumColumns(3);
+//                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
+//                viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+//            }
+//
+//            viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
+//            /**
+//             * 图片列表点击事件
+//             */
+//            viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                    PictureConfig config = new PictureConfig.Builder()
+//                            .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
+//                            .setPosition(i)//图片下标（从第position张图片开始浏览）
+//                            .setDownloadPath("DCIM")//图片下载文件夹地址
+//                            .setIsShowNumber(true)//是否显示数字下标
+//                            .needDownload(true)//是否支持图片下载
+//                            .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+//                            .build();
+//                    ImagePagerActivity.startActivity(context, config);
+//                }
+//            });
+//        } else {
+//            viewHolder.gridView.setVisibility(View.GONE);
+//            viewHolder.iv_pic.setVisibility(View.GONE);
+//
+//        }
 
 
         return convertView;
@@ -612,6 +748,69 @@ public class MyDynListviewAdater extends BaseAdapter {
         RxShineButton rx_zan;
         RxShineButton rx_guanzhu;
         ExpandableTextView expandableTextView;
+
+        CardView iv_pic_cv;
+        LinearLayout img_layout2;
+        ImageView iv_pic2_1;
+        ImageView iv_pic2_2;
+        LinearLayout img_layout3;
+        ImageView iv_pic3_1;
+        ImageView iv_pic3_2;
+        ImageView iv_pic3_3;
+        LinearLayout img_layout4;
+        ImageView iv_pic4_1;
+        ImageView iv_pic4_2;
+        ImageView iv_pic4_3;
+        ImageView iv_pic4_4;
+        LinearLayout img_layout5;
+        ImageView iv_pic5_1;
+        ImageView iv_pic5_2;
+        ImageView iv_pic5_3;
+        ImageView iv_pic5_4;
+        ImageView iv_pic5_5;
+        LinearLayout img_layout6;
+        ImageView iv_pic6_1;
+        ImageView iv_pic6_2;
+        ImageView iv_pic6_3;
+        ImageView iv_pic6_4;
+        ImageView iv_pic6_5;
+        ImageView iv_pic6_6;
+        TextView iv_pic6_6_meng;
+    }
+
+    private void setImg(ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
+        RequestOptions options1 = new RequestOptions()
+                .placeholder(R.drawable.loading_img)//加载占位图
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .priority(Priority.HIGH);
+
+        StringBuilder sb = new StringBuilder(imgDatas.get(position));
+        sb.insert(imgDatas.get(position).length() - 4, "_400X400");
+
+        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(viewParams, viewParams);
+        linearParams.gravity = Gravity.CENTER;
+        linearParams.weight = 1;
+        imageView.setLayoutParams(linearParams);
+
+        Glide.with(context)
+                .load(sb.toString())
+                .apply(options1)
+                .into(imageView);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PictureConfig config = new PictureConfig.Builder()
+                        .setListData((ArrayList<String>) imgDatas)//图片数据List<String> list
+                        .setPosition(position)//图片下标（从第position张图片开始浏览）
+                        .setDownloadPath("DCIM")//图片下载文件夹地址
+                        .setIsShowNumber(true)//是否显示数字下标
+                        .needDownload(true)//是否支持图片下载
+                        .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
+                        .build();
+                ImagePagerActivity.startActivity(context, config);
+            }
+        });
     }
 
     private void showListDialog(final int pos) {
