@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  */
 
 
-public class HuiJiYeWuBean {
+public class HuiJiYeWuBean implements Serializable{
     private boolean success;
     private String errorMsg;
     private int code;
@@ -51,7 +52,7 @@ public class HuiJiYeWuBean {
                 '}';
     }
 
-    public class Data {
+    public class Data implements Serializable{
 
 //        private float newcard;
 //        private float leaselocker;

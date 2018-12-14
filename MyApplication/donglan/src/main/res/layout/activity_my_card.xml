@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@+id/dl_title"
         android:layout_width="match_parent"
         app:titleText="业绩展板"
         android:layout_height="wrap_content"/>

@@ -111,6 +111,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cn.danceland.myapplication.R.id.tv_biaoqian;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -1055,7 +1057,14 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 41://业绩展板
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
-                        startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
+                        //教练或教练主管
+                        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
+                            startActivity(new Intent(mActivity, YeJiZhanBanActivity.class).putExtra("isjiaolian",true));
+                        }  else {
+                            startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
+                        }
+
+
                         break;
                     case 42://会籍推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍推送");

@@ -9,14 +9,16 @@ import java.util.List;
  */
 
 
-public class HuiJiYeJiBean implements Serializable{
+public class HuiJiYeJiBean implements Serializable {
     private boolean success;
     private String errorMsg;
     private int code;
     private List<Data> data;
+
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
     public boolean getSuccess() {
         return success;
     }
@@ -24,6 +26,7 @@ public class HuiJiYeJiBean implements Serializable{
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
+
     public String getErrorMsg() {
         return errorMsg;
     }
@@ -31,6 +34,7 @@ public class HuiJiYeJiBean implements Serializable{
     public void setCode(int code) {
         this.code = code;
     }
+
     public int getCode() {
         return code;
     }
@@ -38,6 +42,7 @@ public class HuiJiYeJiBean implements Serializable{
     public void setData(List<Data> data) {
         this.data = data;
     }
+
     public List<Data> getData() {
         return data;
     }
@@ -60,7 +65,35 @@ public class HuiJiYeJiBean implements Serializable{
         private String employee_id;
         private String avatar_path;
         private String avatar_url;
-        private float total;
+        private float allccourse;//教练总计 ,
+        private String groupcourse;//(number, optional): 团体私教 ,
+        private String singlecourse;// (number, optional): 单人私教
+
+        private float total;//会籍总计
+
+        public float getAllccourse() {
+            return allccourse;
+        }
+
+        public void setAllccourse(float allccourse) {
+            this.allccourse = allccourse;
+        }
+
+        public String getGroupcourse() {
+            return groupcourse;
+        }
+
+        public void setGroupcourse(String groupcourse) {
+            this.groupcourse = groupcourse;
+        }
+
+        public String getSinglecourse() {
+            return singlecourse;
+        }
+
+        public void setSinglecourse(String singlecourse) {
+            this.singlecourse = singlecourse;
+        }
 
         @Override
         public String toString() {

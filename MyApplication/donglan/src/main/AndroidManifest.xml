@@ -360,6 +360,9 @@
         <activity
             android:name=".activity.EmployeeListActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.GeRenYeWuActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.EmpUserHomeActivty"
