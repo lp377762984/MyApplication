@@ -123,14 +123,23 @@
         android:textSize="14sp"
         emojicon:emojiconSize="18sp" />
 
-    <cn.jzvd.JZVideoPlayerStandard
-        android:id="@+id/videoplayer"
+    <android.support.v7.widget.CardView
+        android:id="@+id/videoplayer_cv"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false">
+
+        <cn.jzvd.JZVideoPlayerStandard
+            android:id="@+id/videoplayer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </android.support.v7.widget.CardView>
 
     <com.cn.danceland.myapplication.view.NoScrollGridView
         android:id="@+id/gridview"
@@ -143,14 +152,9 @@
         android:numColumns="3"
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/iv_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp"
-        android:visibility="gone" />
+    <include
+        android:id="@+id/img_layout"
+        layout="@layout/item_public_dyn_layout" />
 
     <LinearLayout
         android:id="@+id/ll_location"

@@ -24,10 +24,12 @@ import com.cn.danceland.myapplication.bean.FitnessTestBean;
 import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
+import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.utils.ViewUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 
@@ -67,6 +69,22 @@ public class FitnessTestActivity extends BaseActivity {
     private TextView bone_tv;//饼状图 骨质
     private TextView protein_tv;//饼状图 蛋白质
     private TextView test_person;//操作人员
+    private ImageView iv_triangle_mark1;
+    private ImageView iv_triangle_mark2;
+    private ImageView iv_triangle_mark3;
+    private ImageView iv_triangle_mark4;
+    private ImageView iv_triangle_mark5;
+    private ImageView iv_triangle_mark6;
+    private ImageView iv_triangle_mark7;
+    private ImageView iv_triangle_mark8;
+    private ImageView iv_triangle1;
+    private ImageView iv_triangle2;
+    private ImageView iv_triangle3;
+    private ImageView iv_triangle4;
+    private ImageView iv_triangle5;
+    private ImageView iv_triangle6;
+    private ImageView iv_triangle7;
+    private ImageView iv_triangle8;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -239,6 +257,14 @@ public class FitnessTestActivity extends BaseActivity {
             xingbie = data.getMember_sex() + "";
         }
         if (weight != null || height != null) {
+            setScale("体重", data.getWeight());
+            setScale("肌肉", data.getMuscle());
+            setScale("体脂百分比", data.getPbf());
+            setScale("骨质", data.getBone());
+            setScale("总水分", data.getWater());
+            setScale("骨骼肌", data.getSmm());
+            setScale("体质指数", data.getBmi());
+            setScale("腰臀比", data.getWhr());
             setLine("体重", data.getWeight());
             setLine("肌肉", data.getMuscle());
             setLine("体脂百分比", data.getPbf());
@@ -250,10 +276,198 @@ public class FitnessTestActivity extends BaseActivity {
         }
 
         test_classify.setText(tiXing(Float.valueOf(data.getBmi()), Float.valueOf(data.getPbf()), xingbie));
-
         initPie(data);
+    }
 
-
+    private void setScale(String type, String value) {
+        double realValue = Float.valueOf(value);//要计算的值
+        int finalAvg = (int) Math.pow(realValue, 1);
+        int viewWidth = iv_triangle_mark1.getWidth() - DensityUtils.dp2px(FitnessTestActivity.this, 40f); // 获取宽度-左右空白
+        if ("体重".equals(type)) {
+            finalAvg = (int) Math.pow((realValue - 60), 1);//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle1, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 90;
+            double max = 110;
+            if (realValue < min) {
+                iv_triangle1.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle1.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle1.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle1, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * (finalAvg + 8), 0, 0, 0);
+            }
+            iv_triangle_mark1.setBackground(getResources().getDrawable(R.drawable.fitnesstest_chizi));
+        } else if ("肌肉".equals(type)) {
+            finalAvg = (int) Math.pow((realValue - 60), 1);//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle2, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 90;
+            double max = 110;
+            if (realValue < min) {
+                iv_triangle2.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle2.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle2.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle2, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * (finalAvg + 8), 0, 0, 0);
+            }
+            iv_triangle_mark2.setBackground(getResources().getDrawable(R.drawable.fitnesstest_chizi));
+        } else if ("体脂百分比".equals(type)) {
+            if ("1".equals(xingbie)) {
+                finalAvg = (int) Math.pow((realValue - 0 + 5), 1);//60A起始值
+                if (finalAvg < 0) {
+                    finalAvg = 0;
+                }
+                ViewUtils.setMargins(iv_triangle3, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * finalAvg, 0, 0, 0);
+                LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * (finalAvg)) + "-宽-" + viewWidth + "-值-" + finalAvg);
+                double min = 10;
+                double max = 20;
+                if (realValue < min) {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+                } else if (realValue >= min && realValue <= max) {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+                } else {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                    ViewUtils.setMargins(iv_triangle3, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * (finalAvg + 2), 0, 0, 0);
+                }
+                iv_triangle_mark3.setBackground(getResources().getDrawable(R.drawable.fitnesstest_tizhibaifenbi_men));
+            } else if ("2".equals(xingbie)) {
+                finalAvg = (int) Math.pow((realValue - 0), 1);//60A起始值
+                if ((finalAvg - 8) < 0) {
+                    finalAvg = 13;
+                }
+                ViewUtils.setMargins(iv_triangle3, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 48) * finalAvg-3, 0, 0, 0);
+                LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 48) * (finalAvg)) + "-宽-" + viewWidth + "-值-" + finalAvg);
+                double min = 18;
+                double max = 28;
+                if (realValue < min) {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+                } else if (realValue >= min && realValue <= max) {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+                } else {
+                    iv_triangle3.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                    ViewUtils.setMargins(iv_triangle3, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 48) * (finalAvg ), 0, 0, 0);
+                }
+                iv_triangle_mark3.setBackground(getResources().getDrawable(R.drawable.fitnesstest_tizhibaifenbi_women));
+            }
+        } else if ("骨质".equals(type)) {
+            finalAvg = (int) Math.pow((realValue - 60), 1);//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle4, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 90;
+            double max = 110;
+            if (realValue < min) {
+                iv_triangle4.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle4.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle4.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle4, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * (finalAvg + 8), 0, 0, 0);
+            }
+            iv_triangle_mark4.setBackground(getResources().getDrawable(R.drawable.fitnesstest_chizi));
+        } else if ("总水分".equals(type)) {
+            finalAvg = (int) Math.pow((realValue - 60), 1);//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle5, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 90;
+            double max = 110;
+            if (realValue < min) {
+                iv_triangle5.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle5.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle5.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle5, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * (finalAvg + 8), 0, 0, 0);
+            }
+            iv_triangle_mark5.setBackground(getResources().getDrawable(R.drawable.fitnesstest_chizi));
+        } else if ("骨骼肌".equals(type)) {
+            finalAvg = (int) Math.pow((realValue - 60), 1);//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle6, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 90;
+            double max = 110;
+            if (realValue < min) {
+                iv_triangle6.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle6.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle6.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle6, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 90) *(finalAvg + 8), 0, 0, 0);
+            }
+            iv_triangle_mark6.setBackground(getResources().getDrawable(R.drawable.fitnesstest_chizi));
+        } else if ("体质指数".equals(type)) {
+            finalAvg = finalAvg - 9;//60A起始值
+            if (finalAvg < 0) {
+                finalAvg = 0;
+            }
+            ViewUtils.setMargins(iv_triangle7, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 27) * finalAvg, 0, 0, 0);
+            LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 27) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+            double min = 18;
+            double max = 24;
+            if (realValue < min) {
+                iv_triangle7.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+            } else if (realValue >= min && realValue <= max) {
+                iv_triangle7.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+            } else {
+                iv_triangle7.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                ViewUtils.setMargins(iv_triangle7, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 27) * (finalAvg + 2), 0, 0, 0);
+            }
+            iv_triangle_mark7.setBackground(getResources().getDrawable(R.drawable.fitnesstest_tizhizhishu));
+        } else if ("腰臀比".equals(type)) {
+            if ("1".equals(xingbie)) {
+                finalAvg = (int) Math.pow((realValue * 100 - 70), 1);//60A起始值
+                if (finalAvg < 0) {
+                    finalAvg = 0;
+                }
+                ViewUtils.setMargins(iv_triangle8, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * finalAvg, 0, 0, 0);
+                LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+                double min = 0.85;
+                double max = 0.95;
+                if (realValue < min) {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+                } else if (realValue >= min && realValue <= max) {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+                } else {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                    ViewUtils.setMargins(iv_triangle8, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * (finalAvg +1), 0, 0, 0);
+                }
+                iv_triangle_mark8.setBackground(getResources().getDrawable(R.drawable.fitnesstest_yaotunbi_men));
+            } else if ("2".equals(xingbie)) {
+                finalAvg = (int) Math.pow((realValue * 100 - 55), 1);//60A起始值
+                if (finalAvg < 0) {
+                    finalAvg = 0;
+                }
+                ViewUtils.setMargins(iv_triangle8, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * finalAvg, 0, 0, 0);
+                LogUtil.i(type + "标尺--" + (DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * finalAvg) + "-宽-" + viewWidth + "-值-" + finalAvg);
+                double min = 0.70;
+                double max = 0.80;
+                if (realValue < min) {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_yellow_jiantou));
+                } else if (realValue >= min && realValue <= max) {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_green_jiantou));
+                } else {
+                    iv_triangle8.setImageDrawable(getResources().getDrawable(R.drawable.fitnesstest_red_jiantou));
+                    ViewUtils.setMargins(iv_triangle8, DensityUtils.dp2px(FitnessTestActivity.this, 20f) + (viewWidth / 45) * (finalAvg + 1), 0, 0, 0);
+                }
+                iv_triangle_mark8.setBackground(getResources().getDrawable(R.drawable.fitnesstest_yaotunbi_women));
+            }
+        }
     }
 
     private void setLine(String type, String value) {
@@ -268,6 +482,7 @@ public class FitnessTestActivity extends BaseActivity {
             double m = Double.valueOf(mi);
             double min = m * m * 18.5;
             double max = m * m * 23.9;
+            //-----------------
 //            double centre = min + (max - min) / 2;//标体的中线
 //            int progress = (int) ((realValue - centre) / 10 + centre);
 //            LogUtil.i("centre=" + centre);
@@ -734,6 +949,22 @@ public class FitnessTestActivity extends BaseActivity {
         fat_tv = findViewById(R.id.fat_tv);//饼状图 脂肪
         bone_tv = findViewById(R.id.bone_tv);//饼状图 骨质
         protein_tv = findViewById(R.id.protein_tv);//饼状图 蛋白质
+        iv_triangle_mark1 = findViewById(R.id.iv_triangle_mark1);
+        iv_triangle_mark2 = findViewById(R.id.iv_triangle_mark2);
+        iv_triangle_mark3 = findViewById(R.id.iv_triangle_mark3);
+        iv_triangle_mark4 = findViewById(R.id.iv_triangle_mark4);
+        iv_triangle_mark5 = findViewById(R.id.iv_triangle_mark5);
+        iv_triangle_mark6 = findViewById(R.id.iv_triangle_mark6);
+        iv_triangle_mark7 = findViewById(R.id.iv_triangle_mark7);
+        iv_triangle_mark8 = findViewById(R.id.iv_triangle_mark8);
+        iv_triangle1 = findViewById(R.id.iv_triangle1);
+        iv_triangle2 = findViewById(R.id.iv_triangle2);
+        iv_triangle3 = findViewById(R.id.iv_triangle3);
+        iv_triangle4 = findViewById(R.id.iv_triangle4);
+        iv_triangle5 = findViewById(R.id.iv_triangle5);
+        iv_triangle6 = findViewById(R.id.iv_triangle6);
+        iv_triangle7 = findViewById(R.id.iv_triangle7);
+        iv_triangle8 = findViewById(R.id.iv_triangle8);
 
     }
 

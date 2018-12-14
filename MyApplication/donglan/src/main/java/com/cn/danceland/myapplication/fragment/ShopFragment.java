@@ -72,6 +72,7 @@ import com.cn.danceland.myapplication.activity.SellCardActivity;
 import com.cn.danceland.myapplication.activity.ShopDetailedActivity;
 import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.activity.TextPushActivity;
+import com.cn.danceland.myapplication.activity.TimeTableActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
 import com.cn.danceland.myapplication.activity.YeJiZhanBanActivity;
 import com.cn.danceland.myapplication.activity.YeWuActivity;
@@ -148,6 +149,7 @@ public class ShopFragment extends BaseFragment {
     private TextView tv_detail;//新增详情布局
     private TextView tv_dcs;
     private TextView tv_time;
+    private String shopName;//门店名
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -537,24 +539,25 @@ public class ShopFragment extends BaseFragment {
                 ShopDetailBean.DataBean data = shopDetailBean.getData();
                 if (data != null) {
                     tv_shopname.setText(data.getName());
+                    shopName = data.getName();
                     shopWeidu = data.getLat() + "";
                     shopJingdu = data.getLng() + "";
                     PhoneNo = data.getTelphone();
-                    String  open_time;
+                    String open_time;
                     String colse_time;
-                    if (Integer.valueOf(data.getOpen_time())%60==0){
-                        open_time =Integer.valueOf(data.getOpen_time())/60+":00";
-                    }else {
-                        open_time =Integer.valueOf(data.getOpen_time())/60+":"+Integer.valueOf(data.getOpen_time())%60;
+                    if (Integer.valueOf(data.getOpen_time()) % 60 == 0) {
+                        open_time = Integer.valueOf(data.getOpen_time()) / 60 + ":00";
+                    } else {
+                        open_time = Integer.valueOf(data.getOpen_time()) / 60 + ":" + Integer.valueOf(data.getOpen_time()) % 60;
                     }
-                    if (Integer.valueOf(data.getClose_time())%60==0){
-                        colse_time=Integer.valueOf(data.getClose_time())/60+":00";
-                    }else {
-                        colse_time=Integer.valueOf(data.getClose_time())/60+":"+Integer.valueOf(data.getClose_time())%60;
+                    if (Integer.valueOf(data.getClose_time()) % 60 == 0) {
+                        colse_time = Integer.valueOf(data.getClose_time()) / 60 + ":00";
+                    } else {
+                        colse_time = Integer.valueOf(data.getClose_time()) / 60 + ":" + Integer.valueOf(data.getClose_time()) % 60;
                     }
 
 
-                    tv_time.setText(open_time+"-"+colse_time);
+                    tv_time.setText(open_time + "-" + colse_time);
 
                     tv_detail.setVisibility(View.VISIBLE);
                     if (isPermission) {
@@ -618,7 +621,7 @@ public class ShopFragment extends BaseFragment {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtil.i(jsonObject.toString());
-                        if (jsonObject!=null){
+                        if (jsonObject != null) {
                             if (jsonObject.toString().contains("true")) {
 
                                 MenusBean menusBean = gson.fromJson(jsonObject.toString(), MenusBean.class);
@@ -745,7 +748,6 @@ public class ShopFragment extends BaseFragment {
             setPop();
             //setSpinner();
             initData();
-
 
 
         } else {
@@ -929,7 +931,6 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的租柜");
                         startActivity(new Intent(mActivity, CabinetActivity.class));
                         break;
-
                     case 25://推荐好友
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "推荐好友");
                         startActivity(new Intent(mActivity, RecommendActivity.class));
@@ -946,13 +947,13 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "扫码入场");
                         if (PermissionsUtil.hasPermission(mActivity, Manifest.permission.CAMERA)) {
                             //有权限
-                            startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from","entrance"));
+                            startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from", "entrance"));
                         } else {
                             PermissionsUtil.requestPermission(mActivity, new PermissionListener() {
                                 @Override
                                 public void permissionGranted(@NonNull String[] permissions) {
                                     //用户授予了权限
-                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from","entrance"));
+                                    startActivity(new Intent(mActivity, ScanerCodeActivity.class).putExtra("from", "entrance"));
                                 }
 
                                 @Override
@@ -1020,7 +1021,6 @@ public class ShopFragment extends BaseFragment {
                     case 34://我的体测
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "我的体侧");
                         startActivity(new Intent(mActivity, FitnessTestActivity.class));
-
                         break;
                     case 35://动态码
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "动态码");
@@ -1069,22 +1069,26 @@ public class ShopFragment extends BaseFragment {
                     case 42://会籍推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍推送");
                         //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
-                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",101));
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from", 101));
                         break;
                     case 43://教练推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "教练推送");
                         //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
-                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",102));
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from", 102));
                         break;
                     case 44://全店推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "全店推送");
                         //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
-                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",100));
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from", 100));
                         break;
                     case 45://服务部推送
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "服务部推送");
                         //推送范围(100:店长推送;101:会籍推送;102:教练推送;103:服务部推送)
-                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from",103));
+                        startActivity(new Intent(mActivity, TextPushActivity.class).putExtra("from", 103));
+                        break;
+                    case 46://门店课表
+                        MobclickAgent.onEvent(mActivity, "shop_list_btn", "门店课表");
+                        startActivity(new Intent(mActivity, TimeTableActivity.class).putExtra("shopName", shopName));
                         break;
                     default:
                         ToastUtils.showToastShort("该功能正在研发中");

@@ -1,55 +1,55 @@
 package com.cn.danceland.myapplication.fragment;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+        import android.app.ProgressDialog;
+        import android.content.Intent;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.support.v7.widget.LinearLayoutManager;
+        import android.support.v7.widget.RecyclerView;
+        import android.text.TextUtils;
+        import android.view.View;
+        import android.widget.AbsListView;
+        import android.widget.ImageView;
+        import android.widget.ListView;
+        import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.cn.danceland.myapplication.MyApplication;
-import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.FitnessManActivity;
-import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
-import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
-import com.cn.danceland.myapplication.bean.Data;
-import com.cn.danceland.myapplication.bean.RequestPushUserBean;
-import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
-import com.cn.danceland.myapplication.evntbus.EventConstants;
-import com.cn.danceland.myapplication.evntbus.IntEvent;
-import com.cn.danceland.myapplication.evntbus.StringEvent;
-import com.cn.danceland.myapplication.fragment.base.BaseFragment;
-import com.cn.danceland.myapplication.utils.Constants;
-import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MyStringRequest;
-import com.cn.danceland.myapplication.utils.SPUtils;
-import com.cn.danceland.myapplication.utils.ToastUtils;
-import com.google.gson.Gson;
-import com.handmark.pulltorefresh.library.ILoadingLayout;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+        import com.android.volley.AuthFailureError;
+        import com.android.volley.Request;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.cn.danceland.myapplication.MyApplication;
+        import com.cn.danceland.myapplication.R;
+        import com.cn.danceland.myapplication.activity.FitnessManActivity;
+        import com.cn.danceland.myapplication.adapter.DynHeadviewRecylerViewAdapter;
+        import com.cn.danceland.myapplication.adapter.MyDynListviewAdater;
+        import com.cn.danceland.myapplication.bean.Data;
+        import com.cn.danceland.myapplication.bean.RequestPushUserBean;
+        import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
+        import com.cn.danceland.myapplication.evntbus.EventConstants;
+        import com.cn.danceland.myapplication.evntbus.IntEvent;
+        import com.cn.danceland.myapplication.evntbus.StringEvent;
+        import com.cn.danceland.myapplication.fragment.base.BaseFragment;
+        import com.cn.danceland.myapplication.utils.Constants;
+        import com.cn.danceland.myapplication.utils.LogUtil;
+        import com.cn.danceland.myapplication.utils.MyStringRequest;
+        import com.cn.danceland.myapplication.utils.SPUtils;
+        import com.cn.danceland.myapplication.utils.ToastUtils;
+        import com.google.gson.Gson;
+        import com.handmark.pulltorefresh.library.ILoadingLayout;
+        import com.handmark.pulltorefresh.library.PullToRefreshBase;
+        import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+        import org.greenrobot.eventbus.EventBus;
+        import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+        import java.util.ArrayList;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
+        import java.util.Timer;
+        import java.util.TimerTask;
 
-import cn.jzvd.JZVideoPlayer;
+        import cn.jzvd.JZVideoPlayer;
 
 /**
  * Created by shy on 2017/10/20 13:56
@@ -114,7 +114,7 @@ public class SelectionFragment extends BaseFragment {
                 break;
 
             case  8901://当前页
-                   // LogUtil.i("当前页"+event.getMsg());
+                // LogUtil.i("当前页"+event.getMsg());
                 if (event.getMsg()==0){
                     pullToRefresh.getRefreshableView().setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
@@ -630,7 +630,7 @@ public class SelectionFragment extends BaseFragment {
 
                     } else {
 
-                   //     LogUtil.i(data.toString());
+                        //     LogUtil.i(data.toString());
 
                         mCurrentPage = mCurrentPage + 1;
                     }

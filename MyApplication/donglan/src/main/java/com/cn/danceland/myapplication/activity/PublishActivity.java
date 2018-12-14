@@ -538,27 +538,28 @@ public class PublishActivity extends BaseActivity {
     }
 
     int maptag = 0;
-   // int ystag=0;
+
+    // int ystag=0;
     //压缩图片
     private void compressImg(final List<File> files) {
         final List<String> paths = new ArrayList<>();
-        final List<String> ystags=new ArrayList<>();
-    //    List<Map<String,String>> pathsmaps=new ArrayList<>();
+        final List<String> ystags = new ArrayList<>();
+        //    List<Map<String,String>> pathsmaps=new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
 
             String houzhui = files.get(i).getAbsolutePath().substring(files.get(i).getAbsolutePath().lastIndexOf(".") + 1);
-            if (TextUtils.equals(houzhui.toLowerCase(),"gif")){
-                arrayFileMap.put(i+"", files.get(i));
-            }else {
+            if (TextUtils.equals(houzhui.toLowerCase(), "gif")) {
+                arrayFileMap.put(i + "", files.get(i));
+            } else {
 
                 paths.add(files.get(i).getAbsolutePath());
-                ystags.add(""+i);
+                ystags.add("" + i);
 
             }
 
         }
 
-        if (paths.size()==0&&files.size()>0){
+        if (paths.size() == 0 && files.size() > 0) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -587,7 +588,7 @@ public class PublishActivity extends BaseActivity {
                         maptag = 0;
                     } else {
                         LogUtil.i("图片上传失败");
-                     //   ToastUtils.showToastShort("图片过大，上传失败");
+                        //   ToastUtils.showToastShort("图片过大，上传失败");
                     }
 
                 }
@@ -612,7 +613,7 @@ public class PublishActivity extends BaseActivity {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         //         LogUtil.i(file.getAbsolutePath());
 
-                        if (maptag<paths.size()){
+                        if (maptag < paths.size()) {
                             arrayFileMap.put(ystags.get(maptag), file);
                         }
 
@@ -633,25 +634,29 @@ public class PublishActivity extends BaseActivity {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
-                                    if (upImagesBean.getSuccess()) {
-                                        List<UpImagesBean.Data> beanList = upImagesBean.getData();
+                                    try {
+                                        UpImagesBean upImagesBean = gson.fromJson(s, UpImagesBean.class);
+                                        if (upImagesBean.getSuccess()) {
+                                            List<UpImagesBean.Data> beanList = upImagesBean.getData();
 
-                                        arrImgUrl = new ArrayList<String>();
-                                        arrImgPath = new ArrayList<String>();
-                                        if (beanList != null && beanList.size() > 0) {
-                                            for (int k = 0; k < beanList.size(); k++) {
-                                                arrImgUrl.add(beanList.get(k).getImgUrl());
-                                                arrImgPath.add(beanList.get(k).getImgPath());
+                                            arrImgUrl = new ArrayList<String>();
+                                            arrImgPath = new ArrayList<String>();
+                                            if (beanList != null && beanList.size() > 0) {
+                                                for (int k = 0; k < beanList.size(); k++) {
+                                                    arrImgUrl.add(beanList.get(k).getImgUrl());
+                                                    arrImgPath.add(beanList.get(k).getImgPath());
+                                                }
                                             }
-                                        }
 
-                                        Message message = new Message();
-                                        message.what = 2;
-                                        handler.sendMessage(message);
-                                        maptag = 0;
-                                    } else {
-                                        LogUtil.i("图片上传失败");
+                                            Message message = new Message();
+                                            message.what = 2;
+                                            handler.sendMessage(message);
+                                            maptag = 0;
+                                        } else {
+                                            LogUtil.i("图片上传失败");
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
 
                                 }
