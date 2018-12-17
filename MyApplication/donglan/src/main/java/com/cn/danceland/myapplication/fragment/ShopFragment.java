@@ -408,17 +408,28 @@ public class ShopFragment extends BaseFragment {
     private void setMap() {
         roleMap = new HashMap<>();
         authMap = new HashMap<>();
-        roleMap.put("会籍顾问", "1");
-        roleMap.put("教练", "2");
-        roleMap.put("前台", "3");
-        roleMap.put("店长", "4");
-        roleMap.put("会籍主管", "5");
-        roleMap.put("教练主管", "6");
-        roleMap.put("前台主管", "7");
-        roleMap.put("操教", "8");
-        roleMap.put("出纳", "9");
-        roleMap.put("收银", "10");
-        roleMap.put("兼职教练", "11");
+        if (info != null) {
+            roles = info.getRoles();
+            if (roles != null && roles.size() > 0) {
+                for (int i = 0; i < roles.size(); i++) {
+                    roleMap.put(roles.get(i).getName(),roles.get(i).getRole_type()+"");
+
+                }
+            }
+        }
+
+//
+//        roleMap.put("会籍顾问", "1");
+//        roleMap.put("教练", "2");
+//        roleMap.put("前台", "3");
+//        roleMap.put("店长", "4");
+//        roleMap.put("会籍主管", "5");
+//        roleMap.put("教练主管", "6");
+//        roleMap.put("前台主管", "7");
+//        roleMap.put("操教", "8");
+//        roleMap.put("出纳", "9");
+//        roleMap.put("收银", "10");
+//        roleMap.put("兼职教练", "11");
         authMap.put("准会员", "1");
         authMap.put("会员", "2");
 
@@ -443,29 +454,30 @@ public class ShopFragment extends BaseFragment {
             roles = info.getRoles();
             if (roles != null && roles.size() > 0) {
                 for (int i = 0; i < roles.size(); i++) {
-                    if (roles.get(i).getRole_type() == 1) {
-                        roleList.add("会籍顾问");
-                    } else if (roles.get(i).getRole_type() == 2) {
-                        roleList.add("教练");
-                    } else if (roles.get(i).getRole_type() == 3) {
-                        roleList.add("前台");
-                    } else if (roles.get(i).getRole_type() == 4) {
-                        roleList.add("店长");
-                    } else if (roles.get(i).getRole_type() == 5) {
-                        roleList.add("会籍主管");
-                    } else if (roles.get(i).getRole_type() == 6) {
-                        roleList.add("教练主管");
-                    } else if (roles.get(i).getRole_type() == 7) {
-                        roleList.add("前台主管");
-                    } else if (roles.get(i).getRole_type() == 8) {
-                        roleList.add("操教");
-                    } else if (roles.get(i).getRole_type() == 9) {
-                        roleList.add("出纳");
-                    } else if (roles.get(i).getRole_type() == 10) {
-                        roleList.add("收银");
-                    } else if (roles.get(i).getRole_type() == 11) {
-                        roleList.add("兼职教练");
-                    }
+                    roleList.add(roles.get(i).getName());
+//                    if (roles.get(i).getRole_type() == 1) {
+//                        roleList.add("会籍顾问");
+//                    } else if (roles.get(i).getRole_type() == 2) {
+//                        roleList.add("教练");
+//                    } else if (roles.get(i).getRole_type() == 3) {
+//                        roleList.add("前台");
+//                    } else if (roles.get(i).getRole_type() == 4) {
+//                        roleList.add("店长");
+//                    } else if (roles.get(i).getRole_type() == 5) {
+//                        roleList.add("会籍主管");
+//                    } else if (roles.get(i).getRole_type() == 6) {
+//                        roleList.add("教练主管");
+//                    } else if (roles.get(i).getRole_type() == 7) {
+//                        roleList.add("前台主管");
+//                    } else if (roles.get(i).getRole_type() == 8) {
+//                        roleList.add("操教");
+//                    } else if (roles.get(i).getRole_type() == 9) {
+//                        roleList.add("出纳");
+//                    } else if (roles.get(i).getRole_type() == 10) {
+//                        roleList.add("收银");
+//                    } else if (roles.get(i).getRole_type() == 11) {
+//                        roleList.add("兼职教练");
+//                    }
                 }
             }
 
@@ -1059,8 +1071,8 @@ public class ShopFragment extends BaseFragment {
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "业绩展板");
                         //教练或教练主管
                         if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
-                            startActivity(new Intent(mActivity, YeJiZhanBanActivity.class).putExtra("isjiaolian",true));
-                        }  else {
+                            startActivity(new Intent(mActivity, YeJiZhanBanActivity.class).putExtra("isjiaolian", true));
+                        } else {
                             startActivity(new Intent(mActivity, YeJiZhanBanActivity.class));
                         }
 

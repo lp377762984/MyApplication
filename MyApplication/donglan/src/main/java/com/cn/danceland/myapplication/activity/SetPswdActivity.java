@@ -113,7 +113,10 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
                 RequestSimpleBean simpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (simpleBean.getSuccess()) {
                     ToastUtils.showToastShort("密码设置成功");
-                    data.setHasPwd(true);
+                    if(data!=null){
+                        data.setHasPwd(true);
+                    }
+
                     DataInfoCache.saveOneCache(data,Constants.MY_INFO);
                     finish();
                 }
