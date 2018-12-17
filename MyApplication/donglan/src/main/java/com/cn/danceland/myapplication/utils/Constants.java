@@ -365,6 +365,7 @@ public class Constants {
     public static String QUERY_HUIJI = HOST + "/panel/queryHuiJi";// 查询会籍业绩
     public static String QUERY_JIAOLIANYEJI = HOST + "/panel/queryJiaoLianYeJi";// 查询教练业绩
     public static String QUERY_HUIJIYEWU = HOST + "/panel/queryHuiJiYeWu";// 查询会籍业务
+    public static String QUERY_JIAOLIANYEWU = HOST + "/panel/queryJiaoLianYeWu";// 查询教练业务
     public static String QUERY_HUIJIYEJIMINGXI = HOST + "/panel/queryHuiJiYeJiMingXi";// 查询会籍业务明细
     public static String QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
 
@@ -483,6 +484,7 @@ public class Constants {
         QUERY_HUIJI = HOST + "/panel/queryHuiJi";// 查询会籍业绩
         QUERY_JIAOLIANYEJI = HOST + "/panel/queryJiaoLianYeJi";// 查询教练业绩
         QUERY_HUIJIYEWU = HOST + "/panel/queryHuiJiYeWu";// 查询会籍业务
+        QUERY_JIAOLIANYEWU = HOST + "/panel/queryJiaoLianYeWu";// 查询教练业务
         QUERY_HUIJIYEJIMINGXI = HOST + "/panel/queryHuiJiYeJiMingXi";// 查询会籍业务明细
         QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
         //报表相关

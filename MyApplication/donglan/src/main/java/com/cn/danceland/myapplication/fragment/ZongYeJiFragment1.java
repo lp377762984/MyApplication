@@ -87,7 +87,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
         if (mCurrentDate == null) {
             mCurrentDate = TimeUtils.timeStamp2Date(System.currentTimeMillis() + "", "yyyy-MM-dd");
         }
-        findhjyj(mCurrentDate, mCurrentDate);
+     //   findhjyj(mCurrentDate, mCurrentDate);
+        findhjyj("2017-01-01", mCurrentDate);
         setOnlyDownReresh();
     }
 
@@ -162,26 +163,28 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
             if (isjiaolian) {
 
                 viewHolder.setText(R.id.tv_name, data.getEmp_name());
-                viewHolder.setText(R.id.tv_sum, "总业绩：" + data.getTotal() + "元");
+                viewHolder.setText(R.id.tv_sum, "总业绩：" + data.getAllccourse() + "元");
                 viewHolder.setText(R.id.tv_yewu1, "单人私教：" + data.getSinglecourse());
                 viewHolder.setText(R.id.tv_yewu2, "团体私教：" + data.getGroupcourse());
                 RequestOptions options = new RequestOptions()
                         .transform(new GlideRoundTransform(mActivity, 10));
 
                 Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-//                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-////                    Bundle bundle=new Bundle();
-////                    HuiJiYeJiBean.Data data1=dataList.get(position);
-////                    bundle.putSerializable(data1);
-//
-//                        startActivity(new Intent(mActivity, GeRenYeJiActivity.class)
-//                                .putExtra("date",mCurrentDate)
-//                                .putExtra("id",data.getEmployee_id())
-//                                .putExtra("data",data));
-//                    }
-//                });
+                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                    Bundle bundle=new Bundle();
+//                    HuiJiYeJiBean.Data data1=dataList.get(position);
+//                    bundle.putSerializable(data1);
+
+                        startActivity(new Intent(mActivity, GeRenYeJiActivity.class)
+                                .putExtra("date",mCurrentDate)
+                                .putExtra("id",data.getEmployee_id())
+                                .putExtra("data",data)
+                                .putExtra("isjiaolian",isjiaolian)
+                        );
+                    }
+                });
             } else {
 
                 viewHolder.setText(R.id.tv_name, data.getEmp_name());

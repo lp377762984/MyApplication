@@ -61,10 +61,51 @@ public class HuiJiYeWuBean implements Serializable{
         private String avatar_path;
         private String avatar_url;
         private long total;
-
         private   long   newGuest;
         private    long     visitGuest;
         private    long    visitMember ;
+        private    long    all ;
+        private    long    jihua ;
+        private    long    tice ;
+        private    long    ticefenxi ;
+
+//        all (integer, optional): 总计 ,
+//        jihua (integer, optional): 健身计划 ,
+//        tice (integer, optional): 体测 ,
+//        ticefenxi (integer, optional): 体测分析
+
+
+        public long getJihua() {
+            return jihua;
+        }
+
+        public void setJihua(long jihua) {
+            this.jihua = jihua;
+        }
+
+        public long getTice() {
+            return tice;
+        }
+
+        public void setTice(long tice) {
+            this.tice = tice;
+        }
+
+        public long getTicefenxi() {
+            return ticefenxi;
+        }
+
+        public void setTicefenxi(long ticefenxi) {
+            this.ticefenxi = ticefenxi;
+        }
+
+        public long getAll() {
+            return all;
+        }
+
+        public void setAll(long all) {
+            this.all = all;
+        }
 
         public void setTotal(long total) {
             this.total = total;

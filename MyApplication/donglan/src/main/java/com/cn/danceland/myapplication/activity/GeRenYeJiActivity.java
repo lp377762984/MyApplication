@@ -11,6 +11,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.bean.HuiJiYeJiBean;
 import com.cn.danceland.myapplication.fragment.GeRenYeJiFragment;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
+import com.cn.danceland.myapplication.utils.LogUtil;
 
 /**
  * Created by shy on 2018/6/25 15:18
@@ -24,6 +25,7 @@ public class GeRenYeJiActivity extends FragmentActivity {
 
     private GeRenYeJiFragment geRenYeJiFragment;
     String toChatUsername;
+    private boolean isjiaolian;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -31,10 +33,13 @@ public class GeRenYeJiActivity extends FragmentActivity {
         setContentView(R.layout.activity_ge_ren_ye_ji);
 
         initView();
+        isjiaolian=getIntent().getBooleanExtra("isjiaolian",false);
+        LogUtil.i(isjiaolian+"");
         geRenYeJiFragment = new GeRenYeJiFragment();
         Bundle bundle=new Bundle();
         bundle.putString("date",getIntent().getStringExtra("date"));
         bundle.putString("id",getIntent().getStringExtra("id"));
+        bundle.putBoolean("isjiaolian",isjiaolian);
         geRenYeJiFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.container, geRenYeJiFragment).commit();
 
@@ -48,9 +53,18 @@ public class GeRenYeJiActivity extends FragmentActivity {
         TextView tv_yewu1=findViewById(R.id.tv_yewu1);
         TextView tv_yewu2=findViewById(R.id.tv_yewu2);
         tv_name.setText(data.getEmp_name());
-        tv_sum.setText("总业绩：" + data.getTotal() + "元");
-        tv_yewu1.setText("办卡：" + data.getNewcard());
-        tv_yewu2.setText("租柜：" + data.getLeaselocker());
+
+        if (isjiaolian){
+            tv_sum.setText("总业绩：" + data.getAllccourse() + "元");
+            tv_yewu1.setText("单人私教：" + data.getSinglecourse());
+            tv_yewu2.setText("团体私教：" + data.getGroupcourse());
+        }else {
+            tv_sum.setText("总业绩：" + data.getTotal() + "元");
+            tv_yewu1.setText("办卡：" + data.getNewcard());
+            tv_yewu2.setText("租柜：" + data.getLeaselocker());
+        }
+
+
 
         RequestOptions options = new RequestOptions()
                 .transform(new GlideRoundTransform(this, 10));

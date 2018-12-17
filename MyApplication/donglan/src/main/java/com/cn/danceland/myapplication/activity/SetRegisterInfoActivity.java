@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
@@ -133,9 +134,9 @@ public class SetRegisterInfoActivity extends BaseActivity implements View.OnClic
 
         lp_month.setTextSize(24);
         lp_date.setTextSize(24);
-        lp_year.setCenterTextColor(getColor(R.color.color_dl_yellow));
-        lp_month.setCenterTextColor(getColor(R.color.color_dl_yellow));
-        lp_date.setCenterTextColor(getColor(R.color.color_dl_yellow));
+        lp_year.setCenterTextColor( ContextCompat.getColor(this,R.color.color_dl_yellow) );
+        lp_month.setCenterTextColor(ContextCompat.getColor(this,R.color.color_dl_yellow));
+        lp_date.setCenterTextColor(ContextCompat.getColor(this,R.color.color_dl_yellow));
         lp_year.setOuterTextColor(Color.parseColor("#6d819c"));
         lp_month.setOuterTextColor(Color.parseColor("#6d819c"));
         lp_date.setOuterTextColor(Color.parseColor("#6d819c"));

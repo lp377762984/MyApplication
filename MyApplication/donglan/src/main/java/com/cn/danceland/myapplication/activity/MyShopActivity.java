@@ -226,7 +226,7 @@ public class MyShopActivity extends BaseActivity implements View.OnClickListener
                 MyJionShopList shopListInfo = new MyJionShopList();
                 shopListInfo = gson.fromJson(s, MyJionShopList.class);
                 if (shopListInfo.getSuccess()) {
-                    if (shopListInfo.getData().size() > 0) {
+                    if (shopListInfo.getData()!=null&&shopListInfo.getData().size() > 0) {
                         data = shopListInfo.getData();
                         listViewAdapter.notifyDataSetChanged();
                     } else {

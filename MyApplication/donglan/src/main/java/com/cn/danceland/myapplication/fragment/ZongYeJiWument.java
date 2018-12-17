@@ -48,6 +48,7 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
     private MylistAtapter mylistAtapter;
     private int mCurrentPage = 0;
     private String mCurrentDate =null;
+    private boolean isjiaolian;
 
     @Override
     public void onEventMainThread(StringEvent event) {
@@ -69,6 +70,7 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
 
     @Override
     public CommonAdapter setAtapter() {
+        isjiaolian=getArguments().getBoolean("isjiaolian");
         mylistAtapter = new MylistAtapter(mActivity, R.layout.listview_item_jinriyewu, dataList);
 //        EmptyWrapper mEmptyWrapper = new EmptyWrapper(mylistAtapter);
 //        mEmptyWrapper.setEmptyView(R.layout.no_info_layout);
@@ -85,7 +87,7 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
         if (mCurrentDate==null){
             mCurrentDate= TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd");
         }
-        findhjyj(mCurrentDate, mCurrentDate);
+        findhjyj("2017-01-01", mCurrentDate);
         setOnlyDownReresh();
     }
 
@@ -97,7 +99,14 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
 
 
     private void findhjyj(final String start, final String end) {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJIYEWU, new Response.Listener<String>() {
+        String url;
+        if (isjiaolian){
+            url= Constants.QUERY_JIAOLIANYEWU;
+         }else {
+            url= Constants.QUERY_HUIJIYEWU;
+        }
+
+        MyStringRequest request = new MyStringRequest(Request.Method.POST,url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -143,24 +152,47 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
 
         @Override
         public void convert(ViewHolder viewHolder, final HuiJiYeWuBean.Data data, int position) {
-            viewHolder.setText(R.id.tv_name, data.getEmp_name());
-            viewHolder.setText(R.id.tv_sum, "总业务：" + data.getTotal() + "个");
-            viewHolder.setText(R.id.tv_yewu1, "潜客增加：" + data.getNewGuest());
-            viewHolder.setText(R.id.tv_yewu2, "潜客回访：" + data.getVisitGuest());
-            viewHolder.setText(R.id.tv_yewu3, "会员回访：" + data.getVisitMember());
-            RequestOptions options = new RequestOptions()
-                    .transform(new GlideRoundTransform(mActivity, 10));
 
-            Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-            viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-               startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
-                       .putExtra("date",mCurrentDate)
-                       .putExtra("data",data)
-               );
-                }
-            });
+            if (isjiaolian){
+                viewHolder.setText(R.id.tv_name, data.getEmp_name());
+                viewHolder.setText(R.id.tv_sum, "总业务：" + data.getAll() + "个");
+                viewHolder.setText(R.id.tv_yewu1, "体侧：" + data.getTice());
+                viewHolder.setText(R.id.tv_yewu2, "体侧分析：" + data.getTicefenxi());
+                viewHolder.setText(R.id.tv_yewu3, "健身计划：" + data.getJihua());
+                RequestOptions options = new RequestOptions()
+                        .transform(new GlideRoundTransform(mActivity, 10));
+
+                Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
+//                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
+//                                .putExtra("date",mCurrentDate)
+//                                .putExtra("data",data)
+//                        );
+//                    }
+//                });
+            }else {
+                viewHolder.setText(R.id.tv_name, data.getEmp_name());
+                viewHolder.setText(R.id.tv_sum, "总业务：" + data.getTotal() + "个");
+                viewHolder.setText(R.id.tv_yewu1, "潜客增加：" + data.getNewGuest());
+                viewHolder.setText(R.id.tv_yewu2, "潜客回访：" + data.getVisitGuest());
+                viewHolder.setText(R.id.tv_yewu3, "会员回访：" + data.getVisitMember());
+                RequestOptions options = new RequestOptions()
+                        .transform(new GlideRoundTransform(mActivity, 10));
+
+                Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
+                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
+                                .putExtra("date",mCurrentDate)
+                                .putExtra("data",data)
+                        );
+                    }
+                });
+            }
+
         }
 
 
