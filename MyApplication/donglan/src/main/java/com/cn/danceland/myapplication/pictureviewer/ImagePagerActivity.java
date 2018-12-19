@@ -119,12 +119,12 @@ public class ImagePagerActivity extends FragmentActivity {
         Animation scaleAnimation = new ScaleAnimation((float) mOriginWidth / (float) AppUtils.getWidth(), 1f,
                 (float) mOriginWidth / (float) AppUtils.getWidth(), 1f, mOriginLeft, mOriginTop);
         scaleAnimation.setDuration(250);
-        scaleAnimation.setFillAfter(true);
+      //  scaleAnimation.setFillAfter(true);
         scaleAnimation.setInterpolator(new AccelerateInterpolator());//加速变化 越来越快
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                fl_image.getBackground().setAlpha(0);
+           //     fl_image.getBackground().setAlpha(0);
             }
 
             @Override
@@ -142,7 +142,7 @@ public class ImagePagerActivity extends FragmentActivity {
         //设置动画持续时长
         alphaAnimation.setDuration(250);
         //设置动画结束之后的状态是否是动画的最终状态，true，表示是保持动画结束时的最终状态
-        alphaAnimation.setFillAfter(true);
+     //   alphaAnimation.setFillAfter(true);
 
 
         ValueAnimator animator = ValueAnimator.ofInt(0, 255);
@@ -179,7 +179,7 @@ public class ImagePagerActivity extends FragmentActivity {
         Animation scaleAnimation = new ScaleAnimation(1f, (float) mOriginWidth / (float) AppUtils.getWidth(), 1f,
                 (float) mOriginWidth / (float) AppUtils.getWidth(), mOriginLeft, mOriginTop);
         scaleAnimation.setDuration(250);
-        scaleAnimation.setFillAfter(true);
+     //   scaleAnimation.setFillAfter(true);
         scaleAnimation.setInterpolator(new DecelerateInterpolator());//减速变化 越来越慢
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -204,19 +204,19 @@ public class ImagePagerActivity extends FragmentActivity {
         //设置动画持续时长
         alphaAnimation.setDuration(250);
         //设置动画结束之后的状态是否是动画的最终状态，true，表示是保持动画结束时的最终状态
-        alphaAnimation.setFillAfter(true);
+    //    alphaAnimation.setFillAfter(true);
 
-        ValueAnimator animator = ValueAnimator.ofInt(255, 0);
-        animator.setDuration(250);
-        animator.setInterpolator(new AccelerateInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                int curValue = (int) animation.getAnimatedValue();
-                fl_image.getBackground().setAlpha(curValue);
-            }
-        });
-        animator.start();
+//        ValueAnimator animator = ValueAnimator.ofInt(255, 0);
+//        animator.setDuration(250);
+//        animator.setInterpolator(new AccelerateInterpolator());
+//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                int curValue = (int) animation.getAnimatedValue();
+//                fl_image.getBackground().setAlpha(curValue);
+//            }
+//        });
+//        animator.start();
         AnimationSet animationSet=new AnimationSet(true);
         animationSet.addAnimation(alphaAnimation);
         animationSet.addAnimation(scaleAnimation);

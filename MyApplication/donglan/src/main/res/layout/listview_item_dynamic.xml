@@ -183,10 +183,12 @@
                 android:visibility="gone"
                 app:cardCornerRadius="6dp"
                 app:cardElevation="0dp"
+                android:background="@color/black"
                 app:cardPreventCornerOverlap="false">
 
                 <cn.jzvd.JZVideoPlayerStandard
                     android:id="@+id/videoplayer"
+                    android:background="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="200dp" />
             </android.support.v7.widget.CardView>

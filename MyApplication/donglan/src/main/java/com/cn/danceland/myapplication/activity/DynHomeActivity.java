@@ -23,7 +23,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,7 +45,6 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.adapter.CommentListviewAdapter;
 import com.cn.danceland.myapplication.adapter.DynZanHeadviewRecylerViewAdapter;
-import com.cn.danceland.myapplication.adapter.ImageGridAdapter;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestCommitCommentBean;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
@@ -938,7 +936,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
         return headview;
     }
 
-    private void setImg(ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
+    private void setImg(final ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
         RequestOptions options1 = new RequestOptions()
                 .placeholder(R.drawable.loading_img)//加载占位图
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -968,6 +966,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         .needDownload(true)//是否支持图片下载
                         .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                         .build();
+                config.setImageBean(AppUtils.img2Location(imageView));
                 ImagePagerActivity.startActivity( DynHomeActivity.this, config);
             }
         });

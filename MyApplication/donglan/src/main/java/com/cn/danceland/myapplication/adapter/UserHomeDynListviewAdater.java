@@ -16,7 +16,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -708,7 +707,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
         TextView iv_pic6_6_meng;
     }
 
-    private void setImg(ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
+    private void setImg(final ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
         RequestOptions options1 = new RequestOptions()
                 .placeholder(R.drawable.loading_img)//加载占位图
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -738,6 +737,7 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                         .needDownload(true)//是否支持图片下载
                         .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                         .build();
+                config.setImageBean(AppUtils.img2Location(imageView));
                 ImagePagerActivity.startActivity(context, config);
             }
         });

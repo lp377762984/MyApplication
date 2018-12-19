@@ -12,7 +12,7 @@
         android:layout_marginLeft="-100dp"
         android:layout_marginRight="-300dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ova"/>
+        android:src="@drawable/ic_check_white_48dp"/>
 
 
 </FrameLayout>

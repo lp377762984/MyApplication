@@ -17,8 +17,10 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.MyApplication;
+import com.cn.danceland.myapplication.bean.ImageBean;
 
 import java.util.List;
 import java.util.UUID;
@@ -68,14 +70,14 @@ public class AppUtils {
      * 获取渠道编号
      * @return
      */
-    public static String getChannelCode(){
-        String code=null;
-        if (Constants.DEV_CONFIG){
+    public static String getChannelCode() {
+        String code = null;
+        if (Constants.DEV_CONFIG) {
             return "1";
         }
-        code=MyApplication.channelMap.get(getChannelName());
-        if (code==null){
-            code="1";
+        code = MyApplication.channelMap.get(getChannelName());
+        if (code == null) {
+            code = "1";
         }
         return code;
     }
@@ -98,6 +100,7 @@ public class AppUtils {
 
     /**
      * 屏幕宽度(dp)
+     *
      * @return 屏幕宽度(dp)
      */
     public static int getScreenWidth() {
@@ -258,11 +261,12 @@ public class AppUtils {
     }
 
     /**
-     *  判断手机是否安装某个应用
-     *  @param context
-     *  @param appPackageName  应用包名
-     *  @return   true：安装，false：未安装
-     *  */
+     * 判断手机是否安装某个应用
+     *
+     * @param context
+     * @param appPackageName 应用包名
+     * @return true：安装，false：未安装
+     */
     public static boolean isApplicationAvilible(Context context, String appPackageName) {
         PackageManager packageManager = context.getPackageManager();// 获取packagemanager
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
@@ -271,11 +275,29 @@ public class AppUtils {
                 String pn = pinfo.get(i).packageName;
 //                LogUtil.i("packageName--"+pn);
                 if (appPackageName.equals(pn)) {
-                    LogUtil.i("packageName--"+pn);
+                    LogUtil.i("packageName--" + pn);
                     return true;
                 }
             }
         }
         return false;
     }
+
+    /***
+     * 获取图片位置
+     * @param imageView
+     * @return
+     */
+    public static ImageBean img2Location(ImageView imageView) {
+
+        int[] location = new int[2];
+        imageView.getLocationOnScreen(location);
+        ImageBean bean = new ImageBean(
+                location[0], location[1],
+                imageView.getHeight(), imageView.getWidth());
+        //  bean.setFilePath(path);
+
+        return bean;
+    }
+
 }
