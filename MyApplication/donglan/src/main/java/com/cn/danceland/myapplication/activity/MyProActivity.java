@@ -401,7 +401,7 @@ public class MyProActivity extends BaseActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<String, String>();
-                map.put("self_avatar_path", self_avatar_path);
+                map.put("self_avatar_path", selfAvatarPath);
                 map.put("nick_name", nick_name);
                 map.put("gender", gender);
                 map.put("hobby", hobby);
@@ -1064,12 +1064,12 @@ public class MyProActivity extends BaseActivity {
             }
             if (file != null) {
                 params.put("file", file);
-
+                LogUtil.i("开始上传文件");
                 MultipartRequest request = new MultipartRequest(Request.Method.POST, params, Constants.UPLOADFILE_URL, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String s) {
-                        LogUtil.i( s);
+                        LogUtil.i(s);
                         HeadImageBean headImageBean = gson.fromJson(s, HeadImageBean.class);
                         if (headImageBean != null && headImageBean.getData() != null) {
 

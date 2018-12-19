@@ -464,7 +464,12 @@
         <activity
             android:name=".activity.SettingActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".pictureviewer.ImagePagerActivity" />
+        <activity android:name=".pictureviewer.ImagePagerActivity"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.notAnimation"
+
+            />
         <activity
             android:name=".activity.ResetPhoneActivity"
             android:screenOrientation="portrait"></activity>

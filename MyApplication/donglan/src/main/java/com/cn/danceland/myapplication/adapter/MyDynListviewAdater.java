@@ -18,7 +18,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +37,7 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.DynHomeActivity;
 import com.cn.danceland.myapplication.activity.UserSelfHomeActivity;
 import com.cn.danceland.myapplication.bean.Data;
+import com.cn.danceland.myapplication.bean.ImageBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
@@ -778,7 +778,7 @@ public class MyDynListviewAdater extends BaseAdapter {
         TextView iv_pic6_6_meng;
     }
 
-    private void setImg(ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
+    private void setImg(final ImageView imageView, final List<String> imgDatas, int viewParams, final int position) {
         RequestOptions options1 = new RequestOptions()
                 .placeholder(R.drawable.loading_img)//加载占位图
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -797,6 +797,8 @@ public class MyDynListviewAdater extends BaseAdapter {
                 .apply(options1)
                 .into(imageView);
 
+
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -808,10 +810,27 @@ public class MyDynListviewAdater extends BaseAdapter {
                         .needDownload(true)//是否支持图片下载
                         .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
                         .build();
+                config.setImageBean(img2Location(imageView));
+
+
                 ImagePagerActivity.startActivity(context, config);
             }
         });
     }
+
+    private ImageBean img2Location(ImageView imageView){
+
+        int[] location = new int[2];
+        imageView.getLocationOnScreen(location);
+        ImageBean bean = new ImageBean(
+                location[0],location[1],
+                imageView.getHeight(),imageView.getWidth());
+      //  bean.setFilePath(path);
+
+        return bean;
+    }
+
+
 
     private void showListDialog(final int pos) {
         final String[] items = {"举报"};

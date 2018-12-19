@@ -2,6 +2,8 @@ package com.cn.danceland.myapplication.pictureviewer;
 
 import android.support.annotation.DrawableRes;
 
+import com.cn.danceland.myapplication.bean.ImageBean;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,6 +18,15 @@ public class PictureConfig {
     public static int resId = 0;//占位符资源图片
     public static int position = 0;//下标
     public static ArrayList<String> list;
+    public ImageBean imageBean;
+
+    public ImageBean getImageBean() {
+        return imageBean;
+    }
+
+    public void setImageBean(ImageBean imageBean) {
+        this.imageBean = imageBean;
+    }
 
     public PictureConfig(Builder builder) {
         this.mIsShowNumber = builder.mIsShowNumber;

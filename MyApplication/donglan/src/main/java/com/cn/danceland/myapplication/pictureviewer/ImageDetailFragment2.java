@@ -61,6 +61,7 @@ public class ImageDetailFragment2 extends Fragment {
         super.onCreate(savedInstanceState);
         mImageUrl = getArguments() != null ? getArguments().getString("url") : null;
         BigImageViewer.initialize(GlideImageLoader.with(MyApplication.getContext()));
+
     }
 
     @Override
@@ -146,7 +147,8 @@ public class ImageDetailFragment2 extends Fragment {
         bigImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+                ((ImagePagerActivity)getActivity()).getContext().overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
+                ((ImagePagerActivity)getActivity()).startEndAnim();
             }
         });
 //        bigImageView.showImage(

@@ -28,6 +28,9 @@ android {
     }
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
+
+
+
     greendao {
         schemaVersion 3//指定数据库版本号，更新操作会用到;
     }
@@ -35,11 +38,15 @@ android {
         applicationId "com.cn.danceland.myapplication"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 6
-        versionName "2.0.0"
+        versionCode 8
+        versionName "2.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
-    multiDexEnabled true
+        multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
     }
     buildTypes {
         release {
@@ -112,12 +119,12 @@ android {
 //        compile 'com.android.support:support-compat:25.1.1'
 //        compile 'com.daimajia.easing:library:2.0@aar'
 //        compile 'com.daimajia.androidanimations:library:2.3@aar'
-      //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
+        //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
         compile files('libs/pldroid-shortvideo-1.14.0.jar')//七牛短视频  发布动态用到压缩视频
 
 
-            compile 'com.umeng.sdk:common:latest.integration'//友盟统计
-            compile 'com.umeng.sdk:analytics:latest.integration'//友盟统计
+        compile 'com.umeng.sdk:common:latest.integration'//友盟统计
+        compile 'com.umeng.sdk:analytics:latest.integration'//友盟统计
     }
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false

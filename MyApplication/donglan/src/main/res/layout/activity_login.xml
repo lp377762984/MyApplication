@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="24dp"
                 android:elevation="3dp"
                 app:cardCornerRadius="20dp"
                 app:cardPreventCornerOverlap="false">
@@ -53,7 +53,7 @@
                 android:layout_alignStart="@+id/miman"
                 android:layout_below="@+id/logo"
                 android:layout_marginRight="25dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/edit_bg_phone"
                 android:focusable="true"
 
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/wangji"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp">
+                android:layout_marginTop="16dp">
 
                 <CheckBox
                     android:id="@+id/cb_agreement"
@@ -294,7 +294,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="34dp"
                     >
 
