@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
@@ -87,8 +88,8 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
         if (mCurrentDate == null) {
             mCurrentDate = TimeUtils.timeStamp2Date(System.currentTimeMillis() + "", "yyyy-MM-dd");
         }
-     //   findhjyj(mCurrentDate, mCurrentDate);
-        findhjyj("2017-01-01", mCurrentDate);
+        //   findhjyj(mCurrentDate, mCurrentDate);
+        findhjyj(mCurrentDate, mCurrentDate);
         setOnlyDownReresh();
     }
 
@@ -119,7 +120,12 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
                     getListAdapter().notifyDataSetChanged();
                     float zongyeji = 0;
                     for (int i = 0; i < dataList.size(); i++) {
-                        zongyeji = zongyeji + dataList.get(i).getTotal();
+                        if (isjiaolian){
+                            zongyeji = zongyeji + dataList.get(i).getAllccourse();
+                        }else {
+                            zongyeji = zongyeji + dataList.get(i).getTotal();
+                        }
+
 
                     }
                     EventBus.getDefault().post(new StringEvent(zongyeji + "", 7101));
@@ -176,12 +182,12 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
 //                    Bundle bundle=new Bundle();
 //                    HuiJiYeJiBean.Data data1=dataList.get(position);
 //                    bundle.putSerializable(data1);
-
+                        LogUtil.i(data.toString());
                         startActivity(new Intent(mActivity, GeRenYeJiActivity.class)
-                                .putExtra("date",mCurrentDate)
-                                .putExtra("id",data.getEmployee_id())
-                                .putExtra("data",data)
-                                .putExtra("isjiaolian",isjiaolian)
+                                .putExtra("date", mCurrentDate)
+                                .putExtra("id", data.getEmployee_id())
+                                .putExtra("data", data)
+                                .putExtra("isjiaolian", isjiaolian)
                         );
                     }
                 });
@@ -205,9 +211,18 @@ public class ZongYeJiFragment1 extends BaseRecyclerViewRefreshFragment {
                         startActivity(new Intent(mActivity, GeRenYeJiActivity.class)
                                 .putExtra("date", mCurrentDate)
                                 .putExtra("id", data.getEmployee_id())
+                                .putExtra("isjiaolian", isjiaolian)
                                 .putExtra("data", data));
                     }
                 });
+            }
+
+            //会籍主管或会籍主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+
+
+            }else {
+                viewHolder.setOnClickListener(R.id.ll_item,null);
             }
 
         }

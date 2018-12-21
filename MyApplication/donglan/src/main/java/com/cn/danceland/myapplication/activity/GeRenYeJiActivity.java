@@ -32,21 +32,23 @@ public class GeRenYeJiActivity extends FragmentActivity {
         super.onCreate(arg0);
         setContentView(R.layout.activity_ge_ren_ye_ji);
 
-        initView();
+
         isjiaolian=getIntent().getBooleanExtra("isjiaolian",false);
-        LogUtil.i(isjiaolian+"");
+      //  LogUtil.i(isjiaolian+"");
         geRenYeJiFragment = new GeRenYeJiFragment();
         Bundle bundle=new Bundle();
         bundle.putString("date",getIntent().getStringExtra("date"));
         bundle.putString("id",getIntent().getStringExtra("id"));
         bundle.putBoolean("isjiaolian",isjiaolian);
         geRenYeJiFragment.setArguments(bundle);
+        initView();
         getSupportFragmentManager().beginTransaction().add(R.id.container, geRenYeJiFragment).commit();
 
     }
 
     private void initView() {
         HuiJiYeJiBean.Data data= (HuiJiYeJiBean.Data) getIntent().getSerializableExtra("data");
+        LogUtil.i(data.toString());
         ImageView iv_avatar=findViewById(R.id.iv_avatar);
         TextView tv_name=findViewById(R.id.tv_name);
         TextView tv_sum=findViewById(R.id.tv_sum);

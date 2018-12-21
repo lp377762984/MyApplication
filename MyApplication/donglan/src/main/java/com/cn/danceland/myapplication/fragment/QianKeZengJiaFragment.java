@@ -46,6 +46,8 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
     private String mCurrentDate = null;
     private String id;
     HuiJiYeWuBean.Data data;
+    private boolean isjiaolian;
+    private int type=0;
 //    @Override
 //    public void onEventMainThread(StringEvent event) {
 //        switch (event.getEventCode()) {
@@ -68,7 +70,9 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
 
         mCurrentDate = getArguments().getString("date");
         id=getArguments().getString("id");
+        isjiaolian=getArguments().getBoolean("isjiaolian");
         data= (HuiJiYeWuBean.Data) getArguments().getSerializable("data");
+        type=getArguments().getInt("type");
         return super.initViews();
     }
 
@@ -86,10 +90,18 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
              TextView tv_yewu3 =view.findViewById(R.id.tv_yewu3);
             ImageView iv_avatar =view.findViewById(R.id.iv_avatar);
         tv_name.setText( data.getEmp_name());
-        tv_sum.setText("总业务：" + data.getTotal() + "个");
-        tv_yewu1.setText("潜客增加：" + data.getNewGuest());
-        tv_yewu2.setText( "潜客回访：" + data.getVisitGuest());
-        tv_yewu3.setText("会员回访：" + data.getVisitMember());
+        if (isjiaolian){
+            tv_sum.setText("总业务：" + data.getAll() + "个");
+            tv_yewu1.setText("体测：" + data.getTice());
+            tv_yewu2.setText( "体测分析：" + data.getTicefenxi());
+            tv_yewu3.setText("健身计划：" + data.getJihua());
+        }else {
+            tv_sum.setText("总业务：" + data.getTotal() + "个");
+            tv_yewu1.setText("潜客增加：" + data.getNewGuest());
+            tv_yewu2.setText( "潜客回访：" + data.getVisitGuest());
+            tv_yewu3.setText("会员回访：" + data.getVisitMember());
+        }
+
         RequestOptions options = new RequestOptions()
                 .transform(new GlideRoundTransform(mActivity, 10));
 
@@ -125,7 +137,26 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
 
 
     private void findhjyj(final String start, final String end, final String employee_id) {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_XINQIANKE , new Response.Listener<String>() {
+        String URL="";
+        if (isjiaolian){
+            switch(type){
+                case 3:
+                    URL=Constants.QUERY_TICEMINGXI;
+                    break;
+
+                case 4:
+                    URL=Constants.QUERY_TICEFENXIMINGXI;
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
+            }
+        }else {
+            URL=Constants.QUERY_XINQIANKE;
+        }
+
+        MyStringRequest request = new MyStringRequest(Request.Method.POST, URL , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -162,7 +193,12 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
                 return map;
             }
         };
-        MyApplication.getHttpQueues().add(request);
+        if (isjiaolian&&type==5){
+
+        }else {
+            MyApplication.getHttpQueues().add(request);
+        }
+
     }
 
     class MylistAtapter extends CommonAdapter<RequestQianKeZengJiaBean.Data.Content> {
@@ -176,11 +212,20 @@ public class QianKeZengJiaFragment extends BaseRecyclerViewRefreshFragment {
         @Override
         public void convert(ViewHolder viewHolder, RequestQianKeZengJiaBean.Data.Content data, int position) {
             viewHolder.setText(R.id.tv_name, data.getMember_name());
-            if (data.getCount_date() != null) {
-                viewHolder.setText(R.id.tv_lasttime, TimeUtils.timeStamp2Date(data.getCount_date(),"yyyy.MM.dd HH:mm:ss"));
-            } else {
-                viewHolder.setText(R.id.tv_lasttime,"最近未维护");
+            if (isjiaolian){
+                if (data.getTest_time() != null) {
+                    viewHolder.setText(R.id.tv_lasttime, TimeUtils.timeStamp2Date(data.getTest_time(),"yyyy.MM.dd HH:mm:ss"));
+                } else {
+                    viewHolder.setText(R.id.tv_lasttime,"最近未维护");
+                }
+            }else {
+                if (data.getCount_date() != null) {
+                    viewHolder.setText(R.id.tv_lasttime, TimeUtils.timeStamp2Date(data.getCount_date(),"yyyy.MM.dd HH:mm:ss"));
+                } else {
+                    viewHolder.setText(R.id.tv_lasttime,"最近未维护");
+                }
             }
+
 
             RequestOptions options = new RequestOptions()
                     .transform(new GlideRoundTransform(mActivity, 10))

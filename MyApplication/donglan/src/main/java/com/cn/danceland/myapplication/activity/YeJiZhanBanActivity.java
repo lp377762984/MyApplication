@@ -15,7 +15,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
-import com.cn.danceland.myapplication.fragment.ZongYeJiWument;
+import com.cn.danceland.myapplication.fragment.ZongYeWument;
+import com.cn.danceland.myapplication.utils.Constants;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.CustomDateAndTimePicker;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -64,15 +66,15 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         showZongyeji( zongyeji);
         isjiaolian=getIntent().getBooleanExtra("isjiaolian",false);
 
-//        //会籍主管或会籍主管
-//        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
-//
-//            tv_zongyeji.setVisibility(View.VISIBLE);
-//            findViewById(iv_rili).setVisibility(View.VISIBLE);
-//        }else {
-//            tv_zongyeji.setVisibility(View.GONE);
-//            findViewById(iv_rili).setVisibility(View.GONE);
-//        }
+        //会籍主管或会籍主管
+        if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+
+            tv_zongyeji.setVisibility(View.VISIBLE);
+            findViewById(iv_rili).setVisibility(View.VISIBLE);
+        }else {
+            tv_zongyeji.setVisibility(View.GONE);
+            findViewById(iv_rili).setVisibility(View.GONE);
+        }
 
 
         if (isjiaolian){
@@ -129,7 +131,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
         if (isjiaolian){
             tv_zongyeji.setText("今日教练总业务：" + zongyewu + "个");
         }else {
-            tv_zongyeji.setText("今日会籍总业务：" + zongyewu + "个");
+            tv_zongyeji.setText("今日会籍总业务：" + (zongyewu) + "个");
         }
 
     }
@@ -273,7 +275,7 @@ public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickLis
                  fragment.setArguments(bundle);
                 return fragment;
             } else if (arg0 == 1) {
-                ZongYeJiWument fragment = new ZongYeJiWument();
+                ZongYeWument fragment = new ZongYeWument();
                  fragment.setArguments(bundle);
                 return fragment;
             }

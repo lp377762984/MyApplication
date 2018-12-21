@@ -132,11 +132,38 @@ public class RequestHuiJiYeWuBean {
             private long order_time;
             private int bus_type;
             private int big_type;
+            private int course_type;
             private String member_name;
             private String employee_name;
+            private String emp_name;
+
             private String pay_name;
             private String code;
-//
+
+            public String getEmp_name() {
+                return emp_name;
+            }
+
+            public void setEmp_name(String emp_name) {
+                this.emp_name = emp_name;
+            }
+
+            public float getPrice() {
+                return price;
+            }
+
+            public void setPrice(float price) {
+                this.price = price;
+            }
+
+            public int getCourse_type() {
+                return course_type;
+            }
+
+            public void setCourse_type(int course_type) {
+                this.course_type = course_type;
+            }
+            //
 //            big_type (string, optional): 业务大类 ,
 //            bus_type (string, optional): 业务小类 ,
 //            code (string, optional): big_type=3时为卡号,big_type=4时为柜号 ,

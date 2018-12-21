@@ -40,6 +40,7 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
     private String mCurrentDate = null;
     Map<Integer,String> yewumap=new HashMap<>();
     private String id;
+    private boolean isjiaolian;
 //    @Override
 //    public void onEventMainThread(StringEvent event) {
 //        switch (event.getEventCode()) {
@@ -62,6 +63,7 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
 
         mCurrentDate = getArguments().getString("date");
         id=getArguments().getString("id");
+        isjiaolian=getArguments().getBoolean("isjiaolian");
         return super.initViews();
     }
 
@@ -128,7 +130,13 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
 
 
     private void findhjyj(final String start, final String end, final String employee_id) {
-        MyStringRequest request = new MyStringRequest(Request.Method.POST, Constants.QUERY_HUIJIYEJIMINGXI, new Response.Listener<String>() {
+        String URL;
+        if (isjiaolian){
+            URL=  Constants.QUERY_JIAOLIANYEJIMINGXI;
+        }else {
+            URL=   Constants.QUERY_HUIJIYEJIMINGXI;
+        }
+        MyStringRequest request = new MyStringRequest(Request.Method.POST,URL , new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -178,15 +186,33 @@ public class GeRenYeJiFragment extends BaseRecyclerViewRefreshFragment {
 
         @Override
         public void convert(ViewHolder viewHolder, RequestHuiJiYeWuBean.Data.Content data, int position) {
-            viewHolder.setText(R.id.tv_name, data.getEmployee_name());
+            if (isjiaolian){
+                viewHolder.setText(R.id.tv_name, data.getEmp_name());
+            }else {
+                viewHolder.setText(R.id.tv_name, data.getEmployee_name());
+            }
+
             viewHolder.setText(R.id.tv_admin_name, data.getMember_name());
             viewHolder.setText(R.id.tv_code, data.getCode());
             viewHolder.setText(R.id.tv_type, yewumap.get(data.getBig_type()) + "、" + yewumap.get(data.getBus_type()));
+            if (isjiaolian){
+                if (data.getCourse_type()==1){
+                    viewHolder.setText(R.id.tv_type, yewumap.get(data.getBig_type()) + "、单人私教" );
+                }else if (data.getCourse_type()==2){
+                    viewHolder.setText(R.id.tv_type, yewumap.get(data.getBig_type()) + "、团体私教" );
+                }
+
+            }
             if (data.getBig_type()==3){
                 viewHolder.setText(R.id.tv_kahao,getString(R.string.cardnumber));
             }
             if (data.getBig_type()==4){
                 viewHolder.setText(R.id.tv_kahao, getString(R.string.boxnmumber));
+            }
+            if (isjiaolian){
+                viewHolder.setVisible(R.id.ll_code,false);
+            }else {
+                viewHolder.setVisible(R.id.ll_code,true);
             }
 //            RequestOptions options = new RequestOptions()
 //                    .transform(new GlideRoundTransform(mActivity, 10));

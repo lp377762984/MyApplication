@@ -71,6 +71,22 @@ public class HuiJiYeJiBean implements Serializable {
 
         private float total;//会籍总计
 
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "newcard=" + newcard +
+                    ", leaselocker=" + leaselocker +
+                    ", emp_name='" + emp_name + '\'' +
+                    ", employee_id='" + employee_id + '\'' +
+                    ", avatar_path='" + avatar_path + '\'' +
+                    ", avatar_url='" + avatar_url + '\'' +
+                    ", allccourse=" + allccourse +
+                    ", groupcourse='" + groupcourse + '\'' +
+                    ", singlecourse='" + singlecourse + '\'' +
+                    ", total=" + total +
+                    '}';
+        }
+
         public float getAllccourse() {
             return allccourse;
         }
@@ -93,19 +109,6 @@ public class HuiJiYeJiBean implements Serializable {
 
         public void setSinglecourse(String singlecourse) {
             this.singlecourse = singlecourse;
-        }
-
-        @Override
-        public String toString() {
-            return "Data{" +
-                    "newcard=" + newcard +
-                    ", leaselocker=" + leaselocker +
-                    ", emp_name='" + emp_name + '\'' +
-                    ", employee_id='" + employee_id + '\'' +
-                    ", avatar_path='" + avatar_path + '\'' +
-                    ", avatar_url='" + avatar_url + '\'' +
-                    ", total=" + total +
-                    '}';
         }
 
         public float getNewcard() {

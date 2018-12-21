@@ -241,7 +241,7 @@ public class ImagePagerActivity extends FragmentActivity {
         @Override
         public Fragment getItem(int position) {
             String url = fileList.get(position).toString();
-            return ImageDetailFragment2.newInstance(url);
+            return ImageDetailFragment2.newInstance(url,false);
         }
 
 

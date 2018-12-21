@@ -784,6 +784,9 @@ public class ShopDetailedActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(ShopDetailedActivity.this, AvatarActivity.class).putExtra("url", jiaolianList.get(position).getPicture_url()));
+
+
+
                 }
             });
             return convertView;

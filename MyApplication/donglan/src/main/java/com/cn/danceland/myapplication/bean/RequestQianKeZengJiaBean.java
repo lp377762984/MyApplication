@@ -134,6 +134,7 @@ public class RequestQianKeZengJiaBean {
             private String avatar_url;
             private String count_date;
             private String member_name;
+            private String test_time;
 
             @Override
             public String toString() {
@@ -144,7 +145,16 @@ public class RequestQianKeZengJiaBean {
                         ", avatar_url='" + avatar_url + '\'' +
                         ", count_date='" + count_date + '\'' +
                         ", member_name='" + member_name + '\'' +
+                        ", test_time='" + test_time + '\'' +
                         '}';
+            }
+
+            public String getTest_time() {
+                return test_time;
+            }
+
+            public void setTest_time(String test_time) {
+                this.test_time = test_time;
             }
 
             public int getId() {

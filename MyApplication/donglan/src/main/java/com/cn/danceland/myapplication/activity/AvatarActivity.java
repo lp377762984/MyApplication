@@ -21,7 +21,7 @@ public class AvatarActivity extends BaseActivity {
         setContentView(R.layout.activity_avatar);
         String url = getIntent().getStringExtra("url");
         FrameLayout frameLayout = findViewById(R.id.fl_image);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_image, ImageDetailFragment2.newInstance(url)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_image, ImageDetailFragment2.newInstance(url,true)).commit();
 
     }
 }

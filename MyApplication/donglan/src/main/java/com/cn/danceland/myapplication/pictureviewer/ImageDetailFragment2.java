@@ -45,12 +45,15 @@ public class ImageDetailFragment2 extends Fragment {
     private Bitmap mBitmap;
     private BigImageView bigImageView;
     private ImageView iv_gif;
+    private boolean isavater;
 
-    public static ImageDetailFragment2 newInstance(String imageUrl) {
+    public static ImageDetailFragment2 newInstance(String imageUrl, boolean isavater) {
         final ImageDetailFragment2 imageDetailFragment = new ImageDetailFragment2();
 
         final Bundle args = new Bundle();
         args.putString("url", imageUrl);
+        args.putBoolean("isavater", isavater);
+
         imageDetailFragment.setArguments(args);
 
         return imageDetailFragment;
@@ -60,6 +63,7 @@ public class ImageDetailFragment2 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mImageUrl = getArguments() != null ? getArguments().getString("url") : null;
+        isavater= getArguments().getBoolean("isavater");
         BigImageViewer.initialize(GlideImageLoader.with(MyApplication.getContext()));
 
     }
@@ -91,34 +95,33 @@ public class ImageDetailFragment2 extends Fragment {
         //  LogUtil.i("mImageUrl=" + mImageUrl);
 
 
-
-        StringBuilder  sb = new StringBuilder (mImageUrl);
+        StringBuilder sb = new StringBuilder(mImageUrl);
 
         String houzhui = mImageUrl.substring(mImageUrl.lastIndexOf(".") + 1);
         sb.insert(mImageUrl.length() - houzhui.length() - 1, "_400X400");
 
-      if (TextUtils.equals(houzhui.toLowerCase(),"gif")){
-          bigImageView.setVisibility(View.GONE);
-          iv_gif.setVisibility(View.VISIBLE);
-          Glide.with(getActivity()).load(mImageUrl).into(iv_gif);
-          iv_gif.setOnLongClickListener(new View.OnLongClickListener() {
-              @Override
-              public boolean onLongClick(View v) {
+        if (TextUtils.equals(houzhui.toLowerCase(), "gif")) {
+            bigImageView.setVisibility(View.GONE);
+            iv_gif.setVisibility(View.VISIBLE);
+            Glide.with(getActivity()).load(mImageUrl).into(iv_gif);
+            iv_gif.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
 
 
-                  showDialog1();
+                    showDialog1();
 
-                  return false;
-              }
-          });
-      }
+                    return false;
+                }
+            });
+        }
 
 
         BigImageViewer.prefetch(Uri.parse(mImageUrl));
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
 
         bigImageView.showImage(Uri.parse(mImageUrl));
-      //  bigImageView.showImage(Uri.parse(sb.toString()),Uri.parse(mImageUrl));
+        //  bigImageView.showImage(Uri.parse(sb.toString()),Uri.parse(mImageUrl));
         bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CENTER_INSIDE);
         bigImageView.setImageSaveCallback(new ImageSaveCallback() {
             @Override
@@ -147,8 +150,12 @@ public class ImageDetailFragment2 extends Fragment {
         bigImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ImagePagerActivity)getActivity()).getContext().overridePendingTransition(R.anim.no_anim, R.anim.no_anim);
-                ((ImagePagerActivity)getActivity()).startEndAnim();
+                if (isavater){
+                    getActivity().finish();
+                }else {
+
+                    ((ImagePagerActivity) getActivity()).startEndAnim();
+                }
             }
         });
 //        bigImageView.showImage(
@@ -212,6 +219,7 @@ public class ImageDetailFragment2 extends Fragment {
         });
         dialog.show();
     }
+
     // 保存图片到手机
     public void download(final String url) {
 
@@ -231,7 +239,7 @@ public class ImageDetailFragment2 extends Fragment {
                     // 首先保存图片
                     File pictureFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
 
-                    File appDir = new File(pictureFolder ,"GIF");
+                    File appDir = new File(pictureFolder, "GIF");
                     if (!appDir.exists()) {
                         appDir.mkdirs();
                     }
@@ -241,12 +249,12 @@ public class ImageDetailFragment2 extends Fragment {
                     FileUtil.copyFile(file.getAbsolutePath(), destFile.getAbsolutePath());
 
                     // 最后通知图库更新
-                   getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                             Uri.fromFile(new File(destFile.getPath()))));
 
 
                 } catch (Exception e) {
-                  LogUtil.e(e.getMessage());
+                    LogUtil.e(e.getMessage());
                     Toast.makeText(getActivity(), "保存失败", Toast.LENGTH_SHORT).show();
                 }
                 return file;

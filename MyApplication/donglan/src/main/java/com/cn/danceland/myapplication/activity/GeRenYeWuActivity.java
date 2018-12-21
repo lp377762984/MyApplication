@@ -47,15 +47,22 @@ public class GeRenYeWuActivity extends BaseActivity implements View.OnClickListe
     private String auth;
     private String date;
     HuiJiYeWuBean.Data data;
+    private boolean isjiaolian;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_card);
         EventBus.getDefault().register(this);
-        id=getIntent().getStringExtra("id");
-        auth=getIntent().getStringExtra("auth");
-        date=getIntent().getStringExtra("date");
-        data= (HuiJiYeWuBean.Data) getIntent().getSerializableExtra("data");
+        id = getIntent().getStringExtra("id");
+        auth = getIntent().getStringExtra("auth");
+        date = getIntent().getStringExtra("date");
+        data = (HuiJiYeWuBean.Data) getIntent().getSerializableExtra("data");
+        isjiaolian = getIntent().getBooleanExtra("isjiaolian", false);
+
+        if (isjiaolian) {
+            mTitleDataList = new String[]{"体测", "体测分析", "健身计划"};
+        }
         initView();
 
     }
@@ -183,21 +190,38 @@ public class GeRenYeWuActivity extends BaseActivity implements View.OnClickListe
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
 
-            bundle.putString("date",date);
-            bundle.putSerializable("data",data);
+            bundle.putString("date", date);
+            bundle.putSerializable("data", data);
+            bundle.putBoolean("isjiaolian", isjiaolian);
+
             if (arg0 == 0) {
                 QianKeZengJiaFragment fragment = new QianKeZengJiaFragment();
-
-                 fragment.setArguments(bundle);
-                return fragment;
-            } else if (arg0 == 1) {
-                QianKeHuiFangFragment fragment = new QianKeHuiFangFragment();
-                bundle.putString("auth","1");
+                bundle.putInt("type",3);
                 fragment.setArguments(bundle);
                 return fragment;
-            }else if (arg0 == 2){
+            } else if (arg0 == 1) {
+                if (isjiaolian){
+                    QianKeZengJiaFragment fragment = new QianKeZengJiaFragment();
+                    bundle.putInt("type",4);//体测分析
+                    fragment.setArguments(bundle);
+                    return fragment;
+
+                }
+
                 QianKeHuiFangFragment fragment = new QianKeHuiFangFragment();
-                bundle.putString("auth","2");
+                bundle.putString("auth", "1");
+                fragment.setArguments(bundle);
+                return fragment;
+            } else if (arg0 == 2) {
+                if (isjiaolian){
+                    QianKeZengJiaFragment fragment = new QianKeZengJiaFragment();
+                    bundle.putInt("type",5);//健身计划
+                    fragment.setArguments(bundle);
+                    return fragment;
+
+                }
+                QianKeHuiFangFragment fragment = new QianKeHuiFangFragment();
+                bundle.putString("auth", "2");
                 fragment.setArguments(bundle);
                 return fragment;
             }

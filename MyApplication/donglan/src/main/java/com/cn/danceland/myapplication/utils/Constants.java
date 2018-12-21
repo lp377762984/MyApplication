@@ -367,6 +367,11 @@ public class Constants {
     public static String QUERY_HUIJIYEWU = HOST + "/panel/queryHuiJiYeWu";// 查询会籍业务
     public static String QUERY_JIAOLIANYEWU = HOST + "/panel/queryJiaoLianYeWu";// 查询教练业务
     public static String QUERY_HUIJIYEJIMINGXI = HOST + "/panel/queryHuiJiYeJiMingXi";// 查询会籍业务明细
+    public static String QUERY_JIAOLIANYEJIMINGXI = HOST + "/panel/queryJiaoLianYeJiMingXi";// 查询教练业务明细
+    public static String QUERY_TICEMINGXI = HOST + "/panel/queryTiCeMingXi";// 查询体测明细
+    public static String QUERY_TICEFENXIMINGXI = HOST + "/panel/queryTiCeFenXiMingXi";// 查询体测分析明细
+
+
     public static String QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
 
 
@@ -486,6 +491,9 @@ public class Constants {
         QUERY_HUIJIYEWU = HOST + "/panel/queryHuiJiYeWu";// 查询会籍业务
         QUERY_JIAOLIANYEWU = HOST + "/panel/queryJiaoLianYeWu";// 查询教练业务
         QUERY_HUIJIYEJIMINGXI = HOST + "/panel/queryHuiJiYeJiMingXi";// 查询会籍业务明细
+        QUERY_JIAOLIANYEJIMINGXI = HOST + "/panel/queryJiaoLianYeJiMingXi";// 查询教练业务明细
+        QUERY_TICEMINGXI = HOST + "/panel/queryTiCeMingXi";// 查询体测明细
+         QUERY_TICEFENXIMINGXI = HOST + "/panel/queryTiCeFenXiMingXi";// 查询体测分析明细
         QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
         //报表相关
         BUSSTATISTICSREPORT = HOST + "statistics/busStatisticsReport";//业务报表

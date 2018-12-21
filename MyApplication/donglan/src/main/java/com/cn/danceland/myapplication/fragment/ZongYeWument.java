@@ -23,6 +23,7 @@ import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.SPUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.google.gson.Gson;
 
@@ -42,7 +43,7 @@ import java.util.Map;
  */
 
 
-public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
+public class ZongYeWument extends BaseRecyclerViewRefreshFragment {
 
     private List<HuiJiYeWuBean.Data> dataList = new ArrayList<>();
     private MylistAtapter mylistAtapter;
@@ -87,7 +88,7 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
         if (mCurrentDate==null){
             mCurrentDate= TimeUtils.timeStamp2Date(System.currentTimeMillis()+"","yyyy-MM-dd");
         }
-        findhjyj("2017-01-01", mCurrentDate);
+        findhjyj(mCurrentDate, mCurrentDate);
         setOnlyDownReresh();
     }
 
@@ -117,10 +118,16 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
                 getListAdapter().notifyDataSetChanged();
                 double zongyeji=0;
                 for (int i=0;i<dataList.size();i++ ){
-                    zongyeji=zongyeji+dataList.get(i).getTotal();
+                    if (isjiaolian){
+                        zongyeji=zongyeji+dataList.get(i).getAll();
+                    }else {
+                        zongyeji=zongyeji+dataList.get(i).getTotal();
+                    }
+
 
                 }
-                EventBus.getDefault().post(new StringEvent(zongyeji+"",7102));
+
+                EventBus.getDefault().post(new StringEvent((int)zongyeji+"",7102));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -163,15 +170,16 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
                         .transform(new GlideRoundTransform(mActivity, 10));
 
                 Glide.with(mActivity).load(data.getAvatar_url()).apply(options).into((ImageView) viewHolder.getView(R.id.iv_avatar));
-//                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
-//                                .putExtra("date",mCurrentDate)
-//                                .putExtra("data",data)
-//                        );
-//                    }
-//                });
+                viewHolder.setOnClickListener(R.id.ll_item, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(mActivity, GeRenYeWuActivity.class).putExtra("id",data.getEmployee_id())
+                                .putExtra("date",mCurrentDate)
+                                .putExtra("data",data)
+                                .putExtra("isjiaolian",isjiaolian)
+                        );
+                    }
+                });
             }else {
                 viewHolder.setText(R.id.tv_name, data.getEmp_name());
                 viewHolder.setText(R.id.tv_sum, "总业务：" + data.getTotal() + "个");
@@ -191,6 +199,15 @@ public class ZongYeJiWument extends BaseRecyclerViewRefreshFragment {
                         );
                     }
                 });
+            }
+
+
+            //会籍主管或会籍主管
+            if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
+
+
+            }else {
+                viewHolder.setOnClickListener(R.id.ll_item,null);
             }
 
         }
