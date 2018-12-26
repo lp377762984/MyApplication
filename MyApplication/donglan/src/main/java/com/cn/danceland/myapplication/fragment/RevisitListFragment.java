@@ -583,6 +583,7 @@ public class RevisitListFragment extends BaseFragment {
                 vh.iv_sex = convertView.findViewById(R.id.iv_sex);
 
                 vh.tv_lasttime = convertView.findViewById(R.id.tv_lasttime);
+                vh.iv_push_set = convertView.findViewById(R.id.iv_push_set);
 
                 vh.ll_item = convertView.findViewById(R.id.ll_item);
 
@@ -593,6 +594,16 @@ public class RevisitListFragment extends BaseFragment {
 
                 vh = (ViewHolder) convertView.getTag();
 
+            }
+            if (TextUtils.equals(auth,"2")){
+               vh. iv_push_set.setVisibility(View.VISIBLE);
+                if (datalist.get(position).getPush_setting()==0){
+                    vh. iv_push_set.setImageResource(R.drawable.push_open);
+                }else {
+                    vh. iv_push_set.setImageResource(R.drawable.push_close);
+                }
+            }else {
+                vh. iv_push_set.setVisibility(View.GONE);
             }
 
 
@@ -867,6 +878,7 @@ public class RevisitListFragment extends BaseFragment {
         }
 
         class ViewHolder {
+            public ImageView iv_push_set;
             public ImageView iv_avatar;
             public ImageView iv_callphone;
             public TextView tv_name;

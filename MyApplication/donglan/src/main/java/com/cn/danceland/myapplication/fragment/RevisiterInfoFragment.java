@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,6 +29,7 @@ import com.cn.danceland.myapplication.activity.AddRevisiterRecordActivity;
 import com.cn.danceland.myapplication.activity.EditPotentialActivity;
 import com.cn.danceland.myapplication.bean.PotentialInfo;
 import com.cn.danceland.myapplication.bean.RequsetPotentialInfoBean;
+import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragmentEventBus;
 import com.cn.danceland.myapplication.utils.CallLogUtils;
@@ -41,6 +43,9 @@ import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.google.gson.Gson;
 import com.willy.ratingbar.ScaleRatingBar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shy on 2018/1/11 17:09
@@ -106,13 +111,14 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     private LinearLayout ll_final_admin;
     private LinearLayout ll_admin;
     private LinearLayout ll_tuijianren;
+    private ImageView iv_push_set;
 
     public void setview() {
         if (!TextUtils.isEmpty(info.getSelf_avatar_url())) {
             RequestOptions options = new RequestOptions()
-                    .transform(new GlideRoundTransform(mActivity,10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
+                    .transform(new GlideRoundTransform(mActivity, 10)).placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
             String S = info.getAvatar_url();
-               Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
+            Glide.with(mActivity).load(S).apply(options).into(iv_avatar);
         }
 
         if (TextUtils.equals(info.getGender(), "1")) {
@@ -129,28 +135,28 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 //            tv_name.setText(info.getCname() + "(" + info.getNick_name() + ")");
 //        }
         tv_name.setText(info.getCname());
-        if (info.getLast_time()!=null){
+        if (info.getLast_time() != null) {
             tv_lasttime.setText("最后维护时间：" + info.getLast_time());
-        }else {
+        } else {
             tv_lasttime.setText("最后维护时间：" + "最近未维护");
         }
 
         //会籍或会籍主管
         if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIGUWEN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_HUIJIZHUGUANG) {
-            if (TextUtils.isEmpty(info.getAdmin_mark())){
+            if (TextUtils.isEmpty(info.getAdmin_mark())) {
                 tv_biaoqian.setText(info.getAdmin_mark());
-            }else {
-                tv_biaoqian.setText("("+info.getAdmin_mark()+")");
+            } else {
+                tv_biaoqian.setText("(" + info.getAdmin_mark() + ")");
             }
 
 
         }
         //教练或教练主管
         if (SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIAN || SPUtils.getInt(Constants.ROLE_ID, 0) == Constants.ROLE_ID_JIAOLIANZHUGUAN) {
-            if (TextUtils.isEmpty(info.getTeach_mark())){
+            if (TextUtils.isEmpty(info.getTeach_mark())) {
                 tv_biaoqian.setText(info.getTeach_mark());
-            }else {
-                tv_biaoqian.setText("("+info.getTeach_mark()+")");
+            } else {
+                tv_biaoqian.setText("(" + info.getTeach_mark() + ")");
             }
         }
 
@@ -223,6 +229,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
                         public void permissionGranted(@NonNull String[] permissions) {
                             showDialog(info.getPhone_no());
                         }
+
                         @Override
                         public void permissionDenied(@NonNull String[] permissions) {
                             //用户拒绝了申请
@@ -245,6 +252,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
                         public void permissionGranted(@NonNull String[] permissions) {
                             doSendSMSTo(info.getPhone_no(), "");
                         }
+
                         @Override
                         public void permissionDenied(@NonNull String[] permissions) {
                             //用户拒绝了申请
@@ -260,15 +268,15 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_nationality.setText(info.getNationality());
         tv_certificate_type.setText(info.getCertificate_type());
 
-        if (info.getIdentity_card()!=null&&info.getIdentity_card().length()>3){
+        if (info.getIdentity_card() != null && info.getIdentity_card().length() > 3) {
 //            for(int i;i<info.getIdentity_card().length();i++){
 //
 //            }
-            String a=info.getIdentity_card().substring(1, info.getIdentity_card().length()-1);
-            String b=info.getIdentity_card().replace(a,"**************");
+            String a = info.getIdentity_card().substring(1, info.getIdentity_card().length() - 1);
+            String b = info.getIdentity_card().replace(a, "**************");
 
             tv_certificate_no.setText(b);
-        }else {
+        } else {
             tv_certificate_no.setText("");
         }
 
@@ -287,11 +295,18 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         tv_final_admin_name.setText(info.getFinal_admin_name());
         tv_final_teach_name.setText(info.getFinal_teach_name());
         if (TextUtils.equals(info.getAuth(), "2")) {
-        ll_final_admin.setVisibility(View.VISIBLE);
+            ll_final_admin.setVisibility(View.VISIBLE);
             ll_admin.setVisibility(View.GONE);
             ll_tuijianren.setVisibility(View.VISIBLE);
         }
-
+        if (TextUtils.equals(info.getAuth(), "1")) {
+            iv_push_set.setVisibility(View.GONE);
+        }
+        if (info.getPush_setting() == 0) {
+            iv_push_set.setImageResource(R.drawable.img_isdone_up);
+        } else {
+            iv_push_set.setImageResource(R.drawable.img_isdone_off);
+        }
 
     }
 
@@ -312,7 +327,7 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
     @Override
     public View initViews() {
         View v = View.inflate(mActivity, R.layout.fragment_revisiter_details, null);
-        if (TextUtils.equals("true",getArguments().getString("isyewu"))){
+        if (TextUtils.equals("true", getArguments().getString("isyewu"))) {
             v.findViewById(R.id.iv_more).setVisibility(View.INVISIBLE);
         }
         iv_avatar = v.findViewById(R.id.iv_avatar);
@@ -355,7 +370,8 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         ll_tuijianren = v.findViewById(R.id.ll_tuijianren);
 
         ll_admin = v.findViewById(R.id.ll_admin);
-
+        iv_push_set = v.findViewById(R.id.iv_push_set);
+        iv_push_set.setOnClickListener(this);
         v.findViewById(R.id.iv_more).setOnClickListener(this);
         return v;
     }
@@ -387,6 +403,17 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
         switch (v.getId()) {
             case R.id.iv_more:
                 showListDialog();
+                break;
+            case R.id.iv_push_set:
+                if (info != null) {
+                    if (info.getPush_setting() == 0) {
+                        setpush(info.getId(), 1);
+                    }else {
+                        setpush(info.getId(), 0);
+                    }
+
+                }
+
                 break;
             default:
                 break;
@@ -504,6 +531,34 @@ public class RevisiterInfoFragment extends BaseFragmentEventBus {
 
     }
 
+    private void setpush(final String member_id, final int push_setting) {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.EMP_MEM_PUSHRECEIVE, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequsetSimpleBean simpleBean = new Gson().fromJson(s, RequsetSimpleBean.class);
+                if (simpleBean.isSuccess()) {
+                    find_by_id_potential(id);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("member_id", member_id);
+                map.put("push_setting", "" + push_setting);
+
+                return map;
+
+            }
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
 
     private void find_by_id_potential(String id) {
 

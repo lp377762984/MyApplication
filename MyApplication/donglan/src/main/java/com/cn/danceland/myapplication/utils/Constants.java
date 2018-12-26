@@ -269,7 +269,6 @@ public class Constants {
     public static String GROUP_QUERY_MEMBER_CALENDAR = HOST + "appFreeGroupCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
 
 
-
     public static String YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务
     //手环相关
     public static String QUERY_WEAR_FIT_HEART_RATE_LIST = HOST + "/personHeartRate/queryList";//按条件查询不分页[人员心率数据]列表
@@ -373,10 +372,10 @@ public class Constants {
     public static String QUERY_JIAOLIANYEJIMINGXI = HOST + "/panel/queryJiaoLianYeJiMingXi";// 查询教练业务明细
     public static String QUERY_TICEMINGXI = HOST + "/panel/queryTiCeMingXi";// 查询体测明细
     public static String QUERY_TICEFENXIMINGXI = HOST + "/panel/queryTiCeFenXiMingXi";// 查询体测分析明细
+    public static String EMP_MEM_PUSHRECEIVE = HOST + "/empMemPushReceive/save";//设置推送
 
 
     public static String QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
-
 
 
     //我的-运动数据
@@ -498,7 +497,8 @@ public class Constants {
         QUERY_HUIJIYEJIMINGXI = HOST + "/panel/queryHuiJiYeJiMingXi";// 查询会籍业务明细
         QUERY_JIAOLIANYEJIMINGXI = HOST + "/panel/queryJiaoLianYeJiMingXi";// 查询教练业务明细
         QUERY_TICEMINGXI = HOST + "/panel/queryTiCeMingXi";// 查询体测明细
-         QUERY_TICEFENXIMINGXI = HOST + "/panel/queryTiCeFenXiMingXi";// 查询体测分析明细
+        QUERY_TICEFENXIMINGXI = HOST + "/panel/queryTiCeFenXiMingXi";// 查询体测分析明细
+        EMP_MEM_PUSHRECEIVE = HOST + "/empMemPushReceive/save";// 设置推送
         QUERY_XINQIANKE = HOST + "/panel/queryXinQianKe";// 查询会籍新增潜客
         //报表相关
         BUSSTATISTICSREPORT = HOST + "statistics/busStatisticsReport";//业务报表
@@ -656,7 +656,7 @@ public class Constants {
         FINDGROUPCOURSEAPPOINTLIST = HOST + "appGroupCourse/findGroupCourseAppointList";//小团课预约记录
         FreeCourse = HOST + "appFreeGroupCourse/queryFreeGroupCourseByDate";//查询某会员某天的团课课程表
         MEMBER_TIME_LINE = HOST + "timeline/memberTimeline";//会员约教练时间轴
-       TEACH_TIME_LINE = HOST + "timeline/teachTimeline";//教练约会员时间轴
+        TEACH_TIME_LINE = HOST + "timeline/teachTimeline";//教练约会员时间轴
         FreeCourseApply = HOST + "appFreeGroupCourse/freeGroupApply";//报名小团课
         APPOINTLIST = HOST + "appCourse/findCourseAppointList";//获取自己的一对一预约记录
         APPOINTCANCEL = HOST + "appCourse/courseAppointCancel";//取消私教
@@ -674,9 +674,9 @@ public class Constants {
         FINDFREEGROUPCOURSEAPPLYPERSON = HOST + "appFreeGroupCourse/findFreeGroupCourseApplyPerson";//免费团课
         FOROTHERSIJIAOLIST = HOST + "appCourse/queryForOthersList";//为他人购买的私教列表
         QUERYAVERAGE = HOST + "/evaluate/queryAverage";//课程详情里边的三个评分
-       QUERY_TEACH_CALENDAR = HOST + "appCourse/queryTeachCalendar";//返回教练私教界面查询日历红点数据
+        QUERY_TEACH_CALENDAR = HOST + "appCourse/queryTeachCalendar";//返回教练私教界面查询日历红点数据
         QUERY_MEMBER_CALENDAR = HOST + "appCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
-          GROUP_QUERY_MEMBER_CALENDAR = HOST + "appFreeGroupCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
+        GROUP_QUERY_MEMBER_CALENDAR = HOST + "appFreeGroupCourse/queryMemberCalendar";//返回会员私教界面查询日历红点数据
 
 
         YEWU_URL = HOST + "/api/memberRelated/queryPage";//查询业务
@@ -742,7 +742,7 @@ public class Constants {
         PUSH_SCANER_TRAIN = HOST + "/SHDevice/openSHDevice";//扫码训练
 
         //扫码训练 查询是否占用健身设备
-         QUERY_SCANER_TRAIN_STATUS = HOST + "/SHDevice/queryStatus";//扫码训练 查询是否占用健身设备
+        QUERY_SCANER_TRAIN_STATUS = HOST + "/SHDevice/queryStatus";//扫码训练 查询是否占用健身设备
 
         //新增[收藏表
         PUSH_COLLECT_SAVE = HOST + "/collect/save";//新增[收藏表

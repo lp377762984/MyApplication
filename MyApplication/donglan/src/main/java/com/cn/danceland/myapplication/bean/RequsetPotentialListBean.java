@@ -182,22 +182,7 @@ public class RequsetPotentialListBean {
             private String self_avatar_url;
             private String admin_mark;//会籍备注
             private String teach_mark;//教练备注
-
-            public String getAdmin_mark() {
-                return admin_mark;
-            }
-
-            public void setAdmin_mark(String admin_mark) {
-                this.admin_mark = admin_mark;
-            }
-
-            public String getTeach_mark() {
-                return teach_mark;
-            }
-
-            public void setTeach_mark(String teach_mark) {
-                this.teach_mark = teach_mark;
-            }
+            private int push_setting;//推送设置
 
             @Override
             public String toString() {
@@ -265,7 +250,32 @@ public class RequsetPotentialListBean {
                         ", self_avatar_url='" + self_avatar_url + '\'' +
                         ", admin_mark='" + admin_mark + '\'' +
                         ", teach_mark='" + teach_mark + '\'' +
+                        ", push_setting='" + push_setting + '\'' +
                         '}';
+            }
+
+            public int getPush_setting() {
+                return push_setting;
+            }
+
+            public void setPush_setting(int push_setting) {
+                this.push_setting = push_setting;
+            }
+
+            public String getAdmin_mark() {
+                return admin_mark;
+            }
+
+            public void setAdmin_mark(String admin_mark) {
+                this.admin_mark = admin_mark;
+            }
+
+            public String getTeach_mark() {
+                return teach_mark;
+            }
+
+            public void setTeach_mark(String teach_mark) {
+                this.teach_mark = teach_mark;
             }
 
             public String getId() {

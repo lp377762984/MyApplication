@@ -1025,12 +1025,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private void clearAnim(){
+        for (int i=0;i<mmTabsImgs.length;i++){
+            mmTabsImgs[i].clearAnimation();
+        }
+
+    }
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
             case R.id.ll_home:
-                mmTabsImgs[0].clearAnimation();
+                clearAnim();
                 mmTabsImgs[0].startAnimation(mAnimationSet);
                 //   mAnimationSet.start();
                 index = 0;
@@ -1038,18 +1044,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
             case R.id.ll_shop:
                 index = 1;
-                mmTabsImgs[1].clearAnimation();
+                clearAnim();
                 mmTabsImgs[1].startAnimation(mAnimationSet);
                 break;
             case R.id.ll_discover:
                 LogUtil.i("ll_discover");
                 index = 2;
-                mmTabsImgs[2].clearAnimation();
+                clearAnim();
                 mmTabsImgs[2].startAnimation(mAnimationSet);
                 break;
             case R.id.ll_me:
                 index = 3;
-                mmTabsImgs[3].clearAnimation();
+                clearAnim();
                 mmTabsImgs[3].startAnimation(mAnimationSet);
                 break;
 

@@ -88,31 +88,16 @@ public class PotentialInfo implements Serializable {
     private String teach_mark;//教练备注
 
     private List<ChonicList> chonicList;
+    private int push_setting;
     private List<ProjectList> projectList;
     private List<TargetList> targetList;
 
-    public String getGuest_way() {
-        return guest_way;
+    public int getPush_setting() {
+        return push_setting;
     }
 
-    public void setGuest_way(String guest_way) {
-        this.guest_way = guest_way;
-    }
-
-    public String getAdmin_mark() {
-        return admin_mark;
-    }
-
-    public void setAdmin_mark(String admin_mark) {
-        this.admin_mark = admin_mark;
-    }
-
-    public String getTeach_mark() {
-        return teach_mark;
-    }
-
-    public void setTeach_mark(String teach_mark) {
-        this.teach_mark = teach_mark;
+    public void setPush_setting(int push_setting) {
+        this.push_setting = push_setting;
     }
 
     @Override
@@ -185,9 +170,34 @@ public class PotentialInfo implements Serializable {
                 ", admin_mark='" + admin_mark + '\'' +
                 ", teach_mark='" + teach_mark + '\'' +
                 ", chonicList=" + chonicList +
+                ", push_setting='" + push_setting + '\'' +
                 ", projectList=" + projectList +
                 ", targetList=" + targetList +
                 '}';
+    }
+
+    public String getGuest_way() {
+        return guest_way;
+    }
+
+    public void setGuest_way(String guest_way) {
+        this.guest_way = guest_way;
+    }
+
+    public String getAdmin_mark() {
+        return admin_mark;
+    }
+
+    public void setAdmin_mark(String admin_mark) {
+        this.admin_mark = admin_mark;
+    }
+
+    public String getTeach_mark() {
+        return teach_mark;
+    }
+
+    public void setTeach_mark(String teach_mark) {
+        this.teach_mark = teach_mark;
     }
 
     public List<ChonicList> getChonicList() {
