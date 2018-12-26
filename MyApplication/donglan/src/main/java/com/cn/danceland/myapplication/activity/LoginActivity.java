@@ -151,6 +151,10 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             case 1011://登录
                 login();
                 break;
+            case 1015://返回密码登录
+                login(event.getmMsgs().get(0),event.getmMsgs().get(1));
+                LogUtil.i(event.getmMsgs().toString());
+                break;
             default:
                 break;
         }
@@ -334,7 +338,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             case R.id.tv_forgetpsw://忘记密码
 
 
-                startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, NewForgetPasswordActivity.class));
                 break;
 
             case R.id.tv_agreemnet:
@@ -711,6 +715,105 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
 
         return true;
     }
+
+    /**
+     * 登录
+     */
+    private void login(final String phone, final String pwd) {
+
+
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.LOGIN_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //           dialog.dismiss();
+                LogUtil.i(s);
+
+                Gson gson = new Gson();
+
+                final RequestLoginInfoBean loginInfoBean = gson.fromJson(s, RequestLoginInfoBean.class);
+
+                LogUtil.i(loginInfoBean.toString());
+                LogUtil.i(loginInfoBean.getCode() + "");
+
+                if (loginInfoBean.getCode() == 6) {//如手机号被解绑,立刻绑定手机号
+                    SPUtils.setString("tempTokenToCode", "Bearer+" + loginInfoBean.getData().getToken());//为了绑手机号的临时touken
+                    startActivity(new Intent(LoginActivity.this, ResetPhoneActivity.class).putExtra("password", MD5Utils.encode(mEtPsw.getText().toString().trim())));
+                } else {
+                    if (loginInfoBean.getSuccess()) {
+                        SPUtils.setString(Constants.MY_USERID, loginInfoBean.getData().getPerson().getId());//保存id
+
+                        SPUtils.setString(Constants.MY_TOKEN, "Bearer+" + loginInfoBean.getData().getToken());
+                        SPUtils.setString(Constants.MY_PSWD, MD5Utils.encode(mEtPsw.getText().toString().trim()));//保存id\
+                        if (loginInfoBean.getData().getMember() != null) {
+                            SPUtils.setString(Constants.MY_MEMBER_ID, loginInfoBean.getData().getMember().getId());
+                        }
+                        Data data = loginInfoBean.getData();
+                        DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+
+                        //查询信息
+                        queryUserInfo(loginInfoBean.getData().getPerson().getId());
+                        if (Constants.DEV_CONFIG) {
+                            login_txim("dev" + data.getPerson().getMember_no(), data.getSig());
+                        } else {
+                            login_txim(data.getPerson().getMember_no(), data.getSig());
+                        }
+                        setMipushId();
+                        SPUtils.setBoolean(Constants.ISLOGINED, true);//保存登录状态
+                        // startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        //        finish();
+                        ToastUtils.showToastShort("登录成功");
+                        //    login_hx(data.getPerson().getMember_no(),"QWE",data);
+                    } else {
+                        if (loginInfoBean.getCode() == 5) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            builder.setMessage("您未在此设备登录，请绑定设备");
+                            builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(LoginActivity.this, VerifyPSWDActivty.class).putExtra("phone", loginInfoBean.getData().getPhone()));
+                                  //  startActivity(new Intent(LoginSMSActivity.this, VerifyPSWDActivty.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode", smsCode));
+
+                                }
+                            });
+                            builder.show();
+                        } else {
+                            ToastUtils.showToastShort("用户名或密码错误");
+                        }
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                //       dialog.dismiss();
+                LogUtil.e(volleyError.toString());
+                ToastUtils.showToastShort("请求失败，请查看网络连接");
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("phone", phone);
+                map.put("password", MD5Utils.encode(pwd));
+                map.put("terminal", "1");
+                map.put("deviceNo", AppUtils.getDeviceId(MyApplication.getContext()));
+                LogUtil.i(AppUtils.getDeviceId(MyApplication.getContext()));
+
+                return map;
+            }
+        };
+
+        // 设置请求的Tag标签，可以在全局请求队列中通过Tag标签进行请求的查找
+        request.setTag("login");
+        // 设置超时时间
+        request.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        // 将请求加入全局队列中
+        MyApplication.getHttpQueues().add(request);
+    }
+
 
     /**
      * 登录

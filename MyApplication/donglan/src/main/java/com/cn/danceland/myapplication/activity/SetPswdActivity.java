@@ -16,6 +16,9 @@ import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
+import com.cn.danceland.myapplication.bean.RequestSimpleBean1;
+import com.cn.danceland.myapplication.evntbus.StringEvent;
+import com.cn.danceland.myapplication.utils.AppUtils;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -24,7 +27,11 @@ import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,9 +42,11 @@ import java.util.Map;
 
 public class SetPswdActivity extends BaseActivity implements View.OnClickListener {
     private String id;
+    private String phone;
     private EditText mEtPsw;
     private EditText mEtConfirmPsd;
     private Data data;
+    private int login_type = 0; //1登陆，2创建人然后登陆
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +59,8 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
 
     private void initData() {
         id = getIntent().getStringExtra("id");
+        login_type = getIntent().getIntExtra("login_type", 0);
+        phone = getIntent().getStringExtra("phone");
         LogUtil.i(id);
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
     }
@@ -97,12 +108,53 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
                     return;
                 }
 
+                if (login_type != 2) {
+                    resetPwd(id, mEtPsw.getText().toString());
+                } else {
+                    unbind();//重新绑定账号
+                }
 
-                resetPwd(id, mEtPsw.getText().toString());
                 break;
             default:
                 break;
         }
+    }
+
+    private void unbind() {
+        MyStringNoTokenRequest request = new MyStringNoTokenRequest(Request.Method.POST, Constants.UNBIND_ANDREGISTER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                RequestSimpleBean1 simpleBean = new Gson().fromJson(s, RequestSimpleBean1.class);
+                if (simpleBean.getSuccess()) {
+                    ToastUtils.showToastShort("绑定成功");
+                    List<String> strings = new ArrayList<>();
+                    strings.add(phone);
+                    strings.add(mEtPsw.getText().toString());
+                    EventBus.getDefault().post(new StringEvent(strings, 1015));
+                    finish();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e(volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("phone", phone);
+                map.put("platform", "1");
+                map.put("password", MD5Utils.encode(mEtPsw.getText().toString()));
+                map.put("deviceNo", AppUtils.getDeviceId(SetPswdActivity.this));
+
+                LogUtil.i(map.toString());
+                return map;
+            }
+        };
+        MyApplication.getHttpQueues().add(request);
     }
 
     private void resetPwd(final String id, final String pswd) {
@@ -113,11 +165,17 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
                 RequestSimpleBean simpleBean = new Gson().fromJson(s, RequestSimpleBean.class);
                 if (simpleBean.getSuccess()) {
                     ToastUtils.showToastShort("密码设置成功");
-                    if(data!=null){
+                    if (data != null) {
                         data.setHasPwd(true);
+                        DataInfoCache.saveOneCache(data, Constants.MY_INFO);
+                    }
+                    if (login_type == 1) {
+                        List<String> strings = new ArrayList<>();
+                        strings.add(phone);
+                        strings.add(pswd);
+                        EventBus.getDefault().post(new StringEvent(strings, 1015));
                     }
 
-                    DataInfoCache.saveOneCache(data,Constants.MY_INFO);
                     finish();
                 }
             }
@@ -133,6 +191,7 @@ public class SetPswdActivity extends BaseActivity implements View.OnClickListene
 
                 map.put("person_id", id);
                 map.put("pwd", MD5Utils.encode(pswd));
+                map.put("deviceNo", AppUtils.getDeviceId(SetPswdActivity.this));
 
                 LogUtil.i(map.toString());
                 return map;

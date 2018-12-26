@@ -112,6 +112,9 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
             case 1010:
                 finish();
                 break;
+            case 1015:
+                finish();
+                break;
             case 1012://短信
                 login_by_phone_url(event.getMsg());
                 break;
@@ -307,7 +310,7 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
                     if (loginInfoBean.getCode() == 3 || loginInfoBean.getCode() == 4) {
                         ToastUtils.showToastShort("该用户未注册");
                         AlertDialog.Builder builder = new AlertDialog.Builder(LoginSMSActivity.this);
-                        builder.setMessage("您未在此设备登录，请绑定设备");
+                        builder.setMessage("该用户未注册，请先注册账号");
                         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -332,13 +335,13 @@ public class LoginSMSActivity extends BaseActivity implements View.OnClickListen
                             builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(LoginSMSActivity.this, BindDeviceNoPswdActivity.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode", smsCode));
+                                    startActivity(new Intent(LoginSMSActivity.this, VerifyPSWDActivty.class).putExtra("phone", mEtPhone.getText().toString()).putExtra("smscode", smsCode));
                                     dialog.dismiss();
                                 }
                             });
                             builder.show();
                         } else {
-                            ToastUtils.showToastShort("登录失败");
+                            ToastUtils.showToastShort(loginInfoBean.getErrorMsg());
                         }
 
 

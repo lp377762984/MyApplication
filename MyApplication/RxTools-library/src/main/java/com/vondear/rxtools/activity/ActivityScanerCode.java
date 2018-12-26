@@ -213,7 +213,8 @@ public class ActivityScanerCode extends ActivityBase {
 
     public void setCropWidth(int cropWidth) {
         mCropWidth = cropWidth;
-        CameraManager.FRAME_WIDTH = mCropWidth;
+       CameraManager.FRAME_WIDTH = mCropWidth;
+//        CameraManager.MAX_FRAME_WIDTH= mCropWidth;
 
     }
 
@@ -223,7 +224,8 @@ public class ActivityScanerCode extends ActivityBase {
 
     public void setCropHeight(int cropHeight) {
         this.mCropHeight = cropHeight;
-        CameraManager.FRAME_HEIGHT = mCropHeight;
+      CameraManager.FRAME_HEIGHT = mCropHeight;
+        //CameraManager.MAX_FRAME_HEIGHT= mCropHeight;
     }
 
     public void btn(View view) {

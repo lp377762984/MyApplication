@@ -352,6 +352,15 @@
             android:name=".activity.YeJiZhanBanActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.NewForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BindSFZActivty"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VerifyPSWDActivty"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.YeWuActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -362,6 +371,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.GeRenYeWuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BindConfirmInfoActivity"
             android:screenOrientation="portrait" />
 
         <activity

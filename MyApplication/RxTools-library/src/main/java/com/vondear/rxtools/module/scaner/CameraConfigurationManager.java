@@ -1,20 +1,5 @@
-/*
- * Copyright (C) 2010 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.vondear.rxtools.module.scaner;
+
 
 import android.content.Context;
 import android.graphics.Point;
@@ -69,6 +54,48 @@ final class CameraConfigurationManager {
 
         return cameraResolution;
     }
+//
+//    private static Point findBestPreviewSizeValue(Camera.Parameters parameters,
+//                                                  Point screenResolution) {
+//        Point point = null;
+//
+//        Rect frame = CameraManager.get().getFramingRect();
+//        int frameSize = frame.right - frame.left;
+//        int discountMax = Integer.MAX_VALUE;
+//        int width = 0;
+//        int height = 0;
+//        List<Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+//        for (Size size : supportedPreviewSizes) {
+//            int discount = size.height - frameSize;
+//            if (discount > 0 && size.height * screenResolution.x == screenResolution.y * size.width) {
+//                if (discount < discountMax) {
+//                    discountMax = discount;
+//                    width = size.width;
+//                    height = size.height;
+//                }
+//            }
+//        }
+//        if (width * height != 0) {
+//            point = new Point(width, height);
+//        }
+//        if (point == null) {
+//            String previewSizeValueString = parameters.get("preview-size-values");
+//            // saw this on Xperia
+//            if (previewSizeValueString == null) {
+//                previewSizeValueString = parameters.get("preview-size-value");
+//            }
+//
+//            if (previewSizeValueString != null) {
+//                Log.d(TAG, "preview-size-values parameter: " + previewSizeValueString);
+//                return findBestPreviewSizeValue(previewSizeValueString, screenResolution);
+//            } else {
+//                return null;
+//            }
+//        } else {
+//            return point;
+//        }
+//    }
+
 
     private static Point findBestPreviewSizeValue(CharSequence previewSizeValueString, Point screenResolution) {
         int bestX = 0;

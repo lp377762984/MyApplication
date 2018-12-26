@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.cn.danceland.myapplication.view.DongLanTitleView
+        android:id="@id/dl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleText="短信验证"></com.cn.danceland.myapplication.view.DongLanTitleView>

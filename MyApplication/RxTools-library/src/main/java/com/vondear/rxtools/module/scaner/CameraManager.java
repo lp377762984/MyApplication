@@ -1,19 +1,19 @@
-/*
- * Copyright (C) 2008 ZXing authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+///*
+// * Copyright (C) 2008 ZXing authors
+// *
+// * Licensed under the Apache License, Version 2.0 (the "License");
+// * you may not use this file except in compliance with the License.
+// * You may obtain a copy of the License at
+// *
+// *      http://www.apache.org/licenses/LICENSE-2.0
+// *
+// * Unless required by applicable law or agreed to in writing, software
+// * distributed under the License is distributed on an "AS IS" BASIS,
+// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// * See the License for the specific language governing permissions and
+// * limitations under the License.
+// */
+//
 package com.vondear.rxtools.module.scaner;
 
 import android.content.Context;
@@ -32,6 +32,7 @@ import java.io.IOException;
  * implementation encapsulates the steps needed to take preview-sized images, which are used for
  * both preview and decoding.
  */
+
 public final class CameraManager {
 
     static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
@@ -270,20 +271,39 @@ public final class CameraManager {
                 // This format has never been seen in the wild, but is compatible as we only care
                 // about the Y channel, so allow it.
             case PixelFormat.YCbCr_422_SP:
-                return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-                        rect.width(), rect.height());
+//                return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+//                        rect.width(), rect.height());
+                return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height);//增加近距离识别率
             default:
                 // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
                 // Fortunately, it too has all the Y data up front, so we can read it.
                 if ("yuv420p".equals(previewFormatString)) {
-                    return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
-                            rect.width(), rect.height());
+//                    return new PlanarYUVLuminanceSource(data, width, height, rect.left, rect.top,
+//                            rect.width(), rect.height());
+                 return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height);
                 }
         }
         throw new IllegalArgumentException("Unsupported picture format: " +
                 previewFormat + '/' + previewFormatString);
     }
 
+
+
+//        public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height) {
+//            Rect rect = getFramingRectInPreview();
+//            int previewFormat = configManager.getPreviewFormat();
+//            String previewFormatString = configManager.getPreviewFormatString();
+//            switch (previewFormat) {
+//                // This is the standard Android format which all devices are REQUIRED to support.
+//                // In theory, it's the only one we should ever care about. case PixelFormat.YCbCr_420_SP:
+//                // This format has never been seen in the wild, but is compatible as we only care
+//                // about the Y channel, so allow it.
+//                case PixelFormat.YCbCr_422_SP:
+//                    return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height);
+//                default: // The Samsung Moment incorrectly uses this variant instead of the 'sp' version.
+//                    // Fortunately, it too has all the Y data up front, so we can read it.
+//                    if ("yuv420p".equals(previewFormatString)) { return new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height); } } throw new IllegalArgumentException("Unsupported picture format: " + previewFormat + '/' + previewFormatString); }
+//
     public Context getContext() {
         return context;
     }

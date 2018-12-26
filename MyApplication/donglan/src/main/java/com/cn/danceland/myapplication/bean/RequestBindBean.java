@@ -1,5 +1,7 @@
 package com.cn.danceland.myapplication.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by shy on 2017/12/26 17:57
  * Email:644563767@qq.com
@@ -7,11 +9,11 @@ package com.cn.danceland.myapplication.bean;
 
 
 
-public class RequestBindBean {
+public class RequestBindBean implements Serializable {
 
     private boolean success;
     private String errorMsg;
-    private  String code;
+    private  int code;
     private Data data;
 
     @Override
@@ -36,11 +38,11 @@ public class RequestBindBean {
         this.data = data;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

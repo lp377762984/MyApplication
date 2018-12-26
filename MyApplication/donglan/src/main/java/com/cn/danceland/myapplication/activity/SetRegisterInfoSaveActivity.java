@@ -146,7 +146,7 @@ public class SetRegisterInfoSaveActivity extends BaseActivity {
                 LogUtil.i(s);
                 RootBean rootBean = gson.fromJson(s, RootBean.class);
                 if ("true".equals(rootBean.success)) {
-                    ToastUtils.showToastShort("提交成功！");
+                    ToastUtils.showToastShort("保存成功");
                     mData.getPerson().setBirthday(birthday);
                     mData.getPerson().setNick_name(name);
                     mData.getPerson().setHeight(height);

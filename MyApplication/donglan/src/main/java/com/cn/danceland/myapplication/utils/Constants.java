@@ -43,6 +43,8 @@ public class Constants {
     public static String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
     public static String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
     public static String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
+    public static String UNBIND_ANDREGISTER = HOST + "/person/unbindAndRegister";//解绑原手机号并创建新帐户
+    public static String VERIFY_PHONEPASSWORD = HOST + "/person/verifyPhonePassword";//验证手机号与密码是否一致
 
 
     //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
@@ -53,6 +55,7 @@ public class Constants {
     public static String BIND_DEVICE_NOPWD_URL = HOST + "/person/bindDeviceNoPwd";//绑定新设备
     public static String BIND_DEVICE_URL = HOST + "/person/bindDevice";//绑定新设备
     public static String FORGET_PWD_URL = HOST + "/person/forgetPwd";//忘记密码
+    public static String VALIDATE_IDENTITYCARD_URL = HOST + "/person/validateIdentityCard";//验证身份证号后六位
 
     public static String LOGOUT_URL = HOST + "/person/logout";//用户退出
     public static String ZONE = HOST + "/zone";//城市区域
@@ -450,7 +453,8 @@ public class Constants {
         QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
         QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
         RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码
-
+        VERIFY_PHONEPASSWORD = HOST + "/person/verifyPhonePassword";//验证手机号与密码是否一致
+        UNBIND_ANDREGISTER = HOST + "/person/unbindAndRegister";//解绑原手机号并创建新帐户
 
         //   public static final String RESET_PASSWORD_URL = HOST + "user/updatePwd";//重置密码
         SET_BASE_USERINFO_URL = HOST + "user/updateBase";//设置用户基本资料
@@ -460,6 +464,7 @@ public class Constants {
         BIND_DEVICE_NOPWD_URL = HOST + "/person/bindDeviceNoPwd";//绑定新设备
         BIND_DEVICE_URL = HOST + "/person/bindDevice";//绑定新设备
         FORGET_PWD_URL = HOST + "/person/forgetPwd";//忘记密码
+        VALIDATE_IDENTITYCARD_URL = HOST + "/person/validateIdentityCard";//验证身份证号后六位
 
         LOGOUT_URL = HOST + "/person/logout";//用户退出
         ZONE = HOST + "/zone";//城市区域

@@ -48,6 +48,13 @@
     </declare-styleable>
 
 
+
+        <declare-styleable name="Keyboard">
+            <attr name="xml" format="reference"/>
+        </declare-styleable>
+
+
+
     <!-- 提交按钮自定义属性 -->
     <declare-styleable name="commitButton">
         <!-- 标题文案 -->

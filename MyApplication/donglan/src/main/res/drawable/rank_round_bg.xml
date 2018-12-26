@@ -6,7 +6,7 @@
     android:useLevel="false">
 
     <stroke
-        android:width="3dp"
+        android:width="8dp"
         android:color="@color/white" />
 
     <size

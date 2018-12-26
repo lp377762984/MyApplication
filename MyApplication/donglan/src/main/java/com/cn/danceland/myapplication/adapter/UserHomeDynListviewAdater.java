@@ -538,6 +538,11 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
             } else {
                 viewHolder.gridView.setVisibility(View.GONE);
                 viewHolder.iv_pic.setVisibility(View.GONE);
+                viewHolder.img_layout2.setVisibility(View.GONE);
+                viewHolder.img_layout3.setVisibility(View.GONE);
+                viewHolder.img_layout4.setVisibility(View.GONE);
+                viewHolder.img_layout5.setVisibility(View.GONE);
+                viewHolder.img_layout6.setVisibility(View.GONE);
             }
 //            if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
 //
