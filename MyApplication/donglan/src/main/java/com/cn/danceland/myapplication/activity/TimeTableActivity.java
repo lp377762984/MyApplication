@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,8 +9,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -28,12 +31,14 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.RequestSimpleRemarkBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
 import com.cn.danceland.myapplication.bean.TimeTableResultBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyListView;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -74,6 +79,8 @@ public class TimeTableActivity extends BaseActivity {
 
     private DongLanTitleView donglantitle;
     private String shopName = "";
+    private String branchId = "";
+    private ImageView iv_qr_code;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +99,7 @@ public class TimeTableActivity extends BaseActivity {
         allGridViewList = new ArrayList<>();
 
         shopName = getIntent().getStringExtra("shopName");
+        branchId = getIntent().getStringExtra("branchId");
     }
 
     class StrBean {
@@ -223,35 +231,28 @@ public class TimeTableActivity extends BaseActivity {
         lv_timetable = findViewById(R.id.lv_timetable);
         time_tv = findViewById(R.id.time_tv);
         hint_tv = findViewById(R.id.hint_tv);
+     TextView   tv_shopname = findViewById(R.id.tv_shopname);
         wholeView = findViewById(R.id.wholeView);
+        iv_qr_code = findViewById(R.id.iv_qr_code);
+        iv_qr_code.setVisibility(View.GONE);
         donglantitle = findViewById(R.id.title);
-        TextView more_iv = donglantitle.getMoreTv();
+
+        ImageView more_iv = donglantitle.getMoreIv();
         if (shopName != null && shopName.length() > 0) {
             donglantitle.setTitle(shopName + "课表");
+            tv_shopname.setText("门店："+shopName);
         }
 
         more_iv.setVisibility(View.VISIBLE);
-        more_iv.setText("生成图片");
+        more_iv.setImageResource(R.drawable.img_more_dyn);
+//        more_iv.setText("生成图片");
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (PermissionsUtil.hasPermission(TimeTableActivity.this, Manifest.permission.CAMERA)) {
-                    saveBitmapFile(getBitmapByView(wholeView));// 保存图片
-                } else {
-                    PermissionsUtil.requestPermission(TimeTableActivity.this, new PermissionListener() {
-                        @Override
-                        public void permissionGranted(@NonNull String[] permissions) {
-                            //用户授予了权限
-                            saveBitmapFile(getBitmapByView(wholeView));// 保存图片
-                        }
 
-                        @Override
-                        public void permissionDenied(@NonNull String[] permissions) {
-                            //用户拒绝了申请
-                            ToastUtils.showToastShort("没有权限");
-                        }
-                    }, new String[]{Manifest.permission.CAMERA}, false, null);
-                }
+
+                showListDialog();
+
             }
         });
     }
@@ -497,11 +498,11 @@ public class TimeTableActivity extends BaseActivity {
         }
     }
 
-    public File saveBitmapFile(Bitmap bitmap) {
+    public File saveBitmapFile(Bitmap bitmap, int type) {//0保存并分享，1只保存
         File file = new File(Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/" + System.currentTimeMillis() + ".jpg");//将要保存图片的路径
+                + "/Pictures/" + "课表" + System.currentTimeMillis() + ".jpg");//将要保存图片的路径
         File dir = new File(Environment.getExternalStorageDirectory().getPath()
-                + "/donglan/camera/");
+                + "/Pictures/");
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -511,13 +512,98 @@ public class TimeTableActivity extends BaseActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bos.flush();
             bos.close();
-            ToastUtils.showToastShort("保存成功");
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+
+            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+            iv_qr_code.setVisibility(View.GONE);
+            // 最后通知图库更新
+            this.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.fromFile(new File(file.getPath()))));
+            if (type == 0) {
+                ShareBean shareBean=new ShareBean();
+                shareBean.img_url=file.getAbsolutePath();
+                shareBean.type=10;
+                shareBean.bus_id=branchId;
+                ShareUtils.create(TimeTableActivity.this).shareImg(shareBean);
+            }
+            if (type == 1) {
+                ToastUtils.showToastShort("保存成功" + file.getAbsolutePath());
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return file;
     }
+
+
+    private void showListDialog() {
+        final String[] items = {"分享课表", "保存课表"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        iv_qr_code.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                if (PermissionsUtil.hasPermission(TimeTableActivity.this, Manifest.permission.CAMERA)) {
+                                    saveBitmapFile(getBitmapByView(wholeView),0);// 保存图片
+                                } else {
+                                    PermissionsUtil.requestPermission(TimeTableActivity.this, new PermissionListener() {
+                                        @Override
+                                        public void permissionGranted(@NonNull String[] permissions) {
+                                            //用户授予了权限
+                                            saveBitmapFile(getBitmapByView(wholeView), 0);// 保存图片
+                                        }
+
+                                        @Override
+                                        public void permissionDenied(@NonNull String[] permissions) {
+                                            //用户拒绝了申请
+                                            ToastUtils.showToastShort("没有权限");
+                                        }
+                                    }, new String[]{Manifest.permission.CAMERA}, false, null);
+                                }
+                            }
+                        }, 100);
+                        break;
+                    case 1:
+                        iv_qr_code.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                if (PermissionsUtil.hasPermission(TimeTableActivity.this, Manifest.permission.CAMERA)) {
+                                    saveBitmapFile(getBitmapByView(wholeView),1);// 保存图片
+                                } else {
+                                    PermissionsUtil.requestPermission(TimeTableActivity.this, new PermissionListener() {
+                                        @Override
+                                        public void permissionGranted(@NonNull String[] permissions) {
+                                            //用户授予了权限
+                                            saveBitmapFile(getBitmapByView(wholeView), 1);// 保存图片
+                                        }
+
+                                        @Override
+                                        public void permissionDenied(@NonNull String[] permissions) {
+                                            //用户拒绝了申请
+                                            ToastUtils.showToastShort("没有权限");
+                                        }
+                                    }, new String[]{Manifest.permission.CAMERA}, false, null);
+                                }
+                            }
+                        }, 100);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
 
     /**
      * 截取scrollview的屏幕

@@ -43,6 +43,26 @@
             android:maxWidth="180dp"
             android:textColor="@color/color_dl_black"
             android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/tv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/dl_share"/>
+        <TextView
+
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="分享"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:textColor="@color/color_dl_yellow"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <FrameLayout

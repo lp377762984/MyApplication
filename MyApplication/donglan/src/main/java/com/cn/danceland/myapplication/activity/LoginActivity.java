@@ -342,6 +342,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                 break;
 
             case R.id.tv_agreemnet:
+
                 startActivity(new Intent(LoginActivity.this, NewsDetailsActivity.class).putExtra("url", Constants.REGISTER_AGREEMENT_URL).putExtra("title", "用户协议"));
 
                 break;

@@ -39,6 +39,7 @@ import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestImageNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
 import com.cn.danceland.myapplication.bean.RequsetMyPaiMingBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragment;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -75,6 +76,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by yxx on 2018-10-18.
@@ -234,7 +237,19 @@ public class HomeFragment extends BaseFragment {
 
                 LogUtil.i(data.size() + "position" + position);
                 setReadNum(data, data.get(position).getId(), position);
-                mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
+
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=data.get(position).getId()+"";
+                shareBean.img_url=data.get(position).getImg_url();
+                shareBean.title=data.get(position).getTitle();
+                shareBean.url=data.get(position).getUrl();
+                shareBean.type= 3;// 首页新闻；
+                mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class)
+                        .putExtra("url", data.get(position).getUrl())
+                        .putExtra("shareBean", shareBean)
+                        .putExtra("title", data.get(position).getTitle())
+                        .putExtra("img_url", data.get(position).getImg_url()));
+
             }
         });
         mRecycler.setAdapter(newsListviewAdapter);
@@ -692,7 +707,18 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onPageClick(View view, int i) {
                 //   Toast.makeText(getContext(),"click page:"+position,Toast.LENGTH_LONG).show();
-                mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class).putExtra("url", imagelist.get(i).getUrl()).putExtra("title", imagelist.get(i).getTitle()));
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=imagelist.get(i).getId()+"";
+                shareBean.img_url=imagelist.get(i).getImg_url();
+                shareBean.title=imagelist.get(i).getTitle();
+                shareBean.url=imagelist.get(i).getUrl();
+                shareBean.type=9;//首页轮播
+                mActivity.startActivity(new Intent(mActivity, NewsDetailsActivity.class)
+                        .putExtra("url", imagelist.get(i).getUrl())
+                        .putExtra("shareBean", shareBean)
+                        .putExtra("title", imagelist.get(i).getTitle())
+                        .putExtra("img_url", imagelist.get(i).getImg_url()));
+
 
             }
         });

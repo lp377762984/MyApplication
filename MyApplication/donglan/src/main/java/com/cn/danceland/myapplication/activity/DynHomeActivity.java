@@ -52,6 +52,7 @@ import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserListBeanZan;
 import com.cn.danceland.myapplication.bean.RequstCommentInfoBean;
 import com.cn.danceland.myapplication.bean.RequstOneDynInfoBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -66,6 +67,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -1491,7 +1493,7 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void showListDialog() {
-        final String[] items = {"举报"};
+        final String[] items = {"举报","分享动态"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(this);
         //listDialog.setTitle("我是一个列表Dialog");
@@ -1504,7 +1506,10 @@ public class DynHomeActivity extends BaseActivity implements View.OnClickListene
                         showJuBaoListDialog();
                         break;
                     case 1:
-
+                        final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+                        strbean.share_type = "4";//门店详情
+                        strbean.bus_id=msgId;
+                        ShareUtils.create(DynHomeActivity.this).shareWebInfoFromService(strbean);
                         break;
                     default:
                         break;

@@ -81,6 +81,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.MenusBean;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RolesBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragment;
@@ -111,8 +112,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.cn.danceland.myapplication.R.id.tv_biaoqian;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -343,8 +342,21 @@ public class ShopFragment extends BaseFragment {
         shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=backBannerList.get(i).getId()+"";
+                shareBean.img_url=backBannerList.get(i).getImg_url();
+                shareBean.title=backBannerList.get(i).getTitle();
+                shareBean.url=backBannerList.get(i).getUrl();
+                shareBean.type=12;// 门店轮播图
                 startActivity(new Intent(mActivity, NewsDetailsActivity.class)
-                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title", backBannerList.get(i).getTitle()));
+                        .putExtra("url", backBannerList.get(i).getUrl())
+                        .putExtra("title", backBannerList.get(i).getTitle())
+                        .putExtra("img_url",backBannerList.get(i).getImg_url())
+                        .putExtra("shareBean",shareBean));
+//                startActivity(new Intent(mActivity, NewsDetailsActivity.class)
+//                        .putExtra("url", backBannerList.get(i).getUrl())
+//                        .putExtra("title", backBannerList.get(i).getTitle())
+//                        .putExtra("img_url", backBannerList.get(i).getImg_url()));
 
 
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
@@ -987,7 +999,9 @@ public class ShopFragment extends BaseFragment {
                     case 22://我要培训
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "我要培训");
                         startActivity(new Intent(mActivity, NewsDetailsActivity.class)
-                                .putExtra("url", "http://jiaolian.danceland.com.cn/").putExtra("title", "动岚健身学院"));
+                                .putExtra("url", "http://jiaolian.danceland.com.cn/")
+                                .putExtra("title", "动岚健身学院"));
+                             //   .putExtra("img_url", backBannerList.get(i).getImg_url()));
                         break;
                     case 23://会籍报表
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "会籍报表");

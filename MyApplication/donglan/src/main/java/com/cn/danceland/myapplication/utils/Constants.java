@@ -31,7 +31,7 @@ public class Constants {
     public static String APP_ID_WEIXIN = "wx530b17b3c2de2e0d";//第三方AppId   微信
     public static String APP_SECRET_WEIXIN = "a8887e732c374dbffc37cd1390cf8bce";//第三方AppSecret   微信
     public static String APP_ID_QQ_ZONE = "101506602";//第三方AppId   QQ
-    public static String APP_SECRET_QQ_ZONE = "";//第三方AppSecret   QQ
+    public static String APP_SECRET_QQ_ZONE = "2f150fc09c11923ecd7574ecca211d30";//第三方AppSecret   QQ
 
     public static String DYNAMICCODE = HOST + "/employ/getDynamicCode";//动态验证码
     public static String CHECKUPDATE = HOST + "/versionLog/checkUpdate";//检查更新
@@ -321,6 +321,10 @@ public class Constants {
 
     //第三方登录-QQ登录绑定手机号
     public static String BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
+
+    public static String SHARE_RECORD_SAVE = HOST + "/shareRecord/save";//新增分享记录
+
+    public static String SHARERECORD_CREATESHARE = HOST + "/shareRecord/createShare";//获取分享信息
 
     //我的通知-接收移动端传过来的角标数
     public static String PUSH_RECORD_SET_BADGE = HOST + "/pushRecord/setbadge";//接收移动端传过来的角标数
@@ -732,6 +736,9 @@ public class Constants {
         //第三方登录-QQ登录绑定手机号
         BIND_ACCOUNT_QQ = HOST + "/auth/bindQQUser";//QQ登录绑定手机号
 
+        SHARE_RECORD_SAVE = HOST + "/shareRecord/save";//新增分享记录
+
+        SHARERECORD_CREATESHARE = HOST + "/shareRecord/createShare";//获取分享信息
         //我的通知-接收移动端传过来的角标数
         PUSH_RECORD_SET_BADGE = HOST + "/pushRecord/setbadge";//接收移动端传过来的角标数
 

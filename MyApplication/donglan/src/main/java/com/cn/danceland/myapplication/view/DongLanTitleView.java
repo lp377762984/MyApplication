@@ -3,6 +3,7 @@ package com.cn.danceland.myapplication.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +83,25 @@ public class DongLanTitleView extends RelativeLayout {
     public void setMoreTvOnClick(OnClickListener listener) {
         donglan_right_tv.setOnClickListener(listener);
     }
+    public void setMoreIvOnClick(OnClickListener listener) {
+        donglan_more.setOnClickListener(listener);
+    }
+    public void setMoreIvVisible(boolean isvisible){
+        if (isvisible){
+            donglan_more.setVisibility(VISIBLE);
+        }else {
+            donglan_more.setVisibility(GONE);
+        }
+    }
 
-
+    public void setMoreTvVisible(boolean isvisible){
+        if (isvisible){
+            donglan_right_tv.setVisibility(VISIBLE);
+        }else {
+            donglan_right_tv.setVisibility(GONE);
+        }
+    }
+    public  void setMoreIvImg(@DrawableRes int resId){
+        donglan_more.setImageResource(resId);
+    }
 }

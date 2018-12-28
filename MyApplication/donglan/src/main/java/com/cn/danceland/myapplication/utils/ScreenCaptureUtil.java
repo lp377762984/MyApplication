@@ -28,6 +28,7 @@ import java.util.List;
 /**
  * Created by shy on 2018/5/21 11:47
  * Email:644563767@qq.com
+ * 截屏工具
  */
 
 
@@ -289,4 +290,24 @@ public class ScreenCaptureUtil {
         v.draw(c);
         return b;
     }
+//    /**
+//     *拼接图片
+//     * @param first 分享的长图
+//     * @param second  公司logo图
+//     */
+//    public static Bitmap add2Bitmap(Bitmap first, Bitmap second) {
+//        float scale = ((float) first.getWidth()) / second.getWidth();
+//        second = ImageUtil.scaleImg(second, scale);
+//        int width = first.getWidth();
+//        int height = first.getHeight() + second.getHeight();
+//        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
+//        Canvas canvas = new Canvas(result);
+//        canvas.drawBitmap(first, 0, 0, null);
+//        canvas.drawBitmap(second, 0, first.getHeight(), null);
+//        return result;
+//    }
+
+
+
+
 }

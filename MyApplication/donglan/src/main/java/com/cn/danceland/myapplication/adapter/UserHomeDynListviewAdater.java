@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,6 +39,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -51,7 +53,9 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.TintUitls;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.google.gson.Gson;
@@ -327,10 +331,17 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
 
                 }
             });
+            //改变图标颜色
+            TintUitls.changeColor(context,R.drawable.img_dl_share_dyn, viewHolder.iv_transpond,R.color.color_dl_deep_blue);
             viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ToastUtils.showToastShort("转发");
+
+                    final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+                    strbean.share_type = "4";//门店详情
+                    strbean.bus_id=data.get(position).getId();
+                    ShareUtils.create((Activity) context).shareWebInfoFromService(strbean);
+
                 }
             });
 
@@ -537,121 +548,13 @@ public class UserHomeDynListviewAdater extends BaseAdapter {
                 }
             } else {
                 viewHolder.gridView.setVisibility(View.GONE);
-                viewHolder.iv_pic.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
                 viewHolder.img_layout2.setVisibility(View.GONE);
                 viewHolder.img_layout3.setVisibility(View.GONE);
                 viewHolder.img_layout4.setVisibility(View.GONE);
                 viewHolder.img_layout5.setVisibility(View.GONE);
                 viewHolder.img_layout6.setVisibility(View.GONE);
             }
-//            if (data.get(position).getImgList() != null && data.get(position).getImgList().size() > 0) {
-//
-//                viewHolder.gridView.setVisibility(View.VISIBLE);
-////            if (data.get(position).getImgList().size() == 1) {
-////                viewHolder.gridView.setVisibility(View.GONE);
-////            }
-//
-//                if (data.get(position).getImgList().size() == 1) {
-//                    viewHolder.gridView.setVisibility(View.GONE);
-//                    //  int height = DensityUtils.dp2px(context,100f);//此处的高度需要动态计算
-//                    //   int width = DensityUtils.dp2px(context,100f);//此处的宽度需要动态计算
-//                    RequestOptions options1 = new RequestOptions()
-//                            .placeholder(R.drawable.loading_img)//加载占位图
-////                            .error(R.drawable.loading_img)//
-//                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-//                            .priority(Priority.HIGH);
-//
-//                    viewHolder.iv_pic.setVisibility(View.VISIBLE);
-//                    StringBuilder sb = new StringBuilder(data.get(position).getImgList().get(0));
-//                    String houzhui = data.get(position).getImgList().get(0).substring(data.get(position).getImgList().get(0).lastIndexOf(".") + 1);
-//                    sb.insert(data.get(position).getImgList().get(0).length() - houzhui.length() - 1, "_400X400");
-//                    String[] b = sb.toString().split("_");
-//                    String[] c = b[1].toString().split("X");
-//
-////                LogUtil.i(b[2].toString());
-////
-////                LogUtil.i(c[0]);
-////                LogUtil.i(c[1]);
-////                LogUtil.i(sb.toString());
-//
-//                    if (TextUtils.isDigitsOnly(c[0]) && TextUtils.isDigitsOnly(c[1]) && c.length > 1) {
-//                        if (Float.parseFloat(c[0]) != 0 && Float.parseFloat(c[1]) != 0) {
-//                            if (Float.parseFloat(c[0]) >= Float.parseFloat(c[1])) {
-//                                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f), DensityUtils.dp2px(context, 200f * Float.parseFloat(c[1]) / Float.parseFloat(c[0])));
-////                                linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-//                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-//                                viewHolder.iv_pic.setLayoutParams(linearParams);
-//                            } else {
-//                                LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(DensityUtils.dp2px(context, 200f * Float.parseFloat(c[0]) / Float.parseFloat(c[1])), DensityUtils.dp2px(context, 200f));
-////                                linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-//                                linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-//                                viewHolder.iv_pic.setLayoutParams(linearParams);
-//                            }
-//                        }
-//                    }
-//
-//                    Glide.with(context)
-//                            .load(sb.toString())
-//                             .apply(options1)
-//                            .into(viewHolder.iv_pic);
-//                    viewHolder.iv_pic.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            PictureConfig config = new PictureConfig.Builder()
-//                                    .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-//                                    .setPosition(0)//图片下标（从第position张图片开始浏览）
-//                                    .setDownloadPath("DCIM")//图片下载文件夹地址
-//                                    .setIsShowNumber(false)//是否显示数字下标
-//                                    .needDownload(true)//是否支持图片下载
-//                                    .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-//                                    .build();
-//                            ImagePagerActivity.startActivity(context, config);
-//                        }
-//                    });
-//                    LinearLayout.LayoutParams linearParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                    linearParams1.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-//                    viewHolder.gridView.setLayoutParams(linearParams1); //使设置好的布局参数应用到控件
-//                } else if (data.get(position).getImgList().size() == 4) {
-//                    viewHolder.iv_pic.setVisibility(View.GONE);
-//                    viewHolder.gridView.setNumColumns(2);
-//                    int width = (DensityUtils.dp2px(context, AppUtils.getScreenWidth()) - DensityUtils.dp2px(context, 32f)) / 3 * 2;
-////                    int width = DensityUtils.dp2px(context, 195f);//此处的宽度需要动态计算
-//                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-////                    linearParams.setMargins(0, DensityUtils.dp2px(context, 5f), 0, 0);
-//                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-//                    viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-//
-//                } else {
-//                    viewHolder.iv_pic.setVisibility(View.GONE);
-//                    viewHolder.gridView.setNumColumns(3);
-//                    LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//                    linearParams.setMargins(DensityUtils.dp2px(context, 16f), DensityUtils.dp2px(context, 10f), DensityUtils.dp2px(context, 16f), 0);
-//                    viewHolder.gridView.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-//                }
-//
-//                viewHolder.gridView.setAdapter(new ImageGridAdapter(context, data.get(position).getImgList()));
-//                /**
-//                 * 图片列表点击事件
-//                 */
-//                viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                        PictureConfig config = new PictureConfig.Builder()
-//                                .setListData((ArrayList<String>) data.get(position).getImgList())//图片数据List<String> list
-//                                .setPosition(i)//图片下标（从第position张图片开始浏览）
-//                                .setDownloadPath("DCIM")//图片下载文件夹地址
-//                                .setIsShowNumber(true)//是否显示数字下标
-//                                .needDownload(true)//是否支持图片下载
-//                                .setPlacrHolder(R.drawable.loading_img)//占位符图片（图片加载完成前显示的资源图片，来源drawable或者mipmap）
-//                                .build();
-//                        ImagePagerActivity.startActivity(context, config);
-//                    }
-//                });
-//            } else {
-//                viewHolder.gridView.setVisibility(View.GONE);
-//                viewHolder.iv_pic.setVisibility(View.GONE);
-//
-//            }
         }
         return convertView;
     }

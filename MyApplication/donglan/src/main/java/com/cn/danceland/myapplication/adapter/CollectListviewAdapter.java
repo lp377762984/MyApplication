@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -25,6 +24,7 @@ import com.cn.danceland.myapplication.activity.CollectEntranceActivity;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
 import com.cn.danceland.myapplication.bean.RequestCollectDataBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.LogUtil;
@@ -131,7 +131,20 @@ public class CollectListviewAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 setReadNum(position + "");
-                context.startActivity(new Intent(context, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
+
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=data.get(position).getId()+"";
+                shareBean.img_url=data.get(position).getImg_url();
+                shareBean.title=data.get(position).getTitle();
+                shareBean.url=data.get(position).getUrl();
+                shareBean.type=3;//首页新闻
+                context.startActivity(new Intent(context, NewsDetailsActivity.class)
+                        .putExtra("url", data.get(position).getUrl())
+                        .putExtra("shareBean", shareBean)
+                        .putExtra("title", data.get(position).getTitle())
+                        .putExtra("img_url", data.get(position).getImg_url()));
+
+
             }
         });
         if (data.get(position).is_collect()) {

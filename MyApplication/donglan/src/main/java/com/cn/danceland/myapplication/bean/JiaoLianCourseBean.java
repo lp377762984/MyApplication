@@ -78,6 +78,7 @@ public class JiaoLianCourseBean implements Serializable {
         private int time_length;
         private String self_avatar_path;
         private String img_url;
+private String room_id;
 
         @Override
         public String toString() {
@@ -103,7 +104,16 @@ public class JiaoLianCourseBean implements Serializable {
                     ", time_length=" + time_length +
                     ", self_avatar_path='" + self_avatar_path + '\'' +
                     ", img_url='" + img_url + '\'' +
+                    ", room_id='" + room_id + '\'' +
                     '}';
+        }
+
+        public String getRoom_id() {
+            return room_id;
+        }
+
+        public void setRoom_id(String room_id) {
+            this.room_id = room_id;
         }
 
         public String getCourse_type_describe() {

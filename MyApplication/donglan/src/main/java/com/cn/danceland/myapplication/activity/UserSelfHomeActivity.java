@@ -2,10 +2,13 @@ package com.cn.danceland.myapplication.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -26,6 +29,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequestSimpleBean;
 import com.cn.danceland.myapplication.bean.RequsetUserDynInfoBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -34,6 +38,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.utils.UIUtils;
 import com.cn.danceland.myapplication.view.DongLanTransparentTitleView;
@@ -135,16 +140,29 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
         if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
             findViewById(R.id.ll_01).setVisibility(View.INVISIBLE);
-            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_edit));
-        }else{
-            more_iv.setImageDrawable(getResources().getDrawable(R.drawable.black_list_icon));
+            //  more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_edit));
+
+//            imageView1.setImageDrawable(drawable1);
+
+
+        } else {
+            //  more_iv.setImageDrawable(getResources().getDrawable(R.drawable.img_more_dyn));
         }
+
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.img_more_dyn);
+        Drawable.ConstantState state = drawable.getConstantState();
+        Drawable drawable1 = DrawableCompat.wrap(state == null ? drawable : state.newDrawable()).mutate();
+        drawable1.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.white));
+        more_iv.setImageDrawable(drawable);
+
         more_iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//拉黑
                 if (TextUtils.equals(userId, SPUtils.getString(Constants.MY_USERID, ""))) {
-                    startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
-                }else{
+                    //    startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
+                    showListDialogSelf1(userId);
+                } else {
                     showListDialogSelf(userId);
                 }
             }
@@ -280,13 +298,13 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_my_dyn://我的动态
-                startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true).putExtra("from",6));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserHomeActivity.class).putExtra("id", userId).putExtra("isdyn", true).putExtra("from", 6));
                 break;
             case R.id.ll_my_guanzhu://我的关注
-                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1).putExtra("from",6));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 1).putExtra("from", 6));
                 break;
             case R.id.ll_my_fans://我的粉丝
-                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2).putExtra("from",6));
+                startActivity(new Intent(UserSelfHomeActivity.this, UserListActivity.class).putExtra("id", userId).putExtra("type", 2).putExtra("from", 6));
                 break;
             case R.id.iv_avatar://头像
                 startActivity(new Intent(UserSelfHomeActivity.this, AvatarActivity.class).putExtra("url", userInfo.getPerson().getSelf_avatar_path()));
@@ -322,7 +340,7 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showListDialogSelf(final String userid) {
-        final String[] items = {"加入黑名单"};
+        final String[] items = {"分享", "加入黑名单"};
         AlertDialog.Builder listDialog =
                 new AlertDialog.Builder(this);
         //listDialog.setTitle("我是一个列表Dialog");
@@ -332,17 +350,17 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
 
                 switch (which) {
                     case 0:
+                        getShareInfo();
+                        break;
+                    case 1:
                         Data data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
                         if (TextUtils.equals(data.getPerson().getId(), userid)) {
                             ToastUtils.showToastShort("不能将本人加入黑名单");
                             return;
                         }
                         addBlack(userid);
-
                         break;
-                    case 1:
 
-                        break;
                     default:
                         break;
                 }
@@ -351,8 +369,67 @@ public class UserSelfHomeActivity extends BaseActivity implements View.OnClickLi
         listDialog.show();
     }
 
+    private void showListDialogSelf1(final String userid) {
+        final String[] items = {"分享", "编辑个人资料"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(this);
+        //listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case 0:
+                        getShareInfo();
+                        break;
+                    case 1:
+                        startActivity(new Intent(UserSelfHomeActivity.this, MyProActivity.class));
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+
+    private void getShareInfo() {
+        ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+        strbean.share_type = "8";
+        strbean.bus_id = userInfo.getPerson().getId();
+        ShareUtils.create(UserSelfHomeActivity.this).shareWebInfoFromService(strbean);
+
+//
+//        MyJsonObjectRequest myJsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.SHARERECORD_CREATESHARE, new Gson().toJson(strbean).toString(), new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject jsonObject) {
+//                ;
+//                LogUtil.i(jsonObject.toString());
+//                RequestShareBean shareBean = new Gson().fromJson(jsonObject.toString(), RequestShareBean.class);
+//
+//                ShareUtils.create(UserSelfHomeActivity.this).shareWeb(shareBean.getData()
+//                        .getUrl(), shareBean.getData().getImg(), shareBean.getData().getTitle(), 8,userInfo.getPerson().getId());
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//
+//            }
+//        }
+//        ) {
+//
+//        };
+//        MyApplication.getHttpQueues().add(myJsonObjectRequest);
+    }
+
     private class Strbean {
         public String blocked_id;
+        public String share_type;
+        public String bus_id;
+
     }
 
     private void addBlack(String userid) {

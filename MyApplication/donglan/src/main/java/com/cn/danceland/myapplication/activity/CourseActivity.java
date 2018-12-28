@@ -89,42 +89,41 @@ public class CourseActivity extends BaseActivity {
     String from;
     CalendarView mCalendarView;
     private CalendarPointBean calendarPointBean;
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch(msg.what){
-            case 100:
-                if (calendarPointBean.getData()!=null&&calendarPointBean.getData().size()>0){
-                    Map<String, Calendar> map = new HashMap<>();
+            switch (msg.what) {
+                case 100:
+                    if (calendarPointBean.getData() != null && calendarPointBean.getData().size() > 0) {
+                        Map<String, Calendar> map = new HashMap<>();
 
-                    for (int i=0;i<calendarPointBean.getData().size();i++){
-                            List<Integer> colors=new ArrayList<>();
-                                if (calendarPointBean.getData().get(i).getCourse()){
-                                    colors.add(0xFF262626);
-                                }
-                                if (calendarPointBean.getData().get(i).getFreeGroupCourse()){
-                                    colors.add(0xFF5ac8fb);
-                                }
-                                if (calendarPointBean.getData().get(i).getGroupCourse()){
-                                    colors.add(0xFFd81159);
-                                }
-                        map.put(getSchemePintCalendar(calendarPointBean.getData().get(i).getDate()+"",colors).toString(),
-                                getSchemePintCalendar(calendarPointBean.getData().get(i).getDate()+"",colors));
+                        for (int i = 0; i < calendarPointBean.getData().size(); i++) {
+                            List<Integer> colors = new ArrayList<>();
+                            if (calendarPointBean.getData().get(i).getCourse()) {
+                                colors.add(0xFF262626);
+                            }
+                            if (calendarPointBean.getData().get(i).getFreeGroupCourse()) {
+                                colors.add(0xFF5ac8fb);
+                            }
+                            if (calendarPointBean.getData().get(i).getGroupCourse()) {
+                                colors.add(0xFFd81159);
+                            }
+                            map.put(getSchemePintCalendar(calendarPointBean.getData().get(i).getDate() + "", colors).toString(),
+                                    getSchemePintCalendar(calendarPointBean.getData().get(i).getDate() + "", colors));
 
 
+                        }
+
+
+                        //此方法在巨大的数据量上不影响遍历性能，推荐使用
+                        mCalendarView.setSchemeDate(map);
                     }
 
 
-                    //此方法在巨大的数据量上不影响遍历性能，推荐使用
-                    mCalendarView.setSchemeDate(map);
-                }
-
-
-
-            break;
-            default:
-            break;
+                    break;
+                default:
+                    break;
             }
         }
     };
@@ -144,8 +143,9 @@ public class CourseActivity extends BaseActivity {
 //        }
 
     }
+
     private Calendar getSchemePintCalendar(String date, List<Integer> colors) {
-        String[] dates=TimeUtils.timeStamp2Date(date,"yyyy-MM-dd").split("-");
+        String[] dates = TimeUtils.timeStamp2Date(date, "yyyy-MM-dd").split("-");
 
         Calendar calendar = new Calendar();
         calendar.setYear(Integer.valueOf(dates[0]));
@@ -154,9 +154,9 @@ public class CourseActivity extends BaseActivity {
         calendar.setSchemeColor(0);//如果单独标记颜色、则会使用这个颜色
         calendar.setScheme("");
         //    calendar.addScheme(new Calendar.Scheme());
-        List<Calendar.Scheme> schemes=new ArrayList<>();
-        for (int i=0;i<colors.size();i++){
-            schemes.add(new Calendar.Scheme(colors.get(i),""));
+        List<Calendar.Scheme> schemes = new ArrayList<>();
+        for (int i = 0; i < colors.size(); i++) {
+            schemes.add(new Calendar.Scheme(colors.get(i), ""));
 
         }
         calendar.setSchemes(schemes);
@@ -168,21 +168,20 @@ public class CourseActivity extends BaseActivity {
 
     private void loadCalendar() {
         String url;
-        if (!isTuanke.equals("0")){//不是团课
-            url=Constants.QUERY_MEMBER_CALENDAR;
+        if (!isTuanke.equals("0")) {//不是团课
+            url = Constants.QUERY_MEMBER_CALENDAR;
 
-        }else {
-            url=Constants.GROUP_QUERY_MEMBER_CALENDAR;
+        } else {
+            url = Constants.GROUP_QUERY_MEMBER_CALENDAR;
         }
-
+        LogUtil.i(url);
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-
 
 
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
-                calendarPointBean = new Gson().fromJson(s,CalendarPointBean.class);
+                calendarPointBean = new Gson().fromJson(s, CalendarPointBean.class);
 //                Message message=Message.obtain();
 //                message.what=100;
                 handler.sendEmptyMessage(100);
@@ -199,7 +198,8 @@ public class CourseActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("memberId", data.getMember().getId());
-                map.put("mDate", startTime);
+                map.put("date", startTime);
+                LogUtil.i(map.toString());
                 return map;
 
             }
@@ -524,7 +524,7 @@ public class CourseActivity extends BaseActivity {
 
                 rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
-                if (tuanKeFragment==null){
+                if (tuanKeFragment == null) {
                     tuanKeFragment = new TuanKeFragment();
                 }
 
@@ -534,7 +534,7 @@ public class CourseActivity extends BaseActivity {
 
                 fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
             } else {
-                if (siJiaoFragment==null){
+                if (siJiaoFragment == null) {
                     siJiaoFragment = new SiJiaoFragment();
                 }
 
@@ -550,28 +550,28 @@ public class CourseActivity extends BaseActivity {
                 //    nccalendar.setVisibility(View.GONE);
                 mCalendarView.setVisibility(View.GONE);
                 rl_tuanke_record.setVisibility(View.VISIBLE);
-                if (tuanKeRecordFragment==null){
+                if (tuanKeRecordFragment == null) {
                     tuanKeRecordFragment = new TuanKeRecordFragment();
                 }
 
                 tuanKeRecordFragment.getStartTime(startTime);
                 fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
             } else {
-                if (siJiaoRecordFragment==null){
+                if (siJiaoRecordFragment == null) {
                     siJiaoRecordFragment = new SiJiaoRecordFragment();
                 }
 
 
                 siJiaoRecordFragment.getStartTime(startTime);
                 siJiaoRecordFragment.getRoles(role, auth);
-                Bundle bundle =new Bundle();
-                bundle.putString("siJiaoRecordFragment",currentSelectDate);
+                Bundle bundle = new Bundle();
+                bundle.putString("siJiaoRecordFragment", currentSelectDate);
                 siJiaoRecordFragment.setArguments(bundle);
                 fragmentTransaction.replace(R.id.rl_nv, siJiaoRecordFragment);
             }
 
         } else if ("2".equals(type)) {
-            if (tuanKeFragment==null){
+            if (tuanKeFragment == null) {
                 tuanKeFragment = new TuanKeFragment();
             }
 

@@ -29,6 +29,7 @@ import com.cn.danceland.myapplication.bean.CourseEvaluateBean;
 import com.cn.danceland.myapplication.bean.CourseFindPerson;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -39,6 +40,7 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -151,7 +153,14 @@ public class TuanKeDetailActivity extends BaseActivity {
       //  tv_tuanke_title = findViewById(R.id.tv_tuanke_title);
         titleView.setTitle("免费团课");
         course_type.setText("免费团课");
-
+        titleView.setMoreIvVisible(true);
+        titleView.setMoreIvImg(R.drawable.img_more_dyn);
+        titleView.setMoreIvOnClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareInfo();
+            }
+        });
 
         img_1 = findViewById(pic_01);
         img_2 = findViewById(pic_02);
@@ -185,6 +194,26 @@ public class TuanKeDetailActivity extends BaseActivity {
             getData(groupId);
         }
         queryAverage();
+    }
+
+
+    private void ShareInfo() {
+
+        final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+        strbean.share_type = "11";//免费团课
+        if (item != null) {
+            strbean.course_type_id = item.getCourse_type_id() + "";
+            strbean.bus_id = item.getId() + "";
+            strbean.employee_id = item.getEmployee_id() + "";
+            strbean.room_id = item.getRoom_id()+ "";
+        }
+//        if (item1 != null) {
+//            strbean.course_type_id = item1.getCourse_type_id() + "";
+//            strbean.bus_id = item1.getId() + "";
+//            strbean.employee_id = item1.getEmployee_id() + "";
+//            strbean.room_id = item1.getRoom_id()+ "";
+//        }
+        ShareUtils.create(this).shareWebInfoFromService(strbean);
     }
 
     private void commitYuyue(KeChengBiaoBean.Data data, final RelativeLayout rl, final TextView tv) {

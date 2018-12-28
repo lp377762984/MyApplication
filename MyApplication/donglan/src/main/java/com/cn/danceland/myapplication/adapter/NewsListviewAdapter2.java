@@ -20,12 +20,10 @@ import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.NewsDetailsActivity;
 import com.cn.danceland.myapplication.bean.RequestCollectBean;
-import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
 import com.cn.danceland.myapplication.bean.RequestNewsDataBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
-import com.cn.danceland.myapplication.utils.MD5Utils;
-import com.cn.danceland.myapplication.utils.MyStringNoTokenRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
@@ -127,7 +125,18 @@ public class NewsListviewAdapter2 extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 setReadNum(position+"");
-                context.startActivity(new Intent(context, NewsDetailsActivity.class).putExtra("url", data.get(position).getUrl()).putExtra("title", data.get(position).getTitle()));
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=data.get(position).getId()+"";
+                shareBean.img_url=data.get(position).getImg_url();
+                shareBean.title=data.get(position).getTitle();
+                shareBean.url=data.get(position).getUrl();
+                shareBean.type=3;//首页新闻
+                context.startActivity(new Intent(context, NewsDetailsActivity.class)
+                        .putExtra("url", data.get(position).getUrl())
+                        .putExtra("shareBean", shareBean)
+                        .putExtra("title", data.get(position).getTitle())
+                        .putExtra("img_url", data.get(position).getImg_url()));
+
             }
         });
         if(data.get(position).is_collect()){

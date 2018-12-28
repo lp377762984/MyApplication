@@ -27,6 +27,7 @@ import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.MyCourseBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.CustomGridView;
@@ -34,8 +35,10 @@ import com.cn.danceland.myapplication.utils.DataInfoCache;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.view.CommitButton;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -64,7 +67,7 @@ public class CourseDetailActivity extends BaseActivity {
     ImageView course_img, course_back;
     CircleImageView course_jiaolian_huiyuan_circle;
     CommitButton rl_button_yuyue;
-  // NestedExpandaleListView my_expanda;
+    // NestedExpandaleListView my_expanda;
     ImageView down_img, up_img;
     Gson gson;
     CourseMemberBean courseMemberBean;
@@ -84,6 +87,32 @@ public class CourseDetailActivity extends BaseActivity {
         initView();
         queryAverage();
     }
+
+    private class Strbean {
+        public String course_type_id;
+        public String employee_id;
+        public String id;
+        public String share_type;
+
+    }
+
+    private void ShareInfo() {
+
+        final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+        strbean.share_type = "2";//一对一
+        if (item != null) {
+            strbean.course_type_id = item.getCourse_type_id() + "";
+            strbean.bus_id = item.getId() + "";
+            strbean.employee_id = item.getEmployee_id() + "";
+        }
+        if (item1 != null) {
+            strbean.course_type_id = item1.getCourse_type_id() + "";
+            strbean.bus_id = item1.getId() + "";
+            strbean.employee_id = item1.getEmployee_id() + "";
+        }
+        ShareUtils.create(this).shareWebInfoFromService(strbean);
+    }
+
 
     private void queryAverage() {
 
@@ -292,7 +321,16 @@ public class CourseDetailActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        DongLanTitleView titleView = findViewById(R.id.dl_title);
+        ImageView imageView = titleView.getMoreIv();
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setImageResource(R.drawable.img_more_dyn);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareInfo();
+            }
+        });
 
         course_name = findViewById(R.id.course_name);
         course_length = findViewById(R.id.course_length);
@@ -308,31 +346,14 @@ public class CourseDetailActivity extends BaseActivity {
         tv_jiaolian_fenshu = findViewById(R.id.tv_jiaolian_fenshu);
         tv_changdi_fenshu = findViewById(R.id.tv_changdi_fenshu);
         tv_content = findViewById(R.id.tv_content);
-//        my_expanda = findViewById(my_expanda);
-//        my_expanda.setGroupIndicator(null);
-//        my_expanda.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-//                down_img = v.findViewById(R.id.down_img);
-//                up_img = v.findViewById(R.id.up_img);
-//                if (down_img.getVisibility() == View.GONE) {
-//                    down_img.setVisibility(View.VISIBLE);
-//                    up_img.setVisibility(View.GONE);
-//                } else {
-//                    down_img.setVisibility(View.GONE);
-//                    up_img.setVisibility(View.VISIBLE);
-//                }
-//                return false;
-//            }
-//        });
 
         if (role != null) {
 
-            tv_content.setText("课程介绍："+item1.getCourse_type_describe());
+            tv_content.setText("课程介绍：" + item1.getCourse_type_describe());
 
         } else {
 
-            tv_content.setText("课程介绍："+item.getCourse_type_describe());
+            tv_content.setText("课程介绍：" + item.getCourse_type_describe());
         }
 
         my_recycler_view = findViewById(R.id.my_recycler_view);
@@ -344,7 +365,6 @@ public class CourseDetailActivity extends BaseActivity {
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         my_recycler_view.setHasFixedSize(true);
         //创建并设置Adapter
-
 
 
         setclick();
@@ -406,17 +426,17 @@ public class CourseDetailActivity extends BaseActivity {
                         if (data.getTotalElements() > 6) {
                             getTotlePeple();
                         } else if (data.getTotalElements() < 1) {
-                     //       my_expanda.setVisibility(View.GONE);
+                            //       my_expanda.setVisibility(View.GONE);
                         }
                         course_renshu.setText("购买会员(" + data.getTotalElements() + ")");
                         headList = data.getContent();
                         mRecylerViewAdapter = new SiJiaoRecylerViewAdapter(CourseDetailActivity.this, headList);
                         my_recycler_view.setAdapter(mRecylerViewAdapter);
-                   //     my_expanda.setAdapter(myAdapter);
+                        //     my_expanda.setAdapter(myAdapter);
                     }
 
                 } else {
-              //      my_expanda.setVisibility(View.GONE);
+                    //      my_expanda.setVisibility(View.GONE);
                     course_renshu.setText("购买会员(0)");
                 }
 

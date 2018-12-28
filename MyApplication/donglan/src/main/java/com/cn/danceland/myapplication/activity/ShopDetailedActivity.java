@@ -39,6 +39,8 @@ import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestLoginInfoBean;
+import com.cn.danceland.myapplication.bean.ShareBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.bean.ShopDetailBean;
 import com.cn.danceland.myapplication.bean.ShopJiaoLianBean;
 import com.cn.danceland.myapplication.bean.ShopPictrueBean;
@@ -48,6 +50,7 @@ import com.cn.danceland.myapplication.utils.DensityUtils;
 import com.cn.danceland.myapplication.utils.GlideRoundTransform;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CommitButton;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
@@ -137,6 +140,13 @@ public class ShopDetailedActivity extends BaseActivity {
 
     private boolean isjion = false;
 
+    private void ShareInfo() {//分享
+
+        final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+        strbean.share_type = "7";//门店详情
+        strbean.bus_id=branchID;
+        ShareUtils.create(this).shareWebInfoFromService(strbean);
+    }
     private void isJoinBranch(final String branchId) {
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.ISJOINBRANCH, new Response.Listener<String>() {
@@ -176,14 +186,20 @@ public class ShopDetailedActivity extends BaseActivity {
     }
 
     private void initView() {
-
+ImageView iv_more=findViewById(R.id.iv_more);
+        iv_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareInfo();
+            }
+        });
         shop_banner = findViewById(R.id.shop_banner);
         img_kechenganpai = findViewById(R.id.img_kechenganpai);
         img_kechenganpai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isjion == true) {
-                    startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class).putExtra("shopName",shopName));
+                    startActivity(new Intent(ShopDetailedActivity.this, TimeTableActivity.class).putExtra("shopName",shopName).putExtra("branchId",branchID));
                 } else {
                     ToastUtils.showToastShort("请先加入门店");
                 }
@@ -377,8 +393,17 @@ public class ShopDetailedActivity extends BaseActivity {
         shop_banner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
+                ShareBean shareBean=new ShareBean();
+                shareBean.bus_id=backBannerList.get(i).getId()+"";
+                shareBean.img_url=backBannerList.get(i).getImg_url();
+                shareBean.title=backBannerList.get(i).getTitle();
+                shareBean.url=backBannerList.get(i).getUrl();
+                shareBean.type= 12;// 门店轮播图
                 startActivity(new Intent(ShopDetailedActivity.this, NewsDetailsActivity.class)
-                        .putExtra("url", backBannerList.get(i).getUrl()).putExtra("title", backBannerList.get(i).getTitle()));
+                        .putExtra("url", backBannerList.get(i).getUrl())
+                        .putExtra("title", backBannerList.get(i).getTitle())
+                .putExtra("img_url",backBannerList.get(i).getImg_url())
+                .putExtra("shareBean",shareBean));
 
 //                Intent intent = new Intent(mActivity, ShopDetailedActivity.class);
 //                intent.putExtra("shopWeidu", itemsList.get(0).getLat() + "");

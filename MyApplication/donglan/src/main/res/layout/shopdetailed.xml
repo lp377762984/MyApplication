@@ -461,6 +461,14 @@
                 android:text="门店详情"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+            <ImageView
+                android:id="@+id/iv_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:src="@drawable/img_more_dyn"
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
     </FrameLayout>

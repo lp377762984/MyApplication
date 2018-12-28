@@ -6,7 +6,7 @@
 
 
     <com.cn.danceland.myapplication.view.DongLanTitleView
-        android:id="@+id/rl_coursedetail_title"
+        android:id="@+id/dl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleText="单人私教详情">
@@ -17,7 +17,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_coursedetail_title">
+        android:layout_below="@+id/dl_title">
 
         <LinearLayout
             android:layout_width="match_parent"

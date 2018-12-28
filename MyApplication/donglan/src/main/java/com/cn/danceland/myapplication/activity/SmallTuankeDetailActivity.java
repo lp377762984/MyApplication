@@ -30,6 +30,7 @@ import com.cn.danceland.myapplication.bean.CourseMemberBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.JiaoLianCourseBean;
 import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.bean.TuanKeBean;
 import com.cn.danceland.myapplication.utils.Constants;
@@ -40,8 +41,10 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.NestedExpandaleListView;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -56,6 +59,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by feng on 2018/3/30.
+ * 小团体私教详情
  */
 
 public class SmallTuankeDetailActivity extends BaseActivity {
@@ -181,6 +185,15 @@ public class SmallTuankeDetailActivity extends BaseActivity {
     }
 
     private void initView() {
+        DongLanTitleView titleView=findViewById(R.id.dl_title);
+        titleView.setMoreIvVisible(true);
+        titleView.setMoreIvImg(R.drawable.img_more_dyn);
+        titleView.setMoreIvOnClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareInfo();
+            }
+        });
         my_recycler_view = findViewById(R.id.my_recycler_view);
         //创建默认的线性LayoutManager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -238,7 +251,24 @@ public class SmallTuankeDetailActivity extends BaseActivity {
         //initData();a
     }
 
+    private void ShareInfo() {
 
+        final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+        strbean.share_type = "1";//小团课
+        if (item != null) {
+            strbean.course_type_id = item.getCourse_type_id() + "";
+            strbean.bus_id = item.getId() + "";
+            strbean.employee_id = item.getEmployee_id() + "";
+            strbean.room_id = item.getRoom_id()+ "";
+        }
+        if (item1 != null) {
+            strbean.course_type_id = item1.getCourse_type_id() + "";
+            strbean.bus_id = item1.getId() + "";
+            strbean.employee_id = item1.getEmployee_id() + "";
+            strbean.room_id = item1.getRoom_id()+ "";
+        }
+        ShareUtils.create(this).shareWebInfoFromService(strbean);
+    }
     private void getDeatil(){
 
 

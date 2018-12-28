@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,7 @@ import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.RequestInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetDynInfoBean;
 import com.cn.danceland.myapplication.bean.RequsetSimpleBean;
+import com.cn.danceland.myapplication.bean.ShareInfoFromServiceBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -52,7 +54,9 @@ import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
 import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.SPUtils;
+import com.cn.danceland.myapplication.utils.ShareUtils;
 import com.cn.danceland.myapplication.utils.TimeUtils;
+import com.cn.danceland.myapplication.utils.TintUitls;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.NoScrollGridView;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -344,10 +348,19 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 EventBus.getDefault().post(new IntEvent(100, 8902));
             }
         });
+
+        //改变图标颜色
+        TintUitls.changeColor(context,R.drawable.img_dl_share_dyn, viewHolder.iv_transpond,R.color.color_dl_deep_blue);
+
         viewHolder.iv_transpond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.showToastShort("转发");
+
+                final ShareInfoFromServiceBean strbean = new ShareInfoFromServiceBean();
+                strbean.share_type = "4";//门店详情
+                strbean.bus_id=data.get(position).getId();
+                ShareUtils.create((Activity) context).shareWebInfoFromService(strbean);
+
             }
         });
 
@@ -576,7 +589,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
                 setImg(viewHolder.iv_pic6_6, data.get(position).getImgList(), screenWidth, 5);
             } } else {
                 viewHolder.gridView.setVisibility(View.GONE);
-                viewHolder.iv_pic.setVisibility(View.GONE);
+                viewHolder.iv_pic_cv.setVisibility(View.GONE);
             viewHolder.img_layout2.setVisibility(View.GONE);
             viewHolder.img_layout3.setVisibility(View.GONE);
             viewHolder.img_layout4.setVisibility(View.GONE);

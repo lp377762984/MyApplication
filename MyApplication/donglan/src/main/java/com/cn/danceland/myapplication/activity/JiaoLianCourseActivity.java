@@ -191,7 +191,8 @@ public class JiaoLianCourseActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
                 map.put("employeeId", data.getEmployee().getId()+"");
-                map.put("mDate", startTime);
+                map.put("date", startTime);
+                LogUtil.i(map.toString());
                 return map;
 
             }

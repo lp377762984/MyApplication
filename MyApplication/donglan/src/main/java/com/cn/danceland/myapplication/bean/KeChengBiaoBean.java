@@ -63,7 +63,16 @@ public class KeChengBiaoBean implements Serializable{
         private int week;
         private String level;
         private String room_name;
+        private String room_id;
         private int self_appoint_count;
+
+        public String getRoom_id() {
+            return room_id;
+        }
+
+        public void setRoom_id(String room_id) {
+            this.room_id = room_id;
+        }
 
         public String getRoom_name() {
             return room_name;
