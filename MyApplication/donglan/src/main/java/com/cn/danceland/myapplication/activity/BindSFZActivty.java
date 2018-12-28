@@ -59,6 +59,7 @@ public class BindSFZActivty extends BaseActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     //even事件处理
     @Subscribe
     public void onEventMainThread(StringEvent event) {
@@ -101,7 +102,9 @@ public class BindSFZActivty extends BaseActivity {
                     showClearDialog("输入证件号不符，请联系门店或重试");
                 }
                 if (newBindBean.getCode() == 2) {//通过
-                    startActivity(new Intent(BindSFZActivty.this,SetPswdActivity.class).putExtra("id",newBindBean.getData().getPerson().getId()));
+                    startActivity(new Intent(BindSFZActivty.this, SetPswdActivity.class).putExtra("id", newBindBean.getData().getPerson().getId())
+                            .putExtra("login_type", 1)
+                            .putExtra("phone", phone));
                 }
             }
         }, new Response.ErrorListener() {
