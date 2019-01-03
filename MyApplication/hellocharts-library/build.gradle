@@ -8,22 +8,23 @@ apply plugin: 'maven-publish'
 
 buildscript {
     repositories {
+        google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
 dependencies {
     //compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.android.support:support-v4:23.4.0'
+    api 'com.android.support:support-v4:23.4.0'
 }
 
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -31,7 +32,7 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -47,7 +48,21 @@ android {
             assets.srcDirs = ['assets']
         }
     }
-
+//    signingConfigs {
+//        config {
+//            keyPassword 'donglanyg'
+//            storeFile file('D:/key.jks')
+//            storePassword 'donglanyg'
+//            keyAlias 'key0'
+//
+//        }
+//        debug {
+//            storeFile file('D:/key.jks')
+//            storePassword 'donglanyg'
+//            keyAlias 'key0'
+//            keyPassword 'donglanyg'
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
@@ -92,6 +107,7 @@ publishing {
  //   }
 
     repositories {
+        google()
 //        maven {
 //            credentials {
 //                username 'nexusUser'

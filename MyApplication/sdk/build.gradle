@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -19,15 +19,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile files('libs/imsdk_group_ext.jar')
-    compile files('libs/imsdk_msg_ext.jar')
-    compile files('libs/imsdk_sns_ext.jar')
-    compile files('libs/imsdk_ugc_ext.jar')
-    compile files('libs/MiPush_SDK_Client_3_5_1.jar')
-    compile files('libs/BaiduLBS_Android.jar')
-    compile files('libs/HwPush_SDK_V2705.jar')
-    compile files('libs/txrtmpsdk.jar')
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    api files('libs/imsdk_group_ext.jar')
+    api files('libs/imsdk_msg_ext.jar')
+    api files('libs/imsdk_sns_ext.jar')
+    api files('libs/imsdk_ugc_ext.jar')
+    api files('libs/MiPush_SDK_Client_3_5_1.jar')
+    api files('libs/BaiduLBS_Android.jar')
+    api files('libs/HwPush_SDK_V2705.jar')
+    api files('libs/txrtmpsdk.jar')
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 }

@@ -58,8 +58,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
@@ -76,8 +75,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.cn.danceland.myapplication.pictureviewer.PictureConfig.position;
 
 /**
  * Created by yxx on 2018-10-18.
@@ -264,16 +261,20 @@ public class HomeFragment extends BaseFragment {
         header.setHeaderTextColor(getResources().getColor(R.color.white));
         refreshLayout.setRefreshHeader(header);//设置 Header 为 贝塞尔雷达 样式
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);//取消内容不满一页时开启上拉加载功能
-        refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
+        refreshLayout.setEnableAutoLoadMore(true);//是否启用列表惯性滑动到底部时自动加载更多
         refreshLayout.setEnableHeaderTranslationContent(false);//拖动Header的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableFooterTranslationContent(true);//拖动Footer的时候是否同时拖动内容（默认true）
         refreshLayout.setEnableOverScrollDrag(false);//禁止越界拖动（1.0.4以上版本）
-        refreshLayout.setRefreshFooter(new BallPulseFooter(mActivity).setSpinnerStyle(SpinnerStyle.Scale));
+        ClassicsFooter classicsFooter = new ClassicsFooter(mActivity);
+        classicsFooter.setProgressDrawable(getResources().getDrawable(R.drawable.listview_loading_anim));
+        refreshLayout.setRefreshFooter(classicsFooter);
+//        refreshLayout.setRefreshFooter(new BallPulseFooter(mActivity).setSpinnerStyle(SpinnerStyle.Scale));
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 //                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+                refreshlayout.setNoMoreData(false);//恢复加载更多的状态
                 TimerTask task = new TimerTask() {
                     public void run() {
                         new DownRefresh().execute();
@@ -287,13 +288,14 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
 //                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
-                TimerTask task = new TimerTask() {
-                    public void run() {
-                        new UpRefresh().execute();
-                    }
-                };
-                Timer timer = new Timer();
-                timer.schedule(task, 1000);
+//                TimerTask task = new TimerTask() {
+//                    public void run() {
+//
+//                    }
+//                };
+//                Timer timer = new Timer();
+//                timer.schedule(task, 1000);
+                new UpRefresh().execute();
             }
         });
 
@@ -634,6 +636,9 @@ public class HomeFragment extends BaseFragment {
 
     private void setEnd() {
         isEnd = true;//没数据了
+
+        refreshLayout.finishLoadMoreWithNoMoreData();
+
 //        ILoadingLayout endLabels = pullToRefresh.getLoadingLayoutProxy(
 //                false, true);
 //        endLabels.setPullLabel("—我是有底线的—");// 刚下拉时，显示的提示
@@ -840,6 +845,7 @@ public class HomeFragment extends BaseFragment {
                     }
                     LogUtil.i(data.size() + "");
                     if (data.size() > 0 && data.size() < 10) {
+                        LogUtil.i(data.size() + "沒了");
                         setEnd();
                     } else {
                         mCurrentPage = mCurrentPage + 1;

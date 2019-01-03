@@ -13,7 +13,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 
 import com.hyphenate.easeui.R;
 
@@ -22,7 +21,7 @@ import com.hyphenate.easeui.R;
  * Created by lzan13 on 2015/4/30.
  * customized ImageView，Rounded Rectangle and border is implemented, and change color when you press
  */
-public class EaseImageView extends ImageView {
+public class EaseImageView extends android.support.v7.widget.AppCompatImageView {
     // paint when user press
     private Paint pressPaint;
     private int width;
@@ -130,11 +129,12 @@ public class EaseImageView extends ImageView {
         paint.setAntiAlias(true); //smooths out the edges of what is being drawn
         PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         // set flags
-        int saveFlags = Canvas.MATRIX_SAVE_FLAG
-                | Canvas.CLIP_SAVE_FLAG
-                | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
-                | Canvas.FULL_COLOR_LAYER_SAVE_FLAG
-                | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
+        int saveFlags = Canvas.ALL_SAVE_FLAG;
+//        int saveFlags = Canvas.ALL_SAVE_FLAG
+//                | Canvas.CLIP_SAVE_FLAG
+//                | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+//                | Canvas.FULL_COLOR_LAYER_SAVE_FLAG
+//                | Canvas.CLIP_TO_LAYER_SAVE_FLAG;
         canvas.saveLayer(0, 0, width, height, null, saveFlags);
 
         if (shapeType == 1) {

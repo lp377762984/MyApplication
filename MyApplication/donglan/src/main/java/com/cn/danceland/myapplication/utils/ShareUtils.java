@@ -67,15 +67,15 @@ public class ShareUtils {
     }
 
     public static ShareUtils create(Activity context) {
-        if (shareUtils == null) {
-            synchronized (ShareUtils.class) {
-                if (shareUtils == null) {
-                    shareUtils = new ShareUtils(context);
-                }
-            }
-
-        }
-
+//        if (shareUtils == null) {
+//            synchronized (ShareUtils.class) {
+//                if (shareUtils == null) {
+//                    shareUtils = new ShareUtils(context);
+//                }
+//            }
+//
+//        }
+        shareUtils = new ShareUtils(context);
 
         return shareUtils;
 
@@ -286,7 +286,7 @@ public class ShareUtils {
 
 
     public void shareWebInfoFromService(final ShareInfoFromServiceBean shareInfoBean) {
-        LogUtil.i(shareInfoBean.toString());
+        LogUtil.i( new Gson().toJson(shareInfoBean).toString());
 
         MyJsonObjectRequest myJsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.SHARERECORD_CREATESHARE, new Gson().toJson(shareInfoBean).toString(), new Response.Listener<JSONObject>() {
             @Override
@@ -294,6 +294,7 @@ public class ShareUtils {
 
                 LogUtil.i(jsonObject.toString());
                 RequestShareBean shareBean = new Gson().fromJson(jsonObject.toString(), RequestShareBean.class);
+                LogUtil.i(shareBean.getData().url);
                 shareBean.getData().bus_id = shareInfoBean.bus_id;
                 shareWeb(shareBean.getData());
             }

@@ -1,6 +1,7 @@
 package com.cn.danceland.myapplication.pictureviewer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.target.Target;
 import com.cn.danceland.myapplication.MyApplication;
@@ -34,6 +34,8 @@ import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.ImageSaveCallback;
 
 import java.io.File;
+
+import static com.bumptech.glide.Glide.with;
 
 
 public class ImageDetailFragment2 extends Fragment {
@@ -103,7 +105,7 @@ public class ImageDetailFragment2 extends Fragment {
         if (TextUtils.equals(houzhui.toLowerCase(), "gif")) {
             bigImageView.setVisibility(View.GONE);
             iv_gif.setVisibility(View.VISIBLE);
-            Glide.with(getActivity()).load(mImageUrl).into(iv_gif);
+            with(getActivity()).load(mImageUrl).into(iv_gif);
             iv_gif.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -115,7 +117,12 @@ public class ImageDetailFragment2 extends Fragment {
                 }
             });
         }
-
+        iv_gif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
 
         BigImageViewer.prefetch(Uri.parse(mImageUrl));
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
@@ -221,16 +228,16 @@ public class ImageDetailFragment2 extends Fragment {
     }
 
     // 保存图片到手机
+    @SuppressLint("StaticFieldLeak")
     public void download(final String url) {
 
-        new AsyncTask<Void, Integer, File>() {
+        AsyncTask<Void, Integer, File> execute = new AsyncTask<Void, Integer, File>() {
 
             @Override
             protected File doInBackground(Void... params) {
                 File file = null;
                 try {
-                    FutureTarget<File> future = Glide
-                            .with(getActivity())
+                    FutureTarget<File> future =with(getActivity())
                             .load(url)
                             .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
 

@@ -521,7 +521,7 @@ public class MyDynListviewAdater extends BaseAdapter {
 
             viewHolder.gridView.setVisibility(View.VISIBLE);
             viewHolder.iv_pic_cv.setVisibility(View.VISIBLE);
-            LogUtil.i("data.get(position).getImgList().size()" + data.get(position).getImgList().size());
+        //    LogUtil.i("data.get(position).getImgList().size()" + data.get(position).getImgList().size());
             if (data.get(position).getImgList().size() == 1) {
                 viewHolder.gridView.setVisibility(View.GONE);
                 viewHolder.img_layout2.setVisibility(View.GONE);

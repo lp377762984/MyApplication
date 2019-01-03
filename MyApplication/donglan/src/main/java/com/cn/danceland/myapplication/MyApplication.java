@@ -211,7 +211,7 @@ initchannel();
     }
 
 public void initchannel(){
-    channelMap.put("guangwang","1");
+    channelMap.put("guanwang","1");
     channelMap.put("360","3");
     channelMap.put("yingyongbao","4");
     channelMap.put("91","5");

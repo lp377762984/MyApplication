@@ -26,8 +26,8 @@ android {
             keyPassword 'donglanyg'
         }
     }
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
 
 
@@ -37,9 +37,9 @@ android {
     defaultConfig {
         applicationId "com.cn.danceland.myapplication"
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 8
-        versionName "2.0.2"
+        targetSdkVersion 28
+        versionCode 9
+        versionName "2.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         multiDexEnabled true
@@ -55,90 +55,100 @@ android {
             signingConfig signingConfigs.config
         }
         debug {
-
             signingConfig signingConfigs.config
-
-        }
-        sourceSets {
-            main {
-                jniLibs.srcDirs = ['libs']
-
-            }
-
-        }
-        productFlavors {
         }
     }
     repositories {
+        google()
         mavenCentral()
         maven { url 'https://maven.google.com' }
         jcenter()
     }
     dependencies {
-        compile fileTree(include: ['*.jar'], dir: 'libs')
-        androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-            exclude group: 'com.android.support', module: 'support-annotations'
-        })
-        compile project(':hellocharts-library')
-        compile files('libs/volley-1.0.19.jar')
-        compile files('libs/gson-2.4.jar')
-        compile project(':hellocharts-library')
-        //compile 'com.android.support:appcompat-v7:26.+'
-        compile 'com.android.support.constraint:constraint-layout:1.0.2'
-        compile 'com.android.support:support-v4:26.+'
-        compile 'de.hdodenhof:circleimageview:2.1.0'
-        testCompile 'junit:junit:4.12'
-        //   compile project(':ViewPagerIndicatorlibrary')
-        compile project(':PullToRefreshLibrary')
-        compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-        //compile project(':DroppyDropdownLibrary')
-        // compile 'com.github.bumptech.glide:glide:4.3.0'
-        annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
-        //    compile project(':PictureViewerLibrary')
-        compile 'com.android.support:cardview-v7:26.0.0-alpha1'
-
-        //  compile 'org.apache.httpcomponents:httpcore:4.4.2'
-
-        compile 'org.greenrobot:greendao:3.2.2'
-        compile 'org.greenrobot:greendao-generator:3.2.2'
-        compile 'org.greenrobot:eventbus:3.1.1'
-        compile 'com.android.support:multidex:1.0.0'
-
-        compile project(':jiaozivideoplayerLibrary')
-        compile 'com.squareup.picasso:picasso:2.5.2'
-        compile 'com.zhihu.android:matisse:0.4.3'
-        compile 'q.rorbin:badgeview:1.1.3'
-        compile 'com.necer.ncalendar:ncalendar:2.4.5'
-        compile 'com.github.codbking:CalendarExaple:v1.0.0'
-        compile 'com.weigan:loopView:0.1.2'
-        compile 'cjt.library.wheel:camera:1.1.9'
-        compile "me.leolin:ShortcutBadger:1.1.21@aar"
-        compile 'com.ms-square:expandableTextView:0.1.4'
-        compile 'com.github.dfqin:grantor:2.1.0'
-        compile 'com.contrarywind:Android-PickerView:4.1.6'
-//        compile 'com.android.support:support-compat:25.1.1'
-//        compile 'com.daimajia.easing:library:2.0@aar'
-//        compile 'com.daimajia.androidanimations:library:2.3@aar'
-        //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
-        compile files('libs/pldroid-shortvideo-1.14.0.jar')//七牛短视频  发布动态用到压缩视频
 
 
-        compile 'com.umeng.sdk:common:latest.integration'//友盟统计
-        compile 'com.umeng.sdk:analytics:latest.integration'//友盟统计
     }
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
 }
-
-
+//dependencies {
+//
+//}
 dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    api project(':hellocharts-library')
+    api files('libs/volley-1.0.19.jar')
+    api project(':hellocharts-library')
+
+    //compile 'com.android.support:appcompat-v7:26.+'
+    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api 'com.android.support:support-v4:26.+'
+
+    api 'de.hdodenhof:circleimageview:2.1.0'
+    testImplementation 'junit:junit:4.12'
+
+    //   compile project(':ViewPagerIndicatorlibrary')
+    api project(':PullToRefreshLibrary')
+    api 'com.android.support:cardview-v7:26.0.0-alpha1'
+    api   'com.android.support:recyclerview-v7:26.0.0-alpha1'
+
+    //compile project(':DroppyDropdownLibrary')
+
+    // compile 'com.github.bumptech.glide:glide:4.3.0'
+    api 'com.github.bumptech.glide:glide:4.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.0'
+
+    //    compile project(':PictureViewerLibrary')
+    api 'com.android.support:cardview-v7:26.0.0-alpha1'
+
+    //  compile 'org.apache.httpcomponents:httpcore:4.4.2'
+    api 'org.greenrobot:greendao:3.2.2'
+    api 'org.greenrobot:greendao-generator:3.2.2'
+    api 'org.greenrobot:eventbus:3.1.1'
+    api 'com.android.support:multidex:1.0.0'
+    api project(':jiaozivideoplayerLibrary')
+    api 'com.squareup.picasso:picasso:2.5.2'
+    api 'com.zhihu.android:matisse:0.4.3'
+    api 'q.rorbin:badgeview:1.1.3'
+    api 'com.necer.ncalendar:ncalendar:2.4.5'
+    api 'com.github.codbking:CalendarExaple:v1.0.0'
+    api 'com.weigan:loopView:0.1.2'
+    api 'cjt.library.wheel:camera:1.1.9'
+    api 'me.leolin:ShortcutBadger:1.1.21@aar'
+    api 'com.ms-square:expandableTextView:0.1.4'
+    api 'com.github.dfqin:grantor:2.1.0'
+    api 'com.contrarywind:Android-PickerView:4.1.6'
+
+    //        compile 'com.android.support:support-compat:25.1.1'
+
+    //        compile 'com.daimajia.easing:library:2.0@aar'
+
+    //        compile 'com.daimajia.androidanimations:library:2.3@aar'
+
+    //  compile 'com.github.jaychou2012:SwitchLayout:1.0.0.0'
+    api files('libs/pldroid-shortvideo-1.14.0.jar')
+
+    //七牛短视频  发布动态用到压缩视频
+    api 'com.umeng.sdk:common:latest.integration'
+
+    //友盟统计
+    api 'com.umeng.sdk:analytics:latest.integration'
+
+    //友盟统计
+
     // compile 'io.github.rockerhieu:emojicon:1.4.2'
-    compile 'com.danikula:videocache:2.7.0'
+    api 'com.danikula:videocache:2.7.0'
+
     //  compile 'com.sunfusheng:glideimageview:1.2.0'
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
+    api 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
+
     //
     allprojects {
         repositories {
+            google()
             maven {
                 url "http://dl.bintray.com/piasy/maven"
 
@@ -148,62 +158,93 @@ dependencies {
             maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
         }
     }
+
     //
-    compile 'com.github.piasy:BigImageViewer:1.4.5'
+    api 'com.github.piasy:BigImageViewer:1.4.5'
+
     // load with glide
-    compile 'com.github.piasy:GlideImageLoader:1.4.5'
+    api 'com.github.piasy:GlideImageLoader:1.4.5'
+
     // progress pie indicator
-    compile 'com.github.piasy:ProgressPieIndicator:1.4.5'
-    compile 'com.github.razerdp:BasePopup:1.9.4'
-    compile 'com.github.hani-momanii:SuperNova-Emoji:1.1'
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    api 'com.github.piasy:ProgressPieIndicator:1.4.5'
+    api 'com.github.razerdp:BasePopup:1.9.4'
+    api 'com.github.hani-momanii:SuperNova-Emoji:1.1'
+   // api 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    api 'com.android.support:appcompat-v7:25.3.1'
+    api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.android.support:design:26.0.0-alpha1'
-    compile('com.github.hotchemi:permissionsdispatcher:3.1.0') {
+    api 'com.android.support:design:26.0.0-alpha1'
+    api('com.github.hotchemi:permissionsdispatcher:3.1.0') {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.6'
-    compile 'com.github.hackware1993:MagicIndicator:1.5.0'
+    api 'com.github.ome450901:SimpleRatingBar:1.3.6'
+    api 'com.github.hackware1993:MagicIndicator:1.5.0'
+
     //  compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'//系统bar颜色
-    compile 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
+    api 'com.github.pinguo-zhouwei:MZBannerView:v2.0.0'
+
     //banner
-    compile project(':RxTools-library')
+    api project(':RxTools-library')
+
     // compile 'me.shaohui.advancedluban:library:1.3.5'
+
     //微信支付
+
     //   compile files('libs/BaiduLBS_Android.jar')
+
     //compile files('libs/MiPush_SDK_Client_3_5_1.jar')
-    compile 'top.zibin:Luban:1.1.3'
+    api 'top.zibin:Luban:1.1.3'
+
     //    compile files('libs/bugly_2.4.0_imsdk_release.jar')
+
     //    compile files('libs/imsdk.jar')
+
     //    compile files('libs/imsdk_group_ext.jar')
+
     //    compile files('libs/imsdk_msg_ext.jar')
+
     //    compile files('libs/imsdk_sns_ext.jar')
+
     //    compile files('libs/mobilepb.jar')
+
     //    compile files('libs/qalsdk.jar')
+
     //    compile files('libs/soload.jar')
+
     //    compile files('libs/tls_sdk.jar')
+
     //  compile project(':presentation')
-    compile project(':ui')
+    api project(':ui')
+
     //compile 'com.android.support:multidex:'
-    compile files('libs/umeng-share-core-6.9.3.jar')
+    api files('libs/umeng-share-core-6.9.3.jar')
+
     //    compile files('libs/umeng-share-QQ-si mplify-6.9.3.jar')
-    compile files('libs/umeng-share-wechat-simplify-6.9.3.jar')
-    compile files('libs/umeng-share-sina-simplify-6.9.3.jar')
-    compile files('libs/umeng-shareboard-widget-6.9.3.jar')
-    compile files('libs/umeng-sharetool-6.9.3.jar')
+    api files('libs/umeng-share-wechat-simplify-6.9.3.jar')
+    api files('libs/umeng-share-sina-simplify-6.9.3.jar')
+    api files('libs/umeng-shareboard-widget-6.9.3.jar')
+    api files('libs/umeng-sharetool-6.9.3.jar')
+
     //阴影控件
+
     // compile 'com.sdsmdg.harjot:materialshadows:1.2.5'
+
     // compile 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+    api 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    api 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
+
     //没有使用特殊Header，可以不加这行
+
     //easyrecyclerview
+
     // compile 'com.jude:easyrecyclerview:4.4.2'
-    compile 'com.haibin:calendarview:3.4.8'
+    api 'com.haibin:calendarview:3.4.8'
+
     //日历控件
+
     //compile 'com.zhy:base-adapter:3.0.3'//万能lsitview适配器
+
     //    compile 'com.google.zxing:core:3.3.0'
 }

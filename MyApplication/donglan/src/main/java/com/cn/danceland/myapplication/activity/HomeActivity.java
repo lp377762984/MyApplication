@@ -1048,7 +1048,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 mmTabsImgs[1].startAnimation(mAnimationSet);
                 break;
             case R.id.ll_discover:
-                LogUtil.i("ll_discover");
+             //   LogUtil.i("ll_discover");
                 index = 2;
                 clearAnim();
                 mmTabsImgs[2].startAnimation(mAnimationSet);
