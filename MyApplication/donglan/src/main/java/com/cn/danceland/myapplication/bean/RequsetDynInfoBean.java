@@ -116,6 +116,7 @@ public class RequsetDynInfoBean {
             private int priase_number;
             private int reply_number;
             private int followerNumber;
+            private int share_count;
             private boolean is_follower;
             private boolean is_praise;
 
@@ -125,7 +126,133 @@ public class RequsetDynInfoBean {
 
             private String imgs;
 
+            public int getPrivacy_type() {
+                return privacy_type;
+            }
 
+            public void setPrivacy_type(int privacy_type) {
+                this.privacy_type = privacy_type;
+            }
+
+            public int getMsg_type() {
+                return msg_type;
+            }
+
+            public void setMsg_type(int msg_type) {
+                this.msg_type = msg_type;
+            }
+
+            public int getPublish_type() {
+                return publish_type;
+            }
+
+            public void setPublish_type(int publish_type) {
+                this.publish_type = publish_type;
+            }
+
+            public int getShare_id() {
+                return share_id;
+            }
+
+            public void setShare_id(int share_id) {
+                this.share_id = share_id;
+            }
+
+            public String getPublish_time() {
+                return publish_time;
+            }
+
+            public void setPublish_time(String publish_time) {
+                this.publish_time = publish_time;
+            }
+
+            public String getPublish_place() {
+                return publish_place;
+            }
+
+            public void setPublish_place(String publish_place) {
+                this.publish_place = publish_place;
+            }
+
+            public String getSelf_url() {
+                return self_url;
+            }
+
+            public void setSelf_url(String self_url) {
+                this.self_url = self_url;
+            }
+
+            public String getNick_name() {
+                return nick_name;
+            }
+
+            public void setNick_name(String nick_name) {
+                this.nick_name = nick_name;
+            }
+
+            public int getPriase_number() {
+                return priase_number;
+            }
+
+            public void setPriase_number(int priase_number) {
+                this.priase_number = priase_number;
+            }
+
+            public int getReply_number() {
+                return reply_number;
+            }
+
+            public void setReply_number(int reply_number) {
+                this.reply_number = reply_number;
+            }
+
+            public int getShare_count() {
+                return share_count;
+            }
+
+            public void setShare_count(int share_count) {
+                this.share_count = share_count;
+            }
+
+            public boolean isIs_follower() {
+                return is_follower;
+            }
+
+            public void setIs_follower(boolean is_follower) {
+                this.is_follower = is_follower;
+            }
+
+            public boolean isIs_praise() {
+                return is_praise;
+            }
+
+            public void setIs_praise(boolean is_praise) {
+                this.is_praise = is_praise;
+            }
+
+            public String getVedio_img() {
+                return vedio_img;
+            }
+
+            public void setVedio_img(String vedio_img) {
+                this.vedio_img = vedio_img;
+            }
+
+            public String getVedio_url() {
+                return vedio_url;
+            }
+
+            public void setVedio_url(String vedio_url) {
+                this.vedio_url = vedio_url;
+            }
+
+            public String getImgs() {
+                return imgs;
+            }
+
+            public void setImgs(String imgs) {
+                this.imgs = imgs;
+            }
 
             public boolean isAnimationFlag() {
                 return animationFlag;

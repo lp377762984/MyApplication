@@ -119,6 +119,9 @@ public abstract class BaseRecyclerViewRefreshActivity extends BaseActivity imple
 
     }
 
+    public void notifyDataSetChanged() {
+        listAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onDestroy() {

@@ -376,6 +376,9 @@
         <activity
             android:name=".activity.BindConfirmInfoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VideoListActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.EmpUserHomeActivty"

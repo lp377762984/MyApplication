@@ -208,6 +208,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.listview_item_dynamic, null);
             viewHolder.tv_nick_name = (TextView) convertView.findViewById(R.id.tv_nick_name);
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
+            viewHolder.tv_share_count = (TextView) convertView.findViewById(R.id.tv_share_count);
             viewHolder.tv_guanzhu = (TextView) convertView.findViewById(tv_guanzhu);
             viewHolder.tv_location = convertView.findViewById(R.id.tv_location);
             viewHolder.ll_location = convertView.findViewById(R.id.ll_location);
@@ -286,6 +287,8 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         viewHolder.tv_pinglun.setText(data.get(position).getReplyNumber() + "");
         //设置点赞数量
         viewHolder.tv_zan_num.setText(data.get(position).getPriaseNumber() + "");
+        //设置分享数
+        viewHolder.tv_share_count.setText(data.get(position).getShare_count() + "");
 
         if (data.get(position).isPraise()) {//设置点赞
             viewHolder.iv_zan.setImageResource(R.drawable.img_zan1);
@@ -714,6 +717,7 @@ public class AttentionDynListviewAdater extends BaseAdapter {
         CardView videoplayer_cv;
         LinearLayout ll_item;
         TextView tv_pinglun;//评论数
+        TextView tv_share_count;//分享数
         RelativeLayout rl_more;//更多
         LinearLayout ll_zan;
         ImageView iv_pic;

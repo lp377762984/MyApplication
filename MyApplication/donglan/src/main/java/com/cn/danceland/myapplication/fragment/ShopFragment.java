@@ -55,7 +55,6 @@ import com.cn.danceland.myapplication.activity.FitnessTestActivity;
 import com.cn.danceland.myapplication.activity.HomeActivity;
 import com.cn.danceland.myapplication.activity.HuiYuanTuiJianActivty;
 import com.cn.danceland.myapplication.activity.JiaoLianCourseActivity;
-import com.cn.danceland.myapplication.activity.LoginNumberActivity;
 import com.cn.danceland.myapplication.activity.MapActivity;
 import com.cn.danceland.myapplication.activity.MyCardActivity;
 import com.cn.danceland.myapplication.activity.MyContactsActivity;
@@ -74,6 +73,7 @@ import com.cn.danceland.myapplication.activity.StoreCardActivity;
 import com.cn.danceland.myapplication.activity.TextPushActivity;
 import com.cn.danceland.myapplication.activity.TimeTableActivity;
 import com.cn.danceland.myapplication.activity.UserHomeActivity;
+import com.cn.danceland.myapplication.activity.VideoListActivity;
 import com.cn.danceland.myapplication.activity.YeJiZhanBanActivity;
 import com.cn.danceland.myapplication.activity.YeWuActivity;
 import com.cn.danceland.myapplication.bean.BranchBannerBean;
@@ -1050,7 +1050,8 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 35://动态码
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "动态码");
-                        startActivity(new Intent(mActivity, LoginNumberActivity.class));
+//                        startActivity(new Intent(mActivity, LoginNumberActivity.class));
+                        startActivity(new Intent(mActivity, VideoListActivity.class));
                         break;
                     case 36://联系人
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "联系人");
