@@ -144,7 +144,7 @@ public class MotionBean implements Serializable {
             private String heart;// 平均心率 ,
             private String heavy;// 平均重量（公斤） ,
             private String id;//id ,
-            private Integer incline;// 当期阶段平均坡度 ,
+            private String incline;// 当期阶段平均坡度 ,
             private String name;// 设备名称 ,
             private String person_id;// 人员id ,
             private String speed;// 当前阶段平均速度 ,
@@ -233,11 +233,11 @@ public class MotionBean implements Serializable {
                 this.id = id;
             }
 
-            public Integer getIncline() {
+            public String getIncline() {
                 return incline;
             }
 
-            public void setIncline(Integer incline) {
+            public void setIncline(String incline) {
                 this.incline = incline;
             }
 

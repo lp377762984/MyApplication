@@ -27,7 +27,7 @@
 
     <string name="app_slogon">即时通讯云领导者</string>
 
-    <string name="umeng_sharebutton_custom">QQ</string>
+    <string name="umeng_sharebutton_custom" translatable="false">QQ</string>
 <!--    <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>
     <string name="back">返回</string>
