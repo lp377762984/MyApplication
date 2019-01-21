@@ -213,10 +213,9 @@ ImageView iv_more=findViewById(R.id.iv_more);
         gv_shop_image = findViewById(R.id.gv_shop_image);
         gv_jiaolian = findViewById(R.id.gv_jiaolian);
 
-        if (imgList != null && imgList.size() > 0) {
 
             Glide.with(ShopDetailedActivity.this).load("http://img.dljsgw.com/app_dir/default_course.png").into(img_kechenganpai);
-        }
+
 
 
         tv_adress = findViewById(R.id.tv_adress);

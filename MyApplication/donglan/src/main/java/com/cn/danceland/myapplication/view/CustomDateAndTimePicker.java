@@ -597,11 +597,11 @@ public class CustomDateAndTimePicker extends AlertDialog {
 
     public String getDateStringF() {
         if (Integer.valueOf(smonth) < 10 && Integer.valueOf(sdate) >= 10) {
-            dateString = syear + "-0" + smonth + "-" + sdate;
+            dateString = syear + "-0" + Integer.valueOf(smonth) + "-" + sdate;
         } else if (Integer.valueOf(sdate) < 10 && Integer.valueOf(smonth) >= 10) {
-            dateString = syear + "-" + smonth + "-0" + sdate;
+            dateString = syear + "-" + smonth + "-0" + Integer.valueOf(sdate);
         } else if (Integer.valueOf(sdate) < 10 && Integer.valueOf(smonth) < 10) {
-            dateString = syear + "-0" + smonth + "-0" + sdate;
+            dateString = syear + "-0" + Integer.valueOf(smonth) + "-0" + Integer.valueOf(sdate);
         } else {
             dateString = syear + "-" + smonth + "-" + sdate;
         }

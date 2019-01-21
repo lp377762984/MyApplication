@@ -678,6 +678,7 @@ public class ReportFormActivity extends BaseActivity {
             @Override
             public void onClick() {
                 selectDate = customDateAndTimePicker.getDateStringF();
+                LogUtil.i(selectDate);
                 tv_date.setText(selectDate);
                 initBusData(selectDate, role, emp_id);
                 initScoreData(selectDate, role, target_role_type, emp_id);
