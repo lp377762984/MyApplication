@@ -1315,13 +1315,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1356,13 +1357,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1397,13 +1399,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle3"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1438,13 +1441,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle4"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1479,13 +1483,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle5"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1520,13 +1525,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle6"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1561,13 +1567,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle7"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>
@@ -1603,13 +1610,14 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginLeft="16dp"
                                     android:layout_marginRight="16dp"
-                                    android:layout_marginTop="43dp"
+                                    android:layout_marginTop="35dp"
                                     android:orientation="vertical">
 
                                     <ImageView
                                         android:id="@+id/iv_triangle8"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                        android:layout_width="20dp"
+                                        android:layout_height="10dp"
+                                        android:scaleType="fitXY"
                                         android:layout_centerHorizontal="true"
                                         android:src="@drawable/fitnesstest_yellow_jiantou" />
                                 </LinearLayout>

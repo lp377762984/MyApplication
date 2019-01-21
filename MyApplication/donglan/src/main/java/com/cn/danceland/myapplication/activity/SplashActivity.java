@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.animation.AlphaAnimation;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,21 +92,23 @@ public class SplashActivity extends BaseActivity implements TIMCallBack {
     };
     private long start;
 
+
+
     @Override
     protected void onCreate(Bundle arg0) {
-        setContentView(R.layout.activity_splash);
+        setTheme(R.style.MyTheme);
         super.onCreate(arg0);
-
-
+        setContentView(R.layout.activity_splash);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
         TextView versionText = (TextView) findViewById(R.id.tv_version);
 
         versionText.setText("版本号：" + AppUtils.getVersionName(this));
 
 
-        AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
-        animation.setDuration(1500);
-        rootLayout.startAnimation(animation);
+//        AlphaAnimation animation = new AlphaAnimation(1.0f, 1.0f);
+//        animation.setDuration(1500);
+//        rootLayout.startAnimation(animation);
         init();
         if (Constants.DEV_CONFIG) {
 

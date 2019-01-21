@@ -3,50 +3,59 @@
     android:id="@+id/splash_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9">
-    <ImageView
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:src="@drawable/img_dl_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/tv_logo"/>
-    <TextView
+    android:background="@color/color_white">
 
-        android:id="@+id/tv_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="动岚科技"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:textColor="#000"
-        />
-    <TextView
-        android:id="@+id/tv_logo1"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/tv_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="时尚健身领导者"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:textColor="#000"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_version"
-        android:layout_marginTop="5dp"
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+     android:layout_centerVertical="true"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="v1.0"
-        android:layout_marginBottom="10dp"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#000"
-        />
+            android:src="@drawable/img_dl_logo" />
+
+        <TextView
+
+            android:id="@+id/tv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_logo"
+            android:layout_centerInParent="true"
+            android:text="动岚科技"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_logo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_logo"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="时尚健身领导者"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_version"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="v1.0"
+            android:textColor="#000"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
