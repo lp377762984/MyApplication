@@ -256,7 +256,7 @@ public class NewForgetPasswordActivity extends BaseActivity implements View.OnCl
 //        });
 //        listDialog.show();
 //    }
-
+private RequestNewBindBean newBindBean;
     private void bindDevice() {
 
         String url = Constants.FORGET_PWD_URL;
@@ -278,6 +278,12 @@ public class NewForgetPasswordActivity extends BaseActivity implements View.OnCl
                             ToastUtils.showToastShort(requestInfoBean.getErrorMsg());
                             break;
                         case 4://原证件号为空
+                            newBindBean = new Gson().fromJson(s, RequestNewBindBean.class);
+                            startActivity(new Intent(NewForgetPasswordActivity.this, BindConfirmInfoActivity.class)//驗證門店信息
+                                    .putExtra("phone", mEtPhone.getText().toString())
+                                    .putExtra("info", newBindBean)
+                                    .putExtra("isresetpsd",true)
+                            );
                             break;
 
                         case 5:

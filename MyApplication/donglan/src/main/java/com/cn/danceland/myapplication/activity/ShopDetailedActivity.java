@@ -126,13 +126,15 @@ public class ShopDetailedActivity extends BaseActivity {
         shopJingdu = getIntent().getStringExtra("shopJingdu");
         shopWeidu = getIntent().getStringExtra("shopWeidu");
         branchID = getIntent().getStringExtra("branchID");
+        LogUtil.i("门店id"+branchID);
 //        imgList = getIntent().getStringArrayListExtra("imgList");
-        backBannerList = (ArrayList<BranchBannerBean.Data>) getIntent().getSerializableExtra("backBannerList");
-        if (backBannerList != null && backBannerList.size() > 0) {
-            for (int i = 0; i < backBannerList.size(); i++) {
-                imgList.add(backBannerList.get(i).getImg_url());
-            }
-        }
+//        LogUtil.i(imgList.toString());
+//        backBannerList = (ArrayList<BranchBannerBean.Data>) getIntent().getSerializableExtra("backBannerList");
+////        if (backBannerList != null && backBannerList.size() > 0) {
+////            for (int i = 0; i < backBannerList.size(); i++) {
+////                imgList.add(backBannerList.get(i).getImg_url());
+////            }
+////        }
         //myBranchId = myInfo.getPerson().getDefault_branch();
         isJoinBranch(branchID);
 
@@ -333,11 +335,12 @@ ImageView iv_more=findViewById(R.id.iv_more);
                 setFoldView(oldScrollY);
             }
         });
-        setBannner();
+       // setBannner();
         getShopDetail();
         getShopPictrue();
         getJiaolian(branchID);
         getHuiJi(branchID);
+        getBanner(branchID);
     }
 
     /**
@@ -422,6 +425,8 @@ ImageView iv_more=findViewById(R.id.iv_more);
 //        drawableArrayList.add(R.drawable.img_man);
 //        drawableArrayList.add(R.drawable.img_man);
         }
+
+
         // 设置数据
         shop_banner.setPages(imgList, new MZHolderCreator<BannerViewHolder>() {
             @Override
@@ -632,7 +637,43 @@ ImageView iv_more=findViewById(R.id.iv_more);
         };
         MyApplication.getHttpQueues().add(stringRequest);
     }
+    private void getBanner(final String branchId) {
 
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                LogUtil.i(s);
+                BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
+                if (branchBannerBean != null) {
+                    backBannerList.clear();
+                    List<BranchBannerBean.Data> data = branchBannerBean.getData();
+                    if (data != null) {
+                        for (int i = 0; i < data.size(); i++) {
+                            imgList.add(data.get(i).getImg_url());
+
+                        }
+                        setBannner();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtil.e("zzf", volleyError.toString());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("branchId", branchId);
+                return map;
+            }
+
+
+        };
+        MyApplication.getHttpQueues().add(stringRequest);
+    }
     private void getShopDetail() {
 
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + branchID, new Response.Listener<String>() {
@@ -766,7 +807,7 @@ ImageView iv_more=findViewById(R.id.iv_more);
                             .putExtra("person_id", jiaolianList.get(position).getPerson_id() + "")
                             .putExtra("employee_id", jiaolianList.get(position).getId() + "")
                             .putExtra("branch_id", jiaolianList.get(position).getBranch_id() + "")
-                            .putExtra("avatar", jiaolianList.get(position).getSelf_avatar_path())
+                            .putExtra("avatar", jiaolianList.get(position).getAvatar_url())
                     );
                 }
             });
