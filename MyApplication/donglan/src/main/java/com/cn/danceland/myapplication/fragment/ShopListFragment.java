@@ -72,7 +72,7 @@ public class ShopListFragment extends BaseFragment {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
-
+    ArrayList<String> imgList = new ArrayList<>();
     private TextView tv_detail;//新增详情布局
 
     private ArrayList<BranchBannerBean.Data> backBannerList = new ArrayList<>();
@@ -150,6 +150,7 @@ public class ShopListFragment extends BaseFragment {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.GET, Constants.BRANCH + "/" + weidu + "/" + jingdu, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
+                LogUtil.i(s);
                 StoreBean storeBean = gson.fromJson(s, StoreBean.class);
                 if (storeBean != null && storeBean.getData() != null) {
                     itemsList = storeBean.getData();
@@ -239,7 +240,7 @@ public class ShopListFragment extends BaseFragment {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.BANNER, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-
+                LogUtil.i(s);
                 BranchBannerBean branchBannerBean = gson.fromJson(s, BranchBannerBean.class);
                 if (branchBannerBean != null) {
                     drawableArrayList.clear();
@@ -247,6 +248,7 @@ public class ShopListFragment extends BaseFragment {
                     List<BranchBannerBean.Data> data = branchBannerBean.getData();
                     if (data != null) {
                         for (int i = 0; i < data.size(); i++) {
+                            imgList.add(data.get(i).getImg_url());
                             drawableArrayList.add(data.get(i).getImg_url());
                             backBannerList.add(data.get(i));
                         }
@@ -397,7 +399,14 @@ public class ShopListFragment extends BaseFragment {
                     intent.putExtra("jingdu", jingdu);
                     intent.putExtra("weidu", weidu);
                     intent.putExtra("branchID", itemsArrayList.get(position).getBranch_id() + "");
+
+                    LogUtil.i(itemsArrayList.get(position).toString());
+
+
+                    intent.putExtra("imgList", imgList);
                     Bundle b = new Bundle();
+
+
                     b.putSerializable("backBannerList", backBannerList);
                     intent.putExtras(b);
 //                    intent.putStringArrayListExtra("imgList", drawableArrayList);

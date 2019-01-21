@@ -20,6 +20,16 @@ public class StoreBean {
     private Object code;
     private List<DataBean> data;
 
+    @Override
+    public String toString() {
+        return "StoreBean{" +
+                "success=" + success +
+                ", errorMsg=" + errorMsg +
+                ", code=" + code +
+                ", data=" + data +
+                '}';
+    }
+
     public boolean isSuccess() {
         return success;
     }
@@ -104,6 +114,37 @@ public class StoreBean {
         private String close_time;
         private Object create_name;
         private Object photo_url;
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "branch_id='" + branch_id + '\'' +
+                    ", league_id='" + league_id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", real_name='" + real_name + '\'' +
+                    ", address='" + address + '\'' +
+                    ", real_address='" + real_address + '\'' +
+                    ", status='" + status + '\'' +
+                    ", zone_code=" + zone_code +
+                    ", description=" + description +
+                    ", logo_path='" + logo_path + '\'' +
+                    ", enabled='" + enabled + '\'' +
+                    ", lat='" + lat + '\'' +
+                    ", lng='" + lng + '\'' +
+                    ", telphone='" + telphone + '\'' +
+                    ", follows='" + follows + '\'' +
+                    ", pictures=" + pictures +
+                    ", remark='" + remark + '\'' +
+                    ", create_time='" + create_time + '\'' +
+                    ", creator='" + creator + '\'' +
+                    ", logo_url='" + logo_url + '\'' +
+                    ", league_name='" + league_name + '\'' +
+                    ", open_time='" + open_time + '\'' +
+                    ", close_time='" + close_time + '\'' +
+                    ", create_name=" + create_name +
+                    ", photo_url=" + photo_url +
+                    '}';
+        }
 
         public String getOpen_time() {
             return open_time;

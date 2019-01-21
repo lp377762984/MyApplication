@@ -36,6 +36,7 @@ public class BindConfirmInfoActivity extends BaseActivity {
     private RequestNewBindBean info;
     private List<RequestNewBindBean.Data.Branchs> branchs=new ArrayList<>();
     String phone;
+    private boolean isresetpsd=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class BindConfirmInfoActivity extends BaseActivity {
         info = (RequestNewBindBean) getIntent().getSerializableExtra("info");
         branchs=info.getData().getBranchs();
         phone = getIntent().getStringExtra("phone");
+        isresetpsd=getIntent().getBooleanExtra("isresetpsd",false);
         TextView tv_name = findViewById(R.id.tv_name);
         TextView tv_login = findViewById(R.id.tv_login);
         TextView tv_register = findViewById(R.id.tv_register);
@@ -83,6 +85,9 @@ public class BindConfirmInfoActivity extends BaseActivity {
         }
         RequestOptions options = new RequestOptions().placeholder(R.drawable.img_my_avatar).error(R.drawable.img_my_avatar);
         Glide.with(this).load(info.getData().getPerson().getSelf_avatar_path()).apply(options).into(circleimageview);
+        if (isresetpsd){
+            tv_login.setText("是我的，重置密码");
+        }
         tv_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//设置密码后登陆

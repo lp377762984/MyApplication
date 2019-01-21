@@ -125,7 +125,7 @@ public class EmployeeListActivity extends BaseActivity {
                             .putExtra("person_id", huijiList.get(position).getPerson_id()+"")
                             .putExtra("employee_id", huijiList.get(position).getId()+"")
                             .putExtra("branch_id", huijiList.get(position).getBranch_id()+"")
-                            .putExtra("avatar",huijiList.get(position).getSelf_avatar_path()));
+                            .putExtra("avatar",huijiList.get(position).getAvatar_url()));
                 }
             });
 
