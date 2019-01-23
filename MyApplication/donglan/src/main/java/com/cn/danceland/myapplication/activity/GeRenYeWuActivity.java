@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.bean.HuiJiYeWuBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.QianKeHuiFangFragment;
@@ -37,7 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
  */
 
 
-public class GeRenYeWuActivity extends BaseActivity implements View.OnClickListener {
+public class GeRenYeWuActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
 

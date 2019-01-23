@@ -11,10 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.MyCardFragment;
 import com.cn.danceland.myapplication.fragment.MySendCardFragment;
+import com.cn.danceland.myapplication.view.DongLanTitleView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -37,7 +38,7 @@ import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
  */
 
 
-public class MyCardActivity extends BaseActivity implements View.OnClickListener {
+public class MyCardActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
 
@@ -46,6 +47,7 @@ public class MyCardActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_my_card);
         EventBus.getDefault().register(this);
         initView();
@@ -73,6 +75,8 @@ public class MyCardActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         findViewById(R.id.iv_back).setOnClickListener(this);
+        DongLanTitleView dongLanTitleView=findViewById(R.id.dl_title);
+        dongLanTitleView.setTitle("我的会员卡");
         MyViewPagerAdapter myViewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.view_pager);
         mViewPager.setOffscreenPageLimit(2);

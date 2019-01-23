@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.fragment.RecommendFragment;
 import com.cn.danceland.myapplication.fragment.RecommendedFragment;
 import com.cn.danceland.myapplication.utils.SPUtils;
@@ -39,7 +39,7 @@ import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
  */
 
 
-public class RecommendActivity extends BaseActivity implements View.OnClickListener {
+public class RecommendActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
 

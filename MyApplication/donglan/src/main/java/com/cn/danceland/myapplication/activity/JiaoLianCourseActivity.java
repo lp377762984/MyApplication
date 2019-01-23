@@ -20,7 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.bean.CalendarPointBean;
 import com.cn.danceland.myapplication.bean.Data;
 import com.cn.danceland.myapplication.bean.GroupRecordBean;
@@ -61,7 +61,7 @@ import static android.R.attr.value;
  * 预约会员
  */
 
-public class JiaoLianCourseActivity extends BaseActivity {
+public class JiaoLianCourseActivity extends BaseFragmentActivity {
     FragmentManager fragmentManager;
     SiJiaoFragment siJiaoFragment;
     TuanKeFragment tuanKeFragment;

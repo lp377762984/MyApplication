@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.ZongYeJiFragment1;
 import com.cn.danceland.myapplication.fragment.ZongYeWument;
@@ -45,7 +45,7 @@ import static com.cn.danceland.myapplication.adapter.TabAdapter.TITLES;
  */
 
 
-public class YeJiZhanBanActivity extends BaseActivity implements View.OnClickListener {
+public class YeJiZhanBanActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
     private TextView tv_zongyeji;

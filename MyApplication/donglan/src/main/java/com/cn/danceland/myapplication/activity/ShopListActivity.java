@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.fragment.ShopListFragment;
 import com.cn.danceland.myapplication.utils.SPUtils;
 
@@ -14,7 +14,7 @@ import com.cn.danceland.myapplication.utils.SPUtils;
  */
 
 
-public class ShopListActivity extends BaseActivity {
+public class ShopListActivity extends BaseFragmentActivity {
 
     private ShopListFragment shopListFragment;
 

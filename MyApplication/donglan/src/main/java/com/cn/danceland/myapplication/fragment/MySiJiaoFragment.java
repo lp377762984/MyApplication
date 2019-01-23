@@ -133,7 +133,7 @@ public class MySiJiaoFragment extends BaseFragment {
             TextView tv_category = inflate.findViewById(R.id.tv_category);
 
             tv_sijiaoName.setText(dataList.get(position).getCourse_type_name());
-            tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name()+"节");
+            tv_jiaolian_name.setText("上课教练: "+dataList.get(position).getEmployee_name());
             tv_goumai_num.setText(Html.fromHtml("购买节数: "+"<font color='#6D819C'>"+dataList.get(position).getCount()+"节</font>"));
             tv_shengyu_num.setText(Html.fromHtml("剩余节数: "+"<font color='#6D819C'>"+dataList.get(position).getSurplus_count()+"节</font>"));
             //tv_huiyuan_name.setText("会员:"+dataList.get(position).getMember_name());

@@ -130,7 +130,7 @@ public class CollectListviewAdapter extends BaseAdapter {
         viewHolder.ll_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setReadNum(position + "");
+                setReadNum(data.get(position).getId() + "");
 
                 ShareBean shareBean=new ShareBean();
                 shareBean.bus_id=data.get(position).getId()+"";
@@ -223,7 +223,7 @@ public class CollectListviewAdapter extends BaseAdapter {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("news_id", news_id);
+                map.put("id", news_id);
                 LogUtil.i("map--" + map.toString());
                 return map;
             }

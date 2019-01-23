@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.pictureviewer.ImageDetailFragment2;
 
 /**
@@ -14,7 +14,7 @@ import com.cn.danceland.myapplication.pictureviewer.ImageDetailFragment2;
  */
 
 
-public class AvatarActivity extends BaseActivity {
+public class AvatarActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

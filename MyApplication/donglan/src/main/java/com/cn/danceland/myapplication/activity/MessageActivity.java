@@ -25,7 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.bean.RequestMessageNumBean;
 import com.cn.danceland.myapplication.evntbus.EventConstants;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
@@ -42,7 +42,6 @@ import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +50,7 @@ import java.util.Map;
  * Created by feng on 2017/12/11.
  */
 
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends BaseFragmentActivity {
     int pinglunNum;
     int dianzanNum;
     int fansNum;

@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.fragment.MyStoreFragment;
 import com.cn.danceland.myapplication.fragment.SellStoreCardFragment;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -37,7 +37,7 @@ import java.util.List;
  * 储值卡
  */
 
-public class StoreCardActivity extends BaseActivity {
+public class StoreCardActivity extends BaseFragmentActivity {
 
     TabLayout tl;
     //MagicIndicator magic_indicator;

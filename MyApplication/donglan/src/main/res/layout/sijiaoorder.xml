@@ -125,6 +125,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="10dp"
                                         android:text="商品名称："
+                                        android:visibility="gone"
                                         android:textColor="#333333" />
 
                                     <TextView
@@ -146,6 +147,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="10dp"
+                                        android:visibility="gone"
                                         android:text="商品类型："
                                         android:textColor="#333333" />
 
@@ -168,6 +170,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="10dp"
                                         android:text="有效期限："
+                                        android:visibility="gone"
                                         android:textColor="#333333" />
 
                                     <TextView
@@ -192,6 +195,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="10dp"
                                         android:text="商品金额："
+                                        android:visibility="gone"
                                         android:textColor="#333333" />
 
                                     <TextView

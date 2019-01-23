@@ -32,7 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.evntbus.IntEvent;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.PotentialUpcomingMatterFragment;
@@ -74,7 +74,7 @@ import razerdp.basepopup.BasePopupWindow;
  */
 
 
-public class YeWuActivity extends BaseActivity implements View.OnClickListener {
+public class YeWuActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
     public String[] TITLES = new String[]{"最近维护"};

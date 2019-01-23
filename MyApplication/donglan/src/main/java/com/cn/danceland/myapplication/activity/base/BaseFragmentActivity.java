@@ -1,12 +1,12 @@
 package com.cn.danceland.myapplication.activity.base;
 
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 
 import com.umeng.analytics.MobclickAgent;
 
 
-public class BaseActivity extends Activity {
+public class BaseFragmentActivity extends FragmentActivity {
 
     // BaseActivity中统一调用MobclickAgent 类的 onResume/onPause 接口
     // 子类中无需再调用

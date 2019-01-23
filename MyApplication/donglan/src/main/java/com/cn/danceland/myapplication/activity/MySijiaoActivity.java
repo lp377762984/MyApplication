@@ -11,7 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.fragment.ForOtherSiJiaoFragment;
 import com.cn.danceland.myapplication.fragment.MySiJiaoFragment;
 import com.cn.danceland.myapplication.view.DongLanTitleView;
@@ -32,7 +32,7 @@ import java.util.List;
  * Created by feng on 2018/4/16.
  */
 
-public class MySijiaoActivity extends BaseActivity {
+public class MySijiaoActivity extends BaseFragmentActivity {
 
     DongLanTitleView activity_mysijiao_title;
     MagicIndicator magicIndicator;

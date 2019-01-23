@@ -43,7 +43,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
 import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -125,7 +125,7 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.view.animation.Animation.REVERSE;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends BaseFragmentActivity implements View.OnClickListener {
 
 
     private TextView[] mTabs;

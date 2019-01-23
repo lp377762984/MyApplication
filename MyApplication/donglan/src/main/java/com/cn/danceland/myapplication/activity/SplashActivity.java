@@ -18,7 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
-import com.cn.danceland.myapplication.activity.base.BaseActivity;
+import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
 import com.cn.danceland.myapplication.db.DBData;
 import com.cn.danceland.myapplication.im.model.FriendshipInfo;
 import com.cn.danceland.myapplication.im.model.GroupInfo;
@@ -60,7 +60,7 @@ import static com.android.volley.Request.Method.GET;
 /**
  * 开屏页
  */
-public class SplashActivity extends BaseActivity implements TIMCallBack {
+public class SplashActivity extends BaseFragmentActivity implements TIMCallBack {
 
     private static final int sleepTime = 2000;
     private SplashPresenter presenter;
