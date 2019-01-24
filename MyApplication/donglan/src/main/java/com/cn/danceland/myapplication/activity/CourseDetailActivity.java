@@ -412,7 +412,7 @@ public class CourseDetailActivity extends BaseActivity {
 
 
         siJiaoYuYueConBean.setPage(0);
-        siJiaoYuYueConBean.setSize(6);
+        siJiaoYuYueConBean.setSize(100);
 
         String s = gson.toJson(siJiaoYuYueConBean);
         MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.QUERYBUYCOURSEPERSONINFO, s, new Response.Listener<JSONObject>() {
@@ -430,8 +430,8 @@ public class CourseDetailActivity extends BaseActivity {
                         }
                         course_renshu.setText("购买会员(" + data.getTotalElements() + ")");
                         headList = data.getContent();
-                        mRecylerViewAdapter = new SiJiaoRecylerViewAdapter(CourseDetailActivity.this, headList);
-                        my_recycler_view.setAdapter(mRecylerViewAdapter);
+//                        mRecylerViewAdapter = new SiJiaoRecylerViewAdapter(CourseDetailActivity.this, headList);
+////                        my_recycler_view.setAdapter(mRecylerViewAdapter);
                         //     my_expanda.setAdapter(myAdapter);
                     }
 
@@ -469,6 +469,8 @@ public class CourseDetailActivity extends BaseActivity {
                 courseMemberBean = gson.fromJson(jsonObject.toString(), CourseMemberBean.class);
                 if (courseMemberBean != null && courseMemberBean.getData() != null) {
                     childList = courseMemberBean.getData().getContent();
+                    mRecylerViewAdapter = new SiJiaoRecylerViewAdapter(CourseDetailActivity.this, headList);
+                    my_recycler_view.setAdapter(mRecylerViewAdapter);
                 }
                 LogUtil.e("zzf", jsonObject.toString());
 

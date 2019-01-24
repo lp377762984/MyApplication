@@ -352,11 +352,15 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
 //                    ToastUtils.showToastShort("必须添加潜客会籍");
 //                    return;
 //                }
-                try {
-                    add_potential(gson.toJson(potentialInfo).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Data info= (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
+
+                find_by_phone(et_phone.getText().toString(),info.getPerson().getDefault_branch(),gson.toJson(potentialInfo).toString());
+
+//                try {
+//                    add_potential(gson.toJson(potentialInfo).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
                 break;
             default:
                 break;
@@ -443,8 +447,8 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
     }
 
     private void showInputDialog() {
-    /*@setView 装入一个EditView
-     */
+        /*@setView 装入一个EditView
+         */
         final EditText editText = new EditText(this);
         AlertDialog.Builder inputDialog =
                 new AlertDialog.Builder(this);
@@ -466,6 +470,83 @@ public class AddPotentialActivity extends BaseActivity implements OnClickListene
         });
         inputDialog.show();
     }
+
+    class A {
+        public String phone_no;
+        public String branch_id;
+
+    }
+    public class JsonRootBean {
+
+        private boolean success;
+        private String errorMsg;
+        private int code;
+        private boolean data;
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+        public boolean getSuccess() {
+            return success;
+        }
+
+        public void setErrorMsg(String errorMsg) {
+            this.errorMsg = errorMsg;
+        }
+        public String getErrorMsg() {
+            return errorMsg;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+        public int getCode() {
+            return code;
+        }
+
+        public void setData(boolean data) {
+            this.data = data;
+        }
+        public boolean getData() {
+            return data;
+        }
+
+    }
+    private void find_by_phone(String phone_no, String branch_id, final String data) {
+
+        A a=new A();
+        a.branch_id=branch_id;
+        a.phone_no=phone_no;
+
+
+        MyJsonObjectRequest stringRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.ADD_POTENTIAL_FINDBYPHONE, new Gson().toJson(a).toString(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                LogUtil.i(jsonObject.toString());
+                JsonRootBean jsonRootBean= gson.fromJson(jsonObject.toString(), JsonRootBean.class);
+                if (jsonRootBean.getData()) {
+
+                    try {
+                        add_potential(data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    ToastUtils.showToastShort("用户已存在");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+                ToastUtils.showToastShort(volleyError.toString());
+
+            }
+        });
+        MyApplication.getHttpQueues().add(stringRequest);
+
+    }
+
 
     /**
      * 添加潜客

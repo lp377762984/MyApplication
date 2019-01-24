@@ -19,7 +19,7 @@ public class Constants {
     // public static  String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
-    public static  String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
+    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
 //    public static String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
 //   public static  String HOST_SERVICE = "http://39.104.188.91:6003/";//审核服务器
 
@@ -182,6 +182,7 @@ public class Constants {
 
     //潜客相关
     public static String ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
+    public static String ADD_POTENTIAL_FINDBYPHONE = HOST + "/appPotential/findByPhone";//验证手机号
     public static String FIND_POTENTIAL_LIST = HOST + "/appPotential/recentMaintain";//查询潜客列表
     public static String ADD_VISIT_RECOR = HOST + "/appPotential/saveVisitRecord";//添加回访记录
     public static String FIND_BY_ID_POTENTIAL = HOST + "/appPotential/findByIdPotential/";//查询潜客详情
@@ -599,6 +600,7 @@ public class Constants {
 
         //潜客相关
         ADD_POTENTIAL = HOST + "/appPotential/savePotential";//添加潜客
+        ADD_POTENTIAL_FINDBYPHONE = HOST + "/appPotential/findByPhone";//验证手机号
         FIND_POTENTIAL_LIST = HOST + "/appPotential/recentMaintain";//查询潜客列表
         ADD_VISIT_RECOR = HOST + "/appPotential/saveVisitRecord";//添加回访记录
         FIND_BY_ID_POTENTIAL = HOST + "/appPotential/findByIdPotential/";//查询潜客详情

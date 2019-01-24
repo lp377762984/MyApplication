@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
+import com.cn.danceland.myapplication.activity.base.BaseActivity;
 import com.cn.danceland.myapplication.db.HeartRate;
 import com.cn.danceland.myapplication.db.HeartRateHelper;
 import com.cn.danceland.myapplication.shouhuan.command.CommandManager;
@@ -42,7 +42,7 @@ import java.util.List;
 import static com.cn.danceland.myapplication.MyApplication.mBluetoothConnected;
 
 
-public class ShouHuanMainActivity extends AppCompatActivity {
+public class ShouHuanMainActivity extends BaseActivity {
 
     private static final int REQUEST_SEARCH = 1;
     private TextView device_address;
