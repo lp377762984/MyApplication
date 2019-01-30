@@ -456,7 +456,18 @@ public class CourseDetailActivity extends BaseActivity {
     private void getTotlePeple() {
 
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
-        siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
+
+        if (role != null) {
+
+            siJiaoYuYueConBean.setCourse_type_id(item1.getCourse_type_id());
+
+        } else {
+
+            siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
+        }
+
+
+//        siJiaoYuYueConBean.setCourse_type_id(item.getCourse_type_id());
 
         siJiaoYuYueConBean.setPage(0);
         siJiaoYuYueConBean.setSize(100);

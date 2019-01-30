@@ -15,11 +15,11 @@ public class Constants {
     }
 
     //  public static  String HOST_SERVICE = "http://192.168.1.96:8003/";//服务器地址
-//   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
+   public static  String HOST_SERVICE = "http://wx.dljsgw.com/";//阿里云服务器地址
     // public static  String HOST_SERVICE = "http://coder-hc.oicp.io:57068/";//佳楠
 //    public static String HOST_SERVICE = "http://192.168.1.138:8003/";//
     // public static final String HOST_SERVICE = "http://39.104.188.91:6003/";// 测试地址
-    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
+//    public static String HOST_SERVICE = "http://192.168.1.66:8003/";//老高
 //    public static String HOST_SERVICE = "http://192.168.1.78:8003/";//超哥
 //   public static  String HOST_SERVICE = "http://39.104.188.91:6003/";//审核服务器
 
@@ -39,7 +39,7 @@ public class Constants {
     public static String REGISTER_URL = HOST + "person/register";//注册用户
     public static String REGISTER_AGREEMENT_URL = "http://img.dljsgw.com/protocol/app_register_protocol.html";//注册用户协议
 
-    public static String LOGIN_URL = HOST + "person/login ";//登录
+    public static String LOGIN_URL = HOST + "person/login";//登录
     public static String QUERY_USER_DYN_INFO_URL = HOST + "/appDynMsg/findPersonDyn/";//查询用户动态相关资料
     public static String QUERY_USERINFO_URL = HOST + "user/findOne/";//查询用户资料
     public static String RESET_PASSWORD_URL = HOST + "/person/updatePwd";//忘记密码

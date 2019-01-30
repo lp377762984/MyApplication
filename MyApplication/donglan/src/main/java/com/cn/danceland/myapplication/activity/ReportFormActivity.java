@@ -188,7 +188,7 @@ public class ReportFormActivity extends BaseActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("employee_id", emp_id);
-                map.put("mDate", selectDate);
+                map.put("date", selectDate);
 
                 return map;
             }
@@ -819,7 +819,7 @@ public class ReportFormActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
 //            LogUtil.i("avatar=" + data.get(position).getAvatar_url());
-            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1);
+            RequestOptions options = new RequestOptions().placeholder(R.drawable.img_avatar1).error(R.drawable.img_avatar1);
             Glide.with(ReportFormActivity.this).load(data.get(position).getAvatar_url()).apply(options).into(holder.img_touxiang);
             if (click != -1 && click == position && emp_id.equals(data.get(position).getId() + "")) {
                 holder.img_touxiang_stroke_bg.setVisibility(View.VISIBLE);

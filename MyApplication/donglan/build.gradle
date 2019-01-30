@@ -38,8 +38,8 @@ android {
         applicationId "com.cn.danceland.myapplication"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 10
-        versionName "2.0.4"
+        versionCode 12
+        versionName "2.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
         multiDexEnabled true
