@@ -3,31 +3,12 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT" />
+        </compositeConfiguration>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-4.6" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/BluetoothTest-master" />
-            <option value="$PROJECT_DIR$/ChatDemoUI3.0" />
-            <option value="$PROJECT_DIR$/EaseChat-easeui_dev" />
-            <option value="$PROJECT_DIR$/EasyRecyclerViewDemo" />
-            <option value="$PROJECT_DIR$/PullToRefreshLibrary" />
-            <option value="$PROJECT_DIR$/RxTools-library" />
-            <option value="$PROJECT_DIR$/TXapp" />
-            <option value="$PROJECT_DIR$/donglan" />
-            <option value="$PROJECT_DIR$/easeui" />
-            <option value="$PROJECT_DIR$/easyrecyclerview" />
-            <option value="$PROJECT_DIR$/hellocharts-library" />
-            <option value="$PROJECT_DIR$/hellocharts-samples" />
-            <option value="$PROJECT_DIR$/jiaozivideoplayerLibrary" />
-            <option value="$PROJECT_DIR$/presentation" />
-            <option value="$PROJECT_DIR$/sdk" />
-            <option value="$PROJECT_DIR$/tlslibrary" />
-            <option value="$PROJECT_DIR$/ui" />
-          </set>
-        </option>
+        <option name="gradleHome" value="D:/.gradle/wrapper/dists/gradle-4.10.1-all/455itskqi2qtf0v2sja68alqd/gradle-4.10.1" />
         <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>

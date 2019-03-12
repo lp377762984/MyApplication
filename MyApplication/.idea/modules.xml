@@ -2,19 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BluetoothTest-master/BluetoothTest-master.iml" filepath="$PROJECT_DIR$/BluetoothTest-master/BluetoothTest-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ChatDemoUI3.0/ChatDemoUI3.0.iml" filepath="$PROJECT_DIR$/ChatDemoUI3.0/ChatDemoUI3.0.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EaseChat-easeui_dev/EaseChat-easeui_dev.iml" filepath="$PROJECT_DIR$/EaseChat-easeui_dev/EaseChat-easeui_dev.iml" />
-      <module fileurl="file://$PROJECT_DIR$/EasyRecyclerViewDemo/EasyRecyclerViewDemo.iml" filepath="$PROJECT_DIR$/EasyRecyclerViewDemo/EasyRecyclerViewDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" filepath="$PROJECT_DIR$/PullToRefreshLibrary/PullToRefreshLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/RxTools-library/RxTools-library.iml" filepath="$PROJECT_DIR$/RxTools-library/RxTools-library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TXapp/TXapp.iml" filepath="$PROJECT_DIR$/TXapp/TXapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/donglan/donglan.iml" filepath="$PROJECT_DIR$/donglan/donglan.iml" />
-      <module fileurl="file://$PROJECT_DIR$/easeui/easeui.iml" filepath="$PROJECT_DIR$/easeui/easeui.iml" />
-      <module fileurl="file://$PROJECT_DIR$/easyrecyclerview/easyrecyclerview.iml" filepath="$PROJECT_DIR$/easyrecyclerview/easyrecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" filepath="$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hellocharts-samples/hellocharts-samples.iml" filepath="$PROJECT_DIR$/hellocharts-samples/hellocharts-samples.iml" />
       <module fileurl="file://$PROJECT_DIR$/jiaozivideoplayerLibrary/jiaozivideoplayerLibrary.iml" filepath="$PROJECT_DIR$/jiaozivideoplayerLibrary/jiaozivideoplayerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/presentation/presentation.iml" filepath="$PROJECT_DIR$/presentation/presentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/sdk/sdk.iml" filepath="$PROJECT_DIR$/sdk/sdk.iml" />
