@@ -107,45 +107,49 @@ public class MyContactsActivity extends BaseActivity {
 
                 //               LogUtil.i(FriendshipInfo.getInstance().getFriends().toString());
                 Map<String, List<FriendProfile>> friends = FriendshipInfo.getInstance().getFriends();
-                List<FriendProfile> friends1 = friends.get(FriendshipInfo.getInstance().getGroups().get(0));
-                //          LogUtil.i(friends1.size() + "");
-                if (friends1.size() > Constants.MAX_FRIEND_COUNT) {
+                try {
+                    List<FriendProfile> friends1 = friends.get(FriendshipInfo.getInstance().getGroups().get(0));
+                    //          LogUtil.i(friends1.size() + "");
+                    if (friends1.size() > Constants.MAX_FRIEND_COUNT) {
 
-                    //将好友列表升序排列
-                    Collections.sort(friends1, new Comparator<FriendProfile>() {
-                        @Override
-                        public int compare(FriendProfile o1, FriendProfile o2) {
-                            Long a;
-                            Long b;
-                            if (TextUtils.isEmpty(o1.getRemark())) {
-                                a = 0L;
-                            } else {
-                                a = Long.parseLong(o1.getRemark());
+                        //将好友列表升序排列
+                        Collections.sort(friends1, new Comparator<FriendProfile>() {
+                            @Override
+                            public int compare(FriendProfile o1, FriendProfile o2) {
+                                Long a;
+                                Long b;
+                                if (TextUtils.isEmpty(o1.getRemark())) {
+                                    a = 0L;
+                                } else {
+                                    a = Long.parseLong(o1.getRemark());
+                                }
+                                if (TextUtils.isEmpty(o2.getRemark())) {
+                                    b = 0L;
+                                } else {
+                                    b = Long.parseLong(o2.getRemark());
+                                }
+
+
+                                //升序
+                                return a.compareTo(b);
                             }
-                            if (TextUtils.isEmpty(o2.getRemark())) {
-                                b = 0L;
-                            } else {
-                                b = Long.parseLong(o2.getRemark());
+                        });
+                        LogUtil.i("升序排序后--:" + friends1.size());
+
+                        List<String> delUers = new ArrayList<String>();
+                        for (int i = 0; i < friends1.size(); i++) {
+                            LogUtil.i(friends1.get(i).getRemark());
+                            if (i < friends1.size() - Constants.MAX_FRIEND_COUNT) {
+                                //获取多余的好友id
+                                delUers.add(friends1.get(i).getIdentify());
                             }
-
-
-                            //升序
-                            return a.compareTo(b);
                         }
-                    });
-                    LogUtil.i("升序排序后--:" + friends1.size());
+                        //删除多余的好友
+                        delUsers(position, delUers);
 
-                    List<String> delUers = new ArrayList<String>();
-                    for (int i = 0; i < friends1.size(); i++) {
-                        LogUtil.i(friends1.get(i).getRemark());
-                        if (i < friends1.size() - Constants.MAX_FRIEND_COUNT) {
-                            //获取多余的好友id
-                            delUers.add(friends1.get(i).getIdentify());
-                        }
                     }
-                    //删除多余的好友
-                    delUsers(position, delUers);
-
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
         });
