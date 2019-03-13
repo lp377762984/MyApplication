@@ -837,24 +837,20 @@
         <!--AlertDialog  有×的-->
         <activity
             android:name=".activity.AlertDialogActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/DialogStyle" />
         <activity
             android:name=".activity.AlertDialogSelectTimeActivity"
-            android:exported="true"
             android:theme="@style/dialog" />
         <activity
             android:name=".activity.AlertDialogTuiJianActivity"
             android:theme="@style/dialog" />
         <activity
             android:name=".activity.AlertDialogUpdateActivity"
-            android:exported="true"
             android:theme="@style/dialog" />
 
         <!--ListViewAlertDialog  有×的-->
         <activity
             android:name=".activity.AlertDialogToListActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/DialogStyle" />
 
         <!--体测分析-注意事项-->
