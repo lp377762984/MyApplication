@@ -72,11 +72,10 @@ public class MessageFragment extends BaseRecyclerViewRefreshFragment {
 
     @Override
     public void upDownRefreshData() {
-
         if ((mCurrentPage + 1) >= datainfo.getData().getTotalPages()) {
             setOnlyDownReresh();
         } else {
-            mCurrentPage = +1;
+            mCurrentPage +=1;
             try {
                 find_all_data(mCurrentPage);
             } catch (JSONException e) {
