@@ -175,7 +175,10 @@ public class TuanKeRecordFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if(list.get(position).getStatus()!=2){
+                        viewHolder.rl_button.setVisibility(View.VISIBLE);
                         showDialog(list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
+                    }else {
+                        viewHolder.rl_button.setVisibility(View.GONE);
                     }
                 }
 

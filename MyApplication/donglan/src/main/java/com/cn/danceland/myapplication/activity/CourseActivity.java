@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -357,6 +358,7 @@ public class CourseActivity extends BaseFragmentActivity {
 
                 startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd HH:mm:ss") + "";
                 endTime = (Long.valueOf(startTime) + 86400000) + "";
+                Log.d("test_lp", "isTuanke: " + isTuanke + "  type:   " + type);
                 if ("0".equals(isTuanke) || "1".equals(type)) {
                     showFragment(type, isTuanke);
                 } else if ("2".equals(type)) {
@@ -532,14 +534,22 @@ public class CourseActivity extends BaseFragmentActivity {
                 from = "免费团课";
                 tuanKeFragment.refresh(from, startTime, endTime, course_type_id, id);
 
-                fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
+                //fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
+                if (!tuanKeFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, tuanKeFragment);
+                fragmentTransaction.show(tuanKeFragment);
+                if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeRecordFragment);
             } else {
                 if (siJiaoFragment == null) {
                     siJiaoFragment = new SiJiaoFragment();
                 }
 
                 siJiaoFragment.getRoles(role, auth, startTime);
-                fragmentTransaction.replace(R.id.rl_nv, siJiaoFragment);
+                //fragmentTransaction.replace(R.id.rl_nv, siJiaoFragment);
+                if (!siJiaoFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, siJiaoFragment);
+                fragmentTransaction.show(siJiaoFragment);
+                if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoRecordFragment);
             }
 
         } else if ("1".equals(type)) {
@@ -555,7 +565,12 @@ public class CourseActivity extends BaseFragmentActivity {
                 }
 
                 tuanKeRecordFragment.getStartTime(startTime);
-                fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
+                //fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
+                if (!tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.add(R.id.rl_tuanke_record, tuanKeRecordFragment);
+                fragmentTransaction.show(tuanKeRecordFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
             } else {
                 if (siJiaoRecordFragment == null) {
                     siJiaoRecordFragment = new SiJiaoRecordFragment();
@@ -565,9 +580,14 @@ public class CourseActivity extends BaseFragmentActivity {
                 siJiaoRecordFragment.getStartTime(startTime);
                 siJiaoRecordFragment.getRoles(role, auth);
                 Bundle bundle = new Bundle();
-                bundle.putString("siJiaoRecordFragment", currentSelectDate);
+                bundle.putString("currentSelectDate", currentSelectDate);
                 siJiaoRecordFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.rl_nv, siJiaoRecordFragment);
+                //fragmentTransaction.replace(R.id.rl_nv, siJiaoRecordFragment);
+                if (!siJiaoRecordFragment.isAdded())
+                    fragmentTransaction.add(R.id.rl_nv, siJiaoRecordFragment);
+                fragmentTransaction.show(siJiaoRecordFragment);
+                if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoFragment);
             }
 
         } else if ("2".equals(type)) {
@@ -578,7 +598,11 @@ public class CourseActivity extends BaseFragmentActivity {
             from = "小团课";
             tuanKeFragment.refresh(from, startTime, endTime, course_type_id, id);
 
-            fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
+            //fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
+            if (!tuanKeFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, tuanKeFragment);
+            fragmentTransaction.show(tuanKeFragment);
+            if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                fragmentTransaction.hide(tuanKeRecordFragment);
         }
 
         fragmentTransaction.commit();

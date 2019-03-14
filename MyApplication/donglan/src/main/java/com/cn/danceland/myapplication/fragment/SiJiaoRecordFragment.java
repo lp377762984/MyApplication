@@ -94,8 +94,8 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
         LogUtil.i(event.getMsg());
         switch (event.getEventCode()) {
             case 4331:
-                initData(event.getMsg());
                 currentSelectDate=event.getMsg();
+                initData(event.getMsg());
                 break;
             default:
                 break;

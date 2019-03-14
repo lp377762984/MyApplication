@@ -335,9 +335,9 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
 
             viewHolder.tv_ok.setVisibility(View.GONE);
             viewHolder.rl_qiandao.setVisibility(View.GONE);
+            viewHolder.rl_button.setVisibility(View.GONE);
 
-
-            if (list.get(position).getCourse_category()==2){//会员岳教练
+            if (list.get(position).getAppointment_type()==2){//会员岳教练
                 switch (list.get(position).getStatus()) {
                     case 1:
                         viewHolder.tv_ok.setVisibility(View.VISIBLE);
@@ -396,7 +396,7 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
                     default:
                         break;
                 }
-            }else if (list.get(position).getCourse_category()==1){//教练约会员
+            }else if (list.get(position).getAppointment_type()==1){//教练约会员
                 switch (list.get(position).getStatus()) {
                     case 1:
                         viewHolder.tv_ok.setVisibility(View.VISIBLE);
@@ -457,9 +457,6 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
                 }
 
             }
-            Log.d("test_lp", "确定按钮: "+viewHolder.tv_ok.getVisibility()+
-                    "取消按钮: "+viewHolder.rl_button.getVisibility()+
-                    "签到按钮: "+viewHolder.rl_qiandao.getVisibility());
             return convertView;
         }
     }
