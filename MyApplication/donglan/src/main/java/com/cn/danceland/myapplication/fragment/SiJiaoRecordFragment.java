@@ -356,10 +356,10 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                                     if (list.get(position).getCourse_date() < System.currentTimeMillis() && System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {
                                         //只有在当天可以签到
                                         if ("2".equals(list.get(position).getCategory())) {
-                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                             startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                         } else {
-                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                             startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                         }
                                     } else {
@@ -446,10 +446,10 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                                     if (list.get(position).getCourse_date() < System.currentTimeMillis() && System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {
                                         //只有在当天可以签到
                                         if ("2".equals(list.get(position).getCategory())) {
-                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                             startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                         } else {
-                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                            StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                             startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                         }
                                     } else {
@@ -529,10 +529,10 @@ public class SiJiaoRecordFragment extends BaseFragmentEventBus {
                                 if (list.get(position).getCourse_date() < System.currentTimeMillis() && System.currentTimeMillis() < list.get(position).getCourse_date() + 60 * 60 * 24 * 1000) {
                                     //只有在当天可以签到
                                     if ("2".equals(list.get(position).getCategory())) {
-                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_GROUP_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                         startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                     } else {
-                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId());
+                                        StringBuilder data = new StringBuilder().append("1").append(",").append("1").append(",").append(Constants.QR_MAPPING_COURSE_ENTER).append(",").append(list.get(position).getId()).append(",").append(System.currentTimeMillis());
                                         startActivity(new Intent(mActivity, MyQRCodeActivity.class).putExtra("data", data.toString()));
                                     }
                                 } else {

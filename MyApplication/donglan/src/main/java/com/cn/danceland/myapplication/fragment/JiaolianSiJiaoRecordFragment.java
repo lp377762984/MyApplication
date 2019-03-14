@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.fragment;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -398,7 +399,7 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
             }else if (list.get(position).getCourse_category()==1){//教练约会员
                 switch (list.get(position).getStatus()) {
                     case 1:
-                        viewHolder.tv_ok.setVisibility(View.GONE);
+                        viewHolder.tv_ok.setVisibility(View.VISIBLE);
                         viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -456,7 +457,9 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
                 }
 
             }
-
+            Log.d("test_lp", "确定按钮: "+viewHolder.tv_ok.getVisibility()+
+                    "取消按钮: "+viewHolder.rl_button.getVisibility()+
+                    "签到按钮: "+viewHolder.rl_qiandao.getVisibility());
             return convertView;
         }
     }
