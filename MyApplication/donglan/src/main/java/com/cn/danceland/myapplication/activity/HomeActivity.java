@@ -2,6 +2,7 @@ package com.cn.danceland.myapplication.activity;
 
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,6 +45,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.cn.danceland.myapplication.MyApplication;
 import com.cn.danceland.myapplication.R;
 import com.cn.danceland.myapplication.activity.base.BaseFragmentActivity;
+import com.cn.danceland.myapplication.app.AppManager2;
 import com.cn.danceland.myapplication.bean.CheckUpdateBean;
 import com.cn.danceland.myapplication.bean.CornerMarkMessageBean;
 import com.cn.danceland.myapplication.bean.Data;
@@ -425,12 +427,13 @@ public class HomeActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void onForceOffline() {
                         //被其他终端踢下线
-                        LogUtil.i("onForceOffline");
-                        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                        LogUtil.i("onForceOffline: "+AppManager2.getAppManager().currentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AppManager2.getAppManager().currentActivity());
                         builder.setMessage("您的账号已从从其他设备登录，请重新登录");
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                AppManager2.getAppManager().finishAllActivity();
                                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                                 SPUtils.setBoolean(Constants.ISLOGINED, false);
                                 finish();
