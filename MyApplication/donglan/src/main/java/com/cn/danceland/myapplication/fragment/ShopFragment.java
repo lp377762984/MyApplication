@@ -629,7 +629,7 @@ public class ShopFragment extends BaseFragment {
                 role_id = null;
                 for (int i = 0; i < info.getRoles().size(); i++) {
                     LogUtil.i(id + "----" + info.getRoles().get(i).getRole_type() + "");
-                    if (TextUtils.equals(id, info.getRoles().get(i).getRole_type() + "")) {
+                    if (TextUtils.equals(role, info.getRoles().get(i).getName() + "")) {
                         rolesBean.setId(info.getRoles().get(i).getId());
                     }
                 }
