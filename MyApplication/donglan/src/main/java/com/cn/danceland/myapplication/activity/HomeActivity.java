@@ -437,7 +437,7 @@ public class HomeActivity extends BaseFragmentActivity implements View.OnClickLi
                             }
                         });
                         builder.setCancelable(false);
-
+                        builder.show();
                     }
 
                     @Override
