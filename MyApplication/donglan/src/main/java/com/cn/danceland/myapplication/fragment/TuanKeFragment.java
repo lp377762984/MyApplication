@@ -25,6 +25,7 @@ import com.cn.danceland.myapplication.bean.KeChengBiaoBean;
 import com.cn.danceland.myapplication.bean.SiJiaoYuYueConBean;
 import com.cn.danceland.myapplication.evntbus.StringEvent;
 import com.cn.danceland.myapplication.fragment.base.BaseFragmentEventBus;
+import com.cn.danceland.myapplication.im.utils.TimeUtil;
 import com.cn.danceland.myapplication.utils.Constants;
 import com.cn.danceland.myapplication.utils.LogUtil;
 import com.cn.danceland.myapplication.utils.MyJsonObjectRequest;
@@ -275,7 +276,7 @@ public class TuanKeFragment extends BaseFragmentEventBus {
             if (convertView == null) {
                 viewHolder = new ViewHolder();
                 convertView = View.inflate(mActivity, R.layout.tuanke_item, null);
-            //    viewHolder.tuanke_img = convertView.findViewById(R.id.tuanke_img);
+                //    viewHolder.tuanke_img = convertView.findViewById(R.id.tuanke_img);
                 viewHolder.tuanke_jibie = convertView.findViewById(R.id.tuanke_jibie);
                 viewHolder.tuanke_leibie = convertView.findViewById(R.id.tuanke_leibie);
                 viewHolder.tuanke_room = convertView.findViewById(R.id.tuanke_room);
@@ -303,7 +304,7 @@ public class TuanKeFragment extends BaseFragmentEventBus {
             endTime = TimeUtils.MinuteToTime(Integer.valueOf(xiaoTuanList.get(position).getEnd_time() + ""));
             viewHolder.tuanke_time.setText(startTime + "-" + endTime);
             viewHolder.tuanke_leibie.setText(xiaoTuanList.get(position).getCourse_type_name());
-            viewHolder.tuanke_name.setText("上课教练:" +xiaoTuanList.get(position).getEmployee_name());
+            viewHolder.tuanke_name.setText("上课教练:" + xiaoTuanList.get(position).getEmployee_name());
 
             if (xiaoTuanList.get(position).getLevel() != null) {
                 viewHolder.tuanke_jibie.setText("课程级别:" + xiaoTuanList.get(position).getLevel());
@@ -331,8 +332,14 @@ public class TuanKeFragment extends BaseFragmentEventBus {
             } else {
                 viewHolder.renshu.setVisibility(View.GONE);
             }
+            //1553270400000 xiaoTuanList.get(position).getStart_time()*3600*1000
+            String format = "yyyy-MM-dd";
+            String dayStr = TimeUtils.timeStamp2Date(yuyueStartTime, format);//2019-3-22
+            long hours = xiaoTuanList.get(position).getStart_time() * 60 * 1000;
+            String hourStr = TimeUtils.timeToStr(hours, "HH:mm:ss");//14:00:00
+            Long time = TimeUtils.date2TimeStamp(dayStr + " " + hourStr, "yyyy-MM-dd HH:mm:ss");
 
-            if (Long.valueOf(yuyueStartTime) + xiaoTuanList.get(position).getStart_time() * 60000 >= System.currentTimeMillis()) {
+            if (time >= System.currentTimeMillis()) {
                 if (xiaoTuanList.get(position).getSelf_appoint_count() > 0) {
                     yuyue = false;//有预约项，无法点击
                     //viewHolder.tuanke_yuyue.setBackgroundColor(Color.parseColor("#ADFF2F"));

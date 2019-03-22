@@ -32,6 +32,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,7 @@ public class TuanKeRecordFragment extends BaseFragment {
     RelativeLayout rl_error;
     ImageView iv_error;
     TextView tv_error;
+
     @Override
     public View initViews() {
 
@@ -56,16 +59,17 @@ public class TuanKeRecordFragment extends BaseFragment {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
         gson = new Gson();
         initView();
-     //   initData();
+        //   initData();
 
 
         return view;
     }
 
-    public void getStartTime(String startTime){
-        this.startTime =startTime;
+    public void getStartTime(String startTime) {
+        this.startTime = startTime;
 
     }
+
     @Override
     public void initData() {
         SiJiaoYuYueConBean siJiaoYuYueConBean = new SiJiaoYuYueConBean();
@@ -73,20 +77,20 @@ public class TuanKeRecordFragment extends BaseFragment {
         //siJiaoYuYueConBean.setDate(startTime);
 
         String s = gson.toJson(siJiaoYuYueConBean);
-        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s,new Response.Listener<JSONObject>() {
+        MyJsonObjectRequest jsonObjectRequest = new MyJsonObjectRequest(Request.Method.POST, Constants.FREECOURSELIST, s, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                LogUtil.e("zzf",jsonObject.toString());
+                LogUtil.e("zzf", jsonObject.toString());
                 TuanKeRecordBean tuanKeRecordBean = gson.fromJson(jsonObject.toString(), TuanKeRecordBean.class);
-                if(tuanKeRecordBean!=null){
+                if (tuanKeRecordBean != null) {
 
                     List<TuanKeRecordBean.Data> data = tuanKeRecordBean.getData();
-                    if(data!=null){
+                    if (data != null) {
                         lv_tuanke.setAdapter(new RecordAdapter(data));
-                    }else{
+                    } else {
                         ToastUtils.showToastShort("暂无记录！");
                     }
-                }else{
+                } else {
                     ToastUtils.showToastShort("暂无记录！");
                 }
             }
@@ -95,11 +99,10 @@ public class TuanKeRecordFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 ToastUtils.showToastShort("获取记录失败！");
             }
-        }){
+        }) {
 
         };
         MyApplication.getHttpQueues().add(jsonObjectRequest);
-
 
 
     }
@@ -122,15 +125,15 @@ public class TuanKeRecordFragment extends BaseFragment {
     }
 
 
-
     private class RecordAdapter extends BaseAdapter {
 
         List<TuanKeRecordBean.Data> list;
 
-        RecordAdapter(List<TuanKeRecordBean.Data> list){
+        RecordAdapter(List<TuanKeRecordBean.Data> list) {
             this.list = list;
 
         }
+
         @Override
         public int getCount() {
             return list.size();
@@ -149,9 +152,9 @@ public class TuanKeRecordFragment extends BaseFragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder viewHolder;
-            if(convertView==null){
+            if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = View.inflate(mActivity,R.layout.sijiaorecord_item, null);
+                convertView = View.inflate(mActivity, R.layout.sijiaorecord_item, null);
                 viewHolder.course_name = convertView.findViewById(R.id.course_name);
                 viewHolder.course_date = convertView.findViewById(R.id.course_date);
                 viewHolder.course_num = convertView.findViewById(R.id.course_num);
@@ -160,44 +163,56 @@ public class TuanKeRecordFragment extends BaseFragment {
                 viewHolder.rl_button = convertView.findViewById(R.id.rl_button);
                 viewHolder.rl_button_tv = convertView.findViewById(R.id.rl_button_tv);
                 convertView.setTag(viewHolder);
-            }else{
+            } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
             viewHolder.course_name.setText(list.get(position).getCourse_type_name());
 //            LogUtil.i(list.get(position).getDate() + "   "list.get(position).getCreate_date());
-            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date()+ "", "yyyy.MM.dd HH:mm");
-            viewHolder.course_date.setText("预约时间："+time);
+            String time = TimeUtils.timeStamp2Date(list.get(position).getCreate_date() + "", "yyyy.MM.dd HH:mm");
+            viewHolder.course_date.setText("预约时间：" + time);
             viewHolder.course_type.setText("免费团课");
             viewHolder.course_jiaolian.setText("");
-          viewHolder.course_num.setText("上课场地："+list.get(position).getRoom_name());
-            viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(list.get(position).getStatus()!=2){
-                        viewHolder.rl_button.setVisibility(View.VISIBLE);
-                        showDialog(list.get(position).getId(),viewHolder.rl_button,viewHolder.rl_button_tv);
-                    }else {
-                        viewHolder.rl_button.setVisibility(View.GONE);
-                    }
-                }
-
-            });
-            if(list.get(position).getStatus()==2){
+            viewHolder.course_num.setText("上课场地：" + list.get(position).getRoom_name());
+            TuanKeRecordBean.Data item = list.get(position);
+            final int status = item.getStatus();//1已报名2已取消
+            long date = item.getDate();
+            int startTime = item.getStart_time();
+            final Calendar currentTime = Calendar.getInstance();
+            final Calendar overTime = Calendar.getInstance();
+            overTime.setTime(new Date(date + startTime * 60 * 1000));
+            if (status == 1 && (currentTime.compareTo(overTime) < 0)) {
+                viewHolder.rl_button_tv.setText("已过期");
+                viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
+            }
+            if (list.get(position).getStatus() == 2) {
                 viewHolder.rl_button_tv.setText("已取消");
                 viewHolder.rl_button.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey));
             }
+            viewHolder.rl_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    if (list.get(position).getStatus() != 2) {
+//                        viewHolder.rl_button.setVisibility(View.VISIBLE);
+//                        showDialog(list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+//                    } else {
+//                        viewHolder.rl_button.setVisibility(View.GONE);
+//                    }
+                    if (status == 1 && (currentTime.compareTo(overTime) > 0))
+                        showDialog(list.get(position).getId(), viewHolder.rl_button, viewHolder.rl_button_tv);
+                }
 
+            });
             return convertView;
         }
     }
 
-    class ViewHolder{
-        TextView course_name,course_date,course_type,course_jiaolian,rl_button_tv,course_num;
+    class ViewHolder {
+        TextView course_name, course_date, course_type, course_jiaolian, rl_button_tv, course_num;
         RelativeLayout rl_button;
     }
 
-    private void showDialog(final int id, final RelativeLayout rl, final TextView tv){
+    private void showDialog(final int id, final RelativeLayout rl, final TextView tv) {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
         dialog.setTitle("提示");
@@ -205,7 +220,7 @@ public class TuanKeRecordFragment extends BaseFragment {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                cancleYuYue(id,rl,tv);
+                cancleYuYue(id, rl, tv);
             }
         });
         dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -224,14 +239,14 @@ public class TuanKeRecordFragment extends BaseFragment {
         MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, Constants.FREECANCELGROUP, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                LogUtil.e("zzf",s);
-                if(s.contains("1")){
+                LogUtil.e("zzf", s);
+                if (s.contains("1")) {
                     ToastUtils.showToastShort("取消成功！");
                     tv.setText("已取消");
                     tv.setTextColor(getResources().getColor(R.color.color_dl_deep_blue));
                     rl.setBackground(getResources().getDrawable(R.drawable.img_btn_bg_grey1));
                     rl.setClickable(false);
-                }else{
+                } else {
                     ToastUtils.showToastShort("取消失败！请重新操作");
                 }
 
@@ -241,11 +256,11 @@ public class TuanKeRecordFragment extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
 
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("applyId",id+"");
+                map.put("applyId", id + "");
                 return map;
             }
 

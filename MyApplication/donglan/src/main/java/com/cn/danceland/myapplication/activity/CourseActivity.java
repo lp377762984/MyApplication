@@ -1,5 +1,6 @@
 package com.cn.danceland.myapplication.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.R.attr.value;
@@ -80,6 +82,7 @@ public class CourseActivity extends BaseFragmentActivity {
     String startTime, endTime;
     int id, course_type_id;
     String isTuanke;//团课isTuanke==0；一对一和小团课==1
+    private int flag;//0普通 1进入团体私教
     Time time;
     String nowTime, nowTimeLen, role, auth;
     Data data;
@@ -90,6 +93,7 @@ public class CourseActivity extends BaseFragmentActivity {
     String from;
     CalendarView mCalendarView;
     private CalendarPointBean calendarPointBean;
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -240,7 +244,10 @@ public class CourseActivity extends BaseFragmentActivity {
 
     private void initHost() {
         data = (Data) DataInfoCache.loadOneCache(Constants.MY_INFO);
-        isTuanke = getIntent().getStringExtra("isTuanke");
+        isTuanke = getIntent().getStringExtra("isTuanke");// .putExtra("id", id)  .putExtra("course_type_id", courseTypeId));
+        flag = getIntent().getIntExtra("flag", 0);
+        id = getIntent().getIntExtra("id", 0);
+        course_type_id = getIntent().getIntExtra("course_type_id", 0);
         if (isTuanke == null) {
             isTuanke = "1";
         }
@@ -341,6 +348,10 @@ public class CourseActivity extends BaseFragmentActivity {
     private void setOnclick() {
         mYear = mCalendarView.getCurYear();
         //   mCalendarLayout.shrink();
+        tv_date.setText(String.format(Locale.getDefault(), "%d.%d.%d", mCalendarView.getCurYear(), mCalendarView.getCurMonth(), mCalendarView.getCurDay()));
+        Calendar selectedCalendar = mCalendarView.getSelectedCalendar();
+        currentSelectDate = selectedCalendar.getYear() + "-" + selectedCalendar.getMonth() + "-" + selectedCalendar.getDay() + "";
+        startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
         mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
             @Override
             public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
@@ -523,15 +534,16 @@ public class CourseActivity extends BaseFragmentActivity {
                 //     week.setVisibility(View.VISIBLE);
                 //     nccalendar.setVisibility(View.VISIBLE);
                 mCalendarView.setVisibility(View.VISIBLE);
-
                 rl_tuanke_record.setVisibility(View.GONE);
                 tab1.setText("团课");
                 if (tuanKeFragment == null) {
                     tuanKeFragment = new TuanKeFragment();
                 }
-
-
-                from = "免费团课";
+                if (flag == 2) {
+                    from = "免费团课";
+                } else {
+                    from = "小团课";
+                }
                 tuanKeFragment.refresh(from, startTime, endTime, course_type_id, id);
 
                 //fragmentTransaction.replace(R.id.rl_nv, tuanKeFragment);
@@ -539,7 +551,11 @@ public class CourseActivity extends BaseFragmentActivity {
                 fragmentTransaction.show(tuanKeFragment);
                 if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
                     fragmentTransaction.hide(tuanKeRecordFragment);
-            } else {
+                if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoRecordFragment);
+                if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoFragment);
+            } else {//私教
                 if (siJiaoFragment == null) {
                     siJiaoFragment = new SiJiaoFragment();
                 }
@@ -550,6 +566,10 @@ public class CourseActivity extends BaseFragmentActivity {
                 fragmentTransaction.show(siJiaoFragment);
                 if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
                     fragmentTransaction.hide(siJiaoRecordFragment);
+                if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeRecordFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
             }
 
         } else if ("1".equals(type)) {
@@ -558,19 +578,47 @@ public class CourseActivity extends BaseFragmentActivity {
                 //     mDate.setVisibility(View.GONE);
                 //  week.setVisibility(View.GONE);
                 //    nccalendar.setVisibility(View.GONE);
-                mCalendarView.setVisibility(View.GONE);
-                rl_tuanke_record.setVisibility(View.VISIBLE);
-                if (tuanKeRecordFragment == null) {
-                    tuanKeRecordFragment = new TuanKeRecordFragment();
+                if (flag == 1) {
+                    mCalendarView.setVisibility(View.VISIBLE);
+                    rl_tuanke_record.setVisibility(View.GONE);
+                    if (siJiaoRecordFragment == null) {
+                        siJiaoRecordFragment = new SiJiaoRecordFragment();
+                    }
+                    siJiaoRecordFragment.getStartTime(startTime);
+                    siJiaoRecordFragment.getRoles(role, auth);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("currentSelectDate", currentSelectDate);
+                    siJiaoRecordFragment.setArguments(bundle);
+                    //fragmentTransaction.replace(R.id.rl_nv, siJiaoRecordFragment);
+                    if (!siJiaoRecordFragment.isAdded())
+                        fragmentTransaction.add(R.id.rl_nv, siJiaoRecordFragment);
+                    fragmentTransaction.show(siJiaoRecordFragment);
+                    if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                        fragmentTransaction.hide(siJiaoFragment);
+                    if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                        fragmentTransaction.hide(tuanKeRecordFragment);
+                    if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                        fragmentTransaction.hide(tuanKeFragment);
+                } else {
+                    mCalendarView.setVisibility(View.GONE);
+                    rl_tuanke_record.setVisibility(View.VISIBLE);
+                    if (tuanKeRecordFragment == null) {
+                        tuanKeRecordFragment = new TuanKeRecordFragment();
+                    }
+
+                    tuanKeRecordFragment.getStartTime(startTime);
+                    //fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
+                    if (!tuanKeRecordFragment.isAdded())
+                        fragmentTransaction.add(R.id.rl_tuanke_record, tuanKeRecordFragment);
+                    fragmentTransaction.show(tuanKeRecordFragment);
+                    if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                        fragmentTransaction.hide(tuanKeFragment);
+                    if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
+                        fragmentTransaction.hide(siJiaoRecordFragment);
+                    if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                        fragmentTransaction.hide(siJiaoFragment);
                 }
 
-                tuanKeRecordFragment.getStartTime(startTime);
-                //fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
-                if (!tuanKeRecordFragment.isAdded())
-                    fragmentTransaction.add(R.id.rl_tuanke_record, tuanKeRecordFragment);
-                fragmentTransaction.show(tuanKeRecordFragment);
-                if (tuanKeFragment != null && tuanKeFragment.isAdded())
-                    fragmentTransaction.hide(tuanKeFragment);
             } else {
                 if (siJiaoRecordFragment == null) {
                     siJiaoRecordFragment = new SiJiaoRecordFragment();
@@ -588,6 +636,10 @@ public class CourseActivity extends BaseFragmentActivity {
                 fragmentTransaction.show(siJiaoRecordFragment);
                 if (siJiaoFragment != null && siJiaoFragment.isAdded())
                     fragmentTransaction.hide(siJiaoFragment);
+                if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeRecordFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
             }
 
         } else if ("2".equals(type)) {
@@ -603,6 +655,10 @@ public class CourseActivity extends BaseFragmentActivity {
             fragmentTransaction.show(tuanKeFragment);
             if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
                 fragmentTransaction.hide(tuanKeRecordFragment);
+            if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                fragmentTransaction.hide(siJiaoFragment);
+            if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
+                fragmentTransaction.hide(siJiaoRecordFragment);
         }
 
         fragmentTransaction.commit();

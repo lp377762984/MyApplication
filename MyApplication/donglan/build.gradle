@@ -75,6 +75,18 @@ android {
 //
 //}
 dependencies {
+    allprojects {
+        repositories {
+            google()
+            maven {
+                url "http://dl.bintray.com/piasy/maven"
+
+            }
+            maven { url "https://jitpack.io" }
+            jcenter()
+            maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+        }
+    }
     api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -144,21 +156,6 @@ dependencies {
 
     //  compile 'com.sunfusheng:glideimageview:1.2.0'
     api 'com.davemorrissey.labs:subsampling-scale-image-view:3.9.0'
-
-    //
-    allprojects {
-        repositories {
-            google()
-            maven {
-                url "http://dl.bintray.com/piasy/maven"
-
-            }
-            maven { url "https://jitpack.io" }
-            jcenter()
-            maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-        }
-    }
-
     //
     api 'com.github.piasy:BigImageViewer:1.4.5'
 
@@ -240,7 +237,7 @@ dependencies {
     //easyrecyclerview
 
     // compile 'com.jude:easyrecyclerview:4.4.2'
-    api 'com.haibin:calendarview:3.4.8'
+    api 'com.haibin:calendarview:3.5.5'
 
     //日历控件
 

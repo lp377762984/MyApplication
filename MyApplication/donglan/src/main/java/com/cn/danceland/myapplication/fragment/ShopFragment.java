@@ -991,7 +991,9 @@ public class ShopFragment extends BaseFragment {
                         break;
                     case 20://预约团课
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "预约团课");
-                        startActivity(new Intent(mActivity, CourseActivity.class).putExtra("isTuanke", "0"));
+                        startActivity(new Intent(mActivity, CourseActivity.class)
+                                .putExtra("isTuanke", "0")
+                        .putExtra("flag",2));
                         break;
                     case 21://储值卡
                         MobclickAgent.onEvent(mActivity, "shop_list_btn", "储值卡");

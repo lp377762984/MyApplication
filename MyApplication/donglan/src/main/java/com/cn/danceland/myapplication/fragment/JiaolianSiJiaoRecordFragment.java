@@ -81,7 +81,8 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
         lv_tuanke.setAdapter(recordAdapter);
         lv_tuanke.setEmptyView(rl_error);
         currentSelectDate=getArguments().getString("currentSelectDate");
-      //  initData(currentSelectDate);
+        LogUtil.i(currentSelectDate);
+        initData(currentSelectDate);
 
 
         return inflate;
@@ -399,13 +400,13 @@ public class JiaolianSiJiaoRecordFragment extends BaseFragmentEventBus {
             }else if (list.get(position).getAppointment_type()==1){//教练约会员
                 switch (list.get(position).getStatus()) {
                     case 1:
-                        viewHolder.tv_ok.setVisibility(View.VISIBLE);
-                        viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showDialog(true, list.get(position).getId(), position);
-                            }
-                        });
+//                        viewHolder.tv_ok.setVisibility(View.VISIBLE);
+//                        viewHolder.tv_ok.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                showDialog(true, list.get(position).getId(), position);
+//                            }
+//                        });
 
                         viewHolder.rl_button.setVisibility(View.VISIBLE);
                         viewHolder.rl_button_tv.setText("取消");

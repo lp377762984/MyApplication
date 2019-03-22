@@ -258,6 +258,17 @@ public class TimeUtils {
         return sdf.format(new Date(Long.valueOf(seconds)));
     }
 
+    public static String timeToStr(long ms, String format){
+        if (format == null || format.isEmpty()) {
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat formatter= new SimpleDateFormat(format,Locale.CHINESE);
+
+        // 设置格式化器的时区为格林威治时区，否则格式化的结果不对，中国的时间比格林威治时间早8小时，比如0点会被格式化为8:00
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+0:00"));
+        return formatter.format(ms);
+    }
+
     //毫秒转凌晨整点
     public static long timeToTopHour(long time) {
         Date date = new Date();

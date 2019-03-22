@@ -3,8 +3,8 @@ package com.cn.danceland.myapplication.activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,9 @@ import com.cn.danceland.myapplication.utils.MyStringRequest;
 import com.cn.danceland.myapplication.utils.TimeUtils;
 import com.cn.danceland.myapplication.utils.ToastUtils;
 import com.cn.danceland.myapplication.view.CustomLine;
+import com.cn.danceland.myapplication.view.CustomLine2;
 import com.google.gson.Gson;
+import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 import com.necer.ncalendar.calendar.NCalendar;
@@ -50,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -92,7 +95,6 @@ public class SiJiaoDetailActivity extends BaseActivity {
     private ArrayList<Integer> statusList;
     private ArrayList<Integer> roleList;
     private CustomLine customLine;
-    private NestedScrollView ns_view;
     private LinearLayout ll_01;
     private ArrayList<String> timeStrList;
     private ArrayList<Integer> startMinutesList;
@@ -100,6 +102,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
     private ArrayList<Integer> endMinuteList;
     private ArrayList<Integer> jiaolianMinuteList;
     CalendarView mCalendarView;
+    private CustomLine2 customLine2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,6 +150,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
             item = (MyCourseBean.Data) getIntent().getSerializableExtra("item");
             courseLength = item.getTime_length();
         }
+        Log.d("test_lp", "courseLength: " + courseLength);//60
         timeStrList = new ArrayList<>();
         for (int i = 8; i < 23; i++) {
             for (int j = 0; j < 6; j++) {
@@ -193,7 +197,8 @@ public class SiJiaoDetailActivity extends BaseActivity {
                     LogUtil.i(ts[0] + " 00:00:00");
                     endTime = (Long.valueOf(startTime) + 86399) + "";
                     weekDay = TimeUtils.dateToWeek(ts[0]);
-                    getData();
+                    //getData();
+                    getMemberLine();
                 }
             }
 
@@ -203,14 +208,22 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
     public void iniView() {
         //customLine = findViewById(R.id.customLine);
-        ll_01 = findViewById(R.id.ll_01);
-        ll_01.setOnClickListener(new View.OnClickListener() {
+//        ll_01 = findViewById(R.id.ll_01);
+//        ll_01.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showTime();
+//            }
+//        });
+        customLine2 = ((CustomLine2) findViewById(R.id.customLine));
+        customLine2.setCallback(new CustomLine2.Callback() {
             @Override
-            public void onClick(View view) {
-                showTime();
+            public void onClickTime(int time) {//480 490
+                int position = time / 10;
+                Log.d("test_lp", "onClickTime: " + time + "*" + position);
+                showTime(position);
             }
         });
-        ns_view = findViewById(R.id.ns_view);
         inflate = LayoutInflater.from(SiJiaoDetailActivity.this).inflate(R.layout.timeselect, null);
 
         detail_img = findViewById(R.id.detail_img);
@@ -251,6 +264,13 @@ public class SiJiaoDetailActivity extends BaseActivity {
         mCalendarLayout = (CalendarLayout) findViewById(R.id.calendarLayout);
         //mCalendarLayout.shrink();//收起来
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+
+        tv_date.setText(String.format(Locale.getDefault(),"%d.%d.%d", mCalendarView.getCurYear(), mCalendarView.getCurMonth(), mCalendarView.getCurDay()));
+        Calendar selectedCalendar = mCalendarView.getSelectedCalendar();
+        String currentSelectDate = selectedCalendar.getYear() + "-" + selectedCalendar.getMonth() + "-" + selectedCalendar.getDay() + "";
+        startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
+        getMemberLine();
+
         mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
             @Override
             public void onCalendarOutOfRange(com.haibin.calendarview.Calendar calendar) {
@@ -259,7 +279,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
             @Override
             public void onCalendarSelect(com.haibin.calendarview.Calendar calendar, boolean b) {
-                //     LogUtil.i(calendar.getYear() + "年" + calendar + "月" + calendar.getDay() + b);
+                LogUtil.i(calendar.getYear() + "年" + calendar + "月" + calendar.getDay() + b);
                 tv_date.setText(calendar.getYear() + "." + calendar.getMonth() + "." + calendar.getDay() + "");
                 String currentSelectDate = calendar.getYear() + "-" + calendar.getMonth() + "-" + calendar.getDay() + "";
 
@@ -281,27 +301,21 @@ public class SiJiaoDetailActivity extends BaseActivity {
 //                    }
 
                 startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
+                LogUtil.i("startTime  " + startTime);
                 LogUtil.i(currentSelectDate + " 00:00:00");
                 endTime = (Long.valueOf(startTime) + 86399) + "";
                 weekDay = TimeUtils.dateToWeek(currentSelectDate);
-             //   getData();
-
-                if (item!=null){
-                    getMemberLine(item.getMember_id() + "", item.getEmployee_id() + "", startTime);
-                }
-                if (item1!=null){
-                    getMemberLine(item1.getMember_id() + "", item1.getEmployee_id() + "", startTime);
-                }
+                //   getData();
+                getMemberLine();
 
             }
-
-
         });
-
-        getData();
+        mCalendarView.updateCurrentDate();
+        mCalendarView.update();
+        //getData();
     }
 
-    private void showTime() {
+    private void showTime(int currentPosition) {
         alertdialog = new AlertDialog.Builder(SiJiaoDetailActivity.this);
         ViewGroup parent = (ViewGroup) inflate.getParent();
         if (parent != null) {
@@ -312,8 +326,9 @@ public class SiJiaoDetailActivity extends BaseActivity {
         loopview.setItems(timeStrList);
         //设置初始位置
         loopview.setInitPosition(0);
-        loopview.setCurrentPosition(0);
-        int endMinute = startMinutesList.get(0) + courseLength;
+        loopview.setCurrentPosition(currentPosition);
+        pos = currentPosition;
+        int endMinute = startMinutesList.get(currentPosition) + courseLength;
         String endTime;
         if (endMinute % 60 < 10) {
             endTime = endMinute / 60 + ":0" + endMinute % 60;
@@ -408,15 +423,15 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
     }
 
-    private void getMemberLine(final String member_id, final String employee_id, final String date) {
+    private void getMemberLine() {
         String url;
-        if (item1!=null){//教练约会员时间轴
-            url= Constants.TEACH_TIME_LINE;
-        }else {
-            url= Constants.MEMBER_TIME_LINE;
+        if (item1 != null) {//教练约会员时间轴
+            url = Constants.TEACH_TIME_LINE;
+        } else {
+            url = Constants.MEMBER_TIME_LINE;
         }
 
-        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST,url, new Response.Listener<String>() {
+        MyStringRequest stringRequest = new MyStringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 LogUtil.i(s);
@@ -445,12 +460,13 @@ public class SiJiaoDetailActivity extends BaseActivity {
 
 
                 }
+                customLine2.setData(data);
 
-                if (ll_01.getChildCount() > 0) {
-                    ll_01.removeAllViews();
-                }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
-                ll_01.addView(customLine);
+//                if (ll_01.getChildCount() > 0) {
+//                    ll_01.removeAllViews();
+//                }
+//                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+//                ll_01.addView(customLine);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -460,10 +476,20 @@ public class SiJiaoDetailActivity extends BaseActivity {
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                String date = startTime;
+                String member_id = "", employee_id = "";
+                if (item != null) {
+                    member_id = String.valueOf(item.getMember_id());
+                    employee_id = String.valueOf(item.getEmployee_id());
+                }
+                if (item1 != null) {
+                    member_id = String.valueOf(item1.getMember_id());
+                    employee_id = String.valueOf(item1.getEmployee_id());
+                }
                 Map<String, String> map = new HashMap<>();
                 map.put("member_id", member_id);
                 map.put("employee_id", employee_id);
-                map.put("mDate", date);//0点时间戳
+                map.put("date", date);//0点时间戳
                 return map;
 
             }
@@ -522,6 +548,13 @@ public class SiJiaoDetailActivity extends BaseActivity {
                     }
                     LogUtil.i(textPositionList.toString());
                 }
+                customLine2.setData(data);
+//                if (ll_01.getChildCount() > 0) {
+//                    ll_01.removeAllViews();
+//                }
+//                CustomLine2 customLine2 = new CustomLine2(SiJiaoDetailActivity.this);
+//                customLine2.setData(data);
+//                ll_01.addView(customLine2);
 
 //                TimeAxisBean timeAxisBean = gson.fromJson(jsonObject.toString(), TimeAxisBean.class);
 //                List<TimeAxisBean.Data> data = timeAxisBean.getData();
@@ -542,7 +575,7 @@ public class SiJiaoDetailActivity extends BaseActivity {
 //                        }
 //                    }
 //                }
-                getHistory();
+                //getHistory();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -636,8 +669,11 @@ public class SiJiaoDetailActivity extends BaseActivity {
                 if (ll_01.getChildCount() > 0) {
                     ll_01.removeAllViews();
                 }
-                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
-                ll_01.addView(customLine);
+//                CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+//                ll_01.addView(customLine);
+                CustomLine2 customLine2 = new CustomLine2(SiJiaoDetailActivity.this);
+                customLine2.setData(data);
+                ll_01.addView(customLine2);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -700,12 +736,21 @@ public class SiJiaoDetailActivity extends BaseActivity {
                             roleList.set(pos, 2);
                             pos++;
                         }
-                        if (ll_01.getChildCount() > 0) {
-                            ll_01.removeAllViews();
-                        }
-                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
-                        ll_01.addView(customLine);
+//                        if (ll_01.getChildCount() > 0) {
+//                            ll_01.removeAllViews();
+//                        }
+//                        CustomLine customLine = new CustomLine(SiJiaoDetailActivity.this, positionList, statusList, roleList, textPositionList, courseLength / 10);
+//                        ll_01.addView(customLine);
+//                        CustomLine2 customLine2 = new CustomLine2(SiJiaoDetailActivity.this);
+//                        customLine2.setData(data);
+//                        ll_01.addView(customLine2);
+//                        if (customLine2 != null) {
+//                            List<SiJiaoYuYueBean.Data> data = customLine2.getData();
+//                            data.add(new SiJiaoYuYueBean.Data((int) startM, (int) endM, 1));
+//                            customLine2.updateUI();
+//                        }
                         ToastUtils.showToastShort("预约成功！");
+                        getMemberLine();
                     } else {
                         ToastUtils.showToastShort(rootBean.errorMsg);
                     }

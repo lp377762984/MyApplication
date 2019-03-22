@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.R.attr.value;
@@ -332,6 +333,11 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
     private void setOnclick() {
         mYear = mCalendarView.getCurYear();
         //   mCalendarLayout.shrink();
+        tv_date.setText(String.format(Locale.getDefault(),"%d.%d.%d", mCalendarView.getCurYear(), mCalendarView.getCurMonth(), mCalendarView.getCurDay()));
+        Calendar selectedCalendar = mCalendarView.getSelectedCalendar();
+        currentSelectDate = selectedCalendar.getYear() + "-" + selectedCalendar.getMonth() + "-" + selectedCalendar.getDay() + "";
+        startTime = TimeUtils.date2TimeStamp(currentSelectDate + " 00:00:00", "yyyy-MM-dd 00:00:00") + "";
+
         mCalendarView.setOnCalendarSelectListener(new CalendarView.OnCalendarSelectListener() {
             @Override
             public void onCalendarOutOfRange(Calendar calendar) {
@@ -457,6 +463,8 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
         rl_tuanke_record = findViewById(R.id.rl_tuanke_record);
         mCalendarLayout = (CalendarLayout) findViewById(R.id.calendarLayout);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+
+        currentSelectDate = mCalendarView.getCurYear() + "-" + mCalendarView.getCurMonth() + "-" + mCalendarView.getCurDay() + "";
         //  nccalendar = findViewById(nccalendar);
         tv_date = findViewById(R.id.tv_date);
         //mDate = findViewById(mDate);
@@ -522,6 +530,10 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
                 if (!tuanKeFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, tuanKeFragment);
                 fragmentTransaction.show(tuanKeFragment);
                 if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded()) fragmentTransaction.hide(tuanKeRecordFragment);
+                if (siJiaoRecordFragment!= null && siJiaoRecordFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoRecordFragment);
+                if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoFragment);
             } else {
                 if (siJiaoFragment == null) {
                     siJiaoFragment = new SiJiaoFragment();
@@ -532,6 +544,10 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
                 if (!siJiaoFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, siJiaoFragment);
                 fragmentTransaction.show(siJiaoFragment);
                 if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded()) fragmentTransaction.hide(siJiaoRecordFragment);
+                if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeRecordFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
             }
 
         } else if ("1".equals(type)) {
@@ -550,7 +566,12 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
                 //fragmentTransaction.replace(R.id.rl_tuanke_record, tuanKeRecordFragment);
                 if (!tuanKeRecordFragment.isAdded()) fragmentTransaction.add(R.id.rl_tuanke_record, tuanKeRecordFragment);
                 fragmentTransaction.show(tuanKeRecordFragment);
-                if (tuanKeFragment != null && tuanKeFragment.isAdded()) fragmentTransaction.hide(tuanKeFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
+                if (siJiaoRecordFragment!= null && siJiaoRecordFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoRecordFragment);
+                if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                    fragmentTransaction.hide(siJiaoFragment);
             } else {
                 if (siJiaoRecordFragment == null) {
                     siJiaoRecordFragment = new JiaolianSiJiaoRecordFragment();
@@ -559,12 +580,16 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
                 siJiaoRecordFragment.getStartTime(startTime);
                 siJiaoRecordFragment.getRoles(role, auth);
                 Bundle bundle = new Bundle();
-                bundle.putString("siJiaoRecordFragment", currentSelectDate);
+                bundle.putString("currentSelectDate", currentSelectDate);
                 siJiaoRecordFragment.setArguments(bundle);
                 //fragmentTransaction.replace(R.id.rl_nv, siJiaoRecordFragment);
                 if (!siJiaoRecordFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, siJiaoRecordFragment);
                 fragmentTransaction.show(siJiaoRecordFragment);
                 if (siJiaoFragment != null && siJiaoFragment.isAdded()) fragmentTransaction.hide(siJiaoFragment);
+                if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeRecordFragment);
+                if (tuanKeFragment != null && tuanKeFragment.isAdded())
+                    fragmentTransaction.hide(tuanKeFragment);
 
             }
 
@@ -577,6 +602,10 @@ public class JiaoLianCourseActivity extends BaseFragmentActivity {
             if (!tuanKeFragment.isAdded()) fragmentTransaction.add(R.id.rl_nv, tuanKeFragment);
             fragmentTransaction.show(tuanKeFragment);
             if (tuanKeRecordFragment != null && tuanKeRecordFragment.isAdded()) fragmentTransaction.hide(tuanKeRecordFragment);
+            if (siJiaoFragment != null && siJiaoFragment.isAdded())
+                fragmentTransaction.hide(siJiaoFragment);
+            if (siJiaoRecordFragment != null && siJiaoRecordFragment.isAdded())
+                fragmentTransaction.hide(siJiaoRecordFragment);
         }
 
         fragmentTransaction.commit();

@@ -377,7 +377,12 @@ public class SmallTuankeDetailActivity extends BaseActivity {
         rl_button_yuyue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+                String format = "yyyy-MM-dd";
+                String dayStr = TimeUtils.timeStamp2Date(yuyueStartTime, format);//2019-3-22
+                long hours = item.getStart_time() * 60 * 1000;
+                String hourStr = TimeUtils.timeToStr(hours, "HH:mm:ss");//14:00:00
+                Long time = TimeUtils.date2TimeStamp(dayStr + " " + hourStr, "yyyy-MM-dd HH:mm:ss");
+                if(time >= System.currentTimeMillis()){
                     if(item.getSelf_appoint_count()==0){
                         commitYuyue();
                     }
@@ -388,7 +393,13 @@ public class SmallTuankeDetailActivity extends BaseActivity {
         });
 
         if(item!=null){
-            if(Long.valueOf(yuyueStartTime) + item.getStart_time() * 60000 >= System.currentTimeMillis()){
+            String format = "yyyy-MM-dd";
+            String dayStr = TimeUtils.timeStamp2Date(yuyueStartTime, format);//2019-3-22
+            long hours = item.getStart_time() * 60 * 1000;
+            String hourStr = TimeUtils.timeToStr(hours, "HH:mm:ss");//14:00:00
+            Long time = TimeUtils.date2TimeStamp(dayStr + " " + hourStr, "yyyy-MM-dd HH:mm:ss");
+
+            if(time >= System.currentTimeMillis()){
                 if(item.getSelf_appoint_count()>0){
                     tv_status.setText("已预约");
                     rl_button_yuyue.setBackground(getResources().getDrawable(R.drawable.btn_bg_dl_bule));

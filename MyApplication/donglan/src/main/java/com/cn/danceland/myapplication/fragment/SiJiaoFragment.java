@@ -566,11 +566,18 @@ public class SiJiaoFragment extends BaseFragment {
 //                                putExtra("endTime", endTime)
 //                                .putExtra("role", role)
 //                                .putExtra("auth", auth));
-                        CourseActivity activity = (CourseActivity) getActivity();
+                       /* CourseActivity activity = (CourseActivity) getActivity();
                         if (activity != null) {
                             activity.getItemId(list.get(groupPosition).getId(), list.get(groupPosition).getCourse_type_id(), "2");
                             activity.showFragment("2", "");
-                        }
+                        }*/
+                        int id = list.get(groupPosition).getId();
+                        int courseTypeId = list.get(groupPosition).getCourse_type_id();
+                        startActivity(new Intent(mActivity, CourseActivity.class)
+                                .putExtra("flag",1)
+                                .putExtra("isTuanke", "0")
+                                .putExtra("id", id)
+                                .putExtra("course_type_id", courseTypeId));
                     }
                 }
             });

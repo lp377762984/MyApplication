@@ -45,7 +45,7 @@ public class SiJiaoYuYueBean {
 
 
 
-    public class Data {
+    public static class Data {
 
         private String id;
         private int type;
@@ -56,7 +56,14 @@ public class SiJiaoYuYueBean {
         private int occ_type;
         private String occ_obj_id;
         private int occ_obj_status;
+        public Data() {
+        }
 
+        public Data(int start_time, int end_time, int occ_obj_status) {
+            this.start_time = start_time;
+            this.end_time = end_time;
+            this.occ_obj_status = occ_obj_status;
+        }
         public String getId() {
             return id;
         }
